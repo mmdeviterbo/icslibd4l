@@ -7,7 +7,7 @@ const PORT = config.get('port');
 
 //implements code in startup/db.js
 require('./startup/db')();
-
+require('./startup/routes');
 //starts listening in PORT 3001
 app.listen(PORT, () => {
     console.log(`Listening to Port ${PORT}`);
