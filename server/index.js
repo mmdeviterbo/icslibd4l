@@ -1,9 +1,13 @@
 //starting file of the backend
 const express = require('express');
 const config = require("config")
+const dotenv = require("dotenv");
 
 const app = express();
 const PORT = config.get('port');
+
+dotenv.config();
+
 //database USER:
 //username: sampleuser
 //password: password1234
@@ -15,4 +19,8 @@ app.listen(PORT, () => {
     console.log(`Listening to Port ${PORT}`);
 });
 
+app.use(express.json());
+
+//set up user activity router
+app.use("/auth", require("./routes/userActivityRouter"));
 
