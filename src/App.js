@@ -1,6 +1,6 @@
 import {Route, Switch, Redirect } from 'react-router-dom';
 import {useState, useEffect} from 'react';
-import NavigationBar from './components/NavigationBar';
+import NavigationBar from './components/navigationbar';
 import Notfound from './components/notfound';
 import './App.css';
 
@@ -19,7 +19,7 @@ function App() {
           {/* <Redirect to="/not-found"/>  */}
         {/* </Switch> */}
 
-        
+
     </div>
   );
 }
