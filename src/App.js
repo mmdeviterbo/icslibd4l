@@ -1,7 +1,10 @@
 import {Route, Switch, Redirect } from 'react-router-dom';
 import {useState, useEffect} from 'react';
+import Footer from './components/footer';
+import Homepage from './components/homepage';
 import NavigationBar from './components/navigationbar';
 import Notfound from './components/notfound';
+
 import './App.css';
 
 function App() {
@@ -11,6 +14,7 @@ function App() {
   return (
     <div className="App">
         <NavigationBar/>
+        <Homepage/>
 
         {/* <Switch> */}
           {/* <Route path="/home" component={}></Route> */}
@@ -18,8 +22,7 @@ function App() {
           {/* <Redirect exact from="/" to="/home"/> */}
           {/* <Redirect to="/not-found"/>  */}
         {/* </Switch> */}
-
-
+        <Footer/>
     </div>
   );
 }

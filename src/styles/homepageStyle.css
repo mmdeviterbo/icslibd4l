@@ -70,4 +70,11 @@
         font-size: 18px;
         font-weight: 550;
     }
+    .left-footer-container{
+        display: none !important;
+    }
+    .footer-container{
+        min-height: auto !important;
+        padding:3px !important;
+    }
 }
