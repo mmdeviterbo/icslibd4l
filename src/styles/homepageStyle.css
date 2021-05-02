@@ -67,8 +67,11 @@
         padding:4px;
     }
     .ics-caption{
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 550;
+    }
+    .uplb-caption{
+        font-size: 13px;
     }
     .left-footer-container{
         display: none !important;
