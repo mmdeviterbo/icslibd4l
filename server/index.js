@@ -21,4 +21,6 @@ app.listen(PORT, () => {
 
 app.use(express.json());
 
-// for testing
+// set up routes
+app.use("/books", require("./routes/bookRouter"))
+app.use("/thesis", require("./routes/thesisRouter"))
