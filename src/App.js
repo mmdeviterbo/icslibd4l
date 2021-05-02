@@ -2,7 +2,7 @@ import {Route, Switch, Redirect } from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
-import NavigationBar from './components/navigationbar';
+import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 
 import './App.css';
