@@ -1,7 +1,7 @@
 import {Route, Switch, Redirect } from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import Footer from './components/footer';
-import Homepage from './components/homepage';
+import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationbar';
 import Notfound from './components/notfound';
 
@@ -9,6 +9,7 @@ import './App.css';
 
 function App() {
   const [user, setUser] = useState();
+  const [seach, setSearch] = useState();
   
   
   return (
