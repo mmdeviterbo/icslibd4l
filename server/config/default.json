@@ -3,7 +3,7 @@
     "jwtPrivateKey": "icslib-privateKey",
     
     //link of the database from mongodb
-    "db": "",
+    "db": "mongodb+srv://sampleuser:password1234@cluster0.0iawg.mongodb.net/test-brazil",
 
     //3001 port is used by backend, 3000 port is used by frontend
     "port": "3001", 
