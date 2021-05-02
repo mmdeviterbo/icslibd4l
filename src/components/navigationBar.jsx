@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import '../styles/homepageStyle.css';
 import icsLogoImg from '../assets/icslogo.png';
 
-export default function Homepage() {
+export default function NavigationBar() {
     return (
         <>
         <div className="navbar-container">
@@ -12,7 +12,7 @@ export default function Homepage() {
                         <Link to="/home">
                             <img draggable="false" src={icsLogoImg} className="icslogo-img"/>
                         </Link>
-                        <Link className="ics-uplb-caption" to="/home">
+                        <Link draggable="false" className="ics-uplb-caption" to="/home">
                             <p className="ics-caption">Institute of Computer Science Online Library</p>
                             <p className="uplb-caption">University of the Philippines Los Baños</p>
                         </Link>
