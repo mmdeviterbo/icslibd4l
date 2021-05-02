@@ -30,7 +30,6 @@ const advanceSearch = {
     "height":"55vh",
     "display":"grid",
     "placeItems":"center",
-    "border":"5px solid black",
     "padding":0
 }
 const searchBoxContainer = {
