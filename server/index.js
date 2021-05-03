@@ -13,7 +13,8 @@ dotenv.config();
 //password: password1234
 //implements code in startup/db.js
 require('./startup/db')();
-require('./startup/routes');
+require('./startup/routes')(app);
+
 //starts listening in PORT 3001
 app.listen(PORT, () => {
     console.log(`Listening to Port ${PORT}`);
@@ -22,5 +23,4 @@ app.listen(PORT, () => {
 app.use(express.json());
 
 //set up user activity router
-app.use("/auth", require("./routes/userActivityRouter"));
 
