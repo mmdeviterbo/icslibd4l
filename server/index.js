@@ -22,5 +22,6 @@ app.listen(PORT, () => {
 
 app.use(express.json());
 
-//set up user activity router
-
+// set up routes
+app.use("/books", require("./routes/bookRouter"))
+app.use("/thesis", require("./routes/thesisRouter"))
