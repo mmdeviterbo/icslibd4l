@@ -6,7 +6,7 @@ export default function Footer() {
     return (
         <div className="footer-container" style={footerContainer}>
             <div className="left-footer-container" style={leftFooterContainer}>
-                <div>
+                <div style={avoidCopyText}>
                     <p style={icsTextFooter}>Institute of Computer Science</p>
                     <p style={textFooter}>College of Arts and Sciences</p>
                     <p style={textFooter}>University of the Philippines Los Baños</p>
@@ -72,5 +72,15 @@ const openInNewTab = (url) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
     if (newWindow) newWindow.opener = null
 }
+
+const avoidCopyText = {
+    "WebkitTouchCallout": "none",  
+	"WebkitUserSelect": "none", 
+	"KhtmlUserSelect": "none", 
+	"MozUserSelect": "none",
+	"MsUserSelect": "none",  
+	"userSelect": "none", 
+}
+
 
 //responsive to mobile devices - located on homepageStyle.css
