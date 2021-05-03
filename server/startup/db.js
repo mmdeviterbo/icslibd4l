@@ -20,8 +20,8 @@ module.exports = () => {
     );
 
     //checks if database is connected to backend
-    mongoose.connection.once('open', () => {
-        console.log('Connection successfully established');
+    mongoose.connection.on('connected', ()=>{
+        console.log("Database CONNECTED! ");
     })
 
 }

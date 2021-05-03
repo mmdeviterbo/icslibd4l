@@ -1,20 +1,29 @@
 import {Route, Switch, Redirect } from 'react-router-dom';
 import {useState, useEffect} from 'react';
+import Footer from './components/footer';
+import Homepage from './components/homepage/homepage';
+import NavigationBar from './components/navigationBar';
+import Notfound from './components/notfound';
+
 import './App.css';
 
 function App() {
+  const [user, setUser] = useState();
+  const [seach, setSearch] = useState();
+  
+  
   return (
     <div className="App">
-        <h1> Hello world! </h1>
-        <h1> Test ... </h1>
+        <NavigationBar/>
+        <Homepage/>
 
-          {/* <Switch>
-            <Route path="/home" component={**insert component here**>}></Route>
-            <Route exact path="/not-found" component={**insert component here**}></Route> 
-            <Redirect exact from="/" to="/home"/>
-            <Redirect to="/not-found"/> 
-          </Switch> */}
-
+        {/* <Switch> */}
+          {/* <Route path="/home" component={}></Route> */}
+          {/* <Route exact path="/not-found" component={Notfound}></Route>  */}
+          {/* <Redirect exact from="/" to="/home"/> */}
+          {/* <Redirect to="/not-found"/>  */}
+        {/* </Switch> */}
+        <Footer/>
     </div>
   );
 }
