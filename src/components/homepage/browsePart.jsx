@@ -14,12 +14,20 @@ export default function BrowsePart() {
         });
     },[])
 
+    const animateOnClick=(nameClass)=>{
+        const tempNameClass = "." + nameClass;
+        
+    }
+
     
     return (
         <div className="browsePartContainer" style={browsePartContainer}>
-            <Link className="browseBox browseboxBooks" style={browseBox} to='/home'>Books</Link>
-            <Link className="browseBox browseboxThesis" style={browseBox} to='/home'>Thesis</Link>
-            <Link className="browseBox browseboxSP" style={browseBox} to='/home'>Special Problem</Link>
+            <Link className="browseBox browseboxBooks" style={browseBox} to='/home'
+                onClick={()=>animateOnClick("browseboxBooks")}>Books</Link>
+            <Link className="browseBox browseboxThesis" style={browseBox} to='/home'
+                onClick={()=>animateOnClick("browseboxThesis")}>Thesis</Link>
+            <Link className="browseBox browseboxSP" style={browseBox} to='/home'
+                onClick={()=>animateOnClick("browseboxSP")}>Special Problem</Link>
         </div>
     )
 }

@@ -1,5 +1,7 @@
 /* navigation bar */
 .navbar-container{
+    position: relative; /*for the box-shadow to show*/
+    box-shadow: 2px 2px 7px black;
     background-color: #0067A1;
     height:100px;
     margin-top:25px;
@@ -10,9 +12,11 @@
     -ms-user-select: none;
     user-select: none;
 }
+
 .navbar-elements{
     height:100%;
     display: flex;
+
 }
 .left-half{
     height: 100%;
