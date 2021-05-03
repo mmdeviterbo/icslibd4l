@@ -1,6 +1,7 @@
 import React from 'react'
 import BrowsePart from './browsePart';
 import LatestAcquisitions from './latestAcquisitions';
+import RecentNews from './recentNews';
 import SearchbarPart from './searchbarPart'
 
 export default function Homepage() {
@@ -9,6 +10,7 @@ export default function Homepage() {
             <SearchbarPart/>
             <BrowsePart/>
             <LatestAcquisitions/>
+            <RecentNews/>
 
             <div className="browseResources-homepage"> </div>
         </div>
