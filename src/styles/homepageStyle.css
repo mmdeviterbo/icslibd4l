@@ -60,6 +60,7 @@
 
 /* apply mobile responsivess */
 @media screen and (max-width: 780px) {
+    /* footer  */
     .icslogo-img{
         display: none;   
     }
@@ -80,6 +81,26 @@
         min-height: auto !important;
         padding:3px !important;
     }
+
+    /* search bar */
+    .searchBoxContainer{
+        width:85vw !important;
+    }
+
+    /* browse on books, sp, theses button */
+    .browsePartContainer{
+        flex-direction: column !important;
+    }
+    .browseBox{
+        width: 80vw !important;
+        height:90px !important;
+    }
+
+    /* latest acquisitions */
+    .acquisitionsInnerContainer, .captionContainer{
+        width: 90vw !important;
+    }
+    
 }
 
 

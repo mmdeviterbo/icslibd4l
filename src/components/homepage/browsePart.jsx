@@ -2,10 +2,10 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 export default function BrowsePart() {
     return (
-        <div className="browsPart" style={browsePartContainer}>
-            <Link className="browseBooks" style={browseBox} to='/home'>Books</Link>
-            <Link className="browseThesis" style={browseBox} to='/home'>Thesis</Link>
-            <Link className="browseSP" style={browseBox} to='/home'>Special Problem</Link>
+        <div className="browsePartContainer" style={browsePartContainer}>
+            <Link className="browseBox" style={browseBox} to='/home'>Books</Link>
+            <Link className="browseBox" style={browseBox} to='/home'>Thesis</Link>
+            <Link className="browseBox" style={browseBox} to='/home'>Special Problem</Link>
         </div>
     )
 }

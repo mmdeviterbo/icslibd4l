@@ -4,7 +4,7 @@ import React from 'react'
 export default function SearchbarPart() {
     return (
         <div style={advanceSearch}>
-            <div style={searchBoxContainer}>
+            <div style={searchBoxContainer}  className="searchBoxContainer">
                 <div className="input-group">
                     <input style={inputSearch} type="text" className="form-control" 
                     placeholder="Search for Books, Theses, and Special Problems"/>

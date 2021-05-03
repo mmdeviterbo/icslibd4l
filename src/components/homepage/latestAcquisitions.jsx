@@ -15,17 +15,16 @@ export default function LatestAcquisitions() {
 
     return (
         <div className="latestAcquisitions" style={latestAcquisitionsContainer}>
-            <div style={captionContainer}>
+            <div style={captionContainer} className="captionContainer">
                 <p style={captionStyle}>Latest Acquisitions</p>
                 <hr style={horizontalLine}/>
             </div>
 
-            <div style={acquisitionsInnerContainer}>
+            <div style={acquisitionsInnerContainer} className="acquisitionsInnerContainer">
                 {acquisitions.map(book=><CardBook 
                     imageSrc={book.imageSrc} title={book.title} linkTo={book.linkTo}
                     key={book.title}
                 />)}
-            
             </div>
         </div>
     )
@@ -65,3 +64,5 @@ const horizontalLine = {
     lineHeight:0,
     borderTop: "3px solid gray"
 }
+
+// mobile responsiveness is in homepagestyle.css 
