@@ -1,0 +1,83 @@
+.navbar-container{
+    background-color: #0067A1;
+    height:100px;
+    margin-top:25px;
+    font-family: Montserrat;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.navbar-elements{
+    height:100%;
+    display: flex;
+}
+.left-half{
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.ics-uplb-caption{
+    color:white;
+}
+.ics-uplb-caption:hover{
+    color:white;
+    text-decoration: none;
+    list-style: none;
+}
+.ics-caption{
+    font-size: 22px;
+    font-weight: 600;
+}
+.uplb-caption{
+    font-size: 15px;
+    line-height: 0;
+}
+.icslogo-img{
+    height:150px;
+    width:150px;
+}
+.right-half{
+    flex-grow: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right:20px;
+}
+.login-link{
+    color:white;
+    letter-spacing: 1px;
+    font-size: 20px;
+}
+.login-link:hover{
+    color:white;
+}
+
+
+/* apply mobile responsivess */
+@media screen and (max-width: 780px) {
+    .icslogo-img{
+        display: none;   
+    }
+    .left-half{
+        padding:4px;
+    }
+    .ics-caption{
+        font-size: 15px;
+        font-weight: 550;
+    }
+    .uplb-caption{
+        font-size: 13px;
+    }
+    .left-footer-container{
+        display: none !important;
+    }
+    .footer-container{
+        min-height: auto !important;
+        padding:3px !important;
+    }
+}
