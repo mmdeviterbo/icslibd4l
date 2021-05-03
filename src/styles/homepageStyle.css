@@ -1,4 +1,7 @@
+/* navigation bar */
 .navbar-container{
+    position: relative; /*for the box-shadow to show*/
+    box-shadow: 2px 2px 7px black;
     background-color: #0067A1;
     height:100px;
     margin-top:25px;
@@ -9,9 +12,11 @@
     -ms-user-select: none;
     user-select: none;
 }
+
 .navbar-elements{
     height:100%;
     display: flex;
+
 }
 .left-half{
     height: 100%;
@@ -32,8 +37,10 @@
 .ics-caption{
     font-size: 22px;
     font-weight: 600;
+    transition:1s;
 }
 .uplb-caption{
+    transition:1s;
     font-size: 15px;
     line-height: 0;
 }
@@ -58,8 +65,18 @@
 }
 
 
+/* hover effects */
+.acquisitionsInnerContainer:hover{
+    filter: brightness(0.95) !important;
+}
+.acquisitionsInnerContainer .cardContainer:hover{
+    filter: brightness(1.2) !important;
+    transform: scale(1.05) !important;
+}
+
 /* apply mobile responsivess */
 @media screen and (max-width: 780px) {
+    /* footer  */
     .icslogo-img{
         display: none;   
     }
@@ -80,4 +97,26 @@
         min-height: auto !important;
         padding:3px !important;
     }
+
+    /* search bar */
+    .searchBoxContainer{
+        width:85vw !important;
+    }
+
+    /* browse on books, sp, theses button */
+    .browsePartContainer{
+        flex-direction: column !important;
+    }
+    .browseBox{
+        width: 80vw !important;
+        height:90px !important;
+    }
+
+    /* latest acquisitions, recent news */
+    .acquisitionsInnerContainer, .captionContainer, .recentNewsInnerContainer{
+        width: 90vw !important;
+    }
+    
 }
+
+
