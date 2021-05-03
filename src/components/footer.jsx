@@ -6,14 +6,14 @@ export default function Footer() {
     return (
         <div className="footer-container" style={footerContainer}>
             <div className="left-footer-container" style={leftFooterContainer}>
-                <div>
+                <div style={avoidCopyText}>
                     <p style={icsTextFooter}>Institute of Computer Science</p>
                     <p style={textFooter}>College of Arts and Sciences</p>
                     <p style={textFooter}>University of the Philippines Los Baños</p>
                 </div>
             </div>
             <div className="right-footer-container" style={rightFooterContainer}>
-                <img draggable="false" src={icsLogo} style={icslogo}/>
+                <img draggable="false" src={icsLogo} style={icslogo} alt="#"/>
                 <div>
                     <i style={icons} className="fa fa-lg fa-facebook"
                     onClick={() => openInNewTab('https://www.facebook.com/ICS.UPLB')}
@@ -72,5 +72,15 @@ const openInNewTab = (url) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
     if (newWindow) newWindow.opener = null
 }
+
+const avoidCopyText = {
+    "WebkitTouchCallout": "none",  
+	"WebkitUserSelect": "none", 
+	"KhtmlUserSelect": "none", 
+	"MozUserSelect": "none",
+	"MsUserSelect": "none",  
+	"userSelect": "none", 
+}
+
 
 //responsive to mobile devices - located on homepageStyle.css
