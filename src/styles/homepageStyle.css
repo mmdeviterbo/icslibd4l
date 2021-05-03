@@ -1,3 +1,4 @@
+/* navigation bar */
 .navbar-container{
     background-color: #0067A1;
     height:100px;
@@ -32,8 +33,10 @@
 .ics-caption{
     font-size: 22px;
     font-weight: 600;
+    transition:1s;
 }
 .uplb-caption{
+    transition:1s;
     font-size: 15px;
     line-height: 0;
 }
@@ -57,6 +60,15 @@
     color:white;
 }
 
+
+/* hover effects */
+.acquisitionsInnerContainer:hover{
+    filter: brightness(0.95) !important;
+}
+.acquisitionsInnerContainer .cardContainer:hover{
+    filter: brightness(1.2) !important;
+    transform: scale(1.05) !important;
+}
 
 /* apply mobile responsivess */
 @media screen and (max-width: 780px) {

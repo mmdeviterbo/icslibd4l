@@ -5,7 +5,7 @@ export default function CardBook({imageSrc, title, linkTo}) {
     return (
             <Link to={linkTo} className="cardContainer" style={cardContainer}>
                 <div className="imgContainer" src={imageSrc} style={imgContainer}>
-                    <img src={imageSrc} style={imgSrcStyle}/>
+                    <img src={imageSrc} style={imgSrcStyle} alt="#"/>
                 </div>
                 <p style={{fontSize:"15px",padding:"7px"}}>{title}</p>
             </Link>
@@ -17,7 +17,10 @@ const cardContainer = {
     width:"150px",   
     padding:0,
     color:"black",
-    marginRight:"10px"  
+    marginRight:"10px",
+    transition:"0.3s",
+    transform:"scale(1)",
+
 }
 const imgContainer = {
     height:"90%",

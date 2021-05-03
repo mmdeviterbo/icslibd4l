@@ -26,6 +26,7 @@ const advanceSearch = {
 }
 const searchBoxContainer = {
     width:"45vw",
+    transition:"0.3s"
 }
 const inputSearch={
     padding:"30px 25px 30px 25px",

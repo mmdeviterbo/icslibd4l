@@ -1,14 +1,29 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import React,{useEffect} from 'react'
+import {Link} from 'react-router-dom';
+import {gsap} from 'gsap';
+
 export default function BrowsePart() {
+    useEffect(()=>{
+        gsap.from('.browseboxBooks',{
+            duration:0.6,
+            x:-1000
+        });
+        gsap.from('.browseboxSP',{
+            duration:0.6,
+            x:1000
+        });
+    },[])
+
+    
     return (
         <div className="browsePartContainer" style={browsePartContainer}>
-            <Link className="browseBox" style={browseBox} to='/home'>Books</Link>
-            <Link className="browseBox" style={browseBox} to='/home'>Thesis</Link>
-            <Link className="browseBox" style={browseBox} to='/home'>Special Problem</Link>
+            <Link className="browseBox browseboxBooks" style={browseBox} to='/home'>Books</Link>
+            <Link className="browseBox browseboxThesis" style={browseBox} to='/home'>Thesis</Link>
+            <Link className="browseBox browseboxSP" style={browseBox} to='/home'>Special Problem</Link>
         </div>
     )
 }
+
 const browsePartContainer={
     minHeight:"40vh",
     padding:"20px 10px",
@@ -16,7 +31,9 @@ const browsePartContainer={
     "gap":"20px",
     justifyContent:"center",
     alignItems:"center",
-    background:"white"
+    background:"white",
+    transition: "0.5s"
+
 }
 const browseBox = {
     borderRadius:"20px",
@@ -31,5 +48,7 @@ const browseBox = {
     fontWeight:"700",
     fontSize:"18px",
     fontColor:"black",
-    textDecoration:"none"
+    textDecoration:"none",
+    transition: "0.5s"
+
 }

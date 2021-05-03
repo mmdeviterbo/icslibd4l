@@ -13,7 +13,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className="right-footer-container" style={rightFooterContainer}>
-                <img draggable="false" src={icsLogo} style={icslogo}/>
+                <img draggable="false" src={icsLogo} style={icslogo} alt="#"/>
                 <div>
                     <i style={icons} className="fa fa-lg fa-facebook"
                     onClick={() => openInNewTab('https://www.facebook.com/ICS.UPLB')}

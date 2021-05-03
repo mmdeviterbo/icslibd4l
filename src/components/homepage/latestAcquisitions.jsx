@@ -21,7 +21,7 @@ export default function LatestAcquisitions() {
             </div>
 
             <div style={acquisitionsInnerContainer} className="acquisitionsInnerContainer">
-                {acquisitions.map(book=><CardBook 
+                {acquisitions.map(book=><CardBook className="cardContainer"
                     imageSrc={book.imageSrc} title={book.title} linkTo={book.linkTo}
                     key={book.title}
                 />)}
@@ -37,7 +37,10 @@ const latestAcquisitionsContainer={
     justifyContent:"center",
     flexDirection:"column",
     alignItems:"center",
-    padding:0
+    padding:0,
+    "filter": "brightness(1)",
+    transition:"0.8s"
+
 }
 const acquisitionsInnerContainer = {
     width:"80vw",  
@@ -45,7 +48,8 @@ const acquisitionsInnerContainer = {
     display:"grid",
     gridTemplateColumns:"auto auto auto auto auto auto auto",
     justifyContent:"space-between",
-    overflowX:"auto"
+    overflowX:"auto",
+    overflowY:"hidden",
 }
 const captionStyle = {
     margin:0,
@@ -59,6 +63,9 @@ const captionContainer = {
     justifyContent:"flex-start",
     flexDirection:"column",
     width:"80vw",
+    transition:"0.8s",
+    "filter": "brightness(1)",
+
 }
 const horizontalLine = {
     lineHeight:0,

@@ -10,7 +10,7 @@ export default function NavigationBar() {
             <ul className="navbar-elements">
                 <div className="left-half">
                         <Link to="/home">
-                            <img draggable="false" src={icsLogoImg} className="icslogo-img"/>
+                            <img draggable="false" src={icsLogoImg} className="icslogo-img" alt="#"/>
                         </Link>
                         <Link draggable="false" className="ics-uplb-caption" to="/home">
                             <p className="ics-caption">Institute of Computer Science Online Library</p>

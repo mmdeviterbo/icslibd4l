@@ -1,41 +1,39 @@
 import React from 'react'
 import {Link} from 'react-router-dom';
 
-
 // temporary, news should be from the database
 const newsList = [
-    {title:"News Title", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021"},
-    {title:"News Title", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021"},
-    {title:"News Title", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021"}
+    {title:"News Title 1", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"},
+    {title:"News Title 2", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"},
+    {title:"News Title 3", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"}
 ]
 
 export default function RecentNews() {
     return (
         <div className="recentNewsContainer" style={recentNewsContainer}>
             <div className="recentNewsInnerContainer" style={recentNewsInnerContainer}>
-                {articleContainer(newsList)}
+                <p style={recentNewsTitle}>Recent News</p> 
+                <hr style={horizontalLine}/>
+                {newsList.map(news=><ArticleContainer 
+                    news={news} key={news.title}
+                    className="recentNewsTitle"
+                />)}
             </div>
         </div>
     )
 }
 
 // reusable template for article/recent news
-const articleContainer=(newList)=>{
+const ArticleContainer=({news})=>{
     return(
-        <>
-        <p style={recentNewsTitle} className="recentNewsTitle">Recent News</p> 
-        <hr style={horizontalLine}/>
-        {newList.map(news=>{
-            return(
-                <>
-                    <Link style={recentNewsHeader} className="recentNewsHeader">{news.title}</Link>    
-                    <p>{news.content}</p>
-                    <p>{news.date}</p>
-                    <hr style={{lineHeight:0,borderTop: "1px solid gray"}}/>
-                </>)
-        })}
-        </>
-    );
+            <>
+                <Link style={recentNewsHeader} className="recentNewsHeader" to={news.linkTo}>
+                    {news.title}
+                </Link>    
+                <p>{news.content}</p>
+                <p>{news.date}</p>
+                <hr style={{lineHeight:0,borderTop: "1px solid gray"}}/>
+            </>)
 }
 
 
@@ -54,10 +52,9 @@ const recentNewsInnerContainer = {
 
 const recentNewsTitle = {
     margin:0,
-    padding:0,
     fontSize:"32px",
     fontWeight:"700",
-    padding:"30px 0px",
+    padding:"30px 0px 0px 0px",
 }
 const recentNewsHeader = {
     fontSize:"21px",
