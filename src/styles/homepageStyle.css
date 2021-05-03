@@ -74,6 +74,20 @@
     transform: scale(1.05) !important;
 }
 
+.browseBox:hover{
+    background: rgb(92, 92, 92,0.3) !important;
+}
+
+
+.browseboxSP:hover .imgSPContainer .imgSPHover{display: block !important;}
+.browseboxTheses:hover .imgThesesContainer .imgThesesHover{display: block !important;}
+.browseboxBooks:hover .imgBooksContainer .imgBooksHover{display: block !important;}
+.browseboxSP:hover .imgSPContainer .imgSPBefore{ display: none !important;}
+.browseboxTheses:hover .imgThesesContainer .imgThesesBefore{display: none !important;}
+.browseboxBooks:hover .imgBooksContainer .imgBooksBefore{display: none !important;}
+
+
+
 /* apply mobile responsivess */
 @media screen and (max-width: 780px) {
     /* footer  */
@@ -110,7 +124,15 @@
     .browseBox{
         width: 80vw !important;
         height:90px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
+    .imgBooksContainer, .imgThesesContainer, .imgSPContainer{
+        height:50px !important;
+        width:50px !important;
+    } 
 
     /* latest acquisitions, recent news */
     .acquisitionsInnerContainer, .captionContainer, .recentNewsInnerContainer{

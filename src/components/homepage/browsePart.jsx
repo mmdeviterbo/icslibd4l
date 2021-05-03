@@ -23,11 +23,36 @@ export default function BrowsePart() {
     return (
         <div className="browsePartContainer" style={browsePartContainer}>
             <Link className="browseBox browseboxBooks" style={browseBox} to='/home'
-                onClick={()=>animateOnClick("browseboxBooks")}>Books</Link>
-            <Link className="browseBox browseboxThesis" style={browseBox} to='/home'
-                onClick={()=>animateOnClick("browseboxThesis")}>Thesis</Link>
+                onClick={()=>animateOnClick("browseboxBooks")}>
+                    <div style={imgContainer} className="imgBooksContainer">
+                        <img src="https://img.icons8.com/ios/64/000000/book-stack.png" alt="#"
+                            style={imgStyle} className="imgBooksBefore"/>
+                        <img src="https://img.icons8.com/ios-filled/64/000000/book-stack.png" alt="#"
+                            style={imgStyleHover} className="imgBooksHover"/>
+                    </div>
+                    <p style={titleSource}>Books</p>
+            </Link>
+            
+            <Link className="browseBox browseboxTheses" style={browseBox} to='/home'
+                onClick={()=>animateOnClick("browseboxTheses")}>
+                    <div style={imgContainer} className="imgThesesContainer">
+                        <img src="https://img.icons8.com/ios/64/000000/agreement.png" alt="#"
+                            style={imgStyle} className="imgThesesBefore"/>
+                        <img src="https://img.icons8.com/ios-filled/64/000000/agreement.png" alt="#"
+                            style={imgStyleHover} className="imgThesesHover"/>
+                    </div>
+                    <p style={titleSource}>Theses</p>
+            </Link>
             <Link className="browseBox browseboxSP" style={browseBox} to='/home'
-                onClick={()=>animateOnClick("browseboxSP")}>Special Problem</Link>
+                onClick={()=>animateOnClick("browseboxSP")}>
+                    <div style={imgContainer} className="imgSPContainer">
+                        <img src="https://img.icons8.com/ios/50/000000/new-file.png" alt="#"
+                            style={imgStyle} className="imgSPBefore"/>
+                        <img src="https://img.icons8.com/ios-filled/50/000000/new-file.png" alt="#"
+                            style={imgStyleHover} className="imgSPHover"/>
+                    </div>
+                    <p style={titleSource}>Special Problem</p>
+            </Link>
         </div>
     )
 }
@@ -47,16 +72,39 @@ const browseBox = {
     borderRadius:"20px",
     height:"200px",
     width:"200px",
-    border:"0.5px solid black",
+    border:"0.1px solid black",
     cursor:"pointer",
-    background: "linear-gradient(90deg, rgba(252,252,252,1) 40%, rgba(255,255,255,1) 95%, rgba(255,244,244,1) 100%)",
-    display:"grid",
-    placeItems:"center",
-    boxShadow:"2px 1px 4px 1px black",
+    backgroundColor:"white",
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"space-around",
+    alignItems:"center",
+    boxShadow:"0.5px 1px 1px 0.5px black",
     fontWeight:"700",
     fontSize:"18px",
     fontColor:"black",
     textDecoration:"none",
     transition: "0.5s"
+}
+const imgContainer = {
+    position:"relative",
+    height:"44%",
+    width:"45%",
+}
 
+const imgStyle = {
+    height:"100%",
+    width:"100%",
+    position:"absolute",
+}
+const imgStyleHover = {
+    height:"100%",
+    width:"100%",
+    position:"absolute",
+    display:"none"
+}
+const titleSource = {
+    color:"black", 
+    padding:0,
+    margin:0,
 }
