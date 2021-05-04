@@ -23,4 +23,8 @@ module.exports = (app) => {
     
     //set up user activity router       
     app.use("/auth", require('../routes/userActivityRouter'));
+
+    // set up routes
+    app.use("/books", require("./routes/bookRouter"))
+    app.use("/thesis", require("./routes/thesisRouter"))
 }

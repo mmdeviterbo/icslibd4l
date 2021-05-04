@@ -18,7 +18,13 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req,res) => {
     console.log(req.body)
-   
+    // {
+    //     googleId: "dsddsads"
+    //     email
+    //     full name
+    //     surname
+    //     date
+    //    }
     try{
         const {name, email, password, passwordVerify} = req.body
 
