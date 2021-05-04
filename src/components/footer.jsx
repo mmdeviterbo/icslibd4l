@@ -32,7 +32,9 @@ const footerContainer={
     "width":"100%",
     "display":"flex",
     "color":"white",
-    "backgroundColor":"#0067A1"
+    "backgroundColor":"#0067A1",
+    "fontFamily": 'Montserrat'
+
 }
 
 const leftFooterContainer = {

@@ -13,6 +13,7 @@ export default function CardBook({imageSrc, title, linkTo}) {
 }
 
 const cardContainer = {
+    fontFamily: 'Montserrat',
     height:"100%",
     width:"150px",   
     padding:0,

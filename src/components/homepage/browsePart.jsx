@@ -58,6 +58,7 @@ export default function BrowsePart() {
 }
 
 const browsePartContainer={
+    fontFamily: 'Montserrat',
     minHeight:"40vh",
     padding:"20px 10px",
     display:"flex",
