@@ -10,9 +10,9 @@ const config = require("config")
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
-const app = express();
 
-module.exports = (app) => {
+
+module.exports = function(app){
     //parser tools 
     app.use(express.json());
     app.use(bodyParser.json());
@@ -25,6 +25,7 @@ module.exports = (app) => {
     app.use("/auth", require('../routes/userActivityRouter'));
 
     // set up routes
-    app.use("/books", require("./routes/bookRouter"))
-    app.use("/thesis", require("./routes/thesisRouter"))
+    app.use("/books", require("../routes/bookRouter"))
+    app.use("/thesis", require("../routes/thesisRouter"))
+    app.use("/admin", require("../routes/adminRouter"))
 }
