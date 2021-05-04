@@ -31,6 +31,7 @@ export default function LatestAcquisitions() {
 }
 
 const latestAcquisitionsContainer={
+    fontFamily: 'Montserrat',
     "minHeight": "45vh",
     background:"white",
     display:"flex",
