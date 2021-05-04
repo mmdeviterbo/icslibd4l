@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.8.3",
     "antd": "^4.15.4",
     "bootstrap": "^4.6.0",
+    "config": "^3.3.6",
     "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "gsap": "^3.6.1",
