@@ -52,5 +52,25 @@
         margin-right: 0;
         padding:40px 10px 10px 10px;
     }
+    .title-notfound{
+        font-size:50px;
+        font-weight: 600;
+    }
+}
+@media screen and (max-height: 600px) {
+    .caption-notfound{
+        display: none !important;
+    }
+    .iconNotFound{
+        display: none !important;
+    }
+}
 
+
+@media screen and (max-height: 650px) {
+    .white-notfound{
+        height:95%;
+        width:500px;
+        padding:8px;
+    }
 }
