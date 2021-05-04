@@ -24,7 +24,6 @@ export default function Notfound() {
                 </div>
                 <hr style={{borderTop:"0.5px solid white"}}/>
                 <p className="caption-notfound">The page you are looking for might been removed.</p>
-
             </div>
         </div>
     )
