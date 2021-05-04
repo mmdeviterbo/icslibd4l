@@ -89,6 +89,16 @@
 
 
 /* apply mobile responsivess */
+@media screen and (max-width: 426px) {
+    .ics-caption{
+        font-size: 13px !important;
+        font-weight: 550;
+    }
+    .uplb-caption{
+        font-size: 11px !important;
+    }
+}
+
 @media screen and (max-width: 780px) {
     /* footer  */
     .icslogo-img{
@@ -98,11 +108,11 @@
         padding:4px;
     }
     .ics-caption{
-        font-size: 15px;
-        font-weight: 550;
+        font-size: 20px;
+        font-weight: 650;
     }
     .uplb-caption{
-        font-size: 13px;
+        font-size: 14px;
     }
     .left-footer-container{
         display: none !important;
