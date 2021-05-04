@@ -1,11 +1,11 @@
 /* navigation bar */
 .navbar-container{
+    font-family: 'Montserrat';
     position: relative; /*for the box-shadow to show*/
     box-shadow: 2px 2px 7px black;
     background-color: #0067A1;
     height:100px;
     margin-top:25px;
-    font-family: Montserrat;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     -moz-user-select: none;

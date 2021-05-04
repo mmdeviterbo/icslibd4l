@@ -18,4 +18,5 @@ export default function Homepage() {
 }
 const homepageContainer = {
     backgroundColor: "#E9E9E9",
+    fontFamily: 'Montserrat',
 }

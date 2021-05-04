@@ -19,6 +19,7 @@ export default function SearchbarPart() {
     )
 }
 const advanceSearch = {
+    fontFamily: 'Montserrat',
     "height":"50vh",
     "display":"grid",
     "placeItems":"center",
