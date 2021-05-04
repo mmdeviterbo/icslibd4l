@@ -15,13 +15,11 @@ dotenv.config();
 require('./startup/db')();
 require('./startup/routes')(app);
 
+app.use(express.json());
+
 //starts listening in PORT 3001
 app.listen(PORT, () => {
     console.log(`Listening to Port ${PORT}`);
 });
 
-app.use(express.json());
 
-// set up routes
-app.use("/books", require("./routes/bookRouter"))
-app.use("/thesis", require("./routes/thesisRouter"))
