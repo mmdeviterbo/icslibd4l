@@ -6,85 +6,53 @@ const config = require("config")
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
-//npm install bcryptjs
-//npm unstall jsonwebtokencx
-//register 
-
-
-router.get("/", async (req, res) => {
-    console.log("hello")
-    res.send("hello")
-});
-
+//register
 router.post("/", async (req,res) => {
-    console.log(req.body)
-    // {
-    //     googleId: "dsddsads"
-    //     email
-    //     full name
-    //     surname
-    //     date
-    //    }
-    try{
-        const {name, email, password, passwordVerify} = req.body
 
+    try{
+        const { googleId, email, firstName, lastName, date} = req.body
+        // var date_now, model_data;
+
+        // //inserts current date
+        // if (!date){
+        //     // current timestamp in milliseconds
+        //     let ts = Date.now();
+
+        //     let date_ob = new Date(ts);
+        //     let day = date_ob.getDate();
+        //     let month = date_ob.getMonth() + 1;
+        //     let year = date_ob.getFullYear();
+
+        //     date_now = year + "-" + month + "-" + day;
+        // }
+
+        console.log(req.body)
         //validation
-        //all fields have values 
-        if (!name || !email || !password || !passwordVerify)
+        if (!googleId || !email || !firstName || !lastName)
             return res
                     .status(400)
                     .json({
                         errMessage: "Please enter All required fields. "
                     });
-        //password is longer than 6 characters 
-        if (password.length < 6)
-            return res
-                    .status(400)
-                    .json({
-                        errMessage: "Please enter longer password. "
-                    });
-        //password is same as verification
-        if (password !== passwordVerify)
-            return res
-                    .status(400)
-                    .json({
-                        errMessage: "Please enter the same password. "
-                    });
-        
-        const existingUser = await UserModel.findOne({ email });
-        //if email already in database
-        if (existingUser)
-            return res
-                .status(400)
-                .json({
-                    errMessage: "Email already exists. "
-                });
-        
-        //encrypt password through hashing
-        const salt = await bcrypt.genSalt();
-        const passwordHash = await bcrypt.hash(password, salt);
-        
-        //display hashed password in console
-        console.log(passwordHash);
 
-        //save new user account in database
         const newUser = new UserModel ({
-            name, email, passwordHash
+            googleId, email, lastName, firstName, date
         });
 
         //save new user entry in mongoDB
         //returns object with entry details
         const savedUser = await newUser.save();
-        
+        loggedUser = savedUser;
+        //   
         //log user in
         const token = jwt.sign({
-            user: savedUser._id
+            user: loggedUser._id
         }, jwtPrivateKey
         );  
 
         res.cookie("token", token, {
             httpOnly: true,
-        }).send();
+        }).send("User logged. logging you in.");
     }
     catch (err){
         console.error(err)
