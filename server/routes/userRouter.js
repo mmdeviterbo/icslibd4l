@@ -7,7 +7,7 @@ const config = require("config")
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
 //register
-router.post("/", async (req,res) => {
+router.post("/create", async (req,res) => {
 
     try{
         const { googleId, email, firstName, lastName, date} = req.body
@@ -60,55 +60,11 @@ router.post("/", async (req,res) => {
     }
 });
 
-
-
-//log in
-router.post("/login", async (req, res) => {
-    try{
-        const {email, password} = req.body;
-
-        //validation
-        //all fields have values 
-        if (!email || !password)
-            return res
-                    .status(400)
-                    .json({
-                        errMessage: "Please enter All required fields. "
-                    });
-        
-        const existingUser = await UserModel.findOne({ email });
-        if (!existingUser)
-            return res
-                    .status(401)
-                    .json({
-                        errMessage: "Wrong Email or Password. "
-                    });
-        
-        //check if password is correct
-        const passwordCorrect = bcrypt.compare(password, existingUser.passwordHash)
-        if (!passwordCorrect)
-        return res
-                .status(401)
-                .json({
-                    errMessage: "Wrong Email or Password. "
-                });
-        
-        //log user in
-        const token = jwt.sign({
-            user: existingUser._id
-        }, jwtPrivateKey
-        );
-
-        res.cookie("token", token, {
-            httpOnly: true,
-        }).send();
-
-    }
-    catch(err){
-        console.error(err)
-        res.status(500).send();
-    }
-})
+router.delete("/delete/:id", async (req, res) => {
+    const id = req.params.id;
+    await userModel.findByIdAndRemove(id).exec();
+    res.send("Entry Deleted")
+});
 
 //logout current signed in user. deletes cookie for user
 router.get("/logout", (req,res) => {
