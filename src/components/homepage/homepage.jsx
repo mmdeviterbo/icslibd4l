@@ -11,12 +11,13 @@ export default function Homepage() {
             <BrowsePart/>
             <LatestAcquisitions/>
             <RecentNews/>
-
-            <div className="browseResources-homepage"> </div>
         </div>
     )
 }
 const homepageContainer = {
-    backgroundColor: "#E9E9E9",
+    backgroundColor: "#f3f4f7",
+    backgroundImage: "linear-gradient(315deg, #f3f4f7 0%, #caccd1 74%)",
     fontFamily: 'Montserrat',
 }
+
+

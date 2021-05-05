@@ -66,8 +66,7 @@ const browsePartContainer={
     justifyContent:"center",
     alignItems:"center",
     background:"white",
-    transition: "0.5s"
-
+    transition: "0.5s",
 }
 const browseBox = {
     borderRadius:"20px",
