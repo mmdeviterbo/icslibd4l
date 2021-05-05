@@ -130,7 +130,7 @@
 
     /* search container */
     .searchMainContainer{
-        height:40vh !important;
+        height:50vh !important;
     }
     .searchBoxContainer{
         padding:0px 5vw !important;
@@ -139,6 +139,7 @@
     /* browse on books, sp, theses button */
     .browsePartContainer{
         flex-direction: column !important;
+        min-height: 50vh !important;
     }
     .browseBox{
         width: 80vw !important;
@@ -159,5 +160,3 @@
     }
     
 }
-
-

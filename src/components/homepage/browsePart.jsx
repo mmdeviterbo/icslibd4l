@@ -1,18 +1,16 @@
 import React,{useEffect} from 'react'
 import {Link} from 'react-router-dom';
+
 import {gsap} from 'gsap';
+import ScrollTrigger from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger)
+
+
 
 export default function BrowsePart() {
     useEffect(()=>{
-        gsap.from('.browseboxBooks',{
-            duration:0.6,
-            x:-1000
-        });
-        gsap.from('.browseboxSP',{
-            duration:0.6,
-            x:1000
-        });
-    },[])
+        animateBrowse();
+    })
 
     const animateOnClick=(nameClass)=>{
         const tempNameClass = "." + nameClass;
@@ -57,29 +55,62 @@ export default function BrowsePart() {
     )
 }
 
+const animateBrowse=()=>{
+        let t1 = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".browsePartContainer",
+                start: "top bottom",
+                end: "bottom bottom",
+                scrub: true
+            }    
+        })
+        
+        let t2 = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".browsePartContainer",
+                start: "top bottom",
+                end: "bottom bottom",
+                scrub: true
+            }    
+        })
+        let t3 = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".browsePartContainer",
+                start: "top bottom",
+                end: "bottom bottom",
+                scrub: true
+            }    
+        })
+        t1.from('.browseboxBooks',{yPercent:250})
+        t2.from('.browseboxSP',{yPercent:250});    
+        t3.from('.browseboxTheses',{yPercent:250});    
+}
+
+
 const browsePartContainer={
+    overflowY:"hidden",
     fontFamily: 'Montserrat',
-    minHeight:"40vh",
+    minHeight:"100vh",
     padding:"20px 10px",
     display:"flex",
     "gap":"20px",
-    justifyContent:"center",
+    justifyContent:"space-evenly",
     alignItems:"center",
     background:"white",
     transition: "0.5s",
 }
 const browseBox = {
     borderRadius:"20px",
-    height:"200px",
-    width:"200px",
-    border:"0.1px solid black",
+    height:"40vh",
+    width:"40vh",
+    border:"2px solid black",
     cursor:"pointer",
     backgroundColor:"white",
     display:"flex",
     flexDirection:"column",
     justifyContent:"space-around",
     alignItems:"center",
-    boxShadow:"0.5px 1px 1px 0.5px black",
+    boxShadow:"1px 1px 10px black",
     fontWeight:"700",
     fontSize:"18px",
     fontColor:"black",
