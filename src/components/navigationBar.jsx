@@ -24,9 +24,6 @@ export default function NavigationBar() {
                         </Link>
                 </div>
                 <div className="right-half">
-                    {/* this is incomplete: change this if there's user logged in */}
-                    {/* <Link to="/login"><span className="login-link">Login</span></Link> */}
-
                     <GoogleLogin
                         clientId="6202802484-iccqejrjgf8i8ltf7ri1t12o0598509n.apps.googleusercontent.com"
                         buttonText="Login"
@@ -34,9 +31,7 @@ export default function NavigationBar() {
                         onFailure={responseGoogle}
                         cookiePolicy={'single_host_origin'}
                         className="login-link"
-                        icon={false}
-                        disabledStyle={{boxShadow:"none"}}
-                        />
+                        icon={false}/>
                 </div>
             </ul>     
         </div>
