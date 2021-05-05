@@ -35,24 +35,37 @@ router.post("/create", async (req,res) => {
                         errMessage: "Please enter All required fields. "
                     });
 
-        const newUser = new UserModel ({
-            googleId, email, lastName, firstName, date
-        });
-
-        //save new user entry in mongoDB
-        //returns object with entry details
-        const savedUser = await newUser.save();
-        loggedUser = savedUser;
-        //   
+        const existingUser = await UserModel.findOne({ googleId });
+        var loggedUser;
+        
+        //user exists
+        if (existingUser){
+            loggedUser = existingUser;
+        }
+        else{   
+            const userType = "student"
+            const newUser = new UserModel ({
+                googleId, email, lastName, firstName, date, userType
+            });
+    
+            //save new user entry in mongoDB
+            //returns object with entry details
+            const savedUser = await newUser.save();
+            loggedUser = savedUser;
+        }
+        
         //log user in
         const token = jwt.sign({
-            user: loggedUser._id
+            email: loggedUser.email,
+            lastName: loggedUser.lastName,
+            firstName: loggedUser.firstName,
+            userType: loggedUser.userType
         }, jwtPrivateKey
         );  
 
         res.cookie("token", token, {
             httpOnly: true,
-        }).send("User logged. logging you in.");
+        }).send(loggedUser);
     }
     catch (err){
         console.error(err)
@@ -60,11 +73,11 @@ router.post("/create", async (req,res) => {
     }
 });
 
-router.delete("/delete/:id", async (req, res) => {
-    const id = req.params.id;
-    await userModel.findByIdAndRemove(id).exec();
-    res.send("Entry Deleted")
-});
+// router.delete("/delete/:id", async (req, res) => {
+//     const id = req.params.id;
+//     await userModel.findByIdAndRemove(id).exec();
+//     res.send("Entry Deleted")
+// });
 
 //logout current signed in user. deletes cookie for user
 router.get("/logout", (req,res) => {
