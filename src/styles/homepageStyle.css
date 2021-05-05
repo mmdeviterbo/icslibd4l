@@ -1,8 +1,5 @@
 /* navigation bar */
 .navbar-container{
-    z-index: 1000;
-    position: sticky !important;
-    top:25px !important;
     font-family: 'Montserrat';
     position: relative; /*for the box-shadow to show*/
     box-shadow: 4px 4px 7px rgb(18, 28, 49);
