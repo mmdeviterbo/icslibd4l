@@ -1,10 +1,5 @@
 const mongoose = require('mongoose');
-    //     googleId: "dsddsads"
-    //     email
-    //     full name
-    //     surname
-    //     date
-    //    }
+
 const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
@@ -24,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     date: {
         type: String,
-        required: true
+        required: false
     },
 });
 //creates a database in mongoose using User Model Structure
