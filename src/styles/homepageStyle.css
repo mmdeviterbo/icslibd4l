@@ -1,8 +1,11 @@
 /* navigation bar */
 .navbar-container{
+    z-index: 1000;
+    position: sticky !important;
+    top:25px !important;
     font-family: 'Montserrat';
     position: relative; /*for the box-shadow to show*/
-    box-shadow: 2px 2px 7px black;
+    box-shadow: 4px 4px 7px rgb(18, 28, 49);
     background-color: #0067A1;
     height:100px;
     margin-top:25px;
@@ -55,15 +58,18 @@
     align-items: center;
     padding-right:20px;
 }
-.login-link{
-    color:white;
-    letter-spacing: 1px;
-    font-size: 20px;
-}
-.login-link:hover{
-    color:white;
-}
 
+/* google auth button */
+.login-link{
+    font-weight: 600;
+    letter-spacing: 1px !important;
+    font-size: 22px !important;
+    background: none !important;
+    border:none !important;
+    box-shadow: none !important;
+    color:white !important;
+
+}
 
 /* hover effects */
 .acquisitionsInnerContainer:hover{
@@ -122,9 +128,12 @@
         padding:3px !important;
     }
 
-    /* search bar */
+    /* search container */
+    .searchMainContainer{
+        height:40vh !important;
+    }
     .searchBoxContainer{
-        width:85vw !important;
+        padding:0px 5vw !important;
     }
 
     /* browse on books, sp, theses button */
