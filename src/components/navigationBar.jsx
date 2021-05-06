@@ -1,4 +1,5 @@
-import mainBg from '../assets/homepage-cover-bg.jpg';
+import personService from '../services/personService'
+import mainBgUp from '../assets/icslib.jpg';
 import React, {useEffect} from 'react'
 import GoogleLogin from 'react-google-login';
 import {Link} from 'react-router-dom';
@@ -10,20 +11,21 @@ gsap.registerPlugin(ScrollTrigger)
 
 
 
-export default function NavigationBar() {
+export default function NavigationBar({loginRegisterUser}) {
     useEffect(()=>{
         navBarAnimation();
     },[])
     
     const responseGoogle=(response)=>{
-        console.log(response);
-        console.log(response.profileObj);
+        const {googleId, email, name, familyName} = response.profileObj
+        const userInfo = {googleId: googleId, email: email, fullname: name, surname: familyName}
+        loginRegisterUser(userInfo);
     }   
 
     return (
         <div className="navbar-container">
             <div style={mainBgStyleContainer}>
-                <img src={mainBg} style={mainBgStyleImg} className="mainBgStyle-navbar" alt="#"/>
+                <img src={mainBgUp} style={mainBgStyleImg} className="mainBgStyle-navbar" alt="#"/>
             </div>
             <ul className="navbar-elements">
                 <div className="left-half">
