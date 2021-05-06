@@ -68,7 +68,7 @@
 /* google auth button */
 .login-link{
     letter-spacing: 1px !important;
-    font-size: calc(18px + 1vw) !important;
+    font-size: calc(10px + 1vw) !important;
     background: none !important;
     box-shadow: none !important;
     color:white !important;
