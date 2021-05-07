@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    nickname: {
+        type: String,
+        required: true
+    }
 });
 //creates a database in mongoose using User Model Structure
 const UserModel = mongoose.model("alluser", userSchema);
