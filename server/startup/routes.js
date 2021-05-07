@@ -17,7 +17,13 @@ module.exports = function(app){
     app.use(express.json());
     app.use(bodyParser.json());
     app.use(cookieParser());
-
+    app.use(function (req,res,next){
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
+        next();
+    })
+    
     app.use("/test", require('../routes/testDataRouter'))
     app.use("/authentication", require('../routes/userRouter'));
     
