@@ -11,7 +11,7 @@ export default function Homepage() {
             <BrowsePart/>
             <LatestAcquisitions/>
             <RecentNews/>
-
+            
             <div className="browseResources-homepage"> </div>
         </div>
     )

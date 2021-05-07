@@ -20,6 +20,7 @@ module.exports = (app) => {
 
     app.use("/test", require('../routes/testDataRouter'))
     app.use("/authentication", require('../routes/userRouter'));
+    app.use("/addThesis", require('../routes/thesisRouter'));
     
     //set up user activity router       
     app.use("/auth", require('../routes/userActivityRouter'));

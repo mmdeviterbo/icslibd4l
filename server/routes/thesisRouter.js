@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const thesisModel = require("../models/thesisModel");
 
-router.post("/", async (req,res)=>{
+router.post("/addThesis", async (req,res)=>{
     try{
         const {title, author, year} = req.body; 
 
