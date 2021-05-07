@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 import {gsap} from 'gsap';
 import ScrollTrigger from "gsap/ScrollTrigger";
-import searchBg from '../../assets/searchBg.png';
+import searchBg from '../../assets/searchBg_4.png';
 gsap.registerPlugin(ScrollTrigger)
 
 
@@ -118,7 +118,7 @@ const searchBgStyle = {
     height:"100%",
     width:"100%",
     zIndex:"-1",
-    transform:"scaleY(-1)"
+    transform:"scaleY(-1)",
 }
     
 

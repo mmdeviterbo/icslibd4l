@@ -1,5 +1,5 @@
 import React from 'react'
-import searchBg from '../../assets/searchBg.png';
+import searchBg from '../../assets/searchBg_4.png';
 
 export default function SearchbarPart() {
     return (
@@ -47,7 +47,7 @@ const inputSearch={
     padding:"30px 25px 30px 25px",
     borderRadius:"5px 0 0 5px",
     backgroundColor:"rgba(255,255,255,0.6)",
-    boxShadow:"15px 20px 30px black",
+    boxShadow:"10px 15px 25px black",
     zIndex:0,
 }
 const searchIcon = {
@@ -61,6 +61,6 @@ const searchBgStyle = {
     position:"absolute",
     height:"100%",
     width:"100%",
-    zIndex:"-1"
+    zIndex:"-1",
 }
 
