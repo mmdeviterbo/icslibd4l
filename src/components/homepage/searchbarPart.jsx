@@ -1,5 +1,5 @@
 import React from 'react'
-import searchBg from '../../assets/searchBg.jpg';
+import searchBg from '../../assets/searchBg.png';
 
 export default function SearchbarPart() {
     return (
@@ -27,19 +27,21 @@ const advanceSearch = {
     "display":"flex",
     flexDirection:"column",
     "justifyContent":"center",
-    "AlignItems":"center",
+    "alignItems":"center",
     "padding":0,
     overflowX:"hidden",
     transition:"1s"
 }
 const searchBoxContainer = {
-    width:"100%",
-    height:"100%",
+    width:"80%",
+    height:"65%",
     transition:"1s",
     display:"grid",
     placeItems:"center",
-    padding:"0px 20vw",
-    margin:"0"
+    padding:"0px 12vw",
+    margin:"0",
+    borderRadius:"20px",
+    boxShadow:"10px 10px 35px black",
 }
 const inputSearch={
     padding:"30px 25px 30px 25px",

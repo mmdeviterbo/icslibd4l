@@ -8,7 +8,7 @@
     font-family: 'Montserrat';
     display: flex;
     align-items:flex-end;
-
+    box-shadow: 0.5px 0.5px 2px rgb(190, 190, 190, 0.4);
 
     /* protect from copy paste  */
     -webkit-user-select: none;
@@ -34,8 +34,10 @@
     transition: 1s;
 }
 .ics-uplb-caption{
-    color:white;
+    text-shadow: 2px 2px 7px #2e2e2e;
+    color:rgb(255, 255, 255);
     display: flex;
+    font-weight: 500;
     flex-direction: column;
 }
 .ics-uplb-caption:hover{
@@ -173,7 +175,12 @@
         height:50vh !important;
     }
     .searchBoxContainer{
-        padding:0px 5vw !important;
+        height:100% !important;
+        width:100% !important;
+        border-radius: 0px !important;
+        flex-direction: column;
+        padding:5px;
+        box-shadow:none;
     }
 
     /* browse on books, sp, theses button */

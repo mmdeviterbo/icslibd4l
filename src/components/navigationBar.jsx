@@ -60,7 +60,7 @@ const navBarAnimation=()=>{
 
     gsap.timeline({
         scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 10px", scrub:0}    
-    }).to('.mainBgStyle-navbar',{filter:"blur(0px) brightness(50%)", opacity:0.98})
+    }).to('.mainBgStyle-navbar',{filter:"blur(0px) brightness(50%)", opacity:0.3})
 
     gsap.timeline({scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 10px", scrub:0,}}).from('.icslogo-img',{opacity:0})
     
@@ -82,6 +82,6 @@ const mainBgStyleImg = {
     height:"100%",
     width:"100%",
     objectFit:"cover",
-    filter:"blur(4px) brightness(100%)",
-    transform:"scale(1.02)"
+    filter:"blur(3px) brightness(100%)",
+    transform:"scale(1.02)",
 }
