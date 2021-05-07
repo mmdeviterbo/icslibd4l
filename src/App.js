@@ -13,8 +13,17 @@ function App() {
   const [seach, setSearch] = useState(); //search query from user
   
   useEffect(()=>{
+    topWhenRefresh();
     getCurrentToken();
   },[])
+
+
+  // refresh when full reload happens
+  function topWhenRefresh(){
+    window.onbeforeunload = function () {
+      window.scrollTo(0, 0);
+    }
+  }
 
   // to see if there's current user logged in the browser
   const getCurrentToken=()=>{

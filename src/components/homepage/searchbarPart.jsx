@@ -45,9 +45,11 @@ const inputSearch={
     padding:"30px 25px 30px 25px",
     borderRadius:"5px 0 0 5px",
     backgroundColor:"rgba(255,255,255,0.6)",
-    boxShadow:"15px 20px 30px black"
+    boxShadow:"15px 20px 30px black",
+    zIndex:0,
 }
 const searchIcon = {
+    opacity:1,
     backgroundColor:"#0067A1",
     borderRadius:"0 5px 5px 0",
     boxShadow:"10px 10px 20px black"
