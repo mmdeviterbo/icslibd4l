@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     userType: {
-        type: String,
+        type: Number,
         required: true
     },
 });
