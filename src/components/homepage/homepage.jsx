@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function Homepage() {
     useEffect(()=>{
-        gsap.timeline({scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 10px", scrub:0,}}).to('.homepage-container',{background: "#4b79a1"})
+        gsap.timeline({scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 40px", scrub:0,}}).from('.homepage-container',{background: "linear-gradient(to right, #d3cce3, #e9e4f0)"})
     },[])
     
     return (

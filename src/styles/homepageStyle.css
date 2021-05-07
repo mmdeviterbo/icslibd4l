@@ -1,5 +1,6 @@
 /* navigation bar */
 .navbar-container{
+    display: block;
     z-index: 10;
     min-height:320px;
     position: sticky !important;

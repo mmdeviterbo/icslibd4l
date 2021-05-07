@@ -1,6 +1,6 @@
 .notFoundContainer{
     font-family: 'Montserrat';
-    height:78vh;
+    height:100vh;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -15,7 +15,7 @@
 }
 .white-notfound{
     background-color: rgba(255,255,255,0.15);
-    height:90%;
+    height:70%;
     width:500px;
     border-radius: 18px;
     margin-right: 10%;

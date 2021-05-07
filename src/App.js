@@ -43,8 +43,6 @@ function App() {
 
   }
 
-  
-
   return (
     <div className="App">
         {/* navigationBar is always visible no matter on what route */}
@@ -53,6 +51,9 @@ function App() {
         {/* this route returns component depending on the route */}
         <Switch>
           <Route path="/home" component={Homepage}></Route>
+          {/* add your new route/path here */}
+
+
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/> 
