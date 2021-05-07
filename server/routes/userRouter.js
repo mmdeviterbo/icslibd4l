@@ -11,22 +11,7 @@ router.post("/create", async (req,res) => {
 
     try{
         const { googleId, email, fullName} = req.body
-        // var date_now, model_data;
-
-        // //inserts current date
-        // if (!date){
-        //     // current timestamp in milliseconds
-        //     let ts = Date.now();
-
-        //     let date_ob = new Date(ts);
-        //     let day = date_ob.getDate();
-        //     let month = date_ob.getMonth() + 1;
-        //     let year = date_ob.getFullYear();
-
-        //     date_now = year + "-" + month + "-" + day;
-        // }
-
-        // console.log(req.body)
+    
         //validation
         if (!googleId || !email || !fullName)
             return res
@@ -43,7 +28,7 @@ router.post("/create", async (req,res) => {
             loggedUser = existingUser;
         }
         else{   
-            const userType = "student"
+            const userType = 4
             const newUser = new UserModel ({
                 googleId, email, fullName, userType
             });
