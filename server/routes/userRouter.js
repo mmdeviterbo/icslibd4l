@@ -6,85 +6,65 @@ const config = require("config")
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
-//npm install bcryptjs
-//npm unstall jsonwebtokencx
-//register 
+//register
+router.post("/create", async (req,res) => {
 
-
-router.get("/", async (req, res) => {
-    console.log("hello")
-    res.send("hello")
-});
-
-router.post("/", async (req,res) => {
-    console.log(req.body)
-    // {
-    //     googleId: "dsddsads"
-    //     email
-    //     full name
-    //     surname
-    //     date
-    //    }
     try{
-        const {name, email, password, passwordVerify} = req.body
+        const { googleId, email, fullName} = req.body
+        // var date_now, model_data;
 
+        // //inserts current date
+        // if (!date){
+        //     // current timestamp in milliseconds
+        //     let ts = Date.now();
+
+        //     let date_ob = new Date(ts);
+        //     let day = date_ob.getDate();
+        //     let month = date_ob.getMonth() + 1;
+        //     let year = date_ob.getFullYear();
+
+        //     date_now = year + "-" + month + "-" + day;
+        // }
+
+        // console.log(req.body)
         //validation
-        //all fields have values 
-        if (!name || !email || !password || !passwordVerify)
+        if (!googleId || !email || !fullName)
             return res
                     .status(400)
                     .json({
                         errMessage: "Please enter All required fields. "
                     });
-        //password is longer than 6 characters 
-        if (password.length < 6)
-            return res
-                    .status(400)
-                    .json({
-                        errMessage: "Please enter longer password. "
-                    });
-        //password is same as verification
-        if (password !== passwordVerify)
-            return res
-                    .status(400)
-                    .json({
-                        errMessage: "Please enter the same password. "
-                    });
-        
-        const existingUser = await UserModel.findOne({ email });
-        //if email already in database
-        if (existingUser)
-            return res
-                .status(400)
-                .json({
-                    errMessage: "Email already exists. "
-                });
-        
-        //encrypt password through hashing
-        const salt = await bcrypt.genSalt();
-        const passwordHash = await bcrypt.hash(password, salt);
-        
-        //display hashed password in console
-        console.log(passwordHash);
 
-        //save new user account in database
-        const newUser = new UserModel ({
-            name, email, passwordHash
-        });
-
-        //save new user entry in mongoDB
-        //returns object with entry details
-        const savedUser = await newUser.save();
+        const existingUser = await UserModel.findOne({ googleId });
+        var loggedUser;
+        
+        //user exists
+        if (existingUser){
+            loggedUser = existingUser;
+        }
+        else{   
+            const userType = "student"
+            const newUser = new UserModel ({
+                googleId, email, fullName, userType
+            });
+    
+            //save new user entry in mongoDB
+            //returns object with entry details
+            const savedUser = await newUser.save();
+            loggedUser = savedUser;
+        }
         
         //log user in
         const token = jwt.sign({
-            user: savedUser._id
+            email: loggedUser.email,
+            fullName: loggedUser.fullName,
+            userType: loggedUser.userType
         }, jwtPrivateKey
         );  
 
         res.cookie("token", token, {
             httpOnly: true,
-        }).send();
+        }).send(loggedUser);
     }
     catch (err){
         console.error(err)
@@ -92,55 +72,12 @@ router.post("/", async (req,res) => {
     }
 });
 
-
-
-//log in
-router.post("/login", async (req, res) => {
-    try{
-        const {email, password} = req.body;
-
-        //validation
-        //all fields have values 
-        if (!email || !password)
-            return res
-                    .status(400)
-                    .json({
-                        errMessage: "Please enter All required fields. "
-                    });
-        
-        const existingUser = await UserModel.findOne({ email });
-        if (!existingUser)
-            return res
-                    .status(401)
-                    .json({
-                        errMessage: "Wrong Email or Password. "
-                    });
-        
-        //check if password is correct
-        const passwordCorrect = bcrypt.compare(password, existingUser.passwordHash)
-        if (!passwordCorrect)
-        return res
-                .status(401)
-                .json({
-                    errMessage: "Wrong Email or Password. "
-                });
-        
-        //log user in
-        const token = jwt.sign({
-            user: existingUser._id
-        }, jwtPrivateKey
-        );
-
-        res.cookie("token", token, {
-            httpOnly: true,
-        }).send();
-
-    }
-    catch(err){
-        console.error(err)
-        res.status(500).send();
-    }
-})
+//delete
+router.delete("/delete", async (req, res) => {
+    const googleId = req.body.googleId;
+    await UserModel.findOneAndDelete({ googleId })
+    res.send("Entry Deleted")
+});
 
 //logout current signed in user. deletes cookie for user
 router.get("/logout", (req,res) => {
@@ -149,4 +86,8 @@ router.get("/logout", (req,res) => {
         expires: new Date(0)
     }).send();
 })
+
+
+//TODO
+// async function mail()
 module.exports = router;        
