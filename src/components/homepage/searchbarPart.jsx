@@ -1,11 +1,10 @@
 import React from 'react'
-import {gsap} from 'gsap';
-import ScrollTrigger from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger)
+import searchBg from '../../assets/searchBg.jpg';
 
 export default function SearchbarPart() {
     return (
         <div style={advanceSearch} className="searchMainContainer">
+            <img src={searchBg} style={searchBgStyle} alt="#"/>
             <div style={searchBoxContainer}  className="searchBoxContainer">
                 <div className="input-group">
                     <input style={inputSearch} type="text" className="form-control" 
@@ -24,7 +23,7 @@ export default function SearchbarPart() {
 const advanceSearch = {
     position:"relative",
     fontFamily: 'Montserrat',
-    "height":"84vh",
+    "height":"100vh",
     "display":"flex",
     flexDirection:"column",
     "justifyContent":"center",
@@ -44,12 +43,20 @@ const searchBoxContainer = {
 }
 const inputSearch={
     padding:"30px 25px 30px 25px",
-    borderRadius:"10px 0 0 10px"
+    borderRadius:"5px 0 0 5px",
+    backgroundColor:"rgba(255,255,255,0.6)",
+    boxShadow:"15px 20px 30px black"
 }
 const searchIcon = {
     backgroundColor:"#0067A1",
-    borderRadius:"0 10px 10px 0"
+    borderRadius:"0 5px 5px 0",
+    boxShadow:"10px 10px 20px black"
 }
 
-
+const searchBgStyle = {
+    position:"absolute",
+    height:"100%",
+    width:"100%",
+    zIndex:"-1"
+}
 

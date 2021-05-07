@@ -81,14 +81,14 @@ const animateBrowse=()=>{
                 scrub: true
             }    
         })
-        t1.from('.browseboxBooks',{yPercent:250})
-        t2.from('.browseboxSP',{yPercent:250});    
-        t3.from('.browseboxTheses',{yPercent:250});    
+        t1.from('.browseboxBooks',{xPercent:-270});
+        t2.from('.browseboxSP',{xPercent:270});    
+        t3.from('.browseboxTheses',{yPercent:-150});    
 }
 
 
 const browsePartContainer={
-    overflowY:"hidden",
+    overflow:"hidden",
     fontFamily: 'Montserrat',
     minHeight:"100vh",
     padding:"20px 10px",
