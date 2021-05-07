@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    name: {
+    googleId: {
         type: String,
         required: true
     },
@@ -9,10 +9,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    passwordHash: {
+    fullName: {
         type: String,
         required: true
-    }
+    },
+    userType: {
+        type: String,
+        required: true
+    },
 });
 //creates a database in mongoose using User Model Structure
 const UserModel = mongoose.model("alluser", userSchema);
