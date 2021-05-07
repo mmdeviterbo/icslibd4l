@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 
 import {gsap} from 'gsap';
 import ScrollTrigger from "gsap/ScrollTrigger";
+import searchBg from '../../assets/searchBg.png';
 gsap.registerPlugin(ScrollTrigger)
 
 
@@ -20,37 +21,40 @@ export default function BrowsePart() {
     
     return (
         <div className="browsePartContainer" style={browsePartContainer}>
-            <Link className="browseBox browseboxBooks" style={browseBox} to='/home'
-                onClick={()=>animateOnClick("browseboxBooks")}>
-                    <div style={imgContainer} className="imgBooksContainer">
-                        <img src="https://img.icons8.com/ios/64/000000/book-stack.png" alt="#"
-                            style={imgStyle} className="imgBooksBefore"/>
-                        <img src="https://img.icons8.com/ios-filled/64/000000/book-stack.png" alt="#"
-                            style={imgStyleHover} className="imgBooksHover"/>
-                    </div>
-                    <p style={titleSource}>Books</p>
-            </Link>
-            
-            <Link className="browseBox browseboxTheses" style={browseBox} to='/home'
-                onClick={()=>animateOnClick("browseboxTheses")}>
-                    <div style={imgContainer} className="imgThesesContainer">
-                        <img src="https://img.icons8.com/ios/64/000000/agreement.png" alt="#"
-                            style={imgStyle} className="imgThesesBefore"/>
-                        <img src="https://img.icons8.com/ios-filled/64/000000/agreement.png" alt="#"
-                            style={imgStyleHover} className="imgThesesHover"/>
-                    </div>
-                    <p style={titleSource}>Theses</p>
-            </Link>
-            <Link className="browseBox browseboxSP" style={browseBox} to='/home'
-                onClick={()=>animateOnClick("browseboxSP")}>
-                    <div style={imgContainer} className="imgSPContainer">
-                        <img src="https://img.icons8.com/ios/50/000000/new-file.png" alt="#"
-                            style={imgStyle} className="imgSPBefore"/>
-                        <img src="https://img.icons8.com/ios-filled/50/000000/new-file.png" alt="#"
-                            style={imgStyleHover} className="imgSPHover"/>
-                    </div>
-                    <p style={titleSource}>Special Problem</p>
-            </Link>
+            <img src={searchBg} style={searchBgStyle} alt="#"/>
+            <div style={searchBoxContainer} className="searchBoxContainer">
+                <Link className="browseBox browseboxBooks" style={browseBox} to='/home'
+                    onClick={()=>animateOnClick("browseboxBooks")}>
+                        <div style={imgContainer} className="imgBooksContainer">
+                            <img src="https://img.icons8.com/ios/64/000000/book-stack.png" alt="#"
+                                style={imgStyle} className="imgBooksBefore"/>
+                            <img src="https://img.icons8.com/ios-filled/64/000000/book-stack.png" alt="#"
+                                style={imgStyleHover} className="imgBooksHover"/>
+                        </div>
+                        <p style={titleSource}>Books</p>
+                </Link>
+                
+                <Link className="browseBox browseboxTheses" style={browseBox} to='/home'
+                    onClick={()=>animateOnClick("browseboxTheses")}>
+                        <div style={imgContainer} className="imgThesesContainer">
+                            <img src="https://img.icons8.com/ios/64/000000/agreement.png" alt="#"
+                                style={imgStyle} className="imgThesesBefore"/>
+                            <img src="https://img.icons8.com/ios-filled/64/000000/agreement.png" alt="#"
+                                style={imgStyleHover} className="imgThesesHover"/>
+                        </div>
+                        <p style={titleSource}>Theses</p>
+                </Link>
+                <Link className="browseBox browseboxSP" style={browseBox} to='/home'
+                    onClick={()=>animateOnClick("browseboxSP")}>
+                        <div style={imgContainer} className="imgSPContainer">
+                            <img src="https://img.icons8.com/ios/50/000000/new-file.png" alt="#"
+                                style={imgStyle} className="imgSPBefore"/>
+                            <img src="https://img.icons8.com/ios-filled/50/000000/new-file.png" alt="#"
+                                style={imgStyleHover} className="imgSPHover"/>
+                        </div>
+                        <p style={titleSource}>Special Problem</p>
+                </Link>
+            </div>
         </div>
     )
 }
@@ -88,21 +92,40 @@ const animateBrowse=()=>{
 
 
 const browsePartContainer={
-    overflow:"hidden",
+    position:"relative",
     fontFamily: 'Montserrat',
     minHeight:"100vh",
     padding:"20px 10px",
-    display:"flex",
-    "gap":"20px",
-    justifyContent:"space-evenly",
-    alignItems:"center",
-    background:"white",
+    display:"grid",
+    placeItems:"center",
     transition: "0.5s",
 }
+const searchBoxContainer={
+    position:"absolute",
+    overflow:"hidden",
+    width:"80%",
+    height:"65%",
+    display:"flex",
+    justifyContent:"center",
+    gap:"10px",
+    alignItems:"center",
+    borderRadius:"20px",
+    boxShadow:"10px 10px 35px black",
+}
+
+const searchBgStyle = {
+    position:"absolute",
+    height:"100%",
+    width:"100%",
+    zIndex:"-1",
+    transform:"scaleY(-1)"
+}
+    
+
 const browseBox = {
     borderRadius:"20px",
-    height:"40vh",
-    width:"40vh",
+    height:"33vh",
+    width:"33vh",
     border:"2px solid black",
     cursor:"pointer",
     backgroundColor:"white",
