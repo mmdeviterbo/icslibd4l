@@ -10,7 +10,7 @@ const jwtPrivateKey = config.get('jwtPrivateKey');
 router.post("/create", async (req,res) => {
 
     try{
-        const { googleId, email, firstName, lastName, date} = req.body
+        const { googleId, email, fullName} = req.body
         // var date_now, model_data;
 
         // //inserts current date
@@ -26,9 +26,9 @@ router.post("/create", async (req,res) => {
         //     date_now = year + "-" + month + "-" + day;
         // }
 
-        console.log(req.body)
+        // console.log(req.body)
         //validation
-        if (!googleId || !email || !firstName || !lastName)
+        if (!googleId || !email || !fullName)
             return res
                     .status(400)
                     .json({
@@ -45,7 +45,7 @@ router.post("/create", async (req,res) => {
         else{   
             const userType = "student"
             const newUser = new UserModel ({
-                googleId, email, lastName, firstName, date, userType
+                googleId, email, fullName, userType
             });
     
             //save new user entry in mongoDB
@@ -57,8 +57,7 @@ router.post("/create", async (req,res) => {
         //log user in
         const token = jwt.sign({
             email: loggedUser.email,
-            lastName: loggedUser.lastName,
-            firstName: loggedUser.firstName,
+            fullName: loggedUser.fullName,
             userType: loggedUser.userType
         }, jwtPrivateKey
         );  
@@ -73,11 +72,12 @@ router.post("/create", async (req,res) => {
     }
 });
 
-// router.delete("/delete/:id", async (req, res) => {
-//     const id = req.params.id;
-//     await userModel.findByIdAndRemove(id).exec();
-//     res.send("Entry Deleted")
-// });
+//delete
+router.delete("/delete", async (req, res) => {
+    const googleId = req.body.googleId;
+    await UserModel.findOneAndDelete({ googleId })
+    res.send("Entry Deleted")
+});
 
 //logout current signed in user. deletes cookie for user
 router.get("/logout", (req,res) => {
@@ -86,4 +86,8 @@ router.get("/logout", (req,res) => {
         expires: new Date(0)
     }).send();
 })
+
+
+//TODO
+// async function mail()
 module.exports = router;        
