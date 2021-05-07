@@ -1,4 +1,4 @@
-import {Route, Switch, Redirect } from 'react-router-dom';
+import {Route, Switch, Redirect, Link } from 'react-router-dom';
 import {useState, useEffect, useRef} from 'react';
 import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
@@ -8,12 +8,15 @@ import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import './App.css';
 
+
 function App() {
   const [user, setUser] = useState();    //fullname, email, surname, googleId
   const [seach, setSearch] = useState(); //search query from user
+  // insert your other states here
+
   
   useEffect(()=>{
-    topWhenRefresh();
+    topWhenRefresh(); 
     getCurrentToken();
   },[])
 
@@ -54,21 +57,24 @@ function App() {
 
   return (
     <div className="App">
-        {/* navigationBar is always visible no matter on what route */}
         <NavigationBar loginRegisterUser={loginRegisterUser}/>
 
-        {/* this route returns component depending on the route */}
         <Switch>
           <Route path="/home" component={Homepage}></Route>
-          {/* add your new route/path here */}
+          {/* insert you new path here */}
+          
 
 
+          {/* if /not-found, then go to "notfound" component*/}
           <Route exact path="/not-found" component={Notfound}></Route> 
+          
+          {/* if / only, the redirect it to /home path */}
           <Redirect exact from="/" to="/home"/>
+          
+          {/* if no path is found, it will fall under "notfound" component */}
           <Redirect to="/not-found"/> 
         </Switch>
 
-        {/* footer is always visible no matter on what route */}
         <Footer/>
     </div>
   );
