@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const thesisModel = require("../models/thesisModel");
 
-router.post("/addThesis", async (req,res)=>{
+router.post("/", async (req,res)=>{
     try{
+        // console.log("went here sa post")
         const {title, author, year} = req.body; 
 
         // sample verification: incomplete fields
