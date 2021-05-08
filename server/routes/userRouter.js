@@ -6,7 +6,7 @@ const config = require("config")
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
-//register
+//create entry
 router.post("/create", async (req,res) => {
 
     try{
@@ -102,7 +102,7 @@ router.delete("/delete", async (req, res) => {
     res.send("Entry Deleted")
 });
 
-//logout current signed in user. deletes cookie for user
+//logout current signed in user. deletes cookie for user                
 router.get("/logout", (req,res) => {
     res.cookie("token", "", {
         httpOnly: true,
@@ -111,6 +111,4 @@ router.get("/logout", (req,res) => {
 })
 
 
-//TODO
-// async function mail()
-module.exports = router;        
+module.exports = router;            
