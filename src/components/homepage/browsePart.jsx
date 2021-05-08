@@ -93,7 +93,6 @@ const animateBrowse=()=>{
 
 const browsePartContainer={
     position:"relative",
-    fontFamily: 'Montserrat',
     minHeight:"100vh",
     padding:"20px 10px",
     display:"grid",
@@ -106,11 +105,12 @@ const searchBoxContainer={
     width:"80%",
     height:"65%",
     display:"flex",
-    justifyContent:"center",
+    justifyContent:"space-around",
     gap:"10px",
     alignItems:"center",
-    borderRadius:"20px",
-    boxShadow:"10px 10px 35px black",
+    borderRadius:"50px",
+    boxShadow: "12px 12px 16px 0 rgba(0, 0, 0, 0.4),-8px -8px 12px 0 rgba(255, 255, 255, 0.7)",
+    filter:"brightness(0.98)"
 }
 
 const searchBgStyle = {
@@ -123,17 +123,16 @@ const searchBgStyle = {
     
 
 const browseBox = {
-    borderRadius:"20px",
+    borderRadius:"50px",
     height:"33vh",
     width:"33vh",
-    border:"2px solid black",
     cursor:"pointer",
-    backgroundColor:"white",
+    background: "#e6e6e6",
+    boxShadow: "6px 6px 14px 0 rgba(0, 0, 0, 0.4),-8px -8px 18px 0 rgba(255, 255, 255, 0.8)",
     display:"flex",
     flexDirection:"column",
     justifyContent:"space-around",
     alignItems:"center",
-    boxShadow:"1px 1px 10px black",
     fontWeight:"700",
     fontSize:"18px",
     fontColor:"black",

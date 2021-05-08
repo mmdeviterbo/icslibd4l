@@ -6,8 +6,8 @@ import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
+import {jwtPrivateKey} from './config.json';
 import './App.css';
-
 
 function App() {
   const [user, setUser] = useState();    //fullname, email, surname, googleId
@@ -16,25 +16,26 @@ function App() {
 
   
   useEffect(()=>{
-    topWhenRefresh(); 
+    goTopWhenRefresh(); 
     getCurrentToken();
   },[])
 
 
-  // refresh when full reload happens
-  function topWhenRefresh(){
-    window.onbeforeunload = function () {
+  // go to top position when full reload happens
+  function goTopWhenRefresh(){
+    window.onbeforeunload = function(){
       window.scrollTo(0, 0);
     }
   }
 
-  // to see if there's current user logged in the browser
+  // see if there's current user logged in the browser
   const getCurrentToken=()=>{
     try{
-      const jwt = localStorage.getItem("tokey");
+      const jwt = localStorage.getItem(jwtPrivateKey);
       const userInfo = jwtDecode(jwt);
-      console.log(userInfo);
+      console.log("DECODED JWT: " + userInfo);
       // set state
+      // do full reload
 
     }catch(err){
       console.log("No tokens yet");
@@ -43,16 +44,12 @@ function App() {
   
   // login/register a user
   const loginRegisterUser=async(userInfo)=>{
-    setUser(userInfo);
-    
-    //call database
     try{
       const {data} = await personService.loginRegisterUser(userInfo);   
-      console.log("Response: " + data);
+      setUser(data);
     }catch(err){
-      console.log("Error: " +  err);
+      console.log("Errorrrrr: " +  err);
     } 
-
   }
 
   return (

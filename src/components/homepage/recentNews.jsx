@@ -38,7 +38,6 @@ const ArticleContainer=({news})=>{
 
 
 const recentNewsContainer={
-    fontFamily: 'Montserrat',
     "minHeight": "45vh",
     background:"white",
     display:"flex",

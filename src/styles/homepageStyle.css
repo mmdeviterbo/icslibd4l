@@ -1,15 +1,12 @@
 /* navigation bar */
 .navbar-container{
-    display: block;
     z-index: 10;
-    min-height:320px;
+    min-height:220px;
     position: sticky !important;
     top:0 !important;
-    font-family: 'Montserrat';
     display: flex;
     align-items:flex-end;
-    box-shadow: 0.5px 0.5px 2px rgb(190, 190, 190, 0.4);
-
+    box-shadow: none;
     /* protect from copy paste  */
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -26,25 +23,26 @@
 }
 
 .left-half{
+    margin-left: 10%;
+    box-shadow:none;
+    border-radius: 20px;
     height: 100%;
     flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: 1s;
+    transition: 0.1s;
 }
 .ics-uplb-caption{
-    text-shadow: 2px 2px 7px #2e2e2e;
-    color:rgb(255, 255, 255);
+    color:black;
     display: flex;
     font-weight: 500;
     flex-direction: column;
 }
 .ics-uplb-caption:hover{
-    color:white;
-    text-decoration: none;
-    list-style: none;
+    color:black;
 }
+
 .ics-caption{
     font-size: 22px;
     font-weight: 600;
@@ -70,12 +68,25 @@
 
 /* google auth button */
 .login-link{
-    letter-spacing: 1px !important;
-    font-size: calc(10px + 1vw) !important;
-    background: none !important;
+    font-size: calc(7px + 1vw) !important;
+    background:none !important;
     box-shadow: none !important;
-    color:white !important;
 }
+.loginIconContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 5px 0 rgba(0, 0, 0, 0.45),-8px -8px 12px 0 rgba(255, 255, 255, 0.8);
+    padding:0px 10px;
+    border-radius: 10px;
+    transition: 0.4s;
+}
+.loginIconContainer:active{
+    box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2),
+    inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
+}
+
+
 
 /* hover effects */
 .acquisitionsInnerContainer:hover{
@@ -102,13 +113,19 @@
 
 /* apply mobile responsivess */
 @media screen and (max-width: 426px) {
+    .left-half{
+        margin-left: 0;
+        box-shadow:none !important;
+    }
+    .loginIconContainer{
+        box-shadow: none;
+    }
+
     .ics-uplb-caption{
         padding-left: 5px;
     }
-
     .ics-caption{
-        font-size: 15px;
-        font-weight: 450;
+        font-size: 12px;
         line-height: 1;
     }
     
@@ -134,26 +151,20 @@
 }
 
 @media screen and (max-width: 780px) {
-    .navbar-elements{
-        padding-left: 15px;
+    .left-half{
+        box-shadow: none !important; 
     }
-    
-    /* navigation bar */
-    .navbar-container{
-        min-height: 220px;
-    }
+
 
     /* footer  */
     .icslogo-img{
         display: none;   
     }
-    .left-half{
-        padding:1px;
-    }
+
 
     .ics-caption{
         font-size: 18px;
-        font-weight: 550;
+        font-weight: 750;
         line-height: 1;
     }
 

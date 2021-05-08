@@ -22,7 +22,6 @@ export default function SearchbarPart() {
 
 const advanceSearch = {
     position:"relative",
-    fontFamily: 'Montserrat',
     "height":"100vh",
     "display":"flex",
     flexDirection:"column",
@@ -30,7 +29,7 @@ const advanceSearch = {
     "alignItems":"center",
     "padding":0,
     overflowX:"hidden",
-    transition:"1s"
+    transition:"1s",
 }
 const searchBoxContainer = {
     width:"80%",
@@ -40,8 +39,8 @@ const searchBoxContainer = {
     placeItems:"center",
     padding:"0px 12vw",
     margin:"0",
-    borderRadius:"20px",
-    boxShadow:"10px 10px 35px black",
+    borderRadius:"50px",
+    boxShadow: "12px 12px 16px 0 rgba(0, 0, 0, 0.4),-8px -8px 12px 0 rgba(255, 255, 255, 0.7)",
 }
 const inputSearch={
     padding:"30px 25px 30px 25px",

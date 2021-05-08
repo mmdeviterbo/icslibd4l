@@ -3,8 +3,8 @@ import {apiEndpoint} from '../config.json';
 
 
 // login/register a person (guess, student, admin, faculty)
-const loginRegisterUser=()=>{
-    return http.post(apiEndpoint+'/authentication/create');
+const loginRegisterUser=(userInfo)=>{
+    return http.post(apiEndpoint+'/authentication/create', userInfo);
 }
 
 // read data of a person 
