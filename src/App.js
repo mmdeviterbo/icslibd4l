@@ -4,6 +4,9 @@ import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
+
+import ManageResPage from './components/manageresourcespage/manageresourcespage'
+
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import './App.css';
@@ -61,7 +64,7 @@ function App() {
         <Switch>
           <Route path="/home" component={Homepage}></Route>
           {/* add your new route/path here */}
-
+          <Route path="/manage-resources" component={ManageResPage}></Route>
 
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
