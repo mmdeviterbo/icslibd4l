@@ -27,7 +27,6 @@ export default function Homepage() {
 }
 
 const homepageContainer = {
-    fontFamily: 'Montserrat',
 }
 
 
