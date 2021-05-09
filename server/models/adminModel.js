@@ -1,22 +1,14 @@
 const mongoose = require("mongoose");
 
 
-const AdminSchema = new mongoose.Schema({
-    adminName: {
-        type: String,
-        required: true,
-    },
-    adminPassword: {
-        type: String,
-        required: true,
-    },
-    adminEmail: {
-        type: String,
-        required: true,
-    },
+const icsUserSchema = new mongoose.Schema({
+    upMail: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    userType: { type: Number, required: true },
 });
 
-const icsAdmin = mongoose.model("icsAdmin", AdminSchema);
-module.exports = icsAdmin;
+const icsUser = mongoose.model("icsadmins", icsUserSchema);
+module.exports = icsUser;
 
 

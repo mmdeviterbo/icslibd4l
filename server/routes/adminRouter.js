@@ -1,9 +1,9 @@
 //user file from the models directory
-const ics = require('../models/adminModel');
+const user = require('../models/adminModel');
 const router = require("express").Router();
 
 router.get('/retrieve', async (req, res) => {
-    ics.find({ adminName: "Ryan Resoles"}, (err, result) => {
+    user.find({ firstName: "Ryan"}, (err, result) => {
         if(err){
             res.send(err);
         }
@@ -13,15 +13,11 @@ router.get('/retrieve', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    // encryption of password
-    // let iv = crypto.randomBytes(16);
-    // let key = crypto.createDecipheriv('aes-128-cbc', Buffer.from('userpassword', 'hex'), iv);
-    // let encryptedPass = key.update('pass1234');
-    // encryptedPass = Buffer.concat([encryptedPass, key.final()])
-    const icsAdmins = new ics({ adminName: "Ryan Resoles", adminPassword: 'pass1234', adminEmail: "sample@up.edu.ph"});
+    const { upMail, firstName, lastName, userType } = req.body;
+    const icsUser = new user({ upMail: "sample@up.edu.ph", firstName: 'Ryan', lastName: "Resoles", userType: 1});
 
     try{
-        await icsAdmins.save();
+        await icsUser.save();
         res.send('User Added.')
     } catch(err) {
         console.log(err)
