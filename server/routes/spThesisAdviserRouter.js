@@ -1,18 +1,18 @@
 const router = require("express").Router();
-const thesisAuthorModel = require("../models/spThesisAuthorModel");
+const thesisAdviserModel = require("../models/spThesisAdviserModel");
 
 router.post("/create", async (req,res)=>{
     try{
-        const {sp_thesis_id, author_fname, author_lname} = req.body; 
+        const {sp_thesis_id, adviser_fname, adviser_lname} = req.body; 
 
         // sample verification: incomplete fields
-        if(!sp_thesis_id || !author_fname || !author_lname){
+        if(!sp_thesis_id || !adviser_fname || !adviser_lname){
             return res.status(400).json({errorMessage:"Please enter all required fields."});
         };
     
         // save to database
-        const newThesisKey = new thesisAuthorModel ({
-            sp_thesis_id, author_fname, author_lname
+        const newThesisKey = new thesisAdviserModel ({
+            sp_thesis_id, adviser_fname, adviser_lname
         });
 
         const savedThesisKey = await newThesisKey.save();
@@ -24,7 +24,7 @@ router.post("/create", async (req,res)=>{
 });
 
 router.get("/read", async (req, res)=> {
-    thesisAuthorModel.find({}, (err,result) => {
+    thesisAdviserModel.find({}, (err,result) => {
         if(err){
             res.send(err);
         }

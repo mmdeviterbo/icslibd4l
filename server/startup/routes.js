@@ -38,4 +38,5 @@ module.exports = function(app){
     app.use("/thesis", require("../routes/spThesisRouter"))
     app.use("/thesis-key", require("../routes/spThesisKeyRouter"))
     app.use("/thesis-author", require("../routes/spThesisAuthorRouter"))
+    app.use("/thesis-adviser", require("../routes/spThesisAdviserRouter"))
 }

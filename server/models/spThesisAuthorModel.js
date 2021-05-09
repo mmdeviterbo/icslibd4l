@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const thesisAuthorSchema = new mongoose.Schema({
-    book_id : {type:String, required: true},
+    sp_thesis_id : {type:String, required: true},
     author_fname : {type:String, required: true},
     author_lname : {type:String, required: true}
 });
