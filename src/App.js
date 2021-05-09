@@ -1,5 +1,5 @@
-import {Route, Switch, Redirect, Link } from 'react-router-dom';
-import {useState, useEffect, useRef} from 'react';
+import {Route, Switch, Redirect} from 'react-router-dom';
+import {useState, useEffect} from 'react';
 import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
@@ -8,25 +8,16 @@ import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import {jwtPrivateKey} from './config.json';
 import './App.css';
+import ParallaxEffect from './components/homepage/parallaxEffect'
 
 function App() {
-  const [user, setUser] = useState();    //fullname, email, surname, googleId
-  const [seach, setSearch] = useState(); //search query from user
+  const [user, setUser] = useState({});    //fullname, email, surname, googleId
+  const [search, setSearch] = useState(""); //search query from user
   // insert your other states here
 
-  
   useEffect(()=>{
-    goTopWhenRefresh(); 
     getCurrentToken();
   },[])
-
-
-  // go to top position when full reload happens
-  function goTopWhenRefresh(){
-    window.onbeforeunload = function(){
-      window.scrollTo(0, 0);
-    }
-  }
 
   // see if there's current user logged in the browser
   const getCurrentToken=()=>{
@@ -55,20 +46,15 @@ function App() {
   return (
     <div className="App">
         <NavigationBar loginRegisterUser={loginRegisterUser}/>
-
+        
         <Switch>
-          <Route path="/home" component={Homepage}></Route>
+          <Route path="/home" render={()=><Homepage onSearch={setSearch}/>}/>
+          <Route path="/parallax" render={()=><ParallaxEffect search={search}/>}/>
+
           {/* insert you new path here */}
-          
 
-
-          {/* if /not-found, then go to "notfound" component*/}
           <Route exact path="/not-found" component={Notfound}></Route> 
-          
-          {/* if / only, the redirect it to /home path */}
           <Redirect exact from="/" to="/home"/>
-          
-          {/* if no path is found, it will fall under "notfound" component */}
           <Redirect to="/not-found"/> 
         </Switch>
 
