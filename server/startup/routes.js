@@ -33,5 +33,6 @@ module.exports = function(app){
     // set up routes
     app.use("/books", require("../routes/bookRouter"))
     app.use("/admin", require("../routes/adminRouter"))
-    app.use("/addSPThesis", require("../routes/thesisRouter"))
+    app.use("/add-sp-thesis", require("../routes/thesisRouter"))
+    app.use("/view-sp-thesis", require("../routes/thesisRouter"))
 }
