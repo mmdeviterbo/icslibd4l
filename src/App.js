@@ -4,6 +4,8 @@ import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
+import ManageUser from './components/manageuserpage/manageuserpage';
+import ViewUser from './components/viewuserpage/viewUserPage';
 
 import './App.css';
 
@@ -19,6 +21,8 @@ function App() {
         {/* this route returns component depending on the route */}
         <Switch>
           <Route path="/home" component={Homepage}></Route>
+          <Route path="/manageusers" component={ManageUser}></Route>
+          <Route path='/viewuser/:userID' component={ViewUser}></Route>
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/> 
