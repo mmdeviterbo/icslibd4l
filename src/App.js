@@ -14,42 +14,6 @@ function App() {
   const [user, setUser] = useState(); //fullname, email, surname, googleId
   const [seach, setSearch] = useState(); //search query from user
 
-  useEffect(() => {
-    topWhenRefresh();
-    getCurrentToken();
-  }, []);
-
-  // refresh when full reload happens
-  function topWhenRefresh() {
-    window.onbeforeunload = function () {
-      window.scrollTo(0, 0);
-    };
-  }
-
-  // to see if there's current user logged in the browser
-  const getCurrentToken = () => {
-    try {
-      const jwt = localStorage.getItem("tokey");
-      const userInfo = jwtDecode(jwt);
-      console.log(userInfo);
-      // set state
-    } catch (err) {
-      console.log("No tokens yet");
-    }
-  };
-  // login/register a user
-  const loginRegisterUser = async (userInfo) => {
-    setUser(userInfo);
-
-    //call database
-    try {
-      const { data } = await personService.loginRegisterUser(userInfo);
-      console.log("Response: " + data);
-    } catch (err) {
-      console.log("Error: " + err);
-    }
-  };
-
   return (
     <div className="App">
       {/* navigationBar is always visible no matter on what route */}
@@ -57,9 +21,9 @@ function App() {
 
       {/* this route returns component depending on the route */}
       <Switch>
+        <Route path="/viewuser/:userID" component={ViewUser}></Route>
         <Route path="/home" component={Homepage}></Route>
         <Route path="/manageusers" component={ManageUser}></Route>
-        <Route path="/viewuser/:userID" component={ViewUser}></Route>
         <Route exact path="/not-found" component={Notfound}></Route>
         <Redirect exact from="/" to="/home" />
         <Redirect to="/not-found" />

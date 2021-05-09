@@ -17,53 +17,53 @@ const tableHeader = [
 
 ];
 const tableEntry = [
-{
-  userID : "0001",
-  name : "Elcid X. Cruzado",
-  classification : "Student",
-},
-{
-  userID : "0002",
-  name : "John Mel Ramos",
-  classification : "Student",
-},
-{
-  userID : "0003",
-  name : "Rita Isabel C. Federer",
-  classification : "Faculty",
-},
-{
-  userID : "0004",
-  name : "Joayma H. Mufasa",
-  classification : "Student"
-},
-{
-  userID : "0005",
-  name: "Olivia Alexis C. Aranas",
-  classification : "Student"
-},
-{
-  userID : "0006",
-  name : "Maria Franchette Beatrix F. Gacad",
-  classification : "Student"
-},
-{
-  userID : "0007", 
-  name : "Josesito Joseph T. Batumbakal III",
-  classification : "Student"
-}
+  {
+    userID: "0001",
+    name: "Elcid X. Cruzado",
+    classification: "Student",
+  },
+  {
+    userID: "0002",
+    name: "John Mel Ramos",
+    classification: "Student",
+  },
+  {
+    userID: "0003",
+    name: "Rita Isabel C. Federer",
+    classification: "Faculty",
+  },
+  {
+    userID: "0004",
+    name: "Joayma H. Mufasa",
+    classification: "Student"
+  },
+  {
+    userID: "0005",
+    name: "Olivia Alexis C. Aranas",
+    classification: "Student"
+  },
+  {
+    userID: "0006",
+    name: "Maria Franchette Beatrix F. Gacad",
+    classification: "Student"
+  },
+  {
+    userID: "0007",
+    name: "Josesito Joseph T. Batumbakal III",
+    classification: "Student"
+  }
 ];
 
 const initialState = {
-  users:[tableEntry]
+  users: [ tableEntry ]
 }
 
 export const GlobalContext = createContext(initialState);
 
 export default function UserEntry() {
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [ page, setPage ] = useState(0);
+  const [ rowsPerPage, setRowsPerPage ] = useState(10);
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
 
 
@@ -78,11 +78,11 @@ export default function UserEntry() {
   }
 
   const header = tableHeader.map((header_text, index) => (
-      <TableCell key={index}>{header_text}</TableCell>
-  )); 
-  
+    <TableCell key={index}>{header_text}</TableCell>
+  ));
+
   const useStyles = makeStyles({
-    root : {
+    root: {
       borderRadius: '10px',
     }
   });
@@ -90,18 +90,22 @@ export default function UserEntry() {
   const tableContainer = useStyles();
 
   const entries = tableEntry.map((entry, index) => (
-      <TableRow hover>
-        <TableCell key={entry.userID} style={{width: '80x'}}>{entry.userID}</TableCell>
-        <TableCell key={entry.name} style={{align: 'left'}}><Link to={`/viewuser/${entry.userID}`}>{entry.name}</Link></TableCell>
-        <TableCell key={entry.classification} style={{width : '80px'}}>{entry.classification}</TableCell>
-        <TableCell key={index} style={{textAlign: 'center', verticalAlign: 'middle'}}>
-          <FontAwesomeIcon icon={faPencilAlt} style={{margin: '0 0 10px 10px'}}/> 
-          <FontAwesomeIcon icon={faTrashAlt} style={{margin: '0 0 10px 10px'}}/>
-        </TableCell>
-      </TableRow>
+    <TableRow hover>
+      <TableCell key={entry.userID} style={{ width: '80x' }}>{entry.userID}</TableCell>
+      <TableCell key={entry.name} style={{ align: 'left' }}>
+        <Link to={{ pathname: '/user/${sample._id}', state: { entry } }}>
+          {entry}
+        </Link>
+      </TableCell>
+      <TableCell key={entry.classification} style={{ width: '80px' }}>{entry.classification}</TableCell>
+      <TableCell key={index} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+        <FontAwesomeIcon icon={faPencilAlt} style={{ margin: '0 0 10px 10px' }} />
+        <FontAwesomeIcon icon={faTrashAlt} style={{ margin: '0 0 10px 10px' }} />
+      </TableCell>
+    </TableRow>
   ))
 
-  return(
+  return (
     <>
       <TableContainer component={Paper} className={tableContainer.root}>
         <Table stickyHeader>
@@ -120,9 +124,9 @@ export default function UserEntry() {
           </TableBody>
         </Table>
 
-        <TablePagination 
-          rowsPerPage={rowsPerPage} 
-          rowsPerPageOptions={[5]}
+        <TablePagination
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[ 5 ]}
           component='div'
           onChangePage={handlePageChange}
           onChangeRowsPerPage={handleChangeRowsPerPage}
