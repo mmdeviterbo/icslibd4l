@@ -8,14 +8,16 @@ export default function FilterButton({filterBy, filterList}) {
   ));
 
   return (
-    <Dropdown>
-      <Dropdown.Toggle variant="sucess" id="dropdown-basic">
-        {filterBy}
-      </Dropdown.Toggle>
+    <>
+      <Dropdown>
+        <Dropdown.Toggle id="dropdown-basic" style={{backgroundColor: '#0067A1'}}>
+          {filterBy}
+        </Dropdown.Toggle>
 
-      <Dropdown.Menu>
-        {drpdownItem}
-      </Dropdown.Menu>
-    </Dropdown>
+        <Dropdown.Menu>
+          {drpdownItem}
+        </Dropdown.Menu>
+      </Dropdown>
+    </>
   )
 }
