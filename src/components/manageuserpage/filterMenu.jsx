@@ -7,7 +7,7 @@ export default function FilterMenu() {
   const filterContainer = {
     display: "flex",
     flexDirection: 'row',
-    margin: '0 50px 0 50px',
+    margin: '30px 50px 30px 50px',
   }
 
   const filterButtonContainer = {
