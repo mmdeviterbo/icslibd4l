@@ -1,10 +1,24 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import icsLogo from '../assets/icslogo.png'
-
+import {useHistory} from 'react-router-dom';
 
 export default function Footer() {
+    const [classFooter, setClassNavBar] = useState("footer-container");
+    const history = useHistory(); 
+    useEffect(() => {
+      return history.listen((location) => {
+          if(location.pathname==="/not-found") setClassNavBar("footer-container-none");
+          else setClassNavBar("footer-container");
+       }) 
+    },[history]) 
+
+    useEffect(()=>{
+        if(window.location.pathname==="/not-found") setClassNavBar("footer-container-none");
+        else setClassNavBar("footer-container");
+    },[])
+
     return (
-        <div className="footer-container" style={footerContainer}>
+        <div className={classFooter} style={footerContainer}>
             <div className="left-footer-container" style={leftFooterContainer}>
                 <div style={avoidCopyText}>
                     <p style={icsTextFooter}>Institute of Computer Science</p>
