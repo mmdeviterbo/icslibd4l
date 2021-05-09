@@ -6,7 +6,8 @@ import SearchbarPart from './searchbarPart'
 import { Link } from 'react-router-dom'
 import {gsap} from 'gsap';
 import ScrollTrigger from "gsap/ScrollTrigger";
-import AddItem from '../additem/add';
+import AddResource from '../additem/add';
+import ViewResource from '../additem/view';
 gsap.registerPlugin(ScrollTrigger)
 
 
@@ -19,7 +20,7 @@ export default function Homepage() {
     
     return (
         <div className="homepage-container" style={homepageContainer}>
-            <AddItem/>
+            <Link to='/manage-resources' className="btn btn-info">Manage Resources</Link>
             <SearchbarPart/>
             <BrowsePart/>
             <LatestAcquisitions/>

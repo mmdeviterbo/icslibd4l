@@ -4,10 +4,14 @@ import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
+
+import ManageResPage from './components/manageresourcespage/manageresourcespage'
+
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import './App.css';
-import AddItem from './components/additem/add';
+import AddResource from './components/additem/add';
+import ViewResource from './components/additem/view';
 
 function App() {
   const [user, setUser] = useState();    //fullname, email, surname, googleId
@@ -63,7 +67,9 @@ function App() {
           <Route path="/home" component={Homepage}></Route>
           <Route exact path="/not-found" component={Notfound}></Route>
            {/* add your new route/path here */}
-          <Route exact path="/addSPThesis" component={AddItem}></Route>
+          <Route exact path="/add-sp-thesis" component={AddResource}></Route>
+          <Route path="/view-sp-thesis" component={ViewResource}></Route>
+          <Route path="/manage-resources" component={ManageResPage}></Route>
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/>
