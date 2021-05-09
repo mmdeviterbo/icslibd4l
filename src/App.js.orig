@@ -1,14 +1,26 @@
+<<<<<<< HEAD
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import jwt_decode from "jwt-decode";
 import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
+import Userpage from "./components/userpage/userpage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
-import ManageUser from "./components/manageuserpage/manageuserpage";
-import ViewUser from "./components/viewuserpage/viewUserPage";
-
+import personService from "./services/personService";
+import jwtDecode from "jwt-decode";
 import "./App.css";
+=======
+import {Route, Switch, Redirect } from 'react-router-dom';
+import {useState, useEffect, useRef} from 'react';
+import Footer from './components/footer';
+import Homepage from './components/homepage/homepage';
+import NavigationBar from './components/navigationBar';
+import Notfound from './components/notfound';
+import ManageUser from './components/manageuserpage/manageuserpage';
+import ViewUser from './components/viewuserpage/viewUserPage';
+
+import './App.css';
+>>>>>>> origin/sprint2-ramos
 
 function App() {
   const [user, setUser] = useState(); //fullname, email, surname, googleId
@@ -37,6 +49,7 @@ function App() {
       console.log("No tokens yet");
     }
   };
+
   // login/register a user
   const loginRegisterUser = async (userInfo) => {
     setUser(userInfo);
@@ -52,14 +65,16 @@ function App() {
 
   return (
     <div className="App">
+<<<<<<< HEAD
       {/* navigationBar is always visible no matter on what route */}
-      <NavigationBar />
+      <NavigationBar loginRegisterUser={loginRegisterUser} />
 
       {/* this route returns component depending on the route */}
       <Switch>
         <Route path="/home" component={Homepage}></Route>
-        <Route path="/manageusers" component={ManageUser}></Route>
-        <Route path="/viewuser/:userID" component={ViewUser}></Route>
+        <Route path="/user-info" component={Userpage}></Route>
+        {/* add your new route/path here */}
+
         <Route exact path="/not-found" component={Notfound}></Route>
         <Redirect exact from="/" to="/home" />
         <Redirect to="/not-found" />
@@ -67,6 +82,23 @@ function App() {
 
       {/* footer is always visible no matter on what route */}
       <Footer />
+=======
+        {/* navigationBar is always visible no matter on what route */}
+        <NavigationBar/>
+
+        {/* this route returns component depending on the route */}
+        <Switch>
+          <Route path="/home" component={Homepage}></Route>
+          <Route path="/manageusers" component={ManageUser}></Route>
+          <Route path='/viewuser/:userID' component={ViewUser}></Route>
+          <Route exact path="/not-found" component={Notfound}></Route> 
+          <Redirect exact from="/" to="/home"/>
+          <Redirect to="/not-found"/> 
+        </Switch>
+
+        {/* footer is always visible no matter on what route */}
+        <Footer/>
+>>>>>>> origin/sprint2-ramos
     </div>
   );
 }
