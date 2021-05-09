@@ -10,7 +10,7 @@ export default function ManageUserPage() {
     <div className="manageuser-container">
       <UserSearch />
       <FilterMenu />
-      <div className="usertable-container" style={{padding: '50px'}}>
+      <div className="usertable-container" style={{padding: '50px', backgroundColor: '#F5F5F5'}}>
         <UserTable />
       </div>
     </div>
