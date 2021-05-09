@@ -1,13 +1,28 @@
 const router = require('express').Router();
 const UserModel = require("../models/userModel");
+const UserLogModel = require("../models/userLogModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("config")
+const config = require("config");
+const { useTheme } = require('@material-ui/core');
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
-//create entry
+//create or login account
 router.post("/create", async (req,res) => {
+
+    //get date
+    //code snippet was taken from https://usefulangle.com/post/187/nodejs-get-date-time
+    let date_ob = new Date();
+    let day = ("0" + date_ob.getDate()).slice(-2);
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    let year = date_ob.getFullYear();
+    let hours = date_ob.getHours();
+    let minutes = date_ob.getMinutes();
+    let seconds = date_ob.getSeconds();
+    const date = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds
+    
+    var loggedUser;
 
     try{
         const { googleId, email, fullName} = req.body
@@ -21,14 +36,12 @@ router.post("/create", async (req,res) => {
                     });
 
         const existingUser = await UserModel.findOne({ googleId });
-        var loggedUser;
-        
         //user exists
         if (existingUser){
             loggedUser = existingUser;
         }
         else{   
-            const userType = 4
+            userType = 4
             const nickname = fullName
             const newUser = new UserModel ({
                 googleId, email, fullName, userType, nickname
@@ -39,7 +52,17 @@ router.post("/create", async (req,res) => {
             const savedUser = await newUser.save();
             loggedUser = savedUser;
         }
-        
+        //logs user login to collection
+        const newUserLog = new UserLogModel ({
+            googleId: loggedUser.googleId, 
+            email: loggedUser.email, 
+            fullName: loggedUser.fullName, 
+            userType: loggedUser.userType, 
+            date
+        });
+        await newUserLog.save();
+
+
         //log user in
         const token = jwt.sign({
             email: loggedUser.email,
