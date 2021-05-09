@@ -36,4 +36,5 @@ module.exports = function(app){
 
     // set up routes: thesis
     app.use("/thesis", require("../routes/spThesisRouter"))
+    app.use("/thesis-key", require("../routes/spThesisKeyRouter"))
 }

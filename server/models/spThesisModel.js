@@ -12,6 +12,6 @@ const thesisSchema = new mongoose.Schema({
     poster: {type:String, required: true}
 });
 
-const SpThesisModel = mongoose.model("sp_thesis", thesisSchema);
+const thesisModel = mongoose.model("sp_thesis", thesisSchema);
 
-module.exports = SpThesisModel;
+module.exports = thesisModel;
