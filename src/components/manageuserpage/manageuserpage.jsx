@@ -1,5 +1,4 @@
 import React from 'react'
-import SearchbarPart from '../homepage/searchbarPart'
 import FilterMenu from './filterMenu'
 import UserTable from './userTable'
 import UserSearch from './userSearch'
@@ -11,7 +10,9 @@ export default function ManageUserPage() {
     <div className="manageuser-container">
       <UserSearch />
       <FilterMenu />
-      <UserTable  />
+      <div className="usertable-container" style={{padding: '50px'}}>
+        <UserTable />
+      </div>
     </div>
   )
 }
