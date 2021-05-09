@@ -77,24 +77,23 @@ export default function UserEntry() {
   
   const useStyles = makeStyles({
     root : {
-      border: "3px solid grey",
+      border: '3px solid grey',
+      borderRadius: '10px'
     }
   });
 
   const tableContainer = useStyles();
 
   const entries = tableEntry.map((entry, index) => (
-    <Link to={`/viewuser/${entry.userID}`}> 
       <TableRow hover>
         <TableCell key={entry.userID} style={{width: '80x'}}>{entry.userID}</TableCell>
-        <TableCell key={entry.name} style={{align: 'left'}}>{entry.name}</TableCell>
+        <TableCell key={entry.name} style={{align: 'left'}}><Link to={`/viewuser/${entry.userID}`}>{entry.name}</Link></TableCell>
         <TableCell key={entry.classification} style={{width : '80px'}}>{entry.classification}</TableCell>
         <TableCell key={index} style={{textAlign: 'center', verticalAlign: 'middle'}}>
           <FontAwesomeIcon icon={faPencilAlt} style={{margin: '0 0 10px 10px'}}/> 
           <FontAwesomeIcon icon={faTrashAlt} style={{margin: '0 0 10px 10px'}}/>
         </TableCell>
       </TableRow>
-    </Link>
   ))
 
   return(
