@@ -8,7 +8,7 @@ import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import {jwtPrivateKey} from './config.json';
 import './App.css';
-import ParallaxEffect from './components/homepage/parallaxEffect'
+import About from './components/about/about';
 
 function App() {
   const [user, setUser] = useState({});    //fullname, email, surname, googleId
@@ -49,9 +49,7 @@ function App() {
         
         <Switch>
           <Route path="/home" render={()=><Homepage onSearch={setSearch}/>}/>
-          <Route path="/parallax" render={()=><ParallaxEffect search={search}/>}/>
-
-          {/* insert you new path here */}
+          {/* <Route path="/about" component={About}/> */}
 
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>

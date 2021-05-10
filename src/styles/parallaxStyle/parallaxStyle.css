@@ -24,7 +24,7 @@
 .card2 {
   width: 25ch;
   height: 25ch;
-  background-image: url("../assets/book-eyerolling/clouds-2.png");
+  background-image: url("../../assets/book-eyerolling/clouds-2.png");
 
 }
 
@@ -32,30 +32,30 @@
   opacity: 0.9;
   width: 55ch;
   height: 55ch;
-  background-image: url("../assets/book-eyerolling/clouds-1.png");
+  background-image: url("../../assets/book-eyerolling/clouds-1.png");
 }
 
 .card4 {
   width: 55ch;
   height: 55ch;
-  background-image: url("../assets/book-eyerolling/human.png");
+  background-image: url("../../assets/book-eyerolling/human.png");
 
 }
 .card5 {
   width: 65ch;
   height: 65ch;
-  background-image: url("../assets/book-eyerolling/magnify.png");
+  background-image: url("../../assets/book-eyerolling/magnify.png");
 
 }
 .card6 {
   width: 15ch;
   height: 15ch;
-  background-image: url("../assets/book-eyerolling/pencil.png");
+  background-image: url("../../assets/book-eyerolling/pencil.png");
 }
 .card7 {
   width: 16ch;
   height: 16ch;
-  background-image: url("../assets/book-eyerolling/book.png");
+  background-image: url("../../assets/book-eyerolling/book.png");
   background-repeat: no-repeat;
   background-size: contain;
 
