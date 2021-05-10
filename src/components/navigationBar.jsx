@@ -14,8 +14,8 @@ export default function NavigationBar({loginRegisterUser}) {
     const history = useHistory(); 
 
     useEffect(()=>{
-        animationTitle();
-    },[])
+        animationTitle(classNavBar);
+    },[classNavBar])
 
     // if not found, hide the navbar component
     useEffect(() => { return history.listen((location) => {
@@ -46,10 +46,12 @@ export default function NavigationBar({loginRegisterUser}) {
                         </div>
                 </Link>
                 <div className="right-half">
-                    <div className="loginIconContainer">
-                        <div>
-                            <i className="fa fa-lg fa-sign-in" style={{color:"white"}} aria-hidden="true"/>
-                        </div>
+                    <Link to="/about" className="navItem">Browse</Link>
+                    <Link to="/browse" className="navItem">About</Link>
+                    {/* <div className="loginIconContainer"> */}
+                        {/* <div> */}
+                            {/* <i className="fa fa-lg fa-sign-in" style={{color:"white"}} aria-hidden="true"/> */}
+                        {/* </div> */}
                         <GoogleLogin
                             clientId="956873967748-7k3coalelv8ko21id2tsh4ij00k3582d.apps.googleusercontent.com"
                             buttonText="Login"
@@ -58,7 +60,7 @@ export default function NavigationBar({loginRegisterUser}) {
                             cookiePolicy={'single_host_origin'}
                             className="login-link"
                             icon={false}/>
-                    </div>
+                    {/* </div> */}
                 </div>
             </ul>     
         </div>
@@ -73,8 +75,11 @@ const mainBgStyleContainer = {
     overflow:"hidden",
 }
 
-const animationTitle=()=>{
+const animationTitle=(classNavBar)=>{
     gsap.from('.ics-caption',{xPercent:-20, duration:1});
     gsap.from('.uplb-caption',{xPercent:-20, duration:1.5});
-
+    
+    
+    let tempClassName = "." + classNavBar;
+    gsap.from(tempClassName,{yPercent:-50, duration:0.5});
 }

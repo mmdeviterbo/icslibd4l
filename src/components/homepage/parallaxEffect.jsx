@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSpring, animated } from 'react-spring'
-import '../../styles/parallaxStyle.css';
+import '../../styles/parallaxStyle/parallaxStyle.css';
 
 export default function ParallaxEffect({search}) {
     const [props, set] = useSpring(() => ({ xy: [0, 0], config: { mass: 15, tension: 550, friction: 140 } }))

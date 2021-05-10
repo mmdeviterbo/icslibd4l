@@ -74,12 +74,12 @@ const browseBoxContainer={
 }
 const colorBrowseContainer = {
     position:"absolute",
-    height:"91%",
+    height:"75%",
     width:"70%",
     right:"2%",
     background:"#0067A1",
-    borderRadius:"10px",
-    boxShadow: "2px 2px 20px 0 rgba(0, 0, 0, 0.4), -6px -6px 12px 0 rgba(255, 255, 255, 0.4)",
+    borderRadius:"7px",
+    boxShadow: "2px 5px 30px 0 rgba(0, 0, 0, 0.8), -6px -6px 22px 0 rgba(255, 255, 255, 0.8)",
     display:"flex",
     justifyContent:"center",
     alignItems:"center",

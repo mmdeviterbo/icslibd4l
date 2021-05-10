@@ -1,12 +1,17 @@
 /* navigation bar */
 .navbar-container{
-    min-height:85px;
+    z-index: 10000;
+    position: sticky !important;
+    top:0;
+    overflow: hidden;
+    position:relative;
+    min-height: 65px;
     display: flex;
     justify-content: center;
     align-items:center;
-    margin:5px;
-    background:rgba(0,0,0,0);
-    box-shadow: 10px 10px 50px white;
+    background:#0067A1;
+    box-shadow: 4px 4px 20px black;
+
 
     /* protect from copy paste  */
     -webkit-user-select: none;
@@ -18,26 +23,26 @@
 .navbar-container-none{display:none !important;}
 
 .navbar-elements{
-    padding:10px;
-    background:#0067A1;
-    border-radius:500px !important;
-    margin: 0 !important;
+    position: absolute;
     height:100%;
-    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    width: 70vw;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding:0 !important;
 }
 
 .left-half{
-    box-shadow:none;
-    border-radius: 20px;
-    height: 100%;
+    height:100%;
     flex-grow: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     transition: 0.1s;
+    text-align: end;
+    padding-right: 1.5vw;
 }
 .ics-uplb-caption{
     color:white;
@@ -47,7 +52,7 @@
 }
 
 .ics-caption{
-    font-size: 19px;
+    font-size: calc(10px + 0.5vw);
     font-weight: 800;
     transition:0.5s;
 }
@@ -56,37 +61,45 @@
     line-height: 2;
     transition:0.5s;
 }
-.icslogo-img{
-    height:110px;
-    width:110px;
-    padding-right:3px
-}
+
 .right-half{
-    flex-grow: 2;
+    height:100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
     align-items: center;
+    flex-grow: 2;
+    transition: 1s;
+}
+.navItem{
+    background:rgb(26, 26, 26);
+    height:100%;
+    display: grid;
+    place-items: center;
+    flex-grow: 1;
+    color:white;
+    font-weight: 900 !important;
+    transition:0.3s;
+}
+.navItem:hover{
+    font-weight: 900 !important;
+    color:black;
+    background: rgb(207, 207, 207);
 }
 
 /* google auth button */
 .login-link{
-    font-size: calc(8px + 0.5vw) !important;
-    background:none !important;
+    font-weight: bolder !important;
+    height:100%;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-grow: 1 !important;
+    background:black !important;
     box-shadow: none !important;
-    font-weight: 800 !important;
     color:white !important;
     transition:0.5s;
 }
-.loginIconContainer{
-    transition:0.5s;
-    display: flex;
-    align-items: center;
-    padding:0 1vw;
-    margin-right:10%;
-    background-color: rgb(44, 44, 44);
-    border-radius:50px;
 
-}
 
 /* hover effects */
 .acquisitionsInnerContainer:hover{
@@ -137,6 +150,15 @@ input.formSearchHomepage{
     .loginIconContainer{
         width: 100% !important;
     }
+
+    .left-half{
+        display: none;
+    }
+    .right-half{
+        width: 100vw;
+    }
+
+
     .ics-uplb-caption{
         padding-left: 5px;
     }
@@ -163,6 +185,11 @@ input.formSearchHomepage{
     .bookTitleCard{
         font-size: 12px !important;
     }
+
+    .notFoundContainer{
+        height:100vh !important;
+    }
+
 }
 
 @media screen and (max-width: 780px) {
@@ -170,13 +197,13 @@ input.formSearchHomepage{
         display: none !important;
     }
 
-    .loginIconContainer{
-        border-radius: 20px;
-        margin:1px 10px;
+    .navbar-elements{
+        width:100vw;
     }
-
     .left-half{
-        box-shadow: none !important; 
+        border:2px solid green; 
+        box-shadow: none !important;
+        text-align: center;
     }
 
     /* footer  */
