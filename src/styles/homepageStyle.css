@@ -95,11 +95,14 @@
     align-items: center !important;
     flex-grow: 1 !important;
     background:black !important;
-    box-shadow: none !important;
     color:white !important;
     transition:0.5s;
 }
-
+.login-link:hover{
+    font-weight: 900 !important;
+    color:black !important;
+    background: rgb(207, 207, 207) !important; 
+}
 
 /* hover effects */
 .acquisitionsInnerContainer:hover{
@@ -201,7 +204,6 @@ input.formSearchHomepage{
         width:100vw;
     }
     .left-half{
-        border:2px solid green; 
         box-shadow: none !important;
         text-align: center;
     }
