@@ -2,6 +2,11 @@ import React, {useState, useEffect} from 'react'
 import { useHistory } from 'react-router-dom';
 import searchBg from '../../assets/searchBg_4.png';
 import homepageBg from '../../assets/homepage/homepage-bg.png';
+import homeItem1 from '../../assets/homepage/homeItem-1.png';
+import homeItem2 from '../../assets/homepage/homeItem-2.png';
+import homeItem3 from '../../assets/homepage/homeItem-3.png';
+import homeItem4 from '../../assets/homepage/homeItem-4.png';
+
 import {gsap} from 'gsap';
 
 export default function SearchbarPart({onSearch}){
@@ -25,10 +30,16 @@ export default function SearchbarPart({onSearch}){
     return (
         <form onSubmit={handleForm} style={advanceSearch} className="searchMainContainer">
             <img draggable="false" src={searchBg} style={mainBgSearchStyle} alt="#"/>
-            <div style={titleSearchContainer} className="titleSearchContainer"></div>
+            <div style={titleSearchContainer} className="titleSearchContainer">
+                
+            </div>
 
             <div style={searchBoxContainer}  className="searchBoxContainer">
                 <div style={homepageBgParent} className="homepageBgParent">
+                    <img draggable="false" className="homeItem1" src={homeItem1} style={homeItems}/> 
+                    <img draggable="false" className="homeItem2" src={homeItem2} style={homeItems}/> 
+                    <img draggable="false" className="homeItem3" src={homeItem3} style={homeItems}/> 
+                    <img draggable="false" className="homeItem4" src={homeItem4} style={homeItems}/> 
                     <img draggable="false" src={homepageBg} style={homepageBgStyle}/> 
                 </div>
                 <div className="input-group" style={inputSearchContainer}>
@@ -60,8 +71,8 @@ const advanceSearch = {
 	"userSelect": "none", 
 }
 const titleSearchContainer ={
-    width:"45%",
-    height:"85%",
+    width:"40%",
+    height:"80%",
     background:"#0067A1",
     borderRadius: "7px  0px  0px  7px",    
     boxShadow: "6px 6px 10px 0 rgba(0, 0, 0, 0.35), -6px -6px 10px 0 rgba(255, 255, 255, 0.5)",
@@ -69,8 +80,8 @@ const titleSearchContainer ={
 }
 const searchBoxContainer = {
     position:"relative",
-    width:"55%",
-    height:"95%",
+    width:"52%",
+    height:"90%",
     display:"flex",
     justifyContent:"center",
     alignItems:"center",
@@ -104,14 +115,28 @@ const homepageBgParent = {
     width:"100%",
     display:"flex",
     justifyContent:"center", 
-    alignItems:"flex-end"
+    alignItems:"flex-end",
+    overflow:"hidden"
 }
 
 const homepageBgStyle = {
     maxHeight:"70%",
     maxWidth:"70%",
 }
+
+const homeItems = {
+    position:"absolute",
+    maxHeight:"70%",
+    maxWidth:"70%", 
+    "opacity":0.5, 
+    zIndex:10
+};
+
 const animateSearchBox=()=>{
     gsap.from('.formSearchHomepage',{opacity:0,yPercent:200, duration:0.6,scale:0.1});
-    gsap.from('.homepageBgParent',{duration:0.4,scale:0.9});
+    gsap.from('.homepageBgParent',{duration:0.8,scale:0.85});
+    gsap.from('.homeItem1',{duration:1,scale:1.6, opacity:1});
+    gsap.from('.homeItem2',{duration:1,scale:1.3, opacity:1});
+    gsap.from('.homeItem3',{duration:1,scale:1.3, opacity:1});
+    gsap.from('.homeItem4',{duration:1,scale:2, opacity:1});
 }

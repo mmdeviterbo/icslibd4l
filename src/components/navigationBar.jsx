@@ -46,20 +46,22 @@ export default function NavigationBar({loginRegisterUser}) {
                         </div>
                 </Link>
                 <div className="right-half">
-                    <Link to="/about" className="navItem">Browse</Link>
-                    <Link to="/browse" className="navItem">About</Link>
+                    <Link to="/about" className="navItem">BROWSE</Link>
+                    <Link to="/browse" className="navItem">ABOUT</Link>
                     {/* <div className="loginIconContainer"> */}
                         {/* <div> */}
                             {/* <i className="fa fa-lg fa-sign-in" style={{color:"white"}} aria-hidden="true"/> */}
                         {/* </div> */}
                         <GoogleLogin
                             clientId="956873967748-7k3coalelv8ko21id2tsh4ij00k3582d.apps.googleusercontent.com"
-                            buttonText="Login"
+                            buttonText="LOGIN"
                             onSuccess={responseGoogleSuccess}
                             onFailure={responseGoogleFail}
                             cookiePolicy={'single_host_origin'}
                             className="login-link"
-                            icon={false}/>
+                            icon={false}
+                            style={false}
+                            />
                     {/* </div> */}
                 </div>
             </ul>     
@@ -78,8 +80,7 @@ const mainBgStyleContainer = {
 const animationTitle=(classNavBar)=>{
     gsap.from('.ics-caption',{xPercent:-20, duration:1});
     gsap.from('.uplb-caption',{xPercent:-20, duration:1.5});
-    
-    
+
     let tempClassName = "." + classNavBar;
     gsap.from(tempClassName,{yPercent:-50, duration:0.5});
 }
