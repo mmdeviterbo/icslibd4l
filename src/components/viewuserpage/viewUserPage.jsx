@@ -1,14 +1,55 @@
-import React, { useState, useContext, useEffect } from 'react';
-import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import { GlobalContext } from '../manageuserpage/userTable';
-import { useHistory } from 'react-router-dom'
+import React, { useState, useContext, useEffect } from "react";
+import Container from "@material-ui/core/Container";
+import { Box, Grid, Paper, Typography, ButtonBase } from "@material-ui/core/";
+import { makeStyles } from "@material-ui/core/styles";
+import { GlobalContext } from "../manageuserpage/userTable";
+import { useHistory } from "react-router-dom";
+import ProfileContainer from "./profileContainer";
+
+// dummy data
+const tableEntry = [
+  {
+    userID: "0001",
+    name: "Elcid X. Cruzado",
+    classification: "Student",
+  },
+  {
+    userID: "0002",
+    name: "John Mel Ramos",
+    classification: "Student",
+  },
+  {
+    userID: "0003",
+    name: "Rita Isabel C. Federer",
+    classification: "Faculty",
+  },
+  {
+    userID: "0004",
+    name: "Joayma H. Mufasa",
+    classification: "Student",
+  },
+  {
+    userID: "0005",
+    name: "Olivia Alexis C. Aranas",
+    classification: "Student",
+  },
+  {
+    userID: "0006",
+    name: "Maria Franchette Beatrix F. Gacad",
+    classification: "Student",
+  },
+  {
+    userID: "0007",
+    name: "Josesito Joseph T. Batumbakal III",
+    classification: "Student",
+  },
+];
 
 export default function ViewUserPage(props) {
-  const [ selectedUser, setSelectedUser ] = useState({
-    userID: '',
-    name: '',
-    classification: ''
+  const [selectedUser, setSelectedUser] = useState({
+    userID: "",
+    name: "",
+    classification: "",
   });
 
   const { users } = useContext(GlobalContext);
@@ -17,44 +58,21 @@ export default function ViewUserPage(props) {
   const currentUserId = props.match.params.userID;
 
   useEffect(() => {
-    const userID = (currentUserId);
-    const selectedUser = users[ 0 ].find(user => user.userID === userID);
-    // console.log(props.userData);
+    const userID = currentUserId;
+    const selectedUser = users[0].find((user) => user.userID === userID);
     console.log(props.location.state);
-    setSelectedUser(selectedUser)
-
-  }, [ currentUserId, users ]);
+    setSelectedUser(selectedUser);
+  }, [currentUserId, users]);
 
   return (
     <>
       <div className="view-user-info-container">
-        {selectedUser === undefined ? history.push('/not-found') :
-          <Container className="user-info-container" style={userInfoContainer}>
-            <Box className="user-info-box" style={userInfoBox}>
-
-              <h1>Hello {props.match.params.name} </h1>
-
-            </Box>
-
-
-
-          </Container>
-        }
+        {selectedUser === undefined ? (
+          history.push("/not-found")
+        ) : (
+          <ProfileContainer />
+        )}
       </div>
     </>
-  )
-}
-
-const userInfoContainer = {
-  maxWidth: "lg",
-  // backgroundColor: '#cfe8fc', //temp[orary]
-  height: "100vh",//temp
-  border: "1px solid black"
-}
-
-const userInfoBox = {
-  display: "flex",
-  border: "5px #cfe8fc",
-  content: "justified"
-
+  );
 }
