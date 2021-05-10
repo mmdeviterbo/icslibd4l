@@ -4,7 +4,7 @@ body{
 
 /* Manage Resources + Search Bar Container */
 .manageresheader{
-    background-color: #cfcfcf;
+    background-color:#0067A1;
     width: 100%;
     display:flex;
     flex-direction:row; 
@@ -18,7 +18,7 @@ body{
 
 .manageresheader h1{
     margin:0;
-    /* text-align: right; */
+    color:white;
 }
 
 /* Search Bar + Button Container */
@@ -49,6 +49,8 @@ body{
     border-bottom-right-radius:8px;
 }
 
+
+
 /* Filter fields container */
 .res-filter-container {
     display: flex;
@@ -66,12 +68,71 @@ body{
     font-size: 14px;
 }
 
-/* clear button */
-#res-filters-clear{
-    padding-top: 0.52em;
-    /* text-decoration: none; */
-    color: black;
+/* ------ clear button ------*/
+
+/* icon + text container*/
+.res-clrbtn{    
+    display:flex; 
+    margin-top: 0.4rem;
 }
+/* icon */
+.res-clrbtn svg{
+    vertical-align: -0.3rem;
+    padding-bottom: 0.2rem;
+    padding-right: 0.3rem;
+}
+
+/* text */
+#res-filters-clear{
+    vertical-align:middle;
+    /* text-decoration: underline; */
+    color: #828282;
+}
+
+/* hover */
+
+.res-clrbtn:hover, .res-clrbtn svg:hover{
+    text-decoration: underline;
+    color:black;
+}
+
+/* ------------------------- */
+
+/* --- Add New Resource button --- */
+.new-res-button {
+    display: inline-block;
+    background-color: white;
+    color:#0067A1;
+    border-style: solid;
+    border-color: #0067A1;
+    border-width: 1px;
+    padding:0.7rem;
+    padding-left: 0.4rem;
+    border-radius: 1em;
+}
+
+.new-res-button a {
+    color:#0067A1
+}
+
+.new-res-button svg {
+    display: inline-block;
+    vertical-align: middle;
+    padding-bottom: 0.15rem;
+}
+
+.new-res-button:hover{
+    background-color: #0067A1;
+    border-color:white;
+    color:white;
+    
+}
+
+/* .new-res-button a:hover{
+    color:white;
+} */
+
+/* ------------------------------- */
 
 /* Table Container */
 .res-table-cont {
@@ -81,4 +142,36 @@ body{
     padding: 2rem;
 }
 
+/* Add Resources buong page */
+.add-resource-page-container {
+    display:flex;
+    flex-direction: row;
+}
 
+/* ------ Add Resources Form container ------ */
+
+.add-res-sidebar h1{
+    color:#0067A1;
+    background-color:white;
+    padding-top: 5rem;
+    padding-left: 4rem;
+    padding-right: 2.5rem;
+    padding-bottom: 100rem;
+    margin-bottom: 0px;
+}
+
+.add-res-form-cont{
+    padding: 3rem;
+    background-color:#cfcfcf;
+    width: 100%;
+}
+
+.isa-pang-div{
+    background-color: white;
+    padding: 1rem;
+    border-color:#828282;
+    border-width: 0.5rem;
+    border-radius: 1rem;
+
+
+}

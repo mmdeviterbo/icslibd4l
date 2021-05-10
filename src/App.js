@@ -6,6 +6,7 @@ import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
+import AddResourcePage from './components/manageresourcespage/add-new-resource-pg'
 
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
@@ -65,6 +66,7 @@ function App() {
           <Route path="/home" component={Homepage}></Route>
           {/* add your new route/path here */}
           <Route path="/manage-resources" component={ManageResPage}></Route>
+          <Route path ="/add-new-resource" component={AddResourcePage}></Route>
 
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
