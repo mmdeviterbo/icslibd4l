@@ -73,8 +73,9 @@
 .navItem{
     background:rgb(26, 26, 26);
     height:100%;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-grow: 1;
     color:white;
     font-weight: 900 !important;
@@ -97,7 +98,13 @@
     background:rgb(26, 26, 26) !important;
     color:white !important;
     transition:0.5s;
+    cursor:pointer
 }
+.login-link > i, .navItem > i{
+    margin:5px !important;
+}
+
+
 .login-link:hover{
     font-weight: 900 !important;
     color:black !important;
@@ -324,7 +331,6 @@ input.formSearchHomepage{
         width:85% !important;
     }
     .newsStyle{
-        padding:0 1px !important;
         border-radius: 0 !important;
     }
 

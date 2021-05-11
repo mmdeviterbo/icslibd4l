@@ -11,7 +11,7 @@ import './App.css';
 import About from './components/about/about';
 
 function App() {
-  const [user, setUser] = useState({});    //fullname, email, surname, googleId, classification
+  const [user, setUser] = useState(null);    //fullname, email, userType (integer)
 
 
   const browseRef = useRef(null);
@@ -26,20 +26,17 @@ function App() {
     try{
       const jwt = localStorage.getItem(jwtPrivateKey);
       const userInfo = jwtDecode(jwt);
-      console.log("DECODED JWT: " + userInfo);
-      // set state
-      // do full reload
-
-    }catch(err){
-      console.log("No tokens yet");
-    }
+      console.log(userInfo);
+      setUser(userInfo);
+    }catch(err){console.log("No tokens yet");}
   }
   
   // login/register a user
   const loginRegisterUser=async(userInfo)=>{
     try{
       const {data} = await personService.loginRegisterUser(userInfo);   
-      setUser(data);
+      localStorage.setItem(jwtPrivateKey, data);
+      window.location = "/home"; 
     }catch(err){
       console.log("Errorrrrr: " +  err);
     } 
@@ -47,7 +44,7 @@ function App() {
 
   return (
     <div className="App" ref={appRef}>
-        <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef}/>
+        <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef} user={user}/>
         
         <Switch>
           <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef}/>}/>
