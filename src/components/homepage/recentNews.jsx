@@ -55,7 +55,6 @@ const arrowUpStyle = {
     transition:"0.4s",
     transform:"scale(1)",
     color:"rgb(26, 26, 26,0.6)"
-
 }
 
 
@@ -63,8 +62,9 @@ const recentNewsCaption = {
     padding:"10px",
 }
 const titleContentContainer={
+    position:"relative",
     height:"100%",
-    width:"70%",
+    width:"75%",
     display:"flex",
     justifyContent:"center",
     transition:"1s",
@@ -79,6 +79,7 @@ const recentNewsContainer={
     alignItems:"center",
 }
 const recentNewsInnerContainer = {
+    width:"85%",
     display:"grid",
     gridTemplateColumns:"auto",
     overflowY:"auto",
@@ -95,10 +96,6 @@ const recentNewsHeader = {
     background:"rgb(0, 103, 161,0.8)",
     padding:"calc(10px + 0.5vw)"
 }
-const horizontalLine = {
-    lineHeight:0,
-    borderTop: "3px solid gray"
-}
 const newsStyle = {
     borderRadius:"20px 0 0 20px",
     color:"white",
@@ -110,7 +107,8 @@ const newsStyle = {
     fontSize:"calc(30px + 2vw)",
     height:"100%",
     fontWeight:900,
-    padding:"0 5px",
+    padding:"0 calc(15px + 1vw)",
+    // protect from copy paste
     "WebkitUserSelect": "none",
     "WebkitTouchCallout": "none",
     "MozUserSelect": "none",
