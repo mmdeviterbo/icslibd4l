@@ -135,11 +135,7 @@ router.get("/search", async (req, res) => {
        
     }
 
-   
-   
-
     try{
-        
         res.send(final_output);
     }
     catch(error){
@@ -147,13 +143,6 @@ router.get("/search", async (req, res) => {
         res.status(500).send("Error Getting query");
     }
 
-    // UserModel.find({}, (err, result) => { //reads all the documents and sends as response
-    //     if (err) {
-    //         res.send(err);
-    //     } else {
-    //     res.send(result);
-    //     }
-    // });
 });
 
 
