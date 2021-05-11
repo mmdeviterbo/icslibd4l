@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const thesisModel = require("../models/thesisModel");
+const thesisModel = require("../models/spThesisModel");
 
 router.post("/", async (req,res)=>{
     try{

@@ -11,7 +11,7 @@ export default function ManageResPage() {
     return(
         <div className = "manage-resources-page-container">
             {/* <TempNavbar/> */}
-            <Link to='/add-sp-thesis' className="btn btn-info">Add Resource</Link>
+            <Link to='/thesis/create' className="btn btn-info">Add Resource</Link>
             <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link>
             <ManageItemsHeader/>
             <FieldsContainerRes/>
