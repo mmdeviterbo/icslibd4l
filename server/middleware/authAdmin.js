@@ -19,7 +19,6 @@ function authenticationFaculty(req, res, next){
         const verified = jwt.verify(token, jwtPrivateKey);
         //attaches a user property to the req object in the request Router function
         req.user = verified.user;
-        console.log(verified)
 
         if (verified.userType === 1)
             next();
