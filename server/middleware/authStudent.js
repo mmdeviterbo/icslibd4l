@@ -5,7 +5,7 @@ const jwtPrivateKey = config.get('jwtPrivateKey');
 
 //npm install cookie-parser
 //makes sure that the current user is allowed to access a part of the website
-function authentication(req, res, next){
+function authenticationStudent(req, res, next){
     try{
         const token = req.cookies.token;
         //checks if token exists
@@ -20,12 +20,19 @@ function authentication(req, res, next){
         //attaches a user property to the req object in the request Router function
         req.user = verified.user;
 
-        next();
+        if (verified.userType === 4 || verified.userType === 3 || verified.userType === 2 || verified.userType === 1)
+            next();
+        else
+            return res
+                .status(401)
+                .json({
+                    errorMessage: "Unauthorized Access"
+                });
     }
     catch(err){
-        console.log(err) 
+        console.log(err)    
         res.send(401).json({ errorMessage: "Unauthorized Access" });
     }
 }
 
-module.exports = authentication;
+module.exports = authenticationStudent;
