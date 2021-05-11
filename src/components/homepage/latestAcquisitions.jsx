@@ -16,7 +16,7 @@ export default function LatestAcquisitions() {
     return (
         <div className="latestAcquisitions" style={latestAcquisitionsContainer}>
             <div style={captionContainer} className="captionContainer">
-                <p style={captionStyle}>Latest Acquisitions</p>
+                <p style={captionStyle} className="latestAcquisitionsCaption">Latest Acquisitions</p>
                 <hr style={horizontalLine}/>
             </div>
 

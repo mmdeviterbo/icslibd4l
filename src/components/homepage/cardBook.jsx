@@ -7,7 +7,7 @@ export default function CardBook({imageSrc, title, linkTo}) {
                 <div className="imgContainer" src={imageSrc} style={imgContainer}>
                     <img src={imageSrc} style={imgSrcStyle} alt="#"/>
                 </div>
-                <p style={{fontSize:"15px",padding:"7px"}}>{title}</p>
+                <p style={{fontSize:"15px",padding:"7px"}} className="bookTitleCard">{title}</p>
             </Link>
     )
 }
