@@ -55,8 +55,52 @@ router.post("/create", async (req,res)=>{
     }
 });
 
-// add keyword entries
-router.post("/addkeywords", async (req,res)=>{
+// add additonal author entries
+router.post("/addadviser", async (req,res)=>{
+    try{
+        const {sp_thesis_id, adviser_fname, adviser_lname} = req.body; 
+
+        // sample verification: incomplete fields
+        if(!sp_thesis_id || !adviser_fname || !adviser_lname){
+            return res.status(400).json({errorMessage:"Please enter all required fields."});
+        };
+    
+        // save thesisKeyModel
+        const newThesisAdviser = new thesisAdviserModel ({
+            sp_thesis_id, adviser_fname, adviser_lname
+        });
+        const savedThesisAdviser = await newThesisAdviser.save();
+        res.json(savedThesisAdviser);
+
+    } catch(err){
+        console.log(err);
+        res.status(500).send();
+    }
+});
+// add additonal adviser entries
+router.post("/addauthor", async (req,res)=>{
+    try{
+        const {sp_thesis_id, author_fname, author_lname} = req.body; 
+
+        // sample verification: incomplete fields
+        if(!sp_thesis_id || !author_fname || !author_lname){
+            return res.status(400).json({errorMessage:"Please enter all required fields."});
+        };
+    
+        // save thesisKeyModel
+        const newThesisAuthor = new thesisAuthorModel ({
+            sp_thesis_id, author_fname, author_lname
+        });
+        const savedThesisAuthor = await newThesisAuthor.save();
+        res.json(savedThesisAuthor);
+
+    } catch(err){
+        console.log(err);
+        res.status(500).send();
+    }
+});
+// add additonal keyword entries
+router.post("/addkeyword", async (req,res)=>{
     try{
         const {sp_thesis_id, sp_thesis_keyword} = req.body; 
 
@@ -65,8 +109,8 @@ router.post("/addkeywords", async (req,res)=>{
             return res.status(400).json({errorMessage:"Please enter all required fields."});
         };
     
-         // save thesisKeyModel
-         const newThesisKey = new thesisKeyModel ({
+        // save thesisKeyModel
+        const newThesisKey = new thesisKeyModel ({
             sp_thesis_id, sp_thesis_keyword
         });
         const savedThesisKey = await newThesisKey.save();
@@ -78,34 +122,39 @@ router.post("/addkeywords", async (req,res)=>{
     }
 });
 
-// get all data under a specific id
+// search data
 router.get("/search", async (req, res)=> {
-    const {sp_thesis_id} = req.body; //get googleId and newNickname from body
+    let final_array;
 
-    // if query is sp
+    // RESOURCE : SP
     if(req.query.type == "SP"){
-        thesisModel.find({"type":req.query.type}, (err,result) => {
-            if (err) {
-                res.send(err);
-            } else {
-            res.send(result);
-            }
-        })
-    }
-})
-
-// print all keywords with a given ID
-router.get("/keyword", async (req, res)=> {
-    const {sp_thesis_id} = req.body; //get googleId and newNickname from body
-
-    thesisKeyModel.find({sp_thesis_id: sp_thesis_id}, (err, result) => { //send the edited user as response
-        if (err) {
-            res.send(err);
-        } else {
-        res.send(result);
+        if(req.query.field == "title"){
+        // search by TITLE
+        // http://localhost:3001/thesis/search?type=SP&field=title&search=red
+            thesisModel.find({"type": "SP", "title": {$regex:req.query.search}}, (err,result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                res.send(result);
+                }
+            });
+        }else if (req.query.field == "year"){
+        // search by YEAR
+        // http://localhost:3001/thesis/search?type=SP&field=year&search=2020
+            thesisModel.find({"type": "SP", "title": {$regex:req.query.search}}, (err,result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                res.send(result);
+                }
+            });
+        }else{
+           // search by AUTHOR
+           // search by ADVISER 
         }
-    });
-})
-
+    }else{
+    // search all fields
+    };
+});
 
 module.exports = router;
