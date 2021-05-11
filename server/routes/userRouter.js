@@ -96,7 +96,7 @@ router.get("/readStudents", authFaculty, async (req, res) => {
 });
 
 //search function
-router.get("/search", authStudent, async (req, res) => {
+router.get("/search", authFaculty, async (req, res) => {
     let query;
     let final_output;
     let attributes = 0;
@@ -185,7 +185,7 @@ router.delete("/delete", authStudent, async (req, res) => {
 });
     
 //logout current signed in user. deletes cookie for user                
-router.get("/logout", (req,res) => {
+router.get("/logout", authStudent, (req,res) => {
     res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0)
