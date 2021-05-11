@@ -73,7 +73,7 @@ router.post("/create", async (req,res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-        }).send(loggedUser);
+        }).send(token);
     }
     catch (err){
         console.error(err)
@@ -91,6 +91,69 @@ router.get("/read", async (req, res) => {
         }
     });
 });
+
+//search
+router.get("/search", async (req, res) => {
+    let query;
+    let final_output = {};
+    let attributes = 0;
+    if (req.query.search){
+        while(attributes < 3){
+            query = {};
+            if (attributes === 0){
+                query.fullName = {
+                    $regex: req.query.search,
+                    $options: 'i'
+                }
+            }
+            
+            else if (attributes == 1){
+                query.email = {
+                    $regex: req.query.search,
+                    $options: 'i'
+                }
+            }
+           
+            else if(attributes == 2){
+                query.googleId = {
+                    $regex: req.query.search,
+                    $options: 'i'
+                }
+            }
+            if (req.query.category && req.query.category != 'All'){
+                query.category = req.query.category;
+            }
+
+            console.log(query);
+            let users = await UserModel.find(query)
+            final_output =final_output + users
+            console.log(final_output)
+            attributes = attributes + 1
+        }
+       
+    }
+
+   
+   
+
+    try{
+        
+        res.send(final_output);
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send("Error Getting query");
+    }
+
+    // UserModel.find({}, (err, result) => { //reads all the documents and sends as response
+    //     if (err) {
+    //         res.send(err);
+    //     } else {
+    //     res.send(result);
+    //     }
+    // });
+});
+
 
 //update
 router.put("/update", async (req, res) => {

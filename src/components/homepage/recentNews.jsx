@@ -12,7 +12,7 @@ export default function RecentNews() {
     return (
         <div className="recentNewsContainer" style={recentNewsContainer}>
             <div className="recentNewsInnerContainer" style={recentNewsInnerContainer}>
-                <p style={recentNewsTitle}>Recent News</p> 
+                <p style={recentNewsTitle} className="recentNewsTitle">Recent News</p> 
                 <hr style={horizontalLine}/>
                 {newsList.map(news=><ArticleContainer 
                     news={news} key={news.title}
@@ -30,8 +30,8 @@ const ArticleContainer=({news})=>{
                 <Link style={recentNewsHeader} className="recentNewsHeader" to={news.linkTo}>
                     {news.title}
                 </Link>    
-                <p>{news.content}</p>
-                <p>{news.date}</p>
+                <p className="recentNewsCaption">{news.content}</p>
+                <p className="recentNewsCaption">{news.date}</p>
                 <hr style={{lineHeight:0,borderTop: "1px solid gray"}}/>
             </>)
 }
