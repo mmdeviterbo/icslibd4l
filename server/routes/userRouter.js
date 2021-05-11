@@ -92,42 +92,44 @@ router.get("/read", async (req, res) => {
     });
 });
 
-//search
+//search function
 router.get("/search", async (req, res) => {
     let query;
-    let final_output = {};
+    let final_output;
     let attributes = 0;
+
     if (req.query.search){
+        //seach quries for all attributes
         while(attributes < 3){
             query = {};
+            //fullName
             if (attributes === 0){
                 query.fullName = {
                     $regex: req.query.search,
                     $options: 'i'
                 }
             }
-            
+            //email
             else if (attributes == 1){
                 query.email = {
                     $regex: req.query.search,
                     $options: 'i'
                 }
             }
-           
+            //googleId
             else if(attributes == 2){
                 query.googleId = {
                     $regex: req.query.search,
                     $options: 'i'
                 }
             }
-            if (req.query.category && req.query.category != 'All'){
-                query.category = req.query.category;
-            }
-
-            console.log(query);
+            //query to database
             let users = await UserModel.find(query)
-            final_output =final_output + users
-            console.log(final_output)
+            //concatenate to final array of objcets
+            if (!final_output)
+                final_output = users;
+            else
+            final_output =[].concat(final_output,users)
             attributes = attributes + 1
         }
        
