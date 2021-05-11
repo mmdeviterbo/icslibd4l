@@ -94,7 +94,7 @@
     justify-content: center !important;
     align-items: center !important;
     flex-grow: 1 !important;
-    background:black !important;
+    background:rgb(26, 26, 26) !important;
     color:white !important;
     transition:0.5s;
 }
@@ -110,7 +110,7 @@
 }
 .acquisitionsInnerContainer .cardContainer:hover{
     filter: brightness(1.2) !important;
-    transform: scale(1.05) !important;
+    transform: scale(1.02) !important;
 }
 
 input.formSearchHomepage{ 
@@ -125,6 +125,12 @@ input.formSearchHomepage{
 }
 .browseBox:hover{
     transform: scale(1.06);
+}
+
+
+.searchInputGroup:hover ~ .homepageBgParent .homeItem{
+    opacity:0.4 !important;
+    transform:scale(1.7) !important;
 }
 
 
@@ -144,6 +150,12 @@ input.formSearchHomepage{
 .footer-container-none{
     display: none !important;
 }
+
+.fa-angle-double-up:hover{
+    transform:scale(1.4) !important;
+    color:rgb(26, 26, 26,1) !important;
+}
+
 
 
 
@@ -176,8 +188,20 @@ input.formSearchHomepage{
     .latestAcquisitionsCaption{
         font-size: 25px !important;
     }
+    .latestAcquisitions{
+        height:80vh !important;
+    }
+    .latestAcqhoverTextStyle{
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        height:100% !important;
+        display: grid;
+        place-items: center;
+    }
+
     .recentNewsTitle{
         font-size: 25px !important;
+
     }
     .recentNewsHeader{
         font-size: 18px !important;
@@ -273,8 +297,35 @@ input.formSearchHomepage{
     } 
 
     /* latest acquisitions, recent news */
-    .acquisitionsInnerContainer, .captionContainer, .recentNewsInnerContainer{
-        width: 90vw !important;
+    .latestAcqcolorsParent{
+        width:95vw !important;
+        border-radius: 0px !important;
+    }
+
+    .titleSearchContainer{
+        display:none;
+    }
+    .searchBoxContainer{
+        width: 100vw !important;
+    }
+    .searchMainContainer{
+        width: 100vw !important;
+        padding:0 !important;
     }
     
+    .recentNewsContainer{
+        height:70vh !important;
+        padding:4px 4px !important;
+    }
+    .titleContentContainer{
+        width:100vw !important;
+    }
+    .recentNewsInnerContainer{
+        width:85% !important;
+    }
+    .newsStyle{
+        padding:0 1px !important;
+        border-radius: 0 !important;
+    }
+
 }

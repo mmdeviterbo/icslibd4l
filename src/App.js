@@ -1,5 +1,5 @@
 import {Route, Switch, Redirect} from 'react-router-dom';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
@@ -11,9 +11,11 @@ import './App.css';
 import About from './components/about/about';
 
 function App() {
-  const [user, setUser] = useState({});    //fullname, email, surname, googleId
-  const [search, setSearch] = useState(""); //search query from user
-  // insert your other states here
+  const [user, setUser] = useState({});    //fullname, email, surname, googleId, classification
+
+
+  const browseRef = useRef(null);
+  const appRef = useRef(null);
 
   useEffect(()=>{
     getCurrentToken();
@@ -44,13 +46,16 @@ function App() {
   }
 
   return (
-    <div className="App">
-        <NavigationBar loginRegisterUser={loginRegisterUser}/>
+    <div className="App" ref={appRef}>
+        <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef}/>
         
         <Switch>
-          <Route path="/home" render={()=><Homepage onSearch={setSearch}/>}/>
-          {/* <Route path="/about" component={About}/> */}
+          <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef}/>}/>
+          
 
+
+
+          {/* <Route path="/about" component={About}/> */}
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/> 

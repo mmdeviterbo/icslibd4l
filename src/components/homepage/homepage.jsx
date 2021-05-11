@@ -4,13 +4,13 @@ import LatestAcquisitions from './latestAcquisitions';
 import RecentNews from './recentNews';
 import SearchbarPart from './searchbarPart'
 
-export default function Homepage({onSearch}) {
+export default function Homepage({browseRef, appRef}) {
     return (
-        <div className="homepage-container">
-            <SearchbarPart onSearch={onSearch}/>
-            <BrowsePart/>
+    <div className="homepage-container">
+            <SearchbarPart/>
+            <BrowsePart browseRef={browseRef}/>
             <LatestAcquisitions/>
-            <RecentNews/>
+            <RecentNews appRef={appRef}/>
         </div>
     )
 }

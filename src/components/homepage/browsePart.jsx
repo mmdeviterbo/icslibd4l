@@ -9,11 +9,11 @@ gsap.registerPlugin(ScrollTrigger)
 
 
 
-export default function BrowsePart() {
+export default function BrowsePart({browseRef}) {
     const [isHoverTitle,setIsHoverTitle] = useState("BROWSE");
     
     return (
-        <div className="browsePartContainer" style={browsePartContainer}>
+        <div className="browsePartContainer" style={browsePartContainer} ref={browseRef}>
             <img src={searchBg} style={searchBgStyle} alt="#"/>
             <div style={colorBrowseContainer} className="colorBrowseContainer">
                 <h1 style={titleOrientation}>{isHoverTitle}</h1>
@@ -21,32 +21,32 @@ export default function BrowsePart() {
             <div style={designBoxContainer} className="designBoxContainer"><ParallaxEffect/></div>
             
             <div style={browseBoxContainer} className="browseBoxContainer">
-                <Link className="browseBox browseboxBooks" style={browseBox} to='/home'
+                <Link className="browseBox browseboxBooks" style={browseBox} to='/home' draggable={false} 
                 onMouseEnter={()=>setIsHoverTitle("BOOK")} onMouseLeave={()=>setIsHoverTitle("BROWSE")}>
                     <div style={imgContainer} className="imgBooksContainer">
-                        <img src="https://img.icons8.com/ios/64/000000/book-stack.png" alt="#"
+                        <img src="https://img.icons8.com/ios/64/000000/book-stack.png" alt="#" draggable={false} 
                             style={imgStyle} className="imgBooksBefore"/>
-                        <img src="https://img.icons8.com/ios-filled/64/000000/book-stack.png" alt="#"
+                        <img src="https://img.icons8.com/ios-filled/64/000000/book-stack.png" alt="#" draggable={false} 
                             style={imgStyleHover} className="imgBooksHover"/>
                     </div>
                     <p style={titleSource}>Books</p>
                 </Link>
-                <Link className="browseBox browseboxTheses" style={browseBox} to='/home' 
+                <Link className="browseBox browseboxTheses" style={browseBox} to='/home' draggable={false} 
                 onMouseEnter={()=>setIsHoverTitle("THESIS")} onMouseLeave={()=>setIsHoverTitle("BROWSE")}>
                         <div style={imgContainer} className="imgThesesContainer">
-                            <img src="https://img.icons8.com/ios/64/000000/agreement.png" alt="#"
+                            <img src="https://img.icons8.com/ios/64/000000/agreement.png" alt="#" draggable={false} 
                                 style={imgStyle} className="imgThesesBefore"/>
-                            <img src="https://img.icons8.com/ios-filled/64/000000/agreement.png" alt="#"
+                            <img src="https://img.icons8.com/ios-filled/64/000000/agreement.png" alt="#" draggable={false} 
                                 style={imgStyleHover} className="imgThesesHover"/>
                         </div>
                         <p style={titleSource}>Theses</p>
                 </Link>
-                <Link className="browseBox browseboxSP" style={browseBox} to='/home' 
+                <Link className="browseBox browseboxSP" style={browseBox} to='/home' draggable={false} 
                 onMouseEnter={()=>setIsHoverTitle("SP")} onMouseLeave={()=>setIsHoverTitle("BROWSE")}>
                         <div style={imgContainer} className="imgSPContainer">
-                            <img src="https://img.icons8.com/ios/50/000000/new-file.png" alt="#"
+                            <img src="https://img.icons8.com/ios/50/000000/new-file.png" alt="#" draggable={false} 
                                 style={imgStyle} className="imgSPBefore"/>
-                            <img src="https://img.icons8.com/ios-filled/50/000000/new-file.png" alt="#"
+                            <img src="https://img.icons8.com/ios-filled/50/000000/new-file.png" alt="#" draggable={false} 
                                 style={imgStyleHover} className="imgSPHover"/>
                         </div>
                         <p style={titleSource}>Special Problems</p>
@@ -62,7 +62,12 @@ const browsePartContainer={
     display:"flex",
     transition: "0.5s",
     justifyContent:"center",
-    alignItems:"center"
+    alignItems:"center",
+    "WebkitUserSelect": "none",
+    "WebkitTouchCallout": "none",
+    "MozUserSelect": "none",
+    "MsUserSelect": "none",
+    "UserSelect": "none",
 }
 const browseBoxContainer={
     width:"40%",
@@ -76,7 +81,7 @@ const colorBrowseContainer = {
     position:"absolute",
     height:"75%",
     width:"70%",
-    right:"2%",
+    right:"5%",
     background:"#0067A1",
     borderRadius:"7px",
     boxShadow: "2px 5px 30px 0 rgba(0, 0, 0, 0.8), -6px -6px 22px 0 rgba(255, 255, 255, 0.8)",
