@@ -8,8 +8,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger)
 
 
-
-export default function NavigationBar({loginRegisterUser}) {
+export default function NavigationBar({loginRegisterUser, browseRef}) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory(); 
 
@@ -31,9 +30,16 @@ export default function NavigationBar({loginRegisterUser}) {
     const responseGoogleSuccess=(response)=>{
         const {googleId, email, name, familyName} = response.profileObj
         const userInfo = {googleId: googleId, email: email, fullName: name, surname: familyName}
-        loginRegisterUser(userInfo);
+        console.log(userInfo);
+        // loginRegisterUser(userInfo);
     }   
-    const responseGoogleFail=(response)=>{} 
+    const responseGoogleFail=(response)=>{
+        console.log("Fail: ");
+        console.log(response.profileObj);
+    } 
+    const scrollToBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+
+    // var provider = new firebase.auth.GoogleAuthProvider();
 
     return (
         <div className={classNavBar}>
@@ -46,23 +52,19 @@ export default function NavigationBar({loginRegisterUser}) {
                         </div>
                 </Link>
                 <div className="right-half">
-                    <Link to="/about" className="navItem">BROWSE</Link>
-                    <Link to="/browse" className="navItem">ABOUT</Link>
-                    {/* <div className="loginIconContainer"> */}
-                        {/* <div> */}
-                            {/* <i className="fa fa-lg fa-sign-in" style={{color:"white"}} aria-hidden="true"/> */}
-                        {/* </div> */}
-                        <GoogleLogin
-                            clientId="956873967748-7k3coalelv8ko21id2tsh4ij00k3582d.apps.googleusercontent.com"
-                            buttonText="LOGIN"
-                            onSuccess={responseGoogleSuccess}
-                            onFailure={responseGoogleFail}
-                            cookiePolicy={'single_host_origin'}
-                            className="login-link"
-                            icon={false}
-                            style={false}
-                            />
-                    {/* </div> */}
+                    <div className="navItem" onClick={scrollToBrowse} style={{cursor:"pointer"}}>BROWSE</div>
+                    <Link to="/browse" className="navItem">ABOUT</Link>                    
+                    <GoogleLogin
+                        clientId="157703212486-qm8nb25m86guqvsg4fhbtc9kl3sk6ubp.apps.googleusercontent.com"
+                        clientSecret="u06bcQiePSj-3fbkdTxS0VUd"
+                        buttonText="LOGIN"
+                        onSuccess={responseGoogleSuccess}
+                        onFailure={responseGoogleFail}
+                        cookiePolicy={'single_host_origin'}
+                        className="login-link"
+                        hostedDomain={'up.edu.ph'}
+                        icon={false}
+                        style={false}/>
                 </div>
             </ul>     
         </div>

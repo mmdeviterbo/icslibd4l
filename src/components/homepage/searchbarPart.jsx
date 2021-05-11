@@ -9,7 +9,7 @@ import homeItem4 from '../../assets/homepage/homeItem-4.png';
 
 import {gsap} from 'gsap';
 
-export default function SearchbarPart({onSearch}){
+export default function SearchbarPart({searchRef}){
     const [localSearch, setLocalSearch] = useState("");
     const history = useHistory();
 
@@ -20,33 +20,31 @@ export default function SearchbarPart({onSearch}){
     const handleForm=(e)=>{
         e.preventDefault();
         if(localSearch.length!==0){
-            onSearch(localSearch);
-            history.push("/parallax");
-
+            // history.push("/parallax");
         }
     }
 
 
     return (
-        <form onSubmit={handleForm} style={advanceSearch} className="searchMainContainer">
+        <form onSubmit={handleForm} style={advanceSearch} className="searchMainContainer" ref={searchRef}>
             <img draggable="false" src={searchBg} style={mainBgSearchStyle} alt="#"/>
             <div style={titleSearchContainer} className="titleSearchContainer">
                 
             </div>
 
             <div style={searchBoxContainer}  className="searchBoxContainer">
-                <div style={homepageBgParent} className="homepageBgParent">
-                    <img draggable="false" className="homeItem1" src={homeItem1} style={homeItems}/> 
-                    <img draggable="false" className="homeItem2" src={homeItem2} style={homeItems}/> 
-                    <img draggable="false" className="homeItem3" src={homeItem3} style={homeItems}/> 
-                    <img draggable="false" className="homeItem4" src={homeItem4} style={homeItems}/> 
-                    <img draggable="false" src={homepageBg} style={homepageBgStyle}/> 
-                </div>
-                <div className="input-group" style={inputSearchContainer}>
+                <div className="input-group searchInputGroup" style={inputSearchContainer}>
                     <input style={inputSearch} type="text" className="form-control formSearchHomepage" 
                     placeholder="Search for Books, Theses, and Special Problems" 
                     value={localSearch}
                     onChange={e=>setLocalSearch(e.currentTarget.value)}/>
+                </div>
+                <div style={homepageBgParent} className="homepageBgParent">
+                    <img draggable="false" className="homeItem homeItem1" src={homeItem1} style={homeItems} alt="#"/> 
+                    <img draggable="false" className="homeItem homeItem2" src={homeItem2} style={homeItems} alt="#"/> 
+                    <img draggable="false" className="homeItem homeItem3" src={homeItem3} style={homeItems} alt="#"/> 
+                    <img draggable="false" className="homeItem homeItem4" src={homeItem4} style={homeItems} alt="#"/> 
+                    <img draggable="false" src={homepageBg} style={homepageBgStyle} alt="#"/> 
                 </div>
             </div>
 
@@ -102,6 +100,7 @@ const inputSearch={
     borderRadius:"50px",
     backgroundColor:"rgba(255,255,255,0.9)",
     boxShadow: "inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5)",
+    zIndex:10
 }
 const mainBgSearchStyle = {
     position:"absolute",
@@ -128,15 +127,17 @@ const homeItems = {
     position:"absolute",
     maxHeight:"70%",
     maxWidth:"70%", 
-    "opacity":0.5, 
-    zIndex:10
+    opacity:0.5, 
+    zIndex:1,
+    transition:"0.4s",
+    transform:"scale(1)"
 };
 
 const animateSearchBox=()=>{
     gsap.from('.formSearchHomepage',{opacity:0,yPercent:200, duration:0.6,scale:0.1});
     gsap.from('.homepageBgParent',{duration:0.8,scale:0.85});
-    gsap.from('.homeItem1',{duration:1,scale:1.6, opacity:1});
-    gsap.from('.homeItem2',{duration:1,scale:1.3, opacity:1});
-    gsap.from('.homeItem3',{duration:1,scale:1.3, opacity:1});
-    gsap.from('.homeItem4',{duration:1,scale:2, opacity:1});
+    gsap.from('.homeItem1',{duration:0.6,scale:4, opacity:0.8});
+    gsap.from('.homeItem2',{duration:0.6,scale:4, opacity:0.8});
+    gsap.from('.homeItem3',{duration:0.6,scale:3, opacity:0.8});
+    gsap.from('.homeItem4',{duration:0.6,scale:3, opacity:0.8});
 }

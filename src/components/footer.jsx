@@ -46,7 +46,7 @@ const footerContainer={
     "width":"100%",
     "display":"flex",
     "color":"white",
-    "backgroundColor":"#0067A1",
+    "backgroundColor":"black",
     "fontFamily": 'Montserrat',
     "boxShadow": "2px 2px 16px 0 rgba(255, 255, 255, 0.3) inset,-8px -8px 12px 0 rgba(0, 0, 0, .25) inset"
 }

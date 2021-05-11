@@ -1,11 +1,12 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-export default function CardBook({imageSrc, title, linkTo}) {
+export default function CardBook({imageSrc, title, linkTo, setHoverText}) {
     return (
-            <Link to={linkTo} className="cardContainer" style={cardContainer}>
+            <Link to={linkTo} className="cardContainer" style={cardContainer}
+                onMouseEnter={()=>setHoverText(title)} onMouseLeave={()=>setHoverText("LATEST ACQUISITIONS")}>
                 <div className="imgContainer" src={imageSrc} style={imgContainer}>
-                    <img src={imageSrc} style={imgSrcStyle} alt="#"/>
+                    <img src={imageSrc} style={imgSrcStyle} alt="#" draggable={false}/>
                 </div>
                 <p style={{fontSize:"15px",padding:"7px"}} className="bookTitleCard">{title}</p>
             </Link>
@@ -13,17 +14,14 @@ export default function CardBook({imageSrc, title, linkTo}) {
 }
 
 const cardContainer = {
-    height:"100%",
     width:"150px",   
-    padding:0,
     color:"black",
-    marginRight:"10px",
+    margin:"8px",
     transition:"0.3s",
     transform:"scale(1)",
-
 }
 const imgContainer = {
-    height:"90%",
+    height:"82%",
 }
 const imgSrcStyle={
     height:"100%",
