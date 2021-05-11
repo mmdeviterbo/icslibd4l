@@ -23,13 +23,13 @@ module.exports = function(app){
         res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
         next();
     })
-
     app.use("/test", require('../routes/testDataRouter'))
     app.use("/authentication", require('../routes/userRouter'));
     
     //set up user activity router       
     app.use("/auth", require('../routes/userActivityRouter'));
 
+    
     // set up routes
     app.use("/books", require("../routes/bookRouter"))
     app.use("/admin", require("../routes/adminRouter"))
