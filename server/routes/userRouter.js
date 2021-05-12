@@ -43,7 +43,7 @@ router.post("/create", async (req,res) => {
             loggedUser = existingUser;
         }
         else{   
-            userType = 4
+            const userType = 4
             const nickname = fullName
             const newUser = new UserModel ({
                 googleId, email, fullName, userType, nickname

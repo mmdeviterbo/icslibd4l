@@ -7,6 +7,8 @@ import Notfound from './components/notfound';
 import ManageUser from './components/manageuserpage/manageuserpage';
 import ViewUser from './components/viewuserpage/viewUserPage';
 
+import ManageResPage from './components/manageresourcespage/manageresourcespage'
+
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import './App.css';
@@ -65,6 +67,9 @@ function App() {
           <Route path="/home" component={Homepage}></Route>
           <Route path="/manageusers" component={ManageUser}></Route>
           <Route path='/viewuser/:userID' component={ViewUser}></Route>
+          {/* add your new route/path here */}
+          <Route path="/manage-resources" component={ManageResPage}></Route>
+
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/> 

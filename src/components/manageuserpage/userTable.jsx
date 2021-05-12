@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import axios from 'axios'
 
 const tableHeader = [
   "User ID", "Full Name", "Classification", " "
@@ -58,9 +59,11 @@ const initialState = {
   users:[tableEntry]
 }
 
+
+
 export const GlobalContext = createContext(initialState);
 
-export default function UserEntry() {
+export default function UserTable() {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -86,6 +89,8 @@ export default function UserEntry() {
       borderRadius: '10px',
     }
   });
+
+  
 
   const tableContainer = useStyles();
 
