@@ -124,15 +124,14 @@ router.post("/addkeyword", async (req,res)=>{
 
 // search data
 router.get("/search", async (req, res)=> {
-    let final_array;
+    let final_array = [];
 
     // RESOURCE : SP
     if(req.query.type == "SP"){
-        if(req.query.field == "title"){
         // search by TITLE
-        // http://localhost:3001/thesis/search?type=SP&field=title&search=red
+        if(req.query.field == "title"){
             thesisModel.aggregate(
-                [{$match: {"type":"SP", "title":{$regex:req.query.search} }},
+                [{$match: {"type":req.query.type, "title":{$regex:req.query.search} }},
                 {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
                 {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
                 {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}}
@@ -141,15 +140,15 @@ router.get("/search", async (req, res)=> {
                 (err,result) => {
                     if(err){
                         res.send(err);
-                    } else {
+                    }else{
                     res.send(result);
+                    }
                 }
-            });
-        }else if (req.query.field == "year"){
+            );
         // search by YEAR
-        // http://localhost:3001/thesis/search?type=SP&field=year&search=2020
+        }else if(req.query.field =="year"){
             thesisModel.aggregate(
-                [{$match: {"type":"SP", "year":{$regex:req.query.search} }},
+                [{$match: {"type":req.query.type, "year": Number(req.query.search) }},
                 {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
                 {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
                 {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}}
@@ -158,18 +157,14 @@ router.get("/search", async (req, res)=> {
                 (err,result) => {
                     if(err){
                         res.send(err);
-                    } else {
+                    }else{
                     res.send(result);
+                    }
                 }
-            });
-        }else if(req.query.field == "author") {
-        // search by AUTHOR
+            );
         }else{
-           
-           // search by ADVISER 
-        }
-    }else{
-    // search all fields
+
+        };
     };
 });
 
