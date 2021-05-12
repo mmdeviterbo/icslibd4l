@@ -65,9 +65,9 @@ function App() {
         {/* this route returns component depending on the route */}
         <Switch>
           <Route path="/home" component={Homepage}></Route>
-          <Route path="/manageusers" component={ManageUser}></Route>
-          <Route path='/viewuser/:userID' component={ViewUser}></Route>
           {/* add your new route/path here */}
+          <Route path="/manageusers" component={ManageUser}></Route>
+          <Route path='/viewuser/:googleId' component={ViewUser}></Route>
           <Route path="/manage-resources" component={ManageResPage}></Route>
 
           <Route exact path="/not-found" component={Notfound}></Route> 
