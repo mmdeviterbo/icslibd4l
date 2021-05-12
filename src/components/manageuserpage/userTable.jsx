@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,47 +11,61 @@ import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import axios from 'axios'
+import HttpService from '../../services/httpService'
 
 const tableHeader = [
-  "User ID", "Full Name", "Classification", " "
-
+  "User ID", "Full Name", "Display Name", "Email", "Classification", " "
 ];
+
 const tableEntry = [
 {
-  userID : "0001",
-  name : "Elcid X. Cruzado",
-  classification : "Student",
+  googleId : "0001",
+  email: "sample@email.com",
+  fullName: "Elcid X. Cruzado",
+  userType: 4,
+  nickname: "Nickname",
 },
 {
-  userID : "0002",
-  name : "John Mel Ramos",
-  classification : "Student",
+  googleId : "0002",
+  email: "sample@email.com",
+  fullName: "John Mel Ramos",
+  userType: 4,
+  nickname: "Nickname",
 },
 {
-  userID : "0003",
-  name : "Rita Isabel C. Federer",
-  classification : "Faculty",
+  googleId : "0003",
+  email: "sample@email.com",
+  fullName: "Rita Isabel C. Federer",
+  userType: 4,
+  nickname: "Nickname",
 },
 {
-  userID : "0004",
-  name : "Joayma H. Mufasa",
-  classification : "Student"
+  googleId : "0004",
+  email: "sample@email.com",
+  fullName: "Joayma H. Mufasa",
+  userType: 4,
+  nickname: "Nickname"
 },
 {
-  userID : "0005",
-  name: "Olivia Alexis C. Aranas",
-  classification : "Student"
+  googleId : "0005",
+  email: "sample@email.com",
+  fullName: "Olivia Alexis C. Aranas",
+  userType: 4,
+  nickname: "Nickname"
 },
 {
-  userID : "0006",
-  name : "Maria Franchette Beatrix F. Gacad",
-  classification : "Student"
+  googleId : "0006",
+  email: "sample@email.com",
+  fullName: "Maria Franchette Beatrix F. Gacad",
+  userType: 4,
+  nickname: "Nickname"
 },
 {
-  userID : "0007", 
-  name : "Josesito Joseph T. Batumbakal III",
-  classification : "Student"
+  googleId : "0007", 
+  email: "sample@email.com",
+  fullName: "Josesito Joseph T. Batumbakal III",
+  userType: 4,
+  nickname: "Nickname"
 }
 ];
 
@@ -59,11 +73,22 @@ const initialState = {
   users:[tableEntry]
 }
 
-
-
 export const GlobalContext = createContext(initialState);
 
 export default function UserTable() {
+
+  // const [ studentList, setStudentList ] = useState([]);
+
+  // useEffect (() => {
+  //   HttpService.get('http://localhost:3001/authentication/readStudents').then((response) => {
+  //     setStudentList(Array.from(response.data));
+
+  //     console.log("Hello. Getting Data from database");
+  //   });
+  // }, []);
+
+  // console.log(studentList);
+  // console.log("Hello World");
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -96,9 +121,11 @@ export default function UserTable() {
 
   const entries = tableEntry.map((entry, index) => (
       <TableRow hover>
-        <TableCell key={entry.userID} style={{width: '80x'}}>{entry.userID}</TableCell>
-        <TableCell key={entry.name} style={{align: 'left'}}><Link to={`/viewuser/${entry.userID}`}>{entry.name}</Link></TableCell>
-        <TableCell key={entry.classification} style={{width : '80px'}}>{entry.classification}</TableCell>
+        <TableCell key={entry.googleId} style={{width: '80x'}}>{entry.googleId}</TableCell>
+        <TableCell key={entry.fullName} style={{align: 'left'}}><Link to={`/viewuser/${entry.googleId}`}>{entry.fullName}</Link></TableCell>
+        <TableCell key={entry.nickname} style={{align: 'left'}}><Link to={`/viewuser/${entry.googleId}`}>{entry.nickname}</Link></TableCell>
+        <TableCell key={entry.email} style={{width : '80px'}}>{entry.email}</TableCell>
+        <TableCell key={entry.userType} style={{width : '80px'}}>{entry.userType}</TableCell>
         <TableCell key={index} style={{textAlign: 'center', verticalAlign: 'middle'}}>
           <FontAwesomeIcon icon={faPencilAlt} style={{margin: '0 0 10px 10px'}}/> 
           <FontAwesomeIcon icon={faTrashAlt} style={{margin: '0 0 10px 10px'}}/>
