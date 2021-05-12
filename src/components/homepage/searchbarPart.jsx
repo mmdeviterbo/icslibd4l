@@ -156,12 +156,13 @@ const uplbStyle={
     padding:0,
 }
 const icsStyle={
+    padding:"5px",
     color:"black",
     textAlign:"center",
-    fontSize:"15px",
+    fontSize:"18px",
     fontWeight:900,
     background:"white",
-    boxShadow:" 2px 2px 5px 0 rgba(0, 0, 0, 0.45),-1px -2px 4px 0 rgba(255, 255, 255, 0.3)",
+    boxShadow:" 2px 2px 5px 0 rgba(0, 0, 0, 0.45),-1px -1px 3px 0 rgba(255, 255, 255, 0.1)",
 
 }
 
@@ -218,8 +219,8 @@ const homeItems = {
 };
 
 const buttonsContainer ={
-    bottom:"5%",
-    minHeight:"20%",
+    height:"40%",
+    bottom:"0%",
     position:"absolute",
     width:"100%",
     display:"flex",
