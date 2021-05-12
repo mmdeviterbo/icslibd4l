@@ -97,7 +97,7 @@ const titleOrientation = {
     fontSize:"70px",
     fontWeight:900,
     height:"100%",
-    background:"rgba(255,255,255,0.05)",
+    background:"rgba(0,0,0,1)",
     textAlign:"center",
     margin:0,
 }

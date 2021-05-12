@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import CardBook from './cardBook';
 import latestAcqBg from '../../assets/searchBg_4.png';
 
-export default function LatestAcquisitions() {
+export default function LatestAcquisitions({latestAcqRef}) {
     const [acquisitions, setacquisitions] = useState([
         {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover1', linkTo:'/home'},
         {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover2', linkTo:'/home'},
@@ -16,7 +16,7 @@ export default function LatestAcquisitions() {
 
     const [hoverText, setHoverText] = useState("");
     return (
-        <div className="latestAcquisitions" style={latestAcquisitionsContainer}>
+        <div className="latestAcquisitions" style={latestAcquisitionsContainer} ref={latestAcqRef}>
             <img src={latestAcqBg} style={latestAcqBgStyle} alt="#"/>
             <div style={colorsParent} className="latestAcqcolorsParent">
                 <div style={whiteBg}>
@@ -103,7 +103,7 @@ const blueBg = {
 const textBgContainer = {
     height:"100%",
     width:"100%",
-    background:"#0067A110",
+    background:"`#0067A110`",
     zIndex:100,
     display:"grid",
     placeItems:"center",
@@ -113,7 +113,7 @@ const textBgContainer = {
 const textBg={
     margin:0,
     fontSize:"calc(20px + 2vw)",
-    background:"rgba(255,255,255,0.05)",
+    background:"black",
     color:"white",
     fontWeight:900,
     width:"100%",

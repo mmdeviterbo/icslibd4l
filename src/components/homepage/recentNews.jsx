@@ -15,10 +15,10 @@ const newsList = [
     {title:"News Title 3", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"}
 ]
 
-export default function RecentNews({appRef}) {
+export default function RecentNews({appRef, newsRef}) {
     const scrollToTop=()=> appRef.current && appRef.current.scrollIntoView({behavior:"smooth",block:"start"});
     return (
-        <div className="recentNewsContainer" style={recentNewsContainer}>
+        <div className="recentNewsContainer" style={recentNewsContainer} ref={newsRef}>
             <img src={recentNewsBg} style={recentNewsBgStyle} alt="#"/>
 
             <div style={titleContentContainer} className="titleContentContainer">
@@ -97,9 +97,9 @@ const recentNewsHeader = {
     padding:"calc(10px + 0.5vw)"
 }
 const newsStyle = {
-    borderRadius:"20px 0 0 20px",
+    borderRadius:"10px 0 0 10px",
     color:"white",
-    background:"rgb(0, 103, 161)",
+    background:"rgb(0, 0, 0)",
     writingMode: "vertical-lr",
     textOrientation: "upright",
     display:"flex",
@@ -107,7 +107,7 @@ const newsStyle = {
     fontSize:"calc(30px + 2vw)",
     height:"100%",
     fontWeight:900,
-    padding:"0 calc(15px + 1vw)",
+    padding:"0 calc(20px + 1vw)",
     // protect from copy paste
     "WebkitUserSelect": "none",
     "WebkitTouchCallout": "none",

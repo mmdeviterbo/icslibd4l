@@ -15,6 +15,9 @@ function App() {
 
 
   const browseRef = useRef(null);
+  const latestAcqRef = useRef(null);
+  const newsRef = useRef(null);
+
   const appRef = useRef(null);
 
   useEffect(()=>{
@@ -44,7 +47,7 @@ function App() {
         <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef} user={user}/>
 
         <Switch>
-          <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef}/>}/>
+          <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef} latestAcqRef={latestAcqRef} newsRef={newsRef}/>}/>
           
 
 
