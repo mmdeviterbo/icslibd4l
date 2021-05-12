@@ -80,7 +80,7 @@ const colorsParent = {
     width:"70%",    
     zIndex:0,
     display:"flex",
-    borderRadius:"0px 30px 30px 0px",
+    borderRadius:"0px 10px 10px 0px",
     overflow:"hidden",
     boxShadow: "4px 4px 20px black",
 }
