@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useHistory } from 'react-router-dom';
+import { Dropdown } from 'semantic-ui-react'
 import searchBg from '../../assets/searchBg_4.png';
 import homepageBg from '../../assets/homepage/homepage-bg.png';
 import homeItem1 from '../../assets/homepage/homeItem-1.png';
@@ -11,6 +12,7 @@ import {gsap} from 'gsap';
 
 export default function SearchbarPart({searchRef}){
     const [localSearch, setLocalSearch] = useState("");
+    const [filterTag, setFilterTag] = useState("");
     const history = useHistory();
 
     useEffect(()=>{
@@ -19,25 +21,29 @@ export default function SearchbarPart({searchRef}){
 
     const handleForm=(e)=>{
         e.preventDefault();
-        if(localSearch.length!==0){
-            // history.push("/parallax");
+        const tempStr = localSearch.replace(/\s/g,'_'); 
+        if(tempStr.length!==0){
+            if(filterTag.length!==0){
+                console.log(`/search/${filterTag}/${tempStr}`);
+                history.push(`/search/${filterTag}/${tempStr}`);
+            }else{
+                console.log(`/search/any/${tempStr}`);
+                history.push(`/search/any/${tempStr}`);
+            }
         }
     }
-
 
     return (
         <form onSubmit={handleForm} style={advanceSearch} className="searchMainContainer" ref={searchRef}>
             <img draggable="false" src={searchBg} style={mainBgSearchStyle} alt="#"/>
-            <div style={titleSearchContainer} className="titleSearchContainer">
-                
-            </div>
+            <div style={titleSearchContainer} className="titleSearchContainer"></div>
 
             <div style={searchBoxContainer}  className="searchBoxContainer">
-                <div className="input-group searchInputGroup" style={inputSearchContainer}>
-                    <input style={inputSearch} type="text" className="form-control formSearchHomepage" 
-                    placeholder="Search for Books, Theses, and Special Problems" 
-                    value={localSearch}
-                    onChange={e=>setLocalSearch(e.currentTarget.value)}/>
+                <div style={alignSearchIcon} className="formSearchHomepage">
+                    <input style={inputSearch} type="text" className="form-control removeOutline" 
+                        placeholder="Search for Books, Theses, and Special Problems" 
+                        value={localSearch} onChange={e=>setLocalSearch(e.currentTarget.value)}/>
+                    <div style={dropDownFilter}><DropdownFilter setFilterTag={setFilterTag} filterTag={filterTag}/></div>
                 </div>
                 <div style={homepageBgParent} className="homepageBgParent">
                     <img draggable="false" className="homeItem homeItem1" src={homeItem1} style={homeItems} alt="#"/> 
@@ -47,9 +53,40 @@ export default function SearchbarPart({searchRef}){
                     <img draggable="false" src={homepageBg} style={homepageBgStyle} alt="#"/> 
                 </div>
             </div>
-
         </form>
     )
+}
+
+const DropdownFilter = ({setFilterTag, filterTag}) =>{ 
+    const options = [
+        { key: 1, text: 'Any', value: 'any'},
+        { key: 2, text: 'Title', value: 'title' },
+        { key: 3, text: 'Author', value: 'author' },
+        { key: 4, text: 'Call number', value: 'callnumber' },
+        { key: 5, text: 'ISBN/ISSN', value: 'isbnissn' },
+    ]
+    const handleChange=(e, data)=>setFilterTag(data.value);
+    return(
+        <Dropdown text='' button style={{"whiteSpace": "nowrap", padding:"19px", borderRadius:"0px", backgroundColor:"rgba(255,255,255,0.7)"}}
+        onChange={handleChange} options={options} value={filterTag}/>
+    )
+}
+const dropDownFilter = {
+    height:"100%",
+    width:"calc(100px + 1vw)",
+    margin:0,
+    padding:0,
+}
+const alignSearchIcon = {
+    zIndex:100,
+    top:"15%",
+    position:"absolute",
+    width:"80%",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+    padding:"5px"
+
 }
 
 const advanceSearch = {
@@ -82,24 +119,20 @@ const searchBoxContainer = {
     height:"90%",
     display:"flex",
     justifyContent:"center",
-    alignItems:"center",
+    alignItems:"flex-start",
     background:"#0067A150",         
     transition:"1s",
     borderRadius: "2px  7px  7px  2px",    
     boxShadow: "6px 6px 10px 0 rgba(0, 0, 0, 0.40), -6px -6px 10px 0 rgba(255, 255, 255, 0.05)",
 }
-const inputSearchContainer = {
-    height:"70%",
-    width:"90%",
-    padding:"0 15%"
-}
 
 const inputSearch={
-    width:"40%",
-    padding:"30px 25px 30px 25px",
-    borderRadius:"50px",
-    backgroundColor:"rgba(255,255,255,0.9)",
-    boxShadow: "inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5)",
+    width:"100%",
+    padding:"25px 25px",
+    margin:0,
+    borderRadius:"5px 0 0 5px",
+    backgroundColor:"rgba(255,255,255,0.4)",
+    border:"0",
     zIndex:10
 }
 const mainBgSearchStyle = {

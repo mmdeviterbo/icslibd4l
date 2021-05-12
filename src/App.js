@@ -26,7 +26,6 @@ function App() {
     try{
       const jwt = localStorage.getItem(jwtPrivateKey);
       const userInfo = jwtDecode(jwt);
-      console.log(userInfo);
       setUser(userInfo);
     }catch(err){console.log("No tokens yet");}
   }
@@ -37,15 +36,13 @@ function App() {
       const {data} = await personService.loginRegisterUser(userInfo);   
       localStorage.setItem(jwtPrivateKey, data);
       window.location = "/home"; 
-    }catch(err){
-      console.log("Errorrrrr: " +  err);
-    } 
+    }catch(err){console.log("Errorrrrr: " +  err)} 
   }
 
   return (
     <div className="App" ref={appRef}>
         <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef} user={user}/>
-        
+
         <Switch>
           <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef}/>}/>
           
