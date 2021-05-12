@@ -7,23 +7,12 @@ const addResource = (resourceData) => {
     return http.post(apiEndpoint+'/thesis/create', resourceData)
 }
 
-const addAuthor = (authorFullName) => {
-  console.log("hello, " + authorFullName.author_fname)
-  return http.post(apiEndpoint+'/thesis-author/create', authorFullName)
-}
-
-const addAdviser = (adviserFullName) => {
-  console.log("hello, " + adviserFullName.adviser_fname)
-  return http.post(apiEndpoint+'/thesis-adviser/create', adviserFullName)
-}
-
-const addKeyword = (resourceKeyword) => {
-  console.log(resourceKeyword)
-  return http.post(apiEndpoint+'/thesis-key/create', resourceKeyword)
-}
-
 // read data of a resource
-
+const viewResource = () => {
+    http.get(apiEndpoint+'/thesis/view').then((response) => {
+      return response.data
+    })
+}
 
 
 // edit data of a resource
@@ -36,9 +25,7 @@ const addKeyword = (resourceKeyword) => {
 
 export default {
     addResource,
-    addAuthor,
-    addAdviser,
-    addKeyword
+    viewResource
 }
 
 

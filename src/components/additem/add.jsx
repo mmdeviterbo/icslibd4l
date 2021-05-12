@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import ResourceServices from '../../services/resourceService';
-import ViewResource from './view';
 
 export default function AddResource() {
     const [type, setType] = useState('')
@@ -14,7 +13,7 @@ export default function AddResource() {
     const [source_code, setSourceCode] = useState('')
     const [abstract, setAbstract] = useState('')
     const [sp_thesis_keyword, setKeyword] = useState('')
-
+    // multiple authors should be possible
     const [author_fname, setAuthorFname] = useState('')
     const [author_lname, setAuthorLname] = useState('')
     const [adviser_fname, setAdviserFname] = useState('')
@@ -32,31 +31,19 @@ export default function AddResource() {
             source_code,
             manuscript,
             journal,
-            poster
-        }
-
-        const authorName = {
-            sp_thesis_id,
-            author_fname, 
-            author_lname
-        }
-
-        const adviserName = {
-            sp_thesis_id,
+            poster,
             adviser_fname, 
-            adviser_lname
-        }
-
-        const keyWord = {
-            sp_thesis_id,
+            adviser_lname,
+            author_fname, 
+            author_lname,
             sp_thesis_keyword
         }
-
-        const {resourceData} = await ResourceServices.addResource(userInput)
-        const {authorFullName} = await ResourceServices.addAuthor(authorName)
-        const {adviserFullName} = await ResourceServices.addAdviser(adviserName)
-        const {resourceKeyword} = await ResourceServices.addKeyword(keyWord)
-        // console.log(resourceData)
+        try{
+            const {resourceData} = await ResourceServices.addResource(userInput)
+        } catch(err){
+            console.log(err);
+            alert("Please enter all required fields.")
+        }
     }
 
 
@@ -67,11 +54,11 @@ export default function AddResource() {
                 <select onChange = {(event) => {
                         setType(event.target.value)
                     }}>
-                    <option value="sp">SP</option>
-                    <option value="thesis">Thesis</option>
-                    <option value="book">Book</option>
+                    <option value="Special Problem">SP</option>
+                    <option value="Thesis">Thesis</option>
+                    {/* <option value="book">Book</option> */}
                 </select>
-
+                
                 <h6>Title</h6>
                 <input 
                     type="text"

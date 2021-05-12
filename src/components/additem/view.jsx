@@ -5,37 +5,24 @@ import http from '../../services/httpService';
 import ResourceService from '../../services/resourceService';
 
 export default function ViewResource() {
-    const [thesisList, setThesisList] = useState([])
-    useEffect(() => {
-        http.get(apiEndpoint+'/view-sp-thesis').then((response) => {
-          setThesisList(response.data)
-            console.log('view data,,')
-        })
-      }, [])
+    const [spThesisList, setSpThesisList] = useState([])
+    console.log(ResourceService.viewResource())
+    
+    // useEffect(() => {
+    //     // console.log(ResourceService.viewResource.data)
+    //     // ResourceService.viewResource.then((response) => {
+    //     //   setSpThesisList(response.data)
+    //     // })
+    //   }, [])
 
     return (
         <div className="viewitem-container">
             <h1>Sp/Thesis</h1>
-            {thesisList.map((val, key) => {
+            {spThesisList.map((val, key) => {
                 return <div>
                     {val.type}, {val.title}, {val.author}, {val.year}
                 </div>
             })}            
         </div>
     );
-}
-
-const additemContainer = {
-    fontFamily: 'Montserrat',
-    display:"flex",
-    justifyContent:"center",
-    flexDirection:"column",
-    alignItems:"center",
-}
-
-const styles = {
-    select:{
-        width:'100%',
-        maxWidth:600
-    },
 }
