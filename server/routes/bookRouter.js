@@ -3,7 +3,7 @@ const bookModel = require("../models/booksModel");
 const request = require('request');
 const cheerio = require('cheerio');
 
-router.get("/get-news", async (req,res)=>{
+router.post("/get-news", async (req,res)=>{
     let options = {url: 'https://uplb.edu.ph/news-and-updates-2/',
         headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}};
     try{
