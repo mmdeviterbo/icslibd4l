@@ -8,7 +8,7 @@ import homeItem2 from '../../assets/homepage/homeItem-2.png';
 import homeItem3 from '../../assets/homepage/homeItem-3.png';
 import homeItem4 from '../../assets/homepage/homeItem-4.png';
 
-import {gsap} from 'gsap';
+import {gsap, Power3} from 'gsap';
 
 export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
     const [localSearch, setLocalSearch] = useState("");
@@ -37,14 +37,14 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
             <img draggable="false" src={searchBg} style={mainBgSearchStyle} alt="#"/>
             <div style={titleSearchContainer} className="titleSearchContainer">
                 <div style={textStylesContainer}>
-                    <div style={uplbContainerStyle}>
+                    <div style={uplbContainerStyle} className="searchUPanimation">
                         <p style={uplbStyle}>UNIVERSITY</p>
                         <p style={uplbStyle}>OF</p>
                         <p style={uplbStyle}>THE</p>
                         <p style={uplbStyle}>PHILIPPINES</p>
                         <p style={uplbStyle}>Los Baños</p>
                     </div>
-                    <p style={icsStyle}><span>Institute of Computer Science Online Library</span></p>
+                    <div style={icsStyle}><p className="searchAnimationICS">Institute of Computer Science Online Library</p></div>
                 </div>
                 <div style={buttonsContainer} className="buttonsSearchContainer">
                     <button style={buttonSelect} className="btn btn-warning" onClick={scrollIntoBrowse}>
@@ -156,6 +156,7 @@ const uplbStyle={
     padding:0,
 }
 const icsStyle={
+    overflowX:"hidden",
     padding:"5px",
     color:"black",
     textAlign:"center",
@@ -244,4 +245,7 @@ const animateSearchBox=()=>{
     gsap.from('.homeItem2',{duration:0.6,scale:4, opacity:0.8});
     gsap.from('.homeItem3',{duration:0.6,scale:3, opacity:0.8});
     gsap.from('.homeItem4',{duration:0.6,scale:3, opacity:0.8});
+    gsap.from('.searchAnimationICS',{duration:0.3,x:40, ease: Power3});
+    gsap.from('.searchUPanimation',{duration:0.5,x:-30, ease: Power3});
+    
 }
