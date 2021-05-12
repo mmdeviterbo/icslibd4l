@@ -7,7 +7,7 @@ import ResourceService from '../../services/resourceService';
 export default function ViewResource() {
     const [thesisList, setThesisList] = useState([])
     useEffect(() => {
-        http.get(apiEndpoint+'/viewSPThesis').then((response) => {
+        http.get(apiEndpoint+'/view-sp-thesis').then((response) => {
           setThesisList(response.data)
             console.log('view data,,')
         })
@@ -18,7 +18,7 @@ export default function ViewResource() {
             <h1>Sp/Thesis</h1>
             {thesisList.map((val, key) => {
                 return <div>
-                    {val.format}, {val.title}, {val.author}, {val.year}
+                    {val.type}, {val.title}, {val.author}, {val.year}
                 </div>
             })}            
         </div>
