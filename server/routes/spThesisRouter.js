@@ -131,25 +131,41 @@ router.get("/search", async (req, res)=> {
         if(req.query.field == "title"){
         // search by TITLE
         // http://localhost:3001/thesis/search?type=SP&field=title&search=red
-            thesisModel.find({"type": "SP", "title": {$regex:req.query.search}}, (err,result) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                res.send(result);
+            thesisModel.aggregate(
+                [{$match: {"type":"SP", "title":{$regex:req.query.search} }},
+                {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
+                {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
+                {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}}
+                ], 
+                
+                (err,result) => {
+                    if(err){
+                        res.send(err);
+                    } else {
+                    res.send(result);
                 }
             });
         }else if (req.query.field == "year"){
         // search by YEAR
         // http://localhost:3001/thesis/search?type=SP&field=year&search=2020
-            thesisModel.find({"type": "SP", "title": {$regex:req.query.search}}, (err,result) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                res.send(result);
+            thesisModel.aggregate(
+                [{$match: {"type":"SP", "year":{$regex:req.query.search} }},
+                {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
+                {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
+                {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}}
+                ], 
+                
+                (err,result) => {
+                    if(err){
+                        res.send(err);
+                    } else {
+                    res.send(result);
                 }
             });
+        }else if(req.query.field == "author") {
+        // search by AUTHOR
         }else{
-           // search by AUTHOR
+           
            // search by ADVISER 
         }
     }else{
