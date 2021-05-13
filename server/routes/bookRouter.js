@@ -42,6 +42,12 @@ router.get("/get-news", async (req,res)=>{
     console.log("here")
 });
 
+
+
+router.get("/get-news", async (req,res)=>{
+    console.log("here")
+});
+
 router.post("/", async (req,res)=>{
     try{
         const {title, author} = req.body; 
