@@ -92,8 +92,8 @@ const DropdownFilter = ({setFilterTag, filterTag}) =>{
         { key: 1, text: 'Any', value: 'any'},
         { key: 2, text: 'Title', value: 'title' },
         { key: 3, text: 'Author', value: 'author' },
-        { key: 4, text: 'Call number', value: 'callnumber' },
-        { key: 5, text: 'ISBN/ISSN', value: 'isbnissn' },
+        { key: 4, text: 'Adviser', value: 'adviser' },
+        { key: 5, text: 'Subject', value: 'subject' },
     ]
     const handleChange=(e, data)=>setFilterTag(data.value);
     return(

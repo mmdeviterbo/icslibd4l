@@ -1,7 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import recentNewsBg from '../../assets/searchBg_4.png';
 import NewsService from '../../services/resourcesService';
-
 export default function RecentNews({appRef, newsRef}) {
     const [titleNews, setTitleNews] = useState([]);
     const [dateNews, setDateNews] = useState([]);
@@ -27,7 +26,7 @@ export default function RecentNews({appRef, newsRef}) {
         <div className="recentNewsContainer" style={recentNewsContainer} ref={newsRef}>
             <img src={recentNewsBg} style={recentNewsBgStyle} alt="#"/>
             <div style={titleContentContainer}>
-                <p style={newsStyle}>NEWS</p>
+                <p style={newsStyle}>UPLB NEWS</p>
                 <div className="ui three stackable cards" style={recentNewsInnerContainer}>
                     {titleNews.map((title,index)=><ArticleContainer 
                         title={title} 
@@ -77,7 +76,7 @@ const arrowUpStyle = {
 
 const recentNewsContainer={
     position:"relative",
-    height: "95vh",
+    height: "100vh",
     maxWidth:"100vw",
     display:"flex",
     flexDirection:"column",
@@ -103,12 +102,12 @@ const recentNewsInnerContainer = {
     padding:"1% 2%"
 }
 const newsStyle = {
+    padding:"30px",
     width:"100%",
     color:"white",
     background:"rgb(0, 0, 0)",
     borderRadius:"5px 5px 0 0",
     display:"flex",
-    justifyContent:"center",
     fontSize:"calc(30px + 2vw)",
     fontWeight:900,
     margin:0,
