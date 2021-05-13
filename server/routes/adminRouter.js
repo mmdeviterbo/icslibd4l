@@ -13,11 +13,10 @@ router.get('/retrieve', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const { upMail, firstName, lastName, userType } = req.body;
-    const icsUser = new user({ upMail: "sample@up.edu.ph", firstName: 'Ryan', lastName: "Resoles", userType: 1});
+    const { upMail, firstName, lastName, userType } = req.body.newIcsUser;
 
     try{
-        await icsUser.save();
+        await newIcsUser.save();
         res.send('User Added.')
     } catch(err) {
         console.log(err)

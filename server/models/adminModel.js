@@ -8,7 +8,7 @@ const icsUserSchema = new mongoose.Schema({
     userType: { type: Number, required: true },
 });
 
-const icsUser = mongoose.model("icsadmins", icsUserSchema);
+const icsUser = mongoose.model("icsadmin", icsUserSchema);
 module.exports = icsUser;
 
 

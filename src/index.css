@@ -9,3 +9,20 @@ body, html, #root{
   box-sizing: border-box;
   font-family: 'Montserrat';
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 7px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: gray; 
+  border-radius: 10px;
+}
