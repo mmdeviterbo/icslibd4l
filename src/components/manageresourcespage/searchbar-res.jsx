@@ -8,16 +8,16 @@ class SearchResources extends React.Component{
                 <input id = "searchbarresources"
                     placeholder = {"Search resources..."}
                 />
-                <button
-                    id = "searchbarresbutton"
-                />
+
+                <button id = "searchbarresbutton">
+                
+                </button>
+
+                
             </div>
             
         );
     }
 }
-
-
-
 
 export default SearchResources

@@ -6,7 +6,7 @@ import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
-import AddResourcePage from './components/manageresourcespage/add-new-resource-pg'
+import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
 
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 

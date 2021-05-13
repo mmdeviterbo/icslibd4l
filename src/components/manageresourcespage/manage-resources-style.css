@@ -4,8 +4,9 @@ body{
 
 /* Manage Resources + Search Bar Container */
 .manageresheader{
-    background-color:#0067A1;
+    background-color:#CFCFCF;
     width: 100%;
+    height: 14rem;
     display:flex;
     flex-direction:row; 
     align-items: center;
@@ -18,7 +19,7 @@ body{
 
 .manageresheader h1{
     margin:0;
-    color:white;
+    color: black;
 }
 
 /* Search Bar + Button Container */
@@ -29,8 +30,8 @@ body{
 
 /* Search Field */
 #searchbarresources{
-    height:2.2rem;
-    width:17rem; 
+    height: 3.5rem;
+    width: 32rem; 
     padding:3px;
     padding-left:10px;
     border:none;
@@ -43,8 +44,8 @@ body{
 #searchbarresbutton {
     border:none;
     color:#EDEDED;
-    height:2.2rem;
-    width:2.5rem;
+    height: 3.5rem;
+    width:4rem;
     border-top-right-radius:8px;
     border-bottom-right-radius:8px;
 }
@@ -96,7 +97,13 @@ body{
     color:black;
 }
 
-/* ------------------------- */
+/* Table Container */
+.res-table-cont {
+    height: 40em;
+    width: 100%;
+    background-color: #f5f5f5;
+    padding: 2rem;
+}
 
 /* --- Add New Resource button --- */
 .new-res-button {
@@ -109,6 +116,7 @@ body{
     padding:0.7rem;
     padding-left: 0.4rem;
     border-radius: 1em;
+    padding-right: 1.4rem;
 }
 
 .new-res-button a {
@@ -126,52 +134,4 @@ body{
     border-color:white;
     color:white;
     
-}
-
-/* .new-res-button a:hover{
-    color:white;
-} */
-
-/* ------------------------------- */
-
-/* Table Container */
-.res-table-cont {
-    height: 40em;
-    width: 100%;
-    background-color: #f5f5f5;
-    padding: 2rem;
-}
-
-/* Add Resources buong page */
-.add-resource-page-container {
-    display:flex;
-    flex-direction: row;
-}
-
-/* ------ Add Resources Form container ------ */
-
-.add-res-sidebar h1{
-    color:#0067A1;
-    background-color:white;
-    padding-top: 5rem;
-    padding-left: 4rem;
-    padding-right: 2.5rem;
-    padding-bottom: 100rem;
-    margin-bottom: 0px;
-}
-
-.add-res-form-cont{
-    padding: 3rem;
-    background-color:#cfcfcf;
-    width: 100%;
-}
-
-.isa-pang-div{
-    background-color: white;
-    padding: 1rem;
-    border-color:#828282;
-    border-width: 0.5rem;
-    border-radius: 1rem;
-
-
 }

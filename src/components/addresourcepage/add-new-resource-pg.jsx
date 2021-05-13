@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './manage-resources-style.css';
+import './add-resource-style.css';
 import AddResSidebar from './sidebar-add-res';
 import AddResFormContainer from './add-res-form-container';
 
