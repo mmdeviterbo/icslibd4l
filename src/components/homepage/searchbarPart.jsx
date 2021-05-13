@@ -63,7 +63,7 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 
             <div style={searchBoxContainer}  className="searchBoxContainer">
 
-                <div style={inputCaptionContainer}>
+                <div style={inputCaptionContainer} className="hoverForImagesVector">
                     <div style={alignSearchIcon} className="formSearchHomepage">
                         <input style={inputSearch} type="text" className="form-control removeOutline" 
                             placeholder="Search for Books, Theses, and Special Problems" autoFocus

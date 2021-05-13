@@ -142,8 +142,7 @@
     transform: scale(1.06);
 }
 
-
-.formSearchHomepage:hover ~ .homepageBgParent .homeItem{
+.hoverForImagesVector:hover ~ .homepageBgParent .homeItem{
     opacity:0.4 !important;
     transform:scale(1.3) !important;
 }
