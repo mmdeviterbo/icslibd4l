@@ -1,143 +1,149 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 
-const BookInfoForm = () => {
-    return(
-        <>
-         <h2><b>Book</b></h2>
-                <hr/>
+class BookInfoForm extends React.Component {
+    render(){
+        return(
+            <>
+            <h2><b>Book</b></h2>
+                    <hr/>
 
-                <form id = "bookForm">
-                    <div class = "primaryfields">
-                            <label for="bookISBN">ISBN: &nbsp; </label>
-                            <input type = "text" id = "bookISBN"/>
-                    </div>
-                    <div class = "primaryfields">
-                            <label for="physDescription">Physical Description: &nbsp; </label>
-                            <textarea id = "physDescription"/>
-                    </div>
-                    ...or upload description file:
-                    <input type = "file" class="resourcefiles" id="uploadDesc"/>
-                    <br/><br/><br/><br/>
-                    <div class = "primaryfields">
-                            <label for="availBookCopies">No. of copies available: &nbsp; </label>
-                            <input type = "number" id ="availBookCopies"/>
-                    </div>
+                    <form id = "bookForm">
+                        <div class = "primaryfields">
+                                <label for="bookISBN">ISBN: &nbsp; </label>
+                                <input type = "text" id = "bookISBN"/>
+                        </div>
+                        <div class = "primaryfields">
+                                <label for="physDescription">Physical Description: &nbsp; </label>
+                                <textarea id = "physDescription"/>
+                        </div>
+                        ...or upload description file:
+                        <input type = "file" class="resourcefiles" id="uploadDesc"/>
+                        <br/><br/><br/><br/>
+                        <div class = "primaryfields">
+                                <label for="availBookCopies">No. of copies available: &nbsp; </label>
+                                <input type = "number" id ="availBookCopies"/>
+                        </div>
 
-                    <div className = "bookRelatedCourses">
-                        <br/>
-                        Related Courses:
-                        <Select id = "relatedCourses"
-                                isMulti
-                                defaultValue={"Courses..."}
-                                options = {courseList}>
-                        </Select>
-                    </div>
+                        <div className = "bookRelatedCourses">
+                            <br/>
+                            Related Courses:
+                            <Select id = "relatedCourses"
+                                    isMulti
+                                    defaultValue={"Courses..."}
+                                    options = {courseList}>
+                            </Select>
+                        </div>
 
-                </form>
-        </>
-    );
+                    </form>
+            </>
+        );
+    }
 }
 
-const SPThesisInfoForm = () => {
-    return(
-        <>
-         <h2><b>SP / Thesis</b></h2>
-                <hr/>
+class SPThesisInfoForm extends React.Component {
+    render() {
+        return(
+            <>
+            <h2><b>SP / Thesis</b></h2>
+                    <hr/>
 
-                <form>
-                    <h5>Adviser(s):</h5>
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorFN"/>
-                    </div>
+                    <form>
+                        <h5>Adviser(s):</h5>
+                        <div class = "primaryfields">
+                            <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
+                            <input type = "text" id = "resAuthorFN"/>
+                        </div>
 
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN"/>
-                    </div>
+                        <div class = "primaryfields">
+                            <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
+                            <input type = "text" id = "resAuthorLN"/>
+                        </div>
 
-                    <button id="addAdviser">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                        Add Adviser
-                    </button>
+                        <button id="addAdviser">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                            Add Adviser
+                        </button>
 
-                    <br/><br/>
+                        <br/><br/>
 
-                
-                    <div class = "spthesisfiles">
-                        <h5>Upload Abstract</h5>
-                        <input type="file" class="resourcefiles" id="spthesisAbstract"/>
-                    </div>
                     
-                    <div class = "spthesisfiles">
-                        <h5>Upload Manuscript</h5>
-                        <input type="file" class="resourcefiles" id="spthesisManuscript"/>
-                    </div>
+                        <div class = "spthesisfiles">
+                            <h5>Upload Abstract</h5>
+                            <input type="file" class="resourcefiles" id="spthesisAbstract"/>
+                        </div>
+                        
+                        <div class = "spthesisfiles">
+                            <h5>Upload Manuscript</h5>
+                            <input type="file" class="resourcefiles" id="spthesisManuscript"/>
+                        </div>
 
-                    <div class = "spthesisfiles">
-                        <h5>Upload Journal</h5>
-                        <input type="file" class="resourcefiles" id="spthesisJournal"/>
-                    </div>
+                        <div class = "spthesisfiles">
+                            <h5>Upload Journal</h5>
+                            <input type="file" class="resourcefiles" id="spthesisJournal"/>
+                        </div>
 
-                    <div class = "spthesisfiles">
-                        <h5>Upload Poster</h5>
-                        <input type="file" class="resourcefiles" id="spthesisPoster"/>
-                    </div>
+                        <div class = "spthesisfiles">
+                            <h5>Upload Poster</h5>
+                            <input type="file" class="resourcefiles" id="spthesisPoster"/>
+                        </div>
 
-                </form>
-        </>
-    );
+                    </form>
+            </>
+        );
+    }
 }
 
-const ResourcePrimaryInfoForm = () =>{
-    return(
-        <>
-            <form id = "createForm">
-                    <h2><b>Primary Info</b></h2>
-                    <hr/> 
+class ResourcePrimaryInfoForm extends React.Component {
+    render(){
+        return(
+            <>
+                <form id = "createForm">
+                        <h2><b>Primary Info</b></h2>
+                        <hr/> 
 
-                    <div class = "primaryfields">
-                        <label for="resId">ID: &nbsp; </label>
-                        <input type = "text" id = "resId"/>
-                    </div>
+                        <div class = "primaryfields">
+                            <label for="resId">ID: &nbsp; </label>
+                            <input type = "text" id = "resId"/>
+                        </div>
 
-                    <div class = "primaryfields">
-                        <label for="resTitle">Title: &nbsp; </label>
-                        <input type = "text" id = "resTitle"/>
-                    </div>
-                    
-                    <h5>Author(s):</h5>
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorFN"/>
-                    </div>
+                        <div class = "primaryfields">
+                            <label for="resTitle">Title: &nbsp; </label>
+                            <input type = "text" id = "resTitle"/>
+                        </div>
+                        
+                        <h5>Author(s):</h5>
+                        <div class = "primaryfields">
+                            <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
+                            <input type = "text" id = "resAuthorFN"/>
+                        </div>
 
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN"/>
-                    </div>
+                        <div class = "primaryfields">
+                            <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
+                            <input type = "text" id = "resAuthorLN"/>
+                        </div>
 
-                    <button id="addAuthor">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                        Add Author
-                    </button>
-                    <br/><br/><br/>
-                    <div class = "resClassification-container">
-                        <p>Classification: &nbsp;   </p>
-                        <Select id = "resClassification"
-                                defaultValue ={"Select..."} 
-                                options = {classificationOptions}
-                        ></Select>
-                    </div>
+                        <button id="addAuthor">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                            Add Author
+                        </button>
+                        <br/><br/><br/>
+                        <div class = "resClassification-container">
+                            <p>Classification: &nbsp;   </p>
+                            <Select id = "resClassification"
+                                    defaultValue ={"Select..."} 
+                                    options = {classificationOptions}
+                            ></Select>
+                        </div>
 
-                </form>
-        </>
-    )
+                    </form>
+            </>
+        )
+    }
 }
 
 const classificationOptions = [
@@ -179,7 +185,7 @@ const SaveResourceButton = () => {
     )
 }
 
-const AddResFormContainer = () => {
+export default function AddResFormContainer() {
     return(
         <div className = "add-res-form-cont">
 
@@ -189,7 +195,6 @@ const AddResFormContainer = () => {
                 <ResourcePrimaryInfoForm/>
                 <br/><br/>
                 <SaveResourceButton/>
-
             </div>
 
             {/* SP/Thesis info or Book, pops up once selected */}
@@ -199,11 +204,8 @@ const AddResFormContainer = () => {
 
             <div className = "popupForm" id="spthesisForm">
                <BookInfoForm/>
-               
             </div>
 
         </div>
     );
 }
-
-export default AddResFormContainer;
