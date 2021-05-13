@@ -18,7 +18,9 @@ body{
 }
 
 .manageresheader h1{
-    font-family: 'Montserrat';
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 2.75rem;
     text-decoration: none;
     margin:0;
     color: black;
@@ -103,7 +105,10 @@ body{
 .res-table-cont {
     width: 100%;
     background-color: #f5f5f5;
-    padding: 5rem;
+    padding-top: 1.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 4rem;
 }
 
 /* --- Add New Resource button --- */
@@ -116,8 +121,9 @@ body{
     border-width: 1px;
     padding:0.7rem;
     padding-left: 0.4rem;
-    border-radius: 1em;
+    border-radius: 0.7rem;
     padding-right: 1.4rem;
+ 
 }
 
 .new-res-button a {

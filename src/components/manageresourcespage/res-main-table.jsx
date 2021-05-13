@@ -165,7 +165,8 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-          <h3>Resources</h3>
+          <h3 style={{fontWeight:"normal", fontFamily:"Montserrat", fontSize:"2rem",paddingBottom:"0.8rem"}}
+          >Resources</h3>
 
       )}
 

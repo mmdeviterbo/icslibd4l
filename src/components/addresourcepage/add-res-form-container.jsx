@@ -127,6 +127,10 @@ const ResourcePrimaryInfoForm = () =>{
                         Add Author
                     </button>
                     <br/><br/><br/>
+                    <div class = "primaryfields">
+                        <label for="publishingYr">Year Published: &nbsp; </label>
+                        <input type = "number" id = "resAuthorLN" min={1800} max={2021}/>
+                    </div>
                     <div class = "resClassification-container">
                         <p>Classification: &nbsp;   </p>
                         <Select id = "resClassification"
@@ -134,6 +138,8 @@ const ResourcePrimaryInfoForm = () =>{
                                 options = {classificationOptions}
                         ></Select>
                     </div>
+
+                    
 
                 </form>
         </>

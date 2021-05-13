@@ -7,8 +7,8 @@ import AddNewResource from './createnewresource';
 const ResTableContainer = () => {
     return(
         <div className = "res-table-cont">
-            <AddNewResource/>
-            <br/>
+            
+            
             {/* <UserTable/> */}
             <MainResourceTable
                 // options={{
@@ -17,6 +17,8 @@ const ResTableContainer = () => {
                 //     }
                 // }}
             />
+            <br/>
+            <AddNewResource/>
         </div>
     )
 };
