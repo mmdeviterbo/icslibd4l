@@ -21,7 +21,6 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 
     const handleForm=(e)=>{
         e.preventDefault();
-        console.log("submitted");
         const tempStr = localSearch.replace(/\s/g,'_'); 
         if(tempStr.length!==0 && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             if(filterTag.length!==0) history.push(`/search/${filterTag}/${tempStr}`);
