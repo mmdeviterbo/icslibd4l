@@ -1,4 +1,3 @@
-import personService from '../services/personService'
 import React, {useEffect, useState} from 'react'
 import GoogleLogin from 'react-google-login';
 import {Link, useHistory} from 'react-router-dom';
@@ -48,8 +47,7 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
                 cookiePolicy={'single_host_origin'}
                 className="login-link"
                 hostedDomain={'up.edu.ph'}
-                icon={false}
-                style={false}>
+                icon={false}>
                     <i className="fa fa-lg fa-sign-in mr-2"/>
                     <span className="login-link-label">LOGIN</span>
                 </GoogleLogin>
@@ -91,9 +89,7 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
 
 // login dropdown menu (in navigation bar)
 const SearchFilter = ({user}) => {
-    const [activeSelection, setActiveSelection] = useState();
     const history = useHistory(); 
-
     const logout=()=>{
         localStorage.removeItem(jwtPrivateKey);
         window.location = '/';
