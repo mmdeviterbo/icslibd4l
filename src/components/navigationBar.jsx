@@ -11,7 +11,6 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory(); 
 
-
     useEffect(()=>{
         animationTitle(classNavBar);
     },[classNavBar])
@@ -91,6 +90,9 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
 
 // login dropdown menu (in navigation bar)
 const SearchFilter = ({user}) => {
+
+
+
     const history = useHistory(); 
     
     const logout=async()=>{
@@ -100,16 +102,21 @@ const SearchFilter = ({user}) => {
     }
 
     const trigger = (<span><Icon className="user"/>{user && user.fullName.split(" ")[0]}</span>);
-    const options = [
+    
+    const optionsNotAdmin = [
         { key: "user", text: (<span> Signed in as <strong>{user.fullName}</strong></span>), disabled: true},
         { key: "accountSettings", text: (<span><i className="fa fa-lg fa-cog mr-3 ml-2" aria-hidden="true"/>Account Settings</span>), value:"Account Settings", onClick:()=>history.push('/account-setting')},
+    ];
+    
+    const options = [
         { key: "manageU", text: (<span><i className="fa fa-lg fa-users mr-3 ml-2"/>Manage Users</span>) , value:"Manage Users", onClick:()=>history.push('/manage-user')},
         { key: "manageI", text: (<span><i className="fa fa-lg fa-sitemap mr-3 ml-2"/>Manage Items</span>) , value:"Manage Items", onClick:()=>history.push('/manage-items')},
         { key: "viewActivityLogs", text: (<span><i className="fa fa-lg fa-list mr-3 ml-2"/>View Activity Logs</span>), value:"View Activity Logs",  onClick:()=>history.push('/view-activitylogs')},
         { key: "sign-out", text: (<span><i className="fa fa-lg fa-sign-out mr-3 ml-2"/>Sign Out</span>), value:"Sign out", onClick:logout}
       ];
+    
   return(
-    <Dropdown trigger={trigger} options={options}/>
+    <Dropdown trigger={trigger} options={user.userType===1? optionsNotAdmin.concat(options): optionsNotAdmin.concat(options[3])}/>
     );
 };
 
