@@ -30,7 +30,7 @@ function App() {
       const jwt = localStorage.getItem(jwtPrivateKey);
       const userInfo = jwtDecode(jwt);
       setUser(userInfo);
-    }catch(err){console.log("No tokens yet");}
+    }catch(err){}
   }
   
   // login/register a user

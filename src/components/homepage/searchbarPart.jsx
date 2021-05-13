@@ -21,11 +21,13 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 
     const handleForm=(e)=>{
         e.preventDefault();
+        console.log("submitted");
         const tempStr = localSearch.replace(/\s/g,'_'); 
         if(tempStr.length!==0 && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             if(filterTag.length!==0) history.push(`/search/${filterTag}/${tempStr}`);
             else history.push(`/search/any/${tempStr}`);
         }
+        return;
     }
 
     const scrollIntoBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
@@ -47,14 +49,14 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
                     <div style={icsStyle}><p className="searchAnimationICS">Institute of Computer Science Online Library</p></div>
                 </div>
                 <div style={buttonsContainer} className="buttonsSearchContainer">
-                    <button style={buttonSelect} className="btn btn-warning" onClick={scrollIntoBrowse}>
+                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoBrowse}>
                         <i className="fa fa-lg fa-list-ul mr-2"/>
                         BROWSE
                     </button>
-                    <button style={buttonSelect} className="btn btn-warning" onClick={scrollIntoLatestAcq}>
+                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoLatestAcq}>
                         <i className="fa fa-lg fa-file mr-2"/>
                         LATEST ACQUISITIONS</button>
-                    <button style={buttonSelect} className="btn btn-warning" onClick={scrollIntoNews}>
+                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoNews}>
                         <i className="fa fa-lg fa-globe mr-2"/>
                         NEWS
                     </button>

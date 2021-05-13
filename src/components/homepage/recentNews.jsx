@@ -86,18 +86,20 @@ const recentNewsContainer={
 const titleContentContainer={
     position:"relative",
     height:"100%",
-    width:"90%",
+    width:"80%",
     display:"flex",
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
     transition:"1s",
-    padding:"2% 0"
+    padding:"2% 0",
 }
 const recentNewsInnerContainer = {
     width:"100%",
     overflowY:"auto",
     margin:0,
+    background:"rgb(0, 103, 161)",
+    padding:"1% 2%"
 }
 const newsStyle = {
     width:"100%",

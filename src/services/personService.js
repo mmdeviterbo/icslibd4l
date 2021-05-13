@@ -4,8 +4,14 @@ import {apiEndpoint} from '../config.json';
 
 // login/register a person (guess, student, admin, faculty)
 const loginRegisterUser=(userInfo)=>{
-    return http.post(apiEndpoint+'/authentication/create', userInfo);
+    return http.post(`${apiEndpoint}/authentication/create`, userInfo);
 }
+
+// logout user
+const logoutUser=()=>{
+    return http.get(`${apiEndpoint}/authentication/logout`);
+}
+
 
 // read data of a person 
 
@@ -22,7 +28,8 @@ const loginRegisterUser=(userInfo)=>{
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
-    loginRegisterUser
+    loginRegisterUser,
+    logoutUser
 }
 
 export default exportFunctions;
