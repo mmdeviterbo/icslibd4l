@@ -41,7 +41,6 @@ router.put("/update-sp-thesis-key", async (req, res) => {
             if(sp_thesis_id){ updatedThesisSpKey.sp_thesis_id = sp_thesis_id }
             if(sp_thesis_keyword){ updatedThesisSpKey.sp_thesis_keyword = sp_thesis_keyword }
             
-            
             // updates
             updatedThesisSpKey.save();
             res.send("Entry Updated");
@@ -51,5 +50,10 @@ router.put("/update-sp-thesis-key", async (req, res) => {
     }
 });
 
+router.delete('/remove', async (req, res) => {
+    const sp_thesis_id_holder = req.body;
+    await thesisKeyModel.findOneAndDelete(sp_thesis_id_holder).exec();
+    res.send("Entry Deleted");
+});
 
 module.exports = router;

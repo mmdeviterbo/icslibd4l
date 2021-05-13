@@ -51,4 +51,10 @@ router.put("/update-sp-thesis-author", async (req, res) => {
     }
 });
 
+router.delete('/remove', async (req, res) => {
+    const sp_thesis_id_holder = req.body;
+    await thesisAuthorModel.findOneAndDelete(sp_thesis_id_holder).exec();
+    res.send("Entry Deleted");
+});
+
 module.exports = router;
