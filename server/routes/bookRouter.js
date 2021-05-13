@@ -38,9 +38,6 @@ router.post("/get-news", async (req,res)=>{
 
 
 
-router.get("/get-news", async (req,res)=>{
-    console.log("here")
-});
 
 
 

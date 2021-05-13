@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import {Link} from 'react-router-dom';
+
 import {gsap} from 'gsap';
 import ScrollTrigger from "gsap/ScrollTrigger";
 import searchBg from '../../assets/searchBg_4.png';
@@ -61,6 +62,7 @@ const browsePartContainer={
     display:"flex",
     transition: "0.5s",
     justifyContent:"center",
+    gap:"10px",
     alignItems:"center",
     "WebkitUserSelect": "none",
     "WebkitTouchCallout": "none",
