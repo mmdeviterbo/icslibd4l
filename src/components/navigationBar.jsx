@@ -11,6 +11,7 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory(); 
 
+
     useEffect(()=>{
         animationTitle(classNavBar);
     },[classNavBar])
@@ -90,9 +91,6 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
 
 // login dropdown menu (in navigation bar)
 const SearchFilter = ({user}) => {
-
-
-
     const history = useHistory(); 
     
     const logout=async()=>{
@@ -114,7 +112,6 @@ const SearchFilter = ({user}) => {
         { key: "viewActivityLogs", text: (<span><i className="fa fa-lg fa-list mr-3 ml-2"/>View Activity Logs</span>), value:"View Activity Logs",  onClick:()=>history.push('/view-activitylogs')},
         { key: "sign-out", text: (<span><i className="fa fa-lg fa-sign-out mr-3 ml-2"/>Sign Out</span>), value:"Sign out", onClick:logout}
       ];
-    
   return(
     <Dropdown trigger={trigger} options={user.userType===1? optionsNotAdmin.concat(options): optionsNotAdmin.concat(options[3])}/>
     );
