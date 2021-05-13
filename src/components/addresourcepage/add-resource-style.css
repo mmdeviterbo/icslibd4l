@@ -1,0 +1,184 @@
+/* ------------------------- */
+
+/* Add Resources buong page */
+.add-resource-page-container {
+    display:flex;
+    flex-direction: row;
+}
+
+/* ------ Add Resources Form container ------ */
+
+.add-res-sidebar h1{
+    color:#0067A1;
+    background-color:white;
+    padding-top: 5rem;
+    padding-left: 4rem;
+    padding-right: 2.5rem;
+    padding-bottom: 5rem;
+}
+
+.add-res-form-cont{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 4rem;
+    background-color:#F2F2F2;
+    width: 100%;
+}
+
+#createForm{
+    padding: 1rem;
+}
+
+.res-primary-info{
+    background-color: white;
+    padding: 1.5rem;
+    border-width: 0.5rem;
+    border-radius: 0.5rem;
+    margin: 2rem;
+    width: 45rem;
+    height: 42rem;
+}
+
+.res-primary-info hr {
+    width: 100%;
+}
+
+.primaryfields {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius:0.5rem;
+    font-weight: normal;
+}
+
+.primaryfields label{
+    font-weight: normal;
+}
+
+.primaryfields input{
+    height: 3rem;
+    border-radius: 0.4rem;
+    border-color:#cfcfcf solid;
+    border-style: solid;
+    border-width: 0.2rem;
+    padding: 0.5rem;
+}
+
+.primaryfields textarea{
+    height: 20rem;
+    width: 21.3rem;
+    border-radius: 0.4rem;
+    border-color:#cfcfcf solid;
+    border-style: solid;
+    border-width: 0.2rem;
+    padding: 0.5rem;
+}
+
+#addAuthor{
+    padding:0.5rem;
+    padding-right: 1rem;
+    float:right;
+    margin:0.2rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-style: solid;
+    border-radius: 0.5rem;
+    border-color:#dadada;
+    border-width:0.2rem;
+}
+
+#addAuthor:hover{
+    background-color:#0067A1;
+    color:white;
+    border-color:white;
+}
+
+.resClassification-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.resClassification-container p {
+    padding-top: 0.8rem;
+}
+
+.popupForm {
+    background-color: white;
+    padding: 2.5rem;
+    border-width: 0.5rem;
+    border-radius: 0.5rem;
+    margin: 2rem;
+    width: 50rem;
+    
+}
+
+#resClassification {
+    width: 21.2rem;
+}
+
+.resourcefiles{
+    padding: 1rem;
+    width: 100%;
+    color: #dadada;
+    background-color:white;
+    border-width: 0.1rem;
+    border-radius: 0.5rem;
+    border-style: solid;
+    float:right;
+}
+
+.spthesisfiles{
+    display:flex;
+    flex: row;
+    justify-content: space-between;
+    margin-top:1rem;
+    align-items:center;
+    margin-bottom: 2rem;
+}
+
+.spthesisfiles h5{
+    width: 12rem;
+    margin-right: 1rem;
+    margin-bottom:0;
+}
+/* 
+.spthesisfiles input{
+    width: 35rem;
+} */
+
+#addAdviser{
+    float:right;
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    padding-right: 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    border-style: solid;
+}
+
+#addAdviser:hover{
+    background-color:#0067A1;
+    color:white;
+    border-color:white;
+}
+
+#saveResource{
+    height: 3rem;
+    border-radius:0.5rem;
+    border-style: solid;
+    border-color:#0067A1;
+    color:white;
+    background-color: #0067A1;
+    width: 40rem;
+}
+
+#saveResource:hover{
+    color:#0067A1;
+    background-color:white;
+}

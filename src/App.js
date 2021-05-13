@@ -5,6 +5,8 @@ import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
+import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
+
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import {jwtPrivateKey} from './config.json';
@@ -57,6 +59,7 @@ function App() {
           <Route path="/view-sp-thesis" component={ViewResource}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           <Route path="/manage-resources" component={ManageResPage}></Route>
+          <Route path ="/add-new-resource" component={AddResourcePage}></Route>
 
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
