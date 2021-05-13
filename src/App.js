@@ -52,7 +52,7 @@ function App() {
 
 
 
-          {/* <Route path="/about" component={About}/> */}
+          <Route path="/about" render={()=><About appRef={appRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/> 

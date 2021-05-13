@@ -284,6 +284,10 @@
         padding:5px;
         box-shadow:none;
     }
+    .searchCaption{
+        text-align: center !important;
+    }
+
     
     /* browse on books, sp, theses button */
     .browsePartContainer{
@@ -317,6 +321,9 @@
         width:95vw !important;
         border-radius: 0px !important;
     }
+    .acquisitionsInnerContainer{
+        grid-template-columns: auto !important;
+    }
 
     .titleSearchContainer{
         display:none;
@@ -342,6 +349,14 @@
     .newsStyle{
         border-radius: 0 !important;
     }
+
+    /* about */
+    .aboutCaption{
+        margin: 5px !important;
+    }
+    .aboutContainer{
+      padding:0 20px !important;
+    }
 }
 
 .dropdown{
@@ -350,15 +365,18 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    z-index: 10000 !important;
 }
 .dropdown .item{
     padding:60px !important;
+    z-index: 10000 !important;
 }
 .dropdown > .menu{
     right: 0 !important; 
     left: auto !important;
+    z-index: 1000 !important;
 }
 
-.buttonsSearchContainer > button:focus{box-shadow:none !important;}
+.buttonsSearchContainer > button:focus, .btnViewAll:focus{box-shadow:none !important;}
 .buttonsSearchContainer > button:hover{filter:invert(1) !important;}
-
+.btnViewAll:hover{filter:invert(1) !important;}
