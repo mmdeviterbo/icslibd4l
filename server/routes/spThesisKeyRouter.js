@@ -38,8 +38,9 @@ router.put("/update-sp-thesis-key", async (req, res) => {
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisKeyModel.findOne({sp_thesis_id}, (err, updatedThesisSpKey) => {
-            updatedThesisSpKey.sp_thesis_id = sp_thesis_id;
-            updatedThesisSpKey.sp_thesis_keyword = sp_thesis_keyword;
+            if(sp_thesis_id){ updatedThesisSpKey.sp_thesis_id = sp_thesis_id }
+            if(sp_thesis_keyword){ updatedThesisSpKey.sp_thesis_keyword = sp_thesis_keyword }
+            
             
             // updates
             updatedThesisSpKey.save();
@@ -49,5 +50,6 @@ router.put("/update-sp-thesis-key", async (req, res) => {
         res.status(500).send;
     }
 });
+
 
 module.exports = router;

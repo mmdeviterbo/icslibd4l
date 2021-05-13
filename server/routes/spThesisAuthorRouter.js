@@ -38,9 +38,9 @@ router.put("/update-sp-thesis-author", async (req, res) => {
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisAuthorModel.findOne({sp_thesis_id}, (err, updatedThesisSpAuthor) => {
-            updatedThesisSpAuthor.sp_thesis_id = sp_thesis_id;
-            updatedThesisSpAuthor.author_fname = author_fname;
-            updatedThesisSpAuthor.author_lname = author_lname;
+            if(sp_thesis_id){ updatedThesisSpAuthor.sp_thesis_id = sp_thesis_id }
+            if(author_fname){ updatedThesisSpAuthor.author_fname = author_fname }
+            if(author_lname){ updatedThesisSpAuthor.author_lname = author_lname }
             
             // updates
             updatedThesisSpAuthor.save();
