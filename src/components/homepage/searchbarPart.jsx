@@ -251,7 +251,8 @@ const buttonSelect = {
     color:"white",
     fontSize:"15px",
     padding:"8px",
-    transition:"0.1s"
+    transition:"0.1s",
+    zIndex:1000
 }
 
 const animateSearchBox=()=>{
