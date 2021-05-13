@@ -5,7 +5,6 @@ import '../styles/homepageStyle.css';
 import { Dropdown, Icon } from "semantic-ui-react";
 import {gsap} from 'gsap';
 import {jwtPrivateKey} from '../config.json';
-import PersonService from '../services/personService';
 
 // the entire navigation bar
 export default function NavigationBar({loginRegisterUser, browseRef, user}) {
@@ -35,8 +34,10 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
     }   
     const responseGoogleFail=(response)=>{}
 
-    const scrollToBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
-
+    const scrollToBrowse=()=> {
+        if(window.location.pathname==="/home") browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+        else history.push('/browse');
+    }
     const logInButton=()=>{
         return(
                 <GoogleLogin
@@ -75,7 +76,7 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
                         <i className="fa fa-lg fa-search mr-2" aria-hidden="true"/>
                         BROWSE
                     </div>
-                    <Link to="/browse" className="navItem">
+                    <Link to="/about" className="navItem">
                         <i className="fa fa-lg fa-info-circle mr-2" aria-hidden="true"/>
                         ABOUT
                     </Link>
