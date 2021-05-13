@@ -22,7 +22,7 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
     const handleForm=(e)=>{
         e.preventDefault();
         const tempStr = localSearch.replace(/\s/g,'_'); 
-        if(tempStr.length!==0 && (localSearch.replace(/^\s+/, '').replace(/\s+$/, ''!==''))){
+        if(tempStr.length!==0 && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             if(filterTag.length!==0) history.push(`/search/${filterTag}/${tempStr}`);
             else history.push(`/search/any/${tempStr}`);
         }
@@ -131,7 +131,6 @@ const titleSearchContainer ={
     position:"relative",
     width:"40%",
     height:"75%",
-    background: "rgb(0,103,161)",
     background: "linear-gradient(90deg, rgba(0,103,161,1) 0%, rgba(0,101,158,1) 43%, rgba(0,74,116,1) 100%)",
     boxShadow:"4px 4px 7px 0 rgba(0, 0, 0, 0.55),-1px -2px 4px 0 rgba(255, 255, 255, 0.3)",
     borderRadius: "4px  0px  0px  4px",    

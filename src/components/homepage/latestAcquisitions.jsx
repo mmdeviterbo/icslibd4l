@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import CardBook from './cardBook';
 import latestAcqBg from '../../assets/searchBg_4.png';
 
