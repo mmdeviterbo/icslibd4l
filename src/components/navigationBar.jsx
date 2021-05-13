@@ -1,87 +1,132 @@
 import personService from '../services/personService'
-import mainBgUp from '../assets/icslib.jpg';
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import GoogleLogin from 'react-google-login';
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import '../styles/homepageStyle.css';
-import icsLogoImg from '../assets/icslogo.png';
+import { Dropdown, Icon } from "semantic-ui-react";
 import {gsap} from 'gsap';
-import ScrollTrigger from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger)
+import {jwtPrivateKey} from '../config.json';
+
+// the entire navigation bar
+export default function NavigationBar({loginRegisterUser, browseRef, user}) {
+    const [classNavBar, setClassNavBar] = useState("navbar-container");
+    const history = useHistory(); 
 
 
-
-export default function NavigationBar({loginRegisterUser}) {
     useEffect(()=>{
-        navBarAnimation();
-    },[])
-    
-    const responseGoogle=(response)=>{
+        animationTitle(classNavBar);
+    },[classNavBar])
+
+    // if not found (404), hide the navbar component
+    useEffect(() => { return history.listen((location) => {
+          if(location.pathname==="/not-found") setClassNavBar("navbar-container-none");
+          else setClassNavBar("navbar-container");
+    })},[history]);
+
+    useEffect(()=>{
+        if(window.location.pathname==="/not-found") setClassNavBar("navbar-container-none");
+        else setClassNavBar("navbar-container");
+    },[classNavBar]);
+
+    const responseGoogleSuccess=(response)=>{
         const {googleId, email, name, familyName} = response.profileObj
-        const userInfo = {googleId: googleId, email: email, fullname: name, surname: familyName}
+        const userInfo = {googleId: googleId, email: email, fullName: name, surname: familyName}
         loginRegisterUser(userInfo);
     }   
+    const responseGoogleFail=(response)=>{}
+
+    const scrollToBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+
+    const logInButton=()=>{
+        return(
+                <GoogleLogin
+                clientId="157703212486-qm8nb25m86guqvsg4fhbtc9kl3sk6ubp.apps.googleusercontent.com"
+                clientSecret="u06bcQiePSj-3fbkdTxS0VUd"
+                buttonText="LOGIN"
+                onSuccess={responseGoogleSuccess}
+                onFailure={responseGoogleFail}
+                cookiePolicy={'single_host_origin'}
+                className="login-link"
+                hostedDomain={'up.edu.ph'}
+                icon={false}
+                style={false}>
+                    <i className="fa fa-lg fa-sign-in mr-2"/>
+                    <span className="login-link-label">LOGIN</span>
+                </GoogleLogin>
+            );
+    }
+    const profileDisplay = ()=>{
+        return(
+            <SearchFilter user={user}/>
+        );
+    }
 
     return (
-        <div className="navbar-container">
-            <div style={mainBgStyleContainer}>
-                <img src={mainBgUp} style={mainBgStyleImg} className="mainBgStyle-navbar" alt="#"/>
-            </div>
+        <div className={classNavBar}>
+            <div style={mainBgStyleContainer}/>
             <ul className="navbar-elements">
-                <div className="left-half">
-                        <Link to="/home">
-                            <img draggable="false" src={icsLogoImg} className="icslogo-img" alt="#"/>
-                        </Link>
-                        <Link draggable="false" className="ics-uplb-caption" to="/home">
+                <Link className="left-half" to="/home">
+                        <div draggable="false" className="ics-uplb-caption" to="/home">
                             <span className="ics-caption">Institute of Computer Science Online Library</span>
                             <span className="uplb-caption">University of the Philippines Los Baños</span>
-                        </Link>
-                </div>
+                        </div>
+                </Link>
                 <div className="right-half">
-                    <GoogleLogin
-                        clientId="6202802484-iccqejrjgf8i8ltf7ri1t12o0598509n.apps.googleusercontent.com"
-                        buttonText="Login"
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        cookiePolicy={'single_host_origin'}
-                        className="login-link"
-                        icon={false}/>
+                    <div className="navItem" onClick={scrollToBrowse} style={{cursor:"pointer"}}>
+                        <i className="fa fa-lg fa-search mr-2" aria-hidden="true"/>
+                        BROWSE
+                    </div>
+                    <Link to="/browse" className="navItem">
+                        <i className="fa fa-lg fa-info-circle mr-2" aria-hidden="true"/>
+                        ABOUT
+                    </Link>
+                    <div className="login-link">
+                        {(user && profileDisplay()) || logInButton()}
+                    </div>
                 </div>
             </ul>     
         </div>
     )
 }
 
-const navBarAnimation=()=>{
-    // whole navbar container
-    gsap.timeline({
-        scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 10px", scrub:0}    
-    }).to('.navbar-container',{yPercent:"-61"})
+// login dropdown menu (in navigation bar)
+const SearchFilter = ({user}) => {
+    const [activeSelection, setActiveSelection] = useState();
+    const history = useHistory(); 
 
-    gsap.timeline({
-        scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 10px", scrub:0}    
-    }).to('.mainBgStyle-navbar',{filter:"blur(0px) brightness(50%)", opacity:0.3})
+    const logout=()=>{
+        localStorage.removeItem(jwtPrivateKey);
+        window.location = '/';
+    }
 
-    gsap.timeline({scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 10px", scrub:0,}}).from('.icslogo-img',{opacity:0})
-    
-    gsap.timeline({scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 10px", scrub:0,}}).from('.ics-caption',{fontSize:"30px", fontWeight:"700"})
+    const trigger = (<span><Icon className="user"/>{user && user.fullName.split(" ")[0]}</span>);
+    const options = [
+        { key: "user", text: (<span> Signed in as <strong>{user.fullName}</strong></span>), disabled: true},
+        { key: "accountSettings", text: (<span><i className="fa fa-lg fa-cog mr-3 ml-2" aria-hidden="true"/>Account Settings</span>), value:"Account Settings", onClick:()=>history.push('/account-setting')},
+        { key: "manageU", text: (<span><i className="fa fa-lg fa-users mr-3 ml-2"/>Manage Users</span>) , value:"Manage Users", onClick:()=>history.push('/manage-user')},
+        { key: "manageI", text: (<span><i className="fa fa-lg fa-sitemap mr-3 ml-2"/>Manage Items</span>) , value:"Manage Items", onClick:()=>history.push('/manage-items')},
+        { key: "viewActivityLogs", text: (<span><i className="fa fa-lg fa-list mr-3 ml-2"/>View Activity Logs</span>), value:"View Activity Logs",  onClick:()=>history.push('/view-activitylogs')},
+        { key: "sign-out", text: (<span><i className="fa fa-lg fa-sign-out mr-3 ml-2"/>Sign Out</span>), value:"Sign out", onClick:logout}
+      ];
+  return(
+    <Dropdown trigger={trigger} options={options}/>
+    );
+};
 
-
-}
 
 const mainBgStyleContainer = {
     position:"absolute",
     height:"100%",
     width:"100%",
     zIndex:-1,
-    overflow:"hidden"
+    overflowX:"hidden",
+    overflowY:"visible",
 }
 
-const mainBgStyleImg = {
-    position:"relative",
-    height:"100%",
-    width:"100%",
-    objectFit:"cover",
-    filter:"blur(3px) brightness(100%)",
-    transform:"scale(1.02)",
+const animationTitle=(classNavBar)=>{
+    gsap.from('.ics-caption',{xPercent:-20, duration:1});
+    gsap.from('.uplb-caption',{xPercent:-20, duration:1.5});
+
+    let tempClassName = "." + classNavBar;
+    gsap.from(tempClassName,{yPercent:-50, duration:0.8});
 }

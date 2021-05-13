@@ -45,7 +45,7 @@ const SPThesisInfoForm = () => {
          <h2><b>SP / Thesis</b></h2>
                 <hr/>
 
-                <form>
+                <form id ="sptform">
                     <h5>Adviser(s):</h5>
                     <div class = "primaryfields">
                         <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
@@ -179,7 +179,7 @@ const SaveResourceButton = () => {
     )
 }
 
-export default function AddResFormContainer() {
+const AddResFormContainer = () => {
     return(
         <div className = "add-res-form-cont">
 
@@ -192,14 +192,16 @@ export default function AddResFormContainer() {
             </div>
 
             {/* SP/Thesis info or Book, pops up once selected */}
-            <div className = "popupForm" id="bookForm">
+            <div className = "popupForm" id="spthesisForm">
                 <SPThesisInfoForm/>
             </div>
 
-            <div className = "popupForm" id="spthesisForm">
+            <div className = "popupForm" id="bookForm">
                <BookInfoForm/>
             </div>
 
         </div>
     );
 }
+
+export default AddResFormContainer

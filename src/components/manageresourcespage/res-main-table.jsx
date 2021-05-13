@@ -210,7 +210,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MainResourceTable() {
+const MainResourceTable = () => {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('resid');
@@ -346,3 +346,5 @@ export default function MainResourceTable() {
     </div>
   );
 }
+
+export default MainResourceTable;

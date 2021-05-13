@@ -1,0 +1,66 @@
+
+.card1, .card2, .card3, .card4, .card5, .card6{
+  position: absolute;
+  border-radius: 5px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+
+.card1 {
+  width: 43vw;
+  height: 43vw;
+  max-width: 100ch;
+  max-height: 100ch;
+  background-color: #f9d29d;
+  background-image: linear-gradient(315deg, #c4c4c4 0%, #ffcfbe 74%);
+  border-radius: 500px;
+  box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.3);
+}
+
+.card2 {
+  width: 25ch;
+  height: 25ch;
+  background-image: url("../../assets/book-eyerolling/clouds-2.png");
+
+}
+
+.card3 {
+  opacity: 0.9;
+  width: 55ch;
+  height: 55ch;
+  background-image: url("../../assets/book-eyerolling/clouds-1.png");
+}
+
+.card4 {
+  width: 55ch;
+  height: 55ch;
+  background-image: url("../../assets/book-eyerolling/human.png");
+
+}
+.card5 {
+  width: 65ch;
+  height: 65ch;
+  background-image: url("../../assets/book-eyerolling/magnify.png");
+
+}
+.card6 {
+  width: 15ch;
+  height: 15ch;
+  background-image: url("../../assets/book-eyerolling/pencil.png");
+}
+.card7 {
+  width: 16ch;
+  height: 16ch;
+  background-image: url("../../assets/book-eyerolling/book.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+
+}
+
+.containerParallax {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

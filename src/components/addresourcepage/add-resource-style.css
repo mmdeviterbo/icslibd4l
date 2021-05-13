@@ -9,12 +9,16 @@
 /* ------ Add Resources Form container ------ */
 
 .add-res-sidebar h1{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 2.7rem;
     color:#0067A1;
     background-color:white;
     padding-top: 5rem;
     padding-left: 4rem;
     padding-right: 2.5rem;
     padding-bottom: 5rem;
+    width: 25rem;
 }
 
 .add-res-form-cont{
@@ -22,7 +26,7 @@
     flex-direction: row;
     justify-content: center;
     padding: 4rem;
-    background-color:#F2F2F2;
+    background-color:#F4F4F4;
     width: 100%;
 }
 
@@ -30,27 +34,28 @@
     padding: 1rem;
 }
 
+#createForm h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+}
+
 .res-primary-info{
     background-color: white;
     padding: 1.5rem;
     border-width: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
     margin: 2rem;
-    width: 45rem;
-    height: 42rem;
-}
-
-.res-primary-info hr {
-    width: 100%;
+    width: 28rem;
+    height: 31.5rem;
 }
 
 .primaryfields {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-radius:0.5rem;
+    border-radius:0.3rem;
     font-weight: normal;
 }
 
@@ -59,8 +64,8 @@
 }
 
 .primaryfields input{
-    height: 3rem;
-    border-radius: 0.4rem;
+    height: 2rem;
+    border-radius: 0.3rem;
     border-color:#cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
@@ -70,7 +75,7 @@
 .primaryfields textarea{
     height: 20rem;
     width: 21.3rem;
-    border-radius: 0.4rem;
+    border-radius: 0.3rem;
     border-color:#cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
@@ -78,6 +83,7 @@
 }
 
 #addAuthor{
+    font-family: 'Montserrat', sans-serif;
     padding:0.5rem;
     padding-right: 1rem;
     float:right;
@@ -111,14 +117,13 @@
     background-color: white;
     padding: 2.5rem;
     border-width: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
     margin: 2rem;
-    width: 50rem;
-    
+    width: 35rem;
 }
 
 #resClassification {
-    width: 21.2rem;
+    width: 11.4rem;
 }
 
 .resourcefiles{
@@ -132,7 +137,14 @@
     float:right;
 }
 
+#sptform h5{
+    font-weight: normal;
+    font-family: 'Montserrat', sans-serif;
+}
+
 .spthesisfiles{
+    font-weight:normal;
+    font-family: 'Montserrat', sans-serif;
     display:flex;
     flex: row;
     justify-content: space-between;
@@ -142,6 +154,8 @@
 }
 
 .spthesisfiles h5{
+    font-weight:normal;
+    font-family: 'Montserrat', sans-serif;
     width: 12rem;
     margin-right: 1rem;
     margin-bottom:0;
@@ -152,6 +166,8 @@
 } */
 
 #addAdviser{
+    font-weight:normal;
+    font-family: 'Montserrat', sans-serif;
     float:right;
     display: flex;
     align-items: center;
@@ -175,10 +191,18 @@
     border-color:#0067A1;
     color:white;
     background-color: #0067A1;
-    width: 40rem;
+    width: 24.1rem;
 }
 
 #saveResource:hover{
     color:#0067A1;
     background-color:white;
+}
+
+/* #bookForm{
+    display: none;
+} */
+
+#spthesisForm{
+    display:none;
 }

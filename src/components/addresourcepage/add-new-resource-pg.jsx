@@ -4,7 +4,7 @@ import './add-resource-style.css';
 import AddResSidebar from './sidebar-add-res';
 import AddResFormContainer from './add-res-form-container';
 
-export default function AddResourcePage() {
+const AddResourcePage = () => {
     return(
         <div className = "add-resource-page-container" >
             <AddResSidebar/>
@@ -12,3 +12,5 @@ export default function AddResourcePage() {
         </div>
     )
 }
+
+export default AddResourcePage

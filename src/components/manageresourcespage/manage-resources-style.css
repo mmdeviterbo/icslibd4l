@@ -18,6 +18,8 @@ body{
 }
 
 .manageresheader h1{
+    font-family: 'Montserrat';
+    text-decoration: none;
     margin:0;
     color: black;
 }
