@@ -17,7 +17,6 @@ function App() {
   const browseRef = useRef(null);
   const latestAcqRef = useRef(null);
   const newsRef = useRef(null);
-
   const appRef = useRef(null);
 
   useEffect(()=>{
