@@ -19,13 +19,10 @@ const loginRegisterUser=(userInfo)=>{
 
 
 
-export default{
+
+// put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
+const exportFunctions = {
     loginRegisterUser
 }
 
-
-// Summary: May 07, 2021
-// 1.) use config.json - reference/reuse address of backend
-// 2.) httpService.js - reference/reuse "axios" http requests
-// 3.) personService.js - all function of http requests
-// 4.) resourceService.js - all function of http requests
+export default exportFunctions;
