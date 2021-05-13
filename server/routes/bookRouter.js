@@ -28,9 +28,10 @@ router.post("/create", authFaculty, async (req,res)=>{
             const savedBook = await newBook.save();
             
             authors.forEach(async function(entry) {
-                const author = entry;
+                const author_fname = entry.fname;
+                const author_lname = entry.lname;
                 const newBookAuthor = new bookAuthorModel ({
-                    bookId, author
+                    bookId, author_fname, author_lname
                 });
                 const savedBookAuthor = await newBookAuthor.save();
             });
