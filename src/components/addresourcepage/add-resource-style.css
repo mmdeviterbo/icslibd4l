@@ -167,3 +167,18 @@
     color:white;
     border-color:white;
 }
+
+#saveResource{
+    height: 3rem;
+    border-radius:0.5rem;
+    border-style: solid;
+    border-color:#0067A1;
+    color:white;
+    background-color: #0067A1;
+    width: 40rem;
+}
+
+#saveResource:hover{
+    color:#0067A1;
+    background-color:white;
+}

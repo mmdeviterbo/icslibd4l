@@ -79,11 +79,16 @@ const AddResFormContainer = () => {
                         ></Select>
                     </div>
 
-                    
-
                 </form>
+
+                <br/><br/>
+                <button type="submit" id="saveResource">
+                Save
+                </button>
+
             </div>
 
+            
             {/* SP/Thesis info or Book, pops up once selected */}
             <div className = "popupForm" id="bookForm">
                 
@@ -167,7 +172,6 @@ const AddResFormContainer = () => {
                         <h5>Upload Poster</h5>
                         <input type="file" class="resourcefiles" id="spthesisPoster"/>
                     </div>
-
 
                 </form>
     
