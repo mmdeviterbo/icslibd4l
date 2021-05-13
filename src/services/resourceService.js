@@ -9,9 +9,7 @@ const addResource = (resourceData) => {
 
 // read data of a resource
 const viewResource = () => {
-    http.get(apiEndpoint+'/thesis/view').then((response) => {
-      return response.data
-    })
+    return http.get(apiEndpoint+'/thesis/view')
 }
 
 

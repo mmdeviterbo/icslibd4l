@@ -1,36 +1,20 @@
-import React,{useEffect} from 'react'
+import React from 'react'
 import BrowsePart from './browsePart';
 import LatestAcquisitions from './latestAcquisitions';
 import RecentNews from './recentNews';
 import SearchbarPart from './searchbarPart'
 import { Link } from 'react-router-dom'
-import {gsap} from 'gsap';
-import ScrollTrigger from "gsap/ScrollTrigger";
 import AddResource from '../additem/add';
 import ViewResource from '../additem/view';
-gsap.registerPlugin(ScrollTrigger)
 
-
-
-
-export default function Homepage() {
-    useEffect(()=>{
-        gsap.timeline({scrollTrigger: {trigger: ".navbar-container", start:"10px top", end:"bottom 40px", scrub:0,}}).from('.homepage-container',{background: "linear-gradient(to right, #d3cce3, #e9e4f0)"})
-    },[])
-    
+export default function Homepage({browseRef, appRef}) {
     return (
-        <div className="homepage-container" style={homepageContainer}>
+        <div className="homepage-container">
             <Link to='/manage-resources' className="btn btn-info">Manage Resources</Link>
             <SearchbarPart/>
-            <BrowsePart/>
+            <BrowsePart browseRef={browseRef}/>
             <LatestAcquisitions/>
-            <RecentNews/>
+            <RecentNews appRef={appRef}/>
         </div>
     )
 }
-
-const homepageContainer = {
-    fontFamily: 'Montserrat',
-}
-
-

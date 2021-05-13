@@ -5,6 +5,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { useTheme } = require('@material-ui/core');
+const authFaculty = require("../middleware/authFaculty");
+const authStudent = require("../middleware/authStudent");
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
@@ -81,9 +83,10 @@ router.post("/create", async (req,res) => {
     }
 });
 
-//read
-router.get("/read", async (req, res) => {
-    UserModel.find({}, (err, result) => { //reads all the documents and sends as response
+
+//read all students (Faculty and above only)
+router.get("/readStudents", authFaculty, async (req, res) => {
+    UserModel.find({userType: 4}, (err, result) => { //reads all the documents and sends as response
         if (err) {
             res.send(err);
         } else {
@@ -93,11 +96,11 @@ router.get("/read", async (req, res) => {
 });
 
 //search function
-router.get("/search", async (req, res) => {
+router.get("/search", authFaculty, async (req, res) => {
     let query;
     let final_output;
     let attributes = 0;
-
+    
     if (req.query.search){
         //seach quries for all attributes
         while(attributes < 3){
@@ -124,17 +127,19 @@ router.get("/search", async (req, res) => {
                 }
             }
             //query to database
-            let users = await UserModel.find(query)
+            let users = await UserModel.find(query).select('googleId fullName email');
             //concatenate to final array of objcets
             if (!final_output)
                 final_output = users;
             else
-            final_output =[].concat(final_output,users)
-            attributes = attributes + 1
+            final_output =[].concat(final_output,users);
+            attributes = attributes + 1;
         }
        
     }
-
+    else{
+        final_output = await UserModel.find().select('googleId fullName email');
+    }
     try{
         res.send(final_output);
     }
@@ -147,7 +152,7 @@ router.get("/search", async (req, res) => {
 
 
 //update
-router.put("/update", async (req, res) => {
+router.put("/update", authStudent, async (req, res) => {
     try{
         const {googleId, newNickname} = req.body; //get googleId and newNickname from body
 
@@ -173,14 +178,14 @@ router.put("/update", async (req, res) => {
 });
 
 //delete
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", authStudent, async (req, res) => {
     const googleId = req.body.googleId;
     await UserModel.findOneAndDelete({ googleId })
     res.send("Entry Deleted")
 });
-
+    
 //logout current signed in user. deletes cookie for user                
-router.get("/logout", (req,res) => {
+router.get("/logout", authStudent, (req,res) => {
     res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0)

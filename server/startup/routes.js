@@ -26,15 +26,13 @@ module.exports = function(app){
     app.use("/test", require('../routes/testDataRouter'))
     app.use("/authentication", require('../routes/userRouter'));
     
-    //set up user activity router       
-    app.use("/auth", require('../routes/userActivityRouter'));
 
     
     // set up routes
     app.use("/books", require("../routes/bookRouter"))
     app.use("/admin", require("../routes/adminRouter"))
-    app.use("/view-sp-thesis", require("../routes/spThesisRouter"))
 
     // set up routes: thesis
     app.use("/thesis", require("../routes/spThesisRouter"))
+    app.use("/faculty", require("../routes/icsFacultyStaffRouter"))
 }

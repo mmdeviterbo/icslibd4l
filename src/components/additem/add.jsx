@@ -46,7 +46,7 @@ export default function AddResource() {
         }
     }
 
-
+    // gawing component to
     return (
         <div className="additem-container">
             <form onSubmit={handleSubmit}>

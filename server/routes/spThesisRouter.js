@@ -110,7 +110,19 @@ router.get("/keyword", async (req, res)=> {
 router.get("/view", async (req, res) => {
     try{
        const spThesis = await thesisModel.find();
-       res.json(spThesis);
+       const spThesisAuthor = await thesisAuthorModel.find();
+       const spThesisAdviser = await thesisAdviserModel.find();
+       const spThesisKeywords = await thesisKeyModel.find();
+
+       const spThesisDetails = {
+            spThesis,
+            spThesisAuthor,
+            spThesisAdviser,
+            spThesisKeywords
+       }
+    //    console.log('hello')
+    //    console.log(spThesisDetails)
+       res.json(spThesisDetails);
     }
     catch (err){
         console.error(err)
