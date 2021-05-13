@@ -55,7 +55,6 @@ function App() {
           <Route exact path="/not-found" component={Notfound}></Route>
           
            {/* add your new route/path here */}
-          <Route exact path="/thesis/create" component={AddResource}></Route>
           <Route path="/view-sp-thesis" component={ViewResource}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           <Route path="/manage-resources" component={ManageResPage}></Route>

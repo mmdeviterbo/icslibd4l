@@ -120,8 +120,7 @@ router.get("/view", async (req, res) => {
             spThesisAdviser,
             spThesisKeywords
        }
-    //    console.log('hello')
-    //    console.log(spThesisDetails)
+
        res.json(spThesisDetails);
     }
     catch (err){

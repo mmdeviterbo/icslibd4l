@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react'
 import Select from 'react-select'
+import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
 
 const classificationOptions = [
@@ -33,17 +34,17 @@ const courseList = [
     {value:'cmsc191', label:'CMSC 191'},
 ]
 
-const AddResFormContainer = () => {
+export default function AddResFormContainer() {
     const [type, setType] = useState('')
     const [title, setTitle] = useState('')
     const [year, setYear] = useState(0)
-    const [sp_thesis_id, setId] = useState('')
+    const [id, setId] = useState('')
     const [journal, setJournal] = useState('')
     const [manuscript, setManuscript] = useState('')
     const [poster, setPoster] = useState('')
     const [source_code, setSourceCode] = useState('')
     const [abstract, setAbstract] = useState('')
-    const [sp_thesis_keyword, setKeyword] = useState('')
+    const [keyword, setKeyword] = useState('')
     // multiple authors should be possible
     const [author_fname, setAuthorFname] = useState('')
     const [author_lname, setAuthorLname] = useState('')
@@ -53,7 +54,7 @@ const AddResFormContainer = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         const userInput = {
-            sp_thesis_id,
+            sp_thesis_id : id,
             type,
             title,
             abstract,
@@ -66,23 +67,164 @@ const AddResFormContainer = () => {
             adviser_lname,
             author_fname, 
             author_lname,
-            sp_thesis_keyword
+            sp_thesis_keyword : keyword
         }
         try{
             const {resourceData} = await ResourceServices.addResource(userInput)
+            alert("New resource has been successfully added to the library")
         } catch(err){
-            console.log(err);
-            alert("Please enter all required fields.")
+            if (err.response && err.response.data) {
+                alert(err.response.data.errorMessage) // some reason error message
+            }
         }
     }
+
     // get input from type selection
     const handleChange = e => {
         setType(e.value)
-      }
+    }
+
+    const BookInfoForm = () => {
+        return(
+            <>
+             <h2><b>Book</b></h2>
+                    <hr/>
+    
+                    <form id = "bookForm">
+                        <div class = "primaryfields">
+                                <label for="bookISBN">ISBN: &nbsp; </label>
+                                <input type = "text" id = "bookISBN"/>
+                        </div>
+                        <div class = "primaryfields">
+                                <label for="physDescription">Physical Description: &nbsp; </label>
+                                <textarea id = "physDescription"/>
+                        </div>
+                        ...or upload description file:
+                        <input type = "file" class="resourcefiles" id="uploadDesc"/>
+                        <br/><br/><br/><br/>
+                        <div class = "primaryfields">
+                                <label for="availBookCopies">No. of copies available: &nbsp; </label>
+                                <input type = "number" id ="availBookCopies"/>
+                        </div>
+    
+                        <div className = "bookRelatedCourses">
+                            <br/>
+                            Related Courses:
+                            <Select id = "relatedCourses"
+                                    isMulti
+                                    defaultValue={"Courses..."}
+                                    options = {courseList}>
+                            </Select>
+                        </div>
+    
+                    </form>
+            </>
+        );
+    }
+    
+    const SPThesisInfoForm = () => {
+        return(
+            <>
+             <h2><b>SP / Thesis</b></h2>
+                    <hr/>
+    
+                    <form>
+                        <h5>Adviser(s):</h5>
+                        <div class = "primaryfields">
+                            <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
+                            <input type = "text" id = "resAuthorFN" onChange = {(event) => {setAdviserFname(event.target.value)}}/>
+                        </div>
+    
+                        <div class = "primaryfields">
+                            <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
+                            <input type = "text" id = "resAuthorLN" onChange = {(event) => {setAdviserLname(event.target.value)}}/>
+                        </div>
+    
+                        <button id="addAdviser">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                            Add Adviser
+                        </button>
+    
+                        <br/><br/>
+    
+                        {/* String inputs muna kasi yun yung nakalagay sa backend na part ngayon. Di pa nila nafi-figure out yung
+                        file attachments as input. */}
+                        <div class = "primaryfields">
+                            <label for="resId">Abstract: &nbsp; </label>
+                            <input type = "text" id = "resId" onChange = {(event) => {setAbstract(event.target.value)}}/>
+                        </div>
+    
+                        <div class = "primaryfields">
+                            <label for="resId">Manuscript: &nbsp; </label>
+                            <input type = "text" id = "resId" onChange = {(event) => {setManuscript(event.target.value)}}/>
+                        </div>
+    
+                        <div class = "primaryfields">
+                            <label for="resId">Journal: &nbsp; </label>
+                            <input type = "text" id = "resId" onChange = {(event) => {setJournal(event.target.value)}}/>
+                        </div>
+    
+                        <div class = "primaryfields">
+                            <label for="resId">Poster: &nbsp; </label>
+                            <input type = "text" id = "resId" onChange = {(event) => {setPoster(event.target.value)}}/>
+                        </div>
+
+                        <div class = "primaryfields">
+                            <label for="resId">Publication Year: &nbsp; </label>
+                            <input type = "number" id = "resId" onChange = {(event) => {setYear(event.target.value)}}/>
+                        </div>
+                        
+                        <div class = "primaryfields">
+                            <label for="resId">Source Code: &nbsp; </label>
+                            <input type = "text" id = "resId" onChange = {(event) => {setSourceCode(event.target.value)}}/>
+                        </div>
+
+                        <div class = "primaryfields">
+                            <label for="resId">Keywords: &nbsp; </label>
+                            <input type = "text" id = "resId" onChange = {(event) => {setKeyword(event.target.value)}}/>
+                        </div>
+
+                        {/* Uncomment this pag okay na yung file attachments for the backend part*/}
+                         {/* <div class = "spthesisfiles">
+                             <h5>Upload Abstract</h5>
+                             <input type="file" class="resourcefiles" id="spthesisAbstract"/>
+                         </div>
+                        
+                         <div class = "spthesisfiles">
+                             <h5>Upload Manuscript</h5>
+                             <input type="file" class="resourcefiles" id="spthesisManuscript"/>
+                         </div>
+    
+                         <div class = "spthesisfiles">
+                             <h5>Upload Journal</h5>
+                             <input type="file" class="resourcefiles" id="spthesisJournal"/>
+                         </div>
+    
+                         <div class = "spthesisfiles">
+                             <h5>Upload Poster</h5>
+                             <input type="file" class="resourcefiles" id="spthesisPoster"/>
+                         </div> */}
+                    </form>
+            </>
+        );
+    }
+
+    // const renderForm = () => {
+    //     if(type === 'book') {
+    //         return (
+    //             BookInfoForm()
+    //         );
+    //     } else if(type === 'sp' || 'thesis'){
+    //         return (
+    //             SPThesisInfoForm()
+    //         );
+    //     }
+    // }
 
     return(
         <div className = "add-res-form-cont">
-
             {/* Primary  Info */}
             <div className = "res-primary-info">
                 <form onSubmit={handleSubmit} id = "createForm">
@@ -126,110 +268,18 @@ const AddResFormContainer = () => {
                                 onChange = {handleChange}
                         ></Select>
                     </div>
-                    { type == "sp" ? (<div>SP</div>) : (<div>Not SP</div>)}
-
-                </form>
-
-                <br/><br/>
-                <button type="submit" id="saveResource">
-                Save
-                </button>
-
-            </div>
-
-            
-            {/* SP/Thesis info or Book, pops up once selected */}
-            <div className = "popupForm" id="bookForm">
-                
-                <h2><b>Book</b></h2>
-                <hr/>
-
-                <form id = "bookForm">
-                    <div class = "primaryfields">
-                            <label for="bookISBN">ISBN: &nbsp; </label>
-                            <input type = "text" id = "bookISBN"/>
-                    </div>
-                    <div class = "primaryfields">
-                            <label for="physDescription">Physical Description: &nbsp; </label>
-                            <textarea id = "physDescription"/>
-                    </div>
-                    ...or upload description file:
-                    <input type = "file" class="resourcefiles" id="uploadDesc"/>
-                    <br/><br/><br/><br/>
-                    <div class = "primaryfields">
-                            <label for="availBookCopies">No. of copies available: &nbsp; </label>
-                            <input type = "number" id ="availBookCopies"/>
-                    </div>
-
-                    <div className = "bookRelatedCourses">
-                        <br/>
-                        Related Courses:
-                        <Select id = "relatedCourses"
-                                isMulti
-                                defaultValue={"Courses..."}
-                                options = {courseList}>
-                        </Select>
-                    </div>
-
-                </form>
-       
-            </div>
-
-            <div className = "popupForm" id="spthesisForm">
-               
-                <h2><b>SP / Thesis</b></h2>
-                <hr/>
-
-                <form>
-                    <h5>Adviser(s):</h5>
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorFN"/>
-                    </div>
-
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN"/>
-                    </div>
-
-                    <button id="addAdviser">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                        Add Adviser
-                    </button>
-
+                    { type == ('book') ? (BookInfoForm()) : (SPThesisInfoForm())}
+                    {/* {renderForm()} */}
                     <br/><br/>
-
-                
-                    <div class = "spthesisfiles">
-                        <h5>Upload Abstract</h5>
-                        <input type="file" class="resourcefiles" id="spthesisAbstract"/>
-                    </div>
-                    
-                    <div class = "spthesisfiles">
-                        <h5>Upload Manuscript</h5>
-                        <input type="file" class="resourcefiles" id="spthesisManuscript"/>
-                    </div>
-
-                    <div class = "spthesisfiles">
-                        <h5>Upload Journal</h5>
-                        <input type="file" class="resourcefiles" id="spthesisJournal"/>
-                    </div>
-
-                    <div class = "spthesisfiles">
-                        <h5>Upload Poster</h5>
-                        <input type="file" class="resourcefiles" id="spthesisPoster"/>
-                    </div>
-
+                    <button type="submit" id="saveResource">
+                    Save
+                    </button>
                 </form>
-    
             </div>
 
-            
-            
+            <div className="res-primary-info">
+            </div>          
+
         </div>
     );
 }
-
-export default AddResFormContainer;

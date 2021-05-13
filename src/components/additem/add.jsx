@@ -40,6 +40,7 @@ export default function AddResource() {
         }
         try{
             const {resourceData} = await ResourceServices.addResource(userInput)
+            alert('New', type, ' has been added to the library.')
         } catch(err){
             console.log(err);
             alert("Please enter all required fields.")
@@ -167,3 +168,54 @@ export default function AddResource() {
 
     );
 }
+
+// const handleSubmit = (event) => {
+//     console.log('HELLo')
+//     event.preventDefault()
+//     const submitBook = async (event) => {
+//         console.log('submit book')
+//         const userInput = {
+//             book_id:id,
+//             title,
+//             abstract,
+//             year,
+//             author_fname, 
+//             author_lname,
+//             book_keyword : keyword
+//         }
+//         try{
+//             const {bookData} = await ResourceServices.addResource(userInput)
+//         } catch(err){
+//             console.log(err);
+//             alert("Please enter all required fields.")
+//         }
+//     }
+
+//     const submitSpThesis = async (event) => {
+//         console.log('submit sp')
+//         event.preventDefault()
+//         const userInput = {
+//             sp_thesis_id : id,
+//             type,
+//             title,
+//             abstract,
+//             year,
+//             source_code,
+//             manuscript,
+//             journal,
+//             poster,
+//             adviser_fname, 
+//             adviser_lname,
+//             author_fname, 
+//             author_lname,
+//             sp_thesis_keyword : keyword
+//         }
+//         try{
+//             const {resourceData} = await ResourceServices.addResource(userInput)
+//         } catch(err){
+//             console.log(err);
+//             alert("Please enter all required fields.")
+//         }
+//     }
+//     const type = 'book' ? submitBook : submitSpThesis
+// }

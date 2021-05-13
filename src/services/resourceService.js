@@ -21,10 +21,15 @@ const viewResource = () => {
 
 
 
-export default {
+// export default {
+//     addResource,
+//     viewResource
+// }
+
+const exportFunctions = {
     addResource,
     viewResource
 }
 
-
+export default exportFunctions;
 

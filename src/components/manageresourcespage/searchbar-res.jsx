@@ -1,23 +1,19 @@
 import React from 'react';
 
 
-class SearchResources extends React.Component{
-    render(){
-        return(
-            <div className = "staff-search-bar-container">
-                <input id = "searchbarresources"
-                    placeholder = {"Search resources..."}
-                />
+const SearchResources = () => {
+    return(
+        <div className = "staff-search-bar-container">
+            <input id = "searchbarresources"
+                placeholder = {"Search resources..."}
+            />
 
-                <button id = "searchbarresbutton">
+            <button id = "searchbarresbutton">
                 
-                </button>
+            </button>
 
-                
-            </div>
-            
+        </div>        
         );
-    }
 }
 
 export default SearchResources
