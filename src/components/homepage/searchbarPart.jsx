@@ -262,7 +262,7 @@ const animateSearchBox=()=>{
     gsap.from('.homeItem2',{duration:0.6,scale:4, opacity:0.8});
     gsap.from('.homeItem3',{duration:0.6,scale:3, opacity:0.8});
     gsap.from('.homeItem4',{duration:0.6,scale:3, opacity:0.8});
-    gsap.from('.searchAnimationICS',{duration:0.3,x:40, ease: Power3});
-    gsap.from('.searchUPanimation',{duration:0.5,x:-30, ease: Power3});
+    gsap.from('.searchAnimationICS',{duration:0.7,x:100, ease: Power3});
+    gsap.from('.searchUPanimation',{duration:0.9,x:-70, ease: Power3});
     
 }
