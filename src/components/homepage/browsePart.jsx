@@ -87,7 +87,6 @@ const colorBrowseContainer = {
     boxShadow: "2px 5px 30px 0 rgba(0, 0, 0, 0.8), -6px -6px 22px 0 rgba(255, 255, 255, 0.8)",
     display:"flex",
     justifyContent:"center",
-    alignItems:"center",
 }
 
 const titleOrientation = {

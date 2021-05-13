@@ -1,8 +1,11 @@
 import React, {useState} from 'react'
 import CardBook from './cardBook';
 import latestAcqBg from '../../assets/searchBg_4.png';
+import { useHistory } from 'react-router-dom';
 
 export default function LatestAcquisitions({latestAcqRef}) {
+    const history = useHistory();
+
     const [acquisitions, setacquisitions] = useState([
         {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover1', linkTo:'/home'},
         {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover2', linkTo:'/home'},
@@ -15,6 +18,10 @@ export default function LatestAcquisitions({latestAcqRef}) {
     ]);
 
     const [hoverText, setHoverText] = useState("");
+    const handleViewAllBooks=()=>{
+        history.push('/view-all-books');
+    }
+
     return (
         <div className="latestAcquisitions" style={latestAcquisitionsContainer} ref={latestAcqRef}>
             <img src={latestAcqBg} style={latestAcqBgStyle} alt="#"/>
@@ -33,6 +40,10 @@ export default function LatestAcquisitions({latestAcqRef}) {
                     <span style={hoverTextStyle}>{hoverText}</span>
                     <div style={textBgContainer}>
                         <h3 style={textBg} className="latestAcqhoverTextStyle">LATEST<br/>ACQUISITIONS</h3>
+                        <p style={{fontSize:"calc(10px + 0.5vw)", textAlign:"center",marginTop:"3%"}}>Discover and browse the latest books</p>
+                    </div>
+                    <div style={buttonViewAllBooks}>
+                        <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button>
                     </div>
                 </div>
             </div>
@@ -42,7 +53,7 @@ export default function LatestAcquisitions({latestAcqRef}) {
 
 const latestAcquisitionsContainer={
     position:"relative",
-    height: "90vh",
+    height: "95vh",
     background:"white",
     display:"flex",
     justifyContent:"center",
@@ -62,8 +73,8 @@ const acquisitionsInnerContainer = {
     minHeight:"auto",
     maxHeight:"100%",
     display:"grid",
-    justifyContent:"center",
-    gridTemplateColumns:"auto",
+    justifyContent:"space-around",
+    gridTemplateColumns:"auto auto auto",
     overflow:"auto auto",
     transition:"0.8s"
 }
@@ -77,10 +88,10 @@ const latestAcqBgStyle = {
 const colorsParent = {
     position:"relative",
     height:"80%",
-    width:"70%",    
+    width:"80%",    
     zIndex:0,
     display:"flex",
-    borderRadius:"0px 10px 10px 0px",
+    borderRadius:"0px 4px 4px 0px",
     overflow:"hidden",
     boxShadow: "4px 4px 20px black",
 }
@@ -99,14 +110,17 @@ const blueBg = {
     zIndex:1,
     overflow:"hidden",
     boxShadow: "2px 5px 10px 0 rgba(0, 0, 0, 0.8), -6px -6px 6px 0 rgba(255, 255, 255, 0.8)",
+    display:"flex",
+    flexDirection:"column",
 }
 const textBgContainer = {
-    height:"100%",
+    flexGrow:1,
     width:"100%",
-    background:"`#0067A110`",
+    background:"#0067A110",
     zIndex:100,
-    display:"grid",
-    placeItems:"center",
+    display:"flex",
+    justifyContent:"center",
+    flexDirection:"column",
     wordBreak:"break-all"
 
 }
@@ -134,6 +148,21 @@ const hoverTextStyleWhite = {
     textAlign:"center",
     writingMode: "vertical-lr",
     textOrientation: "upright"
+}
+
+const buttonViewAllBooks = {
+    flexGrow:0.4,
+    display:"flex",
+    flexDirection:"column",
+    alignItems:"center",
+    zIndex:10000
+}
+const buttonStyle = {
+    border:"1px solid white",
+    background:"none",
+    color:"white",
+    padding:"3% 10%",
+    fontSize:"calc(12px + 0.5vw)"
 }
 
 // mobile responsiveness is in homepagestyle.css 

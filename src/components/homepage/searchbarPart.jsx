@@ -26,7 +26,6 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
             if(filterTag.length!==0) history.push(`/search/${filterTag}/${tempStr}`);
             else history.push(`/search/any/${tempStr}`);
         }
-        return;
     }
 
     const scrollIntoBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
@@ -43,7 +42,7 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
                         <p style={uplbStyle}>OF</p>
                         <p style={uplbStyle}>THE</p>
                         <p style={uplbStyle}>PHILIPPINES</p>
-                        <p style={uplbStyle}>Los Baños</p>
+                        <p style={{...uplbStyle,fontWeight:0,fontSize:"30px"}}>Los Baños</p>
                     </div>
                     <div style={icsStyle}><p className="searchAnimationICS">Institute of Computer Science Online Library</p></div>
                 </div>
@@ -63,12 +62,19 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
             </div>
 
             <div style={searchBoxContainer}  className="searchBoxContainer">
-                <div style={alignSearchIcon} className="formSearchHomepage">
-                    <input style={inputSearch} type="text" className="form-control removeOutline" 
-                        placeholder="Search for Books, Theses, and Special Problems" autoFocus
-                        value={localSearch} onChange={e=>setLocalSearch(e.currentTarget.value)}/>
-                    <div style={dropDownFilter}><DropdownFilter setFilterTag={setFilterTag} filterTag={filterTag}/></div>
+
+                <div style={inputCaptionContainer}>
+                    <div style={alignSearchIcon} className="formSearchHomepage">
+                        <input style={inputSearch} type="text" className="form-control removeOutline" 
+                            placeholder="Search for Books, Theses, and Special Problems" autoFocus
+                            value={localSearch} onChange={e=>setLocalSearch(e.currentTarget.value)}/>
+                        <div style={dropDownFilter}><DropdownFilter setFilterTag={setFilterTag} filterTag={filterTag}/></div>
+                    </div>
+                    <p style={{color:"white", fontSize:"calc(11px + 0.2vw)", zIndex:1}} className="searchCaption">
+                        Search a collection of books, thesis, or SP using keywords
+                    </p>
                 </div>
+                
                 <div style={homepageBgParent} className="homepageBgParent">
                     <img draggable="false" className="homeItem homeItem1" src={homeItem1} style={homeItems} alt="#"/> 
                     <img draggable="false" className="homeItem homeItem2" src={homeItem2} style={homeItems} alt="#"/> 
@@ -91,7 +97,7 @@ const DropdownFilter = ({setFilterTag, filterTag}) =>{
     ]
     const handleChange=(e, data)=>setFilterTag(data.value);
     return(
-        <Dropdown text='' button style={{"whiteSpace": "nowrap", padding:"19px", borderRadius:"0px", backgroundColor:"rgba(255,255,255,0.7)"}}
+        <Dropdown text='' button style={{"whiteSpace": "nowrap", padding:"19px", borderRadius:"0px", backgroundColor:"white"}}
         onChange={handleChange} options={options} value={filterTag}/>
     )
 }
@@ -100,11 +106,10 @@ const dropDownFilter = {
     width:"calc(100px + 1vw)",
     margin:0,
     padding:0,
+    zIndex:1000
 }
 const alignSearchIcon = {
     zIndex:100,
-    top:"15%",
-    position:"absolute",
     width:"80%",
     display:"flex",
     justifyContent:"center",
@@ -119,7 +124,7 @@ const advanceSearch = {
     justifyContent:"center",
     alignItems:"center",
     padding:"0px 2vw",
-    overflowX:"hidden",
+    overflow:"hidden",
     transition:"1s",
     "WebkitTouchCallout": "none",  
 	"WebkitUserSelect": "none", 
@@ -160,10 +165,10 @@ const icsStyle={
     padding:"5px",
     color:"black",
     textAlign:"center",
-    fontSize:"18px",
-    fontWeight:900,
+    fontSize:"21px",
+    fontWeight:300,
     background:"white",
-    boxShadow:" 2px 2px 5px 0 rgba(0, 0, 0, 0.45),-1px -1px 3px 0 rgba(255, 255, 255, 0.1)",
+    boxShadow:" 2px 2px 5px 0 rgba(0, 0, 0, 0.3),-1px -1px 3px 0 rgba(255, 255, 255, 0.1)",
 
 }
 
@@ -172,11 +177,22 @@ const searchBoxContainer = {
     width:"40%",
     height:"90%",
     display:"flex",
-    justifyContent:"center",
-    alignItems:"flex-start",
+    flexDirection:"column",
+    justifyContent:"flex-start",
+    alignItems:"center",
     background:"rgba(0,0,0,0.90)",          
     transition:"1s",
-    borderRadius: "50px",    
+    borderRadius: "15px",    
+}
+
+const inputCaptionContainer = {
+    width:"100%",
+    height:"40%",
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"center",
+    alignItems:"center",
+    gap:"3%"
 }
 
 const inputSearch={
@@ -184,7 +200,7 @@ const inputSearch={
     padding:"25px 25px",
     margin:0,
     borderRadius:"5px 0 0 5px",
-    backgroundColor:"rgba(255,255,255,1)",
+    backgroundColor:"rgba(255,255,255,0.98)",
     zIndex:10,
     border:0,
 }
