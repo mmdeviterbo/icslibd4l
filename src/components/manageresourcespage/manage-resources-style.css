@@ -99,10 +99,9 @@ body{
 
 /* Table Container */
 .res-table-cont {
-    height: 40em;
     width: 100%;
     background-color: #f5f5f5;
-    padding: 2rem;
+    padding: 5rem;
 }
 
 /* --- Add New Resource button --- */
@@ -134,4 +133,9 @@ body{
     border-color:white;
     color:white;
     
+}
+
+.editResourceBtn, .delResBtn {
+    color:#828282;
+    /* height: 2rem; */
 }

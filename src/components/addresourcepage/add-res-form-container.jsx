@@ -179,7 +179,7 @@ const SaveResourceButton = () => {
     )
 }
 
-export default function AddResFormContainer {
+export default function AddResFormContainer() {
     return(
         <div className = "add-res-form-cont">
 
