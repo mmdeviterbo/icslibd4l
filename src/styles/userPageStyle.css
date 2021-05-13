@@ -1,17 +1,11 @@
-.infoContainer {
-  /* justify-content: space-around; */
-  
-}
-.labelContainer {
-  margin: "auto";
-  padding: "10px";
+.label-container {
+  margin: "25px";
+  padding: "50px";
   align-items: flex-start;
-  background-color: azure;
+  justify-content: space-around;
 }
 
-.fieldContainer {
+.field-container {
   padding: "10px";
-  align-items: flex-start;
-  background-color: azure;
   padding-right: "25px";
 }

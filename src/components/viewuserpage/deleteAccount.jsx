@@ -3,11 +3,11 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 export default function DeleteAccount() {
   return (
-    <Container className="delete-container">
+    <Container className="delete-container" style={deleteContainer}>
       <Button
         variant="contained"
         color="secondary"
-        className="deleteButton"
+        className="delete-button"
         startIcon={<DeleteIcon />}
         fontWeight="900">
         Delete Account
@@ -15,3 +15,7 @@ export default function DeleteAccount() {
     </Container>
   );
 }
+
+const deleteContainer = {
+  alignItems: "flex-right",
+};

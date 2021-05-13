@@ -1,7 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import Container from "@material-ui/core/Container";
-import { Box, Grid, Paper, Typography, ButtonBase } from "@material-ui/core/";
-import { makeStyles } from "@material-ui/core/styles";
 import { GlobalContext } from "../manageuserpage/userTable";
 import { useHistory } from "react-router-dom";
 import ProfileContainer from "./profileContainer";
