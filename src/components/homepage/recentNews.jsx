@@ -9,18 +9,19 @@ export default function RecentNews({appRef, newsRef}) {
     const [linkNews, setLinkNews] = useState([]);
 
     const scrollToTop=()=> appRef.current && appRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+    
+    const getNewsData=async()=>{
+        let {data} = await NewsService.getNews();
+        setTitleNews(data.newsTitle);
+        setDateNews(data.newsDate);
+        setImgNews(data.newsImg);
+        setLinkNews(data.newsLinks);
+    }
+
     useEffect(()=>{
-        async function fetchData(){
-            try{
-                let {data} = await NewsService.getNews();
-                setTitleNews(data.newsTitle);
-                setDateNews(data.newsDate);
-                setImgNews(data.newsImg);
-                setLinkNews(data.newsLinks);
-            }catch(err){}
-        }
-        fetchData();
-    },[])
+        getNewsData();
+        return ()=>{setTitleNews([]);setDateNews([]);setImgNews([]);setLinkNews([]);}
+    },[]);
 
     return (
         <div className="recentNewsContainer" style={recentNewsContainer} ref={newsRef}>
