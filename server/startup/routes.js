@@ -5,8 +5,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');  
-const bodyParser = require('body-parser')
-const config = require("config")
+const bodyParser = require('body-parser');
+const config = require("config");
+const cors = require('cors');
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
@@ -23,14 +24,14 @@ module.exports = function(app){
         res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
         next();
     })
-    app.use("/test", require('../routes/testDataRouter'))
-    app.use("/users", require('../routes/userRouter'));
+    app.use(cors({origin: 'http://localhost:3000', methods: ['POST', 'GET', 'PUT', 'DELETE'], creditials: true}));
     
 
-    
     // set up routes
+    
     app.use("/books", require("../routes/bookRouter"))
     app.use("/thesis", require("../routes/thesisRouter"))
+    app.use("/users", require('../routes/userRouter'));
     app.use("/admin", require("../routes/adminRouter"))
     app.use("/faculty", require("../routes/icsFacultyStaffRouter"))
 }
