@@ -5,6 +5,7 @@ import '../styles/homepageStyle.css';
 import { Dropdown, Icon } from "semantic-ui-react";
 import {gsap} from 'gsap';
 import {jwtPrivateKey} from '../config.json';
+import PersonService from '../services/personService';
 
 // the entire navigation bar
 export default function NavigationBar({loginRegisterUser, browseRef, user}) {
@@ -94,9 +95,11 @@ const SearchFilter = ({user}) => {
     const history = useHistory(); 
     
     const logout=async()=>{
-        localStorage.removeItem(jwtPrivateKey);
-        // let response = await PersonService.logoutUser();
-        window.location = '/';
+        try{
+            localStorage.removeItem(jwtPrivateKey);
+            let {data} = await PersonService.logoutUser(user);
+            window.location = '/';
+        }catch(err){}
     }
 
     const trigger = (<span><Icon className="user"/>{user && user.fullName.split(" ")[0]}</span>);

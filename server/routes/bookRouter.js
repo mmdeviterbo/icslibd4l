@@ -1,7 +1,10 @@
-const router = require("express").Router();
-const bookModel = require("../models/booksModel");
 const request = require('request');
 const cheerio = require('cheerio');
+const router = require("express").Router();
+const bookModel = require("../models/bookModel");
+const bookAuthorModel = require("../models/bookAuthorModel");
+const bookSubjectModel = require("../models/bookSubjectModel");
+
 
 router.post("/get-news", async (req,res)=>{
     let options = {url: 'https://uplb.edu.ph/news-and-updates-2/',
@@ -23,40 +26,35 @@ router.post("/get-news", async (req,res)=>{
                         $(finalTagLink).each((index, li) => {newsTitle[index] = $(li).text();}) //loop the result of the data (title)
                         $(finalTagDate).each((index, li) => {newsDate[index] = $(li).text();}) //loop the result of the data (date)
                         
-                    }
+                    }    
                     var newsInformation = {newsLinks,newsTitle, newsDate, newsImg};
                     resolve(newsInformation); //acts as return statement
-                })
-            });
-        }
+                })    
+            });    
+        }    
         let respond = await doGetNewsLinks();
         res.send(respond);
     }catch(err){
         res.status(404).send("404 Not Found");
-    }
-});
+    }    
+});    
 
 
 
 
 
-
-router.get("/get-news", async (req,res)=>{
-    console.log("here")
-});
-
-router.post("/", async (req,res)=>{
+router.post("/create", async (req,res)=>{
     try{
-        const {title, author} = req.body; 
+        const {title, author, subject, physicalDesc, publisher, numberOfCopies} = req.body; 
 
         // sample verification: incomplete fields
-        if(!title||!author){
+        if(!title||!author||!subject||!physicalDesc||!publisher||!numberOfCopies){
             return res.status(400).json({errorMessage:"Please enter all required fields."});
         };
     
         // save to database
         const newBook = new bookModel ({
-            title, author
+            title, physicalDesc, publisher, numberOfCopies
         });
 
         const savedBook = await newBook.save();

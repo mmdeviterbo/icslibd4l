@@ -38,7 +38,7 @@ function App() {
       const {data} = await personService.loginRegisterUser(userInfo);   
       localStorage.setItem(jwtPrivateKey, data);
       window.location = "/home"; 
-    }catch(err){console.log("Errorrrrr: " +  err)} 
+    }catch(err){} 
   }
 
   return (
