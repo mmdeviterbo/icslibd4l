@@ -70,7 +70,7 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
                             value={localSearch} onChange={e=>setLocalSearch(e.currentTarget.value)}/>
                         <div style={dropDownFilter}><DropdownFilter setFilterTag={setFilterTag} filterTag={filterTag}/></div>
                     </div>
-                    <p style={{color:"white", fontSize:"calc(11px + 0.2vw)", zIndex:1}} className="searchCaption">
+                    <p style={{color:"white", fontSize:"calc(11px + 0.2vw)", zIndex:1, textAlign:"center"}} className="searchCaption">
                         Search a collection of books, thesis, or SP using keywords
                     </p>
                 </div>

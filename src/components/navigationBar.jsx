@@ -73,6 +73,10 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
                         </div>
                 </Link>
                 <div className="right-half">
+                    <Link to="/home" className="navItem">
+                        <i className="fa fa-lg fa-home mr-2" aria-hidden="true"/>
+                        Home
+                    </Link>
                     <div className="navItem" onClick={scrollToBrowse} style={{cursor:"pointer"}}>
                         <i className="fa fa-lg fa-search mr-2" aria-hidden="true"/>
                         BROWSE
