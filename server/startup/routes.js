@@ -24,7 +24,7 @@ module.exports = function(app){
         res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
         next();
     })
-    app.use(cors({origin: 'http://localhost:3000', methods: ['POST', 'GET', 'PUT', 'DELETE'], creditials: true}));
+    app.use(cors({origin: 'http://localhost:3000', methods: ['POST', 'GET', 'PUT', 'DELETE'], credentials: true}));
     
 
     // set up routes
