@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom';
 import './manage-resources-style.css';
 // import TempNavbar from './temporary-navbar';
@@ -11,6 +12,8 @@ const ManageResPage = () => {
     return(
         <div className = "manage-resources-page-container">
             {/* <TempNavbar/> */}
+            <Link to='/thesis/create' className="btn btn-info">Add Resource</Link>
+            <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link>
             <ManageItemsHeader/>
             <FieldsContainerRes/>
             <ResTableContainer/>

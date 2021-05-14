@@ -18,11 +18,11 @@ const loginRegisterUser=(userInfo)=>{
 //delete person
 
 
-
-export default{
+const exportFunctions = {
     loginRegisterUser
 }
 
+export default exportFunctions;
 
 // Summary: May 07, 2021
 // 1.) use config.json - reference/reuse address of backend

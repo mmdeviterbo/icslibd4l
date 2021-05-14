@@ -123,6 +123,7 @@ body{
     padding-left: 0.4rem;
     border-radius: 0.7rem;
     padding-right: 1.4rem;
+    margin-right: 1rem;
  
 }
 
@@ -146,4 +147,10 @@ body{
 .editResourceBtn, .delResBtn {
     color:#828282;
     /* height: 2rem; */
+}
+
+.addBtns {
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }

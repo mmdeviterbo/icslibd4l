@@ -46,7 +46,7 @@
     border-radius: 0.3rem;
     margin: 2rem;
     width: 28rem;
-    height: 33.5rem;
+    height: 30rem;
 }
 
 .primaryfields {
@@ -191,7 +191,7 @@
     border-color:#0067A1;
     color:white;
     background-color: #0067A1;
-    width: 24.1rem;
+    width: 100%;
 }
 
 #saveResource:hover{
@@ -199,10 +199,13 @@
     background-color:white;
 }
 
-/* #bookForm{
-    display: none;
-} */
+#mainAddBookForm{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
-#spthesisForm{
-    display:none;
+.add-spt-page-container{
+    display: flex;
+    flex-direction: row;
 }
