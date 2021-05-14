@@ -8,7 +8,6 @@ const jwtPrivateKey = config.get('jwtPrivateKey');
 function authenticationStudent(req, res, next){
     try{
         const token = req.cookies.token;
-        console.log(req.cookies);
         //checks if token exists
         if (!token)
             return res
