@@ -4,75 +4,87 @@ import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
-import ManageUser from "./components/manageuserpage/manageuserpage";
-import ViewUser from "./components/viewuserpage/viewUserPage";
-
-import ManageResPage from "./components/manageresourcespage/manageresourcespage";
-
 import personService from "./services/personService";
 import jwtDecode from "jwt-decode";
+import { jwtPrivateKey } from "./config.json";
 import "./App.css";
+import About from "./components/about/about";
 
 function App() {
-  const [user, setUser] = useState(); //fullname, email, surname, googleId
-  const [seach, setSearch] = useState(); //search query from user
+  const [user, setUser] = useState(null); //fullname, email, userType (integer)
+
+  const browseRef = useRef(null);
+  const latestAcqRef = useRef(null);
+  const newsRef = useRef(null);
+  const appRef = useRef(null);
 
   useEffect(() => {
-    topWhenRefresh();
     getCurrentToken();
   }, []);
 
-  // refresh when full reload happens
-  function topWhenRefresh() {
-    window.onbeforeunload = function () {
-      window.scrollTo(0, 0);
-    };
-  }
-
-  // to see if there's current user logged in the browser
+  // see if there's current user logged in the browser
   const getCurrentToken = () => {
     try {
-      const jwt = localStorage.getItem("tokey");
+      const jwt = localStorage.getItem(jwtPrivateKey);
       const userInfo = jwtDecode(jwt);
-      console.log(userInfo);
-      // set state
-    } catch (err) {
-      console.log("No tokens yet");
-    }
+      setUser(userInfo);
+    } catch (err) {}
   };
 
   // login/register a user
   const loginRegisterUser = async (userInfo) => {
-    setUser(userInfo);
-
-    //call database
     try {
       const { data } = await personService.loginRegisterUser(userInfo);
-      console.log("Response: " + data);
+      localStorage.setItem(jwtPrivateKey, data);
+      window.location = "/home";
     } catch (err) {
-      console.log("Error: " + err);
+      console.log("Errorrrrr: " + err);
     }
   };
 
   return (
-    <div className="App">
-      {/* navigationBar is always visible no matter on what route */}
-      <NavigationBar loginRegisterUser={loginRegisterUser} />
+    <div className="App" ref={appRef}>
+      <NavigationBar
+        loginRegisterUser={loginRegisterUser}
+        browseRef={browseRef}
+        user={user}
+      />
 
-      {/* this route returns component depending on the route */}
       <Switch>
-        <Route path="/home" component={Homepage}></Route>
-        {/* add your new route/path here */}
-        <Route path="/manageusers" component={ManageUser}></Route>
-        <Route path="/viewuser/:googleId" component={ViewUser}></Route>
-        <Route path="/manage-resources" component={ManageResPage}></Route>
+        <Route
+          path="/home"
+          render={() => (
+            <Homepage
+              browseRef={browseRef}
+              appRef={appRef}
+              latestAcqRef={latestAcqRef}
+              newsRef={newsRef}
+            />
+          )}
+        />
 
+        {/* this route returns component depending on the route */}
+        <Switch>
+          {/* add your new route/path here */}
+          <Route path="/viewuser/:googleId" component={ViewUser}></Route>
+          <Route path="/manage-resources" component={ManageResPage}></Route>
+          <Route path="/manageusers" component={ManageUser}></Route>
+
+          <Route path="/home" component={Homepage}></Route>
+          <Route exact path="/not-found" component={Notfound}></Route>
+          <Redirect exact from="/" to="/home" />
+          <Redirect to="/not-found" />
+        </Switch>
+
+        {/* footer is always visible no matter on what route */}
+        <Footer />
+        <Route path="/about" render={() => <About appRef={appRef} />} />
+        {/* <Route path="/about" component={About}/> */}
         <Route exact path="/not-found" component={Notfound}></Route>
         <Redirect exact from="/" to="/home" />
         <Redirect to="/not-found" />
       </Switch>
 
-      {/* footer is always visible no matter on what route */}
       <Footer />
     </div>
   );

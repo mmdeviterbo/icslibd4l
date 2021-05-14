@@ -7,6 +7,9 @@ import './index.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'antd/dist/antd.css';
+import "@fontsource/montserrat";
+import 'semantic-ui-css/semantic.min.css'
+
 
 
 ReactDOM.render(

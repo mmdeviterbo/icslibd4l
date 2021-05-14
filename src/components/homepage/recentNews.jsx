@@ -1,67 +1,130 @@
-import React from 'react'
-import {Link} from 'react-router-dom';
+import React,{useState, useEffect} from 'react'
+import recentNewsBg from '../../assets/searchBg_4.png';
+import NewsService from '../../services/resourcesService';
+export default function RecentNews({appRef, newsRef}) {
+    const [titleNews, setTitleNews] = useState([]);
+    const [dateNews, setDateNews] = useState([]);
+    const [imgNews, setImgNews] = useState([]);
+    const [linkNews, setLinkNews] = useState([]);
 
-// temporary, news should be from the database
-const newsList = [
-    {title:"News Title 1", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"},
-    {title:"News Title 2", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"},
-    {title:"News Title 3", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"}
-]
+    const scrollToTop=()=> appRef.current && appRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+    
+    const getNewsData=async()=>{
+        let {data} = await NewsService.getNews();
+        setTitleNews(data.newsTitle);
+        setDateNews(data.newsDate);
+        setImgNews(data.newsImg);
+        setLinkNews(data.newsLinks);
+    }
 
-export default function RecentNews() {
+    useEffect(()=>{
+        getNewsData();
+        return ()=>{setTitleNews([]);setDateNews([]);setImgNews([]);setLinkNews([]);}
+    },[]);
+
     return (
-        <div className="recentNewsContainer" style={recentNewsContainer}>
-            <div className="recentNewsInnerContainer" style={recentNewsInnerContainer}>
-                <p style={recentNewsTitle} className="recentNewsTitle">Recent News</p> 
-                <hr style={horizontalLine}/>
-                {newsList.map(news=><ArticleContainer 
-                    news={news} key={news.title}
-                    className="recentNewsTitle"
-                />)}
+        <div className="recentNewsContainer" style={recentNewsContainer} ref={newsRef}>
+            <img src={recentNewsBg} style={recentNewsBgStyle} alt="#"/>
+            <div style={titleContentContainer}>
+                <p style={newsStyle}>UPLB NEWS</p>
+                <div className="ui three stackable cards" style={recentNewsInnerContainer}>
+                    {titleNews.map((title,index)=><ArticleContainer 
+                        title={title} 
+                        link={linkNews[index]}
+                        imgSrc={imgNews[index]}
+                        date={dateNews[index]}
+                        key={index}
+                        className="recentNewsTitle"
+                    />)}
+                </div>
+            </div>
+            <div style={scrollToTopStyle}><i style={arrowUpStyle} onClick={scrollToTop} className="fa fa-5x fa-angle-double-up"/></div>
+        </div>
+    )
+}
+
+const ArticleContainer=({title, link, imgSrc, date})=>{
+    const openInNewTab = (url) => {
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+    }
+    return (
+        <div className="ui fluid card" style={{cursor:"pointer"}} onClick={()=>openInNewTab(link)}>
+            <div className="image" style={{}}><img src={imgSrc} alt="#"/></div>
+            <div className="content" style={{}}>
+                <p to='/home' className="header" style={{}}>{title}</p>
+                <div className="meta"><span className="date" style={{}}>{date}</span></div>
+            </div>
+            <div className="extra content" style={{cursor:"pointer"}}>
+                <i className="fa fa-book mr-2" style={{}}/><span>Read more</span>
             </div>
         </div>
     )
 }
 
-// reusable template for article/recent news
-const ArticleContainer=({news})=>{
-    return(
-            <>
-                <Link style={recentNewsHeader} className="recentNewsHeader" to={news.linkTo}>
-                    {news.title}
-                </Link>    
-                <p className="recentNewsCaption">{news.content}</p>
-                <p className="recentNewsCaption">{news.date}</p>
-                <hr style={{lineHeight:0,borderTop: "1px solid gray"}}/>
-            </>)
+// design or styles
+const scrollToTopStyle = {
+    position:"absolute",
+    bottom:"0%"
 }
-
+const arrowUpStyle = {
+    cursor:"pointer",
+    transition:"0.4s",
+    transform:"scale(1)",
+    color:"rgb(26, 26, 26,0.6)"
+}
 
 const recentNewsContainer={
-    fontFamily: 'Montserrat',
-    "minHeight": "45vh",
-    background:"white",
+    position:"relative",
+    height: "100vh",
+    maxWidth:"100vw",
     display:"flex",
-    justifyContent:"flex-start",
     flexDirection:"column",
+    justifyContent:"center",
     alignItems:"center",
-    padding:0
+}
+const titleContentContainer={
+    position:"relative",
+    height:"100%",
+    width:"80%",
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"center",
+    alignItems:"center",
+    transition:"1s",
+    padding:"2% 0",
 }
 const recentNewsInnerContainer = {
-    width:"80vw",
+    width:"100%",
+    overflowY:"auto",
+    margin:0,
+    background:"rgb(0, 103, 161)",
+    padding:"1% 2%"
+}
+const newsStyle = {
+    padding:"30px",
+    width:"100%",
+    color:"white",
+    background:"rgb(0, 0, 0)",
+    borderRadius:"5px 5px 0 0",
+    display:"flex",
+    fontSize:"calc(30px + 2vw)",
+    fontWeight:900,
+    margin:0,
+
+    // protect from copy paste
+    "WebkitUserSelect": "none",
+    "WebkitTouchCallout": "none",
+    "MozUserSelect": "none",
+    "MsUserSelect": "none",
+    "UserSelect": "none",
 }
 
-const recentNewsTitle = {
-    margin:0,
-    fontSize:"32px",
-    fontWeight:"700",
-    padding:"30px 0px 0px 0px",
-}
-const recentNewsHeader = {
-    fontSize:"21px",
-    fontWeight:"500",
-}
-const horizontalLine = {
-    lineHeight:0,
-    borderTop: "3px solid gray"
+// wallpaper background
+const recentNewsBgStyle = {
+    position:"absolute",
+    height:"100%",
+    width:"100%",
+    zIndex:-1,
+    transform:"scaleY(-1)"
 }

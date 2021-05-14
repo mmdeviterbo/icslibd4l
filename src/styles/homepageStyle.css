@@ -1,14 +1,17 @@
 /* navigation bar */
 .navbar-container{
-    display: block;
-    z-index: 10;
-    min-height:320px;
+    z-index: 10000;
     position: sticky !important;
     top:0 !important;
-    font-family: 'Montserrat';
+    overflow: visible !important;
+
+    position:relative;
+    min-height: 65px;
     display: flex;
-    align-items:flex-end;
-    box-shadow: 0.5px 0.5px 2px rgb(190, 190, 190, 0.4);
+    justify-content: center;
+    align-items:center;
+    background:rgb(0, 103, 161);
+    box-shadow: 4px 4px 20px black;
 
     /* protect from copy paste  */
     -webkit-user-select: none;
@@ -17,64 +20,105 @@
     -ms-user-select: none;
     user-select: none;
 }
+.navbar-container-none{display:none !important;}
 
 .navbar-elements{
+    position: absolute;
     height:100%;
-    width: 100%;
+    margin: 0;
+    overflow: block !important;
+    width: 70vw;
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding:0 !important;
 }
 
 .left-half{
-    height: 100%;
+    height:100%;
     flex-grow: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    transition: 1s;
+    transition: 0.1s;
+    text-align: end;
+    padding-right: 1.5vw;
+    overflow-y: visible !important;
 }
 .ics-uplb-caption{
-    text-shadow: 2px 2px 7px #2e2e2e;
-    color:rgb(255, 255, 255);
+    color:white;
     display: flex;
     font-weight: 500;
     flex-direction: column;
 }
-.ics-uplb-caption:hover{
-    color:white;
-    text-decoration: none;
-    list-style: none;
-}
+
 .ics-caption{
-    font-size: 22px;
-    font-weight: 600;
+    font-size: calc(10px + 0.5vw);
+    font-weight: 800;
     transition:0.5s;
 }
 .uplb-caption{
-    font-size: 18px;
+    font-size: 15px;
     line-height: 2;
-    transition:1s;
+    transition:0.5s;
 }
-.icslogo-img{
-    height:110px;
-    width:110px;
-    padding-right:3px
-}
+
 .right-half{
-    flex-grow: 2;
+    height:100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
     align-items: center;
-    padding-right:20px;
+    flex-grow: 2;
+    transition: 1s;
+    overflow-y:visible !important;
+}
+.navItem{
+    font-size: calc(10px + 0.3vw) !important;
+    background:rgb(26, 26, 26);
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    color:white;
+    font-weight: 900 !important;
+    transition:0.3s;
+}
+.login-link-label{
+    font-size: calc(10px + 0.3vw) !important;
+    font-weight: 900 !important;
+    padding:0 !important;
+}
+
+.navItem:hover{
+    font-weight: 900 !important;
+    color:black;
+    background: rgb(207, 207, 207);
 }
 
 /* google auth button */
 .login-link{
-    letter-spacing: 1px !important;
-    font-size: calc(10px + 1vw) !important;
-    background: none !important;
-    box-shadow: none !important;
+    font-weight: bolder !important;
+    height:100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-grow: 1 !important;
+    background:rgb(26, 26, 26) !important;
     color:white !important;
+    transition:0.5s;
+    cursor:pointer;
+    overflow-y: visible !important;
+    box-shadow: none !important;
+    padding:0 !important;
+    margin:0 !important;
+
+}
+
+.login-link:hover{
+    font-weight: 900 !important;
+    color:black !important;
+    background: rgb(207, 207, 207) !important; 
 }
 
 /* hover effects */
@@ -83,11 +127,24 @@
 }
 .acquisitionsInnerContainer .cardContainer:hover{
     filter: brightness(1.2) !important;
-    transform: scale(1.05) !important;
+    transform: scale(1.02) !important;
 }
 
+.formSearchHomepage > .removeOutline:focus{ 
+    box-shadow: none !important;
+}
+.browseBox{
+    z-index: 1;
+    transform: scale(1);
+    transition:0.5s;
+}
 .browseBox:hover{
-    background: rgb(92, 92, 92,0.3) !important;
+    transform: scale(1.06);
+}
+
+.hoverForImagesVector:hover ~ .homepageBgParent .homeItem{
+    opacity:0.4 !important;
+    transform:scale(1.3) !important;
 }
 
 
@@ -100,16 +157,38 @@
 
 
 
+.footer-container{
+    display: flex !important;
+}
+
+.footer-container-none{
+    display: none !important;
+}
+
+.fa-angle-double-up:hover{
+    transform:scale(1.4) !important;
+    color:rgb(26, 26, 26,1) !important;
+}
+
+
+
+
+
 /* apply mobile responsivess */
 @media screen and (max-width: 426px) {
+    .loginIconContainer{
+        width: 100% !important;
+    }
+    .right-half{
+        width: 100vw;
+    }
+
+
     .ics-uplb-caption{
         padding-left: 5px;
     }
-
     .ics-caption{
-        font-size: 15px;
-        font-weight: 450;
-        line-height: 1;
+        font-size: 12px;
     }
     
     .uplb-caption{
@@ -119,8 +198,28 @@
     .latestAcquisitionsCaption{
         font-size: 25px !important;
     }
+    .latestAcquisitions{
+        height:80vh !important;
+    }
+    .latestAcqhoverTextStyle{
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        height:100% !important;
+        display: grid;
+        place-items: center;
+    }
+    .latestAcqDiscover{
+        display: none !important;
+
+    } 
+    
+    .btnViewAll{
+        display: none !important;
+    }
+
     .recentNewsTitle{
         font-size: 25px !important;
+
     }
     .recentNewsHeader{
         font-size: 18px !important;
@@ -131,29 +230,40 @@
     .bookTitleCard{
         font-size: 12px !important;
     }
+
+    .notFoundContainer{
+        height:100vh !important;
+    }
+
+}
+@media screen and (max-width: 640px) {
+    .left-half{
+        display: none;
+    }
 }
 
 @media screen and (max-width: 780px) {
-    .navbar-elements{
-        padding-left: 15px;
+    .colorBrowseContainer{
+        display: none !important;
     }
-    
-    /* navigation bar */
-    .navbar-container{
-        min-height: 220px;
+
+    .navbar-elements{
+        width:100vw;
+    }
+    .left-half{
+        box-shadow: none !important;
+        text-align: center;
     }
 
     /* footer  */
     .icslogo-img{
         display: none;   
     }
-    .left-half{
-        padding:1px;
-    }
+
 
     .ics-caption{
         font-size: 18px;
-        font-weight: 550;
+        font-weight: 750;
         line-height: 1;
     }
 
@@ -178,16 +288,22 @@
         height:100% !important;
         width:100% !important;
         border-radius: 0px !important;
-        flex-direction: column;
         padding:5px;
         box-shadow:none;
     }
+    .searchCaption{
+        text-align: center !important;
+    }
 
+    
     /* browse on books, sp, theses button */
     .browsePartContainer{
-        flex-direction: column !important;
-        min-height: 50vh !important;
+        min-height: 60vh !important;
     }
+    .browseBoxContainer{
+        width:100% !important;
+    }
+
     .browseBox{
         width: 80vw !important;
         height:90px !important;
@@ -195,15 +311,79 @@
         flex-direction: row !important;
         justify-content: center !important;
         align-items: center !important;
+        margin:5px;
     }
+
+    .designBoxContainer{
+        display: none;
+    }
+
     .imgBooksContainer, .imgThesesContainer, .imgSPContainer{
         height:50px !important;
         width:50px !important;
     } 
 
     /* latest acquisitions, recent news */
-    .acquisitionsInnerContainer, .captionContainer, .recentNewsInnerContainer{
-        width: 90vw !important;
+    .latestAcqcolorsParent{
+        width:95vw !important;
+        border-radius: 0px !important;
+    }
+    .acquisitionsInnerContainer{
+        grid-template-columns: auto !important;
+    }
+
+    .titleSearchContainer{
+        display:none;
+    }
+    .searchBoxContainer{
+        width: 100vw !important;
+    }
+    .searchMainContainer{
+        width: 100vw !important;
+        padding:0 !important;
     }
     
+    .recentNewsContainer{
+        height:70vh !important;
+        padding:4px 4px !important;
+    }
+    .titleContentContainer{
+        width:100vw !important;
+    }
+    .recentNewsInnerContainer{
+        width:85% !important;
+    }
+    .newsStyle{
+        border-radius: 0 !important;
+    }
+
+    /* about */
+    .aboutCaption{
+        margin: 5px !important;
+    }
+    .aboutContainer{
+      padding:0 20px !important;
+    }
 }
+
+.dropdown{
+    width:100%;
+    height:100%;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 10000 !important;
+}
+.dropdown .item{
+    padding:60px !important;
+    z-index: 10000 !important;
+}
+.dropdown > .menu{
+    right: 0 !important; 
+    left: auto !important;
+    z-index: 1000 !important;
+}
+
+.buttonsSearchContainer > button:focus, .btnViewAll:focus{box-shadow:none !important;}
+.buttonsSearchContainer > button:hover{filter:invert(1) !important;}
+.btnViewAll:hover{filter:invert(1) !important;}
