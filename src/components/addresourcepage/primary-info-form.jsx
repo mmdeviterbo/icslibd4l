@@ -4,7 +4,6 @@ const ResourcePrimaryInfoForm = () =>{
 
         return(
             <div id = "res-primary-info">
-                {/* <form id = "createForm"> */}
                     <h2><b>Primary Info</b></h2>
                     <hr/> 
 
@@ -18,7 +17,7 @@ const ResourcePrimaryInfoForm = () =>{
                         <input type = "text" id = "resTitle"/>
                     </div>
                     
-                    <h5>Author(s):</h5>
+                    <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>Author(s):</h5>
                     <div class = "primaryfields">
                         <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
                         <input type = "text" id = "resAuthorFN"/>
@@ -41,8 +40,6 @@ const ResourcePrimaryInfoForm = () =>{
                         <label for="resAuthor">Year Published: &nbsp; </label>
                         <input type = "text" id = "resAuthorLN"/>
                     </div>
-
-                {/* </form> */}
             </div>
         )
     }

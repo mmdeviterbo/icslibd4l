@@ -8,5 +8,4 @@ const SaveResourceButton = () => {
         )
     }
 
-
 export default SaveResourceButton

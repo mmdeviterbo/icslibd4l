@@ -122,12 +122,10 @@ const AddBookFormContainer = () => {
     return(
         <div className = "add-res-form-cont">
 
-            <form id = "mainAddBookForm">
+            <form id="mainAddBookForm" onSubmit ={handleSubmit}>
             {/* Primary  Info */}
                 <div className = "res-primary-info">
-                    
                     <ResourcePrimaryInfoForm/>
-                    
                 </div>
                 
                 <div className = "popupForm" id="bookForm">
