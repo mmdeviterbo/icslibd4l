@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');  
 const bodyParser = require('body-parser')
 const config = require("config")
+const cors = require('cors');
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
@@ -23,6 +24,7 @@ module.exports = function(app){
         res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
         next();
     })
+    app.use(cors({origin: 'http://localhost:3000', methods: ['POST', 'PUT', 'GET', 'DELETE'], credentials: true}));
     app.use("/test", require('../routes/testDataRouter'))
     app.use("/users", require('../routes/userRouter'));
     

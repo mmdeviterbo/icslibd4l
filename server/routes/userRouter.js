@@ -76,8 +76,11 @@ router.post("/create", async (req,res) => {
         );  
 
         res.cookie("token", token, {
-            httpOnly: true,
+            httpOnly: false,
         }).send(token);
+
+        console.log("TOKEEEEENNN: ");
+        console.log(req.cookie);
     }
     catch (err){
         console.error(err)

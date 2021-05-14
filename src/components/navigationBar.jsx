@@ -97,7 +97,7 @@ const SearchFilter = ({user}) => {
     const logout=async()=>{
         try{
             localStorage.removeItem(jwtPrivateKey);
-            // let {data} = await PersonService.logoutUser(user);
+            await PersonService.logoutUser(user);
             window.location = '/';
         }catch(err){}
     }
