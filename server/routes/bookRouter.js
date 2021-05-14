@@ -66,9 +66,9 @@ router.get("/search", async (req, res)=> {
     if(req.query.type == "Book"){
     // RESOURCE: Book
         if(req.query.field == "title"){
-        // search by TITLE
+            // search by TITLE
             bookModel.aggregate(
-                [{$match: {"title":{$regex:req.query.search} }},
+                [{$match: {"title":{$regex: req.query.search, $options:'i'} }},
                 {$lookup: {from:"book_authors", localField:"bookId", foreignField:"bookId", as:"author"}},
                 {$lookup: {from:"book_subjects", localField:"bookId", foreignField:"bookId", as:"subject"}}
                 ], 
@@ -85,7 +85,7 @@ router.get("/search", async (req, res)=> {
             // search by SUBJECT
             bookSubjectModel.aggregate(
                 // get matches based from queries
-                [{$match: {"subject": {$regex: req.query.search}} }],
+                [{$match: {"subject": {$regex: req.query.search, $options:'i'}} }],
                 (err,result) => {
                     if(err){
                         res.send(err);
@@ -120,7 +120,7 @@ router.get("/search", async (req, res)=> {
             // search by AUTHOR
             bookAuthorModel.aggregate(
                 // get matches based from queries
-                [{$match: {"author_name": {$regex: req.query.search}} }],
+                [{$match: {"author_name": {$regex: req.query.search, $options:'i'}} }],
                 (err,result) => {
                     if(err){
                         res.send(err);
