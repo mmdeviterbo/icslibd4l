@@ -68,6 +68,7 @@ router.post("/create", async (req,res) => {
 
         //log user in
         const token = jwt.sign({
+            googleId : loggedUser.googleId,
             email: loggedUser.email,
             fullName: loggedUser.fullName,
             userType: loggedUser.userType,
@@ -217,7 +218,7 @@ router.post("/logout", authStudent, async (req,res) => {
     await newUserLog.save();
 
     res.cookie("token", "", {
-        httpOnly: true,
+        httpOnly: false,
         expires: new Date(0)
     }).send("User Logged Out");
     }
