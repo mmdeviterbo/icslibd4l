@@ -22,18 +22,19 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import DeletePopUpCont from './delete-modal-container'
 
 
-function createResourceData(resid, title, author, resclassif, relatedcourses ){
-    return{ resid, title, author, resclassif, relatedcourses  }
+function createResourceData(resid, title, author, resclassif, relatedcourses, pubyr ){
+    return{ resid, title, author, resclassif, relatedcourses, pubyr  }
 }
 
 const rows = [
-    createResourceData('00001', 'SP title here', 'O. Aranas', 'SP', 'CMSC69'),
-    createResourceData('00002', 'Thesis title here', 'L. Aranas', 'Thesis', 'CMSC69'),
-    createResourceData('00003', 'Book title here', 'J. Batumbakal', 'Book', 'CMSC420'),
-    createResourceData('00004', 'SP title here', 'R. Hyrule', 'SP', 'CMSC120'),
-    createResourceData('00005', 'Thesis title here', 'R. Federer', 'Thesis', 'CMSC69'),
+    createResourceData('00001', 'SP title here', 'O. Aranas', 'SP', 'CMSC69', '1999'),
+    createResourceData('00002', 'Thesis title here', 'L. Aranas', 'Thesis', 'CMSC69', '2021'),
+    createResourceData('00003', 'Book title here', 'J. Batumbakal', 'Book', 'CMSC420', '1867'),
+    createResourceData('00004', 'SP title here', 'R. Hyrule', 'SP', 'CMSC120', '2008'),
+    createResourceData('00005', 'Thesis title here', 'R. Federer', 'Thesis', 'CMSC69', '1999'),
 ]
 
 function descendingComparator(a, b, orderBy) {
@@ -68,6 +69,7 @@ const resHeadCells = [
   { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
   { id: 'resclassif', numeric: false, disablePadding: false, label: 'Classification' },
   { id: 'relatedcourses', numeric: false, disablePadding: false, label: 'Related Courses' },
+  { id: 'pubyr', numeric: true, disablePadding: false, label: 'Publishing Year' },
   { id: 'act1', numeric: false, disablePadding: false, label: ' ' },
   { id: 'act2', numeric: false, disablePadding: false, label: ' ' },
 ];
@@ -94,7 +96,7 @@ function EnhancedTableHead(props) {
           <TableCell
             className={classes.tablecell}
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -165,7 +167,7 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-          <h3 style={{fontWeight:"normal", fontFamily:"Montserrat", fontSize:"2rem",paddingBottom:"0.8rem"}}
+          <h3 style={{fontWeight:"normal", fontFamily:"Montserrat", fontSize:"2rem",paddingBottom:"0.5rem"}}
           >Resources</h3>
 
       )}
@@ -317,8 +319,9 @@ const MainResourceTable = () => {
                       <TableCell className={classes.tablecell} align="left">{row.author}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.resclassif}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.relatedcourses}</TableCell>
+                      <TableCell className={classes.tablecell} align="left">{row.pubyr}</TableCell>
                       <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell>
-                      <TableCell> <a className = "delResBtn" href="#">  <DeleteForeverIcon/> </a> </TableCell>
+                      <TableCell> <DeletePopUpCont/> </TableCell>
                     </TableRow>
                   );
                 })}

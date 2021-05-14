@@ -42,13 +42,15 @@ const FiltersContainerRes = () => {
         <div className = "res-filter-container">
             <Select className = "res-filters" 
                     id = "res-category"
-                    // defaultValue ={"Categories"} 
+                    placeholder ={'Resource Classification'} 
                     options = {resClassificationList}
                     />  
             <Select className = "res-filters" 
+                    placeholder ={'Year Published'} 
                     id = "res-publish-date"
                     />
             <Select className = "res-filters" 
+                    placeholder ={'Related Courses'} 
                     id = "res-related-courses"
                     options = {courseList}
                     isMulti
