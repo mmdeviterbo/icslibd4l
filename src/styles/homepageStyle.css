@@ -208,6 +208,14 @@
         display: grid;
         place-items: center;
     }
+    .latestAcqDiscover{
+        display: none !important;
+
+    } 
+    
+    .btnViewAll{
+        display: none !important;
+    }
 
     .recentNewsTitle{
         font-size: 25px !important;
