@@ -24,7 +24,7 @@ module.exports = function(app){
         next();
     })
     app.use("/test", require('../routes/testDataRouter'))
-    app.use("/authentication", require('../routes/userRouter'));
+    app.use("/users", require('../routes/userRouter'));
     
 
     
