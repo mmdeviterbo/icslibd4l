@@ -6,6 +6,10 @@ import AddResSidebar from './sidebar-add-res';
 import ResourcePrimaryInfoForm from './primary-info-form'
 import SaveResourceButton from './save-resource-btn'
 
+const spOrTclas = [
+    {value:'sp', label:'Special Problem'},
+    {value:'thesis', label:'Thesis'},
+];
 
 const SPThesisInfoForm = () => {
         return(
@@ -13,8 +17,16 @@ const SPThesisInfoForm = () => {
                 <h2><b>SP / Thesis</b></h2>
                 <hr/>
 
-                <form id ="sptform">
-                    <h5>Adviser(s):</h5>
+                <div className = "classifSelect">
+                        <br/>
+                        Classification:
+                        <Select id = "classifspt"
+                                options = {spOrTclas}>
+                        </Select>
+                </div>
+
+                    <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>
+                    Adviser(s):</h5>
                     <div class = "primaryfields">
                         <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
                         <input type = "text" id = "resAuthorFN"/>
@@ -54,8 +66,6 @@ const SPThesisInfoForm = () => {
                         <h5>Upload Poster</h5>
                         <input type="file" class="resourcefiles" id="spthesisPoster"/>
                     </div>
-
-                </form>
             </>
         );
     }
