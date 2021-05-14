@@ -44,20 +44,24 @@ const tableEntry = [
 
 export default function ViewUserPage(props) {
   const [selectedUser, setSelectedUser] = useState({
-    userID: "",
-    name: "",
-    classification: "",
+    googleId: "",
+    email: "",
+    fullName: "",
+    userType: "",
+    nickname: "",
   });
 
   const { users } = useContext(GlobalContext);
   const history = useHistory();
 
-  const currentUserId = props.match.params.userID;
+  console.log(users);
+  console.log(props.match.params);
+  const currentUserId = props.match.params.googleId;
+  console.log(currentUserId);
 
   useEffect(() => {
-    const userID = currentUserId;
-    const selectedUser = users[0].find((user) => user.userID === userID);
-    console.log(props.location.state);
+    const googleId = currentUserId;
+    const selectedUser = users[0].find((user) => user.googleId === googleId);
     setSelectedUser(selectedUser);
   }, [currentUserId, users]);
 

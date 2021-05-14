@@ -1,12 +1,14 @@
 const router = require("express").Router();
+const express = require('express');
 const TestDataModel = require("../models/testDataModel");
-const auth = require("../middleware/authentication");
+const authStudent = require("../middleware/authStudent");
+const authFaculty = require("../middleware/authFaculty");
+const authAdmin = require("../middleware/authAdmin");
 
 //test http requests that go through the middleware function which checks if a user is currently logged on
-router.post("/", auth, async (req, res) => {
+router.post("/", authFaculty, async (req, res) => {
     try{
         const {name} = req.body;
-
         const newTestData = new TestDataModel({
             name
         });
@@ -20,7 +22,7 @@ router.post("/", auth, async (req, res) => {
     }
 })
 
-router.get("/", auth, async (req, res) => {
+router.get("/", authAdmin, async (req, res) => {
     try{
        const testDatas = await TestDataModel.find();
        res.json(testDatas);
