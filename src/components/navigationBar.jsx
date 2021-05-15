@@ -5,6 +5,7 @@ import '../styles/homepageStyle.css';
 import { Dropdown, Icon } from "semantic-ui-react";
 import {gsap} from 'gsap';
 import {jwtPrivateKey} from '../config.json';
+import PersonService from '../services/personService';
 
 // the entire navigation bar
 export default function NavigationBar({loginRegisterUser, browseRef, user}) {
@@ -72,6 +73,10 @@ export default function NavigationBar({loginRegisterUser, browseRef, user}) {
                         </div>
                 </Link>
                 <div className="right-half">
+                    <Link to="/home" className="navItem">
+                        <i className="fa fa-lg fa-home mr-2" aria-hidden="true"/>
+                        Home
+                    </Link>
                     <div className="navItem" onClick={scrollToBrowse} style={{cursor:"pointer"}}>
                         <i className="fa fa-lg fa-search mr-2" aria-hidden="true"/>
                         BROWSE
@@ -94,9 +99,11 @@ const SearchFilter = ({user}) => {
     const history = useHistory(); 
     
     const logout=async()=>{
-        localStorage.removeItem(jwtPrivateKey);
-        // let response = await PersonService.logoutUser();
-        window.location = '/';
+        try{
+            localStorage.removeItem(jwtPrivateKey);
+            await PersonService.logoutUser(user);
+            window.location = '/';
+        }catch(err){}
     }
 
     const trigger = (<span><Icon className="user"/>{user && user.fullName.split(" ")[0]}</span>);

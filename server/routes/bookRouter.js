@@ -1,9 +1,9 @@
-const router = require("express").Router();
-const bookModel = require("../models/booksModel");
-const bookAuthorModel = require("../models/bookAuthorModel");
-const bookSubjectModel = require("../models/bookSubjectModel");
 const request = require("request");
 const cheerio = require("cheerio");
+const router = require("express").Router();
+const bookModel = require("../models/bookModel");
+const bookAuthorModel = require("../models/bookAuthorModel");
+const bookSubjectModel = require("../models/bookSubjectModel");
 
 router.post("/get-news", async (req, res) => {
   let options = {
@@ -52,14 +52,32 @@ router.post("/get-news", async (req, res) => {
   }
 });
 
-router.get("/get-news", async (req, res) => {
-  console.log("here");
-});
-
 router.post("/create", async (req, res) => {
   try {
     const { title, author, subject, physicalDesc, publisher, numberOfCopies } =
       req.body;
+
+    // sample verification: incomplete fields
+    if (
+      !title ||
+      !author ||
+      !subject ||
+      !physicalDesc ||
+      !publisher ||
+      !numberOfCopies
+    ) {
+      return res
+        .status(400)
+        .json({ errorMessage: "Please enter all required fields." });
+    }
+
+    // save to database
+    const newBook = new bookModel({
+      title,
+      physicalDesc,
+      publisher,
+      numberOfCopies,
+    });
 
     // sample verification: incomplete fields
     if (

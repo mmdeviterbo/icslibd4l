@@ -40,9 +40,7 @@ function App() {
       const { data } = await personService.loginRegisterUser(userInfo);
       localStorage.setItem(jwtPrivateKey, data);
       window.location = "/home";
-    } catch (err) {
-      console.log("Errorrrrr: " + err);
-    }
+    } catch (err) {}
   };
 
   return (
@@ -78,8 +76,10 @@ function App() {
         <Redirect exact from="/" to="/home" />
         <Redirect to="/not-found" />
 
-        {/* footer is always visible no matter on what route */}
-        <Footer />
+        <Route path="/about" render={() => <About appRef={appRef} />} />
+        <Route exact path="/not-found" component={Notfound}></Route>
+        <Redirect exact from="/" to="/home" />
+        <Redirect to="/not-found" />
       </Switch>
 
       <Footer />

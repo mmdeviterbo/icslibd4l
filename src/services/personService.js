@@ -4,12 +4,12 @@ import {apiEndpoint} from '../config.json';
 
 // login/register a person (guess, student, admin, faculty)
 const loginRegisterUser=(userInfo)=>{
-    return http.post(`${apiEndpoint}/authentication/create`, userInfo);
+    return http.post(`${apiEndpoint}/users/create`, userInfo,{withCredentials:true});
 }
 
 // logout user
-const logoutUser=()=>{
-    return http.get(`${apiEndpoint}/authentication/logout`);
+const logoutUser=(userInfo)=>{
+    return http.post(`${apiEndpoint}/users/logout`, userInfo,{withCredentials:true});
 }
 
 
