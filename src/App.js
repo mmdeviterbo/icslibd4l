@@ -9,11 +9,10 @@ import jwtDecode from 'jwt-decode';
 import {jwtPrivateKey} from './config.json';
 import './App.css';
 import About from './components/about/about';
+import Search from './components/searchResult/advancedSearch.jsx';
 
 function App() {
   const [user, setUser] = useState(null);    //fullname, email, userType (integer)
-
-
   const browseRef = useRef(null);
   const latestAcqRef = useRef(null);
   const newsRef = useRef(null);
@@ -41,6 +40,8 @@ function App() {
     }catch(err){console.log("Errorrrrr: " +  err)} 
   }
 
+  
+
   return (
     <div className="App" ref={appRef}>
         <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef} user={user}/>
@@ -52,6 +53,7 @@ function App() {
 
 
           <Route path="/about" render={()=><About appRef={appRef}/>}/>
+          <Route path="/search" render={()=><Search appRef={appRef}/>}/>
           {/* <Route path="/about" component={About}/> */}
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>

@@ -1,0 +1,3 @@
+.formSearchResults > .removeOutline:focus{ 
+    box-shadow: none !important;
+}
