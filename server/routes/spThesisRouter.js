@@ -46,6 +46,7 @@ router.post("/create", authFaculty, async (req,res)=>{
             advisers.forEach(async function(entry){
                 const adviser_fname = entry.fname;
                 const adviser_lname = entry.lname;
+                const adviser_name = entry.lname;
 
                 const newThesisAdv = new thesisAdviserModel ({
                     sp_thesis_id, adviser_fname, adviser_lname
@@ -57,6 +58,7 @@ router.post("/create", authFaculty, async (req,res)=>{
             authors.forEach(async function(entry){
                 const author_fname = entry.fname;
                 const author_lname = entry.lname;
+                const author_name = entry.lname;
 
                 const newThesisAu = new thesisAuthorModel ({
                     sp_thesis_id, author_fname, author_lname
@@ -90,24 +92,43 @@ router.post("/create", authFaculty, async (req,res)=>{
 // browse all entries, default sort: alphabetical by title
 router.get("/browse", async (req,res)=> {
     const {type} = req.body;
-    // type value: SP or Thesis
 
-    thesisModel.aggregate(
-        [{$match: {"type":type}},
-        {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
-        {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
-        {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}},
-        {$sort : {"title": 1}}
-        ], 
-        
-        (err,result) => {
-            if(err){
-                res.send(err);
-            }else{
-                res.send(result);
+    if (type == "Book"){
+        // type value: SP or Thesis
+        bookModel.aggregate(
+            [{$match: {"bookId":{"$in":idArr_book} }},
+            {$lookup: {from:"book_authors", localField:"bookId", foreignField:"bookId", as:"author"}},
+            {$lookup: {from:"book_subjects", localField:"bookId", foreignField:"bookId", as:"subject"}},
+            {$sort : {"title": 1}}
+            ], 
+
+            (err,result) => {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(result);
+                }
             }
-        }
-    );
+        );
+    }else{
+        // type value: SP or Thesis
+        thesisModel.aggregate(
+            [{$match: {"type":type}},
+            {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
+            {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
+            {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}},
+            {$sort : {"title": 1}}
+            ], 
+            
+            (err,result) => {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(result);
+                }
+            }
+        );
+    }
 })
 
 // search data
@@ -220,7 +241,7 @@ router.get("/search", async (req, res)=> {
                 }else{
                     // extract all IDs from matches
                     result.forEach((item)=> {
-                        idArr_book.push(item.bookID);
+                        idArr_book.push(item.bookId);
                     });
 
                     // extract equivalent entries from bookModel
@@ -254,7 +275,6 @@ router.get("/search", async (req, res)=> {
             }
         )
     }
-
     // walang adviser sa books
     function spAdviser(mode){
         thesisAdviserModel.aggregate(
