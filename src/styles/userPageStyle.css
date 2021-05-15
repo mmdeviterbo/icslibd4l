@@ -1,33 +1,51 @@
 /* profileContainer */
 .profile-container {
-  position: relative;
   height: 90vh;
   width: 100vw;
   padding: 10vh;
   margin: auto;
   align-items: center;
   justify-content: center;
-  /* margin: 10vh; */
-  /* gap: 20px; */
-  background-color: azure;
-  /* outline-color: black; */
+
+
+
+  /* background-color: azure; */
 }
 
 .title-bar {
-  border: 2px solid red;
-  padding: 12px;
+  /* padding: 12px; */
+
+
+  /* border: 2px solid red; */
+}
+
+.edit-column {
+  padding-left: none;
+  padding-top: 21px;
+  align-items: flex-start;
+
+
+  /* border: 2px solid red; */
+
 }
 
 .columns-temp {
-  border: 2px solid green;
-  /* height: 100px; */
+  align-items: center;
+  justify-content: center;
+  height:inherit;
 
   padding: 12px;
+
+
+  /* border: 2px solid blue; */
 }
 
 .label-container {
-  /* margin: 25px; */
-  /* padding: 5px; */
+
+  padding: 12px;
+
+
+  /* border: 2px solid green; */
 }
 /*
 .field-container {

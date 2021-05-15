@@ -66,9 +66,9 @@ function App() {
 
         {/* this route returns component depending on the route */}
         {/* add your new route/path here */}
-        <Route path="/viewuser/:googleId" component={ViewUser}></Route>
+        <Route path="/view-user/:googleId" component={ViewUser}></Route>
         <Route path="/manage-resources" component={ManageResPage}></Route>
-        <Route path="/manageusers" component={ManageUser}></Route>
+        <Route path="/manage-users" component={ManageUser}></Route>
 
         <Route path="/about" render={() => <About appRef={appRef} />} />
         <Route path="/home" component={Homepage}></Route>

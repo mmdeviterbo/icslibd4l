@@ -93,13 +93,13 @@ router.post("/create", async (req, res) => {
         .json({ errorMessage: "Please enter all required fields." });
     }
 
-    // save to database
-    const newBook = new bookModel({
-      title,
-      physicalDesc,
-      publisher,
-      numberOfCopies,
-    });
+    // // save to database
+    // const newBook = new bookModel({
+    //   title,
+    //   physicalDesc,
+    //   publisher,
+    //   numberOfCopies,
+    // });
 
     const savedBook = await newBook.save();
     res.json(savedBook);

@@ -11,21 +11,10 @@ import LabelContainer from "./labelContainer";
 
 import "../../styles/userPageStyle.css";
 
-const HeaderText = (props) => (
-  <div className="headerText" style={headerText}>
-    {props.children}
-  </div>
-);
-
-const LabelText = (props) => (
-  <div className="labelText" style={labelText}>
-    {props.children}
-  </div>
-);
-
 const label = ["Nickname", "Name", "Classificaion", "Email"];
 
 const useStyles = makeStyles({
+  paddingTop: "5px",
   root: {
     "&:hover": {
       backgroundColor: "transparent",
@@ -41,16 +30,19 @@ export default function ProfileContainer() {
       <Row className="title-bar">
         <Col xs={2}></Col>
         <Col xs={8} className="title-bar">
-          <HeaderText>Profile Display</HeaderText>
+          <div className="headerText" style={headerText}>
+            Profile Display
+          </div>
         </Col>
       </Row>
+      <br />
 
-      <Row className="label-container">
+      <Row>
         <Col xs={2}></Col>
-        <Col xs={6} className="columns-temp">
-          <LabelContainer />
+        <Col xs={7} className="columns-temp">
+          <LabelContainer msg="Nickname: " />
         </Col>
-        <Col xs={2} className="columns-temp">
+        <Col xs={1} className="edit-column">
           <IconButton
             aria-label="edit"
             className={editButtonStyle.root}
@@ -61,29 +53,29 @@ export default function ProfileContainer() {
         </Col>
       </Row>
 
-      <Row className="label-container">
+      <Row>
         <Col xs={2}></Col>
-        <Col xs={6} className="columns-temp">
-          <LabelContainer />
+        <Col xs={7} className="columns-temp">
+          <LabelContainer msg="Name: " />
         </Col>
 
-        <Col xs={2} className="columns-temp"></Col>
+        <Col xs={1} className="columns-temp"></Col>
       </Row>
 
-      <Row className="label-container">
+      <Row>
         <Col xs={2}></Col>
-        <Col xs={6} className="columns-temp">
-          <LabelContainer />
+        <Col xs={7} className="columns-temp">
+          <LabelContainer msg="Classification: " />
         </Col>
-        <Col xs={2} className="columns-temp"></Col>
+        <Col xs={1} className="columns-temp"></Col>
       </Row>
 
-      <Row className="label-container">
+      <Row style={{ paddingLeft: "0px" }}>
         <Col xs={2}></Col>
-        <Col xs={6} className="columns-temp">
-          <LabelContainer />
+        <Col xs={7} className="columns-temp">
+          <LabelContainer msg="Email:" />
         </Col>
-        <Col xs={2} className="columns-temp"></Col>
+        <Col xs={1} className="columns-temp"></Col>
       </Row>
     </Container>
   );
@@ -91,15 +83,5 @@ export default function ProfileContainer() {
 
 const headerText = {
   fontWeight: "900",
-  fontSize: "25px",
-};
-
-const labelText = {
-  fontWeight: "900",
-  fontSize: "15px",
-};
-
-const infoTextField = {
-  // background: "black",
-  // border: "white",
+  fontSize: "35px",
 };

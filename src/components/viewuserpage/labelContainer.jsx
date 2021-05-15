@@ -1,20 +1,16 @@
 import { Container, Row, Col } from "react-bootstrap/";
 import { TextField, IconButton, makeStyles, Button } from "@material-ui/core/";
 
-const LabelText = (props) => (
-  <div className="labelText" style={labelText}>
-    {props.children}
-  </div>
-);
-
-export default function LabelContainer() {
+export default function LabelContainer(props) {
   return (
     <Container fluid>
       <Row>
-        <Col xs={6} className="columns-temp">
-          <LabelText>somasdaeth9ing</LabelText>
+        <Col xs={4} className="columns-temp">
+          <div className="labelText" style={labelText}>
+            {props.msg}
+          </div>
         </Col>
-        <Col xs={6} className="columns-temp">
+        <Col xs={8} className="columns-temp">
           <TextField
             variant="outlined"
             fullWidth="true"
@@ -31,6 +27,8 @@ const infoTextField = {
   // border: "white",
 };
 const labelText = {
+  verticalAlign: "center",
+  paddingTop: "12px",
   fontWeight: "900",
-  fontSize: "15px",
+  fontSize: "25px",
 };
