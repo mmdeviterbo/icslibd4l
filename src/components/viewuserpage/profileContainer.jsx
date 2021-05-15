@@ -1,12 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
-import Container from "@material-ui/core/Container";
-import { Box, Grid, Paper, Typography, ButtonBase } from "@material-ui/core/";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container, Row, Col } from "react-bootstrap/";
+import { TextField, IconButton, makeStyles, Button } from "@material-ui/core/";
+import EditIcon from "@material-ui/icons/Edit";
+
 import { GlobalContext } from "../manageuserpage/userTable";
 import { useHistory } from "react-router-dom";
 import UserInfo from "./userInfo";
 // import DeleteAccount from "./deleteAccount";
-import ImageContainer from "./imageContainer";
+import LabelContainer from "./labelContainer";
+
+import "../../styles/userPageStyle.css";
 
 const HeaderText = (props) => (
   <div className="headerText" style={headerText}>
@@ -14,58 +17,89 @@ const HeaderText = (props) => (
   </div>
 );
 
+const LabelText = (props) => (
+  <div className="labelText" style={labelText}>
+    {props.children}
+  </div>
+);
+
+const label = ["Nickname", "Name", "Classificaion", "Email"];
+
+const useStyles = makeStyles({
+  root: {
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+  },
+});
+
 export default function ProfileContainer() {
+  const editButtonStyle = useStyles();
+
   return (
-    <Container fixed style={userInfoContainerGrid}>
-      <Grid
-        container
-        spacing={3}
-        className="user-info-container-grid"
-        style={infoGrid}>
-        <Grid item xs={12} className="info-header" style={infoTopNav}>
+    <Container fixed className="profile-container">
+      <Row className="title-bar">
+        <Col xs={2}></Col>
+        <Col xs={8} className="title-bar">
           <HeaderText>Profile Display</HeaderText>
-        </Grid>
-        <Grid item xs={4} className="image-container" style={imageContainer}>
-          <ImageContainer />
-        </Grid>
-        <Grid item xs={8}>
-          <UserInfo />
-        </Grid>
-        <Grid item xs={12}>
-          {/* <DeleteAccount /> */}
-        </Grid>
-      </Grid>
+        </Col>
+      </Row>
+
+      <Row className="label-container">
+        <Col xs={2}></Col>
+        <Col xs={6} className="columns-temp">
+          <LabelContainer />
+        </Col>
+        <Col xs={2} className="columns-temp">
+          <IconButton
+            aria-label="edit"
+            className={editButtonStyle.root}
+            disableFocusRipple
+            disableRipple>
+            <EditIcon />
+          </IconButton>
+        </Col>
+      </Row>
+
+      <Row className="label-container">
+        <Col xs={2}></Col>
+        <Col xs={6} className="columns-temp">
+          <LabelContainer />
+        </Col>
+
+        <Col xs={2} className="columns-temp"></Col>
+      </Row>
+
+      <Row className="label-container">
+        <Col xs={2}></Col>
+        <Col xs={6} className="columns-temp">
+          <LabelContainer />
+        </Col>
+        <Col xs={2} className="columns-temp"></Col>
+      </Row>
+
+      <Row className="label-container">
+        <Col xs={2}></Col>
+        <Col xs={6} className="columns-temp">
+          <LabelContainer />
+        </Col>
+        <Col xs={2} className="columns-temp"></Col>
+      </Row>
     </Container>
   );
 }
 
-const userInfoContainerGrid = {
-  // backgroundColor: "#cfe8f0", //temp[orary]
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const infoGrid = {
-  padding: "10px",
-  margin: "auto",
-  maxWidth: "sm",
-  height: "auto",
-  flexGrow: 1,
-  // height: "100vh", //temp
-  // border: "1px solid black",
-};
-
-const infoTopNav = {
-  padding: "25px",
-  height: "75px",
-  // backgroundColor: "white", //temp[orary]
-};
-
-const imageContainer = {
-  // backgroundColor: "white", //temp[orary]
-};
-
 const headerText = {
   fontWeight: "900",
-  fontSize: "35px",
+  fontSize: "25px",
+};
+
+const labelText = {
+  fontWeight: "900",
+  fontSize: "15px",
+};
+
+const infoTextField = {
+  // background: "black",
+  // border: "white",
 };

@@ -1,11 +1,36 @@
-.label-container {
-  margin: "25px";
-  padding: "50px";
-  align-items: flex-start;
-  justify-content: space-around;
+/* profileContainer */
+.profile-container {
+  position: relative;
+  height: 90vh;
+  width: 100vw;
+  padding: 10vh;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  /* margin: 10vh; */
+  /* gap: 20px; */
+  background-color: azure;
+  /* outline-color: black; */
 }
 
-.field-container {
-  padding: "10px";
-  padding-right: "25px";
+.title-bar {
+  border: 2px solid red;
+  padding: 12px;
 }
+
+.columns-temp {
+  border: 2px solid green;
+  /* height: 100px; */
+
+  padding: 12px;
+}
+
+.label-container {
+  /* margin: 25px; */
+  /* padding: 5px; */
+}
+/*
+.field-container {
+  padding: 10px;
+  padding-right: 25px;
+} */

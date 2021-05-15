@@ -5,10 +5,13 @@ import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
 import personService from "./services/personService";
+import ManageResPage from "./components/manageresourcespage/manageresourcespage";
+import ManageUser from "./components/manageuserpage/manageuserpage";
+import ViewUser from "./components/viewuserpage/viewUserPage";
 import jwtDecode from "jwt-decode";
 import { jwtPrivateKey } from "./config.json";
-import "./App.css";
 import About from "./components/about/about";
+import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null); //fullname, email, userType (integer)
@@ -64,25 +67,19 @@ function App() {
         />
 
         {/* this route returns component depending on the route */}
-        <Switch>
-          {/* add your new route/path here */}
-          <Route path="/viewuser/:googleId" component={ViewUser}></Route>
-          <Route path="/manage-resources" component={ManageResPage}></Route>
-          <Route path="/manageusers" component={ManageUser}></Route>
+        {/* add your new route/path here */}
+        <Route path="/viewuser/:googleId" component={ViewUser}></Route>
+        <Route path="/manage-resources" component={ManageResPage}></Route>
+        <Route path="/manageusers" component={ManageUser}></Route>
 
-          <Route path="/home" component={Homepage}></Route>
-          <Route exact path="/not-found" component={Notfound}></Route>
-          <Redirect exact from="/" to="/home" />
-          <Redirect to="/not-found" />
-        </Switch>
-
-        {/* footer is always visible no matter on what route */}
-        <Footer />
         <Route path="/about" render={() => <About appRef={appRef} />} />
-        {/* <Route path="/about" component={About}/> */}
+        <Route path="/home" component={Homepage}></Route>
         <Route exact path="/not-found" component={Notfound}></Route>
         <Redirect exact from="/" to="/home" />
         <Redirect to="/not-found" />
+
+        {/* footer is always visible no matter on what route */}
+        <Footer />
       </Switch>
 
       <Footer />
