@@ -7,7 +7,7 @@ import Notfound from "./components/notfound";
 import personService from "./services/personService";
 import ManageResPage from "./components/manageresourcespage/manageresourcespage";
 import ManageUser from "./components/manageuserpage/manageuserpage";
-import ViewUser from "./components/viewuserpage/viewUserPage";
+import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import jwtDecode from "jwt-decode";
 import { jwtPrivateKey } from "./config.json";
 import About from "./components/about/about";
@@ -66,11 +66,12 @@ function App() {
 
         {/* this route returns component depending on the route */}
         {/* add your new route/path here */}
+
         {/* <Route path="/view-user/:googleId" component={ViewUser}></Route> */}
         {/* <Route path="/account-setting/" component={ViewUser}></Route> */}
         <Route
           path="/account-setting/"
-          render={() => <ViewUser user={user} />}></Route>
+          render={() => <ViewUserPage user={user} />}></Route>
         <Route path="/about" render={() => <About appRef={appRef} />} />
         <Route path="/manage-resources" component={ManageResPage}></Route>
         <Route path="/manage-users" component={ManageUser}></Route>

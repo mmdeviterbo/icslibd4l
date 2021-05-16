@@ -14,35 +14,11 @@ import LabelContainer from "./labelContainer";
 
 import "../../styles/userPageStyle.css";
 
-const label = ["Nickname", "Name", "Classificaion", "Email"];
-
-const EditNickname = () => {
-  const [click, setClick] = useState(false);
-  const [style, setStyle] = useState(editButtonDefault);
-  const [buttonStyle, setButtonStyle] = useState(faPencilAlt);
-
-  const setIcon = (click, buttonStyle, style) => {
-    setClick(click);
-    setButtonStyle(buttonStyle);
-    setStyle(style);
-  };
-
-  return (
-    <FontAwesomeIcon
-      onClick={() =>
-        click === false
-          ? setIcon(true, faCheck, editButtonConfirm)
-          : setIcon(false, faPencilAlt, editButtonDefault)
-      }
-      state={click}
-      aria-label="edit"
-      style={style}
-      icon={buttonStyle}
-    />
-  );
-};
-
 export default function ProfileContainer({ user }) {
+  useEffect(() => {
+    console.log(user);
+  }, []);
+  // removes JWT token from the browser
   const logout = async () => {
     try {
       localStorage.removeItem(jwtPrivateKey);
@@ -52,6 +28,7 @@ export default function ProfileContainer({ user }) {
   };
 
   return (
+    // column for the title bar "Profile Display"
     <Container fixed className="profile-container">
       <Row className="title-bar">
         <Col xs={2}></Col>
@@ -60,58 +37,55 @@ export default function ProfileContainer({ user }) {
             Profile Display
           </div>
         </Col>
-      </Row>
-
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={7} className="columns-temp">
-          <LabelContainer msg={"Nickname: "} value={user.nickname} />
-        </Col>
-        <Col xs={1} className="edit-column">
-          <EditNickname />
-        </Col>
-      </Row>
-
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={7} className="columns-temp">
-          <LabelContainer msg={"Name: "} value={user.fullName} />
-        </Col>
-
         <Col xs={1} className="columns-temp"></Col>
       </Row>
-
       <Row>
         <Col xs={2}></Col>
-        <Col xs={7} className="columns-temp">
+        <Col xs={8} className="columns-temp">
+          <LabelContainer
+            msg={"Nickname: "}
+            userinfos={user.nickname}
+            iseditable={true}
+          />
+        </Col>
+        <Col xs={1} className="columns-temp"></Col>
+      </Row>
+      <Row>
+        <Col xs={2}></Col>
+        <Col xs={8} className="columns-temp">
+          <LabelContainer msg={"Name: "} userinfos={user.fullName} />
+        </Col>
+        <Col xs={1} className="columns-temp"></Col>
+      </Row>
+      <Row>
+        <Col xs={2}></Col>
+        <Col xs={8} className="columns-temp">
           <LabelContainer
             msg={"Classification: "}
-            value={user.userType}
+            userinfos={user.userType}
             isType={true}
           />
         </Col>
         <Col xs={1} className="columns-temp"></Col>
       </Row>
-
       <Row>
         <Col xs={2}></Col>
-        <Col xs={7} className="columns-temp">
-          <LabelContainer msg={"Email: "} value={user.email} />
+        <Col xs={8} className="columns-temp">
+          <LabelContainer msg={"Email: "} userinfos={user.email} />
         </Col>
         <Col xs={1} className="columns-temp"></Col>
       </Row>
-
+      {/* part for account removal */}
       <Row className="removal-bar">
         <Col xs={2}></Col>
         <Col xs={8}>
           <div
-            className="headerText"
+            className="header-text"
             style={{ fontWeight: "900", fontSize: "30px" }}>
             Account Removal
           </div>
         </Col>
       </Row>
-
       <Row>
         <Col xs={2}></Col>
         <Col xs={8} className="columns-temp">
@@ -123,13 +97,9 @@ export default function ProfileContainer({ user }) {
       <Row>
         <Col xs={2}></Col>
         <Col xs={8}>
-          {/* 
-
-BACKLOG: 
-- MODAL OR POP-UP TO WARN USER ABOUT DISSOCIATION
-- ACCOUNT DISSOCIATION (FROM BACKEND(?))
-
- */}
+          {/* BACKLOG: 
+        - MODAL OR POP-UP TO WARN USER ABOUT DISSOCIATION
+        - ACCOUNT DISSOCIATION (FROM BACKEND(?)) */}
           <Button
             onClick={logout}
             variant="contained"
@@ -153,14 +123,14 @@ const headerText = {
 
 const editButtonDefault = {
   color: "gray",
-  margin: "12px 0 0px -20px",
+  margin: "24px 0 0px -30px",
   width: "20px",
   height: "20px",
 };
 
 const editButtonConfirm = {
   color: "#90ee90",
-  margin: "12px 0 0px -20px",
+  margin: "24px 0 0px -30px",
   width: "20px",
   height: "20px",
 };
