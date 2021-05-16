@@ -1,0 +1,132 @@
+import personService from '../services/personService'
+import React, {useEffect, useState} from 'react'
+import GoogleLogin from 'react-google-login';
+import {Link, useHistory} from 'react-router-dom';
+import '../styles/homepageStyle.css';
+import { Dropdown, Icon } from "semantic-ui-react";
+import {gsap} from 'gsap';
+import {jwtPrivateKey} from '../config.json';
+
+// the entire navigation bar
+export default function NavigationBar({loginRegisterUser, browseRef, user}) {
+    const [classNavBar, setClassNavBar] = useState("navbar-container");
+    const history = useHistory(); 
+
+
+    useEffect(()=>{
+        animationTitle(classNavBar);
+    },[classNavBar])
+
+    // if not found (404), hide the navbar component
+    useEffect(() => { return history.listen((location) => {
+          if(location.pathname==="/not-found") setClassNavBar("navbar-container-none");
+          else setClassNavBar("navbar-container");
+    })},[history]);
+
+    useEffect(()=>{
+        if(window.location.pathname==="/not-found") setClassNavBar("navbar-container-none");
+        else setClassNavBar("navbar-container");
+    },[classNavBar]);
+
+    const responseGoogleSuccess=(response)=>{
+        const {googleId, email, name, familyName} = response.profileObj
+        const userInfo = {googleId: googleId, email: email, fullName: name, surname: familyName}
+        loginRegisterUser(userInfo);
+    }   
+    const responseGoogleFail=(response)=>{}
+
+    const scrollToBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+
+    const logInButton=()=>{
+        return(
+                <GoogleLogin
+                clientId="157703212486-qm8nb25m86guqvsg4fhbtc9kl3sk6ubp.apps.googleusercontent.com"
+                clientSecret="u06bcQiePSj-3fbkdTxS0VUd"
+                buttonText="LOGIN"
+                onSuccess={responseGoogleSuccess}
+                onFailure={responseGoogleFail}
+                cookiePolicy={'single_host_origin'}
+                className="login-link"
+                hostedDomain={'up.edu.ph'}
+                icon={false}
+                style={false}>
+                    <i className="fa fa-lg fa-sign-in mr-2"/>
+                    <span className="login-link-label">LOGIN</span>
+                </GoogleLogin>
+            );
+    }
+    const profileDisplay = ()=>{
+        return(
+            <SearchFilter user={user}/>
+        );
+    }
+
+    return (
+        <div className={classNavBar}>
+            <div style={mainBgStyleContainer}/>
+            <ul className="navbar-elements">
+                <Link className="left-half" to="/home">
+                        <div draggable="false" className="ics-uplb-caption" to="/home">
+                            <span className="ics-caption">Institute of Computer Science Online Library</span>
+                            <span className="uplb-caption">University of the Philippines Los Baños</span>
+                        </div>
+                </Link>
+                <div className="right-half">
+                    <div className="navItem" onClick={scrollToBrowse} style={{cursor:"pointer"}}>
+                        <i className="fa fa-lg fa-search mr-2" aria-hidden="true"/>
+                        BROWSE
+                    </div>
+                    <Link to="/browse" className="navItem">
+                        <i className="fa fa-lg fa-info-circle mr-2" aria-hidden="true"/>
+                        ABOUT
+                    </Link>
+                    <div className="login-link">
+                        {(user && profileDisplay()) || logInButton()}
+                    </div>
+                </div>
+            </ul>     
+        </div>
+    )
+}
+
+// login dropdown menu (in navigation bar)
+const SearchFilter = ({user}) => {
+    const [activeSelection, setActiveSelection] = useState();
+    const history = useHistory(); 
+
+    const logout=()=>{
+        localStorage.removeItem(jwtPrivateKey);
+        window.location = '/';
+    }
+
+    const trigger = (<span><Icon className="user"/>{user && user.fullName.split(" ")[0]}</span>);
+    const options = [
+        { key: "user", text: (<span> Signed in as <strong>{user.fullName}</strong></span>), disabled: true},
+        { key: "accountSettings", text: (<span><i className="fa fa-lg fa-cog mr-3 ml-2" aria-hidden="true"/>Account Settings</span>), value:"Account Settings", onClick:()=>history.push('/account-setting')},
+        { key: "manageU", text: (<span><i className="fa fa-lg fa-users mr-3 ml-2"/>Manage Users</span>) , value:"Manage Users", onClick:()=>history.push('/manage-user')},
+        { key: "manageI", text: (<span><i className="fa fa-lg fa-sitemap mr-3 ml-2"/>Manage Items</span>) , value:"Manage Items", onClick:()=>history.push('/manage-items')},
+        { key: "viewActivityLogs", text: (<span><i className="fa fa-lg fa-list mr-3 ml-2"/>View Activity Logs</span>), value:"View Activity Logs",  onClick:()=>history.push('/view-activitylogs')},
+        { key: "sign-out", text: (<span><i className="fa fa-lg fa-sign-out mr-3 ml-2"/>Sign Out</span>), value:"Sign out", onClick:logout}
+      ];
+  return(
+    <Dropdown trigger={trigger} options={options}/>
+    );
+};
+
+
+const mainBgStyleContainer = {
+    position:"absolute",
+    height:"100%",
+    width:"100%",
+    zIndex:-1,
+    overflowX:"hidden",
+    overflowY:"visible",
+}
+
+const animationTitle=(classNavBar)=>{
+    gsap.from('.ics-caption',{xPercent:-20, duration:1});
+    gsap.from('.uplb-caption',{xPercent:-20, duration:1.5});
+
+    let tempClassName = "." + classNavBar;
+    gsap.from(tempClassName,{yPercent:-50, duration:0.8});
+}

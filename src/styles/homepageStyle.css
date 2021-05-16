@@ -1,0 +1,361 @@
+/* navigation bar */
+.navbar-container{
+    z-index: 10000;
+    position: sticky !important;
+    top:0 !important;
+    overflow: visible !important;
+
+    position:relative;
+    min-height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    background:#0067A1;
+    box-shadow: 4px 4px 20px black;
+
+
+    /* protect from copy paste  */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.navbar-container-none{display:none !important;}
+
+.navbar-elements{
+    position: absolute;
+    height:100%;
+    margin: 0;
+    overflow: block !important;
+    width: 70vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:0 !important;
+}
+
+.left-half{
+    height:100%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    transition: 0.1s;
+    text-align: end;
+    padding-right: 1.5vw;
+    overflow-y: visible !important;
+}
+.ics-uplb-caption{
+    color:white;
+    display: flex;
+    font-weight: 500;
+    flex-direction: column;
+}
+
+.ics-caption{
+    font-size: calc(10px + 0.5vw);
+    font-weight: 800;
+    transition:0.5s;
+}
+.uplb-caption{
+    font-size: 15px;
+    line-height: 2;
+    transition:0.5s;
+}
+
+.right-half{
+    height:100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-grow: 2;
+    transition: 1s;
+    overflow-y:visible !important;
+}
+.navItem{
+    font-size: calc(10px + 0.3vw) !important;
+    background:rgb(26, 26, 26);
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    color:white;
+    font-weight: 900 !important;
+    transition:0.3s;
+}
+.login-link-label{
+    font-size: calc(10px + 0.3vw) !important;
+    font-weight: 900 !important;
+    padding:0 !important;
+}
+
+.navItem:hover{
+    font-weight: 900 !important;
+    color:black;
+    background: rgb(207, 207, 207);
+}
+
+/* google auth button */
+.login-link{
+    font-weight: bolder !important;
+    height:100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-grow: 1 !important;
+    background:rgb(26, 26, 26) !important;
+    color:white !important;
+    transition:0.5s;
+    cursor:pointer;
+    overflow-y: visible !important;
+    box-shadow: none !important;
+    padding:0 !important;
+    margin:0 !important;
+
+}
+
+.login-link:hover{
+    font-weight: 900 !important;
+    color:black !important;
+    background: rgb(207, 207, 207) !important; 
+}
+
+/* hover effects */
+.acquisitionsInnerContainer:hover{
+    filter: brightness(0.95) !important;
+}
+.acquisitionsInnerContainer .cardContainer:hover{
+    filter: brightness(1.2) !important;
+    transform: scale(1.02) !important;
+}
+
+.formSearchHomepage > .removeOutline:focus{ 
+    box-shadow: none !important;
+}
+.browseBox{
+    z-index: 1;
+    transform: scale(1);
+    transition:0.5s;
+}
+.browseBox:hover{
+    transform: scale(1.06);
+}
+
+
+.formSearchHomepage:hover ~ .homepageBgParent .homeItem{
+    opacity:0.4 !important;
+    transform:scale(1.5) !important;
+}
+
+
+.browseboxSP:hover .imgSPContainer .imgSPHover{display: block !important;}
+.browseboxTheses:hover .imgThesesContainer .imgThesesHover{display: block !important;}
+.browseboxBooks:hover .imgBooksContainer .imgBooksHover{display: block !important;}
+.browseboxSP:hover .imgSPContainer .imgSPBefore{ display: none !important;}
+.browseboxTheses:hover .imgThesesContainer .imgThesesBefore{display: none !important;}
+.browseboxBooks:hover .imgBooksContainer .imgBooksBefore{display: none !important;}
+
+
+
+.footer-container{
+    display: flex !important;
+}
+
+.footer-container-none{
+    display: none !important;
+}
+
+.fa-angle-double-up:hover{
+    transform:scale(1.4) !important;
+    color:rgb(26, 26, 26,1) !important;
+}
+
+
+
+
+
+/* apply mobile responsivess */
+@media screen and (max-width: 426px) {
+    .loginIconContainer{
+        width: 100% !important;
+    }
+    .right-half{
+        width: 100vw;
+    }
+
+
+    .ics-uplb-caption{
+        padding-left: 5px;
+    }
+    .ics-caption{
+        font-size: 12px;
+    }
+    
+    .uplb-caption{
+        display: none;
+    }
+
+    .latestAcquisitionsCaption{
+        font-size: 25px !important;
+    }
+    .latestAcquisitions{
+        height:80vh !important;
+    }
+    .latestAcqhoverTextStyle{
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        height:100% !important;
+        display: grid;
+        place-items: center;
+    }
+
+    .recentNewsTitle{
+        font-size: 25px !important;
+
+    }
+    .recentNewsHeader{
+        font-size: 18px !important;
+    }
+    .recentNewsCaption{
+        font-size: 12px !important;
+    }
+    .bookTitleCard{
+        font-size: 12px !important;
+    }
+
+    .notFoundContainer{
+        height:100vh !important;
+    }
+
+}
+@media screen and (max-width: 640px) {
+    .left-half{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 780px) {
+    .colorBrowseContainer{
+        display: none !important;
+    }
+
+    .navbar-elements{
+        width:100vw;
+    }
+    .left-half{
+        box-shadow: none !important;
+        text-align: center;
+    }
+
+    /* footer  */
+    .icslogo-img{
+        display: none;   
+    }
+
+
+    .ics-caption{
+        font-size: 18px;
+        font-weight: 750;
+        line-height: 1;
+    }
+
+    .uplb-caption{
+        display: none;
+    }
+    
+
+    .left-footer-container{
+        display: none !important;
+    }
+    .footer-container{
+        min-height: auto !important;
+        padding:3px !important;
+    }
+
+    /* search container */
+    .searchMainContainer{
+        height:50vh !important;
+    }
+    .searchBoxContainer{
+        height:100% !important;
+        width:100% !important;
+        border-radius: 0px !important;
+        padding:5px;
+        box-shadow:none;
+    }
+    
+    /* browse on books, sp, theses button */
+    .browsePartContainer{
+        min-height: 60vh !important;
+    }
+    .browseBoxContainer{
+        width:100% !important;
+    }
+
+    .browseBox{
+        width: 80vw !important;
+        height:90px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin:5px;
+    }
+
+    .designBoxContainer{
+        display: none;
+    }
+
+    .imgBooksContainer, .imgThesesContainer, .imgSPContainer{
+        height:50px !important;
+        width:50px !important;
+    } 
+
+    /* latest acquisitions, recent news */
+    .latestAcqcolorsParent{
+        width:95vw !important;
+        border-radius: 0px !important;
+    }
+
+    .titleSearchContainer{
+        display:none;
+    }
+    .searchBoxContainer{
+        width: 100vw !important;
+    }
+    .searchMainContainer{
+        width: 100vw !important;
+        padding:0 !important;
+    }
+    
+    .recentNewsContainer{
+        height:70vh !important;
+        padding:4px 4px !important;
+    }
+    .titleContentContainer{
+        width:100vw !important;
+    }
+    .recentNewsInnerContainer{
+        width:85% !important;
+    }
+    .newsStyle{
+        border-radius: 0 !important;
+    }
+}
+
+.dropdown{
+    width:100%;
+    height:100%;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+.dropdown .item{
+    padding:60px !important;
+}
+.dropdown > .menu{
+    right: 0 !important; 
+    left: auto !important;
+}
