@@ -60,6 +60,7 @@ router.post("/create", async (req,res) => {
             email: loggedUser.email, 
             fullName: loggedUser.fullName, 
             userType: loggedUser.userType, 
+            nickname: loggedUser.nickname,
             activity: "User login",
             date
         });
@@ -71,6 +72,7 @@ router.post("/create", async (req,res) => {
             googleId : loggedUser.googleId,
             email: loggedUser.email,
             fullName: loggedUser.fullName,
+            nickname: loggedUser.nickname,
             userType: loggedUser.userType
         }, jwtPrivateKey
         );  

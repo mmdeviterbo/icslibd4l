@@ -30,8 +30,8 @@ module.exports = function(app){
     // set up routes
     
     app.use("/books", require("../routes/bookRouter"))
-    app.use("/thesis", require("../routes/thesisRouter"))
-    app.use("/users", require('../routes/userRouter'));
     app.use("/admin", require("../routes/adminRouter"))
-    app.use("/faculty", require("../routes/icsFacultyStaffRouter"))
+
+    // set up routes: thesis
+    app.use("/thesis", require("../routes/spThesisRouter"))
 }

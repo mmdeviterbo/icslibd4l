@@ -1,7 +1,5 @@
 const router = require("express").Router();
 const bookModel = require("../models/bookModel");
-const bookAuthorModel = require("../models/bookAuthorModel");
-const bookSubjectModel = require("../models/bookSubjectModel");
 
 
 router.get("/get-news", async (req,res)=>{
