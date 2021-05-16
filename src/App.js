@@ -66,17 +66,17 @@ function App() {
 
         {/* this route returns component depending on the route */}
         {/* add your new route/path here */}
-        <Route path="/view-user/:googleId" component={ViewUser}></Route>
+        {/* <Route path="/view-user/:googleId" component={ViewUser}></Route> */}
+        {/* <Route path="/account-setting/" component={ViewUser}></Route> */}
+        <Route
+          path="/account-setting/"
+          render={() => <ViewUser user={user} />}></Route>
+        <Route path="/about" render={() => <About appRef={appRef} />} />
         <Route path="/manage-resources" component={ManageResPage}></Route>
         <Route path="/manage-users" component={ManageUser}></Route>
 
         <Route path="/about" render={() => <About appRef={appRef} />} />
         <Route path="/home" component={Homepage}></Route>
-        <Route exact path="/not-found" component={Notfound}></Route>
-        <Redirect exact from="/" to="/home" />
-        <Redirect to="/not-found" />
-
-        <Route path="/about" render={() => <About appRef={appRef} />} />
         <Route exact path="/not-found" component={Notfound}></Route>
         <Redirect exact from="/" to="/home" />
         <Redirect to="/not-found" />

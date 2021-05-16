@@ -39,6 +39,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
       fullName: name,
       surname: familyName,
     };
+    console.log(response.profileObj);
     loginRegisterUser(userInfo);
   };
   const responseGoogleFail = (response) => {};
@@ -57,7 +58,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
       <GoogleLogin
         clientId="157703212486-qm8nb25m86guqvsg4fhbtc9kl3sk6ubp.apps.googleusercontent.com"
         clientSecret="u06bcQiePSj-3fbkdTxS0VUd"
-        buttonText="LOGIN"
+        buttonText="Login"
         onSuccess={responseGoogleSuccess}
         onFailure={responseGoogleFail}
         cookiePolicy={"single_host_origin"}
@@ -65,7 +66,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
         hostedDomain={"up.edu.ph"}
         icon={false}>
         <i className="fa fa-lg fa-sign-in mr-2" />
-        <span className="login-link-label">LOGIN</span>
+        <span className="login-link-label">Login</span>
       </GoogleLogin>
     );
   };
@@ -97,11 +98,11 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
             onClick={scrollToBrowse}
             style={{ cursor: "pointer" }}>
             <i className="fa fa-lg fa-search mr-2" aria-hidden="true" />
-            BROWSE
+            Browse
           </div>
           <Link to="/about" className="navItem">
             <i className="fa fa-lg fa-info-circle mr-2" aria-hidden="true" />
-            ABOUT
+            About
           </Link>
           <div className="login-link">
             {(user && profileDisplay()) || logInButton()}
@@ -168,15 +169,15 @@ const SearchFilter = ({ user }) => {
       onClick: () => history.push("/manage-users"),
     },
     {
-      key: "manageI",
+      key: "manageR",
       text: (
         <span>
           <i className="fa fa-lg fa-sitemap mr-3 ml-2" />
-          Manage Items
+          Manage Resources
         </span>
       ),
-      value: "Manage Items",
-      onClick: () => history.push("/manage-items"),
+      value: "Manage Resources",
+      onClick: () => history.push("/manage-resources"),
     },
     {
       key: "viewActivityLogs",

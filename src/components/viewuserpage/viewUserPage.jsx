@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { GlobalContext } from "../manageuserpage/userTable";
+// import { GlobalContext } from "../manageuserpage/userTable";
 import { useHistory } from "react-router-dom";
 import ProfileContainer from "./profileContainer";
 
@@ -42,37 +42,17 @@ const tableEntry = [
   },
 ];
 
-export default function ViewUserPage(props) {
-  const [selectedUser, setSelectedUser] = useState({
-    googleId: "",
-    email: "",
-    fullName: "",
-    userType: "",
-    nickname: "",
-  });
+export default function ViewUserPage({ user }) {
+  // from manage users (to be fixed for sprint3)
+  // const { users } = useContext(GlobalContext);
 
-  const { users } = useContext(GlobalContext);
   const history = useHistory();
 
-  console.log(users);
-  console.log(props.match.params);
-  const currentUserId = props.match.params.googleId;
-  console.log(currentUserId);
-
-  useEffect(() => {
-    const googleId = currentUserId;
-    const selectedUser = users[0].find((user) => user.googleId === googleId);
-    setSelectedUser(selectedUser);
-  }, [currentUserId, users]);
-
+  // const googleId = user.googleId;
   return (
     <>
       <div className="view-user-info-container">
-        {selectedUser === undefined ? (
-          history.push("/not-found")
-        ) : (
-          <ProfileContainer />
-        )}
+        <ProfileContainer user={user} />
       </div>
     </>
   );

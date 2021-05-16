@@ -1,31 +1,25 @@
 /* profileContainer */
 .profile-container {
-  height: 90vh;
+  height: auto;
   width: 100vw;
   padding: 10vh;
   margin: auto;
   align-items: center;
   justify-content: center;
-
-
-
-  /* background-color: azure; */
 }
 
-.title-bar {
-  /* padding: 12px; */
+.removal-bar {
+  padding-top: 10vh;
+  padding-bottom: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
 
-
-  /* border: 2px solid red; */
 }
 
 .edit-column {
   padding-left: none;
   padding-top: 21px;
   align-items: flex-start;
-
-
-  /* border: 2px solid red; */
 
 }
 
@@ -35,20 +29,8 @@
   height:inherit;
 
   padding: 12px;
-
-
-  /* border: 2px solid blue; */
 }
 
 .label-container {
-
   padding: 12px;
-
-
-  /* border: 2px solid green; */
 }
-/*
-.field-container {
-  padding: 10px;
-  padding-right: 25px;
-} */
