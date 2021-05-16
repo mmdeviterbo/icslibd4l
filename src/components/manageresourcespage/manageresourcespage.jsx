@@ -8,7 +8,7 @@ import FieldsContainerRes from './filter-fields-res';
 import ResTableContainer from './resource-table-cont';
 
 
-export default function ManageResPage() {
+const ManageResPage = () => {
     return(
         <div className = "manage-resources-page-container">
             {/* <TempNavbar/> */}
@@ -21,4 +21,6 @@ export default function ManageResPage() {
         </div>
     )
 }
+
+export default ManageResPage
 

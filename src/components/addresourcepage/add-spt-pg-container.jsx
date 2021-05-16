@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './add-resource-style.css';
 import AddResSidebar from './sidebar-add-res';
-import AddBookFormContainer from './add-book-form-container';
+import AddNewSPThesisForm from './add-new-spt-pg';
 
-const AddBookPage = () => {
+const AddSPThesisPage = () => {
     return(
         <div className = "add-resource-page-container" >
             <AddResSidebar/>
-            <AddBookFormContainer/>
+            <AddNewSPThesisForm/>
         </div>
     )
 }
 
-export default AddBookPage
+export default AddSPThesisPage
