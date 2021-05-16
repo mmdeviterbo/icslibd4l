@@ -59,8 +59,7 @@ router.post("/create", async (req,res) => {
             googleId: loggedUser.googleId, 
             email: loggedUser.email, 
             fullName: loggedUser.fullName, 
-            userType: loggedUser.userType, 
-            nickname: loggedUser.nickname,
+            userType: loggedUser.userType,
             activity: "User login",
             date
         });
