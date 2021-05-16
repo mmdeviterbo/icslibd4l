@@ -89,7 +89,6 @@ const inputSearch = {
     padding:"20px 20px",
     marginLeft:0,
     border:0,
-    // zIndex:10
 }
 
 const bottomContainer = { 
