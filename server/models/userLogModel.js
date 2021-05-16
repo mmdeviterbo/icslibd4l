@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    activity: {
+      type: String,
+      required: false
+    },
     date: {
       type: String,
       required: false

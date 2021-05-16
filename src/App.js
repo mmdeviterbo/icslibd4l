@@ -12,15 +12,18 @@ import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import {jwtPrivateKey} from './config.json';
 import './App.css';
-import AddResource from './components/additem/add';
-import ViewResource from './components/additem/view';
-import updateResourceData from './components/additem/update';
+import AddResource from './components/crud/add';
+import ViewResource from './components/crud/view';
+import updateResourceData from './components/crud/update';
 import About from './components/about/about';
 
 function App() {
   const [user, setUser] = useState(null);    //fullname, email, userType (integer)
-  
+
+
   const browseRef = useRef(null);
+  const latestAcqRef = useRef(null);
+  const newsRef = useRef(null);
   const appRef = useRef(null);
 
   useEffect(()=>{
@@ -33,7 +36,7 @@ function App() {
       const jwt = localStorage.getItem(jwtPrivateKey);
       const userInfo = jwtDecode(jwt);
       setUser(userInfo);
-    }catch(err){console.log("No tokens yet");}
+    }catch(err){}
   }
   
   // login/register a user
@@ -42,24 +45,15 @@ function App() {
       const {data} = await personService.loginRegisterUser(userInfo);   
       localStorage.setItem(jwtPrivateKey, data);
       window.location = "/home"; 
-    }catch(err){console.log("Errorrrrr: " +  err)} 
+    }catch(err){} 
   }
 
   return (
     <div className="App" ref={appRef}>
-        {/* navigationBar is always visible no matter on what route */}
         <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef} user={user}/>
-        
-        {/* this route returns component depending on the route */}
+
         <Switch>
-          <Route path="/home" component={Homepage}></Route>
-          {/* add your new route/path here */}
-         
-          <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef}/>}/>
-          
-
-
-          <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef}/>}/>
+          <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef} latestAcqRef={latestAcqRef} newsRef={newsRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route>
           
            {/* add your new route/path here */}
@@ -69,6 +63,7 @@ function App() {
           <Route path ="/add-new-book" component={AddBookPage}></Route>
           <Route path ="/add-new-spt" component={AddSPThesisPage}></Route>
 
+          <Route path="/about" render={()=><About appRef={appRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/>

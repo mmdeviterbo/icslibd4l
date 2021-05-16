@@ -4,17 +4,17 @@ import LatestAcquisitions from './latestAcquisitions';
 import RecentNews from './recentNews';
 import SearchbarPart from './searchbarPart'
 import { Link } from 'react-router-dom'
-import AddResource from '../additem/add';
-import ViewResource from '../additem/view';
+import AddResource from '../crud/add';
+import ViewResource from '../crud/view';
 
-export default function Homepage({browseRef, appRef}) {
+export default function Homepage({browseRef, appRef, newsRef, latestAcqRef}) {
     return (
         <div className="homepage-container">
-            <Link to='/manage-resources' className="btn btn-info">Manage Resources</Link>
-            <SearchbarPart/>
+            {/* <Link to='/manage-resources' className="btn btn-info">Manage Resources</Link> */}
+            <SearchbarPart newsRef={newsRef} latestAcqRef={latestAcqRef} browseRef={browseRef}/>
             <BrowsePart browseRef={browseRef}/>
-            <LatestAcquisitions/>
-            <RecentNews appRef={appRef}/>
+            <LatestAcquisitions latestAcqRef={latestAcqRef}/>
+            <RecentNews appRef={appRef} newsRef={newsRef}/>
         </div>
     )
 }

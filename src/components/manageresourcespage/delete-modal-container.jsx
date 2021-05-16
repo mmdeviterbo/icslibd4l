@@ -7,10 +7,11 @@ import Button from 'react-bootstrap/Button';
 // import 'reactjs-popup/dist/index.css';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
  
-const DeletePopUpCont = () => {
+const DeletePopUpCont = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    // const delthis = props
 
     return(
         <>
@@ -32,7 +33,7 @@ const DeletePopUpCont = () => {
                 </Modal.Header>
 
                 <Modal.Body>
-                    Are you sure you want to delete this Resource?
+                    Are you sure you want to delete {props.id}?
                     {/* read resource title and author here */}
                 </Modal.Body>
 

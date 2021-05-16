@@ -43,7 +43,7 @@ router.post("/create", async (req,res) => {
             loggedUser = existingUser;
         }
         else{   
-            userType = 4
+            let userType = 4
             const nickname = fullName
             const newUser = new UserModel ({
                 googleId, email, fullName, userType, nickname
@@ -60,6 +60,7 @@ router.post("/create", async (req,res) => {
             email: loggedUser.email, 
             fullName: loggedUser.fullName, 
             userType: loggedUser.userType, 
+            activity: "User login",
             date
         });
         await newUserLog.save();
@@ -67,14 +68,16 @@ router.post("/create", async (req,res) => {
 
         //log user in
         const token = jwt.sign({
+            googleId : loggedUser.googleId,
             email: loggedUser.email,
             fullName: loggedUser.fullName,
-            userType: loggedUser.userType
+            userType: loggedUser.userType,
+            googleId: loggedUser.googleId, 
         }, jwtPrivateKey
         );  
 
         res.cookie("token", token, {
-            httpOnly: true,
+            httpOnly: false,
         }).send(token);
     }
     catch (err){
@@ -165,13 +168,13 @@ router.put("/update", authStudent, async (req, res) => {
         UserModel.find({googleId: googleId}, (err, result) => { //send the edited user as response
             if (err) {
                 res.send(err);
-            } else {
-            res.send(result);
-            }
-        });
+            } else {    
+            res.send(result);   
+            }   
+        }); 
 
-    }
-    catch (err){
+    }   
+    catch (err){    
         console.error(err)
         res.status(500).send();
     }
@@ -185,11 +188,41 @@ router.delete("/delete", authStudent, async (req, res) => {
 });
     
 //logout current signed in user. deletes cookie for user                
-router.get("/logout", authStudent, (req,res) => {
+router.post("/logout", authStudent, async (req,res) => {
+    //get date
+    //code snippet was taken from https://usefulangle.com/post/187/nodejs-get-date-time
+    let date_ob = new Date();
+    let day = ("0" + date_ob.getDate()).slice(-2);
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    let year = date_ob.getFullYear();
+    let hours = date_ob.getHours();
+    let minutes = date_ob.getMinutes();
+    let seconds = date_ob.getSeconds();
+    const date = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds
+
+    const googleId = req.body.googleId;
+    try{
+        const loggedUser = await UserModel.findOne({ googleId });
+    //logs user login to collection
+        const newUserLog = new UserLogModel ({
+        googleId: loggedUser.googleId, 
+        email: loggedUser.email, 
+        fullName: loggedUser.fullName, 
+        userType: loggedUser.userType, 
+        activity: "User logout",
+        date
+    });
+    await newUserLog.save();
+
     res.cookie("token", "", {
-        httpOnly: true,
+        httpOnly: false,
         expires: new Date(0)
-    }).send();
+    }).send("User Logged Out");
+    }
+    catch(err){
+        console.error(err)
+        res.status(500).send();
+    }
 })
 
 

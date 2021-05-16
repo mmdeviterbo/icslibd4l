@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useState} from 'react'
 import {Link} from 'react-router-dom';
 
 import {gsap} from 'gsap';
@@ -62,6 +62,7 @@ const browsePartContainer={
     display:"flex",
     transition: "0.5s",
     justifyContent:"center",
+    gap:"10px",
     alignItems:"center",
     "WebkitUserSelect": "none",
     "WebkitTouchCallout": "none",
@@ -87,7 +88,6 @@ const colorBrowseContainer = {
     boxShadow: "2px 5px 30px 0 rgba(0, 0, 0, 0.8), -6px -6px 22px 0 rgba(255, 255, 255, 0.8)",
     display:"flex",
     justifyContent:"center",
-    alignItems:"center",
 }
 
 const titleOrientation = {
@@ -97,7 +97,7 @@ const titleOrientation = {
     fontSize:"70px",
     fontWeight:900,
     height:"100%",
-    background:"rgba(255,255,255,0.05)",
+    background:"rgba(0,0,0,1)",
     textAlign:"center",
     margin:0,
 }

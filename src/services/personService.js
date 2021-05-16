@@ -4,8 +4,14 @@ import {apiEndpoint} from '../config.json';
 
 // login/register a person (guess, student, admin, faculty)
 const loginRegisterUser=(userInfo)=>{
-    return http.post(apiEndpoint+'/authentication/create', userInfo);
+    return http.post(`${apiEndpoint}/users/create`, userInfo,{withCredentials:true});
 }
+
+// logout user
+const logoutUser=(userInfo)=>{
+    return http.post(`${apiEndpoint}/users/logout`, userInfo,{withCredentials:true});
+}
+
 
 // read data of a person 
 
@@ -18,14 +24,12 @@ const loginRegisterUser=(userInfo)=>{
 //delete person
 
 
+
+
+// put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
-    loginRegisterUser
+    loginRegisterUser,
+    logoutUser
 }
 
 export default exportFunctions;
-
-// Summary: May 07, 2021
-// 1.) use config.json - reference/reuse address of backend
-// 2.) httpService.js - reference/reuse "axios" http requests
-// 3.) personService.js - all function of http requests
-// 4.) resourceService.js - all function of http requests

@@ -321,7 +321,7 @@ const MainResourceTable = () => {
                       <TableCell className={classes.tablecell} align="left">{row.relatedcourses}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.pubyr}</TableCell>
                       <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell>
-                      <TableCell> <DeletePopUpCont/> </TableCell>
+                      <TableCell> <DeletePopUpCont id={row.resid}/> </TableCell>
                     </TableRow>
                   );
                 })}

@@ -1,51 +1,68 @@
-import React from 'react'
-import {Link} from 'react-router-dom';
+import React,{useState, useEffect} from 'react'
 import recentNewsBg from '../../assets/searchBg_4.png';
+import NewsService from '../../services/resourcesService';
+export default function RecentNews({appRef, newsRef}) {
+    const [titleNews, setTitleNews] = useState([]);
+    const [dateNews, setDateNews] = useState([]);
+    const [imgNews, setImgNews] = useState([]);
+    const [linkNews, setLinkNews] = useState([]);
 
-
-const news = "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore quaerat iusto molestias impedit tenetur. Aut, ab, ea ipsa tenetur, quis at minus dicta repellendus quas cum perspiciatis temporibus rerum veniam ratione corrupti commodi reprehenderit. Vitae ad voluptatem, tenetur nesciunt voluptate porro animi facere corporis odit eveniet magnam dolores voluptatibus possimus beatae dolorum ut architecto nihil reprehenderit fuga aut sapiente in ducimus delectus. Reiciendis eaque, tempora soluta aliquid dolor facere in repudiandae nobis nostrum odit. Quae dicta corrupti totam corporis cupiditate autem consequatur officia cumque ducimus. Ratione velit quae quam inventore porro impedit unde molestias, a modi veniam? Architecto, fugiat fuga!"
-
-
-// temporary, news should be from the database
-const newsList = [
-    {title:"News Title 1", content:news, date:"26 January 2021", linkTo:"/home"},
-    {title:"News Title 1.1", content:news, date:"26 January 2021", linkTo:"/home"},
-    {title:"News Title 1.2", content:news, date:"26 January 2021", linkTo:"/home"},
-    {title:"News Title 2", content:news, date:"26 January 2021", linkTo:"/home"},
-    {title:"News Title 3", content:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, vitae!", date:"26 January 2021", linkTo:"/home"}
-]
-
-export default function RecentNews({appRef}) {
     const scrollToTop=()=> appRef.current && appRef.current.scrollIntoView({behavior:"smooth",block:"start"});
-    return (
-        <div className="recentNewsContainer" style={recentNewsContainer}>
-            <img src={recentNewsBg} style={recentNewsBgStyle} alt="#"/>
+    
+    const getNewsData=async()=>{
+        let {data} = await NewsService.getNews();
+        setTitleNews(data.newsTitle);
+        setDateNews(data.newsDate);
+        setImgNews(data.newsImg);
+        setLinkNews(data.newsLinks);
+    }
 
-            <div style={titleContentContainer} className="titleContentContainer">
-                <div style={newsStyle} className="newsStyle">NEWS</div>
-                <div className="recentNewsInnerContainer" style={recentNewsInnerContainer}>
-                    {newsList.map(news=><ArticleContainer 
-                        news={news} key={news.title}
+    useEffect(()=>{
+        getNewsData();
+        return ()=>{setTitleNews([]);setDateNews([]);setImgNews([]);setLinkNews([]);}
+    },[]);
+
+    return (
+        <div className="recentNewsContainer" style={recentNewsContainer} ref={newsRef}>
+            <img src={recentNewsBg} style={recentNewsBgStyle} alt="#"/>
+            <div style={titleContentContainer}>
+                <p style={newsStyle}>UPLB NEWS</p>
+                <div className="ui three stackable cards" style={recentNewsInnerContainer}>
+                    {titleNews.map((title,index)=><ArticleContainer 
+                        title={title} 
+                        link={linkNews[index]}
+                        imgSrc={imgNews[index]}
+                        date={dateNews[index]}
+                        key={index}
                         className="recentNewsTitle"
                     />)}
                 </div>
             </div>
-            <div style={scrollToTopStyle}>
-                <i style={arrowUpStyle} onClick={scrollToTop} className="fa fa-5x fa-angle-double-up"/>
+            <div style={scrollToTopStyle}><i style={arrowUpStyle} onClick={scrollToTop} className="fa fa-5x fa-angle-double-up"/></div>
+        </div>
+    )
+}
+
+const ArticleContainer=({title, link, imgSrc, date})=>{
+    const openInNewTab = (url) => {
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+    }
+    return (
+        <div className="ui fluid card" style={{cursor:"pointer"}} onClick={()=>openInNewTab(link)}>
+            <div className="image" style={{}}><img src={imgSrc} alt="#"/></div>
+            <div className="content" style={{}}>
+                <p to='/home' className="header" style={{}}>{title}</p>
+                <div className="meta"><span className="date" style={{}}>{date}</span></div>
+            </div>
+            <div className="extra content" style={{cursor:"pointer"}}>
+                <i className="fa fa-book mr-2" style={{}}/><span>Read more</span>
             </div>
         </div>
     )
 }
 
-// reusable template for article/recent news
-const ArticleContainer=({news})=>{
-    return(
-            <div style={recentNewsTitle}>
-                <Link to={news.linkTo}><p className="recentNewsHeader" style={recentNewsHeader}>{news.title}</p></Link>    
-                <p className="recentNewsCaption" style={recentNewsCaption}>{news.content}</p>
-                <p className="recentNewsCaption" style={recentNewsCaption}>{news.date}</p>
-            </div>)
-}
+// design or styles
 const scrollToTopStyle = {
     position:"absolute",
     bottom:"0%"
@@ -57,57 +74,44 @@ const arrowUpStyle = {
     color:"rgb(26, 26, 26,0.6)"
 }
 
-
-const recentNewsCaption = {
-    padding:"10px",
+const recentNewsContainer={
+    position:"relative",
+    height: "100vh",
+    maxWidth:"100vw",
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"center",
+    alignItems:"center",
 }
 const titleContentContainer={
     position:"relative",
     height:"100%",
-    width:"75%",
+    width:"80%",
     display:"flex",
-    justifyContent:"center",
-    transition:"1s",
-    padding:"5px 0 20px 0",
-}
-const recentNewsContainer={
-    position:"relative",
-    height: "85vh",
-    maxWidth:"100vw",
-    display:"flex",
+    flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
+    transition:"1s",
+    padding:"2% 0",
 }
 const recentNewsInnerContainer = {
-    width:"85%",
-    display:"grid",
-    gridTemplateColumns:"auto",
+    width:"100%",
     overflowY:"auto",
-    background:"white",
-    "boxShadow": "-2px -2px 10px 0 rgba(255, 255, 255, 0.1), 8px 8px 10px 0 rgba(0, 0, 0, .45)"
-}
-
-const recentNewsTitle = {}
-
-const recentNewsHeader = {
-    fontSize:"21px",
-    fontWeight:900,
-    color:"white",
-    background:"rgb(0, 103, 161,0.8)",
-    padding:"calc(10px + 0.5vw)"
+    margin:0,
+    background:"rgb(0, 103, 161)",
+    padding:"1% 2%"
 }
 const newsStyle = {
-    borderRadius:"20px 0 0 20px",
+    padding:"30px",
+    width:"100%",
     color:"white",
-    background:"rgb(0, 103, 161)",
-    writingMode: "vertical-lr",
-    textOrientation: "upright",
+    background:"rgb(0, 0, 0)",
+    borderRadius:"5px 5px 0 0",
     display:"flex",
-    justifyContent:"center",
     fontSize:"calc(30px + 2vw)",
-    height:"100%",
     fontWeight:900,
-    padding:"0 calc(15px + 1vw)",
+    margin:0,
+
     // protect from copy paste
     "WebkitUserSelect": "none",
     "WebkitTouchCallout": "none",
@@ -115,6 +119,7 @@ const newsStyle = {
     "MsUserSelect": "none",
     "UserSelect": "none",
 }
+
 // wallpaper background
 const recentNewsBgStyle = {
     position:"absolute",

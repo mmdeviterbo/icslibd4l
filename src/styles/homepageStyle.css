@@ -10,9 +10,8 @@
     display: flex;
     justify-content: center;
     align-items:center;
-    background:#0067A1;
+    background:rgb(0, 103, 161);
     box-shadow: 4px 4px 20px black;
-
 
     /* protect from copy paste  */
     -webkit-user-select: none;
@@ -143,10 +142,9 @@
     transform: scale(1.06);
 }
 
-
-.formSearchHomepage:hover ~ .homepageBgParent .homeItem{
+.hoverForImagesVector:hover ~ .homepageBgParent .homeItem{
     opacity:0.4 !important;
-    transform:scale(1.5) !important;
+    transform:scale(1.3) !important;
 }
 
 
@@ -209,6 +207,14 @@
         height:100% !important;
         display: grid;
         place-items: center;
+    }
+    .latestAcqDiscover{
+        display: none !important;
+
+    } 
+    
+    .btnViewAll{
+        display: none !important;
     }
 
     .recentNewsTitle{
@@ -285,6 +291,10 @@
         padding:5px;
         box-shadow:none;
     }
+    .searchCaption{
+        text-align: center !important;
+    }
+
     
     /* browse on books, sp, theses button */
     .browsePartContainer{
@@ -318,6 +328,9 @@
         width:95vw !important;
         border-radius: 0px !important;
     }
+    .acquisitionsInnerContainer{
+        grid-template-columns: auto !important;
+    }
 
     .titleSearchContainer{
         display:none;
@@ -343,6 +356,14 @@
     .newsStyle{
         border-radius: 0 !important;
     }
+
+    /* about */
+    .aboutCaption{
+        margin: 5px !important;
+    }
+    .aboutContainer{
+      padding:0 20px !important;
+    }
 }
 
 .dropdown{
@@ -351,11 +372,18 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    z-index: 10000 !important;
 }
 .dropdown .item{
     padding:60px !important;
+    z-index: 10000 !important;
 }
 .dropdown > .menu{
     right: 0 !important; 
     left: auto !important;
+    z-index: 1000 !important;
 }
+
+.buttonsSearchContainer > button:focus, .btnViewAll:focus{box-shadow:none !important;}
+.buttonsSearchContainer > button:hover{filter:invert(1) !important;}
+.btnViewAll:hover{filter:invert(1) !important;}
