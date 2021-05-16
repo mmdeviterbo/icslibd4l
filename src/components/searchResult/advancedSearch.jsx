@@ -32,10 +32,10 @@ export default function SearchbarPart({appRef}){
 
     return (
         <form style={searchMainContainer} onSubmit={handleForm} className="searchMainContainer">
-            <div style={topContainer}>
+            <div style={topContainer} className="topContainer">
                 <h3 style={textStyle}>Search results for:</h3>
-                <div style={searchBarContainer} className="formSearchResults">
-                    <i className="fa fa-search fa-2x" style={searchIcon}></i>
+                <div style={searchBarContainer} className="resultsSearchbar">
+                    <i className="fa fa-search fa-2x" style={searchIcon} onClick={handleForm}></i>
                     <input style={inputSearch} type="text" className="form-control removeOutline" defaultValue={urlQuery} onChange={e=>setQuery(e.target.value)} placeholder="Search for Books, Theses, and Special Problems" />
                 </div>
             </div>
@@ -71,9 +71,9 @@ const topContainer = {
     width: "96vw",
     justifyContent:"center",
     alignItems:"center",
-    padding:"2.5vw 7vw 0 7vw",
+    padding:"2.5vw 5vw 0 5vw",
     overflow:"hidden",
-    borderBottom:"1px solid gainsboro"
+    borderBottom:"2px solid gainsboro",
 }
 
 const searchBarContainer = {
@@ -89,19 +89,25 @@ const inputSearch = {
     padding:"20px 20px",
     marginLeft:0,
     border:0,
-    zIndex:10
+    // zIndex:10
 }
 
-const bottomContainer = {
-    
+const bottomContainer = { 
+    width: "96vw",
+    height:"10vw", //change to auto later
+    display:"flex",
 }
 
 const filtersContaner = {
-
+    width:"24vw",
+    height:"10vw",//change to auto later
+    // background:"pink",
 }
 
 const resultsContainer = {
-
+    width:"72vw",
+    height:"10vw",
+    // background:"lightblue",
 }
 
 const textStyle = {
