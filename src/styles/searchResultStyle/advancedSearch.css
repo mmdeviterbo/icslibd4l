@@ -1,0 +1,19 @@
+.resultsSearchbar > .removeOutline:focus{ 
+    box-shadow: none !important;
+}
+
+.topContainer:focus-within{
+	border-bottom: 2px solid rgb(0, 103, 161) !important;
+}
+
+.sidebarLink:hover{
+	color: black;
+	background: #d3d3d3;
+	border-left: 4px solid #bababa;
+}
+
+.dropdownNav:hover{
+	color: black;
+	background: #d3d3d3;
+	border-left: 4px solid #bababa;
+}

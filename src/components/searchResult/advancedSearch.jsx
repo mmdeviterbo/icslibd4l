@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
-import '../../styles/advancedSearch.css';
+import '../../styles/searchResultStyle/advancedSearch.css';
+import FilterSidebar from './filterSidebar';
 
-export default function SearchbarPart({appRef}){
+export default function AdvancedSearch({appRef}){
     const [query, setQuery] = useState("");
     // const [filterTag, setFilterTag] = useState("");
     const history = useHistory();
@@ -42,7 +43,7 @@ export default function SearchbarPart({appRef}){
 
             <div style={bottomContainer}>
                 <div style={filtersContaner}>
-
+                    <FilterSidebar/>
                 </div>
 
                 <div style={resultsContainer}>
@@ -99,8 +100,7 @@ const bottomContainer = {
 
 const filtersContaner = {
     width:"24vw",
-    height:"10vw",//change to auto later
-    // background:"pink",
+    height:"auto"
 }
 
 const resultsContainer = {
