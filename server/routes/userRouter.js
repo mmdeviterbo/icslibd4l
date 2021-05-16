@@ -71,6 +71,36 @@ router.post("/create", async (req, res) => {
       email: loggedUser.email,
       fullName: loggedUser.fullName,
       userType: loggedUser.userType,
+      nickname: loggedUser.nickname,
+      activity: "User login",
+      date,
+    });
+    await newUserLog.save();
+
+    //log user in
+    const token = jwt.sign(
+      {
+        googleId: loggedUser.googleId,
+        email: loggedUser.email,
+        fullName: loggedUser.fullName,
+        nickname: loggedUser.nickname,
+        userType: loggedUser.userType,
+      },
+      jwtPrivateKey
+    );
+
+    res
+      .cookie("token", token, {
+        httpOnly: false,
+      })
+      .send(token);
+
+    //logs user login to collection
+    const newUserLog = new UserLogModel({
+      googleId: loggedUser.googleId,
+      email: loggedUser.email,
+      fullName: loggedUser.fullName,
+      userType: loggedUser.userType,
       activity: "User login",
       date,
     });

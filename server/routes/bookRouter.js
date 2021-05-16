@@ -2,8 +2,6 @@ const request = require("request");
 const cheerio = require("cheerio");
 const router = require("express").Router();
 const bookModel = require("../models/bookModel");
-const bookAuthorModel = require("../models/bookAuthorModel");
-const bookSubjectModel = require("../models/bookSubjectModel");
 
 router.post("/get-news", async (req, res) => {
   let options = {
