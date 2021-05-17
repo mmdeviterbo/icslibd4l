@@ -74,7 +74,7 @@ function App() {
           render={() => <ViewUserPage user={user} />}></Route>
         <Route path="/about" render={() => <About appRef={appRef} />} />
         <Route path="/manage-resources" component={ManageResPage}></Route>
-        <Route path="/manage-users" component={ManageUser}></Route>
+        <Route path="/manage-users" render={() => <ManageUser user={user}/>} />
 
         <Route path="/about" render={() => <About appRef={appRef} />} />
         <Route path="/home" component={Homepage}></Route>
