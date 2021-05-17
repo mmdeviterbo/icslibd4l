@@ -95,7 +95,18 @@ export const FilterSidebarData = [
     {
         label: "Publication Date",
         link: "/published",
-        // add dates, search bar?
+        subNav: [
+            {
+                label: "Last Month",
+            },
+            {
+                label: "Last Semester",
+
+            },
+            {
+                label: "Last Year",
+            }
+        ]
     },
 
 ]

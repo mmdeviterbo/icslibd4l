@@ -47,7 +47,6 @@ export default function AdvancedSearch({appRef}){
                 </div>
 
                 <div style={resultsContainer}>
-
                 </div>
             </div>
         </form>
