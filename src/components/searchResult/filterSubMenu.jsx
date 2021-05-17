@@ -1,11 +1,16 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
+// import {Link} from 'react-router-dom'
 // import styled from 'styled-components'
 
 export default function FilterSubMenu({item}){
     const [subnav, setSubnav] = useState(false)
 
     const showSubnav = () => setSubnav(!subnav)
+
+    const handleFilter = (data) => {
+        let filter = data.label ?  data.label : null; 
+        return filter;
+    }
 
     return (
         <div>
@@ -23,14 +28,17 @@ export default function FilterSubMenu({item}){
             </a>
             {subnav && item.subNav.map((item, index) => {
                 return (
-                    <a style={dropdownNav} className="dropdownNav" to={item.link} key={index}>
+                    <a style={dropdownNav} 
+                        className="dropdownNav" 
+                        to={item.link} key={index} 
+                        onClick={() => handleFilter(item)}
+                    >
                         <span style={sidebarLabel}>
                             {item.label}
                             {item.searchbar
                             ? item.searchbar
                             : null}
                         </span>
-
                     </a>
                 )
             })}
@@ -64,6 +72,6 @@ const dropdownNav = {
     fontWeight: "600",
     paddingLeft: "3rem",
     textDecoration: "none",
-    height: "30px",
+    height: "40px",
 
 }

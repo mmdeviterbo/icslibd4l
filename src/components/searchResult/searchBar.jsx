@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
+
 // import styled from 'styled-components';
 
 export default function SearchBar(){
+
     return (
         <input type='search' 
-        className='search'
+        className='form-control removeOutline'
         placeholder= {"Search"}
         style={searchInput}
-        //onChange = {} not yet getting inputs
         />
     )
 }
