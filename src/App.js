@@ -1,4 +1,4 @@
-import {Route, Switch, Redirect} from 'react-router-dom';
+import {Route, Switch, Redirect, useParams } from 'react-router-dom';
 import {useState, useEffect, useRef} from 'react';
 import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
@@ -7,6 +7,7 @@ import Notfound from './components/notfound';
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
 import AddBookPage from './components/addresourcepage/add-new-resource-pg'
 import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
+// import AddResFormContainer from './components/addresourcepage/add-res-form-container'
 
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
@@ -48,6 +49,14 @@ function App() {
     }catch(err){} 
   }
 
+  const ParamUrl=()=> {
+    // for dynamic url
+    let { id } = useParams();
+    return (
+      null
+    );
+  }
+  
   return (
     <div className="App" ref={appRef}>
         <NavigationBar loginRegisterUser={loginRegisterUser} browseRef={browseRef} user={user}/>
@@ -62,6 +71,7 @@ function App() {
           <Route path="/manage-resources" component={ManageResPage}></Route>
           <Route path ="/add-new-book" component={AddBookPage}></Route>
           <Route path ="/add-new-spt" component={AddSPThesisPage}></Route>
+          <Route path="/delete/:id" children={<ParamUrl />}  component={ViewResource}></Route>
 
           <Route path="/about" render={()=><About appRef={appRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route> 

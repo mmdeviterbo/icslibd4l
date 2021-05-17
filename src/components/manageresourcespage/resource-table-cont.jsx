@@ -22,7 +22,7 @@ const ResTableContainer = () => {
 
             <div class = "addBtns">
             <AddNewResource/>
-            <AddNewSPT/>
+            {/* <AddNewSPT/> */}
             </div>
         </div>
     )

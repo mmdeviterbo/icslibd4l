@@ -1,6 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ResourcePrimaryInfoForm = () =>{
+    const [title, setTitle] = useState('')
+    const [year, setYear] = useState(0)
+    const [id, setId] = useState('')
+    const [author_fname, setAuthorFName] = useState('')
+    const [author_lname, setAuthorLName] = useState('')
+
+    const primaryInfo = {
+        title,
+        year,
+        id,
+        author_fname,
+        author_lname
+    }
+
+    // callback = primaryInfo
+
+    // const sendData = (primaryInfo) => {
+    //     return primaryInfo
+    // }    
+
+    // sendData(primaryInfo)
 
         return(
             <div id = "res-primary-info">
@@ -9,23 +30,24 @@ const ResourcePrimaryInfoForm = () =>{
 
                     <div class = "primaryfields">
                         <label for="resId">ID: &nbsp; </label>
-                        <input type = "text" id = "resId"/>
+                        <input type = "text" id = "resId" onChange = {(event) => {setId(event.target.value)}}/>
+                        {/* <input type = "text" id = "resId" onChange = {props.onIdChange} value={props.id}/> */}
                     </div>
 
                     <div class = "primaryfields">
                         <label for="resTitle">Title: &nbsp; </label>
-                        <input type = "text" id = "resTitle"/>
+                        <input type = "text" id = "resTitle" onChange = {(event) => {setTitle(event.target.value)}}/>
                     </div>
                     
                     <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>Author(s):</h5>
                     <div class = "primaryfields">
                         <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorFN"/>
+                        <input type = "text" id = "resAuthorFN" onChange = {(event) => {setAuthorFName(event.target.value)}}/>
                     </div>
 
                     <div class = "primaryfields">
                         <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN"/>
+                        <input type = "text" id = "resAuthorLN" onChange = {(event) => {setAuthorLName(event.target.value)}}/>
                     </div>
 
                     <button id="addAuthor">
@@ -38,10 +60,11 @@ const ResourcePrimaryInfoForm = () =>{
 
                     <div class = "primaryfields">
                         <label for="resAuthor">Year Published: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN"/>
+                        <input type = "number" id = "resAuthorLN" onChange = {(event) => {setYear(event.target.value)}}/>
                     </div>
             </div>
         )
+        
     }
 
 export default ResourcePrimaryInfoForm

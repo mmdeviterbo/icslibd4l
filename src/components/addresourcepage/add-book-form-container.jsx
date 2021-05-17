@@ -1,8 +1,8 @@
 import React, { Component, useState } from 'react'
 import Select from 'react-select'
-import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
-import ResourcePrimaryInfoForm from './primary-info-form'
+import { ItemGroup } from 'semantic-ui-react'
+import ResourcePrimaryInfo from './primary-info-form'
 import SaveResourceButton from './save-resource-btn'
 
 const courseList = [
@@ -34,55 +34,48 @@ const AddBookFormContainer = () => {
     const [type, setType] = useState('')
     const [title, setTitle] = useState('')
     const [year, setYear] = useState(0)
-    const [id, setId] = useState('')
+    const [id, setId] = useState()
     const [journal, setJournal] = useState('')
     const [manuscript, setManuscript] = useState('')
     const [poster, setPoster] = useState('')
     const [source_code, setSourceCode] = useState('')
     const [abstract, setAbstract] = useState('')
-    const [keyword, setKeyword] = useState('')
+    const [sp_thesis_keyword, setKeyword] = useState('')
     // multiple authors should be possible
     const [author_fname, setAuthorFname] = useState('')
     const [author_lname, setAuthorLname] = useState('')
     const [adviser_fname, setAdviserFname] = useState('')
     const [adviser_lname, setAdviserLname] = useState('')
 
+    // const handleIdChange = (evt) => {
+    //     setTitle(evt.target.value)
+    // }
+
+    // const [primaryInfo, setPrimaryInfo] = useState()
+    
+    // const callbackFunction = (info) => {
+    //     setPrimaryInfo(info)
+    // }
+
+    // setPrimaryInfo(ResourcePrimaryInfo.sendData)
+
+    // console.log(primaryInfo)
+
     const handleSubmit = async (event) => {
         event.preventDefault()
         const userInput = {
-            sp_thesis_id : id,
-            type,
-            title,
-            abstract,
-            year,
-            source_code,
-            manuscript,
-            journal,
-            poster,
-            adviser_fname, 
-            adviser_lname,
-            author_fname, 
-            author_lname,
-            sp_thesis_keyword : keyword
         }
         try{
             const {resourceData} = await ResourceServices.addResource(userInput)
-            alert("New resource has been successfully added to the library")
+            alert('New book has been added to the library.')
         } catch(err){
-            if (err.response && err.response.data) {
-                alert(err.response.data.errorMessage) // some reason error message
-            }
+            console.log(err);
+            alert("Please enter all required fields.")
         }
     }
 
-    // get input from type selection
-    const handleChange = e => {
-        setType(e.value)
-    }
-
-
     const BookInfoForm = () => {
-    return(
+        return(
             <>
                 <h2><b>Book</b></h2>
                 <hr/>
@@ -90,7 +83,7 @@ const AddBookFormContainer = () => {
                 {/* <form id = "bookForm"> */}
                     <div class = "primaryfields">
                             <label for="bookISBN">ISBN: &nbsp; </label>
-                            <input type = "text" id = "bookISBN"/>
+                            <input type = "text" id = "bookISBN" />
                     </div>
                     <div class = "primaryfields">
                             <label for="physDescription">Physical Description: &nbsp; </label>
@@ -125,7 +118,7 @@ const AddBookFormContainer = () => {
             <form id="mainAddBookForm" onSubmit ={handleSubmit}>
             {/* Primary  Info */}
                 <div className = "res-primary-info">
-                    <ResourcePrimaryInfoForm/>
+                    <ResourcePrimaryInfo/>
                 </div>
                 
                 <div className = "popupForm" id="bookForm">

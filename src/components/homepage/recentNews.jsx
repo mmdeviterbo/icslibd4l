@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import recentNewsBg from '../../assets/searchBg_4.png';
-import NewsService from '../../services/resourcesService';
+import NewsService from '../../services/resourceService';
 export default function RecentNews({appRef, newsRef}) {
     const [titleNews, setTitleNews] = useState([]);
     const [dateNews, setDateNews] = useState([]);

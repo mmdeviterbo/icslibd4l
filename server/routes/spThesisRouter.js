@@ -6,8 +6,8 @@ const thesisKeyModel = require("../models/spThesisKeyModel");
 
 
 // create new sp entry
-router.post("/create", async (req,res)=>{
-    try{   
+router.post("/create", async (req, res)=>{
+    try{
         const {sp_thesis_id, // common ID
             type, title, abstract, year, source_code, manuscript, journal, poster, // thesisModel
             adviser_fname, adviser_lname,   // thesisAdviserModel

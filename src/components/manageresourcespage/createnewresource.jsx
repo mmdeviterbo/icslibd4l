@@ -13,7 +13,7 @@ const AddNewResource = () => {
             </span>
 
             <span class = "res-btn-txt">
-                Add New Book
+                Add New Resource
             </span>
             </button>
             </a>

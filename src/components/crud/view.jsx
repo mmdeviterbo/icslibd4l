@@ -13,7 +13,7 @@ export default function ViewResource() {
         async function fetchData() {
             try {
                 const response = await ResourceService.viewResource()
-                console.log(response.data)
+                // console.log(response.data)
                 setSpThesisList(response.data)
             } catch (error) {
                 console.log(error)
@@ -23,11 +23,17 @@ export default function ViewResource() {
     }, [])
 
     const resource = Object.keys(spthesisList)
+    // console.log(resource)
+
+    const showData = (props) => {
+        console.log(props)
+    }
+
     return (
         <div className="viewitem-container">
             <h1>Sp/Thesis</h1>
 
-            <React.Fragment>
+            {/* <React.Fragment>
                 { resource.map((i, key) => (
                     <div key={key}>
                         {spthesisList[i].map((item,ind) =>
@@ -35,12 +41,54 @@ export default function ViewResource() {
                                     {item.sp_thesis_id},
                                     {item.type},   
                                     {item.title},
-                                    <Link to='./add' className="btn btn-warning">Edit</Link>
+                                    <button className="btn btn-warning" onClick={() => ResourceService.deleteResource(item.sp_thesis_id)}>Delete</button>
                             </div>
                         )}
                     </div>
                 ))}
-            </React.Fragment>
+            </React.Fragment> */}
+
+            <div>
+                <div>
+                    { resource.map((i, key) => (
+                        <div key={key}>
+                            {/* {spthesisList[i].map((item,ind) =>
+                                <div key={ind}>
+                                        {spthesisList[i].sp_thesis_id},
+                                        {item.type},   
+                                        {item.title},
+                                        <button className="btn btn-warning" onClick={() => ResourceService.deleteResource(item.sp_thesis_id)}>Delete</button>
+                                </div>
+                            )} */}
+                            
+                            {/* {spthesisList[i].map(res => (
+                                <p key={res.title}>
+                                    {res.title} : {res.author_fname} {res.author_lname} : {res.journal}
+                                </p>
+                            ))} */}
+
+                            {spthesisList[i].map((sp_thesis_id) => {
+                                const res = sp_thesis_id;
+
+                                console.log(res.value)
+                                // const data = [
+                                //     id.sp_thesis_id
+                                // ]
+                                // showData(data)
+                                // const dayTasks = tasks[date];
+                                // return Object.keys(dayTasks).map((key) => {
+                                //     const task = dayTasks[key];
+                                //     return (
+                                //     <li>{task.name}</li>
+                                    // )
+                                })
+                            })}
+
+                        </div>
+                    ))}
+                </div>
+            </div>
+
         </div>
     );
 }

@@ -12,7 +12,7 @@ const ManageResPage = () => {
     return(
         <div className = "manage-resources-page-container">
             {/* <TempNavbar/> */}
-            <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link>
+            {/* <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link> */}
             <ManageItemsHeader/>
             <FieldsContainerRes/>
             <ResTableContainer/>
