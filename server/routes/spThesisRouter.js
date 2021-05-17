@@ -1,23 +1,19 @@
 // ---------------------------------------- IMPORTS
 // web
 const router = require("express").Router();
-const authFaculty = require("../middleware/authFaculty");
 // thesis
 const thesisModel = require("../models/spThesisModel");
 const thesisAdviserModel = require("../models/spThesisAdviserModel");
 const thesisAuthorModel = require("../models/spThesisAuthorModel");
 const thesisKeyModel = require("../models/spThesisKeyModel");
-<<<<<<< HEAD
 // book
 const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 
 // ---------------------------------------- HTTP REQUESTS
-=======
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
->>>>>>> sprint2-resoles
 
 // create new sp entry
 router.post("/create", authFaculty, async (req,res)=>{
@@ -436,7 +432,6 @@ router.get("/search", async (req, res)=> {
 // update thesis data
 router.put("/update-sp-thesis", authAdmin, async (req, res) => {
     const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
-    
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
@@ -445,7 +440,7 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
             }
 
             // changing values
-            updatedThesisSp.sp_thesis_id = sp_thesis_id;
+            updatedThesisSp.sp_thesis_id = sp_thesis_id;    
             updatedThesisSp.type = type;
             updatedThesisSp.title = title;
             updatedThesisSp.abstract = abstract;
