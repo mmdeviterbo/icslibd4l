@@ -3,7 +3,7 @@ const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
-
+const authAdmin = require("../middleware/authAdmin");
 
 router.get("/get-news", async (req,res)=>{
     console.log("here")
@@ -157,7 +157,7 @@ router.get("/search", async (req, res)=> {
 });
 
 
-router.put("/update-book", authFaculty, async(req, res)=>{ 
+router.put("/update-book", authAdmin, async(req, res)=>{ 
     const {oldBookId, bookId, title, authors, subjects, physicalDesc, publisher, numberOfCopies} = req.body; 
 
     // verification: incomplete fields
@@ -227,7 +227,7 @@ router.put("/update-book", authFaculty, async(req, res)=>{
 
 });
 
-router.delete("/delete-book", authFaculty, async(req, res)=>{ 
+router.delete("/delete-book", authAdmin, async(req, res)=>{ 
     try{
         const bookId = req.body.bookId;
 
