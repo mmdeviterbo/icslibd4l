@@ -433,6 +433,8 @@ router.get("/search", async (req, res)=> {
 router.put("/update-sp-thesis", authAdmin, async (req, res) => {
     const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
     
+    
+
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
@@ -464,9 +466,10 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
         authors.forEach(async function(updatedEntry){
             const author_fname = updatedEntry.author_fname;
             const author_lname = updatedEntry.author_lname;
+            const author_name = author_fname.concat(" ", author_lname);
 
             const newAuthor = new thesisAuthorModel ({
-                sp_thesis_id, author_fname, author_lname
+                sp_thesis_id, author_fname, author_lname, author_name
             });
             await newAuthor.save();
         });
@@ -475,9 +478,10 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
         advisers.forEach(async function(updatedEntry){
             const adviser_fname = updatedEntry.adviser_fname;
             const adviser_lname = updatedEntry.adviser_lname;
+            const adviser_name = adviser_fname.concat(" ", adviser_lname);
 
             const newAdviser = new thesisAdviserModel ({
-                sp_thesis_id, adviser_fname, adviser_lname
+                sp_thesis_id, adviser_fname, adviser_lname, adviser_name
             });
             await newAdviser.save();
         });
