@@ -5,12 +5,21 @@ const bookAuthorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    author: {
+    author_fname: {
         type: String,
         required: true
     },
+    author_lname: {
+        type: String,
+        required: true
+    },
+
+    author_name: {
+        type: String,
+        required: true
+    }
 });
 
-const BookAuthorModel = mongoose.model("bookAuthor", bookAuthorSchema);
+const BookAuthorModel = mongoose.model("book_authors", bookAuthorSchema);
 
 module.exports = BookAuthorModel;

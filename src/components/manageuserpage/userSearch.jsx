@@ -5,7 +5,7 @@ export default function UserSearch() {
     "height":"20vh",
     "display":"flex",
     "placeItems":"center",
-    "padding":"10px"
+    "paddingTop":"50px"
   }
 
   const inputGroupContainer = {
@@ -13,7 +13,7 @@ export default function UserSearch() {
   }
 
   const manageLabel = {
-    "font-size":"36px",
+    "fontSize":"36px",
     "width": '45%'
   }
 
