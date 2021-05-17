@@ -242,7 +242,7 @@
     }
 }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 780px){
     .colorBrowseContainer{
         display: none !important;
     }
@@ -283,6 +283,9 @@
     /* search container */
     .searchMainContainer{
         height:50vh !important;
+    }
+    .titleSearchContainer{
+        display:none !important;
     }
     .searchBoxContainer{
         height:100% !important;
@@ -342,7 +345,8 @@
         width: 100vw !important;
         padding:0 !important;
     }
-    
+
+
     .recentNewsContainer{
         height:70vh !important;
         padding:4px 4px !important;
@@ -383,6 +387,67 @@
     left: auto !important;
     z-index: 1000 !important;
 }
+
+@media only screen and (max-height: 550px){
+    .containerParallax{
+        display: none !important;
+    }
+    /* browse on books, sp, theses button */
+    .browsePartContainer{
+        min-height: 60vh !important;
+        padding:5vh 0 !important;
+    }
+
+    .browseBoxContainer{
+        width:100% !important;
+    }
+
+    .browseBox{
+        width: 80vw !important;
+        height:90px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin:5px;
+    }
+
+    .designBoxContainer{
+        display: none;
+    }
+
+    .imgBooksContainer, .imgThesesContainer, .imgSPContainer{
+        height:50px !important;
+        width:50px !important;
+    } 
+    .colorBrowseContainer{
+        display: none !important;
+    }
+
+    /* searchbarpart */
+
+    /* search container */
+    .searchMainContainer{
+        height:50vh !important;
+        padding:0 !important;
+    }
+    .titleSearchContainer{
+        display:none !important;
+    }
+    .searchBoxContainer{
+        height:100% !important;
+        width:100% !important;
+        border-radius: 0px !important;
+        padding:5px;
+        box-shadow:none;
+    }
+    .searchCaption{
+        text-align: center !important;
+    }
+
+
+}
+
 
 .buttonsSearchContainer > button:focus, .btnViewAll:focus{box-shadow:none !important;}
 .buttonsSearchContainer > button:hover{filter:invert(1) !important;}

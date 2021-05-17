@@ -134,6 +134,7 @@ const advanceSearch = {
 	"userSelect": "none", 
 }
 const titleSearchContainer ={
+    borderLeft:"10px solid white",
     position:"relative",
     width:"40%",
     height:"75%",
@@ -141,19 +142,25 @@ const titleSearchContainer ={
     boxShadow:"4px 4px 7px 0 rgba(0, 0, 0, 0.55),-1px -2px 4px 0 rgba(255, 255, 255, 0.3)",
     borderRadius: "4px  0px  0px  4px",    
     transition:"1s",
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"space-around",
+    alignItems:"center",
 }
 const textStylesContainer = {
-    position:"absolute",
-    height:"100%",
     width:"100%",
+    flexGrow:1,
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"space-around"
+
 }
 const uplbContainerStyle={
-    textAlign:"left",
-    padding:"5%"
+    textAlign:"center",
 }
 const uplbStyle={
     position:"relative",
-    fontSize:"50px",
+    fontSize:"calc(37px + 1vw)",
     color:"white",
     fontWeight:"900",
     lineHeight:0.9,
@@ -161,11 +168,12 @@ const uplbStyle={
     padding:0,
 }
 const icsStyle={
+    width:"100%",
     overflowX:"hidden",
-    padding:"5px",
+    padding:"10px",
     color:"black",
     textAlign:"center",
-    fontSize:"21px",
+    fontSize:"calc(10px + 0.5vw)",
     fontWeight:300,
     background:"white",
     boxShadow:" 2px 2px 5px 0 rgba(0, 0, 0, 0.3),-1px -1px 3px 0 rgba(255, 255, 255, 0.1)",
@@ -236,14 +244,11 @@ const homeItems = {
 };
 
 const buttonsContainer ={
-    height:"40%",
-    bottom:"0%",
-    position:"absolute",
-    width:"100%",
+    gap:"10px",
+    flexGrow:1,
     display:"flex",
     justifyContent:"space-evenly",
     alignItems:"center",
-
 }
 const buttonSelect = {
     background:"none",
