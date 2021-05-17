@@ -72,7 +72,7 @@ router.post("/create", async (req,res) => {
             email: loggedUser.email,
             fullName: loggedUser.fullName,
             nickname: loggedUser.nickname,
-            userType: loggedUser.userType
+            userType: loggedUser.userType   
         }, jwtPrivateKey
         );  
 
