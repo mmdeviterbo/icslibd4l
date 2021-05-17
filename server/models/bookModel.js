@@ -22,8 +22,8 @@ const bookSchema = new mongoose.Schema({
         required: true
     },
     // // empty array for population
-    // author: [],
-    // subject: []
+    author: [],
+    subject: []
 });
 
 const BookModel = mongoose.model("book", bookSchema);
