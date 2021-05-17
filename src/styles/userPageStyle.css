@@ -1,11 +1,15 @@
 /* profileContainer */
 .profile-container {
+  display: grid;
   height: auto;
+  gap: 20px;
   width: 100vw;
   padding: 10vh;
   margin: auto;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  broder: 1px solid red;
 }
 
 .removal-bar {
@@ -33,4 +37,11 @@
 
 .label-container {
   padding: 12px;
+}
+
+
+.text-field {
+  font-size: 15;
+  size: large;
+
 }
