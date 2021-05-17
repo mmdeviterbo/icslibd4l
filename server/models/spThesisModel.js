@@ -10,10 +10,6 @@ const thesisSchema = new mongoose.Schema({
     manuscript: {type:String, required: true},
     journal: {type:String, required: true},
     poster: {type:String, required: true},
-    // empty array for population
-    adviser: [],
-    author: [],
-    keywords: []
 });
 
 const thesisModel = mongoose.model("sp_thesis", thesisSchema);
