@@ -93,11 +93,10 @@ router.post("/create", authFaculty, async (req,res)=>{
 router.get("/browse", async (req,res)=> {
     const {type} = req.body;
 
-    if (type == "Book"){
+    if (type == "book"){
         // type value: SP or Thesis
         bookModel.aggregate(
-            [{$match: {"bookId":{"$in":idArr_book} }},
-            {$lookup: {from:"book_authors", localField:"bookId", foreignField:"bookId", as:"author"}},
+            [{$lookup: {from:"book_authors", localField:"bookId", foreignField:"bookId", as:"author"}},
             {$lookup: {from:"book_subjects", localField:"bookId", foreignField:"bookId", as:"subject"}},
             {$sort : {"title": 1}}
             ], 
