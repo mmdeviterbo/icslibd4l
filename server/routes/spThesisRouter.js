@@ -8,12 +8,12 @@ const thesisModel = require("../models/spThesisModel");
 const thesisAdviserModel = require("../models/spThesisAdviserModel");
 const thesisAuthorModel = require("../models/spThesisAuthorModel");
 const thesisKeyModel = require("../models/spThesisKeyModel");
+
 // book
 const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 
-// ---------------------------------------- HTTP REQUESTS
 
 // create new sp entry
 router.post("/create", authFaculty, async (req,res)=>{
@@ -421,6 +421,14 @@ router.get("/search", async (req, res)=> {
 });
 
 
+// RESOURCES:
+// https://stackoverflow.com/questions/40931821/how-to-combine-two-collection-based-on-idtransectionid-using-node-js
+// https://stackoverflow.com/questions/50495674/get-all-elements-with-matching-id-in-array-of-id
+// https://stackoverflow.com/questions/15834336/how-to-check-if-a-parameter-is-present-in-the-querystring-in-node-js
+
+// https://stackoverflow.com/questions/46122557/how-can-i-make-a-assign-mongoose-result-in-global-variable-in-node-js
+// https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
+
 // update thesis data
 router.put("/update-sp-thesis", authAdmin, async (req, res) => {
     const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
@@ -510,10 +518,3 @@ router.delete('/remove-sp-thesis', authAdmin, async (req, res) => {
 });
 
 module.exports = router;
-// RESOURCES:
-// https://stackoverflow.com/questions/40931821/how-to-combine-two-collection-based-on-idtransectionid-using-node-js
-// https://stackoverflow.com/questions/50495674/get-all-elements-with-matching-id-in-array-of-id
-// https://stackoverflow.com/questions/15834336/how-to-check-if-a-parameter-is-present-in-the-querystring-in-node-js
-
-// https://stackoverflow.com/questions/46122557/how-can-i-make-a-assign-mongoose-result-in-global-variable-in-node-js
-// https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
