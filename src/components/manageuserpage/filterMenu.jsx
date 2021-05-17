@@ -14,6 +14,8 @@ export default function FilterMenu() {
     display: "flex",
     flexDirection: 'row',
     justifyContent: 'start',
+    zIndex: "-1"
+
   }
 
   const clearFilterContainer = {
