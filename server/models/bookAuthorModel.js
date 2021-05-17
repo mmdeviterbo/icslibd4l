@@ -13,7 +13,6 @@ const bookAuthorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
     author_name: {
         type: String,
         required: true
