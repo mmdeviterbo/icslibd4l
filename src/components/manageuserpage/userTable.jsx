@@ -8,11 +8,11 @@ import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import HttpService from "../../services/httpService";
+import httpService from "../../services/httpService";
+import { apiEndpoint } from "../../config.json";
 
+// Temporary User Entries while fetching data from database is not yet implemented.
 const tableHeader = [
   "User ID",
   "Full Name",
@@ -78,38 +78,42 @@ const initialState = {
   users: [tableEntry],
 };
 
+// Data can be used in view user page
 export const GlobalContext = createContext(initialState);
 
-export default function UserTable() {
-  // const [ studentList, setStudentList ] = useState([]);
+export default function UserTable({user}) {
 
-  // useEffect (() => {
-  //   HttpService.get('http://localhost:3001/authentication/readStudents').then((response) => {
-  //     setStudentList(Array.from(response.data));
+  useEffect(() => {
+    console.log(user)
 
-  //     console.log("Hello. Getting Data from database");
-  //   });
-  // }, []);
+    httpService.get(`${apiEndpoint}/admin/readAllUsers`, user, {withCredentials:true}).then((response) => {
+      // setUserList(Array.from(response.data));
 
-  // console.log(studentList);
-  // console.log("Hello World");
+      console.log("Hello. Getting Data from database");
+    });
+  }, [user]);
 
+  // Array for user data retreived from database.
+  // const [ userList, setUserList ] = useState([]);
+ 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
+  // Computes the number of rows missing in a 10 per item pagination
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
 
+  // Handler event for page change in user table
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // Column Header
   const header = tableHeader.map((header_text, index) => (
-    <TableCell key={index}>{header_text}</TableCell>
+    <TableCell key={index} style={{ fontWeight: "bolder" }}><span>{header_text}</span></TableCell>
   ));
 
   const useStyles = makeStyles({
@@ -122,32 +126,24 @@ export default function UserTable() {
 
   const entries = tableEntry.map((entry, index) => (
     <TableRow hover>
-      <TableCell key={entry.googleId} style={{ width: "80x" }}>
-        {entry.googleId}
+      <TableCell key={entry.googleId} style={{ width: "80x", fontWeight: "bold" }}>
+        <span>{entry.googleId}</span>
       </TableCell>
-      <TableCell key={entry.fullName} style={{ align: "left" }}>
+      <TableCell key={entry.fullName} style={{ align: "left", fontWeight: "bolder", color: "black"}}>
         <Link to={`/viewuser/${entry.googleId}`}>{entry.fullName}</Link>
       </TableCell>
-      <TableCell key={entry.nickname} style={{ align: "left" }}>
+      <TableCell key={entry.nickname} style={{ align: "left", fontWeight: "bolder", color: "#FFFFFF" }}>
         <Link to={`/viewuser/${entry.googleId}`}>{entry.nickname}</Link>
       </TableCell>
       <TableCell key={entry.email} style={{ width: "80px" }}>
-        {entry.email}
+        <span>{entry.email}</span>
       </TableCell>
-      <TableCell key={entry.userType} style={{ width: "80px" }}>
-        {entry.userType}
+      <TableCell key={entry.userType} style={{ width: "80px", textAlign: "center"}}>
+        <span>{entry.userType}</span>
       </TableCell>
-      <TableCell
-        key={index}
-        style={{ textAlign: "center", verticalAlign: "middle" }}>
-        <FontAwesomeIcon
-          icon={faPencilAlt}
-          style={{ margin: "0 0 10px 10px" }}
-        />
-        <FontAwesomeIcon
-          icon={faTrashAlt}
-          style={{ margin: "0 0 10px 10px" }}
-        />
+      <TableCell key={index} style={{ textAlign: "center", fontSize: "1.5rem" }}>
+        <i className="fa fa-ellipsis-h" style={{ margin: "10px", color: "#CFCFCF",  }}></i>
+        <i className="fa fa-trash-o" style={{ margin: "10px", color: "#CFCFCF" }}></i>
       </TableCell>
     </TableRow>
   ));
