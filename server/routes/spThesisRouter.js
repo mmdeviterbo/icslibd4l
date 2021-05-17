@@ -4,6 +4,7 @@ const thesisAdviserModel = require("../models/spThesisAdviserModel");
 const thesisAuthorModel = require("../models/spThesisAuthorModel");
 const thesisKeyModel = require("../models/spThesisKeyModel");
 const authFaculty = require("../middleware/authFaculty");
+const authAdmin = require("../middleware/authAdmin");
 
 // create new sp entry
 router.post("/create", authFaculty, async (req,res)=>{
@@ -162,7 +163,7 @@ router.get("/search", async (req, res)=> {
 
 
 // update thesis data
-router.put("/update-sp-thesis", async (req, res) => {
+router.put("/update-sp-thesis", authAdmin, async (req, res) => {
     const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
     
     try{
@@ -233,7 +234,7 @@ router.put("/update-sp-thesis", async (req, res) => {
 
 
 // delete entire sp/thesis entry
-router.delete('/remove-sp-thesis', async (req, res) => {
+router.delete('/remove-sp-thesis', authAdmin, async (req, res) => {
     const sp_thesis_id_holder = req.body;
     if(!sp_thesis_id_holder){
         return res.status(400).json({errorMessage: "Entry does not exist."});
