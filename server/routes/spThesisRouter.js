@@ -90,24 +90,43 @@ router.post("/create", authFaculty, async (req,res)=>{
 // browse all entries, default sort: alphabetical by title
 router.get("/browse", async (req,res)=> {
     const {type} = req.body;
-    // type value: SP or Thesis
 
-    thesisModel.aggregate(
-        [{$match: {"type":type}},
-        {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
-        {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
-        {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}},
-        {$sort : {"title": 1}}
-        ], 
-        
-        (err,result) => {
-            if(err){
-                res.send(err);
-            }else{
-                res.send(result);
+    if (type == "Book"){
+        // type value: SP or Thesis
+        bookModel.aggregate(
+            [{$match: {"bookId":{"$in":idArr_book} }},
+            {$lookup: {from:"book_authors", localField:"bookId", foreignField:"bookId", as:"author"}},
+            {$lookup: {from:"book_subjects", localField:"bookId", foreignField:"bookId", as:"subject"}},
+            {$sort : {"title": 1}}
+            ], 
+
+            (err,result) => {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(result);
+                }
             }
-        }
-    );
+        );
+    }else{
+        // type value: SP or Thesis
+        thesisModel.aggregate(
+            [{$match: {"type":type}},
+            {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
+            {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
+            {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}},
+            {$sort : {"title": 1}}
+            ], 
+            
+            (err,result) => {
+                if(err){
+                    res.send(err);
+                }else{
+                    res.send(result);
+                }
+            }
+        );
+    }
 })
 
 // search data
@@ -254,7 +273,6 @@ router.get("/search", async (req, res)=> {
             }
         )
     }
-
     // walang adviser sa books
     function spAdviser(mode){
         thesisAdviserModel.aggregate(
