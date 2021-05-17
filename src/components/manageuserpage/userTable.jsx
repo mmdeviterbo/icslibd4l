@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import httpService from "../../services/httpService";
 import { apiEndpoint } from "../../config.json";
 
-// Temporary User Entries while fetching data from database is not yet implemented.
 const tableHeader = [
   "User ID",
   "Full Name",
@@ -22,57 +21,7 @@ const tableHeader = [
   " ",
 ];
 
-const tableEntry = [
-  {
-    googleId: "0001",
-    email: "sample@email.com",
-    fullName: "Elcid X. Cruzado",
-    userType: 4,
-    nickname: "Nickname",
-  },
-  {
-    googleId: "0002",
-    email: "sample@email.com",
-    fullName: "John Mel Ramos",
-    userType: 4,
-    nickname: "Nickname",
-  },
-  {
-    googleId: "0003",
-    email: "sample@email.com",
-    fullName: "Rita Isabel C. Federer",
-    userType: 4,
-    nickname: "Nickname",
-  },
-  {
-    googleId: "0004",
-    email: "sample@email.com",
-    fullName: "Joayma H. Mufasa",
-    userType: 4,
-    nickname: "Nickname",
-  },
-  {
-    googleId: "0005",
-    email: "sample@email.com",
-    fullName: "Olivia Alexis C. Aranas",
-    userType: 4,
-    nickname: "Nickname",
-  },
-  {
-    googleId: "0006",
-    email: "sample@email.com",
-    fullName: "Maria Franchette Beatrix F. Gacad",
-    userType: 4,
-    nickname: "Nickname",
-  },
-  {
-    googleId: "0007",
-    email: "sample@email.com",
-    fullName: "Josesito Joseph T. Batumbakal III",
-    userType: 4,
-    nickname: "Nickname",
-  },
-];
+let tableEntry = [];
 
 const initialState = {
   users: [tableEntry],
@@ -83,18 +32,19 @@ export const GlobalContext = createContext(initialState);
 
 export default function UserTable({user}) {
 
+  const [ userList, setUserList ] = useState([]);
+
   useEffect(() => {
     console.log(user)
 
-    httpService.get(`${apiEndpoint}/admin/readAllUsers`, user, {withCredentials:true}).then((response) => {
-      // setUserList(Array.from(response.data));
-
-      console.log("Hello. Getting Data from database");
+    httpService.get(`${apiEndpoint}/admin/readAllUsers`, {withCredentials:true}).then((response) => {
+      setUserList(Array.from(response.data));
     });
   }, [user]);
 
+  tableEntry = userList;
+
   // Array for user data retreived from database.
-  // const [ userList, setUserList ] = useState([]);
  
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -125,23 +75,23 @@ export default function UserTable({user}) {
   const tableContainer = useStyles();
 
   const entries = tableEntry.map((entry, index) => (
-    <TableRow hover>
-      <TableCell key={entry.googleId} style={{ width: "80x", fontWeight: "bold" }}>
+    <TableRow hover key={entry.googleId}>
+      <TableCell style={{ width: "80x", fontWeight: "bold" }}>
         <span>{entry.googleId}</span>
       </TableCell>
-      <TableCell key={entry.fullName} style={{ align: "left", fontWeight: "bolder", color: "black"}}>
+      <TableCell style={{ align: "left", fontWeight: "bolder", color: "black"}}>
         <Link to={`/viewuser/${entry.googleId}`}>{entry.fullName}</Link>
       </TableCell>
-      <TableCell key={entry.nickname} style={{ align: "left", fontWeight: "bolder", color: "#FFFFFF" }}>
+      <TableCell style={{ align: "left", fontWeight: "bolder", color: "#FFFFFF" }}>
         <Link to={`/viewuser/${entry.googleId}`}>{entry.nickname}</Link>
       </TableCell>
-      <TableCell key={entry.email} style={{ width: "80px" }}>
+      <TableCell style={{ width: "80px" }}>
         <span>{entry.email}</span>
       </TableCell>
-      <TableCell key={entry.userType} style={{ width: "80px", textAlign: "center"}}>
+      <TableCell style={{ width: "80px", textAlign: "center"}}>
         <span>{entry.userType}</span>
       </TableCell>
-      <TableCell key={index} style={{ textAlign: "center", fontSize: "1.5rem" }}>
+      <TableCell style={{ textAlign: "center", fontSize: "1.5rem" }}>
         <i className="fa fa-ellipsis-h" style={{ margin: "10px", color: "#CFCFCF",  }}></i>
         <i className="fa fa-trash-o" style={{ margin: "10px", color: "#CFCFCF" }}></i>
       </TableCell>
