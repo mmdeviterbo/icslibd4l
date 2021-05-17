@@ -1,1 +1,1 @@
-console.log('delet??')
+console.log('delete??')
