@@ -163,17 +163,17 @@ router.get("/search", async (req, res)=> {
 
 // update thesis data
 router.put("/update-sp-thesis", async (req, res) => {
-    const {sp_thesis_id, new_sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
+    const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
     
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
-        await thesisModel.findOne({sp_thesis_id}, (err, updatedThesisSp) => {
+        await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
             if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
-                return res.status(400).send({errorMessage: "Please enter all required fields."});
+                return res.status(400).json({errorMessage: "Please enter all required fields."});
             }
 
             // changing values
-            updatedThesisSp.sp_thesis_id = new_sp_thesis_id;
+            updatedThesisSp.sp_thesis_id = sp_thesis_id;
             updatedThesisSp.type = type;
             updatedThesisSp.title = title;
             updatedThesisSp.abstract = abstract;
@@ -188,9 +188,9 @@ router.put("/update-sp-thesis", async (req, res) => {
         });
 
         // deletes all authors with corresponding thesis/sp id
-        await thesisAuthorModel.deleteMany({sp_thesis_id});
-        await thesisAdviserModel.deleteMany({sp_thesis_id});
-        await thesisKeyModel.deleteMany({sp_thesis_id});
+        await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
 
         // save updated thesisAuthorModel
         authors.forEach(async function(updatedEntry){
@@ -235,10 +235,18 @@ router.put("/update-sp-thesis", async (req, res) => {
 // delete entire sp/thesis entry
 router.delete('/remove-sp-thesis', async (req, res) => {
     const sp_thesis_id_holder = req.body;
-    await thesisModel.findOneAndDelete(sp_thesis_id_holder).exec();
-    await thesisAuthorModel.deleteMany(sp_thesis_id_holder).exec();
-    await thesisKeyModel.deleteMany(sp_thesis_id_holder).exec();
-    res.send("Entry Deleted");
+    if(!sp_thesis_id_holder){
+        return res.status(400).json({errorMessage: "Entry does not exist."});
+    }
+    try {
+        await thesisModel.findOneAndDelete(sp_thesis_id_holder);
+        await thesisAuthorModel.deleteMany(sp_thesis_id_holder);
+        await thesisKeyModel.deleteMany(sp_thesis_id_holder);
+        res.send("Entry Deleted");
+    } catch {
+        res.send(500).json({ errorMessage: "Cannot Delete."});
+    }
+
 });
 
 module.exports = router;
