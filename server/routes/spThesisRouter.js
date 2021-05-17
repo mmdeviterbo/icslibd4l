@@ -46,6 +46,7 @@ router.post("/create", authFaculty, async (req,res)=>{
             advisers.forEach(async function(entry){
                 const adviser_fname = entry.fname;
                 const adviser_lname = entry.lname;
+                const adviser_name = entry.lname;
 
                 const newThesisAdv = new thesisAdviserModel ({
                     sp_thesis_id, adviser_fname, adviser_lname
@@ -57,6 +58,7 @@ router.post("/create", authFaculty, async (req,res)=>{
             authors.forEach(async function(entry){
                 const author_fname = entry.fname;
                 const author_lname = entry.lname;
+                const author_name = entry.lname;
 
                 const newThesisAu = new thesisAuthorModel ({
                     sp_thesis_id, author_fname, author_lname
