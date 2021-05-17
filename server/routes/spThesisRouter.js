@@ -1,6 +1,8 @@
 // ---------------------------------------- IMPORTS
 // web
 const router = require("express").Router();
+const authFaculty = require("../middleware/authFaculty");
+const authAdmin = require("../middleware/authAdmin");
 // thesis
 const thesisModel = require("../models/spThesisModel");
 const thesisAdviserModel = require("../models/spThesisAdviserModel");
@@ -11,9 +13,6 @@ const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 
-// ---------------------------------------- HTTP REQUESTS
-const authFaculty = require("../middleware/authFaculty");
-const authAdmin = require("../middleware/authAdmin");
 
 // create new sp entry
 router.post("/create", authFaculty, async (req,res)=>{
@@ -59,7 +58,7 @@ router.post("/create", authFaculty, async (req,res)=>{
             authors.forEach(async function(entry){
                 const author_fname = entry.fname;
                 const author_lname = entry.lname;
-                const author_name = adviser_fname.concat(" ",author_lname);
+                const author_name = author_fname.concat(" ",author_lname);
 
                 const newThesisAu = new thesisAuthorModel ({
                     sp_thesis_id, author_fname, author_lname, author_name
@@ -463,9 +462,10 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
         authors.forEach(async function(updatedEntry){
             const author_fname = updatedEntry.author_fname;
             const author_lname = updatedEntry.author_lname;
+            const author_name = author_fname.concat(" ", author_lname);
 
             const newAuthor = new thesisAuthorModel ({
-                sp_thesis_id, author_fname, author_lname
+                sp_thesis_id, author_fname, author_lname, author_name
             });
             await newAuthor.save();
         });
@@ -474,9 +474,10 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
         advisers.forEach(async function(updatedEntry){
             const adviser_fname = updatedEntry.adviser_fname;
             const adviser_lname = updatedEntry.adviser_lname;
+            const adviser_name = adviser_fname.concat(" ", adviser_lname);
 
             const newAdviser = new thesisAdviserModel ({
-                sp_thesis_id, adviser_fname, adviser_lname
+                sp_thesis_id, adviser_fname, adviser_lname, adviser_name
             });
             await newAdviser.save();
         });
