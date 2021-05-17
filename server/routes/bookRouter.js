@@ -4,6 +4,7 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 
+
 router.get("/get-news", async (req,res)=>{
     console.log("here")
 });
@@ -26,7 +27,7 @@ router.post("/create", authFaculty, async (req,res)=>{
                 bookId, title, physicalDesc, publisher, numberOfCopies
             });
             const savedBook = await newBook.save();
-            
+          
             authors.forEach(async function(entry) { //add each author to the book_authors collection
                 const author_fname = entry.fname;
                 const author_lname = entry.lname;
@@ -154,5 +155,94 @@ router.get("/search", async (req, res)=> {
         }
     }
 });
+
+
+router.put("/update-book", authFaculty, async(req, res)=>{ 
+    const {bookId, newBookId, title, authors, subjects, physicalDesc, publisher, numberOfCopies} = req.body; 
+
+    // verification: incomplete fields
+    if(!bookId||!title||!authors||!subjects||!physicalDesc||!publisher||!numberOfCopies){
+        return res.status(400).json({errorMessage:"Please enter all required fields."});
+    };
+
+    try{
+        //search if book exists
+        const existingBook = await bookModel.findOne({bookId});
+    
+        if(existingBook){ 
+
+            // edit fields in the book collection
+            // look for the book using its bookId and set new values for the fields
+            await bookModel.findOne({bookId}, (err,updatedBook)=>{
+                if(newBookId){updatedBook.bookId = newBookId}
+                updatedBook.title = title
+                updatedBook.physicalDesc = physicalDesc
+                updatedBook.publisher = publisher
+                updatedBook.numberOfCopies = numberOfCopies
+            
+                updatedBook.save();
+                res.send("Entry Updated");
+            });
+
+            // edit fields in the book_author collection
+            // delete the current entries of authors
+            await bookAuthorModel.deleteMany({bookId}); 
+
+            // iterate on the json array and create new entries
+            authors.forEach(async function(entry) { 
+                const author_fname = entry.fname;
+                const author_lname = entry.lname;
+                const author_name = author_fname.concat(" ", author_lname);
+
+                const newBookAuthor = new bookAuthorModel ({
+                    bookId, author_fname, author_lname, author_name
+                });
+                await newBookAuthor.save();   
+
+            });
+
+            // edit fields in the book_subject collection
+            // delete the current entries of subject
+            await bookSubjectModel.deleteMany({bookId});
+
+            // iterate on the json array and create new entries
+            subjects.forEach(async function(entry) { 
+                const subject = entry;
+
+                const newBookSubject = new bookSubjectModel ({
+                    bookId, subject
+                });
+                await newBookSubject.save();
+            });
+
+            }
+        else{ //sends a 400 status if book already exists
+            res.status(400).send("This book does not exist! Cannot update.");
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).send();
+    }
+
+
+});
+
+router.delete("/delete-book", authFaculty, async(req, res)=>{ 
+    const bookId = req.body.bookId;
+
+    // search if book exists
+    const existingBook = await bookModel.findOne({ bookId });
+    
+    // if book exists, delete its entries from book, book_author, and book_subject
+    if(existingBook){ 
+        await bookModel.findOneAndDelete({bookId});
+        await bookAuthorModel.deleteMany({bookId});
+        await bookSubjectModel.deleteMany({bookId});
+        res.send("Entry Deleted");
+    }else{ 
+        res.status(400).send("This book does not exist! Cannot delete.");
+    }
+});
+
 
 module.exports = router;
