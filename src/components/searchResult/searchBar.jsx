@@ -13,8 +13,9 @@ export default function SearchBar(){
 }
 
 const searchInput = {
-    border: 0,
+    border: "0",
     borderRadius: "10px",
+    padding: "5px",
     textIndent: "10px",
-    width: "80%"
+    width: "80%",    
 }

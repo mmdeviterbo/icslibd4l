@@ -21,10 +21,12 @@ export default function FilterSidebar(){
 const sidebarNav = {
     background: "white",
     display: "flex",
-    height: "100vh",
+    height: "75vh",
     width: "250px",
     marginLeft:"auto",
-    marginRight:"2vw"
+    marginRight:"2vw",
+    overflowY: "scroll",
+    MsOverflowStyle:"none",
 }
 
 const wrapper = {

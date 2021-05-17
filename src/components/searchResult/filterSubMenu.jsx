@@ -39,14 +39,16 @@ export default function FilterSubMenu({item}){
 }
 
 const sidebarLink = {
-    display: "flex",
-    color: "black",
-    justifyContent: "space-between",
     alignItems: "center",
-    padding: "20px",
+    color: "black",
+    display: "flex",
+    fontFamily: "Montserrat",
+    fontSize: "18px",
+    fontWeight: "600",
+    justifyContent: "space-between",
     listStyle: "none",
-    height: "60px",
-    fontSize: "18px"
+    padding: "20px",
+    height: "60px"
 }
 
 const sidebarLabel = {
@@ -54,11 +56,14 @@ const sidebarLabel = {
 }
 
 const dropdownNav = {
-    height: "30px",
-    paddingLeft: "3rem",
-    display: "flex",
     alignItems: "center",
+    display: "flex",
+    color: "0067A1",
+    fontSize: "18px",
+    fontFamily: "Montserrat",
+    fontWeight: "600",
+    paddingLeft: "3rem",
     textDecoration: "none",
-    color: "blue",
-    fontSize: "18px"
+    height: "30px",
+
 }

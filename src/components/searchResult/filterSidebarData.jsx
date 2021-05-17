@@ -1,13 +1,13 @@
 import React from 'react'
-import * as RiIcons from 'react-icons/ri'
+import * as FaIcons from 'react-icons/fa'
 import SearchBar from './searchBar'
 // import styled from 'styled-components'
 
 export const FilterSidebarData = [
     {
         label: "Author",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 searchbar: <SearchBar/>
@@ -16,8 +16,8 @@ export const FilterSidebarData = [
     },
     {
         label: "Adviser",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 searchbar: <SearchBar/>
@@ -27,8 +27,8 @@ export const FilterSidebarData = [
     {
         label: "Course",
         link: "/course",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "CMSC",
@@ -51,8 +51,8 @@ export const FilterSidebarData = [
     {
         label: "Topic",
         link: "/topic",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Agriculture",
@@ -75,8 +75,8 @@ export const FilterSidebarData = [
     {
         label: "Format",
         link: "/format",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Book",
