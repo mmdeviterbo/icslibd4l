@@ -14,6 +14,8 @@ const ReadingSPTContainer = () => {
                 <InfoSidebar/>
             </div>
         </div>
+
+        // add suggestions / related content at the bottom ..?
     )
 }
 

@@ -16,24 +16,24 @@ const InfoSidebar = () => {
         <div className = "infosidebardiv">
             <table id = "spttableinfo">
                 <br/>
-                <tr>
-                    <th>Format</th>
-                    <td>{SampleSP.format}</td>
+                <tr >
+                    <th className = "spt-thtr">Format</th>
+                    <td className = "spt-thtr">{SampleSP.format}</td>
                 </tr>
 
                 <tr>
-                    <th>Adviser</th>
-                    <td>{SampleSP.adviser}</td>
+                    <th className = "spt-thtr">Adviser</th>
+                    <td className = "spt-thtr">{SampleSP.adviser}</td>
                 </tr>
 
                 <tr>
-                    <th>Course(s)</th>
-                    <td>{SampleSP.relatedcourses}</td>
+                    <th className = "spt-thtr">Course(s)</th>
+                    <td className = "spt-thtr">{SampleSP.relatedcourses}</td>
                 </tr>
 
                 <tr>
-                    <th>Subject(s)</th>
-                    <td>{SampleSP.subject}</td>
+                    <th className = "spt-thtr">Subject(s)</th>
+                    <td className = "spt-thtr">{SampleSP.subject}</td>
                 </tr>
             </table>
 

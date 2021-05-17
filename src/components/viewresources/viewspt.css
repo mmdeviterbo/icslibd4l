@@ -12,7 +12,7 @@
 .TitleAuthor h1{
     font-size: 2.5rem;
     font-family: 'Montserrat';
-    font-weight:bold;
+    font-weight:bolder;
 }
 
 .TitleAuthor h3 {
@@ -68,8 +68,7 @@
 .infosidebardiv {
     padding-left:5rem;
 }
-
-.infosidebardiv th, td{
+.spt-thtr{
     padding: 1.3rem;
     padding-left:3rem;
     padding-right: 3rem;
@@ -96,4 +95,32 @@
 .sptviewbuttons button:hover {
     box-shadow: none;
 
+}
+
+.bookcover-and-desc{
+    margin-left: 15rem;
+    margin-bottom: 8rem;
+}
+
+.bookinfotr {
+    padding: 1.3rem;
+    padding-right: 3rem;
+    border-bottom: 1px solid;
+    border-color:#e5e5e5;
+}
+
+.bookcover-and-desc{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.physdescdiv {
+    padding-left: 6rem;
+    padding-right: 15rem;
+}
+
+.physdescdiv p {
+    text-align: justify;
+    text-justify: inter-word;
 }
