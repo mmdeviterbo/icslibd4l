@@ -1,0 +1,99 @@
+/* .ViewSPTMainPageContainer {
+    font-family: 'Montserrat', sans-serif
+} */
+
+.TitleAuthor {
+    margin-top: 8rem;
+    margin-bottom:4rem;
+    margin-left: 15rem;
+    margin-right: 15rem;
+}
+
+.TitleAuthor h1{
+    font-size: 2.5rem;
+    font-family: 'Montserrat';
+    font-weight:bold;
+}
+
+.TitleAuthor h3 {
+    font-family: 'Montserrat',sans-serif;
+    font-weight: normal;
+    color: #0067A1;
+}
+
+.TitleAuthor p {
+    color: #9b9b9b;
+}
+
+.dateandview{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dateandview svg {
+    color:black;
+}
+
+#viewmanuscript{
+    color: #0067A1;
+}
+
+#viewmanuscript:hover{
+    text-decoration: underline;
+}
+
+.abstractdiv {
+    padding-right: 1.5rem;
+}
+
+.abstractdiv h2 {
+    font-family: 'Montserrat', sans-serif;
+    padding-bottom: 1rem;
+}
+
+.abstractdiv p{
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.abstract-and-info {
+    margin-left: 15rem;
+    margin-right: 15rem;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5rem;
+}
+
+.infosidebardiv {
+    padding-left:5rem;
+}
+
+.infosidebardiv th, td{
+    padding: 1.3rem;
+    padding-left:3rem;
+    padding-right: 3rem;
+    border-bottom: 1px solid;
+    border-color:#e5e5e5;
+}
+
+.sptviewbuttons {
+    margin-top: 2rem;
+}
+
+.sptviewbuttons button {
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background-color: white;
+    border-color: #bff1ff;
+    border-style: solid;
+    border-radius: 0.5rem;
+    box-shadow: 1px 1px 0.3rem rgb(204, 204, 204);
+}
+
+.sptviewbuttons button:hover {
+    box-shadow: none;
+
+}

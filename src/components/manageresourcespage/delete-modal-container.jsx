@@ -33,6 +33,7 @@ const DeletePopUpCont = () => {
 
                 <Modal.Body>
                     Are you sure you want to delete this Resource?
+                    {/* {row.title} by {row.author} */}
                     {/* read resource title and author here */}
                 </Modal.Body>
 

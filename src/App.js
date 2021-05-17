@@ -7,6 +7,7 @@ import Notfound from './components/notfound';
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
 import AddBookPage from './components/addresourcepage/add-new-resource-pg'
 import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
+import ReadingSPTContainer from './components/viewresources/readingsptcontainer'
 
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
@@ -63,7 +64,7 @@ function App() {
           <Route exact path="/not-found" component={Notfound}></Route>
           
            {/* add your new route/path here */}
-          <Route path="/view-sp-thesis" component={ViewResource}></Route>
+          <Route path="/view-sp-thesis" component={ReadingSPTContainer}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           <Route path="/manage-resources" component={ManageResPage}></Route>
           <Route path ="/add-new-book" component={AddBookPage}></Route>
