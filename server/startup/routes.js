@@ -43,10 +43,10 @@ module.exports = function (app) {
   app.use("/admin", require("../routes/adminRouter"));
 
     // set up routes
-    
-    app.use("/books", require("../routes/bookRouter"))
-    app.use("/users", require('../routes/userRouter'));
     app.use("/admin", require("../routes/adminRouter"))
+    app.use("/faculty", require("../routes/icsFacultyStaffRouter"))
+    app.use("/users", require("../routes/userRouter"))
+    app.use("/books", require("../routes/bookRouter"))
 
     // set up routes: thesis
     app.use("/thesis", require("../routes/spThesisRouter"))
