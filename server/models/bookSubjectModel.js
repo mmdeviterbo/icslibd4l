@@ -11,6 +11,6 @@ const bookSubjectSchema = new mongoose.Schema({
     },
 });
 
-const BookSubjectModel = mongoose.model("bookSubject", bookSubjectSchema);
+const BookSubjectModel = mongoose.model("book_subjects", bookSubjectSchema);
 
 module.exports = BookSubjectModel;

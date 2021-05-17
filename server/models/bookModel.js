@@ -20,7 +20,10 @@ const bookSchema = new mongoose.Schema({
     numberOfCopies: {
         type: Number, 
         required: true
-    }
+    },
+    // empty array for population
+    author: [],
+    subject: []
 });
 
 const BookModel = mongoose.model("book", bookSchema);
