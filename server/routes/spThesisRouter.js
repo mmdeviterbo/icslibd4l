@@ -7,12 +7,17 @@ const thesisModel = require("../models/spThesisModel");
 const thesisAdviserModel = require("../models/spThesisAdviserModel");
 const thesisAuthorModel = require("../models/spThesisAuthorModel");
 const thesisKeyModel = require("../models/spThesisKeyModel");
+<<<<<<< HEAD
 // book
 const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 
 // ---------------------------------------- HTTP REQUESTS
+=======
+const authFaculty = require("../middleware/authFaculty");
+const authAdmin = require("../middleware/authAdmin");
+>>>>>>> sprint2-resoles
 
 // create new sp entry
 router.post("/create", authFaculty, async (req,res)=>{
@@ -419,7 +424,6 @@ router.get("/search", async (req, res)=> {
     }
 });
 
-module.exports = router;
 
 // RESOURCES:
 // https://stackoverflow.com/questions/40931821/how-to-combine-two-collection-based-on-idtransectionid-using-node-js
@@ -428,3 +432,93 @@ module.exports = router;
 
 // https://stackoverflow.com/questions/46122557/how-can-i-make-a-assign-mongoose-result-in-global-variable-in-node-js
 // https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
+
+// update thesis data
+router.put("/update-sp-thesis", authAdmin, async (req, res) => {
+    const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
+    
+    try{
+        // looks for the sp/thesis based on the json object passed, then updates it
+        await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
+            if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
+                return res.status(400).json({errorMessage: "Please enter all required fields."});
+            }
+
+            // changing values
+            updatedThesisSp.sp_thesis_id = sp_thesis_id;
+            updatedThesisSp.type = type;
+            updatedThesisSp.title = title;
+            updatedThesisSp.abstract = abstract;
+            updatedThesisSp.year = year;
+            updatedThesisSp.source_code = source_code;
+            updatedThesisSp.manuscript = manuscript;
+            updatedThesisSp.journal = journal;
+            updatedThesisSp.poster = poster;
+
+            // updates
+            updatedThesisSp.save();
+        });
+
+        // deletes all authors with corresponding thesis/sp id
+        await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+
+        // save updated thesisAuthorModel
+        authors.forEach(async function(updatedEntry){
+            const author_fname = updatedEntry.author_fname;
+            const author_lname = updatedEntry.author_lname;
+
+            const newAuthor = new thesisAuthorModel ({
+                sp_thesis_id, author_fname, author_lname
+            });
+            await newAuthor.save();
+        });
+
+        // save updated thesisAdviserModel
+        advisers.forEach(async function(updatedEntry){
+            const adviser_fname = updatedEntry.adviser_fname;
+            const adviser_lname = updatedEntry.adviser_lname;
+
+            const newAdviser = new thesisAdviserModel ({
+                sp_thesis_id, adviser_fname, adviser_lname
+            });
+            await newAdviser.save();
+        });
+
+        // save updated thesisAdviserModel
+        keywords.forEach(async function(updatedEntry){
+            const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
+            
+            const newKey = new thesisKeyModel ({
+                sp_thesis_id, sp_thesis_keyword
+            });
+            await newKey.save();
+        });
+
+        res.send("Entry Updated");
+
+    } catch {
+        res.send(500).json({ errorMessage: "Cannot Update."});
+    }
+});
+
+
+// delete entire sp/thesis entry
+router.delete('/remove-sp-thesis', authAdmin, async (req, res) => {
+    const sp_thesis_id_holder = req.body;
+    if(!sp_thesis_id_holder){
+        return res.status(400).json({errorMessage: "Entry does not exist."});
+    }
+    try {
+        await thesisModel.findOneAndDelete(sp_thesis_id_holder);
+        await thesisAuthorModel.deleteMany(sp_thesis_id_holder);
+        await thesisKeyModel.deleteMany(sp_thesis_id_holder);
+        res.send("Entry Deleted");
+    } catch {
+        res.send(500).json({ errorMessage: "Cannot Delete."});
+    }
+
+});
+
+module.exports = router;
