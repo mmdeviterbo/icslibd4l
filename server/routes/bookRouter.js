@@ -158,35 +158,34 @@ router.get("/search", async (req, res)=> {
 
 
 router.put("/update-book", authFaculty, async(req, res)=>{ 
-    const {bookId, newBookId, title, authors, subjects, physicalDesc, publisher, numberOfCopies} = req.body; 
+    const {oldBookId, bookId, title, authors, subjects, physicalDesc, publisher, numberOfCopies} = req.body; 
 
     // verification: incomplete fields
-    if(!bookId||!title||!authors||!subjects||!physicalDesc||!publisher||!numberOfCopies){
+    if(!oldBookId||!bookId||!title||!authors||!subjects||!physicalDesc||!publisher||!numberOfCopies){
         return res.status(400).json({errorMessage:"Please enter all required fields."});
     };
 
     try{
         //search if book exists
-        const existingBook = await bookModel.findOne({bookId});
+        const existingBook = await bookModel.findOne({"bookId": oldBookId});
     
         if(existingBook){ 
 
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
-            await bookModel.findOne({bookId}, (err,updatedBook)=>{
-                if(newBookId){updatedBook.bookId = newBookId}
+            await bookModel.findOne({"bookId" : oldBookId}, (err,updatedBook)=>{
+                updatedBook.bookId = bookId
                 updatedBook.title = title
                 updatedBook.physicalDesc = physicalDesc
                 updatedBook.publisher = publisher
                 updatedBook.numberOfCopies = numberOfCopies
             
                 updatedBook.save();
-                res.send("Entry Updated");
             });
 
             // edit fields in the book_author collection
             // delete the current entries of authors
-            await bookAuthorModel.deleteMany({bookId}); 
+            await bookAuthorModel.deleteMany({"bookId" : oldBookId}); 
 
             // iterate on the json array and create new entries
             authors.forEach(async function(entry) { 
@@ -203,7 +202,7 @@ router.put("/update-book", authFaculty, async(req, res)=>{
 
             // edit fields in the book_subject collection
             // delete the current entries of subject
-            await bookSubjectModel.deleteMany({bookId});
+            await bookSubjectModel.deleteMany({"bookId" : oldBookId});
 
             // iterate on the json array and create new entries
             subjects.forEach(async function(entry) { 
@@ -215,6 +214,7 @@ router.put("/update-book", authFaculty, async(req, res)=>{
                 await newBookSubject.save();
             });
 
+            res.send("Entry Updated");
             }
         else{ //sends a 400 status if book already exists
             res.status(400).send("This book does not exist! Cannot update.");
@@ -228,19 +228,24 @@ router.put("/update-book", authFaculty, async(req, res)=>{
 });
 
 router.delete("/delete-book", authFaculty, async(req, res)=>{ 
-    const bookId = req.body.bookId;
+    try{
+        const bookId = req.body.bookId;
 
-    // search if book exists
-    const existingBook = await bookModel.findOne({ bookId });
-    
-    // if book exists, delete its entries from book, book_author, and book_subject
-    if(existingBook){ 
-        await bookModel.findOneAndDelete({bookId});
-        await bookAuthorModel.deleteMany({bookId});
-        await bookSubjectModel.deleteMany({bookId});
-        res.send("Entry Deleted");
-    }else{ 
-        res.status(400).send("This book does not exist! Cannot delete.");
+        // search if book exists
+        const existingBook = await bookModel.findOne({ bookId });
+        
+        // if book exists, delete its entries from book, book_author, and book_subject
+        if(existingBook){ 
+            await bookModel.findOneAndDelete({bookId});
+            await bookAuthorModel.deleteMany({bookId});
+            await bookSubjectModel.deleteMany({bookId});
+            res.send("Entry Deleted");
+        }else{ 
+            res.status(400).send("This book does not exist! Cannot delete.");
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).send();
     }
 });
 
