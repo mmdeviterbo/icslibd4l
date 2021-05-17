@@ -46,10 +46,10 @@ router.post("/create", authFaculty, async (req,res)=>{
             advisers.forEach(async function(entry){
                 const adviser_fname = entry.fname;
                 const adviser_lname = entry.lname;
-                const adviser_name = entry.lname;
+                const adviser_name =  adviser_fname.concat(" ",adviser_lname);
 
                 const newThesisAdv = new thesisAdviserModel ({
-                    sp_thesis_id, adviser_fname, adviser_lname
+                    sp_thesis_id, adviser_fname, adviser_lname, adviser_name
                 });
                 const savedThesisAdv = await newThesisAdv.save();
             });
@@ -58,10 +58,10 @@ router.post("/create", authFaculty, async (req,res)=>{
             authors.forEach(async function(entry){
                 const author_fname = entry.fname;
                 const author_lname = entry.lname;
-                const author_name = entry.lname;
+                const author_name = adviser_fname.concat(" ",author_lname);
 
                 const newThesisAu = new thesisAuthorModel ({
-                    sp_thesis_id, author_fname, author_lname
+                    sp_thesis_id, author_fname, author_lname, author_name
                 });
                 const savedThesisAu = await newThesisAu.save();
             });
