@@ -47,10 +47,10 @@ export default function AddResFormContainer() {
     const [abstract, setAbstract] = useState('')
     const [keyword, setKeyword] = useState('')
     // multiple authors should be possible
-    const [author_fname, setAuthorFname] = useState('')
-    const [author_lname, setAuthorLname] = useState('')
-    const [adviser_fname, setAdviserFname] = useState([])
-    const [adviser_lname, setAdviserLname] = useState([])
+    const [author_fname, setAuthorFname] = useState([])
+    const [author_lname, setAuthorLname] = useState([])
+    const [adviser_fname, setAdviserFname] = useState()
+    const [adviser_lname, setAdviserLname] = useState()
     const [authors, setAuthor] = useState([])
 
     const [courses, setCourses] = useState([])
@@ -133,9 +133,19 @@ export default function AddResFormContainer() {
         setCourses(newCourse)
     }
 
+    const addAuthorFname = (newAuthor) => {
+        setAuthorFname(newAuthor)
+        setAuthorFname('nicolas')
+    }
+    const addAuthorLname = (newAuthor) => {
+        setAuthorLname(newAuthor)
+        setAuthorLname('cage')
+    }
     // courses.map((c, key) => (
     //     console.log(c.label)
     // ))
+    console.log(author_fname)
+    console.log(author_lname)
     
 
     const BookInfoForm = () => {
@@ -296,7 +306,7 @@ export default function AddResFormContainer() {
                         <input type = "text" id = "resAuthorLN" onChange = {(event) => {setAuthorLname(event.target.value)}}/>
                     </div>
 
-                    <button id="addAuthor">
+                    <button id="addAuthor" >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                         </svg>

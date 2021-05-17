@@ -3,6 +3,7 @@ import {apiEndpoint} from '../config.json';
 
 // add a resource details (sp/thesis, book)
 const addSpThesis = (resourceData) => {
+    console.log(resourceData)
     console.log("hello sp/thesis")
     return http.post(apiEndpoint+'/thesis/create', resourceData)
 }
