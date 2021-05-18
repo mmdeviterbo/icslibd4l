@@ -12,6 +12,7 @@ import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import {jwtPrivateKey} from './config.json';
+import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
 import AddResource from './components/crud/add';
 import ViewResource from './components/crud/view';
@@ -43,7 +44,9 @@ function App() {
   const loginRegisterUser = async (userInfo) => {
     try {
       const { data } = await personService.loginRegisterUser(userInfo);
-      localStorage.setItem(jwtPrivateKey, data);
+      // localStorage.setItem(jwtPrivateKey, data); //decode
+      const encryption = {key: "jwtPrivateKey",algorithm: 'aes-256-cbc',};
+      const decrypted = jwtEncrypt.readJWT(data, encryption);  //decrypt 
       window.location = "/home";
     } catch (err) {}
   };
