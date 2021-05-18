@@ -1,7 +1,10 @@
 {
     //this will be used for log in/log out sessions of the current user
-    "jwtPrivateKey": "icslib-privateKey",
+    "jwtPublicKey": "C4XWnhT[^h]$#wc}",
     
+    //private encryption key for token
+    "jwtPrivateKey": "EUTY8L,Gf9T5kkQ5",
+
     //link of the database from mongodb
     "db": "mongodb+srv://sampleuser:password1234@cluster0.0iawg.mongodb.net/icslibd4l?retryWrites=true&keepAlive=true&w=majority",
 
