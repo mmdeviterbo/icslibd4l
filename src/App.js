@@ -43,10 +43,10 @@ function App() {
   // login/register a user
   const loginRegisterUser = async (userInfo) => {
     try {
-      const { data } = await personService.loginRegisterUser(userInfo);
-      // localStorage.setItem(jwtPrivateKey, data); //decode
-      const encryption = {key: "jwtPrivateKey",algorithm: 'aes-256-cbc',};
-      const decrypted = jwtEncrypt.readJWT(data, encryption);  //decrypt 
+      const {data} = await personService.loginRegisterUser(userInfo);
+      const encryption = {key: jwtPrivateKey,algorithm: 'aes-256-cbc'};
+      const decrypted = jwtEncrypt.readJWT(data, encryption,'ICSlibrary');  //decrypt 
+      localStorage.setItem(jwtPrivateKey, decrypted); //decode
       window.location = "/home";
     } catch (err) {}
   };
