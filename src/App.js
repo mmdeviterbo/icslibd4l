@@ -35,8 +35,9 @@ function App() {
   const getCurrentToken = () => {
     try {
       const jwt = localStorage.getItem(jwtPrivateKey);
-      const userInfo = jwtDecode(jwt);
-      setUser(userInfo);
+      const encryption = {key: "EUTY8L,Gf9T5kkQ5",algorithm: 'aes-256-cbc'}; //secure data for encryption
+      const decrypted = jwtEncrypt.readJWT(jwt, encryption,"ICSlibrary");  //decrypt 
+      setUser(decrypted.data); //set state
     } catch (err) {}
   };
 
@@ -44,9 +45,7 @@ function App() {
   const loginRegisterUser = async (userInfo) => {
     try {
       const {data} = await personService.loginRegisterUser(userInfo);
-      const encryption = {key: jwtPrivateKey,algorithm: 'aes-256-cbc'};
-      const decrypted = jwtEncrypt.readJWT(data, encryption,'ICSlibrary');  //decrypt 
-      localStorage.setItem(jwtPrivateKey, decrypted); //decode
+      localStorage.setItem(jwtPrivateKey, data); //set token
       window.location = "/home";
     } catch (err) {}
   };
