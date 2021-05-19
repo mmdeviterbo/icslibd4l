@@ -1,5 +1,5 @@
 const config = require("config")
-
+const jwt = require("jsonwebtoken");
 const jwtPrivateKey = config.get('jwtPrivateKey');
 const jwtEncrypt = require("jwt-token-encrypt");
 
@@ -8,11 +8,7 @@ const jwtEncrypt = require("jwt-token-encrypt");
 function authenticationFaculty(req, res, next){
     try{
         const token = req.cookies.token;
-          // Encryption settings
-        const encryption = {
-            key: jwtPrivateKey,
-            algorithm: 'aes-256-cbc',
-        };
+        
         //checks if token exists
         if (!token)
             return res
@@ -20,10 +16,23 @@ function authenticationFaculty(req, res, next){
                     .json({
                         errorMessage: "Unauthorized Access"
                     });
+        
+        //NEW IMPLEMENTATION    
+        // Encryption settings
+        // const encryption = {
+        //     key: jwtPrivateKey,
+        //     algorithm: 'aes-256-cbc',
+        // };
         //decrypt token and verifies jwt payload
-        const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
+        // const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
                 
-        const verified = decrypted.data;
+        // const verified = decrypted.data;
+        
+
+        //verifies the jwt payload
+        const verified = jwt.verify(token, jwtPrivateKey);
+        //attaches a user property to the req object in the request Router function
+        req.user = verified.user;
 
         if (verified.userType === 1)
             next();
