@@ -100,24 +100,6 @@ router.post("/create", async (req,res) => {
             'ICSlibrary'
             );
             
-        console.log(token);
-        
-        //decrypt token 
-        const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
-        console.log(decrypted);
-
-        //log user in
-        // const token = jwt.sign({
-        //     googleId : loggedUser.googleId,
-        //     email: loggedUser.email,
-        //     fullName: loggedUser.fullName,
-        //     nickname: loggedUser.nickname,
-        //     userType: loggedUser.userType   
-        // }, jwtPrivateKey
-        // );  
-        
-
-
 
 
         res.cookie("token", token, {
