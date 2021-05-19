@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config")
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
+const jwtEncrypt = require("jwt-token-encrypt");
 
 //npm install cookie-parser
 //makes sure that the current user is allowed to access a part of the website
@@ -24,7 +25,7 @@ function authenticationFaculty(req, res, next){
         const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
                 
         const verified = decrypted.data;
-        
+
         if (verified.userType === 1)
             next();
         else

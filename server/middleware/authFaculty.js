@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("config")
 
+const jwtEncrypt = require("jwt-token-encrypt");
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
 //npm install cookie-parser
