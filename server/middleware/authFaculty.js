@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 const config = require("config")
 
 const jwtEncrypt = require("jwt-token-encrypt");
@@ -30,7 +29,7 @@ function authenticationFaculty(req, res, next){
             next();
         else
             return res
-                .status(401)
+                .sendStatus(401)
                 .json({
                     errorMessage: "Unauthorized Access"
                 });

@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 const config = require("config")
 
 const jwtPrivateKey = config.get('jwtPrivateKey');
@@ -17,7 +16,7 @@ function authenticationFaculty(req, res, next){
         //checks if token exists
         if (!token)
             return res
-                    .status(401)
+                    .sendStatus(401)
                     .json({
                         errorMessage: "Unauthorized Access"
                     });

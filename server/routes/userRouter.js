@@ -1,13 +1,11 @@
 const router = require('express').Router();
 const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const config = require("config");
-const { useTheme } = require('@material-ui/core');
+const jwtEncrypt = require("jwt-token-encrypt");
+
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
-const jwtEncrypt = require("jwt-token-encrypt");
 const jwtPrivateKey = config.get('jwtPrivateKey');  
 const jwtPublicKey = config.get('jwtPublicKey'); 
 //create or login account
@@ -123,6 +121,7 @@ router.get("/readStudents", authFaculty, async (req, res) => {
         }
     });
 });
+
 
 //search function
 router.get("/search", authFaculty, async (req, res) => {
