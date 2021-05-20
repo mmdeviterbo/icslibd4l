@@ -66,51 +66,51 @@ router.post("/create", async (req,res) => {
 
         //NEW IMPLEMENTATION
         //TODO: MARTY AYUSIN MO TO
-        // const publicData = null;
-        // // Data that will only be available to users who know encryption details.
-        // const privateData = {
-        //     googleId : loggedUser.googleId,
-        //     email: loggedUser.email,
-        //     fullName: loggedUser.fullName,
-        //     nickname: loggedUser.nickname,
-        //     userType: loggedUser.userType   
-        // };
-
-        // // Encryption settings
-        // const encryption = {
-        //     key: jwtPrivateKey,
-        //     algorithm: 'aes-256-cbc',
-        // };
-
-        // // JWT Settings
-        // const jwtDetails = {
-        //     secret: jwtPublicKey, // to sign the token
-        //     // Default values that will be automatically applied unless specified.
-        //     // algorithm: 'HS256',
-        //     expiresIn: '24h',
-        //     // notBefore: '0s',
-        //     // Other optional values
-        // };
-
-        // const token = await jwtEncrypt.generateJWT(
-        //     jwtDetails,
-        //     publicData,
-        //     encryption,
-        //     privateData,
-        //     'ICSlibrary'
-        //     );
-            
-
-        //OLD IMPLEMENTATION
-        //log user in
-        const token = jwt.sign({
+        const publicData = null;
+        // Data that will only be available to users who know encryption details.
+        const privateData = {
             googleId : loggedUser.googleId,
             email: loggedUser.email,
             fullName: loggedUser.fullName,
             nickname: loggedUser.nickname,
             userType: loggedUser.userType   
-        }, jwtPrivateKey
-        );  
+        };
+
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: 'aes-256-cbc',
+        };
+
+        // JWT Settings
+        const jwtDetails = {
+            secret: jwtPublicKey, // to sign the token
+            // Default values that will be automatically applied unless specified.
+            // algorithm: 'HS256',
+            expiresIn: '24h',
+            // notBefore: '0s',
+            // Other optional values
+        };
+
+        const token = await jwtEncrypt.generateJWT(
+            jwtDetails,
+            publicData,
+            encryption,
+            privateData,
+            'ICSlibrary'
+            );
+            
+
+        //OLD IMPLEMENTATION
+        //log user in
+        // const token = jwt.sign({
+        //     googleId : loggedUser.googleId,
+        //     email: loggedUser.email,
+        //     fullName: loggedUser.fullName,
+        //     nickname: loggedUser.nickname,
+        //     userType: loggedUser.userType   
+        // }, jwtPrivateKey
+        // );  
 
         res.cookie("token", token, {
             httpOnly: false,

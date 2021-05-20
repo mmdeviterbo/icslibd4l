@@ -20,18 +20,18 @@ function authenticationStudent(req, res, next){
         
         //NEW IMPLEMENTATION    
         // Encryption settings
-        // const encryption = {
-        //     key: jwtPrivateKey,
-        //     algorithm: 'aes-256-cbc',
-        // };
-        //decrypt token and verifies jwt payload
-        // const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
-                
-        // const verified = decrypted.data;
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: 'aes-256-cbc',
+        };
+
+        // decrypt token and verifies jwt payload
+        const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
+        const verified = decrypted.data;
         
 
         //verifies the jwt payload
-        const verified = jwt.verify(token, jwtPrivateKey);
+        // const verified = jwt.verify(token, jwtPrivateKey);
         //attaches a user property to the req object in the request Router function
         req.user = verified.user;
 
