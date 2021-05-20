@@ -141,6 +141,86 @@ router.get("/search", async (req, res)=> {
     function filterEntries(){
         // get unique entries
         let final_arr = [...new Set(total)];
+
+        // filter entries if <field> in req.body
+        // <field> = type | title | year | publisher | author | adviser | subject | keyword
+        if ("type" in req.body){
+            if (req.body.type == "Book"){
+                final_arr = final_arr.filter((item)=> {
+                    return ("bookId" in item);
+                });
+            }else{  // "SP" or "Thesis"
+                final_arr = final_arr.filter((item)=> {
+                    return (item.type.toLowerCase() == req.body.type.toLowerCase());
+                });
+            }
+        }
+        if ("title" in req.body){
+            final_arr = final_arr.filter((item)=> {
+                if ("title" in item){
+                    return item.title.toLowerCase().includes( req.body.title.toLowerCase() );
+                }
+            });
+        }
+        if ("year" in req.body){
+            final_arr = final_arr.filter((item)=> {
+                if ("year" in item){
+                    return (item.year == req.body.year);
+                }
+            });
+        }
+        if ("publisher" in req.body){
+            final_arr = final_arr.filter((item)=> {
+                if ("publisher" in item){
+                    return item.publisher.toLowerCase().includes( req.body.publisher.toLowerCase() );
+                }
+            });
+        }
+        if ("author" in req.body){
+            final_arr = final_arr.filter((item)=> {
+                if ("authors" in item){
+                    return (item.authors.some((auth)=> {
+                        return auth.author_name.toLowerCase().includes( req.body.author.toLowerCase() );
+                    }));
+                }else if ("author" in item){
+                    return (item.author.some((auth)=> {
+                        return auth.author_name.toLowerCase().includes( req.body.author.toLowerCase() );
+                    }));
+                }
+            });
+        }
+        if ("adviser" in req.body){
+            final_arr = final_arr.filter((item)=> {
+                if ("advisers" in item){
+                    return (item.advisers.some((advi)=> {
+                        return advi.adviser_name.toLowerCase().includes( req.body.adviser.toLowerCase() );
+                    }));
+                }else if ("adviser" in item){
+                    return (item.adviser.some((advi)=> {
+                        return advi.adviser_name.toLowerCase().includes( req.body.adviser.toLowerCase() );
+                    }));
+                }
+            });
+        }
+        if ("subject" in req.body){
+            final_arr = final_arr.filter((item)=> {
+                if ("subject" in item){
+                    return (item.subject.some((subj)=> {
+                        return subj.subject.toLowerCase().includes( req.body.subject.toLowerCase() );
+                    }));
+                }
+            });
+        }
+        if ("keyword" in req.body){
+            final_arr = final_arr.filter((item)=> {
+                if ("keywords" in item){
+                    return (item.keywords.some((keyw)=> {
+                        return keyw.sp_thesis_keyword.toLowerCase().includes( req.body.keyword.toLowerCase() );
+                    }));
+                }
+            });
+        }
+
         res.send(final_arr);
     }
 
