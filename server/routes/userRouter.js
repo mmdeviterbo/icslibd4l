@@ -1,13 +1,12 @@
 const router = require('express').Router();
 const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const config = require("config");
-const { useTheme } = require('@material-ui/core');
+const jwtEncrypt = require("jwt-token-encrypt");
+
+const jwt = require("jsonwebtoken");
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
-const jwtEncrypt = require("jwt-token-encrypt");
 const jwtPrivateKey = config.get('jwtPrivateKey');  
 const jwtPublicKey = config.get('jwtPublicKey'); 
 //create or login account
@@ -65,60 +64,53 @@ router.post("/create", async (req,res) => {
         });
         await newUserLog.save();
 
-
-        const publicData = null;
-        // Data that will only be available to users who know encryption details.
-        const privateData = {
-            googleId : loggedUser.googleId,
-            email: loggedUser.email,
-            fullName: loggedUser.fullName,
-            nickname: loggedUser.nickname,
-            userType: loggedUser.userType   
-        };
-
-        // Encryption settings
-        const encryption = {
-            key: jwtPrivateKey,
-            algorithm: 'aes-256-cbc',
-        };
-
-        // JWT Settings
-        const jwtDetails = {
-            secret: jwtPublicKey, // to sign the token
-            // Default values that will be automatically applied unless specified.
-            // algorithm: 'HS256',
-            expiresIn: '24h',
-            // notBefore: '0s',
-            // Other optional values
-        };
-
-        const token = await jwtEncrypt.generateJWT(
-            jwtDetails,
-            publicData,
-            encryption,
-            privateData,
-            'ICSlibrary'
-            );
-            
-        console.log(token);
-        
-        //decrypt token 
-        const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
-        console.log(decrypted);
-
-        //log user in
-        // const token = jwt.sign({
+        //NEW IMPLEMENTATION
+        //TODO: MARTY AYUSIN MO TO
+        // const publicData = null;
+        // // Data that will only be available to users who know encryption details.
+        // const privateData = {
         //     googleId : loggedUser.googleId,
         //     email: loggedUser.email,
         //     fullName: loggedUser.fullName,
         //     nickname: loggedUser.nickname,
         //     userType: loggedUser.userType   
-        // }, jwtPrivateKey
-        // );  
-        
+        // };
 
+        // // Encryption settings
+        // const encryption = {
+        //     key: jwtPrivateKey,
+        //     algorithm: 'aes-256-cbc',
+        // };
 
+        // // JWT Settings
+        // const jwtDetails = {
+        //     secret: jwtPublicKey, // to sign the token
+        //     // Default values that will be automatically applied unless specified.
+        //     // algorithm: 'HS256',
+        //     expiresIn: '24h',
+        //     // notBefore: '0s',
+        //     // Other optional values
+        // };
 
+        // const token = await jwtEncrypt.generateJWT(
+        //     jwtDetails,
+        //     publicData,
+        //     encryption,
+        //     privateData,
+        //     'ICSlibrary'
+        //     );
+            
+
+        //OLD IMPLEMENTATION
+        //log user in
+        const token = jwt.sign({
+            googleId : loggedUser.googleId,
+            email: loggedUser.email,
+            fullName: loggedUser.fullName,
+            nickname: loggedUser.nickname,
+            userType: loggedUser.userType   
+        }, jwtPrivateKey
+        );  
 
         res.cookie("token", token, {
             httpOnly: false,
@@ -141,6 +133,7 @@ router.get("/readStudents", authFaculty, async (req, res) => {
         }
     });
 });
+
 
 //search function
 router.get("/search", authFaculty, async (req, res) => {

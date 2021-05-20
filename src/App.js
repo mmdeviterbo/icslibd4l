@@ -11,6 +11,7 @@ import ManageUser from "./components/manageuserpage/manageuserpage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
+
 import {jwtPrivateKey} from './config.json';
 import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
@@ -35,9 +36,11 @@ function App() {
   const getCurrentToken = () => {
     try {
       const jwt = localStorage.getItem(jwtPrivateKey);
-      const encryption = {key: "EUTY8L,Gf9T5kkQ5",algorithm: 'aes-256-cbc'}; //secure data for encryption
-      const decrypted = jwtEncrypt.readJWT(jwt, encryption,"ICSlibrary");  //decrypt 
-      setUser(decrypted.data); //set state
+      // const encryption = {key: jwtPrivateKey,algorithm: 'aes-256-cbc'};
+      // const decrypted = jwtEncrypt.readJWT(jwt, encryption, 'ICSlibrary');
+      // const userInfo = decrypted.data;
+      const userInfo = jwtDecode(jwt);
+      setUser(userInfo);
     } catch (err) {}
   };
 
