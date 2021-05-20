@@ -24,7 +24,7 @@ router.post("/create", async (req,res) => {
     const date = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds
     
     var loggedUser;
-
+    let userType = 4
     try{
         const { googleId, email, fullName} = req.body
     
@@ -42,7 +42,7 @@ router.post("/create", async (req,res) => {
             loggedUser = existingUser;
         }
         else{   
-            let userType = 4
+            
             const nickname = fullName
             const newUser = new UserModel ({
                 googleId, email, fullName, userType, nickname
