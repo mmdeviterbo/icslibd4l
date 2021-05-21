@@ -1,4 +1,5 @@
-import React, { Component, useState } from 'react'
+import { SignalCellularNoSimOutlined } from '@material-ui/icons'
+import React, { Component, useState, useEffect } from 'react'
 import Select from 'react-select'
 import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
@@ -45,60 +46,106 @@ export default function AddResFormContainer() {
     const [poster, setPoster] = useState('')
     const [source_code, setSourceCode] = useState('')
     const [abstract, setAbstract] = useState('')
-    const [keyword, setKeyword] = useState('')
+    const [keywords, setKeyword] = useState('')
     // multiple authors should be possible
-    const [author_fname, setAuthorFname] = useState([])
-    const [author_lname, setAuthorLname] = useState([])
-    const [adviser_fname, setAdviserFname] = useState()
-    const [adviser_lname, setAdviserLname] = useState()
-    const [authors, setAuthor] = useState([])
+    const [author, setAuthor] = useState({
+        fname: '',
+        lname: ''
+    })
+    const [adviser, setAdviser] = useState({
+        fname: '',
+        lname: ''
+    })
+    const [authorList, setAuthorList] = useState([])
+    const [adviserList, setAdviserList] = useState([])
 
     const [courses, setCourses] = useState([])
     const [publisher, setPublisher] = useState('')
     const [numOfCopies, setNumOfCopies] = useState(0)
     const [description, setDescription] = useState('')
 
-    // const AddAuthorField = () => {
-    //     return(
-    //         <div>
-    //             <h5>Author(s):</h5>
-    //                 <div class = "primaryfields">
-    //                     <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-    //                     <input type = "text" id = "resAuthorFN" onChange = {(event) => {setAuthorFname(event.target.value)}}/>
-    //                 </div>
-
-    //                 <div class = "primaryfields">
-    //                     <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-    //                     <input type = "text" id = "resAuthorLN" onChange = {(event) => {setAuthorLname(event.target.value)}}/>
-    //             </div>
-    //             <button id="addAuthor" onClick={console.log('boi')}>
-    //                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-    //                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-    //                 </svg>
-    //                 Add Author
-    //             </button>
-    //         </div>
-    //     )
-    // }
+    useEffect(() => {
+        function isInArray(arr, item) {
+            if(arr.indexOf(item) > -1){
+                console.log('true')
+            } else {
+                console.log('false')
+            }
+        }
+        function updateList() {
+            if(adviser.fname && adviser.lname){
+                // console.log('adding', adviser.fname, adviser.lname);
+                // isInArray(adviserList, adviser)
+                console.log(adviserList.indexOf(adviser))
+                setAdviserList([...adviserList, [adviser]])
+            } else if(author.fname && author.lname){
+                // console.log('adding', author.fname, author.lname);
+                // isInArray(authorList, author)
+                console.log(authorList.indexOf(author))
+                setAuthorList([...authorList, [author]])
+            }
+        };
+        updateList()
+    }, [author, adviser])
     
+    // console.log('author/s: ', authorList)
+    // console.log('adviser/s: ', adviserList)
+    const updateAdviserList = () => {
+        if(adviser.fname && adviser.lname){
+            console.log('adding', adviser.fname, adviser.lname);
+            setAdviserList([...adviserList, [adviser]])
+        }
+    };
+
+    const updateAuthorList = () => {
+        if(author.fname && author.lname){
+            console.log('adding', author.fname, author.lname);
+            setAuthorList([...authorList, [author]])
+        }
+    };      
+    
+    const updateLists = () => {
+        // e.preventDefault();
+        updateAuthorList()
+        updateAdviserList()
+      };
+
+    const addAuthor = e => {
+        setAuthor({
+          ...author,
+          [e.target.name]: e.target.value
+        })     
+    };
+
+    const addAdviser = e => {
+        setAdviser({
+          ...adviser,
+          [e.target.name]: e.target.value
+        })     
+    };
+
+    // console.log(authorList)
+    // console.log(adviserList)
+
     const handleSubmit = async (event) => {
         event.preventDefault()
-        let userInput = {}
-        
+        console.log(authorList)
+         console.log(adviserList)
         try{
             if(type == 'book') {
-                userInput = {
+                const userInput = {
                     bookId : id,
                     title,
-                    authors,
+                    author,
                     subjects : courses,
                     physicalDesc : description,
                     publisher,
                     numberOfCopies : numOfCopies
                 }
                 const {resourceData} = await ResourceServices.addBook(userInput)
+                alert("New book has been successfully added to the library")
             } else {
-                userInput = {
+                const userInput = {
                     sp_thesis_id : id,
                     type,
                     title,
@@ -108,14 +155,13 @@ export default function AddResFormContainer() {
                     manuscript,
                     journal,
                     poster,
-                    adviser_fname, 
-                    adviser_lname,
-                    author_fname, 
-                    author_lname,
-                    sp_thesis_keyword : keyword
+                    advisers : adviserList,
+                    authors : authorList,
+                    keywords : keywords
                 }
-                const {resourceData} = await ResourceServices.addSpThesis(userInput)
-                alert("New resource has been successfully added to the library")
+                const {data} = await ResourceServices.addSpThesis(userInput)
+                // console.log(resourceData)
+                alert("New", {type}, " has been successfully added to the library")
             }
         } catch(err){
             if (err.response && err.response.data) {
@@ -133,28 +179,13 @@ export default function AddResFormContainer() {
         setCourses(newCourse)
     }
 
-    const addAuthorFname = (newAuthor) => {
-        setAuthorFname(newAuthor)
-        setAuthorFname('nicolas')
-    }
-    const addAuthorLname = (newAuthor) => {
-        setAuthorLname(newAuthor)
-        setAuthorLname('cage')
-    }
-    // courses.map((c, key) => (
-    //     console.log(c.label)
-    // ))
-    console.log(author_fname)
-    console.log(author_lname)
-    
-
     const BookInfoForm = () => {
         return(
             <div className = "res-primary-info">
              <h2><b>Book</b></h2>
                     <hr/>
     
-                    <form id = "bookForm">
+                    <form id = "bookForm" >
                         <div class = "primaryfields">
                                 <label for="bookISBN">Publisher: &nbsp; </label>
                                 <input type = "text" id = "bookpublisher" onChange = {(event) => {setPublisher(event.target.value)}}/>
@@ -171,7 +202,6 @@ export default function AddResFormContainer() {
                                 <label for="availBookCopies">No. of copies available: &nbsp; </label>
                                 <input type = "number" id ="availBookCopies" onChange = {(event) => {setNumOfCopies(event.target.value)}}/>
                         </div>
-    
                         <div className = "bookRelatedCourses">
                             <br/>
                             Related Courses:
@@ -199,14 +229,24 @@ export default function AddResFormContainer() {
                         <h5>Adviser(s):</h5>
                         <div class = "primaryfields">
                             <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                            <input type = "text" id = "resAuthorFN" onChange = {(event) => {setAdviserFname(event.target.value)}}/>
+                            <input 
+                                type = "text" 
+                                id = "resAuthorFN" 
+                                name = "fname"
+                                value = {adviser.fname}
+                                onChange = {addAdviser}/>
                         </div>
     
                         <div class = "primaryfields">
                             <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                            <input type = "text" id = "resAuthorLN" onChange = {(event) => {setAdviserLname(event.target.value)}}/>
+                            <input 
+                                type = "text" 
+                                id = "resAuthorLN" 
+                                name = "lname"
+                                value = {adviser.lname}
+                                onChange = {addAdviser}/>
+                                {/* {updateAuthorList()} */}
                         </div>
-    
                         <button id="addAdviser">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -278,61 +318,71 @@ export default function AddResFormContainer() {
         );
     }
 
-    const ResourcePrimaryInfoForm = () =>{
-        return(
-            <div id = "res-primary-info">
-                    <h2><b>Primary Info</b></h2>
-                    <hr/> 
+    // const ResourcePrimaryInfoForm = () =>{
+    //     return(
+    //         <div id = "res-primary-info">
+    //                 <h2><b>Primary Info</b></h2>
+    //                 <hr/> 
 
-                    <div class = "primaryfields">
-                        <label for="resId">ID/ISBN: &nbsp; </label>
-                        <input type = "text" id = "resId" onChange = {(event) => {setId(event.target.value)}}/>
-                        {/* <input type = "text" id = "resId" onChange = {props.onIdChange} value={props.id}/> */}
-                    </div>
+    //                 <div class = "primaryfields">
+    //                     <label for="resId">ID/ISBN: &nbsp; </label>
+    //                     <input type = "text" id = "resId" onChange = {(event) => {setId(event.target.value)}}/>
+    //                     {/* <input type = "text" id = "resId" onChange = {props.onIdChange} value={props.id}/> */}
+    //                 </div>
 
-                    <div class = "primaryfields">
-                        <label for="resTitle">Title: &nbsp; </label>
-                        <input type = "text" id = "resTitle" onChange = {(event) => {setTitle(event.target.value)}}/>
-                    </div>
+    //                 <div class = "primaryfields">
+    //                     <label for="resTitle">Title: &nbsp; </label>
+    //                     <input type = "text" id = "resTitle" onChange = {(event) => {setTitle(event.target.value)}}/>
+    //                 </div>
                     
-                    <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>Author(s):</h5>
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorFN" onChange = {(event) => {setAuthorFname(event.target.value)}}/>
-                    </div>
+    //                 <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>Author(s):</h5>
+    //                 <div class = "primaryfields">
+    //                     <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
+    //                     <input 
+    //                         type = "text" 
+    //                         id = "resAuthorFN"
+    //                         name = "fname"
+    //                         value = {author.fname}
+    //                         onChange = {updateAuthorList}/>
+    //                 </div>
 
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN" onChange = {(event) => {setAuthorLname(event.target.value)}}/>
-                    </div>
+    //                 <div class = "primaryfields">
+    //                     <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
+    //                     <input 
+    //                         type = "text" 
+    //                         id = "resAuthorLN"
+    //                         name = "lname"
+    //                         value = {author.lname}
+    //                         onChange = {updateAuthorList}/>
+    //                 </div>
 
-                    <button id="addAuthor" >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                        Add Author
-                    </button>
-                    <br/><br/><br/>
+    //                 <button id="addAuthor" >
+    //                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+    //                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+    //                     </svg>
+    //                     Add Author
+    //                 </button>
+    //                 <br/><br/><br/>
 
-                    <div class = "primaryfields">
-                        <label for="resAuthor">Year Published: &nbsp; </label>
-                        <input type = "number" id = "resAuthorLN" onChange = {(event) => {setYear(event.target.value)}}/>
-                    </div>
-            </div>
-        )      
-    }
+    //                 <div class = "primaryfields">
+    //                     <label for="resAuthor">Year Published: &nbsp; </label>
+    //                     <input type = "number" id = "resAuthorLN" onChange = {(event) => {setYear(event.target.value)}}/>
+    //                 </div>
+    //         </div>
+    //     )      
+    // }
 
     // Main add resource form container
     return(
         <div className = "add-res-form-cont">
             {/* Primary  Info */}
             <div className = "res-primary-info">
-                <form id = "createForm">
+                <form id = "createForm" onSubmit={handleSubmit}>
                     <h2><b>Primary Info</b></h2>
                     <hr/> 
 
                     <div class = "primaryfields">
-                        <label for="resId">ID: &nbsp; </label>
+                        <label for="resId">ID/ISBN: &nbsp; </label>
                         <input type = "text" id = "resId" onChange = {(event) => {setId(event.target.value)}}/>
                     </div>
 
@@ -345,12 +395,22 @@ export default function AddResFormContainer() {
                     <h5>Author(s):</h5>
                     <div class = "primaryfields">
                         <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorFN" onChange = {(event) => {setAuthorFname(event.target.value)}}/>
+                        <input 
+                            type = "text" 
+                            id = "resAuthorFN" 
+                            name = "fname"
+                            value = {author.fname}
+                            onChange = {addAuthor}/>
                     </div>
 
                     <div class = "primaryfields">
                         <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN" onChange = {(event) => {setAuthorLname(event.target.value)}}/>
+                        <input 
+                            type = "text" 
+                            id = "resAuthorLN"
+                            name = "lname"
+                            value = {author.lname}
+                            onChange = {addAuthor}/>
                     </div>
                     <button id="addAuthor">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
@@ -370,7 +430,7 @@ export default function AddResFormContainer() {
                     </div>
                     {/* {renderForm()} */}
                     <br/><br/>
-                    <button type="submit" id="saveResource" onClick={handleSubmit}>
+                    <button type="submit" id="saveResource">
                     Save
                     </button>
                 </form>

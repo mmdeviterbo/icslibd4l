@@ -1,4 +1,4 @@
-import {Route, Switch, Redirect, useParams } from 'react-router-dom';
+import {Route, Switch, Redirect, useParams, useLocation } from 'react-router-dom';
 import {useState, useEffect, useRef} from 'react';
 import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
@@ -13,10 +13,11 @@ import personService from './services/personService';
 import jwtDecode from 'jwt-decode'; 
 import {jwtPrivateKey} from './config.json';
 import './App.css';
-import AddResource from './components/crud/add';
+import DeletePopUpCont from './components/manageresourcespage/delete-modal-container';
 import ViewResource from './components/crud/view';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
+
 
 function App() {
   const [user, setUser] = useState(null); //fullname, email, userType (integer)
@@ -25,6 +26,9 @@ function App() {
   const latestAcqRef = useRef(null);
   const newsRef = useRef(null);
   const appRef = useRef(null);
+
+  const location = useLocation();
+  const background = location.state && location.state.background;
 
   useEffect(() => {
     getCurrentToken();
@@ -48,14 +52,6 @@ function App() {
     } catch (err) {}
   };
 
-  const ParamUrl=()=> {
-    // for dynamic url
-    let { id } = useParams();
-    return (
-      null
-    );
-  }
-  
   return (
     <div className="App" ref={appRef}>
       <NavigationBar
@@ -64,7 +60,7 @@ function App() {
         user={user}
       />
 
-        <Switch>
+        <Switch location={background || location}>
           <Route
             path="/home"
             render={() => (
@@ -93,14 +89,14 @@ function App() {
           <Route path="/manage-resources" component={ManageResPage}></Route>
           <Route path ="/add-new-book" component={AddBookPage}></Route>
           <Route path ="/add-new-spt" component={AddSPThesisPage}></Route>
-          <Route path="/delete/:id" children={<ParamUrl />}  component={ViewResource}></Route>
+          {/* <Route path="/delete-sp-thesis" component={DeletePopUpCont}></Route> */}
           <Route path="/manage-users" component={ManageUser}></Route>
           <Route path="/about" render={()=><About appRef={appRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
           <Redirect to="/not-found"/>
         </Switch>
-
+        {background && <Route path="/manage-resources/delete-sp-thesis" children={<DeletePopUpCont />} />}
       <Footer />
     </div>
   );

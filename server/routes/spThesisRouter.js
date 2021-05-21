@@ -23,7 +23,9 @@ router.post("/create", authFaculty, async (req,res)=>{
             authors,     // thesisAuthorModel
             keywords               // thesisKeyModel
         } = req.body; 
-
+        
+        console.log(req.body)
+       
         // sample verification: incomplete fields
         if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code 
             || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
@@ -80,12 +82,12 @@ router.post("/create", authFaculty, async (req,res)=>{
             // recheck if correctly sent by sending entry : thesisModel
             res.json(savedThesis);
         }else{
-            res.status(400).send("SP already exists!");
+            res.status(400).json({errorMessage:"SP/Thesis already exists!"});
         }
 
     } catch(err){
         console.log(err);
-        res.status(500).send();
+        res.status(500).send('error dito');
     }
 });
 
@@ -499,9 +501,9 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
     }
 });
 
-
 // delete entire sp/thesis entry
 router.delete('/remove-sp-thesis', authAdmin, async (req, res) => {
+    console.log('del')
     const sp_thesis_id_holder = req.body;
     if(!sp_thesis_id_holder){
         return res.status(400).json({errorMessage: "Entry does not exist."});

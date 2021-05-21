@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react'
+import { Link, useLocation, useHistory, withRouter } from "react-router-dom";
 import Popup from 'reactjs-popup';
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -6,19 +7,37 @@ import Button from 'react-bootstrap/Button';
 // import { Modal } from '@material-ui/core';
 // import 'reactjs-popup/dist/index.css';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import ResourceServices from '../../services/resourceService'
  
 const DeletePopUpCont = (props) => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const history = useHistory();
+    const [show, setShow] = useState(true);
     const handleShow = () => setShow(true);
-    // const delthis = props
+    const handleClose = () => {
+        setShow(false)
+        // history.goBack();
+    }
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        try{
+            const {resourceId} = await ResourceServices.deleteSpThesis(props.id)
+            handleClose()
+            alert("Delete successful")
+        } catch(err){
+            if (err.response && err.response.data) {
+                alert(err.response.data.errorMessage) // some reason error message
+            }
+        }
+    }
 
     return(
         <>
             {/* delete button */}
-            <a onClick = {handleShow}>
+            {/* <a onClick = {handleShow}>
                 <DeleteForeverIcon/>
-            </a>
+
+            </a> */}
 
             {/* popup modal */}
             <Modal
@@ -26,6 +45,7 @@ const DeletePopUpCont = (props) => {
                 onHide = {handleClose}
                 backdrop = "static"
                 keyboard = {false}
+                onRequestClose = {() => setShow(false)}
                 centered
                 >
                 <Modal.Header closeButton>
@@ -41,7 +61,7 @@ const DeletePopUpCont = (props) => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary">Delete</Button>
+                    <Button variant="primary" onClick={handleSubmit}>Delete</Button>
                 </Modal.Footer>
 
                 </Modal>

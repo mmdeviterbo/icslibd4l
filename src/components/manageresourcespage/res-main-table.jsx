@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -214,6 +215,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainResourceTable = () => {
+  const location = useLocation();
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('resid');
@@ -221,6 +223,23 @@ const MainResourceTable = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const DeleteBtn = (id) => {
+    return(
+      <Link
+          to={{
+              pathname: "/manage-resources/delete-sp-thesis",
+              state: { 
+                background: location,
+                id: id
+              }
+          }}
+      >
+        <DeleteForeverIcon/>
+        
+      </Link>
+    )
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -321,7 +340,7 @@ const MainResourceTable = () => {
                       <TableCell className={classes.tablecell} align="left">{row.relatedcourses}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.pubyr}</TableCell>
                       <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell>
-                      <TableCell> <DeletePopUpCont id={row.resid}/> </TableCell>
+                      <TableCell> <DeleteBtn id={row.resid}/> </TableCell>
                     </TableRow>
                   );
                 })}

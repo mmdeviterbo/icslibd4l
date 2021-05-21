@@ -8,6 +8,7 @@ const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
 
 router.post("/get-news", async (req, res) => {
+    console.log('hello')
     let options = {
         url: "https://uplb.edu.ph/news-and-updates-2/",
         headers: {

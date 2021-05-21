@@ -4,18 +4,22 @@ import {apiEndpoint} from '../config.json';
 // add a resource details (sp/thesis, book)
 const addSpThesis = (resourceData) => {
     console.log(resourceData)
-    console.log("hello sp/thesis")
-    return http.post(apiEndpoint+'/thesis/create', resourceData)
+    // console.log("hello sp/thesis")
+    return http.post(`${apiEndpoint}/thesis/create`, resourceData, {withCredentials: true})
 }
 
 const addBook = (resourceData) => {
     console.log(resourceData)
-    return http.post(apiEndpoint+'/books/create', resourceData)
+    return http.post(`${apiEndpoint}/books/create`, resourceData, {withCredentials: true})
 }
 
 // read data of a resource
-const viewResource = () => {
-    return http.get(apiEndpoint+'/thesis/view')
+const browseSpThesis = (resourceType) => {
+    return http.get(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
+}
+
+const searchSpThesis = (filter) => {
+    return http.get(`${apiEndpoint}/thesis/create`, filter, {withCredentials: true})
 }
 
 
@@ -24,8 +28,9 @@ const viewResource = () => {
 
 
 //delete resource
-const deleteResource = (resourceId) => {
-    return http.delete(apiEndpoint+`/thesis/delete/${resourceId}`)
+const deleteSpThesis = (resourceId) => {
+    // console.log(resourceId)
+    return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis`, resourceId, {withCredentials: true})
 }
 
 
@@ -43,8 +48,9 @@ const exportFunctions = {
     getNews,
     addSpThesis,
     addBook,
-    viewResource,
-    deleteResource
+    browseSpThesis,
+    searchSpThesis,
+    deleteSpThesis
 }
 
 export default exportFunctions;
