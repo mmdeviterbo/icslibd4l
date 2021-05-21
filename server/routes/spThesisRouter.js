@@ -151,7 +151,9 @@ router.get("/search", async (req, res)=> {
                 });
             }else{  // "SP" or "Thesis"
                 final_arr = final_arr.filter((item)=> {
-                    return (item.type.toLowerCase() == req.body.type.toLowerCase());
+                    if ("sp_thesis_id" in item){
+                        return (item.type.toLowerCase() == req.body.type.toLowerCase());
+                    }
                 });
             }
         }
