@@ -150,14 +150,15 @@ router.get("/search", async (req, res)=> {
         // Filter by type
         // req.body.type = book | sp | thesis (case insensitive)
         if ("type" in req.body){
-            if (req.body.type.toLowerCase() == "book"){
+            let typeFilter = req.body.type.toLowerCase();
+            if (typeFilter == "book"){
                 final_arr = final_arr.filter((item)=> {
                     return ("bookId" in item);
                 });
             }else{  // "sp" or "thesis" (case insensitive)
                 final_arr = final_arr.filter((item)=> {
                     if ("sp_thesis_id" in item){
-                        return (item.type.toLowerCase() == req.body.type.toLowerCase());
+                        return (item.type.toLowerCase() == typeFilter);
                     }
                 });
             }
@@ -165,44 +166,49 @@ router.get("/search", async (req, res)=> {
 
         // Filter by title (case insensitive, checks for substring match)
         if ("title" in req.body){
+            let titleFilter = req.body.title.toLowerCase();
             final_arr = final_arr.filter((item)=> {
-                return item.title.toLowerCase().includes( req.body.title.toLowerCase() );
+                return item.title.toLowerCase().includes( titleFilter );
             });
         }
 
         // Filter by year (number-number and string-number comparison accepted)
         if ("year" in req.body){
+            let yearFilter = req.body.year;
             final_arr = final_arr.filter((item)=> {
                 if ("year" in item){
-                    return (item.year == req.body.year);
+                    return (item.year == yearFilter);
                 }
             });
         }
 
         // Filter by publisher (case insensitive, checks for substring match)
         if ("publisher" in req.body){
+            let publisherFitler = req.body.publisher.toLowerCase();
             final_arr = final_arr.filter((item)=> {
                 if ("publisher" in item){
-                    return item.publisher.toLowerCase().includes( req.body.publisher.toLowerCase() );
+                    return item.publisher.toLowerCase().includes( publisherFitler );
                 }
             });
         }
 
         // Filter by 1 author (case insensitive, checks for substring match)
         if ("author" in req.body){
+            let authorFilter = req.body.author.toLowerCase();
             final_arr = final_arr.filter((item)=> {
                 return (item.author.some((auth)=> {
-                    return auth.author_name.toLowerCase().includes( req.body.author.toLowerCase() );
+                    return auth.author_name.toLowerCase().includes( authorFilter );
                 }));
             });
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
         if ("adviser" in req.body){
+            let adviserFilter = req.body.adviser.toLowerCase();
             final_arr = final_arr.filter((item)=> {
                 if ("adviser" in item){
                     return (item.adviser.some((advi)=> {
-                        return advi.adviser_name.toLowerCase().includes( req.body.adviser.toLowerCase() );
+                        return advi.adviser_name.toLowerCase().includes( adviserFilter );
                     }));
                 }
             });
@@ -210,10 +216,11 @@ router.get("/search", async (req, res)=> {
 
         // Filter by 1 subject (case insensitive, checks for substring match)
         if ("subject" in req.body){
+            let subjectFilter = req.body.subject.toLowerCase();
             final_arr = final_arr.filter((item)=> {
                 if ("subject" in item){
                     return (item.subject.some((subj)=> {
-                        return subj.subject.toLowerCase().includes( req.body.subject.toLowerCase() );
+                        return subj.subject.toLowerCase().includes( subjectFilter );
                     }));
                 }
             });
@@ -221,10 +228,11 @@ router.get("/search", async (req, res)=> {
 
         // Filter by 1 keyword (case insensitive, checks for substring match)
         if ("keyword" in req.body){
+            let keywordFilter = req.body.keyword.toLowerCase();
             final_arr = final_arr.filter((item)=> {
                 if ("keywords" in item){
                     return (item.keywords.some((keyw)=> {
-                        return keyw.sp_thesis_keyword.toLowerCase().includes( req.body.keyword.toLowerCase() );
+                        return keyw.sp_thesis_keyword.toLowerCase().includes( keywordFilter );
                     }));
                 }
             });
