@@ -97,20 +97,9 @@ router.post("/create", async (req,res) => {
             publicData,
             encryption,
             privateData,
-            'ICSlibrary'
-            );
+                'ICSlibrary'
+                );
             
-
-        //OLD IMPLEMENTATION
-        //log user in
-        // const token = jwt.sign({
-        //     googleId : loggedUser.googleId,
-        //     email: loggedUser.email,
-        //     fullName: loggedUser.fullName,
-        //     nickname: loggedUser.nickname,
-        //     userType: loggedUser.userType   
-        // }, jwtPrivateKey
-        // );  
 
         res.cookie("token", token, {
             httpOnly: false,

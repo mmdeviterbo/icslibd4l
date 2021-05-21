@@ -30,8 +30,6 @@ function authenticationStudent(req, res, next){
         const verified = decrypted.data;
         
 
-        //verifies the jwt payload
-        // const verified = jwt.verify(token, jwtPrivateKey);
         //attaches a user property to the req object in the request Router function
         req.user = verified.user;
 
@@ -46,7 +44,7 @@ function authenticationStudent(req, res, next){
     }
     catch(err){
         console.log(err)    
-        res.send(401).json({ errorMessage: "Unauthorized Access" });
+        res.sendStatus(401).json({ errorMessage: "Unauthorized Access" });
     }
 }
 
