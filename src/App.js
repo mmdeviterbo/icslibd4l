@@ -10,10 +10,10 @@ import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
 import ManageUser from "./components/manageuserpage/manageuserpage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import personService from './services/personService';
-import jwtDecode from 'jwt-decode'; 
-import jwtEncrypt from 'jwt-token-encrypt';
 
 import {jwtPrivateKey} from './config.json';
+import {jwtEncryptionKey} from './config.json';
+import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
 import AddResource from './components/crud/add';
 import ViewResource from './components/crud/view';
@@ -37,7 +37,7 @@ function App() {
     try {
       const jwt = localStorage.getItem(jwtPrivateKey);
       const encryption = {
-        key: jwtPrivateKey,
+        key: jwtEncryptionKey,
         algorithm: 'aes-256-cbc',
       };
       const decrypted = jwtEncrypt.readJWT(jwt, encryption, 'ICSlibrary');
@@ -49,8 +49,8 @@ function App() {
   // login/register a user
   const loginRegisterUser = async (userInfo) => {
     try {
-      const { data } = await personService.loginRegisterUser(userInfo);
-      localStorage.setItem(jwtPrivateKey, data);
+      const {data} = await personService.loginRegisterUser(userInfo);
+      localStorage.setItem(jwtPrivateKey, data); //set token
       window.location = "/home";
     } catch (err) {}
   };
