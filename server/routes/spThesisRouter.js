@@ -159,9 +159,7 @@ router.get("/search", async (req, res)=> {
         }
         if ("title" in req.body){
             final_arr = final_arr.filter((item)=> {
-                if ("title" in item){
-                    return item.title.toLowerCase().includes( req.body.title.toLowerCase() );
-                }
+                return item.title.toLowerCase().includes( req.body.title.toLowerCase() );
             });
         }
         if ("year" in req.body){
