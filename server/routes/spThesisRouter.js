@@ -142,14 +142,19 @@ router.get("/search", async (req, res)=> {
         // get unique entries
         let final_arr = [...new Set(total)];
 
-        // filter entries if <field> in req.body
-        // <field> = type | title | year | publisher | author | adviser | subject | keyword
+        // FILTER ENTRIES if req.body is not empty (has at least one "<field>:<value>") where:
+        //   <field> = type | title | year | publisher | author | adviser | subject | keyword
+        //   <value> = search string/number
+        //   final_arr = search results to be filtered
+        
+        // Filter by type
+        // req.body.type = book | sp | thesis (case insensitive)
         if ("type" in req.body){
             if (req.body.type.toLowerCase() == "book"){
                 final_arr = final_arr.filter((item)=> {
                     return ("bookId" in item);
                 });
-            }else{  // "SP" or "Thesis"
+            }else{  // "sp" or "thesis" (case insensitive)
                 final_arr = final_arr.filter((item)=> {
                     if ("sp_thesis_id" in item){
                         return (item.type.toLowerCase() == req.body.type.toLowerCase());
@@ -157,11 +162,15 @@ router.get("/search", async (req, res)=> {
                 });
             }
         }
+
+        // Filter by title (case insensitive, checks for substring match)
         if ("title" in req.body){
             final_arr = final_arr.filter((item)=> {
                 return item.title.toLowerCase().includes( req.body.title.toLowerCase() );
             });
         }
+
+        // Filter by year (number-number and string-number comparison accepted)
         if ("year" in req.body){
             final_arr = final_arr.filter((item)=> {
                 if ("year" in item){
@@ -169,6 +178,8 @@ router.get("/search", async (req, res)=> {
                 }
             });
         }
+
+        // Filter by publisher (case insensitive, checks for substring match)
         if ("publisher" in req.body){
             final_arr = final_arr.filter((item)=> {
                 if ("publisher" in item){
@@ -176,6 +187,8 @@ router.get("/search", async (req, res)=> {
                 }
             });
         }
+
+        // Filter by 1 author (case insensitive, checks for substring match)
         if ("author" in req.body){
             final_arr = final_arr.filter((item)=> {
                 return (item.author.some((auth)=> {
@@ -183,6 +196,8 @@ router.get("/search", async (req, res)=> {
                 }));
             });
         }
+
+        // Filter by 1 adviser (case insensitive, checks for substring match)
         if ("adviser" in req.body){
             final_arr = final_arr.filter((item)=> {
                 if ("adviser" in item){
@@ -192,6 +207,8 @@ router.get("/search", async (req, res)=> {
                 }
             });
         }
+
+        // Filter by 1 subject (case insensitive, checks for substring match)
         if ("subject" in req.body){
             final_arr = final_arr.filter((item)=> {
                 if ("subject" in item){
@@ -201,6 +218,8 @@ router.get("/search", async (req, res)=> {
                 }
             });
         }
+
+        // Filter by 1 keyword (case insensitive, checks for substring match)
         if ("keyword" in req.body){
             final_arr = final_arr.filter((item)=> {
                 if ("keywords" in item){
@@ -211,8 +230,13 @@ router.get("/search", async (req, res)=> {
             });
         }
 
-        res.send(final_arr);
+        res.send(final_arr);  // filtered search results
     }
+    // REFERENCES for search filter:
+    // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
+    // String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
+    // Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
+
 
     function spTitle(mode){
         // get THESIS entries
