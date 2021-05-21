@@ -178,24 +178,14 @@ router.get("/search", async (req, res)=> {
         }
         if ("author" in req.body){
             final_arr = final_arr.filter((item)=> {
-                if ("authors" in item){
-                    return (item.authors.some((auth)=> {
-                        return auth.author_name.toLowerCase().includes( req.body.author.toLowerCase() );
-                    }));
-                }else if ("author" in item){
-                    return (item.author.some((auth)=> {
-                        return auth.author_name.toLowerCase().includes( req.body.author.toLowerCase() );
-                    }));
-                }
+                return (item.author.some((auth)=> {
+                    return auth.author_name.toLowerCase().includes( req.body.author.toLowerCase() );
+                }));
             });
         }
         if ("adviser" in req.body){
             final_arr = final_arr.filter((item)=> {
-                if ("advisers" in item){
-                    return (item.advisers.some((advi)=> {
-                        return advi.adviser_name.toLowerCase().includes( req.body.adviser.toLowerCase() );
-                    }));
-                }else if ("adviser" in item){
+                if ("adviser" in item){
                     return (item.adviser.some((advi)=> {
                         return advi.adviser_name.toLowerCase().includes( req.body.adviser.toLowerCase() );
                     }));
