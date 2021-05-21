@@ -145,7 +145,7 @@ router.get("/search", async (req, res)=> {
         // filter entries if <field> in req.body
         // <field> = type | title | year | publisher | author | adviser | subject | keyword
         if ("type" in req.body){
-            if (req.body.type == "Book"){
+            if (req.body.type.toLowerCase() == "book"){
                 final_arr = final_arr.filter((item)=> {
                     return ("bookId" in item);
                 });
