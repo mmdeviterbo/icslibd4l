@@ -141,8 +141,110 @@ router.get("/search", async (req, res)=> {
     function filterEntries(){
         // get unique entries
         let final_arr = [...new Set(total)];
-        res.send(final_arr);
+
+        // FILTER ENTRIES if req.body is not empty (has at least one "<field>:<value>") where:
+        //   <field> = type | title | year | publisher | author | adviser | subject | keyword
+        //   <value> = search string/number
+        //   final_arr = search results to be filtered
+        
+        // Filter by type
+        // req.body.type = book | sp | thesis (case insensitive)
+        if ("type" in req.body){
+            let typeFilter = req.body.type.toLowerCase();
+            if (typeFilter == "book"){
+                final_arr = final_arr.filter((item)=> {
+                    return ("bookId" in item);
+                });
+            }else{  // "sp" or "thesis" (case insensitive)
+                final_arr = final_arr.filter((item)=> {
+                    if ("sp_thesis_id" in item){
+                        return (item.type.toLowerCase() == typeFilter);
+                    }
+                });
+            }
+        }
+
+        // Filter by title (case insensitive, checks for substring match)
+        if ("title" in req.body){
+            let titleFilter = req.body.title.toLowerCase();
+            final_arr = final_arr.filter((item)=> {
+                return item.title.toLowerCase().includes( titleFilter );
+            });
+        }
+
+        // Filter by year (number-number and string-number comparison accepted)
+        if ("year" in req.body){
+            let yearFilter = req.body.year;
+            final_arr = final_arr.filter((item)=> {
+                if ("year" in item){
+                    return (item.year == yearFilter);
+                }
+            });
+        }
+
+        // Filter by publisher (case insensitive, checks for substring match)
+        if ("publisher" in req.body){
+            let publisherFitler = req.body.publisher.toLowerCase();
+            final_arr = final_arr.filter((item)=> {
+                if ("publisher" in item){
+                    return item.publisher.toLowerCase().includes( publisherFitler );
+                }
+            });
+        }
+
+        // Filter by 1 author (case insensitive, checks for substring match)
+        if ("author" in req.body){
+            let authorFilter = req.body.author.toLowerCase();
+            final_arr = final_arr.filter((item)=> {
+                return (item.author.some((auth)=> {
+                    return auth.author_name.toLowerCase().includes( authorFilter );
+                }));
+            });
+        }
+
+        // Filter by 1 adviser (case insensitive, checks for substring match)
+        if ("adviser" in req.body){
+            let adviserFilter = req.body.adviser.toLowerCase();
+            final_arr = final_arr.filter((item)=> {
+                if ("adviser" in item){
+                    return (item.adviser.some((advi)=> {
+                        return advi.adviser_name.toLowerCase().includes( adviserFilter );
+                    }));
+                }
+            });
+        }
+
+        // Filter by 1 subject (case insensitive, checks for substring match)
+        if ("subject" in req.body){
+            let subjectFilter = req.body.subject.toLowerCase();
+            final_arr = final_arr.filter((item)=> {
+                if ("subject" in item){
+                    return (item.subject.some((subj)=> {
+                        return subj.subject.toLowerCase().includes( subjectFilter );
+                    }));
+                }
+            });
+        }
+
+        // Filter by 1 keyword (case insensitive, checks for substring match)
+        if ("keyword" in req.body){
+            let keywordFilter = req.body.keyword.toLowerCase();
+            final_arr = final_arr.filter((item)=> {
+                if ("keywords" in item){
+                    return (item.keywords.some((keyw)=> {
+                        return keyw.sp_thesis_keyword.toLowerCase().includes( keywordFilter );
+                    }));
+                }
+            });
+        }
+
+        res.send(final_arr);  // filtered search results
     }
+    // REFERENCES for search filter:
+    // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
+    // String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
+    // Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
+
 
     function spTitle(mode){
         // get THESIS entries
