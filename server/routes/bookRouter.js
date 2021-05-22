@@ -117,7 +117,7 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 //creates a book and uploads its book cover
-router.post("/create", upload.any(), async (req, res) => {
+router.post("/create", authFaculty, upload.any(), async (req, res) => {
     try {
         const {
             bookId,
