@@ -75,8 +75,7 @@ const upload = multer({ storage });
 
 // ---------------------------------------- HTTP REQUESTS
 // create new sp entry
-// "/create", authFaculty, upload.any()
-router.post("/create", upload.any(), async (req,res)=>{
+router.post("/create", authFaculty, upload.any(), async (req,res)=>{
 
 
     try{
@@ -153,8 +152,31 @@ router.post("/create", upload.any(), async (req,res)=>{
 });
 
 // get the pdf of a particular sp
-router.get("/download", async(req,res)=>{
+// version 1: display file
+router.get("/download1", async(req,res)=>{
+    const {sp_thesis_id} = req.body;
 
+    gfs.files.findOne({"metadata":sp_thesis_id}, (err,file) => {
+        if(err){
+            res.send(err);
+        }else{
+            // Read output to browser
+            const readstream = gfs.createReadStream(file.filename);
+            readstream.pipe(res);
+        }
+    });
+})
+// version 2: display file object
+router.get("/download2", async(req,res)=>{
+    const {sp_thesis_id} = req.body;
+
+    gfs.files.findOne({"metadata":sp_thesis_id}, (err,file) => {
+        if(err){
+            res.send(err);
+        }else{
+            return res.json(file);
+        }
+    });
 })
 
 // browse all entries, default sort: alphabetical by title
