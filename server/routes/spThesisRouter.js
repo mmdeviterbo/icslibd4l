@@ -8,7 +8,6 @@ const thesisModel = require("../models/spThesisModel");
 const thesisAdviserModel = require("../models/spThesisAdviserModel");
 const thesisAuthorModel = require("../models/spThesisAuthorModel");
 const thesisKeyModel = require("../models/spThesisKeyModel");
-
 // book
 const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
@@ -432,6 +431,7 @@ router.get("/search", async (req, res)=> {
 // update thesis data
 router.put("/update-sp-thesis", authAdmin, async (req, res) => {
     const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
+<<<<<<< HEAD
     
     if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
         return res.status(400).json({errorMessage: "Please enter all required fields."});
@@ -444,6 +444,8 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
         }
     })
 
+=======
+>>>>>>> remotes/origin/sprint3
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
@@ -452,7 +454,7 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
                 return res.status(400).json({ errorMessage: "Entry not found."});
             }
             // changing values
-            updatedThesisSp.sp_thesis_id = sp_thesis_id;
+            updatedThesisSp.sp_thesis_id = sp_thesis_id;    
             updatedThesisSp.type = type;
             updatedThesisSp.title = title;
             updatedThesisSp.abstract = abstract;

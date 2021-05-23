@@ -1,7 +1,8 @@
 import axios from 'axios';
-export default{
-    get: axios.get,
+const httpRequests = {
     post: axios.post,
     put: axios.put,
-    delete: axios.delete
+    delete: axios.delete,
+    get:axios.get,
 }
+export default httpRequests;

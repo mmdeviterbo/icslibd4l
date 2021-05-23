@@ -1,10 +1,7 @@
 const router = require('express').Router();
 const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const config = require("config");
-const { useTheme } = require('@material-ui/core');
 const authAdmin = require("../middleware/authAdmin");
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
@@ -30,6 +27,16 @@ router.get("/readAllUsers", authAdmin, async (req, res) => {
     });
 });
 
+//read all users
+router.get("/readUserLogs", authAdmin, async (req, res) => {
+    UserLogModel.find({}, (err, result) => { //reads all the documents and sends as response
+        if (err) {
+            res.send(err);
+        } else {
+        res.send(result);
+        }
+    });
+});
 
 //update
 router.put("/updateOtherUser", authAdmin, async (req, res) => {
