@@ -12,17 +12,80 @@ const thesisKeyModel = require("../models/spThesisKeyModel");
 const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
+// file database
+const config = require("config");
+const path = require('path');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+
+const database = config.get('db');
+
+// ---------------------------------------- FILE STORAGE INITIALIZATION
+// Create mongo connection
+const conn = mongoose.createConnection(
+    database, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
+);
+
+// Init gfs
+let gfs;
+
+conn.once('open', () => {
+    // Init stream
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('sp_pdf');
+});
+
+// Create storage engine
+const storage = new GridFsStorage({
+    url: database,
+    file: (req, file) => {
+    return new Promise(async (resolve, reject) => {
+        //get the sp_thesis_id from the multipart form of http request
+        const sp_thesis_id = JSON.parse(req.body.body).sp_thesis_id; 
+        
+        // check if sp is existing
+        const existingThesis = await thesisModel.findOne({ sp_thesis_id });
+        // return error as thesis already exists
+        if(existingThesis){ return reject("Thesis already exists!");
+        }
+
+        //gives the file a different name
+        crypto.randomBytes(16, (err, buf) => { 
+        if (err) { return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+            filename: filename,
+            metadata: sp_thesis_id, //store the book id in the metadata
+            bucketName: 'sp_pdf'
+        };
+        resolve(fileInfo);
+        });
+    });
+    }
+});
+const upload = multer({ storage });
 
 
+// ---------------------------------------- HTTP REQUESTS
 // create new sp entry
-router.post("/create", authFaculty, async (req,res)=>{
+// "/create", authFaculty, upload.any()
+router.post("/create", upload.any(), async (req,res)=>{
+
+
     try{
         const {sp_thesis_id, // common ID
             type, title, abstract, year, source_code, manuscript, journal, poster, // thesisModel
             advisers,   // thesisAdviserModel
             authors,     // thesisAuthorModel
             keywords               // thesisKeyModel
-        } = req.body; 
+        } = JSON.parse(req.body.body); 
 
         // sample verification: incomplete fields
         if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code 
@@ -88,6 +151,11 @@ router.post("/create", authFaculty, async (req,res)=>{
         res.status(500).send();
     }
 });
+
+// get the pdf of a particular sp
+router.get("/download", async(req,res)=>{
+
+})
 
 // browse all entries, default sort: alphabetical by title
 router.get("/browse", async (req,res)=> {
