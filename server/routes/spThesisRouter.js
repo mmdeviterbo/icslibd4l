@@ -15,7 +15,8 @@ const bookSubjectModel = require("../models/bookSubjectModel");
 
 
 // create new sp entry
-router.post("/create", authFaculty, async (req,res)=>{
+// AUTHENTICATION REMOVED FROM THE PARAMeTERES
+router.post("/create", async (req,res)=>{
     try{
         const {sp_thesis_id, // common ID
             type, title, abstract, year, source_code, manuscript, journal, poster, // thesisModel
@@ -23,9 +24,7 @@ router.post("/create", authFaculty, async (req,res)=>{
             authors,     // thesisAuthorModel
             keywords               // thesisKeyModel
         } = req.body; 
-        
-        console.log(req.body)
-       
+
         // sample verification: incomplete fields
         if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code 
             || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
@@ -35,9 +34,10 @@ router.post("/create", authFaculty, async (req,res)=>{
         // search if book exists
         const existingThesis = await thesisModel.findOne({sp_thesis_id});
         
+        console.log(sp_thesis_id)
 
         if (!existingThesis){ // if does not exist, proceed in creating entry
-
+            console.log('at here!')
             // save thesisModel
             const newThesis = new thesisModel ({
                 sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster
@@ -46,39 +46,68 @@ router.post("/create", authFaculty, async (req,res)=>{
 
             // save thesisAdviserModel
             advisers.forEach(async function(entry){
+                console.log('advisers: ')
+                // console.log(entry)
+                // console.log(entry.fname)
+                // console.log(entry.lname)
                 const adviser_fname = entry.fname;
                 const adviser_lname = entry.lname;
                 const adviser_name =  adviser_fname.concat(" ",adviser_lname);
 
+                // console.log(typeof adviser_fname)
+                // console.log(typeof entry.fname)
+                // console.log(adviser_fname)
+                // console.log(adviser_lname)
+                // console.log(adviser_name)
+
                 const newThesisAdv = new thesisAdviserModel ({
                     sp_thesis_id, adviser_fname, adviser_lname, adviser_name
                 });
+
                 const savedThesisAdv = await newThesisAdv.save();
+                console.log(newThesisAdv)
+                console.log(savedThesisAdv)
             });
 
             // save thesisAuthorModel
             authors.forEach(async function(entry){
+                console.log('authors: ')
+                // console.log(entry)
+                // console.log(entry.fname)
+                // console.log(entry.lname)
                 const author_fname = entry.fname;
                 const author_lname = entry.lname;
                 const author_name = author_fname.concat(" ",author_lname);
+
+                console.log(typeof author_fname)
+                console.log(typeof entry.fname)
+                console.log(author_fname)
+                console.log(author_lname)
+                console.log(author_name)
 
                 const newThesisAu = new thesisAuthorModel ({
                     sp_thesis_id, author_fname, author_lname, author_name
                 });
                 const savedThesisAu = await newThesisAu.save();
+                // console.log(newThesisAu)
+                // console.log(savedThesisAu)
             });
 
             // save thesisKeyModel
             keywords.forEach(async function(entry){
+                console.log(entry)
                 const sp_thesis_keyword = entry;
 
                 const newThesisKey = new thesisKeyModel ({
                     sp_thesis_id, sp_thesis_keyword
                 });
+
                 const savedThesisKey = await newThesisKey.save();
+                console.log(newThesisKey)
+                console.log(savedThesisKey)
             })
 
-
+            console.log(savedThesis)
             // recheck if correctly sent by sending entry : thesisModel
             res.json(savedThesis);
         }else{
@@ -87,7 +116,7 @@ router.post("/create", authFaculty, async (req,res)=>{
 
     } catch(err){
         console.log(err);
-        res.status(500).send('error dito');
+        res.status(500).json({errorMessage:"Error preeeeee"});
     }
 });
 
@@ -169,6 +198,7 @@ router.get("/search", async (req, res)=> {
             }
         );
     }
+    
     function bookTitle(mode){
         // get BOOK entries
         bookModel.aggregate(
@@ -502,19 +532,22 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
 });
 
 // delete entire sp/thesis entry
-router.delete('/remove-sp-thesis', authAdmin, async (req, res) => {
+router.delete('/remove-sp-thesis/:sp_thesis_id', async (req, res) => {
     console.log('del')
-    const sp_thesis_id_holder = req.body;
+    const sp_thesis_id_holder = req.params.sp_thesis_id;
+    console.log(sp_thesis_id_holder)
+    console.log(req.params.sp_thesis_id)
+
     if(!sp_thesis_id_holder){
         return res.status(400).json({errorMessage: "Entry does not exist."});
     }
     try {
-        await thesisModel.findOneAndDelete(sp_thesis_id_holder);
-        await thesisAuthorModel.deleteMany(sp_thesis_id_holder);
-        await thesisKeyModel.deleteMany(sp_thesis_id_holder);
+        await thesisModel.findOneAndDelete({sp_thesis_id: sp_thesis_id_holder});
+        await thesisAuthorModel.deleteMany({sp_thesis_id: sp_thesis_id_holder});
+        await thesisKeyModel.deleteMany({sp_thesis_id: sp_thesis_id_holder});
         res.send("Entry Deleted");
     } catch {
-        res.send(500).json({ errorMessage: "Cannot Delete."});
+        res.status(500).json({ errorMessage: `Cannot Delete ${sp_thesis_id_holder}`});
     }
 
 });

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Link } from 'react';
 
 const AddNewResource = () => {
     return (
         <div className = "new-res-container">
-            <a href="/add-new-book">
+            <a href="/add-new-resource">
             <button className = "new-res-button">
 
             <span class = "res-icon">

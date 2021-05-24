@@ -5,13 +5,15 @@ import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
-import AddBookPage from './components/addresourcepage/add-new-resource-pg'
+import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
+import EditResourcePage from './components/addresourcepage/edit-res-page-form'
 import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
 import ManageUser from "./components/manageuserpage/manageuserpage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import personService from './services/personService';
-import jwtDecode from 'jwt-decode'; 
 import {jwtPrivateKey} from './config.json';
+import {jwtEncryptionKey} from './config.json';
+import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
 import DeletePopUpCont from './components/manageresourcespage/delete-modal-container';
 import ViewResource from './components/crud/view';
@@ -38,7 +40,12 @@ function App() {
   const getCurrentToken = () => {
     try {
       const jwt = localStorage.getItem(jwtPrivateKey);
-      const userInfo = jwtDecode(jwt);
+      const encryption = {
+        key: jwtEncryptionKey,
+        algorithm: 'aes-256-cbc',
+      };
+      const decrypted = jwtEncrypt.readJWT(jwt, encryption, 'ICSlibrary');
+      const userInfo = decrypted.data;
       setUser(userInfo);
     } catch (err) {}
   };
@@ -46,8 +53,8 @@ function App() {
   // login/register a user
   const loginRegisterUser = async (userInfo) => {
     try {
-      const { data } = await personService.loginRegisterUser(userInfo);
-      localStorage.setItem(jwtPrivateKey, data);
+      const {data} = await personService.loginRegisterUser(userInfo);
+      localStorage.setItem(jwtPrivateKey, data); //set token
       window.location = "/home";
     } catch (err) {}
   };
@@ -87,8 +94,9 @@ function App() {
           <Route path="/view-sp-thesis" component={ViewResource}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           <Route path="/manage-resources" component={ManageResPage}></Route>
-          <Route path ="/add-new-book" component={AddBookPage}></Route>
-          <Route path ="/add-new-spt" component={AddSPThesisPage}></Route>
+          <Route path ="/add-new-resource" component={AddResourcePage}></Route>
+          <Route path ="/edit-resource" component={EditResourcePage}></Route>
+          {/* <Route path ="/add-new-spt" component={AddSPThesisPage}></Route> */}
           {/* <Route path="/delete-sp-thesis" component={DeletePopUpCont}></Route> */}
           <Route path="/manage-users" component={ManageUser}></Route>
           <Route path="/about" render={()=><About appRef={appRef}/>}/>

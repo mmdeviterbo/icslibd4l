@@ -5,39 +5,26 @@ import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
 import ChipInput from 'material-ui-chip-input'
 
-// LAST PUSH FROM MY BRANCH QWQ
 const classificationOptions = [
     {value: 'sp', label: 'Special Problem'},
     {value: 'thesis', label:'Thesis'},
-    {value: 'book', label: 'Book'}
-]
-
-const courseList = [
-    {value:'cmsc12', label:'CMSC 12'},
-    {value:'cmsc21', label:'CMSC 21'},
-    {value:'cmsc22', label:'CMSC 22'},
-    {value:'cmsc23', label:'CMSC 23'},
-    {value:'cmsc56', label:'CMSC 56'},
-    {value:'cmsc57', label:'CMSC 57'},
-    {value:'cmsc123', label:'CMSC 123'},
-    {value:'cmsc124', label:'CMSC 124'},
-    {value:'cmsc125', label:'CMSC 125'},
-    {value:'cmsc127', label:'CMSC 127'},
-    {value:'cmsc128', label:'CMSC 128'},
-    {value:'cmsc130', label:'CMSC 130'},
-    {value:'cmsc131', label:'CMSC 131'},
-    {value:'cmsc132', label:'CMSC 132'},
-    {value:'cmsc141', label:'CMSC 141'},
-    {value:'cmsc142', label:'CMSC 142'},
-    {value:'cmsc150', label:'CMSC 150'},
-    {value:'cmsc170', label:'CMSC 170'},
-    {value:'cmsc173', label:'CMSC 173'},
-    {value:'cmsc180', label:'CMSC 180'},
-    {value:'cmsc190', label:'CMSC 190'},
-    {value:'cmsc191', label:'CMSC 191'},
 ]
 
 export default function AddResFormContainer() {
+    const [resourceData, setResourceData] = useState({
+        sp_thesis_id: '',
+        type : '',
+        title : '',
+        abstract : '',
+        year : 0,
+        source_code : '',
+        manuscript : '', 
+        journal : '',
+        poster : '',
+        advisers : [],
+        authors : [],
+        keywords: [],
+    })
     const [type, setType] = useState('')
     const [title, setTitle] = useState('')
     const [year, setYear] = useState(0)
@@ -59,11 +46,6 @@ export default function AddResFormContainer() {
     })
     const [authorList, setAuthorList] = useState([])
     const [adviserList, setAdviserList] = useState([])
-
-    const [courses, setCourses] = useState([])
-    const [publisher, setPublisher] = useState('')
-    const [numOfCopies, setNumOfCopies] = useState(0)
-    const [description, setDescription] = useState('')
 
     useEffect(() => {
         function isInArray(arr, item) {
@@ -90,29 +72,6 @@ export default function AddResFormContainer() {
         };
         updateList()
     }, [author, adviser])
-    
-    // console.log('author/s: ', authorList)
-    // console.log('adviser/s: ', adviserList)
-
-    // const updateAdviserList = () => {
-    //     if(adviser.fname && adviser.lname){
-    //         console.log('adding', adviser.fname, adviser.lname);
-    //         setAdviserList([...adviserList, [adviser]])
-    //     }
-    // };
-
-    // const updateAuthorList = () => {
-    //     if(author.fname && author.lname){
-    //         console.log('adding', author.fname, author.lname);
-    //         setAuthorList([...authorList, [author]])
-    //     }
-    // };      
-    
-    // const updateLists = () => {
-    //     // e.preventDefault();
-    //     updateAuthorList()
-    //     updateAdviserList()
-    //   };
 
     const addAuthor = e => {
         setAuthor({
@@ -137,38 +96,23 @@ export default function AddResFormContainer() {
         console.log(adviserList)
         console.log(keywords)
         try{
-            if(type == 'book') {
-                const userInput = {
-                    bookId : id,
-                    title,
-                    authors: authorList,
-                    subjects : courses,
-                    physicalDesc : description,
-                    publisher,
-                    numberOfCopies : numOfCopies
-                }
-                const {data} = await ResourceServices.addBook(userInput)
-                console.log(data)
-                alert("New book has been successfully added to the library")
-            } else {
-                const userInput = {
-                    sp_thesis_id : id,
-                    type,
-                    title,
-                    abstract,
-                    year,
-                    source_code,
-                    manuscript,
-                    journal,
-                    poster,
-                    advisers : adviserList,
-                    authors : authorList,
-                    keywords : keywords
-                }
-                const {data} = await ResourceServices.addSpThesis(userInput)
-                console.log(data)
-                alert(`New Sp/Thesis has been successfully added to the library`)
+            const userInput = {
+                sp_thesis_id : id,
+                type,
+                title,
+                abstract,
+                year,
+                source_code,
+                manuscript,
+                journal,
+                poster,
+                advisers : adviserList,
+                authors : authorList,
+                keywords : keywords
             }
+            const {data} = await ResourceServices.editpThesis(userInput)
+            console.log(data)
+            alert(`${id} has been successfully updated.`)
         } catch(err){
             if (err.response && err.response.data) {
                 alert(err.response.data.errorMessage) // some reason error message
@@ -180,54 +124,10 @@ export default function AddResFormContainer() {
     const handleChange = (e) => {
         setType(e.value)
     }
-    
-    // adds the courses on array
-    const handleCourseChange = (newCourse) => {
-        setCourses(newCourse)
-    }
 
     // creates an array of keywords from theh user input
     const handleChips = (chip) => {
         setKeyword(chip)
-    }
-
-    const BookInfoForm = () => {
-        return(
-            <div className = "res-primary-info">
-             <h2><b>Book</b></h2>
-                    <hr/>
-    
-                    <form id = "bookForm" >
-                        <div class = "primaryfields">
-                                <label for="bookISBN">Publisher: &nbsp; </label>
-                                <input type = "text" id = "bookpublisher" onChange = {(event) => {setPublisher(event.target.value)}}/>
-                        </div>
-
-                        <div class = "primaryfields">
-                                <label for="physDescription">Physical Description: &nbsp; </label>
-                                <textarea id = "physDescription" onChange = {(event) => {setDescription(event.target.value)}}/>
-                        </div>
-                        ...or upload description file:
-                        <input type = "file" class="resourcefiles" id="uploadDesc"/>
-                        <br/><br/><br/><br/>
-                        <div class = "primaryfields">
-                                <label for="availBookCopies">No. of copies available: &nbsp; </label>
-                                <input type = "number" id ="availBookCopies" onChange = {(event) => {setNumOfCopies(event.target.value)}}/>
-                        </div>
-                        <div className = "bookRelatedCourses">
-                            <br/>
-                            Related Courses:
-                            <Select id = "relatedCourses"
-                                    isMulti
-                                    defaultValue={"Courses..."}
-                                    options = {courseList}
-                                    onChange = {handleCourseChange}>
-                            </Select>
-                        </div>
-    
-                    </form>
-            </div>
-        );
     }
     
     const SPThesisInfoForm = () => {
@@ -266,7 +166,7 @@ export default function AddResFormContainer() {
                             Add Adviser
                         </button>
     
-                        <br/><br/>
+                        <br/><br/><br/>
     
                         {/* String inputs muna kasi yun yung nakalagay sa backend na part ngayon. Di pa nila nafi-figure out yung
                         file attachments as input. */}
@@ -302,10 +202,7 @@ export default function AddResFormContainer() {
                         
                         <div class = "primaryfields">
                             <label for="resId">Keywords: &nbsp; </label>
-                            {/* <input onChange = {(event) => {setKeyword(event.target.value)}}>
-                            </input> */}
                                 <ChipInput
-                                    // defaultValue={['foo', 'bar']}
                                     onChange={(chips) => handleChips(chips)}
                                     InputProps={{ borderbottom: "none" }}
                                 />
@@ -399,7 +296,7 @@ export default function AddResFormContainer() {
                     </button>
                 </form>
             </div>
-            { type == ('book') ? (BookInfoForm()) : (SPThesisInfoForm())}
+            {SPThesisInfoForm()}
 
             {/* <div className="res-primary-info">
             </div>           */}

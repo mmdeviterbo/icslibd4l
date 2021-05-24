@@ -3,13 +3,12 @@ import {apiEndpoint} from '../config.json';
 
 // add a resource details (sp/thesis, book)
 const addSpThesis = (resourceData) => {
-    console.log(resourceData)
     // console.log("hello sp/thesis")
     return http.post(`${apiEndpoint}/thesis/create`, resourceData, {withCredentials: true})
 }
 
 const addBook = (resourceData) => {
-    console.log(resourceData)
+    // console.log(resourceData)
     return http.post(`${apiEndpoint}/books/create`, resourceData, {withCredentials: true})
 }
 
@@ -24,13 +23,16 @@ const searchSpThesis = (filter) => {
 
 
 // edit data of a resource
-
-
+const editSpThesis = (resourceData) => {
+    console.log(resourceData)
+    return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {withCredentials: true})
+}
 
 //delete resource
-const deleteSpThesis = (resourceId) => {
-    // console.log(resourceId)
-    return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis`, resourceId, {withCredentials: true})
+const deleteSpThesis = (deleteId) => {
+    console.log(deleteId)
+    return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis/${deleteId}`, {withCredentials: true})
+    // return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis`, {data:{id: deleteId}, headers:{Authorization: "token"}}, {withCredentials: true})
 }
 
 
@@ -50,7 +52,8 @@ const exportFunctions = {
     addBook,
     browseSpThesis,
     searchSpThesis,
-    deleteSpThesis
+    deleteSpThesis,
+    editSpThesis
 }
 
 export default exportFunctions;

@@ -224,6 +224,8 @@ const MainResourceTable = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+
+  // kinda works, dont's remove yet
   const DeleteBtn = (id) => {
     return(
       <Link
@@ -235,8 +237,23 @@ const MainResourceTable = () => {
               }
           }}
       >
-        <DeleteForeverIcon/>
-        
+      <DeleteForeverIcon/> 
+      </Link>
+    )
+  }
+
+  const EditBtn = (id) => {
+    return(
+      <Link
+          to={{
+              pathname: "/edit-resource",
+              state: { 
+                // background: location,
+                id: id
+              }
+          }}
+      >
+      <MoreHorizIcon/> 
       </Link>
     )
   }
@@ -329,6 +346,7 @@ const MainResourceTable = () => {
                       key={row.name}
                       selected={isItemSelected}
                     >
+                      {/* {row} */}
                       <TableCell padding="checkbox" className={classes.tablecell}>
                       </TableCell >
                       <TableCell component="th" id={labelId} scope="row" padding="none" className={classes.tablecell}>
@@ -339,7 +357,8 @@ const MainResourceTable = () => {
                       <TableCell className={classes.tablecell} align="left">{row.resclassif}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.relatedcourses}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.pubyr}</TableCell>
-                      <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell>
+                      {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
+                      <TableCell> <EditBtn id={row.resid}/> </TableCell>
                       <TableCell> <DeleteBtn id={row.resid}/> </TableCell>
                     </TableRow>
                   );

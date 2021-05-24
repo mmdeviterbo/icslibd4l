@@ -9,21 +9,23 @@ import Button from 'react-bootstrap/Button';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ResourceServices from '../../services/resourceService'
  
-const DeletePopUpCont = (props) => {
+const DeletePopUpCont = () => {
     const history = useHistory();
+    const location = useLocation();
+    const { id } = location.state.id
     const [show, setShow] = useState(true);
     const handleShow = () => setShow(true);
     const handleClose = () => {
         setShow(false)
-        // history.goBack();
+        history.goBack();
     }
     
     const handleSubmit = async (event) => {
         event.preventDefault()
+        handleClose()
         try{
-            const {resourceId} = await ResourceServices.deleteSpThesis(props.id)
-            handleClose()
-            alert("Delete successful")
+            const {data} = await ResourceServices.deleteSpThesis(id)
+            alert("Delete successful sa frontend")
         } catch(err){
             if (err.response && err.response.data) {
                 alert(err.response.data.errorMessage) // some reason error message
@@ -33,19 +35,11 @@ const DeletePopUpCont = (props) => {
 
     return(
         <>
-            {/* delete button */}
-            {/* <a onClick = {handleShow}>
-                <DeleteForeverIcon/>
-
-            </a> */}
-
-            {/* popup modal */}
             <Modal
                 show = {show}
                 onHide = {handleClose}
                 backdrop = "static"
                 keyboard = {false}
-                onRequestClose = {() => setShow(false)}
                 centered
                 >
                 <Modal.Header closeButton>
@@ -53,7 +47,7 @@ const DeletePopUpCont = (props) => {
                 </Modal.Header>
 
                 <Modal.Body>
-                    Are you sure you want to delete {props.id}?
+                    Are you sure you want to delete {id}?
                     {/* read resource title and author here */}
                 </Modal.Body>
 
