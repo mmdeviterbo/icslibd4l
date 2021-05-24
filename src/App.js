@@ -16,6 +16,7 @@ import {jwtEncryptionKey} from './config.json';
 import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
 import DeletePopUpCont from './components/manageresourcespage/delete-modal-container';
+import ReadingSPTContainer from './components/viewresources/readingsptcontainer';
 import ViewResource from './components/crud/view';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
@@ -59,6 +60,17 @@ function App() {
     } catch (err) {}
   };
 
+  // SAMPLE DATA ONLY
+  const sampleSP = {
+    title: 'Adaptive Identification of Rice and Corn Pests (Order Hemiptera) using Back Propagation Neural Network Based on Intensity Histogram',
+    type: 'Special Problem',
+    abstract: 'Pest identification through image processing using Back Propagation Neural Network with Intensity Histogram as the feature used as basis for classification yielded an accuracy of 100% using 15 test images from each species. However, the application is only limited to pest images that have distinguishable backgrounds. The reliability of the system can be further increased by adding more training data with plain background. This research aims to help users by giving additional information about the pest identified by the system such as description, treatment, and control.',
+    year: 1969,
+    authorList: ['Concepcion L. Khan', 'John Viscel M. Sangkal'],
+    adviserList: ['Maria Erika Dominique Cunanan', 'Katrina Joy M. Abriol-Santos'],
+    keywords: ['CMSC191', 'CMSC173', 'CMSC69']  }
+  // CLEAR UNTIL HERE
+
   return (
     <div className="App" ref={appRef}>
       <NavigationBar
@@ -91,12 +103,12 @@ function App() {
           <Route exact path="/not-found" component={Notfound}></Route>
           
            {/* add your new route/path here */}
-          <Route path="/view-sp-thesis" component={ViewResource}></Route>
+          {/* <Route path="/view-sp-thesis" component={ViewResource}></Route> */}
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           <Route path="/manage-resources" component={ManageResPage}></Route>
           <Route path ="/add-new-resource" component={AddResourcePage}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
-          {/* <Route path ="/add-new-spt" component={AddSPThesisPage}></Route> */}
+          <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
           {/* <Route path="/delete-sp-thesis" component={DeletePopUpCont}></Route> */}
           <Route path="/manage-users" component={ManageUser}></Route>
           <Route path="/about" render={()=><About appRef={appRef}/>}/>
