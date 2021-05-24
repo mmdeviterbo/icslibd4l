@@ -17,6 +17,7 @@ import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
 import DeletePopUpCont from './components/manageresourcespage/delete-modal-container';
 import ReadingSPTContainer from './components/viewresources/readingsptcontainer';
+import ReadingBookContainer from './components/viewresources/readingbookcontainer';
 import ViewResource from './components/crud/view';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
@@ -69,6 +70,15 @@ function App() {
     authorList: ['Concepcion L. Khan', 'John Viscel M. Sangkal'],
     adviserList: ['Maria Erika Dominique Cunanan', 'Katrina Joy M. Abriol-Santos'],
     keywords: ['CMSC191', 'CMSC173', 'CMSC69']  }
+
+    const sampleBook = {
+      title: 'The Little Prince',
+      authorList: ['Antoine de Saint-Exupéry'],
+      physicalDesc: 'Paperback : 96 pages \n ',
+      year: 1943,
+      publisher: 'Mariner Books; 1st edition (May 15, 2000)',
+      numOfCopies: 5,
+      subjects: ['moral education', 'personalism', 'dialogic approach', 'educational relationship', 'educational interaction']  }
   // CLEAR UNTIL HERE
 
   return (
@@ -109,7 +119,7 @@ function App() {
           <Route path ="/add-new-resource" component={AddResourcePage}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
           <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
-          {/* <Route path="/delete-sp-thesis" component={DeletePopUpCont}></Route> */}
+          <Route path ="/view-book" render={()=><ReadingBookContainer sampleBook={sampleBook}/>}></Route>
           <Route path="/manage-users" component={ManageUser}></Route>
           <Route path="/about" render={()=><About appRef={appRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route> 

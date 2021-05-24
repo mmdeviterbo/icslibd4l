@@ -26,7 +26,7 @@ const InfoSidebar = ({type, adviserList, keywords}) => {
                     <div key={key}>
                         {item}
                     </div>
-                )}
+                     )}
                 </tr>
             </table>
 

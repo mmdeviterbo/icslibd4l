@@ -4,14 +4,13 @@ import BookCoverandInfo from './bookcoverinfoside';
 import BookPhysDescription from './book-phys-desc';
 import '../../styles/viewspt/viewspt.css';
 
-const ReadingBookContainer = () => {
+const ReadingBookContainer = ({sampleBook}) => {
     return(
         <div className = "bookpagecontainer" >
-            <TitleAuthorHere/>
-
+            <TitleAuthorHere title={sampleBook.title} authorList={sampleBook.authorList} year={sampleBook.year}/>
             <div className = "bookcover-and-desc">
-                <BookCoverandInfo/>
-                <BookPhysDescription/>
+                <BookCoverandInfo publisher={sampleBook.publisher} numOfCopies={sampleBook.numOfCopies} subjects={sampleBook.subjects}/>
+                <BookPhysDescription physicalDesc={sampleBook.physicalDesc}/>
             </div>
 
         </div>
