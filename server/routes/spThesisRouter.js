@@ -519,34 +519,8 @@ router.get("/search", async (req, res)=> {
 // https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
 
 
-// Create storage engine for updating thesis
-const storageUpdate = new GridFsStorage({
-    url: database,
-    file: (req, file) => {
-    return new Promise(async (resolve, reject) => {
-        //get the sp_thesis_id from the multipart form of http request
-        const sp_thesis_id = JSON.parse(req.body.body).sp_thesis_id; 
-        
-        //gives the file a different name
-        crypto.randomBytes(16, (err, buf) => { 
-        if (err) { return reject(err);
-        }
-        const filename = buf.toString('hex') + path.extname(file.originalname);
-        const fileInfo = {
-            filename: filename,
-            metadata: sp_thesis_id, //store the book id in the metadata
-            bucketName: 'sp_pdf'
-        };
-        resolve(fileInfo);
-        });
-    });
-    }
-});
-const uploadUpdate = multer({ storageUpdate });
-
-
 // update thesis data
-router.put("/update-sp-thesis", uploadUpdate.any(), async (req, res) => {
+router.put("/update-sp-thesis", upload.any(), async (req, res) => {
     const {old_sp_thesis_id, object_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = JSON.parse(req.body.body); 
     
     if(!sp_thesis_id || !object_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
