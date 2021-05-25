@@ -1,20 +1,21 @@
 import React from 'react';
-// import styled from 'styled-components';
 
-export default function SearchBar(){
+export default function SearchBar({searchFilter, setSearchFilter}){
     return (
         <input type='search' 
-        className='search'
+        className='form-control removeOutline'
         placeholder= {"Search"}
         style={searchInput}
-        //onChange = {} not yet getting inputs
+        value={searchFilter}
+        onChange={(e) => setSearchFilter(e.target.value)}
         />
     )
 }
 
 const searchInput = {
-    border: 0,
+    border: "0",
     borderRadius: "10px",
-    textIndent: "10px",
-    width: "80%"
+    padding: "0.38vw",
+    textIndent: "0.76vw",
+    width: "95.3%",
 }

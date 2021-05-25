@@ -1,16 +1,29 @@
 import React from 'react'
-// import styled from 'styled-components'
-import {Link} from 'react-router-dom'
 import {FilterSidebarData} from './filterSidebarData'
 import FilterSubMenu from './filterSubMenu'
 
-export default function FilterSidebar(){
+export default function FilterSidebar({ searchFilterAuthor,
+                                        setSearchFilterAuthor,
+                                        searchFilterAdviser,
+                                        setSearchFilterAdviser,
+                                        filterTag, 
+                                        setFilterTag}){
     return (
         <div>
             <nav style={sidebarNav}>
                 <div style={wrapper}>
+                    <p style={sidebarTitle}>Filters</p>
                     {FilterSidebarData.map((item, index) => {
-                        return <FilterSubMenu item= {item} key={index}/>
+                        return <FilterSubMenu 
+                        item= {item} 
+                        key={index}
+                        searchFilterAuthor={searchFilterAuthor} 
+                        setSearchFilterAuthor={setSearchFilterAuthor}
+                        searchFilterAdviser={searchFilterAdviser} 
+                        setSearchFilterAdviser={setSearchFilterAdviser}
+                        filterTag={filterTag}
+                        setFilterTag={setFilterTag}
+                        />
                     })}
                 </div>
             </nav>
@@ -21,10 +34,19 @@ export default function FilterSidebar(){
 const sidebarNav = {
     background: "white",
     display: "flex",
-    height: "100vh",
-    width: "250px",
+    height: "auto",
+    width: "19vw",
     marginLeft:"auto",
-    marginRight:"2vw"
+    marginRight:"0.75vw",
+    paddingBottom:"2vw",
+    MsOverflowStyle:"none"
+}
+
+const sidebarTitle = {
+    margin:"1vw 0 1vw 1.5vw",
+    fontSize:"1.5em",
+    fontWeight:"800",
+    fontFamily:"Trebuchet MS"
 }
 
 const wrapper = {

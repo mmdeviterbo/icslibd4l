@@ -1,34 +1,32 @@
 import React from 'react'
-import * as RiIcons from 'react-icons/ri'
-import SearchBar from './searchBar'
-// import styled from 'styled-components'
+import * as FaIcons from 'react-icons/fa'
 
 export const FilterSidebarData = [
     {
         label: "Author",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                searchbar: <SearchBar/>
+                searchbarAuthor: "searchbar"
             }
         ]
     },
     {
         label: "Adviser",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                searchbar: <SearchBar/>
+                searchbarAdviser: "searchbar"
             }
         ]
     },
     {
         label: "Course",
         link: "/course",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "CMSC",
@@ -46,13 +44,17 @@ export const FilterSidebarData = [
                 label: "MORE",
                 link: "/",
             },
+            {
+                label: "123123",
+                link: "/",
+            }
         ]             
     },
     {
         label: "Topic",
         link: "/topic",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Agriculture",
@@ -75,8 +77,8 @@ export const FilterSidebarData = [
     {
         label: "Format",
         link: "/format",
-        iconClosed: <RiIcons.RiArrowDownSLine/>,
-        iconOpened: <RiIcons.RiArrowUpSLine/>,
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Book",
@@ -95,7 +97,20 @@ export const FilterSidebarData = [
     {
         label: "Publication Date",
         link: "/published",
-        // add dates, search bar?
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
+        subNav: [
+            {
+                label: "Last Month",
+            },
+            {
+                label: "Last Semester",
+
+            },
+            {
+                label: "Last Year",
+            }
+        ]
     },
 
 ]

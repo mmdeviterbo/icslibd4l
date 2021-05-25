@@ -1,14 +1,32 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-// import styled from 'styled-components'
+import SearchBar from './searchBar'
 
-export default function FilterSubMenu({item}){
+export default function FilterSubMenu({ item,
+                                        searchFilterAuthor, 
+                                        setSearchFilterAuthor,
+                                        searchFilterAdviser,
+                                        setSearchFilterAdviser,
+                                        filterTag, 
+                                        setFilterTag}){
     const [subnav, setSubnav] = useState(false)
 
     const showSubnav = () => setSubnav(!subnav)
 
+    //returns the value of the clicked filter
+    const handleFilter = (data) => {
+        let filter = data.label ?  data.label : null;
+        if (filter == null && data.searchbarAuthor){
+            setSearchFilterAuthor(data.searchbarAuthor.value)
+        }else if (filter == null && data.searchbarAdviser){
+            setSearchFilterAdviser(data.searchbarAdviser.value)
+        }else {
+            setFilterTag(filter)
+        }
+    }
+
     return (
         <div>
+            {/*displays the submenu*/}
             <a style={sidebarLink} className="sidebarLink" to={item.link} onClick={item.subNav && showSubnav} >
                 <div>
                     <span style={sidebarLabel}> {item.label} </span>
@@ -23,11 +41,21 @@ export default function FilterSubMenu({item}){
             </a>
             {subnav && item.subNav.map((item, index) => {
                 return (
-                    <a style={dropdownNav} className="dropdownNav" to={item.link} key={index}>
+                    <a style={dropdownNav} 
+                        className="dropdownNav" 
+                        to={item.link} key={index} 
+                        onClick={() => handleFilter(item)}
+                    >
                         <span style={sidebarLabel}>
                             {item.label}
-                            {item.searchbar
-                            ? item.searchbar
+                            {item.searchbarAuthor
+                            ?   <SearchBar  searchFilter={searchFilterAuthor} 
+                                            setSearchFilter={setSearchFilterAuthor}
+                                />
+                            : null}
+                            {item.searchbarAdviser
+                            ? <SearchBar searchFilter={searchFilterAdviser} 
+                                         setSearchFilter={setSearchFilterAdviser}/>
                             : null}
                         </span>
 
@@ -43,22 +71,24 @@ const sidebarLink = {
     color: "black",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "20px",
+    padding: "0 1.5vw 0 0",
+    marginLeft: "1vw",
     listStyle: "none",
-    height: "60px",
-    fontSize: "18px"
+    height: "3vw",
+    fontSize: "1.1em",
+    fontWeight: "600",
 }
 
 const sidebarLabel = {
-    marginLeft: "10px"
+    marginLeft: "0.75vw"
 }
 
 const dropdownNav = {
-    height: "30px",
-    paddingLeft: "3rem",
-    display: "flex",
     alignItems: "center",
+    display: "flex",
+    color: "0067A1",
+    fontSize: "1.3em",
+    marginLeft: "3rem",
     textDecoration: "none",
-    color: "blue",
-    fontSize: "18px"
+    height: "2.25vw",
 }
