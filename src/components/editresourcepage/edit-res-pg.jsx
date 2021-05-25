@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './add-resource-style.css';
-import AddResSidebar from './sidebar-add-res';
-import AddNewSPThesisForm from './add-new-spt-pg';
+import AddResSidebar from '../addresourcepage/sidebar-add-res';
+import AddNewSPThesisForm from '../addresourcepage/add-new-spt-pg';
 
 const AddSPThesisPage = () => {
     return(

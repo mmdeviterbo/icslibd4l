@@ -461,15 +461,19 @@ router.get("/search", async (req, res)=> {
 // https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
 
 // update thesis data
-router.put("/update-sp-thesis", authAdmin, async (req, res) => {
+// AUTHENTICATION REMOVED
+router.put("/update-sp-thesis", async (req, res) => {
+    console.log('here at update')
     const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
-        await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
+        // await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
+        await thesisModel.findOne({sp_thesis_id: old_sp_thesis_id}, (err, updatedThesisSp) => {
             if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
                 return res.status(400).json({errorMessage: "Please enter all required fields."});
             }
-
+            console.log('start here')
+            console.log(req.body)
             // changing values
             updatedThesisSp.sp_thesis_id = sp_thesis_id;    
             updatedThesisSp.type = type;
@@ -481,17 +485,27 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
             updatedThesisSp.journal = journal;
             updatedThesisSp.poster = poster;
 
+            console.log(updatedThesisSp)
             // updates
             updatedThesisSp.save();
         });
 
         // deletes all authors with corresponding thesis/sp id
-        await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        
+        await thesisAuthorModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
+        // await thesisAdviserModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
+        // await thesisKeyModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
+
+        console.log(authors)
+        console.log(adviser)
+        console.log(keywords)
 
         // save updated thesisAuthorModel
         authors.forEach(async function(updatedEntry){
+            console.log(updatedEntry)
             const author_fname = updatedEntry.author_fname;
             const author_lname = updatedEntry.author_lname;
             const author_name = author_fname.concat(" ", author_lname);
@@ -504,6 +518,7 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
 
         // save updated thesisAdviserModel
         advisers.forEach(async function(updatedEntry){
+            console.log(updatedEntry)
             const adviser_fname = updatedEntry.adviser_fname;
             const adviser_lname = updatedEntry.adviser_lname;
             const adviser_name = adviser_fname.concat(" ", adviser_lname);
@@ -516,6 +531,7 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
 
         // save updated thesisAdviserModel
         keywords.forEach(async function(updatedEntry){
+            console.log(updatedEntry)
             const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
             
             const newKey = new thesisKeyModel ({

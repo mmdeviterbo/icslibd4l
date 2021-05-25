@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const config = require("config");
 const cors = require("cors");
+const methodOverride = require('method-override');
 
 const jwtPrivateKey = config.get("jwtPrivateKey");
 
@@ -16,6 +17,7 @@ module.exports = function (app) {
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(cookieParser());
+  app.use(methodOverride('_method'));
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(

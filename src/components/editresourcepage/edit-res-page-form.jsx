@@ -10,6 +10,7 @@ const classificationOptions = [
     {value: 'thesis', label:'Thesis'},
 ]
 
+// !!! Should receive an sp/thesis object 
 export default function AddResFormContainer() {
     const [resourceData, setResourceData] = useState({
         sp_thesis_id: '',
@@ -25,6 +26,8 @@ export default function AddResFormContainer() {
         authors : [],
         keywords: [],
     })
+    
+    const old_sp_thesis_id = 'SP009' // EDIT THIS ACCORDINGLY
     const [type, setType] = useState('')
     const [title, setTitle] = useState('')
     const [year, setYear] = useState(0)
@@ -92,11 +95,12 @@ export default function AddResFormContainer() {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log(authorList)
-        console.log(adviserList)
-        console.log(keywords)
+        // console.log(authorList)
+        // console.log(adviserList)
+        // console.log(keywords)
         try{
             const userInput = {
+                old_sp_thesis_id,
                 sp_thesis_id : id,
                 type,
                 title,
@@ -110,9 +114,9 @@ export default function AddResFormContainer() {
                 authors : authorList,
                 keywords : keywords
             }
-            const {data} = await ResourceServices.editpThesis(userInput)
+            const {data} = await ResourceServices.editSpThesis(userInput)
             console.log(data)
-            alert(`${id} has been successfully updated.`)
+            // alert(`${id} has been successfully updated.`)
         } catch(err){
             if (err.response && err.response.data) {
                 alert(err.response.data.errorMessage) // some reason error message
@@ -292,7 +296,7 @@ export default function AddResFormContainer() {
                     {/* {renderForm()} */}
                     <br/><br/>
                     <button type="submit" id="saveResource">
-                    Save
+                    Update
                     </button>
                 </form>
             </div>

@@ -7,6 +7,7 @@ const jwtEncrypt = require("jwt-token-encrypt");
 const jwt = require("jsonwebtoken");
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
+const jwtEncrypt = require("jwt-token-encrypt");
 const jwtPrivateKey = config.get('jwtPrivateKey');  
 const jwtPublicKey = config.get('jwtPublicKey'); 
 //create or login account
@@ -66,6 +67,7 @@ router.post("/create", async (req,res) => {
 
         //NEW IMPLEMENTATION
         //TODO: MARTY AYUSIN MO TO
+
         const publicData = null;
         // Data that will only be available to users who know encryption details.
         const privateData = {

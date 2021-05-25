@@ -6,7 +6,7 @@ import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
 import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
-import EditResourcePage from './components/addresourcepage/edit-res-page-form'
+import EditResourcePage from './components/editresourcepage/edit-res-page-form'
 import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
 import ManageUser from "./components/manageuserpage/manageuserpage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
