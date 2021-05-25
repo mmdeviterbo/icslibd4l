@@ -82,7 +82,7 @@ router.get("/search", authAdmin, async (req, res) => {
     
     if (req.query.search){
         //seach queries for email, name, and nickname attributes\
-        //email
+        //googleId
         init_output = await UserModel.find({
             googleId: {
                 $regex: req.query.search,
