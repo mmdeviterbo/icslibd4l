@@ -5,7 +5,7 @@ const jwtEncrypt = require("jwt-token-encrypt");
 
 //npm install cookie-parser
 //makes sure that the current user is allowed to access a part of the website
-function authenticationFaculty(req, res, next){
+function authenticationAdmin(req, res, next){
     try{
         const token = req.cookies.token;
         
@@ -17,20 +17,17 @@ function authenticationFaculty(req, res, next){
                         errorMessage: "Unauthorized Access"
                     });
         
-        //NEW IMPLEMENTATION    
+        // NEW IMPLEMENTATION    
         // Encryption settings
-        // const encryption = {
-        //     key: jwtPrivateKey,
-        //     algorithm: 'aes-256-cbc',
-        // };
-        //decrypt token and verifies jwt payload
-        // const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
-                
-        // const verified = decrypted.data;
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: 'aes-256-cbc',
+        };
+        // decrypt token and verifies jwt payload
+        const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
+        const verified = decrypted.data;
         
 
-        //verifies the jwt payload
-        const verified = jwt.verify(token, jwtPrivateKey);
         //attaches a user property to the req object in the request Router function
         req.user = verified.user;
 
@@ -38,15 +35,15 @@ function authenticationFaculty(req, res, next){
             next();
         else
             return res
-                .status(401)
+                .sendStatus(401)
                 .json({
                     errorMessage: "Unauthorized Access"
                 });
     }
     catch(err){
         console.log(err)    
-        res.send(401).json({ errorMessage: "Unauthorized Access" });
+        res.sendStatus(401).json({ errorMessage: "Unauthorized Access" });
     }
 }
 
-module.exports = authenticationFaculty;
+module.exports = authenticationAdmin;

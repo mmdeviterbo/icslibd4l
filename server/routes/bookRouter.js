@@ -6,6 +6,15 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
+const config = require("config");
+const path = require('path');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+
+const database = config.get('db');
 
 router.post("/get-news", async (req, res) => {
     let options = {
@@ -62,7 +71,58 @@ router.post("/get-news", async (req, res) => {
     }
 });
 
-router.post("/create", authFaculty, async (req, res) => {
+// Create mongo connection
+const conn = mongoose.createConnection(
+    database,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    },
+    (err) => {
+        if (err)
+            return console.error(err);
+    }
+);
+
+// Init gfs
+let gfs;
+
+conn.once('open', () => {
+    // Init stream
+    console.log("here")
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('book_covers');
+});
+
+// Create storage engine
+const storage = new GridFsStorage({
+    url: database,
+    file: (req, file) => {
+      return new Promise(async (resolve, reject) => {
+        const bookId = JSON.parse(req.body.body).bookId; //parse the book id from the multipart form
+        const existingBook = await bookModel.findOne({ bookId }); //check if the book already exists
+        if(existingBook){ //don't upload if book already exists
+            return reject("Book already exists!");
+        }
+        crypto.randomBytes(16, (err, buf) => { //gives the file a different name
+          if (err) {
+            return reject(err);
+          }
+          const filename = buf.toString('hex') + path.extname(file.originalname);
+          const fileInfo = {
+            filename: filename,
+            metadata: bookId, //store the book id in the metadata
+            bucketName: 'book_covers'
+          };
+          resolve(fileInfo);
+        });
+      });
+    }
+  });
+const upload = multer({ storage });
+
+//creates a book and uploads its book cover
+router.post("/create", authFaculty, upload.any(), async (req, res) => {
     try {
         const {
             bookId,
@@ -72,7 +132,9 @@ router.post("/create", authFaculty, async (req, res) => {
             physicalDesc,
             publisher,
             numberOfCopies,
-        } = req.body;
+            datePublished,
+            dateAcquired
+        } = JSON.parse(req.body.body);
 
         // sample verification: incomplete fields
         if (
@@ -86,7 +148,7 @@ router.post("/create", authFaculty, async (req, res) => {
         ) {
             return res
                 .status(400)
-                .json({ errorMessage: "Please enter all required fields." });
+                .send("Please enter all required fields.");
         }
 
         //search if book exists
@@ -102,6 +164,8 @@ router.post("/create", authFaculty, async (req, res) => {
                 physicalDesc,
                 publisher,
                 numberOfCopies,
+                datePublished,
+                dateAcquired
             });
             const savedBook = await newBook.save();
 
@@ -141,6 +205,50 @@ router.post("/create", authFaculty, async (req, res) => {
         res.status(500).send();
     }
 });
+
+//display the latest 12 books on the homepage
+router.get("/display", async(req,res)=>{
+    bookModel.aggregate(
+        [{$sort : {"dateAcquired": -1}},
+        {$limit : 12}], 
+
+        (err,result) => {
+            if(err){
+                res.send(err);
+            }else{
+                res.send(result);
+            }
+        }
+    );
+})
+
+// get the pdf of a particular sp
+// version 1: display file
+router.get("/download1", async(req,res)=>{
+    const {bookId} = req.body;
+
+    gfs.files.findOne({"metadata":bookId}, (err,file) => {
+        if(err){
+            res.send(err);
+        }else{
+            // Read output to browser
+            const readstream = gfs.createReadStream(file.filename);
+            readstream.pipe(res);
+        }
+    });
+})
+// version 2: display file object
+router.get("/download2", async(req,res)=>{
+    const {bookId} = req.body;
+
+    gfs.files.findOne({"metadata":bookId}, (err,file) => {
+        if(err){
+            res.send(err);
+        }else{
+            return res.json(file);
+        }
+    });
+})
 
 // search data
 router.get("/search", async (req, res) => {

@@ -73,10 +73,76 @@ router.put("/updateOtherUser", authAdmin, async (req, res) => {
 });
 
 //search function
-router.get("/search", async (req, res) => {
-  let query;
+router.get("/search", authAdmin, async (req, res) => {
+  let idList = [];
+  let init_output;
   let final_output;
-  let attributes = 0;
+
+  function saveId(item, index) {
+    if (!idList) {
+      idList = item._id;
+    } else {
+      idList = [].concat(idList, item._id);
+    }
+  }
+
+  if (req.query.search) {
+    //seach queries for email, name, and nickname attributes
+    //email
+    init_output = await UserModel.find({
+      email: {
+        $regex: req.query.search,
+        $options: "i",
+      },
+    });
+    //add to final list
+    final_output = init_output;
+    console.log(final_output);
+    //add _id to idList
+    init_output.forEach(saveId);
+
+    //fullName
+    init_output = await UserModel.find({
+      fullName: {
+        $regex: req.query.search,
+        $options: "i",
+      },
+
+      _id: {
+        $nin: idList,
+      },
+    });
+    //add to final list
+    final_output = [].concat(final_output, init_output);
+    console.log(final_output);
+    //add _id to idList
+    init_output.forEach(saveId);
+    console.log(idList);
+
+    //nickName
+    init_output = await UserModel.find({
+      nickName: {
+        $regex: req.query.search,
+        $options: "i",
+      },
+
+      _id: {
+        $nin: idList,
+      },
+    });
+    //add to final list
+    final_output = [].concat(final_output, init_output);
+    //add _id to idList
+    init_output.forEach(saveId);
+  } else {
+    final_output = await UserModel.find();
+  }
+  try {
+    res.send(final_output);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error Getting query");
+  }
 
   if (req.query.search) {
     //seach quries for all attributes

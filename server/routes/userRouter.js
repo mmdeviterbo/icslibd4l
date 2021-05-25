@@ -33,8 +33,30 @@ router.post("/create", async (req, res) => {
     ":" +
     seconds;
 
-  var loggedUser;
+  //get date
+  //code snippet was taken from https://usefulangle.com/post/187/nodejs-get-date-time
+  let date_ob = new Date();
+  let day = ("0" + date_ob.getDate()).slice(-2);
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  let year = date_ob.getFullYear();
+  let hours = date_ob.getHours();
+  let minutes = date_ob.getMinutes();
+  let seconds = date_ob.getSeconds();
+  const date =
+    year +
+    "-" +
+    month +
+    "-" +
+    day +
+    " " +
+    hours +
+    ":" +
+    minutes +
+    ":" +
+    seconds;
 
+  var loggedUser;
+  let userType = 4;
   try {
     const { googleId, email, fullName } = req.body;
 
@@ -43,6 +65,36 @@ router.post("/create", async (req, res) => {
       return res.status(400).json({
         errMessage: "Please enter All required fields. ",
       });
+
+    const existingUser = await UserModel.findOne({ googleId });
+    //user exists
+    if (existingUser) {
+      loggedUser = existingUser;
+    } else {
+      const nickname = fullName;
+      const newUser = new UserModel({
+        googleId,
+        email,
+        fullName,
+        userType,
+        nickname,
+      });
+
+      //save new user entry in mongoDB
+      //returns object with entry details
+      const savedUser = await newUser.save();
+      loggedUser = savedUser;
+    }
+    //logs user login to collection
+    const newUserLog = new UserLogModel({
+      googleId: loggedUser.googleId,
+      email: loggedUser.email,
+      fullName: loggedUser.fullName,
+      userType: loggedUser.userType,
+      activity: "User login",
+      date,
+    });
+    await newUserLog.save();
 
     const existingUser = await UserModel.findOne({ googleId });
     //user exists
@@ -87,22 +139,6 @@ router.post("/create", async (req, res) => {
       userType: loggedUser.userType,
     };
 
-    // Encryption settings
-    const encryption = {
-      key: jwtPrivateKey,
-      algorithm: "aes-256-cbc",
-    };
-
-    // JWT Settings
-    const jwtDetails = {
-      secret: jwtPublicKey, // to sign the token
-      // Default values that will be automatically applied unless specified.
-      // algorithm: 'HS256',
-      expiresIn: "24h",
-      // notBefore: '0s',
-      // Other optional values
-    };
-
     const token = await jwtEncrypt.generateJWT(
       jwtDetails,
       publicData,
@@ -110,17 +146,6 @@ router.post("/create", async (req, res) => {
       privateData,
       "ICSlibrary"
     );
-
-    //OLD IMPLEMENTATION
-    //log user in
-    // const token = jwt.sign({
-    //     googleId : loggedUser.googleId,
-    //     email: loggedUser.email,
-    //     fullName: loggedUser.fullName,
-    //     nickname: loggedUser.nickname,
-    //     userType: loggedUser.userType
-    // }, jwtPrivateKey
-    // );
 
     res
       .cookie("token", token, {
@@ -143,57 +168,6 @@ router.get("/readStudents", authFaculty, async (req, res) => {
       res.send(result);
     }
   });
-});
-
-//search function
-router.get("/search", async (req, res) => {
-  /*, authFaculty*/
-  console.log("test");
-  let query;
-  let final_output;
-  let attributes = 0;
-
-  if (req.query.search) {
-    //seach quries for all attributes
-    while (attributes < 3) {
-      query = {};
-      //fullName
-      if (attributes === 0) {
-        query.fullName = {
-          $regex: req.query.search,
-          $options: "i",
-        };
-      }
-      //email
-      else if (attributes == 1) {
-        query.email = {
-          $regex: req.query.search,
-          $options: "i",
-        };
-      }
-      //googleId
-      else if (attributes == 2) {
-        query.googleId = {
-          $regex: req.query.search,
-          $options: "i",
-        };
-      }
-      //query to database
-      let users = await UserModel.find(query).select("googleId fullName email");
-      //concatenate to final array of objcets
-      if (!final_output) final_output = users;
-      else final_output = [].concat(final_output, users);
-      attributes = attributes + 1;
-    }
-  } else {
-    final_output = await UserModel.find().select("googleId fullName email");
-  }
-  try {
-    res.send(final_output);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Error Getting query");
-  }
 });
 
 //update
