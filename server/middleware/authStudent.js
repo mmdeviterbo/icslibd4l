@@ -1,6 +1,5 @@
 const config = require("config")
 const jwt = require("jsonwebtoken");
-
 const jwtEncrypt = require("jwt-token-encrypt");
 const jwtPrivateKey = config.get('jwtPrivateKey');
 

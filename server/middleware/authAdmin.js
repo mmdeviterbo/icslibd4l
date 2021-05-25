@@ -23,6 +23,7 @@ function authenticationAdmin(req, res, next){
             key: jwtPrivateKey,
             algorithm: 'aes-256-cbc',
         };
+        
         // decrypt token and verifies jwt payload
         const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
         const verified = decrypted.data;

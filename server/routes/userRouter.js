@@ -7,6 +7,7 @@ const jwtEncrypt = require("jwt-token-encrypt");
 const jwt = require("jsonwebtoken");
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
+
 const jwtPrivateKey = config.get('jwtPrivateKey');  
 const jwtPublicKey = config.get('jwtPublicKey'); 
 //create or login account
@@ -64,46 +65,46 @@ router.post("/create", async (req,res) => {
         });
         await newUserLog.save();
 
-        //NEW IMPLEMENTATION
-        //TODO: MARTY AYUSIN MO TO
-        const publicData = null;
-        // Data that will only be available to users who know encryption details.
-        const privateData = {
-            googleId : loggedUser.googleId,
-            email: loggedUser.email,
-            fullName: loggedUser.fullName,
-            nickname: loggedUser.nickname,
-            userType: loggedUser.userType   
-        };
+            //NEW IMPLEMENTATION
+            //TODO: MARTY AYUSIN MO TO
+            const publicData = null;
+            // Data that will only be available to users who know encryption details.
+            const privateData = {
+                googleId : loggedUser.googleId,
+                email: loggedUser.email,
+                fullName: loggedUser.fullName,
+                nickname: loggedUser.nickname,
+                userType: loggedUser.userType   
+            };
 
-        // Encryption settings
-        const encryption = {
-            key: jwtPrivateKey,
-            algorithm: 'aes-256-cbc',
-        };
+            // Encryption settings
+            const encryption = {
+                key: jwtPrivateKey,
+                algorithm: 'aes-256-cbc',
+            };
 
-        // JWT Settings
-        const jwtDetails = {
-            secret: jwtPublicKey, // to sign the token
-            // Default values that will be automatically applied unless specified.
-            // algorithm: 'HS256',
-            expiresIn: '24h',
-            // notBefore: '0s',
-            // Other optional values
-        };
+            // JWT Settings
+            const jwtDetails = {
+                secret: jwtPublicKey, // to sign the token
+                // Default values that will be automatically applied unless specified.
+                // algorithm: 'HS256',
+                expiresIn: '24h',
+                // notBefore: '0s',
+                // Other optional values
+            };
 
-        const token = await jwtEncrypt.generateJWT(
-            jwtDetails,
-            publicData,
-            encryption,
-            privateData,
-                'ICSlibrary'
-                );
-            
+            const token = await jwtEncrypt.generateJWT(
+                jwtDetails,
+                publicData,
+                encryption,
+                privateData,
+                    'ICSlibrary'
+                    );
+                
 
-        res.cookie("token", token, {
-            httpOnly: false,
-        }).send(token);
+            res.cookie("token", token, {
+                httpOnly: false,
+            }).send(token);
     }
     catch (err){
         console.error(err)
@@ -137,11 +138,49 @@ router.put("/update", authStudent, async (req, res) => {
             });
         }
 
-        UserModel.find({googleId: googleId}, (err, result) => { //send the edited user as response
+        UserModel.find({googleId: googleId}, async (err, result) => { //send the edited user as response
             if (err) {
                 res.send(err);
-            } else {    
-            res.send(result);   
+            } else {  
+                
+            //create new cookie for updated token
+            const publicData = null;
+            // Data that will only be available to users who know encryption details.
+            const privateData = await {
+                googleId : result[0].googleId,
+                email: result[0].email,
+                fullName: result[0].fullName,
+                nickname: result[0].nickname,
+                userType: result[0].userType   
+            };
+            // Encryption settings
+            const encryption = {
+                key: jwtPrivateKey,
+                algorithm: 'aes-256-cbc',
+            };
+
+            // JWT Settings
+            const jwtDetails = {
+                secret: jwtPublicKey, // to sign the token
+                // Default values that will be automatically applied unless specified.
+                // algorithm: 'HS256',
+                expiresIn: '24h',
+                // notBefore: '0s',
+                // Other optional values
+            };
+
+            const token = await jwtEncrypt.generateJWT(
+                jwtDetails,
+                publicData,
+                encryption,
+                privateData,
+                    'ICSlibrary'
+                    );
+                
+
+            res.cookie("token", token, {
+                httpOnly: false,
+            }).send(result);    
             }   
         }); 
 
