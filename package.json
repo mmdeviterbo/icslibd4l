@@ -19,6 +19,7 @@
     "bootstrap": "^4.6.0",
     "cheerio": "^1.0.0-rc.9",
     "config": "^3.3.6",
+    "crypto": "^1.0.1",
     "detect-libc": "^1.0.3",
     "express": "^4.17.1",
     "font-awesome": "^4.7.0",
