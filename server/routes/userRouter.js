@@ -124,60 +124,6 @@ router.get("/readStudents", authFaculty, async (req, res) => {
 });
 
 
-//search function
-router.get("/search", authFaculty, async (req, res) => {
-    let query;
-    let final_output;
-    let attributes = 0;
-    
-    if (req.query.search){
-        //seach quries for all attributes
-        while(attributes < 3){
-            query = {};
-            //fullName
-            if (attributes === 0){
-                query.fullName = {
-                    $regex: req.query.search,
-                    $options: 'i'
-                }
-            }
-            //email
-            else if (attributes == 1){
-                query.email = {
-                    $regex: req.query.search,
-                    $options: 'i'
-                }
-            }
-            //googleId
-            else if(attributes == 2){
-                query.googleId = {
-                    $regex: req.query.search,
-                    $options: 'i'
-                }
-            }
-            //query to database
-            let users = await UserModel.find(query).select('googleId fullName email');
-            //concatenate to final array of objcets
-            if (!final_output)
-                final_output = users;
-            else
-            final_output =[].concat(final_output,users);
-            attributes = attributes + 1;
-        }
-       
-    }
-    else{
-        final_output = await UserModel.find().select('googleId fullName email');
-    }
-    try{
-        res.send(final_output);
-    }
-    catch(error){
-        console.log(error);
-        res.status(500).send("Error Getting query");
-    }
-
-});
 
 
 //update
