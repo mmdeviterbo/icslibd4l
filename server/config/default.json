@@ -6,7 +6,7 @@
     "jwtPrivateKey": "EUTY8L,Gf9T5kkQ5",
 
     //link of the database from mongodb
-    "db": "mongodb+srv://sampleuser:password1234@cluster0.0iawg.mongodb.net/icslibd4l?retryWrites=true&keepAlive=true&w=majority",
+    "db": "mongodb+srv://sampleuser2:password1234@cluster0.0iawg.mongodb.net/icslibd4l?retryWrites=true&keepAlive=true&w=majority",
 
     //3001 port is used by backend, 3000 port is used by frontend
     "port": "3001", 

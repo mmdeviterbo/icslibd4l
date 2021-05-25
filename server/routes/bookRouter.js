@@ -77,6 +77,10 @@ const conn = mongoose.createConnection(
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
+    },
+    (err) => {
+        if (err)
+            return console.error(err);
     }
 );
 
@@ -85,6 +89,7 @@ let gfs;
 
 conn.once('open', () => {
     // Init stream
+    console.log("here")
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('book_covers');
 });
@@ -117,7 +122,7 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 //creates a book and uploads its book cover
-router.post("/create", upload.any(), async (req, res) => {
+router.post("/create", authFaculty, upload.any(), async (req, res) => {
     try {
         const {
             bookId,
