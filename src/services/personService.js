@@ -10,24 +10,31 @@ const loginRegisterUser = (userInfo) => {
 
 // logout user
 const logoutUser = (userInfo) => {
-  return http.post(`${apiEndpoint}/users/logout`, userInfo, {
+  return http.get(`${apiEndpoint}/users/logout`, userInfo, {
     withCredentials: true,
   });
 };
 
 // read data of a person
-const readUser = (userInfo) => {
-  return http.put(`${apiEndpoint}/admin/search?search=:googleId`, userInfo, {
-    //req.params.googleID object req.body
-    withCredentials: true,
-  });
+const readUser = (googleId) => {
+  return http.get(
+    `${apiEndpoint}/admin/search`,
+    { params: { search: googleId } },
+    {
+      //req.params.googleID object req.body
+      withCredentials: true,
+    }
+  );
 };
 
 // edit data of a person
 
 //delete person
-const updateUser = (userInfo) => {
-  return http.post(`${apiEndpoint}/update/`, userInfo, {
+
+//update person
+const updateNickname = (userInfo) => {
+  console.log("pservice", userInfo);
+  return http.post(`${apiEndpoint}/users/update/`, userInfo, {
     withCredentials: true,
   });
 };
@@ -37,6 +44,7 @@ const exportFunctions = {
   loginRegisterUser,
   logoutUser,
   readUser,
+  updateNickname,
 };
 
 export default exportFunctions;

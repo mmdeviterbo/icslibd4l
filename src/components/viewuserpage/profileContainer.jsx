@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap/";
 import { Button } from "@material-ui/core/";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -18,8 +18,20 @@ import "../../styles/userPageStyle.css";
 //<output>
 // A component that contains the information regarding the current user
 //</output>
+
+const getCurrentToken = () => {
+  const jwt = localStorage.getItem("icslib-privateKey");
+  const encryption = {
+    key: jwtEncryptionKey,
+    algorithm: "aes-256-cbc",
+  };
+  const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
+  const userInfo = decrypted.data;
+  return userInfo;
+};
+
 export default function ProfileContainer() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getCurrentToken());
   const [user2, setUser2] = useState(null);
 
   const [type, setType] = useState(null);
@@ -31,19 +43,13 @@ export default function ProfileContainer() {
   const [disable, setDisable] = useState(true);
 
   useEffect(() => {
-    getCurrentToken();
+    // getCurrentToken();
+    console.log(user);
+    setNick(user && user.nickname);
+    // setType(user && user.userType);
+    // console.log("something");
   }, []);
-  console.log(user);
-
-  useEffect(async () => {
-    try {
-      const { data } = await PersonService.readUser(userInfo);
-      setUser2(data);
-    } catch (err) {
-      console.log(err);
-    }
-    console.log("user2: ", user2);
-  }, []);
+  // console.log(user);
 
   // removes JWT token from the browser
   const logout = async () => {
@@ -54,20 +60,19 @@ export default function ProfileContainer() {
     } catch (err) {}
   };
 
-  const getCurrentToken = () => {
-    try {
-      const jwt = localStorage.getItem(jwtPrivateKey);
-      const encryption = {
-        key: jwtEncryptionKey,
-        algorithm: "aes-256-cbc",
-      };
-      const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
-      const userInfo = decrypted.data;
-      setUser(userInfo);
-      setNick(userInfo && userInfo.nickname);
-      setType(userInfo && userInfo.userType);
-    } catch (err) {}
-  };
+  // const getCurrentToken = () => {
+  //   try {
+  //     const jwt = localStorage.getItem("icslib-privateKey");
+  //     const encryption = {
+  //       key: jwtEncryptionKey,
+  //       algorithm: "aes-256-cbc",
+  //     };
+  //     const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
+  //     const userInfo = decrypted.data;
+  //     setUser(userInfo);
+
+  //   } catch (err) {}
+  // };
 
   const setIcon = (click, buttonStyle, style) => {
     setClick(click);
@@ -76,15 +81,28 @@ export default function ProfileContainer() {
     setDisable(!disable);
   };
 
-  const editNickname = () => {
-    !click
-      ? setIcon(true, faCheck, editButtonConfirm)
-      : setIcon(false, faPencilAlt, editButtonDefault);
+  const updateNick = async (userInfo) => {
+    try {
+      const { data } = await PersonService.updateNickname(userInfo);
+    } catch (err) {}
+  };
+
+  // const editNickname = (userInfo) => {
+  //   !click
+  //     ? setIcon(true, faCheck, editButtonConfirm)
+  //     : setIcon(false, faPencilAlt, editButtonDefault);
+  // };
+  const editNickname = (userInfo) => {
+    if (click === false) {
+      setIcon(true, faCheck, editButtonConfirm);
+    } else if (click === true) {
+      setIcon(false, faPencilAlt, editButtonDefault);
+      updateNick(userInfo);
+    }
   };
 
   // convert userType to its corresponding string representation
   useEffect(() => {
-    // console.log(userinfos);
     if (user) {
       if (user.userType === 1) setType("Admin");
       else if (user.userType === 2) setType("Faculty");
@@ -92,6 +110,19 @@ export default function ProfileContainer() {
       else setType("Student");
     }
   }, [user]);
+
+  useEffect(async () => {
+    console.log("do u exist", user);
+    console.log(user.googleId);
+    try {
+      const { data } = await PersonService.readUser(user.googleId);
+      setUser2(data);
+    } catch (err) {
+      console.log(err);
+    }
+    console.log("user2: ", user2);
+  }, []);
+  console.log("user2: ", user2);
 
   return (
     // column for the title bar "Profile Display"
@@ -115,7 +146,14 @@ export default function ProfileContainer() {
         </Col>
         <Col xs={4} className="columns-temp">
           <input
-            onChange={(e) => setNick(e.target.value)}
+            onChange={(e) => {
+              setNick(e.target.value);
+              setUser({
+                ...user,
+                nickname: nick,
+              });
+              // console.log(user);
+            }}
             disabled={disable}
             type="text"
             className="text-field"
@@ -125,7 +163,9 @@ export default function ProfileContainer() {
         <Col xs={1} className="edit-column">
           <div class="button">
             <FontAwesomeIcon
-              onClick={editNickname}
+              onClick={() => {
+                editNickname(user);
+              }}
               state={click}
               aria-label="edit"
               style={style}
