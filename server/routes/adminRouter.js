@@ -81,7 +81,19 @@ router.get("/search", authAdmin, async (req, res) => {
     }
     
     if (req.query.search){
-        //seach queries for email, name, and nickname attributes
+        //seach queries for email, name, and nickname attributes\
+        //email
+        init_output = await UserModel.find({
+            googleId: {
+                $regex: req.query.search,
+                $options: 'i'
+            }
+            });
+        //add to final list
+        final_output = init_output;
+        console.log(final_output);
+        //add _id to idList
+        init_output.forEach(saveId);
         //email
         init_output = await UserModel.find({
                 email: {
@@ -90,7 +102,7 @@ router.get("/search", authAdmin, async (req, res) => {
                 }
             });
         //add to final list
-        final_output = init_output;
+        final_output = [].concat(final_output, init_output);
         console.log(final_output);
         //add _id to idList
         init_output.forEach(saveId);

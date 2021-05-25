@@ -72,26 +72,32 @@ router.post("/get-news", async (req, res) => {
 });
 
 // Create mongo connection
-const conn = mongoose.createConnection(
-    database,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    },
-    (err) => {
-        if (err)
-            return console.error(err);
-    }
-);
-
-// Init gfs
 let gfs;
+let conn;
+mongoose.connection.on('connected', ()=>{
+    conn =  mongoose.createConnection(
+        database,
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            socketTimeoutMS: 10000
+        },
+        (err) => {
+            if (err)
+                return console.error(err);
+        }
+    );
 
-conn.once('open', () => {
-    // Init stream
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('book_covers');
-});
+    
+// Init gfs
+
+    conn.once('open', () => {
+        // Init stream
+        gfs = Grid(conn.db, mongoose.mongo);
+        gfs.collection('book_covers');
+    });
+})
+
 
 // Create storage engine
 const storage = new GridFsStorage({
@@ -455,6 +461,5 @@ router.delete("/delete-book", authAdmin, async (req, res) => {
         console.log(err);
         res.status(500).send();
     }
-});
-
+});  
 module.exports = router;
