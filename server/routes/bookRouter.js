@@ -77,6 +77,10 @@ const conn = mongoose.createConnection(
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
+    },
+    (err) => {
+        if (err)
+            return console.error(err);
     }
 );
 
@@ -85,12 +89,14 @@ let gfs;
 
 conn.once('open', () => {
     // Init stream
+    console.log("here")
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('book_covers');
 });
 
 // Create storage engine
 const storage = new GridFsStorage({
+    
     url: database,
     file: (req, file) => {
       return new Promise(async (resolve, reject) => {
