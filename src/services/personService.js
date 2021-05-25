@@ -10,7 +10,7 @@ const loginRegisterUser = (userInfo) => {
 
 // logout user
 const logoutUser = (userInfo) => {
-  return http.get(`${apiEndpoint}/users/logout`, userInfo, {
+  return http.post(`${apiEndpoint}/users/logout`, userInfo, {
     withCredentials: true,
   });
 };
@@ -34,7 +34,7 @@ const readUser = (googleId) => {
 //update person
 const updateNickname = (userInfo) => {
   console.log("pservice", userInfo);
-  return http.post(`${apiEndpoint}/users/update/`, userInfo, {
+  return http.put(`${apiEndpoint}/users/update/`, userInfo, {
     withCredentials: true,
   });
 };

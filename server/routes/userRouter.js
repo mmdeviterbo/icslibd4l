@@ -33,28 +33,6 @@ router.post("/create", async (req, res) => {
     ":" +
     seconds;
 
-  //get date
-  //code snippet was taken from https://usefulangle.com/post/187/nodejs-get-date-time
-  let date_ob = new Date();
-  let day = ("0" + date_ob.getDate()).slice(-2);
-  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-  let year = date_ob.getFullYear();
-  let hours = date_ob.getHours();
-  let minutes = date_ob.getMinutes();
-  let seconds = date_ob.getSeconds();
-  const date =
-    year +
-    "-" +
-    month +
-    "-" +
-    day +
-    " " +
-    hours +
-    ":" +
-    minutes +
-    ":" +
-    seconds;
-
   var loggedUser;
   let userType = 4;
   try {
@@ -96,37 +74,6 @@ router.post("/create", async (req, res) => {
     });
     await newUserLog.save();
 
-    const existingUser = await UserModel.findOne({ googleId });
-    //user exists
-    if (existingUser) {
-      loggedUser = existingUser;
-    } else {
-      let userType = 4;
-      const nickname = fullName;
-      const newUser = new UserModel({
-        googleId,
-        email,
-        fullName,
-        userType,
-        nickname,
-      });
-
-      //save new user entry in mongoDB
-      //returns object with entry details
-      const savedUser = await newUser.save();
-      loggedUser = savedUser;
-    }
-    //logs user login to collection
-    const newUserLog = new UserLogModel({
-      googleId: loggedUser.googleId,
-      email: loggedUser.email,
-      fullName: loggedUser.fullName,
-      userType: loggedUser.userType,
-      activity: "User login",
-      date,
-    });
-    await newUserLog.save();
-
     //NEW IMPLEMENTATION
     //TODO: MARTY AYUSIN MO TO
     const publicData = null;
@@ -137,6 +84,22 @@ router.post("/create", async (req, res) => {
       fullName: loggedUser.fullName,
       nickname: loggedUser.nickname,
       userType: loggedUser.userType,
+    };
+
+    // Encryption settings
+    const encryption = {
+      key: jwtPrivateKey,
+      algorithm: "aes-256-cbc",
+    };
+
+    // JWT Settings
+    const jwtDetails = {
+      secret: jwtPublicKey, // to sign the token
+      // Default values that will be automatically applied unless specified.
+      // algorithm: 'HS256',
+      expiresIn: "24h",
+      // notBefore: '0s',
+      // Other optional values
     };
 
     const token = await jwtEncrypt.generateJWT(

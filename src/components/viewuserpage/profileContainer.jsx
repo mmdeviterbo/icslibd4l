@@ -39,17 +39,15 @@ export default function ProfileContainer() {
 
   const [click, setClick] = useState(false);
   const [buttonStyle, setButtonStyle] = useState(faPencilAlt);
-  const [style, setStyle] = useState(editButtonDefault);
+  const [btnStyle, setBtnStyle] = useState(editButtonDefault);
   const [disable, setDisable] = useState(true);
 
   useEffect(() => {
     // getCurrentToken();
     console.log(user);
     setNick(user && user.nickname);
-    // setType(user && user.userType);
-    // console.log("something");
   }, []);
-  // console.log(user);
+  // console.log(user2);
 
   // removes JWT token from the browser
   const logout = async () => {
@@ -77,21 +75,17 @@ export default function ProfileContainer() {
   const setIcon = (click, buttonStyle, style) => {
     setClick(click);
     setButtonStyle(buttonStyle);
-    setStyle(style);
+    setBtnStyle(style);
     setDisable(!disable);
   };
 
   const updateNick = async (userInfo) => {
+    console.log("i am updating");
     try {
       const { data } = await PersonService.updateNickname(userInfo);
     } catch (err) {}
   };
 
-  // const editNickname = (userInfo) => {
-  //   !click
-  //     ? setIcon(true, faCheck, editButtonConfirm)
-  //     : setIcon(false, faPencilAlt, editButtonDefault);
-  // };
   const editNickname = (userInfo) => {
     if (click === false) {
       setIcon(true, faCheck, editButtonConfirm);
@@ -110,6 +104,14 @@ export default function ProfileContainer() {
       else setType("Student");
     }
   }, [user]);
+
+  useEffect(() => {
+    setUser({
+      ...user,
+      nickname: nick,
+    });
+    console.log(user.nickname);
+  }, [nick]);
 
   useEffect(async () => {
     console.log("do u exist", user);
@@ -148,11 +150,6 @@ export default function ProfileContainer() {
           <input
             onChange={(e) => {
               setNick(e.target.value);
-              setUser({
-                ...user,
-                nickname: nick,
-              });
-              // console.log(user);
             }}
             disabled={disable}
             type="text"
@@ -164,11 +161,14 @@ export default function ProfileContainer() {
           <div class="button">
             <FontAwesomeIcon
               onClick={() => {
-                editNickname(user);
+                editNickname({
+                  googleId: user.googleId,
+                  newNickname: user.nickname,
+                });
               }}
               state={click}
               aria-label="edit"
-              style={style}
+              style={btnStyle}
               icon={buttonStyle}
             />
           </div>

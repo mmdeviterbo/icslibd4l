@@ -73,7 +73,7 @@ router.put("/updateOtherUser", authAdmin, async (req, res) => {
 });
 
 //search function
-router.get("/search", authAdmin, async (req, res) => {
+router.get("/search", async (req, res) => {
   let idList = [];
   let init_output;
   let final_output;
@@ -87,7 +87,19 @@ router.get("/search", authAdmin, async (req, res) => {
   }
 
   if (req.query.search) {
-    //seach queries for email, name, and nickname attributes
+    //seach queries for email, name, and nickname attributes\
+    //googleId
+    init_output = await UserModel.find({
+      googleId: {
+        $regex: req.query.search,
+        $options: "i",
+      },
+    });
+    //add to final list
+    final_output = init_output;
+    console.log(final_output);
+    //add _id to idList
+    init_output.forEach(saveId);
     //email
     init_output = await UserModel.find({
       email: {
@@ -96,7 +108,7 @@ router.get("/search", authAdmin, async (req, res) => {
       },
     });
     //add to final list
-    final_output = init_output;
+    final_output = [].concat(final_output, init_output);
     console.log(final_output);
     //add _id to idList
     init_output.forEach(saveId);
@@ -134,48 +146,6 @@ router.get("/search", authAdmin, async (req, res) => {
     final_output = [].concat(final_output, init_output);
     //add _id to idList
     init_output.forEach(saveId);
-  } else {
-    final_output = await UserModel.find();
-  }
-  try {
-    res.send(final_output);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Error Getting query");
-  }
-
-  if (req.query.search) {
-    //seach quries for all attributes
-    while (attributes < 3) {
-      query = {};
-      //fullName
-      if (attributes === 0) {
-        query.fullName = {
-          $regex: req.query.search,
-          $options: "i",
-        };
-      }
-      //email
-      else if (attributes == 1) {
-        query.email = {
-          $regex: req.query.search,
-          $options: "i",
-        };
-      }
-      //googleId
-      else if (attributes == 2) {
-        query.googleId = {
-          $regex: req.query.search,
-          $options: "i",
-        };
-      }
-      //query to database
-      let users = await UserModel.find(query);
-      //concatenate to final array of objcets
-      if (!final_output) final_output = users;
-      else final_output = [].concat(final_output, users);
-      attributes = attributes + 1;
-    }
   } else {
     final_output = await UserModel.find();
   }
