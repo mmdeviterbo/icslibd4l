@@ -89,7 +89,6 @@ let gfs;
 
 conn.once('open', () => {
     // Init stream
-    console.log("here")
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('book_covers');
 });
