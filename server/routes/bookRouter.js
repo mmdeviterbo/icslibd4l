@@ -137,6 +137,8 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
             physicalDesc,
             publisher,
             numberOfCopies,
+            datePublished,
+            dateAcquired
         } = JSON.parse(req.body.body);
 
         // sample verification: incomplete fields
@@ -151,7 +153,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         ) {
             return res
                 .status(400)
-                .send(req.body.body);
+                .send("Please enter all required fields.");
         }
 
         //search if book exists
@@ -167,6 +169,8 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                 physicalDesc,
                 publisher,
                 numberOfCopies,
+                datePublished,
+                dateAcquired
             });
             const savedBook = await newBook.save();
 
@@ -206,6 +210,50 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         res.status(500).send();
     }
 });
+
+//display the latest 12 books on the homepage
+router.get("/display", async(req,res)=>{
+    bookModel.aggregate(
+        [{$sort : {"dateAcquired": -1}},
+        {$limit : 12}], 
+
+        (err,result) => {
+            if(err){
+                res.send(err);
+            }else{
+                res.send(result);
+            }
+        }
+    );
+})
+
+// get the pdf of a particular sp
+// version 1: display file
+router.get("/download1", async(req,res)=>{
+    const {bookId} = req.body;
+
+    gfs.files.findOne({"metadata":bookId}, (err,file) => {
+        if(err){
+            res.send(err);
+        }else{
+            // Read output to browser
+            const readstream = gfs.createReadStream(file.filename);
+            readstream.pipe(res);
+        }
+    });
+})
+// version 2: display file object
+router.get("/download2", async(req,res)=>{
+    const {bookId} = req.body;
+
+    gfs.files.findOne({"metadata":bookId}, (err,file) => {
+        if(err){
+            res.send(err);
+        }else{
+            return res.json(file);
+        }
+    });
+})
 
 // search data
 router.get("/search", async (req, res) => {
