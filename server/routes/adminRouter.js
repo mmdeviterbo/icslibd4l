@@ -73,7 +73,7 @@ router.put("/updateOtherUser", authAdmin, async (req, res) => {
 });
 
 //search function
-router.get("/search", async (req, res) => {
+router.get("/search", authAdmin, async (req, res) => {
   let idList = [];
   let init_output;
   let final_output;
