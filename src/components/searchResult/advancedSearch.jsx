@@ -148,7 +148,6 @@ const searchMainContainer = {
 
 const topContainer = {
     position:"sticky",
-    position: "-webkit-sticky", //safari
     top:"10vh",
     width: "96vw",
     justifyContent:"center",
@@ -184,7 +183,6 @@ const bottomContainer = {
 
 const filtersContainer = {
     position:"sticky",
-    position: "-webkit-sticky", //safari
     overflowY:"overlay",
     top:"28vh",
     width:"26vw",
@@ -197,7 +195,6 @@ const resultsOuterContainer = {
 
 const resultTop = {
     position:"sticky",
-    position: "-webkit-sticky", //safari
     top:"28vh",
     padding:"2.5vh 1vw",
     background:"white"
