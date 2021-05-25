@@ -4,13 +4,27 @@ import React from 'react'
 import {FilterSidebarData} from './filterSidebarData'
 import FilterSubMenu from './filterSubMenu'
 
-export default function FilterSidebar(){
+export default function FilterSidebar({ searchFilterAuthor,
+                                        setSearchFilterAuthor,
+                                        searchFilterAdv,
+                                        setSearchFilterAdv,
+                                        filterTag, 
+                                        setFilterTag}){
     return (
         <div>
             <nav style={sidebarNav}>
                 <div style={wrapper}>
                     {FilterSidebarData.map((item, index) => {
-                        return <FilterSubMenu item= {item} key={index}/>
+                        return <FilterSubMenu 
+                        item= {item} 
+                        key={index}
+                        searchFilterAuthor={searchFilterAuthor} 
+                        setSearchFilterAuthor={setSearchFilterAuthor}
+                        searchFilterAdv={searchFilterAdv} 
+                        setSearchFilterAdv={setSearchFilterAdv}
+                        filterTag={filterTag}
+                        setFilterTag={setFilterTag}
+                        />
                     })}
                 </div>
             </nav>

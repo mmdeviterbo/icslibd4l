@@ -1,19 +1,32 @@
 import React, {useState} from 'react'
-// import {Link} from 'react-router-dom'
-// import styled from 'styled-components'
+import SearchBar from './searchBar'
 
-export default function FilterSubMenu({item}){
+export default function FilterSubMenu({ item, 
+                                        searchFilterAuthor, 
+                                        setSearchFilterAuthor,
+                                        searchFilterAdv,
+                                        setSearchFilterAdv,
+                                        filterTag, 
+                                        setFilterTag}){
     const [subnav, setSubnav] = useState(false)
 
     const showSubnav = () => setSubnav(!subnav)
 
+    // returns the value of the clicked filter
     const handleFilter = (data) => {
-        let filter = data.label ?  data.label : null; 
-        return filter;
+        let filter = data.label ?  data.label : null;
+        if (filter == null && data.searchbarAuthor){
+            setSearchFilterAuthor(data.searchbarAuth.value)
+        }else if (filter == null && data.searchbarAdv){
+            setSearchFilterAdv(data.searchbarAdv.value)
+        }else {
+            setFilterTag(filter)
+        }
     }
 
     return (
         <div>
+            {/* displays the submenu */}
             <a style={sidebarLink} className="sidebarLink" to={item.link} onClick={item.subNav && showSubnav} >
                 <div>
                     <span style={sidebarLabel}> {item.label} </span>
@@ -35,8 +48,14 @@ export default function FilterSubMenu({item}){
                     >
                         <span style={sidebarLabel}>
                             {item.label}
-                            {item.searchbar
-                            ? item.searchbar
+                            {item.searchbarAuth
+                            ?   <SearchBar  searchFilter={searchFilterAuthor} 
+                                            setSearchFilter={setSearchFilterAuthor}
+                                />
+                            : null}
+                            {item.searchbarAdv
+                            ? <SearchBar searchFilter={searchFilterAdv} 
+                                         setSearchFilter={setSearchFilterAdv}/>
                             : null}
                         </span>
                     </a>

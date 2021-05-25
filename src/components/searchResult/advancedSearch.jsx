@@ -5,7 +5,10 @@ import FilterSidebar from './filterSidebar';
 
 export default function AdvancedSearch({appRef}){
     const [query, setQuery] = useState("");
-    // const [filterTag, setFilterTag] = useState("");
+    const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
+    const [searchFilterAdv, setSearchFilterAdv] = useState("");
+    const [filterTag, setFilterTag] = useState("");
+    
     const history = useHistory();
 
     let url = window.location.href;
@@ -30,7 +33,6 @@ export default function AdvancedSearch({appRef}){
             // else history.push(`/search?q=${tempStr}`);
         }
     }
-
     return (
         <form style={searchMainContainer} onSubmit={handleForm} className="searchMainContainer">
             <div style={topContainer} className="topContainer">
@@ -43,7 +45,14 @@ export default function AdvancedSearch({appRef}){
 
             <div style={bottomContainer}>
                 <div style={filtersContaner}>
-                    <FilterSidebar/>
+                    <FilterSidebar 
+                    searchFilterAuthor={searchFilterAuthor} 
+                    setSearchFilterAuthor={setSearchFilterAuthor}
+                    searchFilterAdv={searchFilterAdv} 
+                    setSearchFilterAdv={setSearchFilterAdv}
+                    filterTag={filterTag}
+                    setFilterTag={setFilterTag}
+                    />
                 </div>
 
                 <div style={resultsContainer}>

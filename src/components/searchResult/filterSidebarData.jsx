@@ -1,6 +1,5 @@
 import React from 'react'
 import * as FaIcons from 'react-icons/fa'
-import SearchBar from './searchBar'
 // import styled from 'styled-components'
 
 export const FilterSidebarData = [
@@ -10,7 +9,8 @@ export const FilterSidebarData = [
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                searchbar: <SearchBar/>
+                // searchbar: <SearchBar />
+                searchbarAuth: "searchbar"
             }
         ]
     },
@@ -20,7 +20,8 @@ export const FilterSidebarData = [
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                searchbar: <SearchBar/>
+                // searchbar: <SearchBar />
+                searchbarAdv: "searchbar"
             }
         ]
     },
@@ -46,6 +47,10 @@ export const FilterSidebarData = [
                 label: "MORE",
                 link: "/",
             },
+            {
+                label: "123123",
+                link: "/",
+            }
         ]             
     },
     {
@@ -95,6 +100,8 @@ export const FilterSidebarData = [
     {
         label: "Publication Date",
         link: "/published",
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Last Month",
