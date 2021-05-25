@@ -620,16 +620,36 @@ router.get("/search", async (req, res)=> {
 // https://stackoverflow.com/questions/46122557/how-can-i-make-a-assign-mongoose-result-in-global-variable-in-node-js
 // https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
 
+
 // update thesis data
-router.put("/update-sp-thesis", authAdmin, async (req, res) => {
-    const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
+router.put("/update-sp-thesis", upload.any(), async (req, res) => {
+    const {old_sp_thesis_id, object_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = JSON.parse(req.body.body); 
+    
+    if(!sp_thesis_id || !object_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
+        return res.status(400).json({errorMessage: "Please enter all required fields."});
+    }
+
+    // checks if sp_thesis_id inputted already exists
+    await thesisModel.findOne({"sp_thesis_id":sp_thesis_id}, (err, checker) => {
+        if(checker) {
+            return res.status(400).json({ errorMessage: "New ID inputted already exists."});
+        }
+    });
+
+    // removes file that comes along with the sp/thesis entry to update it later on
+    gfs.remove({_id:object_id, root:'sp_pdf'}, (err, gridStore) => {
+        if(err){
+            return res.status(404).json({ err: err });   
+        }
+    });
+
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
-            if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
-                return res.status(400).json({errorMessage: "Please enter all required fields."});
+            
+            if(!updatedThesisSp){
+                return res.status(404).json({ errorMessage: "Entry not found."});
             }
-
             // changing values
             updatedThesisSp.sp_thesis_id = sp_thesis_id;    
             updatedThesisSp.type = type;
@@ -693,19 +713,37 @@ router.put("/update-sp-thesis", authAdmin, async (req, res) => {
 
 
 // delete entire sp/thesis entry
-router.delete('/remove-sp-thesis', authAdmin, async (req, res) => {
-    const sp_thesis_id_holder = req.body;
-    if(!sp_thesis_id_holder){
-        return res.status(400).json({errorMessage: "Entry does not exist."});
+router.delete('/remove-sp-thesis', async (req, res) => {
+    const {sp_thesis_id, object_id} = req.body;
+
+    if(!sp_thesis_id || !object_id){
+        return res.status(400).json({errorMessage: "Input fields cannot be empty."});
     }
+
+    // checks if entry to be deleted exists
+    await thesisModel.findOne({"sp_thesis_id":sp_thesis_id}, (err, object) => {
+        if(!object){
+            return res.status(404).json({ errorMessage: "Entry to be deleted not found."});
+        }
+    });
+
+    // removes entries with corresponding sp_thesis_id
     try {
-        await thesisModel.findOneAndDelete(sp_thesis_id_holder);
-        await thesisAuthorModel.deleteMany(sp_thesis_id_holder);
-        await thesisKeyModel.deleteMany(sp_thesis_id_holder);
+        await thesisModel.findOneAndDelete({"sp_thesis_id":sp_thesis_id});
+        await thesisAuthorModel.deleteMany({"sp_thesis_id":sp_thesis_id});
+        await thesisAdviserModel.deleteMany({"sp_thesis_id":sp_thesis_id});
+        await thesisKeyModel.deleteMany({"sp_thesis_id":sp_thesis_id});
         res.send("Entry Deleted");
     } catch {
-        res.send(500).json({ errorMessage: "Cannot Delete."});
+        res.send(404).json({ errorMessage: "Cannot Delete."});
     }
+
+    // removes file that comes along with the sp/thesis entry
+    gfs.remove({_id:object_id, root:'sp_pdf'}, (err, gridStore) => {
+        if(err){
+         return res.status(404).json({ err: err });   
+        }
+    });
 
 });
 
