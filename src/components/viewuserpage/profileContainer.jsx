@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap/";
 import { Button } from "@material-ui/core/";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -8,6 +8,7 @@ import { jwtPrivateKey } from "../../config.json";
 import { jwtEncryptionKey } from "../../config.json";
 import * as jwtEncrypt from "jwt-token-encrypt";
 import PersonService from "../../services/personService";
+import DeleteAccount from "./deleteAccount";
 
 import "../../styles/userPageStyle.css";
 
@@ -29,22 +30,21 @@ const getCurrentToken = () => {
 //<output>
 // A component that contains the information regarding the current user
 //</output>
+
 export default function ProfileContainer() {
     const [user, setUser] = useState(getCurrentToken());
-    const [user2, setUser2] = useState(null);
+    const [user, setUser] = useState(null);
 
     const [type, setType] = useState(null);
     const [nick, setNick] = useState(null);
 
     const [click, setClick] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(faPencilAlt);
-    const [btnStyle, setBtnStyle] = useState(editButtonDefault);
+    const [style, setStyle] = useState(editButtonDefault);
     const [disable, setDisable] = useState(true);
 
     useEffect(() => {
         // getCurrentToken();
-        console.log(user);
-        setNick(user && user.nickname);
     }, []);
 
     // removes JWT token from the browser
@@ -95,6 +95,7 @@ export default function ProfileContainer() {
 
     // convert userType to its corresponding string representation
     useEffect(() => {
+        // console.log(userinfos);
         if (user) {
             if (user.userType === 1) setType("Admin");
             else if (user.userType === 2) setType("Faculty");
@@ -251,16 +252,7 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="columns-temp"></Col>
                 <Col xs={8}>
-                    <Button
-                        onClick={logout}
-                        variant="contained"
-                        color="secondary"
-                        className="delete-button"
-                        style={{ paddingLeft: "10px" }}
-                        startIcon={<DeleteIcon />}
-                        fontWeight="900">
-                        Remove Account
-                    </Button>
+                    <DeleteAccount user={user} />
                 </Col>
             </Row>
         </Container>
