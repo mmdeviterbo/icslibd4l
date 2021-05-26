@@ -91,16 +91,23 @@ export default function FilterSubMenu({ item,
     const showSubnav = () => setSubnav(!subnav)
 
     //returns the value of the clicked filter
+    // const handleFilterTag = (data) => {
+        
+        
+    // }
+
     const handleFilter = (data) => {
         let filter = data.label ?  data.label : null;
-        if (filter == null && data.searchbarAuthor){
+        
+        if (!filter && data.searchbarAuthor){
             setSearchFilterAuthor(data.searchbarAuthor.value)
-        }else if (filter == null && data.searchbarAdviser){
+        }else if (!filter && data.searchbarAdviser){
             setSearchFilterAdviser(data.searchbarAdviser.value)
-        }else {
-            setFilterTag(filter)
+        }else{
+            setFilterTag(filter);
         }
     }
+
 
     return (
         <div>
