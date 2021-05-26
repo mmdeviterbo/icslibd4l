@@ -25,11 +25,24 @@ const readUser = (userInfo) => {
 // edit data of a person
 
 //delete person
+const deleteUser = (userInfo) => {
+    return http.delete(`${apiEndpoint}/users/delete`, {
+        data: { 
+            googleId: userInfo.googleId,
+            email: userInfo.email,
+            fullName: userInfo.fullName,
+            userType: userInfo.userType,
+            nickname: userInfo.nickname,         
+        },
+        withCredentials: true,
+    });
+}
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
     loginRegisterUser,
     logoutUser,
+    deleteUser,
 };
 
 export default exportFunctions;
