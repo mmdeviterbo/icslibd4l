@@ -102,7 +102,7 @@ const AddBookFormContainer = () => {
                         Related Courses:
                         <Select id = "relatedCourses"
                                 isMulti
-                                defaultValue={"Courses..."}
+                                placeholder={"Courses..."}
                                 options = {courseList}>
                         </Select>
                     </div>

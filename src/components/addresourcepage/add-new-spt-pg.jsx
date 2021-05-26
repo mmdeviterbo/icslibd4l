@@ -11,6 +11,11 @@ const spOrTclas = [
     {value:'thesis', label:'Thesis'},
 ];
 
+const adviserchoices = [
+    {value:['Maria Art Antonette', 'Clariño'], label: 'Clarino, Maria Art Antonette'},
+    {value:['Joseph Anthony', 'Hermocilla'], label: 'Hermocilla, Joseph Anthony'},
+]
+
 const SPThesisInfoForm = () => {
         return(
             <>
@@ -27,24 +32,15 @@ const SPThesisInfoForm = () => {
 
                     <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>
                     Adviser(s):</h5>
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorFN"/>
+                    
+                    <div className="selectadvisers">
+                        <Select id ="advsel"
+                                options={adviserchoices}
+                                isMulti>
+                        </Select>
                     </div>
 
-                    <div class = "primaryfields">
-                        <label for="resAuthor">&nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp; </label>
-                        <input type = "text" id = "resAuthorLN"/>
-                    </div>
-
-                    <button id="addAdviser">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                        Add Adviser
-                    </button>
-
-                    <br/><br/>
+                    <br/>
 
                 
                     <div class = "spthesisfiles">

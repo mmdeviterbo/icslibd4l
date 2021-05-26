@@ -4,9 +4,9 @@ import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
+
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
-// import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
-// import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
+
 import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
 import AddBookFormContainer from './components/addresourcepage/add-book-form-container'
 import EditResourcePage from './components/editresourcepage/edit-res-page-form'

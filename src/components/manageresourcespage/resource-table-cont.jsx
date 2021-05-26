@@ -9,8 +9,6 @@ const ResTableContainer = () => {
     return(
         <div className = "res-table-cont">
             
-            
-            {/* <UserTable/> */}
             <MainResourceTable/>
             <br/>
 
