@@ -14,7 +14,6 @@ const addBook = (resourceData) => {
 
 // read data of a resource
 const browseResources = (resourceType) => {
-    console.log(resourceType)
     return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
 }
 
