@@ -18,7 +18,7 @@ import './App.css';
 import DeletePopUpCont from './components/manageresourcespage/delete-modal-container';
 import ReadingSPTContainer from './components/viewresources/readingsptcontainer';
 import ReadingBookContainer from './components/viewresources/readingbookcontainer';
-import ViewResource from './components/crud/view';
+import BrowseResources from './components/browseresources/browse-resources';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
 
@@ -113,12 +113,15 @@ function App() {
           <Route exact path="/not-found" component={Notfound}></Route>
           
            {/* add your new route/path here */}
-          {/* <Route path="/view-sp-thesis" component={ViewResource}></Route> */}
+          {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
+          {/* <Route path ="/view-resources" render={()=><BrowseResources type={'sp'}/>}></Route> */}
+          {/* <Route path="/search" render={()=><Search appRef={appRef}/>}/> */}
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
-          <Route path="/manage-resources" component={ManageResPage}></Route>
+          <Route path="/manage-resources" render={()=><BrowseResources type={'sp'}/>}></Route>
           <Route path ="/add-new-resource" component={AddResourcePage}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
-          <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
+          {/* <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route> */}
+          <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route>
           <Route path ="/view-book" render={()=><ReadingBookContainer sampleBook={sampleBook}/>}></Route>
           <Route path="/manage-users" component={ManageUser}></Route>
           <Route path="/about" render={()=><About appRef={appRef}/>}/>

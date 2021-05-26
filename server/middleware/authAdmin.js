@@ -5,7 +5,8 @@ const jwtEncrypt = require("jwt-token-encrypt");
 
 //npm install cookie-parser
 //makes sure that the current user is allowed to access a part of the website
-function authenticationFaculty(req, res, next){
+function authenticationAdmin(req, res, next){
+    console.log(req.body)
     try{
         const token = req.cookies.token;
           // Encryption settings
@@ -40,4 +41,4 @@ function authenticationFaculty(req, res, next){
     }
 }
 
-module.exports = authenticationFaculty;
+module.exports = authenticationAdmin;

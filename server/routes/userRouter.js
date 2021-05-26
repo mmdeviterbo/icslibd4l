@@ -3,11 +3,9 @@ const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
 const config = require("config");
 const jwtEncrypt = require("jwt-token-encrypt");
-
 const jwt = require("jsonwebtoken");
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
-const jwtEncrypt = require("jwt-token-encrypt");
 const jwtPrivateKey = config.get('jwtPrivateKey');  
 const jwtPublicKey = config.get('jwtPublicKey'); 
 //create or login account

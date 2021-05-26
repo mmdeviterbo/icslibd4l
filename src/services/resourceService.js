@@ -13,12 +13,17 @@ const addBook = (resourceData) => {
 }
 
 // read data of a resource
-const browseSpThesis = (resourceType) => {
-    return http.get(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
+const browseResources = (resourceType) => {
+    console.log(resourceType)
+    return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
 }
 
 const searchSpThesis = (filter) => {
     return http.get(`${apiEndpoint}/thesis/create`, filter, {withCredentials: true})
+}
+
+const searchBook = (filter) => {
+    return http.get(`${apiEndpoint}/book/search`, filter, {withCredentials: true})
 }
 
 
@@ -50,10 +55,11 @@ const exportFunctions = {
     getNews,
     addSpThesis,
     addBook,
-    browseSpThesis,
+    browseResources,
     searchSpThesis,
     deleteSpThesis,
-    editSpThesis
+    editSpThesis,
+    searchBook
 }
 
 export default exportFunctions;

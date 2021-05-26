@@ -37,7 +37,6 @@ router.post("/create", async (req,res)=>{
         console.log(sp_thesis_id)
 
         if (!existingThesis){ // if does not exist, proceed in creating entry
-            console.log('at here!')
             // save thesisModel
             const newThesis = new thesisModel ({
                 sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster
@@ -79,11 +78,11 @@ router.post("/create", async (req,res)=>{
                 const author_lname = entry.lname;
                 const author_name = author_fname.concat(" ",author_lname);
 
-                console.log(typeof author_fname)
-                console.log(typeof entry.fname)
-                console.log(author_fname)
-                console.log(author_lname)
-                console.log(author_name)
+                // console.log(typeof author_fname)
+                // console.log(typeof entry.fname)
+                // console.log(author_fname)
+                // console.log(author_lname)
+                // console.log(author_name)
 
                 const newThesisAu = new thesisAuthorModel ({
                     sp_thesis_id, author_fname, author_lname, author_name
@@ -121,9 +120,11 @@ router.post("/create", async (req,res)=>{
 });
 
 // browse all entries, default sort: alphabetical by title
-router.get("/browse", async (req,res)=> {
+router.post("/browse", async (req,res)=> {
+    console.log('====BROWSE====')
+    console.log(req.body)
+    // console.log(type)
     const {type} = req.body;
-
     if (type == "book"){
         // type value: SP or Thesis
         bookModel.aggregate(
@@ -463,16 +464,15 @@ router.get("/search", async (req, res)=> {
 // update thesis data
 // AUTHENTICATION REMOVED
 router.put("/update-sp-thesis", async (req, res) => {
-    console.log('here at update')
     const {old_sp_thesis_id, sp_thesis_id, type, title, abstract, year, source_code, manuscript, journal, poster, authors, advisers, keywords} = req.body; 
     try{
         // looks for the sp/thesis based on the json object passed, then updates it
-        // await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
-        await thesisModel.findOne({sp_thesis_id: old_sp_thesis_id}, (err, updatedThesisSp) => {
+        await thesisModel.findOne({"sp_thesis_id": old_sp_thesis_id}, (err, updatedThesisSp) => {
+        // await thesisModel.findOne({sp_thesis_id: old_sp_thesis_id}, (err, updatedThesisSp) => {
             if(!sp_thesis_id || !type || !title || !abstract || !year || !source_code || !manuscript ||  !journal || !poster || !advisers || !authors || !keywords){
                 return res.status(400).json({errorMessage: "Please enter all required fields."});
             }
-            console.log('start here')
+            console.log('====START UPDATE HERE=====')
             console.log(req.body)
             // changing values
             updatedThesisSp.sp_thesis_id = sp_thesis_id;    
@@ -491,24 +491,31 @@ router.put("/update-sp-thesis", async (req, res) => {
         });
 
         // deletes all authors with corresponding thesis/sp id
-        // await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        // await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        // await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
         
-        await thesisAuthorModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
+        // await thesisAuthorModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
         // await thesisAdviserModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
         // await thesisKeyModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
 
-        console.log(authors)
-        console.log(adviser)
-        console.log(keywords)
+        // console.log(authors)
+        // console.log(adviser)
+        // console.log(keywords)
 
         // save updated thesisAuthorModel
         authors.forEach(async function(updatedEntry){
-            console.log(updatedEntry)
-            const author_fname = updatedEntry.author_fname;
-            const author_lname = updatedEntry.author_lname;
+            console.log('AUTHORS')
+            // console.log(updatedEntry)
+            // console.log(updatedEntry.fname)
+            // console.log(updatedEntry.lname)
+
+            const author_fname = updatedEntry.fname;
+            const author_lname = updatedEntry.lname;
             const author_name = author_fname.concat(" ", author_lname);
+
+            console.log(author_fname)
+            console.log(author_lname)
 
             const newAuthor = new thesisAuthorModel ({
                 sp_thesis_id, author_fname, author_lname, author_name
@@ -518,10 +525,14 @@ router.put("/update-sp-thesis", async (req, res) => {
 
         // save updated thesisAdviserModel
         advisers.forEach(async function(updatedEntry){
-            console.log(updatedEntry)
-            const adviser_fname = updatedEntry.adviser_fname;
-            const adviser_lname = updatedEntry.adviser_lname;
+            console.log('ADVISERS')
+            // console.log(updatedEntry)
+            const adviser_fname = updatedEntry.fname;
+            const adviser_lname = updatedEntry.lname;
             const adviser_name = adviser_fname.concat(" ", adviser_lname);
+
+            console.log(adviser_fname)
+            console.log(adviser_lname)
 
             const newAdviser = new thesisAdviserModel ({
                 sp_thesis_id, adviser_fname, adviser_lname, adviser_name
@@ -531,9 +542,11 @@ router.put("/update-sp-thesis", async (req, res) => {
 
         // save updated thesisAdviserModel
         keywords.forEach(async function(updatedEntry){
+            console.log('KEYWORDS')
             console.log(updatedEntry)
-            const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
+            const sp_thesis_keyword = updatedEntry;
             
+            console.log(sp_thesis_keyword)
             const newKey = new thesisKeyModel ({
                 sp_thesis_id, sp_thesis_keyword
             });
