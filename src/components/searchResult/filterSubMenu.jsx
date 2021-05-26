@@ -6,31 +6,44 @@ export default function FilterSubMenu({ item,
                                         setSearchFilterAuthor,
                                         searchFilterAdviser,
                                         setSearchFilterAdviser,
-                                        filterTag, 
-                                        setFilterTag}){
+                                        filterArray,
+                                        setfilterArray,
+                                        fieldArray,
+                                        setfieldArray,
+                                        }){
     const [subnav, setSubnav] = useState(false)
     const [moreSubnav, setmoreSubnav] = useState(false)
 
+    // functions for opening and closing submenus
     const showSubnav = () => setSubnav(!subnav)
     const showMoreSubnav = () => setmoreSubnav(!moreSubnav)
         
-    //     if (!filter && data.searchbarAuthor){
-    //         setSearchFilterAuthor(data.searchbarAuthor.value)
-    //     }else if (!filter && data.searchbarAdviser){
-    //         setSearchFilterAdviser(data.searchbarAdviser.value)
-    //     }else{
-    //         setFilterTag(filter);
-    //     }
-    // }
-
     // fixed warning for handlesearch filter
-    const handleFilter = (data) => {
+    const handleFilter = (data, parent) => {
         let filter = data.label ?  data.label : null;
         if (filter === "MORE") {
-            filter = null
+            return;
         }
-        setFilterTag(filter);
+        // get all selected filters
+        // check if filter is already in the array
+        let filterIndex = filterArray.indexOf(filter);
+        let fieldIndex = fieldArray.indexOf(parent.label);
+
+        // (SELECT FILTER)
+        if(filterIndex < 0){
+            // if filter is not in array
+            setfilterArray([...filterArray, filter]);
+            // add field in field array
+            setfieldArray([...fieldArray, parent.label]);
+        }else{
+            // remove from the array if clicked again (DESELECT FILTER)
+            filterArray.splice(filterIndex, 1);
+            setfilterArray([...filterArray]);
+            fieldArray.splice(fieldIndex, 1);
+            setfieldArray([...fieldArray]);
+        }
     }
+    // console.log(filter_array);
 
     return (
         <div>
@@ -47,38 +60,38 @@ export default function FilterSubMenu({ item,
                     : null}
                 </div>
             </a>
-            {subnav && item.subNav.map((item, index) => {
+            {subnav && item.subNav.map((item2, index) => {
                 return (
                     <a style={dropdownNav} 
                         className="dropdownNav" 
-                        to={item.link} key={index} 
-                        onClick={() => handleFilter(item)}
+                        to={item2.link} key={index} 
+                        onClick={() => handleFilter(item2, item)}
                     >
                         <span style={sidebarLabel}>
 
                             {/* SHOW MORE FILTERS */}
                             <div className="row">
-                                <div className="column" onClick={item.moreSubNav && showMoreSubnav}>
-                                    {item.label}
+                                <div className="column" onClick={item2.moreSubNav && showMoreSubnav}>
+                                    {item2.label}
                                 </div>
-                                <div className="column" style={{alignItems:"center"}}>
-                                    {item.moreSubNav && moreSubnav 
-                                    ? item.iconOpened 
-                                    : item.moreSubNav
-                                    ? item.iconClosed
+                                <div className="column" style={{alignitem2s:"center"}}>
+                                    {item2.moreSubNav && moreSubnav 
+                                    ? item2.iconOpened 
+                                    : item2.moreSubNav
+                                    ? item2.iconClosed
                                     : null}
                                 </div>
                             </div>
                             {/* END OF SHOW MORE FILTERS */}
-                            {/* {moreSubnav && item.moreSubNav.map((moreItem, mIndex) => {
+                            {/* {moreSubnav && item2.moreSubNav.map((moreitem2, mIndex) => {
                                 return(
                                     <a style={dropdownNav} 
                                         className="dropdownNav" 
                                         key={mIndex} 
-                                        onClick={() => handleFilter(moreItem)}
+                                        onClick={() => handleFilter(moreitem2)}
                                     >
                                         <span>
-                                            {moreItem.mlabel}
+                                            {moreitem2.mlabel}
                                         </span>
 
                                     </a>
@@ -86,17 +99,15 @@ export default function FilterSubMenu({ item,
                             })} */}
 
                             {/* ADD a searchbar for authors and advisers */}
-                            {item.searchbarAuthor
+                            {item2.searchbarAuthor
                             ?   <SearchBar  searchFilter={searchFilterAuthor} 
                                             setSearchFilter={setSearchFilterAuthor}
                                 />
                             : null}
-                            {item.searchbarAdviser
+                            {item2.searchbarAdviser
                             ? <SearchBar searchFilter={searchFilterAdviser} 
                                          setSearchFilter={setSearchFilterAdviser}/>
                             : null}
-
-                            
 
                             {/* <div>
                                 {

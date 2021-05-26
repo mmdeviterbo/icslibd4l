@@ -13,7 +13,14 @@ export default function AdvancedSearch({appRef}){
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
     const [searchFilterAdviser, setSearchFilterAdviser] = useState("");
-    const [filterTag, setFilterTag] = useState("");
+
+    // test for multifiltering
+    const [fieldArray, setfieldArray] = useState([])
+    const [filterArray, setfilterArray] = useState([])
+
+    // <field> : <value>
+    // <field> = type | title | year | publisher | author | adviser | subject | keyword
+    // <value> = <search string/number></value>
 
     //for pagination
     const [pageNumber,setPageNumber] = useState(0);
@@ -67,20 +74,18 @@ export default function AdvancedSearch({appRef}){
     }else
         urlQuery = decodeURIComponent((url.replace('q=','')));
 
-// console.log(searchFilterAuthor);
-// console.log(searchFilterAdviser);
-// console.log(filterTag);
+    // console.log(searchFilterAuthor);
+    // console.log(searchFilterAdviser);
+    console.log(filterArray);
+    console.log(fieldArray);
 
     async function fetchData() {
         try {
             const filter_obj = {
                 author: searchFilterAuthor,
                 adviser: searchFilterAdviser,
-                filter: filterTag
             }
-            console.log(filter_obj)
-
-
+            // console.log(filter_obj)
             const response = await ResourceService.searchSpThesis()  // pass JSON object here contain filters
         } catch (error) {
             console.log(error)
@@ -104,7 +109,7 @@ export default function AdvancedSearch({appRef}){
     //             const filter_obj = {
     //                 author: searchFilterAuthor,
     //                 adviser: searchFilterAdviser,
-    //                 filter: filterTag
+    //                 
     //             }
     //             console.log(filter_obj)
     //             const response = await ResourceService.searchSpThesis()
@@ -114,7 +119,7 @@ export default function AdvancedSearch({appRef}){
     //     }
     //     fetchData()
         
-    // }, [searchFilterAuthor, searchFilterAdviser,filterTag])
+    // }, [searchFilterAuthor, searchFilterAdviser])
 
     return (
         <form style={searchMainContainer} onSubmit={handleForm} className="searchMainContainer">
@@ -133,8 +138,10 @@ export default function AdvancedSearch({appRef}){
                     setSearchFilterAuthor={setSearchFilterAuthor}
                     searchFilterAdviser={searchFilterAdviser} 
                     setSearchFilterAdviser={setSearchFilterAdviser}
-                    filterTag={filterTag}
-                    setFilterTag={setFilterTag}
+                    filterArray={filterArray}
+                    setfilterArray={setfilterArray}
+                    fieldArray={fieldArray}
+                    setfieldArray={setfieldArray}
                     />
 
                     {/* TODO: STYLE AND HANDLE ON CLICK */}

@@ -6,8 +6,11 @@ export default function FilterSidebar({ searchFilterAuthor,
                                         setSearchFilterAuthor,
                                         searchFilterAdviser,
                                         setSearchFilterAdviser,
-                                        filterTag, 
-                                        setFilterTag}){
+                                        filterArray,
+                                        setfilterArray,
+                                        fieldArray,
+                                        setfieldArray
+                                    }){
     return (
         <div>
             <nav style={sidebarNav}>
@@ -21,8 +24,10 @@ export default function FilterSidebar({ searchFilterAuthor,
                         setSearchFilterAuthor={setSearchFilterAuthor}
                         searchFilterAdviser={searchFilterAdviser} 
                         setSearchFilterAdviser={setSearchFilterAdviser}
-                        filterTag={filterTag}
-                        setFilterTag={setFilterTag}
+                        filterArray={filterArray}
+                        setfilterArray={setfilterArray}
+                        fieldArray={fieldArray}
+                        setfieldArray={setfieldArray}
                         />
                     })}
                 </div>
