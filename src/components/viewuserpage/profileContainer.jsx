@@ -56,25 +56,24 @@ export default function ProfileContainer() {
         } catch (err) {}
     };
 
-    // const getCurrentToken = () => {
-    //   try {
-    //     const jwt = localStorage.getItem("icslib-privateKey");
-    //     const encryption = {
-    //       key: jwtEncryptionKey,
-    //       algorithm: "aes-256-cbc",
-    //     };
-    //     const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
-    //     const userInfo = decrypted.data;
-    //     setUser(userInfo);
-
-    //   } catch (err) {}
-    // };
-
     const setIcon = (click, buttonStyle, style) => {
         setClick(click);
         setButtonStyle(buttonStyle);
         setBtnStyle(style);
         setDisable(!disable);
+    };
+
+    const updateToken = async (user) => {
+        try {
+            console.log("updateToken", user);
+            localStorage.removeItem(jwtPrivateKey); //remove token from localStorage
+            await PersonService.logoutUser(user);
+
+            const { data } = await PersonService.loginRegisterUser(user); //get and store new token
+            localStorage.setItem(jwtPrivateKey, data); //set token
+
+            window.location = "/account-setting";
+        } catch (err) {}
     };
 
     const updateNick = async (userInfo) => {
@@ -84,12 +83,13 @@ export default function ProfileContainer() {
         } catch (err) {}
     };
 
-    const editNickname = (userInfo) => {
+    const editNickname = (nicknameToken, userInfo) => {
         if (click === false) {
             setIcon(true, faCheck, editButtonConfirm);
         } else if (click === true) {
             setIcon(false, faPencilAlt, editButtonDefault);
-            updateNick(userInfo);
+            updateNick(nicknameToken);
+            updateToken(userInfo);
         }
     };
 
@@ -159,10 +159,13 @@ export default function ProfileContainer() {
                     <div class="button">
                         <FontAwesomeIcon
                             onClick={() => {
-                                editNickname({
-                                    googleId: user.googleId,
-                                    newNickname: user.nickname,
-                                });
+                                editNickname(
+                                    {
+                                        googleId: user.googleId,
+                                        newNickname: user.nickname,
+                                    },
+                                    user
+                                );
                             }}
                             state={click}
                             aria-label="edit"
