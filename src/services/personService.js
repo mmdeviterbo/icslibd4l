@@ -45,7 +45,6 @@ const deleteUser = (userInfo) => {
 
 //update person
 const updateNickname = (userInfo) => {
-    console.log("pservice", userInfo);
     return http.put(`${apiEndpoint}/users/update/`, userInfo, {
         withCredentials: true,
     });

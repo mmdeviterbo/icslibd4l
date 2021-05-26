@@ -1,7 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap/";
-import { Button } from "@material-ui/core/";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { jwtPrivateKey } from "../../config.json";
@@ -33,28 +31,14 @@ const getCurrentToken = () => {
 
 export default function ProfileContainer() {
     const [user, setUser] = useState(getCurrentToken());
-    const [user, setUser] = useState(null);
 
     const [type, setType] = useState(null);
-    const [nick, setNick] = useState(null);
+    const [nick, setNick] = useState(user && user.nickname);
 
     const [click, setClick] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(faPencilAlt);
-    const [style, setStyle] = useState(editButtonDefault);
+    const [btnStyle, setBtnStyle] = useState(editButtonDefault);
     const [disable, setDisable] = useState(true);
-
-    useEffect(() => {
-        // getCurrentToken();
-    }, []);
-
-    // removes JWT token from the browser
-    const logout = async () => {
-        try {
-            localStorage.removeItem(jwtPrivateKey);
-            await PersonService.logoutUser(user);
-            window.location = "/";
-        } catch (err) {}
-    };
 
     const setIcon = (click, buttonStyle, style) => {
         setClick(click);
@@ -77,7 +61,6 @@ export default function ProfileContainer() {
     };
 
     const updateNick = async (userInfo) => {
-        console.log("i am updating");
         try {
             const { data } = await PersonService.updateNickname(userInfo);
         } catch (err) {}
@@ -109,21 +92,7 @@ export default function ProfileContainer() {
             ...user,
             nickname: nick,
         });
-        console.log(user.nickname);
     }, [nick]);
-
-    useEffect(async () => {
-        console.log("do u exist", user);
-        console.log(user.googleId);
-        try {
-            const { data } = await PersonService.readUser(user.googleId);
-            setUser2(data);
-        } catch (err) {
-            console.log(err);
-        }
-        console.log("user2: ", user2);
-    }, []);
-    console.log("user2: ", user2);
 
     return (
         // column for the title bar "Profile Display"
