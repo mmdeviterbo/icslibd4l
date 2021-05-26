@@ -1,81 +1,3 @@
-<<<<<<< HEAD
-import React, {useState} from 'react'
-// import {Link} from 'react-router-dom'
-// import styled from 'styled-components'
-
-export default function FilterSubMenu({item}){
-    const [subnav, setSubnav] = useState(false)
-
-    const showSubnav = () => setSubnav(!subnav)
-
-    const handleFilter = (data) => {
-        let filter = data.label ?  data.label : null; 
-        return filter;
-    }
-
-    return (
-        <div>
-            <a style={sidebarLink} className="sidebarLink" to={item.link} onClick={item.subNav && showSubnav} >
-                <div>
-                    <span style={sidebarLabel}> {item.label} </span>
-                </div>
-                <div>
-                    {item.subNav && subnav 
-                    ? item.iconOpened 
-                    : item.subNav 
-                    ? item.iconClosed 
-                    : null}
-                </div>
-            </a>
-            {subnav && item.subNav.map((item, index) => {
-                return (
-                    <a style={dropdownNav} 
-                        className="dropdownNav" 
-                        to={item.link} key={index} 
-                        onClick={() => handleFilter(item)}
-                    >
-                        <span style={sidebarLabel}>
-                            {item.label}
-                            {item.searchbar
-                            ? item.searchbar
-                            : null}
-                        </span>
-                    </a>
-                )
-            })}
-        </div>
-    )
-}
-
-const sidebarLink = {
-    alignItems: "center",
-    color: "black",
-    display: "flex",
-    fontFamily: "Montserrat",
-    fontSize: "18px",
-    fontWeight: "600",
-    justifyContent: "space-between",
-    listStyle: "none",
-    padding: "20px",
-    height: "60px"
-}
-
-const sidebarLabel = {
-    marginLeft: "10px"
-}
-
-const dropdownNav = {
-    alignItems: "center",
-    display: "flex",
-    color: "0067A1",
-    fontSize: "18px",
-    fontFamily: "Montserrat",
-    fontWeight: "600",
-    paddingLeft: "3rem",
-    textDecoration: "none",
-    height: "40px",
-
-=======
 import React, {useState} from 'react'
 import SearchBar from './searchBar'
 
@@ -87,27 +9,28 @@ export default function FilterSubMenu({ item,
                                         filterTag, 
                                         setFilterTag}){
     const [subnav, setSubnav] = useState(false)
+    const [moreSubnav, setmoreSubnav] = useState(false)
 
     const showSubnav = () => setSubnav(!subnav)
-
-    //returns the value of the clicked filter
-    // const handleFilterTag = (data) => {
+    const showMoreSubnav = () => setmoreSubnav(!moreSubnav)
         
-        
+    //     if (!filter && data.searchbarAuthor){
+    //         setSearchFilterAuthor(data.searchbarAuthor.value)
+    //     }else if (!filter && data.searchbarAdviser){
+    //         setSearchFilterAdviser(data.searchbarAdviser.value)
+    //     }else{
+    //         setFilterTag(filter);
+    //     }
     // }
 
+    // fixed warning for handlesearch filter
     const handleFilter = (data) => {
         let filter = data.label ?  data.label : null;
-        
-        if (!filter && data.searchbarAuthor){
-            setSearchFilterAuthor(data.searchbarAuthor.value)
-        }else if (!filter && data.searchbarAdviser){
-            setSearchFilterAdviser(data.searchbarAdviser.value)
-        }else{
-            setFilterTag(filter);
+        if (filter === "MORE") {
+            filter = null
         }
+        setFilterTag(filter);
     }
-
 
     return (
         <div>
@@ -132,7 +55,37 @@ export default function FilterSubMenu({ item,
                         onClick={() => handleFilter(item)}
                     >
                         <span style={sidebarLabel}>
-                            {item.label}
+
+                            {/* SHOW MORE FILTERS */}
+                            <div className="row">
+                                <div className="column" onClick={item.moreSubNav && showMoreSubnav}>
+                                    {item.label}
+                                </div>
+                                <div className="column" style={{alignItems:"center"}}>
+                                    {item.moreSubNav && moreSubnav 
+                                    ? item.iconOpened 
+                                    : item.moreSubNav
+                                    ? item.iconClosed
+                                    : null}
+                                </div>
+                            </div>
+                            {/* END OF SHOW MORE FILTERS */}
+                            {/* {moreSubnav && item.moreSubNav.map((moreItem, mIndex) => {
+                                return(
+                                    <a style={dropdownNav} 
+                                        className="dropdownNav" 
+                                        key={mIndex} 
+                                        onClick={() => handleFilter(moreItem)}
+                                    >
+                                        <span>
+                                            {moreItem.mlabel}
+                                        </span>
+
+                                    </a>
+                                )
+                            })} */}
+
+                            {/* ADD a searchbar for authors and advisers */}
                             {item.searchbarAuthor
                             ?   <SearchBar  searchFilter={searchFilterAuthor} 
                                             setSearchFilter={setSearchFilterAuthor}
@@ -142,8 +95,15 @@ export default function FilterSubMenu({ item,
                             ? <SearchBar searchFilter={searchFilterAdviser} 
                                          setSearchFilter={setSearchFilterAdviser}/>
                             : null}
-                        </span>
 
+                            
+
+                            {/* <div>
+                                {
+                                    item.label === "MORE" && moreSubnav
+                                }
+                            </div> */}
+                        </span>
                     </a>
                 )
             })}
@@ -165,7 +125,7 @@ const sidebarLink = {
 }
 
 const sidebarLabel = {
-    marginLeft: "0.75vw"
+    marginLeft: "0.75vw",
 }
 
 const dropdownNav = {
@@ -174,7 +134,8 @@ const dropdownNav = {
     color: "0067A1",
     fontSize: "1.3em",
     marginLeft: "3rem",
+    marginTop: "0.25em",
+    marginBottom: "0.25em",
     textDecoration: "none",
     height: "2.25vw",
->>>>>>> a0b5063ab401ce4ac3fe318e93aee75a547a07bd
 }
