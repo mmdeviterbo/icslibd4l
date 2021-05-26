@@ -26,60 +26,6 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import DeletePopUpCont from "./delete-modal-container";
 
-function createResourceData(
-  resid,
-  title,
-  author,
-  resclassif,
-  relatedcourses,
-  pubyr
-) {
-  return { resid, title, author, resclassif, relatedcourses, pubyr };
-}
-
-const rows = [
-  createResourceData(
-    "00001",
-    "SP title here",
-    "O. Aranas",
-    "SP",
-    "CMSC69",
-    "1999"
-  ),
-  createResourceData(
-    "00002",
-    "Thesis title here",
-    "L. Aranas",
-    "Thesis",
-    "CMSC69",
-    "2021"
-  ),
-  createResourceData(
-    "00003",
-    "Book title here",
-    "J. Batumbakal",
-    "Book",
-    "CMSC420",
-    "1867"
-  ),
-  createResourceData(
-    "00004",
-    "SP title here",
-    "R. Hyrule",
-    "SP",
-    "CMSC120",
-    "2008"
-  ),
-  createResourceData(
-    "00005",
-    "Thesis title here",
-    "R. Federer",
-    "Thesis",
-    "CMSC69",
-    "1999"
-  ),
-];
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -289,7 +235,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Main function
-const MainResourceTable = ({ resourceList }) => {
+const MainResourceTable = ({ resourceType }) => {
   const location = useLocation();
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -298,6 +244,25 @@ const MainResourceTable = ({ resourceList }) => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [resourceList, setResourceList] = useState([]);
+  console.log(resourceType);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await ResourceService.browseResources({
+          resourceType: resourceType,
+        });
+        setResourceList(response.data);
+        // console.log(spthesisList)
+        // setSpThesisList(spThesis_arr)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
 
   // kinda works, dont's remove yet
   const DeleteBtn = (id) => {

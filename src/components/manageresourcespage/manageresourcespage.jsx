@@ -15,8 +15,8 @@ const ManageResPage = ({ resourceList }) => {
       {/* <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link> */}
       <ManageItemsHeader />
       <FieldsContainerRes />
-      {/* <ResTableContainer resourceList={resourceList} /> */}
-      <ResTableContainer />
+      <ResTableContainer resourceList={resourceList} />
+      {/* <ResTableContainer /> */}
     </div>
   );
 };

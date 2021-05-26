@@ -120,7 +120,9 @@ function App() {
           <Route path ="/browse-resources" render={()=><BrowseResources type={"thesis"}/>}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
-          <Route path ="/manage-resources" render={()=><GetResources resourceType={'book'}/>}></Route>
+
+          {/* sp/thesis/Special Problem/Thesis ang types */}
+          <Route path ="/manage-resources" render={()=><ManageResPage resourceType={'Special Problem'}/>}></Route>
           <Route path ="/add-new-resource" component={AddResourcePage}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
           <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>

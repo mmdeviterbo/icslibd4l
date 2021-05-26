@@ -958,7 +958,7 @@ router.delete('/remove-sp-thesis/:sp_thesis_id', async (req, res) => {
     }
 
     // checks if entry to be deleted exists
-    await thesisModel.findOne({ sp_thesis_id: sp_thesis_id }, (err, object) => {
+    await thesisModel.findOne({ sp_thesis_id: sp_thesis_id_holder }, (err, object) => {
         if (!object) {
             return res
                 .status(404)
@@ -968,21 +968,21 @@ router.delete('/remove-sp-thesis/:sp_thesis_id', async (req, res) => {
 
     // removes entries with corresponding sp_thesis_id
     try {
-        await thesisModel.findOneAndDelete({ sp_thesis_id: sp_thesis_id });
-        await thesisAuthorModel.deleteMany({ sp_thesis_id: sp_thesis_id });
-        await thesisAdviserModel.deleteMany({ sp_thesis_id: sp_thesis_id });
-        await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id });
+        await thesisModel.findOneAndDelete({ sp_thesis_id: sp_thesis_id_holder });
+        await thesisAuthorModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
+        await thesisAdviserModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
+        await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
         res.send("Entry Deleted");
     } catch {
         res.send(404).json({ errorMessage: "Cannot Delete." });
     }
 
     // removes file that comes along with the sp/thesis entry
-    gfs.remove({ _id: object_id, root: "sp_pdf" }, (err, gridStore) => {
-        if (err) {
-            return res.status(404).json({ err: err });
-        }
-    });
+    // gfs.remove({ _id: object_id, root: "sp_pdf" }, (err, gridStore) => {
+    //     if (err) {
+    //         return res.status(404).json({ err: err });
+    //     }
+    // });
 });
 
 module.exports = router;
