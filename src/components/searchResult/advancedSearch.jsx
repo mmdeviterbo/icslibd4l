@@ -18,7 +18,7 @@ export default function AdvancedSearch({appRef}){
     const [pageNumber,setPageNumber] = useState(0);
     const resultsPerPage = 3;
     const pagesVisited = pageNumber*resultsPerPage;
-
+// console.log(searchFilterAuthor);
     const [results, setResults] = useState([
         {title:'My Resource 1', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
         {title:'My Resource 2', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
@@ -65,6 +65,10 @@ export default function AdvancedSearch({appRef}){
         urlFilter = (url.split('&')[1]).replace('f=','');
     }else
         urlQuery = decodeURIComponent((url.replace('q=','')));
+
+console.log(searchFilterAuthor);
+console.log(searchFilterAdviser);
+console.log(filterTag);
 
     const handleForm=(e)=>{
         e.preventDefault();
