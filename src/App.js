@@ -123,7 +123,7 @@ function App() {
           <Route path="/manage-resources" component={ManageResPage}></Route>
           <Route path ="/add-new-spt" component={AddSPThesisPage}></Route>
           <Route path ="/add-new-book" component = {AddBookFormContainer}></Route>
-          <Route path ="/edit-resource" component={EditResourcePage}></Route>
+          {/* <Route path ="/edit-resource" component={EditResourcePage}></Route> */}
           <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
           <Route path ="/view-book" render={()=><ReadingBookContainer sampleBook={sampleBook}/>}></Route>
           <Route path="/manage-users" component={ManageUser}></Route>
