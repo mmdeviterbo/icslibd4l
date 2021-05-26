@@ -10,6 +10,13 @@ import DeleteAccount from "./deleteAccount";
 
 import "../../styles/userPageStyle.css";
 
+//<summary>
+// gets the jwt token from the localStorage and decrypts it to get the infor of
+// the logged in user
+//</summary>
+//<output>
+// an object containing the information of the logged in user
+//</output>
 const getCurrentToken = () => {
     const jwt = localStorage.getItem("icslib-privateKey");
     const encryption = {
@@ -28,18 +35,18 @@ const getCurrentToken = () => {
 //<output>
 // A component that contains the information regarding the current user
 //</output>
-
 export default function ProfileContainer() {
-    const [user, setUser] = useState(getCurrentToken());
+    const [user, setUser] = useState(getCurrentToken()); // lazy initializer to immediately get the user state
 
     const [type, setType] = useState(null);
     const [nick, setNick] = useState(user && user.nickname);
 
     const [click, setClick] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(faPencilAlt);
-    const [btnStyle, setBtnStyle] = useState(editButtonDefault);
+    const [btnStyle, setBtnStyle] = useState("gray");
     const [disable, setDisable] = useState(true);
 
+    // handles appearance changing of the edit button
     const setIcon = (click, buttonStyle, style) => {
         setClick(click);
         setButtonStyle(buttonStyle);
@@ -47,6 +54,7 @@ export default function ProfileContainer() {
         setDisable(!disable);
     };
 
+    // updates the token stored in the local storage after making changes to the nickname
     const updateToken = async (user) => {
         try {
             console.log("updateToken", user);
@@ -60,17 +68,19 @@ export default function ProfileContainer() {
         } catch (err) {}
     };
 
+    // updates the user's nickname in the database
     const updateNick = async (userInfo) => {
         try {
             const { data } = await PersonService.updateNickname(userInfo);
         } catch (err) {}
     };
 
+    // function that handles nickname changing
     const editNickname = (nicknameToken, userInfo) => {
         if (click === false) {
-            setIcon(true, faCheck, editButtonConfirm);
+            setIcon(true, faCheck, "#90ee90");
         } else if (click === true) {
-            setIcon(false, faPencilAlt, editButtonDefault);
+            setIcon(false, faPencilAlt, "gray");
             updateNick(nicknameToken);
             updateToken(userInfo);
         }
@@ -87,6 +97,7 @@ export default function ProfileContainer() {
         }
     }, [user]);
 
+    // updates user state nickname when nick state changes
     useEffect(() => {
         setUser({
             ...user,
@@ -98,23 +109,23 @@ export default function ProfileContainer() {
         // column for the title bar "Profile Display"
         <Container fixed className="profile-container">
             <Row className="title-bar">
-                <Col xs={2} className="columns-temp"></Col>
+                <Col xs={2} className="grid-columns"></Col>
                 <Col xs={8}>
                     <div className="headerText" style={headerText}>
                         Profile Display
                     </div>
                 </Col>
-                <Col xs={1} className="columns-temp"></Col>
+                <Col xs={1} className="grid-columns"></Col>
             </Row>
-
+            {/* nickname section */}
             <Row>
-                <Col xs={2} className="columns-temp"></Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={2} className="grid-columns"></Col>
+                <Col xs={4} className="grid-columns">
                     <div class="col-4" className="label-text" style={labelText}>
                         Nickname:
                     </div>
                 </Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={4} className="grid-columns">
                     <input
                         onChange={(e) => {
                             setNick(e.target.value);
@@ -139,21 +150,26 @@ export default function ProfileContainer() {
                             }}
                             state={click}
                             aria-label="edit"
-                            style={btnStyle}
+                            style={{
+                                width: "20px",
+                                height: "20px",
+                                color: `${btnStyle}`,
+                            }}
                             icon={buttonStyle}
                         />
                     </div>
                 </Col>
             </Row>
 
+            {/* full name section */}
             <Row>
-                <Col xs={2} className="columns-temp"></Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={2} className="grid-columns"></Col>
+                <Col xs={4} className="grid-columns">
                     <div class="col-4" className="label-text" style={labelText}>
                         Name:
                     </div>
                 </Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={4} className="grid-columns">
                     <input
                         disabled={true}
                         type="text"
@@ -161,34 +177,37 @@ export default function ProfileContainer() {
                         value={user && user.fullName}
                     />
                 </Col>
-                <Col xs={1} className="columns-temp"></Col>
+                <Col xs={1} className="grid-columns"></Col>
             </Row>
+
+            {/* user classification section */}
             <Row>
-                <Col xs={2} className="columns-temp"></Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={2} className="grid-columns"></Col>
+                <Col xs={4} className="grid-columns">
                     <div class="col-4" className="label-text" style={labelText}>
                         Classification:
                     </div>
                 </Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={4} className="grid-columns">
                     <input
                         type="text"
                         disabled={true}
                         className="text-field"
                         value={type}
-                        // value={user && user.userType}
                     />
                 </Col>
-                <Col xs={1} className="columns-temp"></Col>
+                <Col xs={1} className="grid-columns"></Col>
             </Row>
+
+            {/* user email section */}
             <Row>
-                <Col xs={2} className="columns-temp"></Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={2} className="grid-columns"></Col>
+                <Col xs={4} className="grid-columns">
                     <div class="col-4" className="label-text" style={labelText}>
                         Email:
                     </div>
                 </Col>
-                <Col xs={4} className="columns-temp">
+                <Col xs={4} className="grid-columns">
                     <input
                         disabled={true}
                         type="text"
@@ -196,11 +215,12 @@ export default function ProfileContainer() {
                         value={user && user.email}
                     />
                 </Col>
-                <Col xs={1} className="columns-temp"></Col>
+                <Col xs={1} className="grid-columns"></Col>
             </Row>
+
             {/* part for account removal */}
             <Row className="removal-bar">
-                <Col xs={2} className="columns-temp"></Col>
+                <Col xs={2} className="grid-columns"></Col>
                 <Col xs={8}>
                     <div
                         className="header-text"
@@ -210,16 +230,16 @@ export default function ProfileContainer() {
                 </Col>
             </Row>
             <Row>
-                <Col xs={2} className="columns-temp"></Col>
-                <Col xs={8} className="columns-temp">
-                    <div style={{ padding: "12px", fontSize: "15px" }}>
+                <Col xs={2} className="grid-columns"></Col>
+                <Col xs={8} className="grid-columns">
+                    <div style={{ padding: "5px", fontSize: "15px" }}>
                         Removing your accounts means dissociating your account
                         from the app.
                     </div>
                 </Col>
             </Row>
             <Row>
-                <Col xs={2} className="columns-temp"></Col>
+                <Col xs={2} className="grid-columns"></Col>
                 <Col xs={8}>
                     <DeleteAccount user={user} />
                 </Col>
@@ -238,18 +258,4 @@ const labelText = {
     paddingTop: "12px",
     fontWeight: "900",
     fontSize: "25px",
-};
-
-const editButtonDefault = {
-    color: "gray",
-    // margin: "5px 0 0px 0px",
-    width: "20px",
-    height: "20px",
-};
-
-const editButtonConfirm = {
-    color: "#90ee90",
-    // margin: "5px 0 0px 0px",
-    width: "20px",
-    height: "20px",
 };

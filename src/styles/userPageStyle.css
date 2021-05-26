@@ -1,10 +1,8 @@
-
+/* text field */
 input {
-  /* size: 30px; */
   font-style: Montserrat;
   font-size: 25px;
   margin: 12px 20px;
-  /* box-sizing: border-box; */
   border-radius: 8px;
   padding: 12px;
   outline-style: none;
@@ -28,14 +26,12 @@ input:focus {
   justify-content: center;
 }
 
+/* remove account container */
 .removal-bar {
   padding-top: 10vh;
-  padding-bottom: 12px;
-  padding-left: 12px;
-  padding-right: 12px;
-
 }
 
+/* edit button cell */
 .edit-column {
   padding-left: none;
   padding-top: 21px;
@@ -43,11 +39,9 @@ input:focus {
 
 }
 
-.columns-temp {
+.grid-columns {
   align-items: center;
   justify-content: center;
-  /* height:inherit; */
-
   padding: 12px;
 }
 
