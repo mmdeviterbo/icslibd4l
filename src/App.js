@@ -21,6 +21,7 @@ import ReadingBookContainer from './components/viewresources/readingbookcontaine
 import BrowseResources from './components/browseresources/browse-resources';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
+import GetResources from './components/manageresourcespage/get-resources';
 
 
 function App() {
@@ -117,6 +118,7 @@ function App() {
           <Route path ="/browse-resources" render={()=><BrowseResources resourceType={'thesis'}/>}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
+          <Route path ="/manage-resources" render={()=><GetResources resourceType={'book'}/>}></Route>
           <Route path ="/add-new-resource" component={AddResourcePage}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
           {/* <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route> */}
