@@ -7,6 +7,7 @@ import { faCheck, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { jwtPrivateKey } from "../../config.json";
 import jwtDecode from "jwt-decode";
 import PersonService from "../../services/personService";
+import DeleteAccount from "./deleteAccount"
 
 import "../../styles/userPageStyle.css";
 
@@ -185,19 +186,7 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="columns-temp"></Col>
                 <Col xs={8}>
-                    {/* BACKLOG:
-            - MODAL OR POP-UP TO WARN USER ABOUT DISSOCIATION
-            - ACCOUNT DISSOCIATION (FROM BACKEND(?)) */}
-                    <Button
-                        onClick={logout}
-                        variant="contained"
-                        color="secondary"
-                        className="delete-button"
-                        style={{ paddingLeft: "10px" }}
-                        startIcon={<DeleteIcon />}
-                        fontWeight="900">
-                        Remove Account
-                    </Button>
+                    <DeleteAccount user={user}/>
                 </Col>
             </Row>
         </Container>
