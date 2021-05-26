@@ -92,6 +92,9 @@ router.get("/search", authAdmin, async (req, res) => {
                 $regex: req.query.search,
                 $options: "i",
             },
+            _id: {
+                $nin: idList,
+            },
         });
         //add to final list
         final_output = init_output;
