@@ -115,7 +115,7 @@ function App() {
           
            {/* add your new route/path here */}
           {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
-          <Route path ="/browse-resources" render={()=><BrowseResources resourceType={'thesis'}/>}></Route>
+          <Route path ="/browse-resources" render={()=><BrowseResources type={"thesis"}/>}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
           <Route path ="/manage-resources" render={()=><GetResources resourceType={'book'}/>}></Route>
