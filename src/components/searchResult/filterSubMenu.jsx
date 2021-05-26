@@ -1,32 +1,40 @@
 import React, {useState} from 'react'
 import SearchBar from './searchBar'
 
-export default function FilterSubMenu({ item, 
+export default function FilterSubMenu({ item,
                                         searchFilterAuthor, 
                                         setSearchFilterAuthor,
-                                        searchFilterAdv,
-                                        setSearchFilterAdv,
+                                        searchFilterAdviser,
+                                        setSearchFilterAdviser,
                                         filterTag, 
                                         setFilterTag}){
     const [subnav, setSubnav] = useState(false)
+    const [moreSubnav, setmoreSubnav] = useState(false)
 
     const showSubnav = () => setSubnav(!subnav)
+    const showMoreSubnav = () => setmoreSubnav(!moreSubnav)
+        
+    //     if (!filter && data.searchbarAuthor){
+    //         setSearchFilterAuthor(data.searchbarAuthor.value)
+    //     }else if (!filter && data.searchbarAdviser){
+    //         setSearchFilterAdviser(data.searchbarAdviser.value)
+    //     }else{
+    //         setFilterTag(filter);
+    //     }
+    // }
 
-    // returns the value of the clicked filter
+    // fixed warning for handlesearch filter
     const handleFilter = (data) => {
         let filter = data.label ?  data.label : null;
-        if (filter == null && data.searchbarAuthor){
-            setSearchFilterAuthor(data.searchbarAuth.value)
-        }else if (filter == null && data.searchbarAdv){
-            setSearchFilterAdv(data.searchbarAdv.value)
-        }else {
-            setFilterTag(filter)
+        if (filter === "MORE") {
+            filter = null
         }
+        setFilterTag(filter);
     }
 
     return (
         <div>
-            {/* displays the submenu */}
+            {/*displays the submenu*/}
             <a style={sidebarLink} className="sidebarLink" to={item.link} onClick={item.subNav && showSubnav} >
                 <div>
                     <span style={sidebarLabel}> {item.label} </span>
@@ -47,16 +55,54 @@ export default function FilterSubMenu({ item,
                         onClick={() => handleFilter(item)}
                     >
                         <span style={sidebarLabel}>
-                            {item.label}
-                            {item.searchbarAuth
+
+                            {/* SHOW MORE FILTERS */}
+                            <div className="row">
+                                <div className="column" onClick={item.moreSubNav && showMoreSubnav}>
+                                    {item.label}
+                                </div>
+                                <div className="column" style={{alignItems:"center"}}>
+                                    {item.moreSubNav && moreSubnav 
+                                    ? item.iconOpened 
+                                    : item.moreSubNav
+                                    ? item.iconClosed
+                                    : null}
+                                </div>
+                            </div>
+                            {/* END OF SHOW MORE FILTERS */}
+                            {/* {moreSubnav && item.moreSubNav.map((moreItem, mIndex) => {
+                                return(
+                                    <a style={dropdownNav} 
+                                        className="dropdownNav" 
+                                        key={mIndex} 
+                                        onClick={() => handleFilter(moreItem)}
+                                    >
+                                        <span>
+                                            {moreItem.mlabel}
+                                        </span>
+
+                                    </a>
+                                )
+                            })} */}
+
+                            {/* ADD a searchbar for authors and advisers */}
+                            {item.searchbarAuthor
                             ?   <SearchBar  searchFilter={searchFilterAuthor} 
                                             setSearchFilter={setSearchFilterAuthor}
                                 />
                             : null}
-                            {item.searchbarAdv
-                            ? <SearchBar searchFilter={searchFilterAdv} 
-                                         setSearchFilter={setSearchFilterAdv}/>
+                            {item.searchbarAdviser
+                            ? <SearchBar searchFilter={searchFilterAdviser} 
+                                         setSearchFilter={setSearchFilterAdviser}/>
                             : null}
+
+                            
+
+                            {/* <div>
+                                {
+                                    item.label === "MORE" && moreSubnav
+                                }
+                            </div> */}
                         </span>
                     </a>
                 )
@@ -66,31 +112,30 @@ export default function FilterSubMenu({ item,
 }
 
 const sidebarLink = {
-    alignItems: "center",
-    color: "black",
     display: "flex",
-    fontFamily: "Montserrat",
-    fontSize: "18px",
-    fontWeight: "600",
+    color: "black",
     justifyContent: "space-between",
+    alignItems: "center",
+    padding: "0 1.5vw 0 0",
+    marginLeft: "1vw",
     listStyle: "none",
-    padding: "20px",
-    height: "60px"
+    height: "3vw",
+    fontSize: "1.1em",
+    fontWeight: "600",
 }
 
 const sidebarLabel = {
-    marginLeft: "10px"
+    marginLeft: "0.75vw",
 }
 
 const dropdownNav = {
     alignItems: "center",
     display: "flex",
     color: "0067A1",
-    fontSize: "18px",
-    fontFamily: "Montserrat",
-    fontWeight: "600",
-    paddingLeft: "3rem",
+    fontSize: "1.3em",
+    marginLeft: "3rem",
+    marginTop: "0.25em",
+    marginBottom: "0.25em",
     textDecoration: "none",
-    height: "40px",
-
+    height: "2.25vw",
 }

@@ -1,27 +1,26 @@
 import React from 'react'
-// import styled from 'styled-components'
-// import {Link} from 'react-router-dom'
 import {FilterSidebarData} from './filterSidebarData'
 import FilterSubMenu from './filterSubMenu'
 
 export default function FilterSidebar({ searchFilterAuthor,
                                         setSearchFilterAuthor,
-                                        searchFilterAdv,
-                                        setSearchFilterAdv,
+                                        searchFilterAdviser,
+                                        setSearchFilterAdviser,
                                         filterTag, 
                                         setFilterTag}){
     return (
         <div>
             <nav style={sidebarNav}>
                 <div style={wrapper}>
+                    <p style={sidebarTitle}>Filters</p>
                     {FilterSidebarData.map((item, index) => {
                         return <FilterSubMenu 
                         item= {item} 
                         key={index}
                         searchFilterAuthor={searchFilterAuthor} 
                         setSearchFilterAuthor={setSearchFilterAuthor}
-                        searchFilterAdv={searchFilterAdv} 
-                        setSearchFilterAdv={setSearchFilterAdv}
+                        searchFilterAdviser={searchFilterAdviser} 
+                        setSearchFilterAdviser={setSearchFilterAdviser}
                         filterTag={filterTag}
                         setFilterTag={setFilterTag}
                         />
@@ -35,12 +34,19 @@ export default function FilterSidebar({ searchFilterAuthor,
 const sidebarNav = {
     background: "white",
     display: "flex",
-    height: "75vh",
-    width: "250px",
+    height: "auto",
+    width: "19vw",
     marginLeft:"auto",
-    marginRight:"2vw",
-    overflowY: "scroll",
-    MsOverflowStyle:"none",
+    marginRight:"0.75vw",
+    paddingBottom:"2vw",
+    MsOverflowStyle:"none"
+}
+
+const sidebarTitle = {
+    margin:"1vw 0 1vw 1.5vw",
+    fontSize:"1.5em",
+    fontWeight:"800",
+    fontFamily:"Trebuchet MS"
 }
 
 const wrapper = {

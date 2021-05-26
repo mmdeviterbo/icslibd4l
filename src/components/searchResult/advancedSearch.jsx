@@ -1,21 +1,65 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
+import ReactPaginate from "react-paginate";
 import '../../styles/searchResultStyle/advancedSearch.css';
 import FilterSidebar from './filterSidebar';
+import ResultContainer from './resultContainer';
+import ResourceService from '../../services/resourcesService';
 
 export default function AdvancedSearch({appRef}){
     const [query, setQuery] = useState("");
-    const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
-    const [searchFilterAdv, setSearchFilterAdv] = useState("");
-    const [filterTag, setFilterTag] = useState("");
-    
     const history = useHistory();
 
+    //filters
+    const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
+    const [searchFilterAdviser, setSearchFilterAdviser] = useState("");
+    const [filterTag, setFilterTag] = useState("");
+
+    //for pagination
+    const [pageNumber,setPageNumber] = useState(0);
+    const resultsPerPage = 3;
+    const pagesVisited = pageNumber*resultsPerPage;
+// console.log(searchFilterAuthor);
+    const [results, setResults] = useState([
+        {title:'My Resource 1', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 2', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 3', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 4', author:['Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 5', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 6', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource 7', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 8', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 9', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+        {title:'My Resource 10', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    ]);
+    const pageCount = Math.ceil(results.length / resultsPerPage);
+
+
+    const displayresults = results
+    .slice(pagesVisited, pagesVisited + resultsPerPage)
+    .map((result) => {
+      return (
+        <ResultContainer
+        title={result.title}
+        author={result.author} 
+        adviser={result.adviser}
+        linkTo={result.linkTo} 
+        publishDate={result.publishDate}
+        />
+      );
+    });
+
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+    };
+
+    //url manipulation
     let url = window.location.href;
     let urlFilter = 'any';
     let urlQuery = '';
 
-    url = url.replace('http://localhost:3000/search?',''); //edit before prod; url = url.replace(/\+/g,' ');
+    url = url.replace('http://localhost:3000/search?',''); 
+    //edit before prod; url = url.replace(/\+/g,' '); or should i use split and have ? as a delimeter tho the search string can also contain '?'
 
     if(url.split('&').length > 1){
         urlQuery = decodeURIComponent((url.split('&')[0]).replace('q=',''));
@@ -23,20 +67,59 @@ export default function AdvancedSearch({appRef}){
     }else
         urlQuery = decodeURIComponent((url.replace('q=','')));
 
+// console.log(searchFilterAuthor);
+// console.log(searchFilterAdviser);
+// console.log(filterTag);
+
+    async function fetchData() {
+        try {
+            const filter_obj = {
+                author: searchFilterAuthor,
+                adviser: searchFilterAdviser,
+                filter: filterTag
+            }
+            console.log(filter_obj)
+
+
+            const response = await ResourceService.searchSpThesis()  // pass JSON object here contain filters
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleForm=(e)=>{
         e.preventDefault();
         let tempStr = query.trim();
     
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             history.push(`/search?q=${tempStr}`);
-            // if(filterTag.length!==0 && filterTag.length!==3) history.push(`/search?q=${tempStr}&filter=${filterTag}`);
-            // else history.push(`/search?q=${tempStr}`);
         }
+        fetchData()
     }
+
+    // http request from backend
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         try {
+    //             const filter_obj = {
+    //                 author: searchFilterAuthor,
+    //                 adviser: searchFilterAdviser,
+    //                 filter: filterTag
+    //             }
+    //             console.log(filter_obj)
+    //             const response = await ResourceService.searchSpThesis()
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     fetchData()
+        
+    // }, [searchFilterAuthor, searchFilterAdviser,filterTag])
+
     return (
         <form style={searchMainContainer} onSubmit={handleForm} className="searchMainContainer">
             <div style={topContainer} className="topContainer">
-                <h3 style={textStyle}>Search results for:</h3>
+                <h4 className="textStyle">Search results for:</h4>
                 <div style={searchBarContainer} className="resultsSearchbar">
                     <i className="fa fa-search fa-2x" style={searchIcon} onClick={handleForm}></i>
                     <input style={inputSearch} type="text" className="form-control removeOutline" defaultValue={urlQuery} onChange={e=>setQuery(e.target.value)} placeholder="Search for Books, Theses, and Special Problems" />
@@ -44,18 +127,54 @@ export default function AdvancedSearch({appRef}){
             </div>
 
             <div style={bottomContainer}>
-                <div style={filtersContaner}>
-                    <FilterSidebar 
+                <div style={filtersContainer}>
+                    <FilterSidebar
                     searchFilterAuthor={searchFilterAuthor} 
                     setSearchFilterAuthor={setSearchFilterAuthor}
-                    searchFilterAdv={searchFilterAdv} 
-                    setSearchFilterAdv={setSearchFilterAdv}
+                    searchFilterAdviser={searchFilterAdviser} 
+                    setSearchFilterAdviser={setSearchFilterAdviser}
                     filterTag={filterTag}
                     setFilterTag={setFilterTag}
                     />
+
+                    {/* TODO: STYLE AND HANDLE ON CLICK */}
+                    <button variant="primary">
+                        Apply Filters
+                    </button>{' '}
                 </div>
 
-                <div style={resultsContainer}>
+                <div style={resultsOuterContainer}>
+                    <div style={resultTop}>{results.length>0 ? 
+                        <p className="textStyle">Showing results {((pageNumber+1)*resultsPerPage)-(resultsPerPage-1)}
+                        -
+                        {results && 
+                            ((pageNumber+1)*resultsPerPage)<results.length 
+                            ? 
+                            ((pageNumber+1)*resultsPerPage) : results.length} out of {results && results.length}
+                        </p>
+                        :
+                        <p className="textStyle">No results</p>
+                    }
+                    </div>
+
+                    <div style={resultBottom}>
+                        {displayresults}
+                        {results.length>0 ?
+                            <ReactPaginate
+                                previousLabel={"Previous"}
+                                nextLabel={"Next"}
+                                pageCount={pageCount}
+                                onPageChange={changePage}
+                                containerClassName={"paginationBttns"}
+                                previousLinkClassName={"previousBttn"}
+                                nextLinkClassName={"nextBttn"}
+                                disabledClassName={"paginationDisabled"}
+                                activeClassName={"paginationActive"}
+                            />
+                            :
+                            <div></div>
+                        }
+                    </div>
                 </div>
             </div>
         </form>
@@ -63,65 +182,70 @@ export default function AdvancedSearch({appRef}){
 }
 
 const searchMainContainer = {
-    overflow:"hidden",
     position:"relative",
-    height:"90vh",
+    height:"auto",
     width:"100vw",
-    padding:"0 2vw",
-    margin:"auto",
+    padding:0,
+    margin:"auto 2vw",
     display:"flex",
     alignItems:"flex-start",
-    flexDirection:"column"
+    flexDirection:"column",
 }
 
 const topContainer = {
-    position:"relative",
-    height:"auto",
+    position:"sticky",
+    top:"10vh",
     width: "96vw",
     justifyContent:"center",
     alignItems:"center",
-    padding:"2.5vw 5vw 0 5vw",
-    overflow:"hidden",
+    padding:"5vh 5vw 1vh",
+    background:"white",
     borderBottom:"2px solid gainsboro",
+    zIndex:4
 }
 
 const searchBarContainer = {
-    display:"flex",
+    display:"flex"
 }
 
 const searchIcon = {
-    marginTop:"0.5vw"
+    paddingLeft:"1vw",
+    marginTop:"1vh"
+
 }
 
 const inputSearch = {
     width:"100%",
-    padding:"20px 20px",
+    padding:"1.52vh 1.52vw",
     marginLeft:0,
     border:0,
+    fontSize:"1.48em"
 }
 
 const bottomContainer = { 
-    width: "96vw",
-    height:"10vw", //change to auto later
     display:"flex",
+    width: "96vw"
 }
 
-const filtersContaner = {
-    width:"24vw",
-    height:"auto"
+const filtersContainer = {
+    position:"sticky",
+    overflowY:"overlay",
+    top:"28vh",
+    width:"26vw",
+    height:"73vh"
 }
 
-const resultsContainer = {
-    width:"72vw",
-    height:"10vw",
-    // background:"lightblue",
+const resultsOuterContainer = {
+    width:"70vw"
 }
 
-const textStyle = {
-    "WebkitTouchCallout": "none",  
-    "WebkitUserSelect": "none", 
-    "KhtmlUserSelect": "none", 
-    "MozUserSelect": "none",
-    "MsUserSelect": "none",  
-    "userSelect": "none",
+const resultTop = {
+    position:"sticky",
+    top:"28vh",
+    padding:"2.5vh 1vw",
+    background:"white"
+}
+
+const resultBottom = {
+    marginLeft:"5vw"
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 import * as FaIcons from 'react-icons/fa'
-// import styled from 'styled-components'
 
 export const FilterSidebarData = [
     {
@@ -9,8 +8,7 @@ export const FilterSidebarData = [
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                // searchbar: <SearchBar />
-                searchbarAuth: "searchbar"
+                searchbarAuthor: "searchbar"
             }
         ]
     },
@@ -20,8 +18,7 @@ export const FilterSidebarData = [
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                // searchbar: <SearchBar />
-                searchbarAdv: "searchbar"
+                searchbarAdviser: "searchbar"
             }
         ]
     },
@@ -45,12 +42,22 @@ export const FilterSidebarData = [
             },
             {
                 label: "MORE",
+                iconClosed: <FaIcons.FaAngleDown/>,
+                iconOpened: <FaIcons.FaAngleUp/>,
                 link: "/",
+                moreSubNav: [
+                    {
+                        mlabel: "MATH"
+                    },
+                    {
+                        mlabel: "SCIENCE"
+                    },
+                    {
+                        mlabel: "MEDICINE"
+                    }
+                    
+                ]
             },
-            {
-                label: "123123",
-                link: "/",
-            }
         ]             
     },
     {
