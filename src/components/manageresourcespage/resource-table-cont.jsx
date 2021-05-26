@@ -11,18 +11,12 @@ const ResTableContainer = () => {
             
             
             {/* <UserTable/> */}
-            <MainResourceTable
-                // options={{
-                //     cellStyle: {
-                //         fontSize: '5rem',
-                //     }
-                // }}
-            />
+            <MainResourceTable/>
             <br/>
 
             <div class = "addBtns">
-            <AddNewResource/>
-            {/* <AddNewSPT/> */}
+            <AddNewResource/>   {/* Add book */}
+            <AddNewSPT/>        {/* Add Sp/Thesis */}
             </div>
         </div>
     )

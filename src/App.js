@@ -5,9 +5,12 @@ import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 import ManageResPage from './components/manageresourcespage/manageresourcespage'
-import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
-import EditResourcePage from './components/addresourcepage/edit-res-page-form'
+// import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
+// import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
 import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
+import AddBookFormContainer from './components/addresourcepage/add-book-form-container'
+import EditResourcePage from './components/editresourcepage/edit-res-page-form'
+
 import ManageUser from "./components/manageuserpage/manageuserpage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import ReadingSPTContainer from './components/viewresources/readingsptcontainer'
@@ -117,7 +120,8 @@ function App() {
           {/* <Route path="/view-sp-thesis" component={ViewResource}></Route> */}
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           <Route path="/manage-resources" component={ManageResPage}></Route>
-          <Route path ="/add-new-resource" component={AddResourcePage}></Route>
+          <Route path ="/add-new-spt" component={AddSPThesisPage}></Route>
+          <Route path ="/add-new-book" component = {AddBookFormContainer}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
           <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
           <Route path ="/view-book" render={()=><ReadingBookContainer sampleBook={sampleBook}/>}></Route>

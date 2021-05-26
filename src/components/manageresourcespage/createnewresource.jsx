@@ -3,7 +3,7 @@ import React, { Link } from 'react';
 const AddNewResource = () => {
     return (
         <div className = "new-res-container">
-            <a href="/add-new-resource">
+            <a href="/add-new-book">
             <button className = "new-res-button">
 
             <span class = "res-icon">
@@ -13,7 +13,7 @@ const AddNewResource = () => {
             </span>
 
             <span class = "res-btn-txt">
-                Add New Resource
+                Add Book
             </span>
             </button>
             </a>

@@ -78,7 +78,7 @@ const AddNewSPThesisForm = () => {
             {/* Primary  Info */}
                 <div className = "res-primary-info">
                     
-                    {/* <ResourcePrimaryInfoForm/> */}
+                    <ResourcePrimaryInfoForm/>
                     
                 </div>
                 

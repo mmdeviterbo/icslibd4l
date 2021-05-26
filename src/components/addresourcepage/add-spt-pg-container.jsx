@@ -7,7 +7,7 @@ import AddNewSPThesisForm from './add-new-spt-pg';
 const AddSPThesisPage = () => {
     return(
         <div className = "add-resource-page-container" >
-            <AddResSidebar/>
+            {/* <AddResSidebar/> */}
             <AddNewSPThesisForm/>
         </div>
     )
