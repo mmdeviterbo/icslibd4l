@@ -124,8 +124,9 @@ router.post("/browse", async (req,res)=> {
     console.log('====BROWSE====')
     console.log(req.body)
     // console.log(type)
-    const {type} = req.body;
-    if (type == "book"){
+    const {resourceType} = req.body;
+    console.log(resourceType)
+    if ("book"){
         // type value: SP or Thesis
         bookModel.aggregate(
             [{$lookup: {from:"book_authors", localField:"bookId", foreignField:"bookId", as:"author"}},
@@ -142,9 +143,10 @@ router.post("/browse", async (req,res)=> {
             }
         );
     }else{
+        console.log('here at spt')
         // type value: SP or Thesis
         thesisModel.aggregate(
-            [{$match: {"type":type}},
+            [{$match: {"type":resourceType}},
             {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
             {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
             {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}},
@@ -155,6 +157,7 @@ router.post("/browse", async (req,res)=> {
                 if(err){
                     res.send(err);
                 }else{
+                    console.log(result)
                     res.send(result);
                 }
             }

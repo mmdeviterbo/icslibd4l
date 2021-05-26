@@ -114,10 +114,9 @@ function App() {
           
            {/* add your new route/path here */}
           {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
-          {/* <Route path ="/view-resources" render={()=><BrowseResources type={'sp'}/>}></Route> */}
-          {/* <Route path="/search" render={()=><Search appRef={appRef}/>}/> */}
+          <Route path ="/browse-resources" render={()=><BrowseResources resourceType={'thesis'}/>}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
-          <Route path="/manage-resources" render={()=><BrowseResources type={'sp'}/>}></Route>
+          {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
           <Route path ="/add-new-resource" component={AddResourcePage}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
           {/* <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route> */}
