@@ -40,7 +40,7 @@ export default function LatestAcquisitions({latestAcqRef}) {
                     <span style={hoverTextStyle}>{hoverText}</span>
                     <div style={textBgContainer}>
                         <h3 style={textBg} className="latestAcqhoverTextStyle">LATEST<br/>ACQUISITIONS</h3>
-                        <p style={{fontSize:"calc(10px + 0.5vw)", textAlign:"center",marginTop:"3%"}}>Discover and browse the latest books</p>
+                        <p style={{fontSize:"calc(10px + 0.5vw)", textAlign:"center",marginTop:"3%"}} className="latestAcqDiscover">Discover and browse the latest books</p>
                     </div>
                     <div style={buttonViewAllBooks}>
                         <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button>
@@ -116,6 +116,7 @@ const blueBg = {
 const textBgContainer = {
     flexGrow:1,
     width:"100%",
+    height:"100%",
     background:"#0067A110",
     zIndex:100,
     display:"flex",
@@ -126,7 +127,7 @@ const textBgContainer = {
 }
 const textBg={
     margin:0,
-    fontSize:"calc(20px + 2vw)",
+    fontSize:"calc(20px + 1.8vw)",
     background:"black",
     color:"white",
     fontWeight:900,
@@ -151,6 +152,7 @@ const hoverTextStyleWhite = {
 }
 
 const buttonViewAllBooks = {
+    height:"50%",
     flexGrow:0.4,
     display:"flex",
     flexDirection:"column",
