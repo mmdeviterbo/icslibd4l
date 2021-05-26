@@ -21,6 +21,12 @@ const bookSchema = new mongoose.Schema({
         type: Number, 
         required: true
     },
+    datePublished: {
+        type: Date
+    },
+    dateAcquired: {
+        type: Date
+    },
     // // empty array for population
     author: [],
     subject: []
