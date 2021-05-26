@@ -6,7 +6,6 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
-const config = require("config");
 const path = require("path");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
@@ -14,7 +13,7 @@ const multer = require("multer");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 
-const database = config.get("db");
+const database = process.env.db;
 
 router.post("/get-news", async (req, res) => {
     let options = {
@@ -74,6 +73,7 @@ router.post("/get-news", async (req, res) => {
 // Create mongo connection
 let gfs;
 let conn;
+
 mongoose.connection.on("connected", () => {
     conn = mongoose.createConnection(
         database,

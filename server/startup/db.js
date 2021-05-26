@@ -1,9 +1,8 @@
 //this is where monggodb should be set eg. mongoose.connect()
 const mongoose = require("mongoose");
-const config = require("config");
 
 //gets database link from config/default.json
-const database = config.get("db");
+const database = process.env.db;
 
 module.exports = () => {
     //connects the database with the proper address

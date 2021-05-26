@@ -1,14 +1,12 @@
-const config = require("config");
-const jwt = require("jsonwebtoken");
 const jwtEncrypt = require("jwt-token-encrypt");
-const jwtPrivateKey = config.get("jwtPrivateKey");
+const jwtPrivateKey = process.env.jwtPrivateKey;
 
 //npm install cookie-parser
 //makes sure that the current user is allowed to access a part of the website
 function authenticationStudent(req, res, next) {
     try {
         const token = req.cookies.token;
-
+        console.log(req.cookies);
         //checks if token exists
         if (!token)
             return res.sendStatus(401).json({

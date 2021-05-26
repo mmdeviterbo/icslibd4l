@@ -1,16 +1,19 @@
 const router = require("express").Router();
 const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
-const config = require("config");
 const jwtEncrypt = require("jwt-token-encrypt");
 
 const jwt = require("jsonwebtoken");
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
 
-const jwtPrivateKey = config.get("jwtPrivateKey");
-const jwtPublicKey = config.get("jwtPublicKey");
+const jwtPrivateKey = process.env.jwtPrivateKey;
+const jwtPublicKey = process.env.jwtPublicKey;
 //create or login account
+// {
+//   googleId,
+//   email,
+//   fullName }
 router.post("/create", async (req, res) => {
     var loggedUser;
     try {
@@ -50,8 +53,7 @@ router.post("/create", async (req, res) => {
         });
         await newUserLog.save();
 
-        //NEW IMPLEMENTATION
-        //TODO: MARTY AYUSIN MO TO
+        //NEW IMPLEMENTATION=
         const publicData = null;
         // Data that will only be available to users who know encryption details.
         const privateData = {
