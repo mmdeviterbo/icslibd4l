@@ -8,7 +8,6 @@ import FieldsContainerRes from "./filter-fields-res";
 import ResTableContainer from "./resource-table-cont";
 
 const ManageResPage = ({ resourceList }) => {
-  console.log(resourceList);
   return (
     <div className="manage-resources-page-container">
       {/* <TempNavbar/> */}

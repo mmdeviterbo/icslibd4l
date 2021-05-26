@@ -34,7 +34,6 @@ const editSpThesis = (resourceData) => {
 
 //delete resource
 const deleteSpThesis = (deleteId) => {
-    console.log(deleteId)
     return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis/${deleteId}`, {withCredentials: true})
     // return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis`, {data:{id: deleteId}, headers:{Authorization: "token"}}, {withCredentials: true})
 }
@@ -45,7 +44,14 @@ function getNews(){
     return http.post(`${apiEndpoint}/books/get-news`)
 }
 
+// get all books, sorted by date (latest acquisition feature)
+function getBooks(){
+    return http.get(`${apiEndpoint}/books/display`);
+}
 
+function getAllResources(){
+    return http.get(`${apiEndpoint}/thesis/search`);
+}
 
 
 
@@ -58,7 +64,9 @@ const exportFunctions = {
     searchSpThesis,
     deleteSpThesis,
     editSpThesis,
-    searchBook
+    searchBook,
+    getBooks,
+    getAllResources
 }
 
 export default exportFunctions;

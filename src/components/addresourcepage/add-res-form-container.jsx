@@ -1,7 +1,6 @@
 import { SignalCellularNoSimOutlined } from "@material-ui/icons";
-import React, { Component, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import Select from "react-select";
-import { ItemGroup } from "semantic-ui-react";
 import ResourceServices from "../../services/resourceService";
 import ChipInput from "material-ui-chip-input";
 
@@ -139,7 +138,7 @@ export default function AddResFormContainer() {
     console.log(adviserList);
     console.log(keywords);
     try {
-      if (type == "book") {
+      if (type === "book") {
         const userInput = {
           bookId: id,
           title,
@@ -508,7 +507,7 @@ export default function AddResFormContainer() {
           </button>
         </form>
       </div>
-      {type == "book" ? BookInfoForm() : SPThesisInfoForm()}
+      {type === "book" ? BookInfoForm() : SPThesisInfoForm()}
 
       {/* <div className="res-primary-info">
             </div>           */}

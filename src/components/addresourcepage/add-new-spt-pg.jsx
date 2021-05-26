@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useCom } from 'react'
 import Select from 'react-select'
 import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
@@ -71,6 +71,14 @@ const SPThesisInfoForm = () => {
     }
 
 const AddNewSPThesisForm = () => {
+    // retrieve the user info using the info
+    const [resource, setResource] = useState();
+            
+    useEffect(()=>{
+        
+
+    },[])
+
     return(
          <div className = "add-res-form-cont">
 

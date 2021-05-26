@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import clsx from "clsx";
@@ -24,60 +24,14 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import DeletePopUpCont from "./delete-modal-container";
+import resourceService from "../../services/resourceService"
 
-function createResourceData(
-  resid,
-  title,
-  author,
-  resclassif,
-  relatedcourses,
-  pubyr
-) {
+function createResourceData(resid, title, author, resclassif, relatedcourses, pubyr) {
   return { resid, title, author, resclassif, relatedcourses, pubyr };
 }
 
-const rows = [
-  createResourceData(
-    "00001",
-    "SP title here",
-    "O. Aranas",
-    "SP",
-    "CMSC69",
-    "1999"
-  ),
-  createResourceData(
-    "00002",
-    "Thesis title here",
-    "L. Aranas",
-    "Thesis",
-    "CMSC69",
-    "2021"
-  ),
-  createResourceData(
-    "00003",
-    "Book title here",
-    "J. Batumbakal",
-    "Book",
-    "CMSC420",
-    "1867"
-  ),
-  createResourceData(
-    "00004",
-    "SP title here",
-    "R. Hyrule",
-    "SP",
-    "CMSC120",
-    "2008"
-  ),
-  createResourceData(
-    "00005",
-    "Thesis title here",
-    "R. Federer",
-    "Thesis",
-    "CMSC69",
-    "1999"
-  ),
-];
+
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -297,7 +251,41 @@ const MainResourceTable = (props) => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  console.log(props.resourceList);
+
+  const [rows, setRows] = React.useState([]);
+
+  useEffect(async()=>{
+      try{
+        let tempRow = [...rows];
+        // const {data} = await resourceService.browseResources({type:"book"});
+
+        // for(let book of data){
+        //     tempRow.push(createResourceData(book.bookId, book.title, book.author[0].author_name, "Book", book.subject[0].subject, book.datePublished[0]));
+        // }
+        // setRows(tempRow);        
+      
+        const {data} = await resourceService.browseResources({type:"Thesis"});
+        for(let thesis of data){
+            tempRow.push(createResourceData(
+              thesis.sp_thesis_id, 
+              thesis.title, 
+              thesis.author[0]? thesis.author[0].author_name : "N/A", 
+              thesis.type, 
+              thesis.type === "Thesis"? "CMSC 199" : "CMSC 200", 
+              thesis.year
+              ));
+        }
+        setRows(tempRow);        
+
+
+      }catch(err){
+        console.log("ERRROR 304"); 
+      }
+  },[])
+
+
+
+
 
   // kinda works, dont's remove yet
   const DeleteBtn = (id) => {
@@ -432,22 +420,28 @@ const MainResourceTable = (props) => {
                         padding="none"
                         className={classes.tablecell}
                       >
-                        {row.resid}
+                        {/* unique id */}
+                        <p style={{fontSize:"13px", fontWeight:"800"}}>{row.resid}</p> 
                       </TableCell>
                       <TableCell className={classes.tablecell} align="left">
-                        {row.title}
+                        {/* title of resources */}
+                        <p style={{fontSize:"14px"}}>{row.title}</p>
                       </TableCell>
                       <TableCell className={classes.tablecell} align="left">
-                        {row.author}
+                        {/* author */}
+                        <p style={{fontSize:"14px"}}>{row.author}</p>
                       </TableCell>
                       <TableCell className={classes.tablecell} align="left">
-                        {row.resclassif}
+                        {/* classifcation */}
+                        <p style={{fontSize:"14px"}}>{row.resclassif}</p>
                       </TableCell>
                       <TableCell className={classes.tablecell} align="left">
-                        {row.relatedcourses}
+                        {/* related courses */}
+                        <p style={{fontSize:"14px"}}>{row.relatedcourses}</p>
                       </TableCell>
                       <TableCell className={classes.tablecell} align="left">
-                        {row.pubyr}
+                        {/* publishing year */}
+                        <p style={{fontSize:"14px"}}>{row.pubyr}</p>
                       </TableCell>
                       {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
                       <TableCell>
@@ -470,7 +464,7 @@ const MainResourceTable = (props) => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

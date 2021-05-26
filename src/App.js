@@ -1,4 +1,4 @@
-import {Route, Switch, Redirect, useParams, useLocation } from 'react-router-dom';
+import {Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import {useState, useEffect, useRef} from 'react';
 import Footer from './components/footer';
 import Homepage from './components/homepage/homepage';
