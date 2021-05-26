@@ -19,6 +19,7 @@ import AddResource from './components/crud/add';
 import ViewResource from './components/crud/view';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
+import Search from './components/searchResult/advancedSearch.jsx';
 
 function App() {
   const [user, setUser] = useState(null); //fullname, email, userType (integer)
@@ -93,7 +94,7 @@ function App() {
               render={() => <ViewUserPage user={user} />}></Route>
           <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef} latestAcqRef={latestAcqRef} newsRef={newsRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route>
-          
+          <Route path="/search" render={()=><Search appRef={appRef}/>}/>
            {/* add your new route/path here */}
           <Route path="/view-sp-thesis" component={ViewResource}></Route>
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
