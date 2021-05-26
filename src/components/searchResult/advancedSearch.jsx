@@ -24,9 +24,9 @@ export default function AdvancedSearch({appRef}){
 
     //for pagination
     const [pageNumber,setPageNumber] = useState(0);
-    const resultsPerPage = 3;
+    const resultsPerPage = 10;
     const pagesVisited = pageNumber*resultsPerPage;
-// console.log(searchFilterAuthor);
+
     const [results, setResults] = useState([
         {title:'My Resource 1', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
         {title:'My Resource 2', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
@@ -62,20 +62,20 @@ export default function AdvancedSearch({appRef}){
 
     //url manipulation
     let url = window.location.href;
-    let urlFilter = 'any';
+    let urlFilter = '';
     let urlQuery = '';
 
     url = url.replace('http://localhost:3000/search?',''); 
     //edit before prod; url = url.replace(/\+/g,' '); or should i use split and have ? as a delimeter tho the search string can also contain '?'
+    urlQuery = decodeURIComponent((url.split('&')[1]).replace('q=',''));
+    urlFilter = (url.split('&')[0]).replace('st=','');
+    // if(url.split('&').length > 1){
+    //     urlQuery = decodeURIComponent((url.split('&')[0]).replace('q=',''));
+    //     urlFilter = (url.split('&')[1]).replace('f=','');
+    // }else
+    //     urlQuery = decodeURIComponent((url.replace('q=','')));
 
-    if(url.split('&').length > 1){
-        urlQuery = decodeURIComponent((url.split('&')[0]).replace('q=',''));
-        urlFilter = (url.split('&')[1]).replace('f=','');
-    }else
-        urlQuery = decodeURIComponent((url.replace('q=','')));
 
-    // console.log(searchFilterAuthor);
-    // console.log(searchFilterAdviser);
     console.log(filterArray);
     console.log(fieldArray);
 
