@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import clsx from "clsx";
@@ -14,13 +14,13 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
+// import Checkbox from "@material-ui/core/Checkbox";
+// import IconButton from "@material-ui/core/IconButton";
+// import Tooltip from "@material-ui/core/Tooltip";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import Switch from "@material-ui/core/Switch";
+// import DeleteIcon from "@material-ui/icons/Delete";
+// import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import DeletePopUpCont from "./delete-modal-container";
@@ -251,8 +251,9 @@ const MainResourceTable = (props) => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
   const [rows, setRows] = React.useState([]);
+  const [selectedEdit, setSelectedEdit] = useState();
+  
 
   useEffect(async()=>{
       try{
@@ -276,8 +277,7 @@ const MainResourceTable = (props) => {
               ));
         }
         setRows(tempRow);        
-
-
+        setSelectedEdit(data);
       }catch(err){
         console.log("ERRROR 304"); 
       }
@@ -305,14 +305,14 @@ const MainResourceTable = (props) => {
   };
 
   const EditBtn = (id) => {
+  // console.log("30888 res-main-t-2");
+  // console.log(id);
+
     return (
       <Link
         to={{
           pathname: "/edit-resource",
-          state: {
-            // background: location,
-            id: id,
-          },
+          state: {sourceInfo:selectedEdit, id}
         }}
       >
         <MoreHorizIcon />
@@ -446,7 +446,7 @@ const MainResourceTable = (props) => {
                       {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
                       <TableCell>
                         {" "}
-                        <EditBtn id={row.resid} />{" "}
+                        <EditBtn id={row.resid}/>{" "}
                       </TableCell>
                       <TableCell>
                         {" "}

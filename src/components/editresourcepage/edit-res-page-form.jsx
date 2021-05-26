@@ -12,26 +12,8 @@ const classificationOptions = [
 ];
 
 // !!! Should receive an sp/thesis object
-export default function AddResFormContainer() {
-  // const [resourceData, setResourceData] = useState({
-  //   sp_thesis_id: "",
-  //   type: "",
-  //   title: "",
-  //   abstract: "",
-  //   year: 0,
-  //   source_code: "",
-  //   manuscript: "",
-  //   journal: "",
-  //   poster: "",
-  //   advisers: [],
-  //   authors: [],
-  //   keywords: [],
-  // });
-
-  const location = useLocation();
-  const { res_id } = location.state.id;
-  console.log("Editing...");
-  console.log(res_id);
+export default function AddResFormContainer(props) {
+  const [resourceData, setResourceData] = useState({});
 
   const old_sp_thesis_id = "SP-008"; // EDIT THIS ACCORDINGLY
   const [type, setType] = useState("");
@@ -55,26 +37,62 @@ export default function AddResFormContainer() {
   });
   const [authorList, setAuthorList] = useState([]);
   const [adviserList, setAdviserList] = useState([]);
+  const location = useLocation();
+  
+  // return ALL resources (dahil walang search na gumagamit ng id)
+  const [spThInfoArr, setSpThInfoArr] = useState([]); //all sp/thesis array
+  const [idSource, setIdSource] = useState();   //unique key to identify to which specific sp/thesis
+
+  useEffect(()=>{
+    try{
+        setIdSource(props.location.state.id);
+        setSpThInfoArr(props.location.state.sourceInfo);
+    }catch(err){
+      window.location="/not-found"
+    }
+  },[])
+
+  useEffect(()=>{
+    try{ 
+      for(let sourceItem of spThInfoArr){
+          if(sourceItem.sp_thesis_id === idSource.id){
+            const {type, title, year, sp_thesis_id, journal, manuscript, poster, source_code, abstract,
+              author, adviser, keywords} = sourceItem;
+            setType(type);
+            setTitle(title);
+            setYear(year);
+            setId(sp_thesis_id);
+            setJournal(journal);
+            setManuscript(manuscript);
+            setPoster(poster);
+            setSourceCode(source_code);
+            setAbstract(abstract);
+            setKeyword(keywords);
+            setAdviser({fname:adviser[0]?.adviser_fname, lname:adviser[0]?.adviser_lname});
+            setAuthor({fname:author[0]?.author_fname, lname:author[0]?.author_lname});
+            break;
+          }
+        }
+    }catch(err){
+        console.log("Error 85: edit-res-page-form");
+    }
+  },[idSource,resourceData])
+
+  useEffect(()=>{
+    console.log(type +"\n" + title  +"\n" + year  +"\n" + id
+    +"\n" + journal  +"\n" + manuscript  +"\n" + poster  +"\n" + source_code  +"\n" + abstract
+    +"\n" + author.fname + author.lname +"\n" + adviser.fname + "\n" + adviser.lname + "\n" +"\n" + keywords)
+  })
+
 
   useEffect(() => {
-    function isInArray(arr, item) {
-      if (arr.indexOf(item) > -1) {
-        console.log("true");
-      } else {
-        console.log("false");
-      }
-    }
     function updateList() {
       if (adviser.fname && adviser.lname) {
-        // console.log('adding', adviser.fname, adviser.lname);
-        // isInArray(adviserList, adviser)
         if (adviserList.indexOf(adviser)) {
           setAdviserList([]);
           setAdviserList([...adviserList, adviser]);
         }
       } else if (author.fname && author.lname) {
-        // console.log('adding', author.fname, author.lname);
-        // isInArray(authorList, author)
         if (authorList.indexOf(author)) {
           setAuthorList([]);
           setAuthorList([...authorList, author]);
@@ -85,16 +103,17 @@ export default function AddResFormContainer() {
   }, [author, adviser]);
 
   const addAuthor = (e) => {
+    const {name, value} = e.target
     setAuthor({
-      ...author,
-      [e.target.name]: e.target.value,
+      ...author, [name]:value
     });
   };
 
   const addAdviser = (e) => {
+    const {name, value} = e.target
+
     setAdviser({
-      ...adviser,
-      [e.target.name]: e.target.value,
+      ...adviser, [name]:value
     });
   };
 
@@ -103,9 +122,6 @@ export default function AddResFormContainer() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // console.log(authorList)
-    // console.log(adviserList)
-    // console.log(keywords)
     try {
       const userInput = {
         old_sp_thesis_id,
@@ -153,8 +169,8 @@ export default function AddResFormContainer() {
         <form>
           {/* <AddAuthorField/> */}
           <h5>Adviser(s):</h5>
-          <div class="primaryfields">
-            <label for="resAuthor">
+          <div className="primaryfields">
+            <label htmlFor="resAuthor">
               &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
             </label>
             <input
@@ -166,8 +182,8 @@ export default function AddResFormContainer() {
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resAuthor">
+          <div className="primaryfields">
+            <label htmlFor="resAuthor">
               &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
             </label>
             <input
@@ -185,7 +201,7 @@ export default function AddResFormContainer() {
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-plus"
+              className="bi bi-plus"
               viewBox="0 0 16 16"
             >
               <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -199,74 +215,80 @@ export default function AddResFormContainer() {
 
           {/* String inputs muna kasi yun yung nakalagay sa backend na part ngayon. Di pa nila nafi-figure out yung
                         file attachments as input. */}
-          <div class="primaryfields">
-            <label for="resId">Abstract: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">Abstract: &nbsp; </label>
             <input
               type="text"
               id="resId"
+              value={abstract}
               onChange={(event) => {
                 setAbstract(event.target.value);
               }}
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resId">Manuscript: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">Manuscript: &nbsp; </label>
             <input
               type="text"
               id="resId"
+              value={manuscript}
               onChange={(event) => {
                 setManuscript(event.target.value);
               }}
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resId">Journal: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">Journal: &nbsp; </label>
             <input
               type="text"
               id="resId"
+              value={journal}
               onChange={(event) => {
                 setJournal(event.target.value);
               }}
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resId">Poster: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">Poster: &nbsp; </label>
             <input
               type="text"
               id="resId"
+              value={poster}
               onChange={(event) => {
                 setPoster(event.target.value);
               }}
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resId">Publication Year: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">Publication Year: &nbsp; </label>
             <input
               type="number"
               id="resId"
+              value={year}
               onChange={(event) => {
                 setYear(event.target.value);
               }}
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resId">Source Code: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">Source Code: &nbsp; </label>
             <input
               type="text"
               id="resId"
+              value={source_code}
               onChange={(event) => {
                 setSourceCode(event.target.value);
               }}
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resId">Keywords: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">Keywords: &nbsp; </label>
             <ChipInput
               onChange={(chips) => handleChips(chips)}
               InputProps={{ borderbottom: "none" }}
@@ -276,22 +298,22 @@ export default function AddResFormContainer() {
           {/* Uncomment this pag okay na yung file attachments for the backend part*/}
           {/* <div class = "spthesisfiles">
                              <h5>Upload Abstract</h5>
-                             <input type="file" class="resourcefiles" id="spthesisAbstract"/>
+                             <input type="file" className="resourcefiles" id="spthesisAbstract"/>
                          </div>
                         
                          <div class = "spthesisfiles">
                              <h5>Upload Manuscript</h5>
-                             <input type="file" class="resourcefiles" id="spthesisManuscript"/>
+                             <input type="file" className="resourcefiles" id="spthesisManuscript"/>
                          </div>
     
                          <div class = "spthesisfiles">
                              <h5>Upload Journal</h5>
-                             <input type="file" class="resourcefiles" id="spthesisJournal"/>
+                             <input type="file" className="resourcefiles" id="spthesisJournal"/>
                          </div>
     
                          <div class = "spthesisfiles">
                              <h5>Upload Poster</h5>
-                             <input type="file" class="resourcefiles" id="spthesisPoster"/>
+                             <input type="file" className="resourcefiles" id="spthesisPoster"/>
                          </div> */}
         </form>
       </div>
@@ -309,22 +331,24 @@ export default function AddResFormContainer() {
           </h2>
           <hr />
 
-          <div class="primaryfields">
-            <label for="resId">ID/ISBN: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resId">ID/ISBN: &nbsp; </label>
             <input
               type="text"
               id="resId"
+              value={id}
               onChange={(event) => {
                 setId(event.target.value);
               }}
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resTitle">Title: &nbsp; </label>
+          <div className="primaryfields">
+            <label htmlFor="resTitle">Title: &nbsp; </label>
             <input
               type="text"
               id="resTitle"
+              value={title}
               onChange={(event) => {
                 setTitle(event.target.value);
               }}
@@ -333,8 +357,8 @@ export default function AddResFormContainer() {
 
           {/* <AddAuthorField/> */}
           <h5>Author(s):</h5>
-          <div class="primaryfields">
-            <label for="resAuthor">
+          <div className="primaryfields">
+            <label htmlFor="resAuthor">
               &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
             </label>
             <input
@@ -346,8 +370,8 @@ export default function AddResFormContainer() {
             />
           </div>
 
-          <div class="primaryfields">
-            <label for="resAuthor">
+          <div className="primaryfields">
+            <label htmlFor="resAuthor">
               &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
             </label>
             <input
@@ -364,7 +388,7 @@ export default function AddResFormContainer() {
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-plus"
+              className="bi bi-plus"
               viewBox="0 0 16 16"
             >
               <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -374,7 +398,7 @@ export default function AddResFormContainer() {
           <br />
           <br />
           <br />
-          <div class="resClassification-container">
+          <div className="resClassification-container">
             <p>Classification: &nbsp; </p>
             <Select
               id="resClassification"

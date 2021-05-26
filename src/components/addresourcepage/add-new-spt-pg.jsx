@@ -70,15 +70,7 @@ const SPThesisInfoForm = () => {
         );
     }
 
-const AddNewSPThesisForm = () => {
-    // retrieve the user info using the info
-    const [resource, setResource] = useState();
-            
-    useEffect(()=>{
-        
-
-    },[])
-
+const AddNewSPThesisForm = ({props}) => {
     return(
          <div className = "add-res-form-cont">
 
