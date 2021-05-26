@@ -9,7 +9,8 @@ import ManageResPage from './components/manageresourcespage/manageresourcespage'
 
 import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
 import AddBookFormContainer from './components/addresourcepage/add-book-form-container'
-import EditResourcePage from './components/editresourcepage/edit-res-page-form'
+
+// import EditResourcePage from './components/editresourcepage/edit-res-page-form'
 
 import ManageUser from "./components/manageuserpage/manageuserpage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
