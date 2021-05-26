@@ -1,9 +1,7 @@
 const router = require("express").Router();
 const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
-const config = require("config");
 const authAdmin = require("../middleware/authAdmin");
-const jwtPrivateKey = config.get("jwtPrivateKey");
 
 //read all admin entries
 router.get("/readAdmins", authAdmin, async (req, res) => {
@@ -97,7 +95,6 @@ router.get("/search", async (req, res) => {
         });
         //add to final list
         final_output = init_output;
-        console.log(final_output);
         //add _id to idList
         init_output.forEach(saveId);
         //email
@@ -109,7 +106,6 @@ router.get("/search", async (req, res) => {
         });
         //add to final list
         final_output = [].concat(final_output, init_output);
-        console.log(final_output);
         //add _id to idList
         init_output.forEach(saveId);
 
@@ -126,10 +122,8 @@ router.get("/search", async (req, res) => {
         });
         //add to final list
         final_output = [].concat(final_output, init_output);
-        console.log(final_output);
         //add _id to idList
         init_output.forEach(saveId);
-        console.log(idList);
 
         //nickName
         init_output = await UserModel.find({

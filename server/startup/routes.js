@@ -6,51 +6,48 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const config = require("config");
 const cors = require("cors");
-const methodOverride = require('method-override');
-
-const jwtPrivateKey = config.get("jwtPrivateKey");
+const methodOverride = require("method-override");
 
 module.exports = function (app) {
-  //parser tools
-  app.use(express.json());
-  app.use(bodyParser.json());
-  app.use(cookieParser());
-  app.use(methodOverride('_method'));
-  app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, OPTIONS, PUT, DELETE"
+    //parser tools
+    app.use(express.json());
+    app.use(bodyParser.json());
+    app.use(cookieParser());
+    app.use(methodOverride("_method"));
+    app.use(function (req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header(
+            "Access-Control-Allow-Methods",
+            "GET, POST, OPTIONS, PUT, DELETE"
+        );
+        res.header(
+            "Access-Control-Allow-Headers",
+            "Content-Type, Access-Control-Allow-Headers, X-Requested-With"
+        );
+        next();
+    });
+    app.use(
+        cors({
+            origin: "http://localhost:3000",
+            methods: ["POST", "GET", "PUT", "DELETE"],
+            credentials: true,
+        })
     );
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Access-Control-Allow-Headers, X-Requested-With"
-    );
-    next();
-  });
-  app.use(
-    cors({
-      origin: "http://localhost:3000",
-      methods: ["POST", "GET", "PUT", "DELETE"],
-      credentials: true,
-    })
-  );
 
-  // set up routes
+    // set up routes
 
-  app.use("/users", require("../routes/userRouter"));
-  app.use("/books", require("../routes/bookRouter"));
-  app.use("/admin", require("../routes/adminRouter"));
+    app.use("/users", require("../routes/userRouter"));
+    app.use("/books", require("../routes/bookRouter"));
+    app.use("/admin", require("../routes/adminRouter"));
 
-  // set up routes
-  app.use("/admin", require("../routes/adminRouter"))
-  app.use("/faculty", require("../routes/icsFacultyStaffRouter"))
-  app.use("/users", require("../routes/userRouter"))
-  app.use("/books", require("../routes/bookRouter"))
+    // set up routes
+    app.use("/admin", require("../routes/adminRouter"));
+    app.use("/faculty", require("../routes/icsFacultyStaffRouter"));
+    app.use("/users", require("../routes/userRouter"));
+    app.use("/books", require("../routes/bookRouter"));
 
-  // set up routes: thesis
-  app.use("/thesis", require("../routes/spThesisRouter"))
-  app.use("/faculty", require("../routes/icsFacultyStaffRouter"))
-}
+    // set up routes: thesis
+    app.use("/thesis", require("../routes/spThesisRouter"));
+    app.use("/faculty", require("../routes/icsFacultyStaffRouter"));
+};

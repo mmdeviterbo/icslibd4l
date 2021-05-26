@@ -13,27 +13,27 @@ const classificationOptions = [
 
 // !!! Should receive an sp/thesis object
 export default function AddResFormContainer() {
-  const [resourceData, setResourceData] = useState({
-    sp_thesis_id: "",
-    type: "",
-    title: "",
-    abstract: "",
-    year: 0,
-    source_code: "",
-    manuscript: "",
-    journal: "",
-    poster: "",
-    advisers: [],
-    authors: [],
-    keywords: [],
-  });
+  // const [resourceData, setResourceData] = useState({
+  //   sp_thesis_id: "",
+  //   type: "",
+  //   title: "",
+  //   abstract: "",
+  //   year: 0,
+  //   source_code: "",
+  //   manuscript: "",
+  //   journal: "",
+  //   poster: "",
+  //   advisers: [],
+  //   authors: [],
+  //   keywords: [],
+  // });
 
   const location = useLocation();
   const { res_id } = location.state.id;
   console.log("Editing...");
   console.log(res_id);
 
-  const old_sp_thesis_id = res_id; // EDIT THIS ACCORDINGLY
+  const old_sp_thesis_id = "SP-008"; // EDIT THIS ACCORDINGLY
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(0);

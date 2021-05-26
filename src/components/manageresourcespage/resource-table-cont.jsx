@@ -13,7 +13,7 @@ const ResTableContainer = ({ resourceList }) => {
       <MainResourceTable />
       <br />
 
-      <div class="addBtns">
+      <div className="addBtns">
         <AddNewResource />
         {/* <AddNewSPT/> */}
       </div>

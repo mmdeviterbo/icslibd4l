@@ -1,41 +1,21 @@
 const router = require("express").Router();
 const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
-const config = require("config");
 const jwtEncrypt = require("jwt-token-encrypt");
 
 const jwt = require("jsonwebtoken");
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
 
-const jwtPrivateKey = config.get("jwtPrivateKey");
-const jwtPublicKey = config.get("jwtPublicKey");
+const jwtPrivateKey = process.env.jwtPrivateKey;
+const jwtPublicKey = process.env.jwtPublicKey;
 //create or login account
+// {
+//   googleId,
+//   email,
+//   fullName }
 router.post("/create", async (req, res) => {
-    //get date
-    //code snippet was taken from https://usefulangle.com/post/187/nodejs-get-date-time
-    let date_ob = new Date();
-    let day = ("0" + date_ob.getDate()).slice(-2);
-    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-    let year = date_ob.getFullYear();
-    let hours = date_ob.getHours();
-    let minutes = date_ob.getMinutes();
-    let seconds = date_ob.getSeconds();
-    const date =
-        year +
-        "-" +
-        month +
-        "-" +
-        day +
-        " " +
-        hours +
-        ":" +
-        minutes +
-        ":" +
-        seconds;
-
     var loggedUser;
-    let userType = 4;
     try {
         const { googleId, email, fullName } = req.body;
 
@@ -71,12 +51,10 @@ router.post("/create", async (req, res) => {
             fullName: loggedUser.fullName,
             userType: loggedUser.userType,
             activity: "User login",
-            date,
         });
         await newUserLog.save();
 
-        //NEW IMPLEMENTATION
-        //TODO: MARTY AYUSIN MO TO
+        //NEW IMPLEMENTATION=
         const publicData = null;
         // Data that will only be available to users who know encryption details.
         const privateData = {
@@ -207,28 +185,6 @@ router.delete("/delete", authStudent, async (req, res) => {
 
 //logout current signed in user. deletes cookie for user
 router.post("/logout", authStudent, async (req, res) => {
-    //get date
-    //code snippet was taken from https://usefulangle.com/post/187/nodejs-get-date-time
-    let date_ob = new Date();
-    let day = ("0" + date_ob.getDate()).slice(-2);
-    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-    let year = date_ob.getFullYear();
-    let hours = date_ob.getHours();
-    let minutes = date_ob.getMinutes();
-    let seconds = date_ob.getSeconds();
-    const date =
-        year +
-        "-" +
-        month +
-        "-" +
-        day +
-        " " +
-        hours +
-        ":" +
-        minutes +
-        ":" +
-        seconds;
-
     const googleId = req.body.googleId;
     try {
         const loggedUser = await UserModel.findOne({ googleId });
@@ -239,7 +195,6 @@ router.post("/logout", authStudent, async (req, res) => {
             fullName: loggedUser.fullName,
             userType: loggedUser.userType,
             activity: "User logout",
-            date,
         });
         await newUserLog.save();
 
@@ -253,4 +208,14 @@ router.post("/logout", authStudent, async (req, res) => {
     }
 });
 
+router.get("/getUserLogs", async (req, res) => {
+    UserLogModel.find({}, (err, result) => {
+        //reads all the documents and sends as response
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
 module.exports = router;
