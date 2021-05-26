@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom';
-import './manage-resources-style.css';
-// import TempNavbar from './temporary-navbar';
+import '../../styles/manageresources/manage-resources-style.css';
+
 import ManageItemsHeader from './manage-items-header';
 import FieldsContainerRes from './filter-fields-res';
 import ResTableContainer from './resource-table-cont';

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './add-resource-style.css';
+import '../../styles/addresource/add-resource-style.css';
 import AddResSidebar from './sidebar-add-res';
 import AddNewSPThesisForm from './add-new-spt-pg';
 
