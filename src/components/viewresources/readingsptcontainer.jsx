@@ -7,8 +7,8 @@ import InfoSidebar from "./side-info-container";
 
 const ReadingSPTContainer = ({ sampleSP }) => {
   const location = useLocation();
-  const { resourceData } = location.state.resourceData;
-  console.log(resourceData);
+  // const { resourceData } = location.state.resourceData;
+  // console.log(resourceData);
   // console.log(userType)
   return (
     <div className="ViewSPTMainPageContainer">

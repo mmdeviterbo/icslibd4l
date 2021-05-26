@@ -121,8 +121,8 @@ function App() {
           <Route path ="/manage-resources" render={()=><GetResources resourceType={'book'}/>}></Route>
           <Route path ="/add-new-resource" component={AddResourcePage}></Route>
           <Route path ="/edit-resource" component={EditResourcePage}></Route>
-          {/* <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route> */}
-          <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route>
+          <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
+          {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
           <Route path ="/view-book" render={()=><ReadingBookContainer sampleBook={sampleBook}/>}></Route>
           <Route path="/manage-users" component={ManageUser}></Route>
           <Route path="/about" render={()=><About appRef={appRef}/>}/>
