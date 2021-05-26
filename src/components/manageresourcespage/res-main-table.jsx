@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -214,6 +215,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainResourceTable = () => {
+  const location = useLocation();
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('resid');
@@ -221,6 +223,40 @@ const MainResourceTable = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+
+  // kinda works, dont's remove yet
+  const DeleteBtn = (id) => {
+    return(
+      <Link
+          to={{
+              pathname: "/manage-resources/delete-sp-thesis",
+              state: { 
+                background: location,
+                id: id
+              }
+          }}
+      >
+      <DeleteForeverIcon/> 
+      </Link>
+    )
+  }
+
+  const EditBtn = (id) => {
+    return(
+      <Link
+          to={{
+              pathname: "/edit-resource",
+              state: { 
+                // background: location,
+                id: id
+              }
+          }}
+      >
+      <MoreHorizIcon/> 
+      </Link>
+    )
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -310,6 +346,7 @@ const MainResourceTable = () => {
                       key={row.name}
                       selected={isItemSelected}
                     >
+                      {/* {row} */}
                       <TableCell padding="checkbox" className={classes.tablecell}>
                       </TableCell >
                       <TableCell component="th" id={labelId} scope="row" padding="none" className={classes.tablecell}>
@@ -320,8 +357,9 @@ const MainResourceTable = () => {
                       <TableCell className={classes.tablecell} align="left">{row.resclassif}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.relatedcourses}</TableCell>
                       <TableCell className={classes.tablecell} align="left">{row.pubyr}</TableCell>
-                      <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell>
-                      <TableCell> <DeletePopUpCont id={row.resid}/> </TableCell>
+                      {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
+                      <TableCell> <EditBtn id={row.resid}/> </TableCell>
+                      <TableCell> <DeleteBtn id={row.resid}/> </TableCell>
                     </TableRow>
                   );
                 })}

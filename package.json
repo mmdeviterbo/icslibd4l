@@ -26,6 +26,8 @@
     "hookrouter": "^1.2.5",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
+    "jwt-token-encrypt": "^1.0.4",
+    "material-ui-chip-input": "^2.0.0-beta.2",
     "mongoose": "^5.12.7",
     "nodemon": "^2.0.7",
     "puppeteer": "^9.1.1",

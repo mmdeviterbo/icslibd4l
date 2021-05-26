@@ -4,14 +4,17 @@ import '../../styles/viewspt/viewspt.css'
 import AbstractContainer from './abstract-container'
 import InfoSidebar from './side-info-container'
 
-const ReadingSPTContainer = () => {
+const ReadingSPTContainer = ({sampleSP}) => {
+    // const userType = user.userType
+    console.log(sampleSP)
+    // console.log(userType)
     return(
         <div className = "ViewSPTMainPageContainer">
-            <TitleAuthorHere/>
+            <TitleAuthorHere title={sampleSP.title} authorList={sampleSP.authorList} year={sampleSP.year}/>
 
             <div className ="abstract-and-info">
-                <AbstractContainer/>
-                <InfoSidebar/>
+                <AbstractContainer abstract={sampleSP.abstract}/>
+                <InfoSidebar type={sampleSP.type} adviserList={sampleSP.adviserList} keywords={sampleSP.keywords}/>
             </div>
         </div>
 

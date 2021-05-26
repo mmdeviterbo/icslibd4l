@@ -1,6 +1,7 @@
-const jwt = require("jsonwebtoken");
 const config = require("config")
+const jwt = require("jsonwebtoken");
 
+const jwtEncrypt = require("jwt-token-encrypt");
 const jwtPrivateKey = config.get('jwtPrivateKey');
 
 //npm install cookie-parser
@@ -11,12 +12,25 @@ function authenticationStudent(req, res, next){
         //checks if token exists
         if (!token)
             return res
-                    .status(401)
+                    .sendStatus(401)
                     .json({
                         errorMessage: "Unauthorized Access"
                     });
+        
+        //NEW IMPLEMENTATION    
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: 'aes-256-cbc',
+        };
+
+        // decrypt token and verifies jwt payload
+        const decrypted = jwtEncrypt.readJWT(token, encryption, 'ICSlibrary');
+        const verified = decrypted.data;
+        
+
         //verifies the jwt payload
-        const verified = jwt.verify(token, jwtPrivateKey);
+        // const verified = jwt.verify(token, jwtPrivateKey);
         //attaches a user property to the req object in the request Router function
         req.user = verified.user;
 
@@ -24,7 +38,7 @@ function authenticationStudent(req, res, next){
             next();
         else
             return res
-                .status(401)
+                .sendStatus(401)
                 .json({
                     errorMessage: "Unauthorized Access"
                 });

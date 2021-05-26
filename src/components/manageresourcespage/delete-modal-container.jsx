@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react'
+import { Link, useLocation, useHistory, withRouter } from "react-router-dom";
 import Popup from 'reactjs-popup';
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -6,21 +7,34 @@ import Button from 'react-bootstrap/Button';
 // import { Modal } from '@material-ui/core';
 // import 'reactjs-popup/dist/index.css';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import ResourceServices from '../../services/resourceService'
  
-const DeletePopUpCont = (props) => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+const DeletePopUpCont = () => {
+    const history = useHistory();
+    const location = useLocation();
+    const { id } = location.state.id
+    const [show, setShow] = useState(true);
     const handleShow = () => setShow(true);
-    // const delthis = props
+    const handleClose = () => {
+        setShow(false)
+        history.goBack();
+    }
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        handleClose()
+        try{
+            const {data} = await ResourceServices.deleteSpThesis(id)
+            alert("Delete successful sa frontend")
+        } catch(err){
+            if (err.response && err.response.data) {
+                alert(err.response.data.errorMessage) // some reason error message
+            }
+        }
+    }
 
     return(
         <>
-            {/* delete button */}
-            <a onClick = {handleShow}>
-                <DeleteForeverIcon/>
-            </a>
-
-            {/* popup modal */}
             <Modal
                 show = {show}
                 onHide = {handleClose}
@@ -33,7 +47,7 @@ const DeletePopUpCont = (props) => {
                 </Modal.Header>
 
                 <Modal.Body>
-                    Are you sure you want to delete {props.id}?
+                    Are you sure you want to delete {id}?
                     {/* read resource title and author here */}
                 </Modal.Body>
 
@@ -41,7 +55,7 @@ const DeletePopUpCont = (props) => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary">Delete</Button>
+                    <Button variant="primary" onClick={handleSubmit}>Delete</Button>
                 </Modal.Footer>
 
                 </Modal>
