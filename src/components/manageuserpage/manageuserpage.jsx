@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import FilterMenu from './filterMenu'
 import UserTable from './userTable'
 import UserSearch from './userSearch'
+import { useHistory } from 'react-router'
 
 export default function ManageUserPage({user}) {
+  const history = useHistory();
+
+  useEffect(() => {
+    console.log(user);
+    if (user && user.userType !== 1){
+      history.push("/not-found");
+    }
+  })
 
   return (
     <div className="manageuser-container">
