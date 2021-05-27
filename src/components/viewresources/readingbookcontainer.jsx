@@ -1,7 +1,7 @@
 import React from 'react';
-import TitleAuthorHere from './title-container';
-import BookCoverandInfo from './bookcoverinfoside';
-import BookPhysDescription from './book-phys-desc';
+import TitleAuthorHere from './titleContainer';
+import BookCoverandInfo from './bookCoverInfoSide';
+import BookPhysDescription from './bookPhysicalDescription';
 import '../../styles/viewspt/viewspt.css';
 
 const ReadingBookContainer = ({sampleBook}) => {

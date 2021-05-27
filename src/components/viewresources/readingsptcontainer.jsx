@@ -1,9 +1,9 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import TitleAuthorHere from "./title-container";
+import TitleAuthorHere from "./titleContainer";
 import "../../styles/viewspt/viewspt.css";
-import AbstractContainer from "./abstract-container";
-import InfoSidebar from "./side-info-container";
+import AbstractContainer from "./abstractContainer";
+import InfoSidebar from "./sideInfoContainer";
 
 const ReadingSPTContainer = ({ sampleSP }) => {
   const location = useLocation();

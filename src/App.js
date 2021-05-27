@@ -5,30 +5,31 @@ import Homepage from './components/homepage/homepage';
 import NavigationBar from './components/navigationBar';
 import Notfound from './components/notfound';
 
-import ManageResPage from './components/manageresourcespage/manageresourcespage'
+import ManageResPage from './components/manageresourcespage/manageResourcePage'
 
-import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
-import AddBookFormContainer from './components/addresourcepage/add-book-form-container'
+import AddSPThesisPage from './components/addresourcepage/addSPTPageContainer'
+import AddBookFormContainer from './components/addresourcepage/addBookFormContainer'
 
 // import EditResourcePage from './components/editresourcepage/edit-res-page-form'
 
-import ManageUser from "./components/manageuserpage/manageuserpage";
+import ManageUser from "./components/manageuserpage/manageUserPage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
-import ReadingSPTContainer from './components/viewresources/readingsptcontainer'
-import ReadingBookContainer from './components/viewresources/readingbookcontainer'
+import ReadingSPTContainer from './components/viewresources/readingSPTContainer'
+import ReadingBookContainer from './components/viewresources/readingBookContainer'
 
 import personService from './services/personService';
 import {jwtPrivateKey} from './config.json';
 import {jwtEncryptionKey} from './config.json';
 import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
-import DeletePopUpCont from './components/manageresourcespage/delete-modal-container';
+
+import DeletePopUpCont from './components/manageresourcespage/deleteModalContainer';
 
 
-import BrowseResources from './components/browseresources/browse-resources';
+import BrowseResources from './components/browseresources/browseResources';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
-import GetResources from './components/manageresourcespage/get-resources';
+import GetResources from './components/manageresourcespage/getResources';
 
 
 function App() {

@@ -2,8 +2,8 @@ import React, { Component, useState } from 'react'
 import Select from 'react-select'
 import ResourceServices from '../../services/resourceService'
 import { ItemGroup } from 'semantic-ui-react'
-import ResourcePrimaryInfo from './primary-info-form'
-import SaveResourceButton from './save-resource-btn'
+import ResourcePrimaryInfo from './primaryInfoForm'
+import SaveResourceButton from './saveResourceButton'
 
 const courseList = [
     {value:'cmsc12', label:'CMSC 12'},

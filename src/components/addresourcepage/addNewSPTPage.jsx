@@ -2,9 +2,9 @@ import React, { Component, useState, useCom } from 'react'
 import Select from 'react-select'
 import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
-import AddResSidebar from './sidebar-add-res';
-import ResourcePrimaryInfoForm from './primary-info-form'
-import SaveResourceButton from './save-resource-btn'
+import AddResSidebar from './addResSidebar';
+import ResourcePrimaryInfoForm from './primaryInfoForm'
+import SaveResourceButton from './saveResourceButton'
 
 const spOrTclas = [
     {value:'Special Problem', label:'Special Problem'},

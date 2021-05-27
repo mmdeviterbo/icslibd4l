@@ -23,7 +23,7 @@ import Paper from "@material-ui/core/Paper";
 // import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import DeletePopUpCont from "./delete-modal-container";
+import DeletePopUpCont from "./deleteModalContainer";
 import resourceService from "../../services/resourceService"
 
 function createResourceData(resid, title, author, resclassif, relatedcourses, pubyr) {

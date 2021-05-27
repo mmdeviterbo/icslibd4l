@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
-import ManageResPage from "../manageresourcespage/manageresourcespage";
-import ResTableContainer from "../manageresourcespage/resource-table-cont";
-import ReadingSPTContainer from "../viewresources/readingsptcontainer";
+import ManageResPage from "../manageresourcespage/manageResourcePage";
+import ResTableContainer from "../manageresourcespage/resourceTableContainer";
+import ReadingSPTContainer from "../viewresources/readingSPTContainer";
 
 export default function GetResources({ resourceType }) {
   const location = useLocation();
