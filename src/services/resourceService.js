@@ -13,24 +13,26 @@ const addBook = (resourceData) => {
 }
 
 // read data of a resource
-const browseSpThesis = (resourceType) => {
-    return http.get(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
+const browseResources = (resourceType) => {
+    return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
 }
 
 const searchSpThesis = (filter) => {
     return http.get(`${apiEndpoint}/thesis/create`, filter, {withCredentials: true})
 }
 
+const searchBook = (filter) => {
+    return http.get(`${apiEndpoint}/book/search`, filter, {withCredentials: true})
+}
+
 
 // edit data of a resource
 const editSpThesis = (resourceData) => {
-    console.log(resourceData)
     return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {withCredentials: true})
 }
 
 //delete resource
 const deleteSpThesis = (deleteId) => {
-    console.log(deleteId)
     return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis/${deleteId}`, {withCredentials: true})
     // return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis`, {data:{id: deleteId}, headers:{Authorization: "token"}}, {withCredentials: true})
 }
@@ -41,7 +43,14 @@ function getNews(){
     return http.post(`${apiEndpoint}/books/get-news`)
 }
 
+// get all books, sorted by date (latest acquisition feature)
+function getBooks(){
+    return http.get(`${apiEndpoint}/books/display`);
+}
 
+function getAllResources(){
+    return http.get(`${apiEndpoint}/thesis/search`);
+}
 
 
 
@@ -50,10 +59,13 @@ const exportFunctions = {
     getNews,
     addSpThesis,
     addBook,
-    browseSpThesis,
+    browseResources,
     searchSpThesis,
     deleteSpThesis,
-    editSpThesis
+    editSpThesis,
+    searchBook,
+    getBooks,
+    getAllResources
 }
 
 export default exportFunctions;

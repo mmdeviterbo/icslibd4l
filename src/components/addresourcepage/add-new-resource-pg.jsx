@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import '../../styles/addresource/add-resource-style.css';
+import './add-resource-style.css';
 import AddResSidebar from './sidebar-add-res';
 import AddBookFormContainer from './add-res-form-container';
 

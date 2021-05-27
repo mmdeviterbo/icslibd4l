@@ -24,8 +24,9 @@ const DeletePopUpCont = () => {
         event.preventDefault()
         handleClose()
         try{
-            const {data} = await ResourceServices.deleteSpThesis(id)
-            alert("Delete successful sa frontend")
+            const {data} = await ResourceServices.deleteSpThesis(id);
+            window.location="/manage-resources";
+            // alert("Delete successful sa frontend")
         } catch(err){
             if (err.response && err.response.data) {
                 alert(err.response.data.errorMessage) // some reason error message
