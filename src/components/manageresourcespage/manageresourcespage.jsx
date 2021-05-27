@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import { Link } from 'react-router-dom'
 import ReactDOM from 'react-dom';
@@ -7,16 +6,6 @@ import '../../styles/manageresources/manage-resources-style.css';
 import ManageItemsHeader from './manage-items-header';
 import FieldsContainerRes from './filter-fields-res';
 import ResTableContainer from './resource-table-cont';
-=======
-import React from "react";
-import { Link } from "react-router-dom";
-import ReactDOM from "react-dom";
-import "./manage-resources-style.css";
-// import TempNavbar from './temporary-navbar';
-import ManageItemsHeader from "./manage-items-header";
-import FieldsContainerRes from "./filter-fields-res";
-import ResTableContainer from "./resource-table-cont";
->>>>>>> 63d235409c2673cba208ca6f934f564d6f3a8081
 
 const ManageResPage = ({ resourceList }) => {
   return (

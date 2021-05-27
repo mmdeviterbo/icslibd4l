@@ -23,8 +23,8 @@ import {jwtEncryptionKey} from './config.json';
 import * as jwtEncrypt from 'jwt-token-encrypt';
 import './App.css';
 import DeletePopUpCont from './components/manageresourcespage/delete-modal-container';
-import ReadingSPTContainer from './components/viewresources/readingsptcontainer';
-import ReadingBookContainer from './components/viewresources/readingbookcontainer';
+
+
 import BrowseResources from './components/browseresources/browse-resources';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
@@ -63,7 +63,7 @@ function App() {
     // login/register a user
     const loginRegisterUser = async (userInfo) => {
       try {
-        const { data } = await PersonService.loginRegisterUser(userInfo);
+        const { data } = await personService.loginRegisterUser(userInfo);
         localStorage.setItem(jwtPrivateKey, data); //set token
         window.location = "/home";
       } catch (err) {}
@@ -128,10 +128,10 @@ function App() {
           <Route path="/update-sp-thesis" component={updateResourceData}></Route>
           {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
           <Route path ="/manage-resources" render={()=><GetResources resourceType={'book'}/>}></Route>
-          <Route path ="/add-new-resource" component={AddResourcePage}></Route>
+          {/* <Route path ="/add-new-resource" component={AddResourcePage}></Route> */}
           <Route path ="/add-new-spt" component={AddSPThesisPage}></Route>
           <Route path ="/add-new-book" component = {AddBookFormContainer}></Route>
-          <Route path ="/edit-resource" component={EditResourcePage}></Route>
+          {/* <Route path ="/edit-resource" component={EditResourcePage}></Route> */}
           <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
           {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
           <Route path ="/view-book" render={()=><ReadingBookContainer sampleBook={sampleBook}/>}></Route>
