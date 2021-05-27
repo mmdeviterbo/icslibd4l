@@ -7,8 +7,8 @@ import ResourcePrimaryInfoForm from './primary-info-form'
 import SaveResourceButton from './save-resource-btn'
 
 const spOrTclas = [
-    {value:'sp', label:'Special Problem'},
-    {value:'thesis', label:'Thesis'},
+    {value:'Special Problem', label:'Special Problem'},
+    {value:'Thesis', label:'Thesis'},
 ];
 
 const SPThesisInfoForm = () => {

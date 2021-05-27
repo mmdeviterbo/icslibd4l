@@ -15,7 +15,7 @@ const classificationOptions = [
 export default function AddResFormContainer(props) {
   const [resourceData, setResourceData] = useState({});
 
-  const old_sp_thesis_id = "SP-008"; // EDIT THIS ACCORDINGLY
+  const [old_sp_thesis_id, setOld_sp_thesis_id] = useState();
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(0);
@@ -62,14 +62,18 @@ export default function AddResFormContainer(props) {
             setTitle(title);
             setYear(year);
             setId(sp_thesis_id);
+            setOld_sp_thesis_id(sp_thesis_id);
             setJournal(journal);
             setManuscript(manuscript);
             setPoster(poster);
             setSourceCode(source_code);
             setAbstract(abstract);
-            setKeyword(keywords);
             setAdviser({fname:adviser[0]?.adviser_fname, lname:adviser[0]?.adviser_lname});
             setAuthor({fname:author[0]?.author_fname, lname:author[0]?.author_lname});
+            
+            const tempKeyword=[]
+            keywords.map((keyword)=>tempKeyword.push(keyword.sp_thesis_keyword))
+            setKeyword(tempKeyword);
             break;
           }
         }
@@ -78,11 +82,6 @@ export default function AddResFormContainer(props) {
     }
   },[idSource,resourceData])
 
-  useEffect(()=>{
-    console.log(type +"\n" + title  +"\n" + year  +"\n" + id
-    +"\n" + journal  +"\n" + manuscript  +"\n" + poster  +"\n" + source_code  +"\n" + abstract
-    +"\n" + author.fname + author.lname +"\n" + adviser.fname + "\n" + adviser.lname + "\n" +"\n" + keywords)
-  })
 
 
   useEffect(() => {
@@ -117,9 +116,6 @@ export default function AddResFormContainer(props) {
     });
   };
 
-  // console.log(authorList)
-  // console.log(adviserList)
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -139,8 +135,8 @@ export default function AddResFormContainer(props) {
         keywords: keywords,
       };
       const { data } = await ResourceServices.editSpThesis(userInput);
-      console.log(data);
-      // alert(`${id} has been successfully updated.`)
+      alert(`${id} has been successfully updated.`)
+      window.location="/edit-resource";
     } catch (err) {
       if (err.response && err.response.data) {
         alert(err.response.data.errorMessage); // some reason error message
@@ -155,7 +151,7 @@ export default function AddResFormContainer(props) {
 
   // creates an array of keywords from theh user input
   const handleChips = (chip) => {
-    setKeyword(chip);
+    setKeyword([...keywords,chip[chip.length-1]]);
   };
 
   const SPThesisInfoForm = () => {
@@ -290,7 +286,9 @@ export default function AddResFormContainer(props) {
           <div className="primaryfields">
             <label htmlFor="resId">Keywords: &nbsp; </label>
             <ChipInput
+              style={{display:"flex", maxWidth:"180px",justifyContent:"center", flexWrap:"wrap", flexDirection:"column"}}
               onChange={(chips) => handleChips(chips)}
+              value={keywords}
               InputProps={{ borderbottom: "none" }}
             />
           </div>

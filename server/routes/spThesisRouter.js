@@ -231,7 +231,7 @@ router.post("/browse", async (req,res)=> {
     }else{
         // type value: Special Problem or Thesis
         thesisModel.aggregate(
-            [{$match: {type:{$in:["Thesis", "Special Problem"]}}},
+            [{$match: {type:{$in:["Thesis", "Special Problem", "thesis", "sp","SP"]}}},
             {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
             {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
             {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}},
@@ -878,9 +878,9 @@ router.put("/update-sp-thesis", async (req, res) => {
         });
 
         // deletes all authors with corresponding thesis/sp id
-        await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
         
         // await thesisAuthorModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
         // await thesisAdviserModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
@@ -948,13 +948,17 @@ router.put("/update-sp-thesis", async (req, res) => {
 
 // delete entire sp/thesis entry
 router.delete('/remove-sp-thesis/:sp_thesis_id', async (req, res) => {
-    const {sp_thesis_id} = req.params;
-    
-    // if undefined, null, or not found
-    if(!sp_thesis_id) return res.status(400).json({errorMessage: "Entry does not exist."});
+    console.log('del')
+    const sp_thesis_id_holder = req.params.sp_thesis_id;
+    console.log(sp_thesis_id_holder)
+    console.log(req.params.sp_thesis_id)
 
-    // // checks if entry to be deleted exists
-    await thesisModel.findOne({ sp_thesis_id: sp_thesis_id }, (err, object) => {
+    if(!sp_thesis_id_holder){
+        return res.status(400).json({errorMessage: "Entry does not exist."});
+    }
+
+    // checks if entry to be deleted exists
+    await thesisModel.findOne({ sp_thesis_id: sp_thesis_id_holder }, (err, object) => {
         if (!object) {
             return res
                 .status(404)
@@ -962,18 +966,18 @@ router.delete('/remove-sp-thesis/:sp_thesis_id', async (req, res) => {
         }
     });
 
-    // // removes entries with corresponding sp_thesis_id
+    // removes entries with corresponding sp_thesis_id
     try {
-        await thesisModel.findOneAndDelete({ sp_thesis_id: sp_thesis_id });
-        await thesisAuthorModel.deleteMany({ sp_thesis_id: sp_thesis_id });
-        await thesisAdviserModel.deleteMany({ sp_thesis_id: sp_thesis_id });
-        await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id });
+        await thesisModel.findOneAndDelete({ sp_thesis_id: sp_thesis_id_holder });
+        await thesisAuthorModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
+        await thesisAdviserModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
+        await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
         res.send("Entry Deleted");
     } catch {
         res.send(404).json({ errorMessage: "Cannot Delete." });
     }
 
-    // // removes file that comes along with the sp/thesis entry
+    // removes file that comes along with the sp/thesis entry
     // gfs.remove({ _id: object_id, root: "sp_pdf" }, (err, gridStore) => {
     //     if (err) {
     //         return res.status(404).json({ err: err });

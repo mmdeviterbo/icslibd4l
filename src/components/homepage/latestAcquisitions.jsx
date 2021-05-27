@@ -14,7 +14,6 @@ export default function LatestAcquisitions({latestAcqRef}) {
         // get title and year (of 12 books, sorted array)
         const {data} = await ResourceService.getBooks();
         setacquisitions(data);
-        console.log(data);
     },[])
 
     const handleViewAllBooks=()=>{
@@ -35,6 +34,7 @@ export default function LatestAcquisitions({latestAcqRef}) {
                         {acquisitions.map(book=><CardBook className="cardContainer"
                             imageSrc={imgNotAvailable} title={book.title || "No title"} 
                             key={book.title}
+                            linkTo="/home"
                             year={book.dateAcquired || book.Published || "No date"}
                             setHoverText={setHoverText}
                         />)}
