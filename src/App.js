@@ -8,7 +8,6 @@ import Notfound from './components/notfound';
 import AddResourcePage from './components/addresourcepage/add-new-resource-pg'
 import EditResourcePage from './components/editresourcepage/edit-res-page-form'
 // import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
-import ManageUser from "./components/manageuserpage/manageuserpage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import PersonService from "./services/personService";
 import {jwtPrivateKey} from './config.json';
@@ -22,6 +21,7 @@ import BrowseResources from './components/browseresources/browse-resources';
 import updateResourceData from './components/crud/update';
 import About from './components/about/about';
 import GetResources from './components/manageresourcespage/get-resources';
+import ManageUserPage from './components/manageuserpage/manageuserpage';
 
 
 function App() {
@@ -126,7 +126,7 @@ function App() {
           <Route path ="/view-sp-thesis" render={()=><ReadingSPTContainer sampleSP={sampleSP}/>}></Route>
           {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
           <Route path ="/view-book" render={()=><ReadingBookContainer sampleBook={sampleBook}/>}></Route>
-          <Route path="/manage-users" component={ManageUser}></Route>
+          <Route path="/manage-users" render={()=><ManageUserPage user={user}/>}></Route>
           <Route path="/about" render={()=><About appRef={appRef}/>}/>
           <Route exact path="/not-found" component={Notfound}></Route> 
           <Redirect exact from="/" to="/home"/>
