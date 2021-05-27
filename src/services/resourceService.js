@@ -28,8 +28,6 @@ const searchBook = (filter) => {
 
 // edit data of a resource
 const editSpThesis = (resourceData) => {
-    console.log("31");
-    console.log(resourceData)
     return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {withCredentials: true})
 }
 

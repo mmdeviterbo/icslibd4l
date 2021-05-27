@@ -7,8 +7,8 @@ import ResourceServices from "../../services/resourceService";
 import ChipInput from "material-ui-chip-input";
 
 const classificationOptions = [
-  { value: "sp", label: "Special Problem" },
-  { value: "thesis", label: "Thesis" },
+  { value: "Special Problem", label: "Special Problem" },
+  { value: "Thesis", label: "Thesis" },
 ];
 
 // !!! Should receive an sp/thesis object
@@ -68,9 +68,13 @@ export default function AddResFormContainer(props) {
             setPoster(poster);
             setSourceCode(source_code);
             setAbstract(abstract);
+            
             setAdviser({fname:adviser[0]?.adviser_fname, lname:adviser[0]?.adviser_lname});
             setAuthor({fname:author[0]?.author_fname, lname:author[0]?.author_lname});
-            
+
+            console.log("fsdfsdfd");
+            console.log(sourceItem);
+
             const tempKeyword=[]
             keywords.map((keyword)=>tempKeyword.push(keyword.sp_thesis_keyword))
             setKeyword(tempKeyword);
@@ -81,39 +85,36 @@ export default function AddResFormContainer(props) {
         console.log("Error 85: edit-res-page-form");
     }
   },[idSource,resourceData])
-
-
-
+  
+  
+  
+  
   useEffect(() => {
     function updateList() {
       if (adviser.fname && adviser.lname) {
-        if (adviserList.indexOf(adviser)) {
-          setAdviserList([]);
+        if (adviserList.indexOf(adviser) !== -1) {
+          console.log("here2");
           setAdviserList([...adviserList, adviser]);
         }
-      } else if (author.fname && author.lname) {
-        if (authorList.indexOf(author)) {
-          setAuthorList([]);
+    }
+    else if (author.fname && author.lname) {
+        if (authorList.indexOf(author) !== -1) {
+          console.log("here1");
           setAuthorList([...authorList, author]);
         }
       }
     }
     updateList();
   }, [author, adviser]);
-
+  
   const addAuthor = (e) => {
     const {name, value} = e.target
-    setAuthor({
-      ...author, [name]:value
-    });
+    setAuthor({...author, [name]:value});
   };
 
   const addAdviser = (e) => {
     const {name, value} = e.target
-
-    setAdviser({
-      ...adviser, [name]:value
-    });
+    setAdviser({...adviser, [name]:value});
   };
 
   const handleSubmit = async (event) => {
@@ -130,13 +131,16 @@ export default function AddResFormContainer(props) {
         manuscript,
         journal,
         poster,
-        advisers: adviserList,
-        authors: authorList,
+        // advisers: adviserList,
+        // authors: authorList,
+        advisers:[adviser],
+        authors: [author],
         keywords: keywords,
       };
+      console.log(userInput);
       const { data } = await ResourceServices.editSpThesis(userInput);
       alert(`${id} has been successfully updated.`)
-      window.location="/edit-resource";
+      window.location="/manage-resources";
     } catch (err) {
       if (err.response && err.response.data) {
         alert(err.response.data.errorMessage); // some reason error message
