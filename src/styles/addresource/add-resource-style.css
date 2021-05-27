@@ -41,6 +41,7 @@
 
 .res-primary-info{
     background-color: white;
+    box-shadow: 5px 5px 13px #cacaca;
     padding: 2.5rem;
     border-width: 0.5rem;
     border-radius: 0.3rem;
@@ -115,6 +116,7 @@
 
 .popupForm {
     background-color: white;
+    box-shadow: 5px 5px 13px #cacaca;
     padding: 2.5rem;
     border-width: 0.5rem;
     border-radius: 0.3rem;
