@@ -142,7 +142,7 @@ function App() {
                 {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
                 <Route
                     path="/browse-resources"
-                    render={() => <BrowseResources type={"Book"} />}></Route>
+                    render={() => <BrowseResources type={"book"} />}></Route>
                 <Route
                     path="/manage-resources"
                     render={() => (
