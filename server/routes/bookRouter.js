@@ -104,17 +104,23 @@ const storage = new GridFsStorage({
             const bookId = JSON.parse(req.body.body).bookId; //parse the book id from the multipart form
             const existingBook = await bookModel.findOne({ bookId }); //check if the book already exists
             if (existingBook) {
-                // delete the book cover's entry from .files and .chunks (book_id == metadata in book_covers.files)
-                // check first if the book has a saved book cover
-                gfs.files.findOne({ metadata : bookId }, (err, existingBookCover) => {
-                    if (existingBookCover) {   
-                        // .chunks
-                        mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
-                        // .files
-                        gfs.files.deleteOne({metadata : bookId});
-                    }
-                });
+                // for book create (no oldBookId in input)
+                if(JSON.parse(req.body.body).oldBookId == undefined){
+                    return reject("Book already exists!");
+                }else{ //for book update
+                    // delete the book cover's entry from .files and .chunks (book_id == metadata in book_covers.files)
+                    // check first if the book has a saved book cover
+                    gfs.files.findOne({ metadata : bookId }, (err, existingBookCover) => {
+                        if (existingBookCover) {   
+                            // .chunks
+                            mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
+                            // .files
+                            gfs.files.deleteOne({metadata : bookId});
+                        }
+                    });
+                }          
             }
+
             crypto.randomBytes(16, (err, buf) => {
                 //gives the file a different name
                 if (err) {
