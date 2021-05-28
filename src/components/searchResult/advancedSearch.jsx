@@ -4,10 +4,11 @@ import ReactPaginate from "react-paginate";
 import '../../styles/searchResultStyle/advancedSearch.css';
 import FilterSidebar from './filterSidebar';
 import ResultContainer from './resultContainer';
-import ResourceService from '../../services/resourcesService';
+import ResourceService from '../../services/resourceService';
 
 export default function AdvancedSearch({appRef}){
     const [query, setQuery] = useState("");
+    const [objFilter, setObjFilter] = useState("");
     const history = useHistory();
 
     //filters
@@ -15,8 +16,11 @@ export default function AdvancedSearch({appRef}){
     const [searchFilterAdviser, setSearchFilterAdviser] = useState("");
 
     // test for multifiltering
-    const [fieldArray, setfieldArray] = useState([])
-    const [filterArray, setfilterArray] = useState([])
+    const [fieldArray, setfieldArray] = useState([]);
+    const [filterArray, setfilterArray] = useState([]);
+
+    // get results from db
+    const [resultsFilterArr, setResultsFilterArr] = useState([]);
 
     // <field> : <value>
     // <field> = type | title | year | publisher | author | adviser | subject | keyword
@@ -78,19 +82,20 @@ export default function AdvancedSearch({appRef}){
     // console.log(searchFilterAdviser);
     console.log(filterArray);
     console.log(fieldArray);
+    console.log("results:"+resultsFilterArr);
 
-    async function fetchData() {
-        try {
-            const filter_obj = {
-                author: searchFilterAuthor,
-                adviser: searchFilterAdviser,
+    // get filtered results to backend
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                const {data} = await ResourceService.searchSpThesis(objFilter);
+                setResultsFilterArr(data);
+            }catch (err){
+                console.log(err);
             }
-            // console.log(filter_obj)
-            const response = await ResourceService.searchSpThesis()  // pass JSON object here contain filters
-        } catch (error) {
-            console.log(error)
-        }
-    }
+        }        
+        fetchData()
+    }, [objFilter]);
 
     const handleForm=(e)=>{
         e.preventDefault();
@@ -99,27 +104,23 @@ export default function AdvancedSearch({appRef}){
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             history.push(`/search?q=${tempStr}`);
         }
-        fetchData()
+        // call convert filter to object
+        filterParser()        
     }
 
-    // http request from backend
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         try {
-    //             const filter_obj = {
-    //                 author: searchFilterAuthor,
-    //                 adviser: searchFilterAdviser,
-    //                 
-    //             }
-    //             console.log(filter_obj)
-    //             const response = await ResourceService.searchSpThesis()
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     fetchData()
-        
-    // }, [searchFilterAuthor, searchFilterAdviser])
+    // parse Filter array into object
+    // combines 2 array into an object
+    const filterParser = () =>{
+        let obj = {};
+        for (var i = 0; i < fieldArray.length; i++){
+            if(fieldArray[i] === "Adviser" || fieldArray[i] === "Author"){
+                continue;
+            }
+            obj[fieldArray[i]] = filterArray[i];
+        }
+        setObjFilter(obj);
+        console.log(objFilter);
+    }
 
     return (
         <form style={searchMainContainer} onSubmit={handleForm} className="searchMainContainer">

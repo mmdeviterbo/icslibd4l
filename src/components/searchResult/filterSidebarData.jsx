@@ -85,40 +85,40 @@ export const FilterSidebarData = [
         ]                
     },
     {
-        label: "Format",
-        link: "/format",
+        label: "Type",
+        link: "/type",
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Book",
-                link: "/format/books",
+                link: "/type/books",
             },
             {
                 label: "Special Project",
-                link: "/format/sp",
+                link: "/type/sp",
             },
             {
                 label: "Thesis",
-                link: "/format/thesis",
+                link: "/type/thesis",
             }
         ]                 
     },
     {
-        label: "Publication Date",
-        link: "/published",
+        label: "Year",
+        link: "/year",
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                label: "Last Month",
+                label: 2019,
             },
             {
-                label: "Last Semester",
+                label: 2020,
 
             },
             {
-                label: "Last Year",
+                label: 2014,
             }
         ]
     },

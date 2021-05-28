@@ -30,20 +30,21 @@ export default function FilterSubMenu({ item,
         let fieldIndex = fieldArray.indexOf(parent.label);
 
         // (SELECT FILTER)
-        if(filterIndex < 0){
-            // if filter is not in array
+        if(fieldIndex < 0){
+            // field and filter not in the array
+            // add if filter is not in array
             setfilterArray([...filterArray, filter]);
-            // add field in field array
+            // add if field is not in field array
             setfieldArray([...fieldArray, parent.label]);
         }else{
             // remove from the array if clicked again (DESELECT FILTER)
+            // change the filter
             filterArray.splice(filterIndex, 1);
-            setfilterArray([...filterArray]);
+            setfilterArray([...filterArray, filter]);
             fieldArray.splice(fieldIndex, 1);
-            setfieldArray([...fieldArray]);
+            setfieldArray([...fieldArray, parent.label]);
         }
     }
-    // console.log(filter_array);
 
     return (
         <div>
