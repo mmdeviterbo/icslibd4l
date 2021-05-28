@@ -231,7 +231,7 @@ router.post("/browse", async (req,res)=> {
     }else{
         // type value: Special Problem or Thesis
         thesisModel.aggregate(
-            [{$match: {type:{$in:["Thesis", "Special Problem"]}}},
+            [{$match: {type:{$in:["Thesis", "Special Problem", "thesis", "sp","SP"]}}},
             {$lookup: {from:"sp_thesis_advisers", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"adviser"}},
             {$lookup: {from:"sp_thesis_authors", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"author"}},
             {$lookup: {from:"sp_thesis_keywords", localField:"sp_thesis_id", foreignField:"sp_thesis_id", as:"keywords"}},
@@ -878,9 +878,9 @@ router.put("/update-sp-thesis", async (req, res) => {
         });
 
         // deletes all authors with corresponding thesis/sp id
-        await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
-        await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
         
         // await thesisAuthorModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
         // await thesisAdviserModel.deleteMany({sp_thesis_id: old_sp_thesis_id});

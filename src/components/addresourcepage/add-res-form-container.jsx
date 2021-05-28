@@ -1,14 +1,13 @@
 import { SignalCellularNoSimOutlined } from "@material-ui/icons";
-import React, { Component, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import Select from "react-select";
-import { ItemGroup } from "semantic-ui-react";
 import ResourceServices from "../../services/resourceService";
 import ChipInput from "material-ui-chip-input";
 
 // LAST PUSH FROM MY BRANCH QWQ
 const classificationOptions = [
-  { value: "sp", label: "Special Problem" },
-  { value: "thesis", label: "Thesis" },
+  { value: "Special Problem", label: "Special Problem" },
+  { value: "Thesis", label: "Thesis" },
   { value: "book", label: "Book" },
 ];
 
@@ -135,11 +134,11 @@ export default function AddResFormContainer() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(authorList);
-    console.log(adviserList);
-    console.log(keywords);
+    // console.log(authorList);
+    // console.log(adviserList);
+    // console.log(keywords);
     try {
-      if (type == "book") {
+      if (type === "book") {
         const userInput = {
           bookId: id,
           title,
@@ -150,8 +149,8 @@ export default function AddResFormContainer() {
           numberOfCopies: numOfCopies,
         };
         const { data } = await ResourceServices.addBook(userInput);
-        console.log(data);
         alert("New book has been successfully added to the library");
+        window.location="/add-new-resource";
       } else {
         const userInput = {
           sp_thesis_id: id,
@@ -170,6 +169,7 @@ export default function AddResFormContainer() {
         const { data } = await ResourceServices.addSpThesis(userInput);
         console.log(data);
         alert(`New Sp/Thesis has been successfully added to the library`);
+        window.location="/add-new-resource";
       }
     } catch (err) {
       if (err.response && err.response.data) {
@@ -508,7 +508,7 @@ export default function AddResFormContainer() {
           </button>
         </form>
       </div>
-      {type == "book" ? BookInfoForm() : SPThesisInfoForm()}
+      {type === "book" ? BookInfoForm() : SPThesisInfoForm()}
 
       {/* <div className="res-primary-info">
             </div>           */}

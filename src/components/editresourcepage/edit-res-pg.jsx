@@ -4,7 +4,7 @@ import './add-resource-style.css';
 import AddResSidebar from '../addresourcepage/sidebar-add-res';
 import AddNewSPThesisForm from '../addresourcepage/add-new-spt-pg';
 
-const AddSPThesisPage = () => {
+const AddSPThesisPage = (props) => {
     return(
         <div className = "add-resource-page-container" >
             <AddResSidebar/>

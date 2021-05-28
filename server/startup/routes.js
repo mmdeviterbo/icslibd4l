@@ -12,7 +12,9 @@ const methodOverride = require("method-override");
 module.exports = function (app) {
     //parser tools
     app.use(express.json());
-    app.use(bodyParser.json());
+    app.use(express.urlencoded({
+      extended: true
+    }));
     app.use(cookieParser());
     app.use(methodOverride("_method"));
     app.use(function (req, res, next) {

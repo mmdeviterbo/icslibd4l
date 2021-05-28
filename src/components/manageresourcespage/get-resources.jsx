@@ -9,17 +9,12 @@ import ReadingSPTContainer from "../viewresources/readingsptcontainer";
 export default function GetResources({ resourceType }) {
   const location = useLocation();
   const [resourceList, setResourceList] = useState([]);
-  console.log(resourceType);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await ResourceService.browseResources({
-          resourceType: resourceType,
-        });
-        setResourceList(response.data);
-        // console.log(spthesisList)
-        // setSpThesisList(spThesis_arr)
+        const {data} = await ResourceService.browseResources({resourceType});
+        setResourceList(data);
       } catch (error) {
         console.log(error);
       }

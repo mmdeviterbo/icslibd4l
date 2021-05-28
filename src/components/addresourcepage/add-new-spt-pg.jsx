@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useCom } from 'react'
 import Select from 'react-select'
 import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
@@ -7,8 +7,8 @@ import ResourcePrimaryInfoForm from './primary-info-form'
 import SaveResourceButton from './save-resource-btn'
 
 const spOrTclas = [
-    {value:'sp', label:'Special Problem'},
-    {value:'thesis', label:'Thesis'},
+    {value:'Special Problem', label:'Special Problem'},
+    {value:'Thesis', label:'Thesis'},
 ];
 
 const SPThesisInfoForm = () => {
@@ -70,7 +70,7 @@ const SPThesisInfoForm = () => {
         );
     }
 
-const AddNewSPThesisForm = () => {
+const AddNewSPThesisForm = ({props}) => {
     return(
          <div className = "add-res-form-cont">
 

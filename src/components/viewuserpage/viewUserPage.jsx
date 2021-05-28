@@ -1,6 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-// import { GlobalContext } from "../manageuserpage/userTable";
-import { useHistory } from "react-router-dom";
+import React from "react";
 import ProfileContainer from "./profileContainer";
 
 export default function ViewUserPage() {

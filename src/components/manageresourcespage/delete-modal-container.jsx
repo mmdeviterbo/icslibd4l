@@ -19,13 +19,14 @@ const DeletePopUpCont = () => {
     setShow(false);
     history.goBack();
   };
-  console.log(id);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     handleClose();
     try {
       const { data } = await ResourceServices.deleteSpThesis(id);
-      alert("Deleted successfully.");
+      window.location = "/manage-resources";
+      // alert("Delete successful sa frontend")
     } catch (err) {
       if (err.response && err.response.data) {
         alert(err.response.data.errorMessage); // some reason error message
