@@ -17,11 +17,17 @@
 
 .sidebarLink:hover{
     background: #d3d3d3;
+    cursor:pointer;
 }
 
-.dropdownNav:hover{
+.dropdownNav > span:hover{
     color: black;
+    cursor: pointer;
 }
+
+/*.sidebarLabel:hover{
+    color: pink;
+}*/
 
 .resultMainContainer:hover{
     background: gainsboro;

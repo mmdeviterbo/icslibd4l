@@ -49,7 +49,7 @@ export default function FilterSubMenu({ item,
     return (
         <div>
             {/*displays the submenu*/}
-            <a style={sidebarLink} className="sidebarLink" to={item.link} onClick={item.subNav && showSubnav} >
+            <span style={sidebarLink} className="sidebarLink" to={item.link} onClick={item.subNav && showSubnav} >
                 <div>
                     <span style={sidebarLabel}> {item.label} </span>
                 </div>
@@ -60,10 +60,10 @@ export default function FilterSubMenu({ item,
                     ? item.iconClosed 
                     : null}
                 </div>
-            </a>
+            </span>
             {subnav && item.subNav.map((item2, index) => {
                 return (
-                    <a style={dropdownNav} 
+                    <span style={dropdownNav} 
                         className="dropdownNav" 
                         to={item2.link} key={index} 
                         onClick={() => handleFilter(item2, item)}
@@ -116,7 +116,7 @@ export default function FilterSubMenu({ item,
                                 }
                             </div> */}
                         </span>
-                    </a>
+                    </span>
                 )
             })}
         </div>
@@ -143,7 +143,7 @@ const sidebarLabel = {
 const dropdownNav = {
     alignItems: "center",
     display: "flex",
-    color: "0067A1",
+    color: "rgb(0, 103, 161)",
     fontSize: "1.3em",
     marginLeft: "3rem",
     marginTop: "0.25em",
