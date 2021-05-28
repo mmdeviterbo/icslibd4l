@@ -1,9 +1,10 @@
-import React, { Link } from "react";
+import React from "react";
 
+// TODO: add documentation
 const AddNewResource = () => {
     return (
         <div className="new-res-container">
-            <a href="/add-new-resource">
+            <a href="/add-new-book">
                 <button className="new-res-button">
                     <span className="res-icon">
                         <svg
@@ -17,7 +18,7 @@ const AddNewResource = () => {
                         </svg>
                     </span>
 
-                    <span className="res-btn-txt">Add New Resource</span>
+                    <span class="res-btn-txt">Add Book</span>
                 </button>
             </a>
         </div>

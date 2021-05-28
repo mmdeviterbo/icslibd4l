@@ -1,20 +1,19 @@
 import React from "react";
-import { Table } from "@material-ui/core";
-import MainResourceTable from "./resMainTable";
+// import MainResourceTable from "./resourcesMainTbl2"; // CHANGED TO PREVIOUS VERIONS
+import MainResourceTable from "./resourcesMainTable"; // CHANGED TO PREVIOUS VERIONS
 import AddNewResource from "./createNewResource";
-import AddNewSPT from "./newSptButton";
+import AddNewSPT from "./newSPTButton";
 // import UserTable from '../manageuserpage/userTable'
 
 const ResTableContainer = () => {
     return (
         <div className="res-table-cont">
-            {/* <UserTable/> */}
             <MainResourceTable />
             <br />
 
             <div class="addBtns">
-                <AddNewResource />
-                {/* <AddNewSPT/> */}
+                <AddNewResource /> {/* Add book */}
+                <AddNewSPT /> {/* Add Sp/Thesis */}
             </div>
         </div>
     );

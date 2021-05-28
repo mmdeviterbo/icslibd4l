@@ -1,19 +1,16 @@
-import React from 'react';
-
+import React from "react";
 
 const SearchResources = () => {
-    return(
-        <div className = "staff-search-bar-container">
-            <input id = "searchbarresources"
-                placeholder = {"Search resources..."}
+    return (
+        <div className="staff-search-bar-container">
+            <input
+                id="searchbarresources"
+                placeholder={"Search resources..."}
             />
 
-            <button id = "searchbarresbutton">
-                
-            </button>
+            <button id="searchbarresbutton"></button>
+        </div>
+    );
+};
 
-        </div>        
-        );
-}
-
-export default SearchResources
+export default SearchResources;
