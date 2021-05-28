@@ -5,7 +5,7 @@ import AddNewResource from "./createNewResource";
 import AddNewSPT from "./newSPTButton";
 // import UserTable from '../manageuserpage/userTable'
 
-const ResTableContainer = () => {
+const ResourcesTableContainer = () => {
     return (
         <div className="res-table-cont">
             <MainResourceTable />
@@ -19,4 +19,4 @@ const ResTableContainer = () => {
     );
 };
 
-export default ResTableContainer;
+export default ResourcesTableContainer;

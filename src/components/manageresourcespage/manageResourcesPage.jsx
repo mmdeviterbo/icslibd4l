@@ -1,18 +1,18 @@
 import React from "react";
 import ManageItemsHeader from "./manageItemsHeader";
 import FieldsContainerRes from "./filterFieldsResources";
-import ResTableContainer from "./resourceTableContainer";
-import "../../styles/manageresources/manage-resources-style.css";
+import ResourceTableContainer from "./resourceTableContainer";
+import "../../styles/manageresources/manageResourcesStyle.css";
 
-const ManageResPage = ({ resourceList }) => {
+const ManageResourcesPage = ({ resourceList }) => {
     return (
         <div className="manage-resources-page-container">
             <ManageItemsHeader />
             <FieldsContainerRes />
             {/* <ResTableContainer resourceList={resourceList} /> */}
-            <ResTableContainer />
+            <ResourceTableContainer />
         </div>
     );
 };
 
-export default ManageResPage;
+export default ManageResourcesPage;

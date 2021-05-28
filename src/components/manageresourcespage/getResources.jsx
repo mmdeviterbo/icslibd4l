@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import { useLocation } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
-import ManageResPage from "../manageresourcespage/manageResourcePage";
+import ManageResourcesPage from "./manageResourcesPage";
 
 // TODO: add documentation
 export default function GetResources({ resourceType }) {
@@ -24,7 +24,7 @@ export default function GetResources({ resourceType }) {
 
     return (
         <div className="viewitem-container">
-            <ManageResPage resourceList={resourceList} />
+            <ManageResourcesPage resourceList={resourceList} />
         </div>
     );
 }
