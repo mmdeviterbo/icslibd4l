@@ -36,18 +36,11 @@ module.exports = function (app) {
     );
 
     // set up routes
-
-    app.use("/users", require("../routes/userRouter"));
-    app.use("/books", require("../routes/bookRouter"));
-    app.use("/admin", require("../routes/adminRouter"));
-
-    // set up routes
     app.use("/admin", require("../routes/adminRouter"));
     app.use("/faculty", require("../routes/icsFacultyStaffRouter"));
     app.use("/users", require("../routes/userRouter"));
-    app.use("/books", require("../routes/bookRouter"));
 
-    // set up routes: thesis
+    app.use("/books", require("../routes/bookRouter"));
     app.use("/thesis", require("../routes/spThesisRouter"));
-    app.use("/faculty", require("../routes/icsFacultyStaffRouter"));
+    app.use("/report", require("../routes/reportRouter"));
 };
