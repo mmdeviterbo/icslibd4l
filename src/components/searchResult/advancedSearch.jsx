@@ -14,6 +14,8 @@ export default function AdvancedSearch({appRef}){
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
     const [searchFilterAdviser, setSearchFilterAdviser] = useState("");
+    const [searchFilterTitle, setSearchFilterTitle] = useState("");
+    const [searchFilterYear, setSearchFilterYear] = useState("");
 
     // test for multifiltering
     const [fieldArray, setfieldArray] = useState([]);
@@ -48,9 +50,10 @@ export default function AdvancedSearch({appRef}){
 
     const displayresults = results
     .slice(pagesVisited, pagesVisited + resultsPerPage)
-    .map((result) => {
+    .map((result, index) => {
       return (
         <ResultContainer
+        key={index}
         title={result.title}
         author={result.author} 
         adviser={result.adviser}
@@ -80,9 +83,10 @@ export default function AdvancedSearch({appRef}){
     //     urlQuery = decodeURIComponent((url.replace('q=','')));
 
 
-    console.log(filterArray);
-    console.log(fieldArray);
+    // console.log(filterArray);
+    // console.log(fieldArray);
     console.log("results:"+resultsFilterArr);
+    console.log(urlFilter);
 
     // get filtered results to backend
     useEffect(() => {
@@ -139,6 +143,10 @@ export default function AdvancedSearch({appRef}){
                     setSearchFilterAuthor={setSearchFilterAuthor}
                     searchFilterAdviser={searchFilterAdviser} 
                     setSearchFilterAdviser={setSearchFilterAdviser}
+                    searchFilterTitle={searchFilterTitle}
+                    setSearchFilterTitle={setSearchFilterTitle}
+                    searchFilterYear={searchFilterYear}
+                    setSearchFilterYear={setSearchFilterYear} 
                     filterArray={filterArray}
                     setfilterArray={setfilterArray}
                     fieldArray={fieldArray}
@@ -147,6 +155,7 @@ export default function AdvancedSearch({appRef}){
 
                     {/* TODO: STYLE AND HANDLE ON CLICK */}
                     <button variant="primary">
+                        {/* onclick = call filterparse */}
                         Apply Filters
                     </button>{' '}
                 </div>

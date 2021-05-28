@@ -23,22 +23,32 @@ export const FilterSidebarData = [
         ]
     },
     {
-        label: "Course",
-        link: "/course",
+        label: "Title",
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                label: "CMSC",
-                link: "/course/CMSC",
+                searchbarTitle: "searchbar"
+            }
+        ]
+    },
+    {
+        label: "Subject",
+        link: "/subject",
+        iconClosed: <FaIcons.FaAngleDown/>,
+        iconOpened: <FaIcons.FaAngleUp/>,
+        subNav: [
+            {
+                label: "CMSC128",
+                link: "/subject/CMSC128",
             },
             {
-                label: "IT",
-                link: "/course/IT",
+                label: "CMSC123",
+                link: "/subject/CMSC123",
             },
             {
-                label: "STAT",
-                link: "/course/STAT",
+                label: "STAT101",
+                link: "/subject/STAT101",
             },
             {
                 label: "MORE",
@@ -47,13 +57,13 @@ export const FilterSidebarData = [
                 link: "/",
                 moreSubNav: [
                     {
-                        mlabel: "MATH"
+                        mlabel: "MATH27"
                     },
                     {
-                        mlabel: "SCIENCE"
+                        mlabel: "CMSC56"
                     },
                     {
-                        mlabel: "MEDICINE"
+                        mlabel: "CMSC57"
                     }
                     
                 ]
@@ -111,15 +121,18 @@ export const FilterSidebarData = [
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                label: 2019,
+                label: 2020,
             },
             {
-                label: 2020,
+                label: 2019,
 
             },
             {
-                label: 2014,
-            }
+                label: 2018,
+            },
+            {    
+                searchbarYear: "searchbar"
+            },
         ]
     },
 

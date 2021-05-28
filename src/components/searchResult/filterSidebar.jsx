@@ -6,6 +6,10 @@ export default function FilterSidebar({ searchFilterAuthor,
                                         setSearchFilterAuthor,
                                         searchFilterAdviser,
                                         setSearchFilterAdviser,
+                                        searchFilterTitle,
+                                        setSearchFilterTitle,
+                                        searchFilterYear,
+                                        setSearchFilterYear,
                                         filterArray,
                                         setfilterArray,
                                         fieldArray,
@@ -24,6 +28,10 @@ export default function FilterSidebar({ searchFilterAuthor,
                         setSearchFilterAuthor={setSearchFilterAuthor}
                         searchFilterAdviser={searchFilterAdviser} 
                         setSearchFilterAdviser={setSearchFilterAdviser}
+                        searchFilterTitle={searchFilterTitle}
+                        setSearchFilterTitle={setSearchFilterTitle}
+                        searchFilterYear={searchFilterYear}
+                        setSearchFilterYear={setSearchFilterYear} 
                         filterArray={filterArray}
                         setfilterArray={setfilterArray}
                         fieldArray={fieldArray}

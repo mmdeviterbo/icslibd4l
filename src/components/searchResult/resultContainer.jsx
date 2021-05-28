@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 
 export default function ResultContainer({title, author, adviser, linkTo, publishDate}){
     return (
-        <div style={resultMainContainer} class="resultMainContainer">
+        <div style={resultMainContainer} className="resultMainContainer">
             <Link to={linkTo} style={resultLinkContainer}>
                 <h3 style={resultTitle}>{title}</h3>
                 <p style={authAdv}>{author.toString().replace(/,+/g,', ')}</p>

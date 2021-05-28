@@ -10,6 +10,10 @@ export default function FilterSubMenu({ item,
                                         setfilterArray,
                                         fieldArray,
                                         setfieldArray,
+                                        searchFilterTitle,
+                                        setSearchFilterTitle,
+                                        searchFilterYear,
+                                        setSearchFilterYear,
                                         }){
     const [subnav, setSubnav] = useState(false)
     const [moreSubnav, setmoreSubnav] = useState(false)
@@ -108,6 +112,14 @@ export default function FilterSubMenu({ item,
                             {item2.searchbarAdviser
                             ? <SearchBar searchFilter={searchFilterAdviser} 
                                          setSearchFilter={setSearchFilterAdviser}/>
+                            : null}
+                            {item2.searchbarYear
+                            ? <SearchBar searchFilter={searchFilterYear} 
+                                         setSearchFilter={setSearchFilterYear}/>
+                            : null}
+                            {item2.searchbarTitle
+                            ? <SearchBar searchFilter={searchFilterTitle} 
+                                         setSearchFilter={setSearchFilterTitle}/>
                             : null}
 
                             {/* <div>
