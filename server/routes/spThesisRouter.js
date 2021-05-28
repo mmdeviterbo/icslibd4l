@@ -250,6 +250,22 @@ router.post("/browse", async (req,res)=> {
 
 // search data
 router.get("/search", async (req, res) => {
+    // Search and Filter Resources
+    //     http://localhost:3001/thesis/search
+    // REQUEST:
+    // - req.query
+    //     "type" (required) = All | title | author | adviser | subject
+    //     "search" (required) = <string in search bar>
+    // - req.body (json)
+    //     { "<field>" = "<value>", ... }
+    //     * all fields are optional
+    //     * there can be 0, 1, or multiple fields
+    //         <field> = type | title | year | publisher | author | adviser | subject | keyword
+    //         <value> = <search string/number>
+    //     * additional notes in filterEntries()
+    // RESULT:
+    // - array of objects (book/sp/thesis)
+    
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -259,10 +275,7 @@ router.get("/search", async (req, res) => {
         // get unique entries
         let final_arr = [...new Set(total)];
 
-        // FILTER ENTRIES if req.body is not empty (has at least one "<field>:<value>") where:
-        //   <field> = type | title | year | publisher | author | adviser | subject | keyword
-        //   <value> = search string/number
-        //   final_arr = search results to be filtered
+        // FILTER ENTRIES (final_arr = search results to be filtered)
 
         // Filter by type
         // req.body.type = book | sp | thesis (case insensitive)
