@@ -1,5 +1,5 @@
 import React from "react";
-import SearchResources from "./resourceSearchbar";
+import SearchResources from "./resourcesSearchBar";
 
 const ManageItemsHeader = () => {
     return (

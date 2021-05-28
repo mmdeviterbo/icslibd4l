@@ -1,24 +1,24 @@
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { jwtPrivateKey, jwtEncryptionKey } from "./config.json";
+import * as jwtEncrypt from "jwt-token-encrypt";
 import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
 // import ManageResPage from './components/manageresourcespage/manageresourcespage'
-import AddResourcePage from "./components/addresourcepage/addNewResourcesPage";
+// import AddResourcePage from "./components/addresourcepage/addNewResourcesPage";
 import EditResourcePage from "./components/editresourcepage/editResourceForm";
-// import AddSPThesisPage from './components/addresourcepage/add-spt-pg-container'
+import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
+import AddBookFormContainer from "./components/addresourcepage/addBookFormContainer";
 import ManageUser from "./components/manageuserpage/manageUserPage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import PersonService from "./services/personService";
-import { jwtPrivateKey } from "./config.json";
-import { jwtEncryptionKey } from "./config.json";
-import * as jwtEncrypt from "jwt-token-encrypt";
 import DeletePopUpCont from "./components/manageresourcespage/deleteModalContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
 import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 import BrowseResources from "./components/browseresources/browseResources";
-import updateResourceData from "./components/crud/update";
+import UpdateResourceData from "./components/crud/update";
 import About from "./components/about/about";
 import GetResources from "./components/manageresourcespage/getResources";
 import "./App.css";
@@ -120,29 +120,39 @@ function App() {
                 <Route
                     path="/account-setting/"
                     component={ViewUserPage}></Route>
-                {/* <Route
-              path="/account-setting/"
-              render={() => <ViewUserPage user={user} />}></Route>
-          <Route path="/home" render={()=><Homepage browseRef={browseRef} appRef={appRef} latestAcqRef={latestAcqRef} newsRef={newsRef}/>}/>
-          <Route exact path="/not-found" component={Notfound}></Route>
-          
-           {/* add your new route/path here */}
+
+                <Route
+                    path="/home"
+                    render={() => (
+                        <Homepage
+                            browseRef={browseRef}
+                            appRef={appRef}
+                            latestAcqRef={latestAcqRef}
+                            newsRef={newsRef}
+                        />
+                    )}
+                />
+                <Route exact path="/not-found" component={Notfound}></Route>
+
+                {/* add your new route/path here */}
                 {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
                 <Route
-                    path="/browse-resources"
-                    render={() => <BrowseResources type={"thesis"} />}></Route>
-                <Route
                     path="/update-sp-thesis"
-                    component={updateResourceData}></Route>
+                    component={UpdateResourceData}></Route>
                 {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
+                <Route
+                    path="/browse-resources"
+                    render={() => <BrowseResources type={"Book"} />}></Route>
                 <Route
                     path="/manage-resources"
                     render={() => (
-                        <GetResources resourceType={"book"} />
+                        <GetResources resourceType={"Book"} />
                     )}></Route>
+                <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
+
                 <Route
-                    path="/add-new-resource"
-                    component={AddResourcePage}></Route>
+                    path="/add-new-book"
+                    component={AddBookFormContainer}></Route>
                 <Route
                     path="/edit-resource"
                     component={EditResourcePage}></Route>

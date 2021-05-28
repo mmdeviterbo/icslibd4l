@@ -1,8 +1,8 @@
-import { SignalCellularNoSimOutlined } from "@material-ui/icons";
+// import { SignalCellularNoSimOutlined } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { ItemGroup } from "semantic-ui-react";
+// import { ItemGroup } from "semantic-ui-react";
 import ResourceServices from "../../services/resourceService";
 import ChipInput from "material-ui-chip-input";
 
