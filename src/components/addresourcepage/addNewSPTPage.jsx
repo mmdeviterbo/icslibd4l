@@ -3,7 +3,6 @@ import Select from 'react-select'
 import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
 import AddResSidebar from './addResHeader';
-import ResourcePrimaryInfoForm from './primaryInfoForm'
 import ChipInput from "material-ui-chip-input";
 
 const classificationOptions = [
