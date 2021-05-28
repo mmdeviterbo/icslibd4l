@@ -2,7 +2,6 @@ import React, { Component, useState, useCom, useEffect } from 'react'
 import Select from 'react-select'
 import ResourceServices from '../../services/resourceService'
 import { ItemGroup } from 'semantic-ui-react'
-import ResourcePrimaryInfo from './primaryInfoForm'
 
 const courseList = [
     {value:'cmsc12', label:'CMSC 12'},
