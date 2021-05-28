@@ -3,7 +3,7 @@ import React, { Link } from "react";
 const AddNewResource = () => {
   return (
     <div className="new-res-container">
-      <a href="/add-new-resource">
+      <a href="/add-new-book">
         <button className="new-res-button">
           <span className="res-icon">
             <svg
