@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-const PORT = process.env.SERVER_PORT;
+const PORT = process.env.PORT_SERVER;
 
 //database USER:
 //username: sampleuser
