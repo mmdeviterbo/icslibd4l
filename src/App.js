@@ -153,8 +153,9 @@ function App() {
                     component={EditResourcePage}></Route>
                 <Route
                     path="/view-sp-thesis"
+                    // component={ReadingSPTContainer}
                     render={() => (
-                        <ReadingSPTContainer sampleSP={sampleSP} />
+                        <ReadingSPTContainer resourceData={sampleSP}/>
                     )}></Route>
 
                 {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}

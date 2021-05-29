@@ -84,6 +84,7 @@ const DeletePopUpCont = () => {
         backdrop="static"
         keyboard={false}
         centered
+        onModalHide={IsDeleted}
       >
         <Modal.Header closeButton>
           {item == "resource" ? (
