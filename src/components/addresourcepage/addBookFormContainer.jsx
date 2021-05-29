@@ -32,7 +32,8 @@ const AddBookFormContainer = () => {
     // functionalities:
     const [type, setType] = useState("");
     const [title, setTitle] = useState("");
-    const [year, setYear] = useState(0);
+    const [datePublished, setDatePublished] = useState(0);
+    const [dateAcquired, setDateAcquired] = useState(0);
     const [id, setId] = useState("");
     const [journal, setJournal] = useState("");
     const [manuscript, setManuscript] = useState("");
@@ -105,6 +106,8 @@ const AddBookFormContainer = () => {
             const userInput = {
                 bookId: id,
                 title,
+                datePublished,
+                dateAcquired,
                 authors: authorList,
                 subjects: courses,
                 physicalDesc: description,
@@ -170,6 +173,30 @@ const AddBookFormContainer = () => {
                             />
                         </div>
 
+                        <div className="primaryfields">
+                            <label htmlFor="datePublished">Date Published: &nbsp; </label>
+                            <input
+                            type="date"
+                            id="datePublished"
+                            required
+                            onChange={(event) => {
+                                setDatePublished(event.target.value);
+                            }}
+                            />
+                        </div>
+
+                        <div className="primaryfields">
+                            <label htmlFor="dateAcquired">Date Acquired: &nbsp; </label>
+                            <input
+                            type="date"
+                            id="dateAcquired"
+                            required
+                            onChange={(event) => {
+                                setDateAcquired(event.target.value);
+                            }}
+                            />
+                        </div>
+
                         {/* <AddAuthorField/> */}
                         <h5>Author(s):</h5>
                         <div class="primaryfields">
@@ -231,6 +258,7 @@ const AddBookFormContainer = () => {
 
                         ...or upload description file:
                         <input type="file" class="resourcefiles" id="uploadDesc" />
+
                         <br />
                         <br />
                         <br />
