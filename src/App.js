@@ -13,9 +13,9 @@ import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
 import AddBookFormContainer from "./components/addresourcepage/addBookFormContainer";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import ManageUser from "./components/manageuserpage/manageUserPage";
-import ManageUser from "./components/manageuserpage/viewUserModal";
+import ViewUserModal from "./components/manageuserpage/viewUserModal";
 import PersonService from "./services/personService";
-import DeletePopUpCont from "./components/manageresourcespage/deleteModalContainer";
+import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
 import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 import BrowseResources from "./components/browseresources/browseResources";
@@ -23,7 +23,6 @@ import UpdateResourceData from "./components/crud/update";
 import About from "./components/about/about";
 import GetResources from "./components/manageresourcespage/getResources";
 import "./App.css";
-import ViewUserModal from "./components/manageuserpage/viewUserModal";
 
 function App() {
     const [user, setUser] = useState(null); //fullname, email, userType (integer)
@@ -191,13 +190,13 @@ function App() {
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"
-                    children={<DeletePopUpCont />}
+                    children={<DeleteModalContainer />}
                 />
             )}
             {background && (
                 <Route
                     path="/manage-users/delete-user"
-                    children={<DeletePopUpCont />}
+                    children={<DeleteModalContainer />}
                 />
             )}
             <Footer />
