@@ -38,7 +38,8 @@ const AddNewSPThesisForm = ({props}) => {
     // functionalities:
     const [type, setType] = useState("");
     const [title, setTitle] = useState("");
-    const [year, setYear] = useState(0);
+    const [datePublished, setDatePublished] = useState(0);
+    const [dateAcquired, setDateAcquired] = useState(0);
     const [id, setId] = useState("");
     const [journal, setJournal] = useState("");
     const [manuscript, setManuscript] = useState("");
@@ -55,6 +56,7 @@ const AddNewSPThesisForm = ({props}) => {
         fname: "",
         lname: "",
     });
+
     const [authorList, setAuthorList] = useState([]);
     const [adviserList, setAdviserList] = useState([]);
 
@@ -98,14 +100,6 @@ const AddNewSPThesisForm = ({props}) => {
             });
     };
 
-    // const addAdviser = (e) => {
-    //     setAdviser({
-    //         ...adviser,
-    //         [e.target.name]: e.target.value,
-    //     });
-    // };
-
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -114,7 +108,8 @@ const AddNewSPThesisForm = ({props}) => {
                 type,
                 title,
                 abstract,
-                year,
+                datePublished,
+                dateAcquired,
                 source_code,
                 manuscript,
                 journal,
@@ -184,6 +179,30 @@ const AddNewSPThesisForm = ({props}) => {
                             required
                             onChange={(event) => {
                                 setTitle(event.target.value);
+                            }}
+                            />
+                        </div>
+
+                        <div className="primaryfields">
+                            <label htmlFor="datePublished">Date Published: &nbsp; </label>
+                            <input
+                            type="date"
+                            id="datePublished"
+                            required
+                            onChange={(event) => {
+                                setDatePublished(event.target.value);
+                            }}
+                            />
+                        </div>
+
+                        <div className="primaryfields">
+                            <label htmlFor="dateAcquired">Date Acquired: &nbsp; </label>
+                            <input
+                            type="date"
+                            id="dateAcquired"
+                            required
+                            onChange={(event) => {
+                                setDateAcquired(event.target.value);
                             }}
                             />
                         </div>
