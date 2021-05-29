@@ -29,6 +29,7 @@ Response Object:
 }
 ********************************************************/
 router.post("/create", async (req, res) => {
+    console.log("here");
     var loggedUser;
     console.log("here");
     try {
