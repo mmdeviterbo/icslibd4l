@@ -137,134 +137,134 @@ const AddBookFormContainer = () => {
         setKeyword(chip);
     };
 
-    const BookInfoForm = () => {
-        return (
-            <>
-                <h2>
-                    <b>Book</b>
-                </h2>
-                <hr />
-                {/* <form id = "bookForm"> */}
-                <div class="primaryfields">
-                    <label for="bookISBN">ISBN: &nbsp; </label>
-                    <input type="text" id="bookISBN" />
-                </div>
-                <div class="primaryfields">
-                    <label for="physDescription">
-                        Physical Description: &nbsp;{" "}
-                    </label>
-                    <textarea id="physDescription" />
-                </div>
-                ...or upload description file:
-                <input type="file" class="resourcefiles" id="uploadDesc" />
-                <br />
-                <br />
-                <br />
-                <br />
-                <div class="primaryfields">
-                    <label for="availBookCopies">
-                        No. of copies available: &nbsp;{" "}
-                    </label>
-                    <input type="number" id="availBookCopies" />
-                </div>
-                <div className="bookRelatedCourses">
-                    <br />
-                    Related Courses:
-                    <Select
-                        id="relatedCourses"
-                        isMulti
-                        placeholder={"Courses..."}
-                        value={courseList.find((obj) => obj.value === courses)}
-                        options={courseList}></Select>
-                </div>
-                {/* </form> */}
-            </>
-        );
-    };
-
     return (
         <div className="add-res-form-cont">
-            {/* Primary  Info */}
-            <div className="res-primary-info">
-                <form id="createForm" onSubmit={handleSubmit}>
-                    <h2>
-                        <b>Primary Info</b>
-                    </h2>
-                    <hr />
+            <form id="createForm" onSubmit={handleSubmit}>
+                <div className = "form-container">
 
-                    <div class="primaryfields">
-                        <label for="resId">ID: &nbsp; </label>
-                        <input
-                            type="text"
-                            id="resId"
-                            onChange={(event) => {
-                                setId(event.target.value);
-                            }}
-                        />
-                    </div>
+                    <div className="res-primary-info">
+                        <h2>
+                            <b>Primary Info</b>
+                        </h2>
+                        <hr />
 
-                    <div class="primaryfields">
-                        <label for="resTitle">Title: &nbsp; </label>
-                        <input
-                            type="text"
-                            id="resTitle"
-                            onChange={(event) => {
-                                setTitle(event.target.value);
-                            }}
-                        />
-                    </div>
+                        <div class="primaryfields">
+                            <label for="resId">ID: &nbsp; </label>
+                            <input
+                                type="text"
+                                id="resId"
+                                onChange={(event) => {
+                                    setId(event.target.value);
+                                }}
+                            />
+                        </div>
 
-                    {/* <AddAuthorField/> */}
-                    <h5>Author(s):</h5>
-                    <div class="primaryfields">
-                        <label for="resAuthor">
-                            &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
-                        </label>
+                        <div class="primaryfields">
+                            <label for="resTitle">Title: &nbsp; </label>
+                            <input
+                                type="text"
+                                id="resTitle"
+                                onChange={(event) => {
+                                    setTitle(event.target.value);
+                                }}
+                            />
+                        </div>
 
-                        <input
-                            type="text"
-                            id="resAuthorFN"
-                            name="fname"
-                            value={author.fname}
-                            onChange={addAuthor}
-                        />
-                    </div>
+                        {/* <AddAuthorField/> */}
+                        <h5>Author(s):</h5>
+                        <div class="primaryfields">
+                            <label for="resAuthor">
+                                &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
+                            </label>
 
-                    <div class="primaryfields">
-                        <label for="resAuthor">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
-                        </label>
-                        <input
-                            type="text"
-                            id="resAuthorLN"
-                            name="lname"
-                            value={author.lname}
-                            onChange={addAuthor}
-                        />
-                    </div>
-                    <button id="addAuthor">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="bi bi-plus"
-                            viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                        </svg>
-                        Add Author
-                    </button>
-                </form>
-            </div>
+                            <input
+                                type="text"
+                                id="resAuthorFN"
+                                name="fname"
+                                value={author.fname}
+                                onChange={addAuthor}
+                            />
+                        </div>
 
-            <div className="popupForm" id="bookForm">
-                <BookInfoForm />
-                <br />
-                <br />
-                <button type="submit" id="saveResource">
+                        <div class="primaryfields">
+                            <label for="resAuthor">
+                                &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
+                            </label>
+                            <input
+                                type="text"
+                                id="resAuthorLN"
+                                name="lname"
+                                value={author.lname}
+                                onChange={addAuthor}
+                            />
+                        </div>
+
+                        <button id="addAuthor">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-plus"
+                                viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                            </svg>
+                            Add Author
+                        </button>
+                    </div>  {/* Primary Info closing tag */}
+
+                    <div className="res-primary-info">
+                        <h2> <b>Book</b> </h2>
+                        <hr />
+                    
+                        <div class="primaryfields">
+                            <label for="bookISBN">ISBN: &nbsp; </label>
+                            <input type="text" id="bookISBN" />
+                        </div>
+
+                        <div class="primaryfields">
+                            <label for="physDescription">
+                                Physical Description: &nbsp;{" "}
+                            </label>
+                            <textarea id="physDescription" />
+                        </div>
+
+                        ...or upload description file:
+                        <input type="file" class="resourcefiles" id="uploadDesc" />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+                        <div class="primaryfields">
+                            <label for="availBookCopies">
+                                No. of copies available: &nbsp;{" "}
+                            </label>
+                            <input type="number" id="availBookCopies" />
+                        </div>
+
+                        <div className="bookRelatedCourses">
+                            <br />
+                            Related Courses:
+                            <Select
+                                id="relatedCourses"
+                                isMulti
+                                placeholder={"Courses..."}
+                                value={courseList.find((obj) => obj.value === courses)}
+                                options={courseList}></Select>
+                        </div>
+
+                    <br/>
+                    <button type="submit" id="saveResource">
                     Save
-                </button>
-            </div>
+                    </button>
+
+                    </div>
+
+                </div>
+            </form>
+                
+           
         </div>
     );
 };
