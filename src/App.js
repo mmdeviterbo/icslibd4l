@@ -120,36 +120,31 @@ function App() {
                 <Route
                     path="/account-setting/"
                     component={ViewUserPage}></Route>
-
-                <Route
-                    path="/home"
-                    render={() => (
-                        <Homepage
-                            browseRef={browseRef}
-                            appRef={appRef}
-                            latestAcqRef={latestAcqRef}
-                            newsRef={newsRef}
-                        />
-                    )}
-                />
                 <Route exact path="/not-found" component={Notfound}></Route>
-
-                {/* add your new route/path here */}
                 {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
                 <Route
                     path="/update-sp-thesis"
                     component={UpdateResourceData}></Route>
                 {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
+
                 <Route
-                    path="/browse-resources"
+                    path="/browse-books"
                     render={() => <BrowseResources type={"book"} />}></Route>
+                <Route
+                    path="/browse-special-problems"
+                    render={() => <BrowseResources type={"Special Problem"} />}></Route>
+                <Route
+                    path="/browse-theses"
+                    render={() => <BrowseResources type={"Thesis"} />}></Route>
+
                 <Route
                     path="/manage-resources"
                     render={() => (
                         <GetResources resourceType={"Book"} />
                     )}></Route>
-                <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
+                <Route path="/manage-users" component={ManageUser}></Route>
 
+                <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route
                     path="/add-new-book"
                     component={AddBookFormContainer}></Route>
@@ -161,13 +156,13 @@ function App() {
                     render={() => (
                         <ReadingSPTContainer sampleSP={sampleSP} />
                     )}></Route>
+
                 {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
                 <Route
                     path="/view-book"
                     render={() => (
                         <ReadingBookContainer sampleBook={sampleBook} />
                     )}></Route>
-                <Route path="/manage-users" component={ManageUser}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Route exact path="/not-found" component={Notfound}></Route>
                 <Redirect exact from="/" to="/home" />
@@ -176,6 +171,12 @@ function App() {
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"
+                    children={<DeletePopUpCont />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/delete-user"
                     children={<DeletePopUpCont />}
                 />
             )}

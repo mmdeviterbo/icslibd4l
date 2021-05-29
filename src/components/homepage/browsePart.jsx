@@ -28,7 +28,7 @@ export default function BrowsePart({ browseRef }) {
         <Link
           className="browseBox browseboxBooks"
           style={browseBox}
-          to="/home"
+          to="/browse-books"
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("BOOK")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}
@@ -54,7 +54,7 @@ export default function BrowsePart({ browseRef }) {
         <Link
           className="browseBox browseboxTheses"
           style={browseBox}
-          to="/browse-resources"
+          to="/browse-theses"
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("THESIS")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}
@@ -80,7 +80,7 @@ export default function BrowsePart({ browseRef }) {
         <Link
           className="browseBox browseboxSP"
           style={browseBox}
-          to="/browse-resources"
+          to="/browse-special-problems"
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("SP")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}
