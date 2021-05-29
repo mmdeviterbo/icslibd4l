@@ -120,16 +120,6 @@ export const FilterSidebarData = [
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
-            {
-                label: 2020,
-            },
-            {
-                label: 2019,
-
-            },
-            {
-                label: 2018,
-            },
             {    
                 searchbarYear: "searchbar"
             },

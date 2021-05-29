@@ -34,6 +34,11 @@ export default function FilterSubMenu({ item,
         let fieldIndex = fieldArray.indexOf(parent.label);
 
         // (SELECT FILTER)
+        if( parent.label === "Author"||
+            parent.label === "Adviser"||
+            parent.label === "Title"||
+            parent.label === "Year"
+        ){ return;}
         if(fieldIndex < 0){
             // field and filter not in the array
             // add if filter is not in array
