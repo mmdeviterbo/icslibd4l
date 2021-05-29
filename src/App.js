@@ -13,7 +13,6 @@ import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
 import AddBookFormContainer from "./components/addresourcepage/addBookFormContainer";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import ManageUser from "./components/manageuserpage/manageUserPage";
-import ViewUserModal from "./components/manageuserpage/viewUserModal";
 import PersonService from "./services/personService";
 import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
@@ -94,16 +93,6 @@ function App() {
     };
     // CLEAR UNTIL HERE
 
-    // DUMMY USER
-    const dummy = {
-        googleId: 1000,
-        nickname: "dummyNick",
-        fullName: "dummyFN",
-        userType: 2,
-        email: "dummy@email.com",
-    };
-    // CLEAR UNTIL HERE
-
     return (
         <div className="App" ref={appRef}>
             <NavigationBar
@@ -157,10 +146,6 @@ function App() {
                     )}></Route>
 
                 <Route path="/manage-users" component={ManageUser}></Route>
-
-                {/* TEST ROUTE */}
-                <Route path="/test" component={ViewUserModal}></Route>
-                {/* TEST ROUTE */}
 
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route
