@@ -266,6 +266,7 @@ const MainResourceTable = (props) => {
       });
 
       //   const { data } = await resourceService.searchSpThesis({}, "/search");
+      //   console.log(data);
       for (let thesis of data) {
         tempRow.push(
           createResourceData(
