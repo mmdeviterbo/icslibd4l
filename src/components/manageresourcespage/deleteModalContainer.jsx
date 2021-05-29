@@ -3,14 +3,17 @@ import { useLocation, useHistory } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
-import ResourceServices from "../../services/resourceService";
+import ResourceService from "../../services/resourceService";
+import PersonService from "../../services/personService";
+import { jwtPrivateKey } from "../../config.json";
 
 //  TODO: add documentation
-const DeletePopUpCont = () => {
+const DeletePopUpCont = ({ user }) => {
     const history = useHistory();
     const location = useLocation();
     const { id } = location.state.id;
     const item = location.state.item;
+    // const userState = user;
     const [show, setShow] = useState(true);
     const handleClose = () => {
         setShow(false);
@@ -18,16 +21,24 @@ const DeletePopUpCont = () => {
     };
 
     const handleSubmit = async (event) => {
+        console.log(user);
         event.preventDefault();
         // handleClose();
         try {
             if (item == "resource") {
-                const { data } = await ResourceServices.deleteSpThesis(id);
+                const { data } = await ResourceService.deleteSpThesis(id);
                 IsDeleted("success");
                 handleClose();
                 window.location = "/manage-resources";
+            } else if (item == "account") {
+                localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+                await PersonService.logoutUser(user); // logs the user out
+
+                const { data } = await PersonService.deleteUser(user); //deletes the user from the database
+                IsDeleted("success");
+                window.location = "/";
             } else {
-                const { data } = await ResourceServices.deleteUser(id);
+                const { data } = await PersonService.deleteUser(id);
                 IsDeleted("success");
                 // window.location = "/manage-users";
             }
@@ -49,14 +60,6 @@ const DeletePopUpCont = () => {
                     backdrop="static"
                     keyboard={false}
                     centered>
-                    <Modal.Header closeButton>
-                        {item == "resource" ? (
-                            <Modal.Title>Delete Resource?</Modal.Title>
-                        ) : (
-                            <Modal.Title>Delete User?</Modal.Title>
-                        )}
-                    </Modal.Header>
-
                     <Modal.Body>
                         {message == "success" ? (
                             <Modal.Title>
@@ -68,7 +71,7 @@ const DeletePopUpCont = () => {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button variant="danger" onClick={handleClose}>
+                        <Button variant="secondary" onClick={handleClose}>
                             Close
                         </Button>
                     </Modal.Footer>
@@ -84,18 +87,41 @@ const DeletePopUpCont = () => {
                 onHide={handleClose}
                 backdrop="static"
                 keyboard={false}
-                centered
-                onModalHide={IsDeleted}>
+                centered>
+                {/* Renders according to item.
+          If resource, else if user, else account */}
                 <Modal.Header closeButton>
                     {item == "resource" ? (
-                        <Modal.Title>Delete Resource?</Modal.Title>
+                        <Modal.Title style={{ fontWeight: "bold" }}>
+                            Delete Resource?
+                        </Modal.Title>
                     ) : (
-                        <Modal.Title>Delete User?</Modal.Title>
+                        [
+                            item == "user" ? (
+                                <Modal.Title style={{ fontWeight: "bold" }}>
+                                    Delete User?
+                                </Modal.Title>
+                            ) : (
+                                <Modal.Title style={{ fontWeight: "bold" }}>
+                                    Remove Account
+                                </Modal.Title>
+                            ),
+                        ]
                     )}
                 </Modal.Header>
 
+                {/* Renders according to item.
+          If account, else resource/user */}
                 <Modal.Body>
-                    Are you sure you want to delete {id}?
+                    {item == "account" ? (
+                        <Modal.Body>
+                            Are you sure you want to remove your account?
+                        </Modal.Body>
+                    ) : (
+                        <Modal.Body>
+                            Are you sure you want to delete {id}?
+                        </Modal.Body>
+                    )}
                     {/* read resource title and author here */}
                 </Modal.Body>
 
@@ -103,8 +129,8 @@ const DeletePopUpCont = () => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleSubmit}>
-                        Delete
+                    <Button variant="danger" onClick={handleSubmit}>
+                        {item == "account" ? "Remove" : "Delete"}
                     </Button>
                 </Modal.Footer>
             </Modal>

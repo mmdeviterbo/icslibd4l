@@ -202,7 +202,7 @@ function App() {
             {background && (
                 <Route
                     path="/account-setting/remove-account"
-                    children={<DeleteModalContainer />}
+                    children={<DeleteModalContainer user={user} />}
                 />
             )}
             <Footer />
