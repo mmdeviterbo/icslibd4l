@@ -6,7 +6,7 @@ import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
-// import ManageResPage from './components/manageresourcespage/manageresourcespage'
+// import ManageResPage from './components/manageresourcespage/manageResourcesPage'
 // import AddResourcePage from "./components/addresourcepage/addNewResourcesPage";
 import EditResourcePage from "./components/editresourcepage/editResourceForm";
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
