@@ -193,6 +193,7 @@ const AddNewSPThesisForm = ({props}) => {
 
     return(
         <div className = "add-res-form-cont">
+            <div className = "add-resource-header">Add a New Resource</div>
             <form id = "mainForm" onSubmit = {handleSubmit}>
                 <div className = "form-container">
                     <div className="res-primary-info">
@@ -323,14 +324,9 @@ const AddNewSPThesisForm = ({props}) => {
                         </div>
 
                         <br/>
-                                        
-                        <div className = "spthesisfiles">
-                            <h5>Upload Abstract</h5>
-                            <input type="file" className="resourcefiles" id="spthesisAbstract"/>
-                        </div>
 
                         <div>
-                            <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>... or enter Abstract here:</h5>
+                            <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>Enter Abstract here:</h5>
                             <textarea
                                 id = "abstractText"
                                 onChange = {
@@ -400,6 +396,8 @@ const AddNewSPThesisForm = ({props}) => {
                                 InputProps={{ borderbottom: "none" }}
                             />
                         </div>
+
+                        <br/>
 
                         <button type="submit" id="saveResource">
                         Save
