@@ -8,16 +8,16 @@ import FieldsContainerRes from "./filter-fields-res";
 import ResTableContainer from "./resource-table-cont";
 
 const ManageResPage = ({ resourceList }) => {
-  return (
-    <div className="manage-resources-page-container">
-      {/* <TempNavbar/> */}
-      {/* <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link> */}
-      <ManageItemsHeader />
-      <FieldsContainerRes />
-      {/* <ResTableContainer resourceList={resourceList} /> */}
-      <ResTableContainer />
-    </div>
-  );
+    return (
+        <div className="manage-resources-page-container">
+            {/* <TempNavbar/> */}
+            {/* <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link> */}
+            <ManageItemsHeader />
+            <FieldsContainerRes />
+            {/* <ResTableContainer resourceList={resourceList} /> */}
+            <ResTableContainer />
+        </div>
+    );
 };
 
 export default ManageResPage;
