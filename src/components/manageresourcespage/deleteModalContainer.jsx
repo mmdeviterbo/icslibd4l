@@ -85,6 +85,8 @@ const DeletePopUpCont = () => {
         keyboard={false}
         centered
       >
+        {/* Renders according to item.
+          If resource, else if user, else account */}
         <Modal.Header closeButton>
           {item == "resource" ? (
             <Modal.Title>Delete Resource?</Modal.Title>
@@ -99,6 +101,8 @@ const DeletePopUpCont = () => {
           )}
         </Modal.Header>
 
+        {/* Renders according to item.
+          If account, else resource/user */}
         <Modal.Body>
           {item == "account" ? (
             <Modal.Body>
