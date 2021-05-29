@@ -97,7 +97,7 @@ export default function AdvancedSearch({appRef}){
         let tempStr = query.trim();
     
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            history.push(`/search?q=${tempStr}`);
+            history.push(`/search?st=any&q=${tempStr}`);
         }
         fetchData()
     }
