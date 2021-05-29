@@ -5,7 +5,7 @@ import viewTable from "./viewTable";
 import { TableBody, TableCell, TableRow, TableHead } from "@material-ui/core";
 import dateFormat from "dateformat";
 // import ResTableContainer from "../manageresourcespage/resource-table-cont";
-// import ReadingSPTContainer from "../viewresources/readingsptcontainer";
+import ReadingSPTContainer from "../viewresources/readingSPTContainer";
 
 export default function BrowseResources({ type }) {
   const location = useLocation();
@@ -26,6 +26,21 @@ export default function BrowseResources({ type }) {
     fetchData();
     window.scrollTo(0, 0);
   }, []);
+
+  const sampleSP = {
+    title:
+      "Adaptive Identification of Rice and Corn Pests (Order Hemiptera) using Back Propagation Neural Network Based on Intensity Histogram",
+    type: "Special Problem",
+    abstract:
+      "Pest identification through image processing using Back Propagation Neural Network with Intensity Histogram as the feature used as basis for classification yielded an accuracy of 100% using 15 test images from each species. However, the application is only limited to pest images that have distinguishable backgrounds. The reliability of the system can be further increased by adding more training data with plain background. This research aims to help users by giving additional information about the pest identified by the system such as description, treatment, and control.",
+    year: 1969,
+    authorList: ["Concepcion L. Khan", "John Viscel M. Sangkal"],
+    adviserList: [
+      "Maria Erika Dominique Cunanan",
+      "Katrina Joy M. Abriol-Santos",
+    ],
+    keywords: ["CMSC191", "CMSC173", "CMSC69"],
+  };
 
   const ViewSPThesis = () => {
     return (

@@ -30,51 +30,24 @@ const courseList = [
 
 const AddBookFormContainer = () => {
   // functionalities:
-  const [type, setType] = useState("");
   const [title, setTitle] = useState("");
-  const [datePublished, setDatePublished] = useState(0);
-  const [dateAcquired, setDateAcquired] = useState(0);
-  const [id, setId] = useState("");
-  const [journal, setJournal] = useState("");
-  const [manuscript, setManuscript] = useState("");
-  const [poster, setPoster] = useState("");
-  const [source_code, setSourceCode] = useState("");
-  const [abstract, setAbstract] = useState("");
-  const [keywords, setKeyword] = useState();
+  const [datePublished, setDatePublished] = useState();
+  const [dateAcquired, setDateAcquired] = useState();
+  const [isbn, setISBN] = useState("");
   // multiple authors should be possible
   const [author, setAuthor] = useState({
     fname: "",
     lname: "",
   });
-  const [adviser, setAdviser] = useState({
-    fname: "",
-    lname: "",
-  });
   const [authorList, setAuthorList] = useState([]);
-  const [adviserList, setAdviserList] = useState([]);
-
   const [courses, setCourses] = useState([]);
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    function isInArray(arr, item) {
-      if (arr.indexOf(item) > -1) {
-        console.log("true");
-      } else {
-        console.log("false");
-      }
-    }
     function updateList() {
-      if (adviser.fname && adviser.lname) {
-        // console.log('adding', adviser.fname, adviser.lname);
-        // isInArray(adviserList, adviser)
-        if (adviserList.indexOf(adviser)) {
-          setAdviserList([]);
-          setAdviserList([...adviserList, adviser]);
-        }
-      } else if (author.fname && author.lname) {
+      if (author.fname && author.lname) {
         // console.log('adding', author.fname, author.lname);
         // isInArray(authorList, author)
         if (authorList.indexOf(author)) {
@@ -84,7 +57,7 @@ const AddBookFormContainer = () => {
       }
     }
     updateList();
-  }, [author, adviser]);
+  }, [author]);
 
   const addAuthor = (e) => {
     setAuthor({
@@ -93,18 +66,11 @@ const AddBookFormContainer = () => {
     });
   };
 
-  const addAdviser = (e) => {
-    setAdviser({
-      ...adviser,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const userInput = {
-        bookId: id,
+        bookId: isbn,
         title,
         datePublished,
         dateAcquired,
@@ -114,7 +80,9 @@ const AddBookFormContainer = () => {
         publisher,
         numberOfCopies: numOfCopies,
       };
-
+      console.log(userInput);
+      console.log(typeof dateAcquired);
+      console.log(typeof datePublished);
       const { data } = await ResourceServices.addBook(userInput);
       alert("New book has been successfully added to the library");
       window.location = "/add-new-resource";
@@ -125,24 +93,23 @@ const AddBookFormContainer = () => {
     }
   };
 
-  // get input from type selection
-  const handleChange = (e) => {
-    setType(e.value);
-  };
-
   // adds the courses on array
-  const handleCourseChange = (newCourse) => {
-    setCourses(newCourse);
+  const handleCourses = (courses) => {
+    const values = [...courses].map((opt) => opt.value);
+    setCourses(values);
   };
 
-  // creates an array of keywords from theh user input
-  const handleChips = (chip) => {
-    setKeyword(chip);
+  const handleDate = (date) => {
+    var date = new Date(date).toJSON();
+    // var date = new Date(date);
+    return date;
+    // console.log(date);
+    // setDateAcquired(date);
   };
 
   return (
     <div className="add-res-form-cont">
-      <form id="createForm" onSubmit={handleSubmit}>
+      <form id="createForm" autocomplete="off" onSubmit={handleSubmit}>
         <div className="form-container">
           <div className="res-primary-info">
             <h2>
@@ -151,12 +118,12 @@ const AddBookFormContainer = () => {
             <hr />
 
             <div class="primaryfields">
-              <label for="resId">ID: &nbsp; </label>
+              <label for="bookISBN">ISBN: &nbsp; </label>
               <input
                 type="text"
-                id="resId"
+                id="bookISBN"
                 onChange={(event) => {
-                  setId(event.target.value);
+                  setISBN(event.target.value);
                 }}
               />
             </div>
@@ -172,6 +139,16 @@ const AddBookFormContainer = () => {
               />
             </div>
 
+            <div class="primaryfields">
+              <label for="resTitle">Publisher: &nbsp; </label>
+              <input
+                type="text"
+                id="resTitle"
+                onChange={(event) => {
+                  setPublisher(event.target.value);
+                }}
+              />
+            </div>
             <div className="primaryfields">
               <label htmlFor="datePublished">Date Published: &nbsp; </label>
               <input
@@ -179,7 +156,7 @@ const AddBookFormContainer = () => {
                 id="datePublished"
                 required
                 onChange={(event) => {
-                  setDatePublished(event.target.value);
+                  setDatePublished(handleDate(event.target.value));
                 }}
               />
             </div>
@@ -191,7 +168,7 @@ const AddBookFormContainer = () => {
                 id="dateAcquired"
                 required
                 onChange={(event) => {
-                  setDateAcquired(event.target.value);
+                  setDateAcquired(handleDate(event.target.value));
                 }}
               />
             </div>
@@ -247,24 +224,26 @@ const AddBookFormContainer = () => {
             </h2>
             <hr />
             <div class="primaryfields">
-              <label for="bookISBN">ISBN: &nbsp; </label>
-              <input type="text" id="bookISBN" />
-            </div>
-            <div class="primaryfields">
               <label for="physDescription">Physical Description: &nbsp; </label>
-              <textarea id="physDescription" />
+              <textarea
+                id="physDescription"
+                onChange={(event) => {
+                  setDescription(event.target.value);
+                }}
+              />
             </div>
-            ...or upload description file:
-            <input type="file" class="resourcefiles" id="uploadDesc" />
-            <br />
-            <br />
-            <br />
-            <br />
+
             <div class="primaryfields">
               <label for="availBookCopies">
                 No. of copies available: &nbsp;{" "}
               </label>
-              <input type="number" id="availBookCopies" />
+              <input
+                type="number"
+                id="availBookCopies"
+                onChange={(event) => {
+                  setNumOfCopies(event.target.value);
+                }}
+              />
             </div>
             <div className="bookRelatedCourses">
               <br />
@@ -273,8 +252,9 @@ const AddBookFormContainer = () => {
                 id="relatedCourses"
                 isMulti
                 placeholder={"Courses..."}
-                value={courseList.find((obj) => obj.value === courses)}
                 options={courseList}
+                value={courseList.find((obj) => obj.value === courses)}
+                onChange={(courses) => handleCourses(courses)}
               ></Select>
             </div>
             <br />

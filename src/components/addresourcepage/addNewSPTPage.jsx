@@ -120,6 +120,13 @@ const AddNewSPThesisForm = ({ props }) => {
     event.preventDefault();
     // const sourceCode = new FormData();
     // sourceCode.append("File", source_code);
+    if (!source_code || !manuscript || !journal || !poster) {
+      return alert("Please upload the required files");
+    }
+    console.log(source_code);
+    console.log(poster);
+    console.log(journal);
+    console.log(manuscript);
     try {
       const userInput = {
         sp_thesis_id: id,
@@ -183,46 +190,55 @@ const AddNewSPThesisForm = ({ props }) => {
     setAdviserList(adviser);
   };
 
+  // Redundant handlefunctions. Find a way to make it reusable
   const handleSourceCode = (e) => {
     let file = e.target.files[0];
     let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (e) => {
-      const formData = { file: e.target.result };
-      // sourceCode.append("File", source_code);
-      setSourceCode(formData);
-    };
-    // setSourceCode(e.target.files[0]);
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const formData = { file: e.target.result };
+        // sourceCode.append("File", source_code);
+        setSourceCode(formData);
+      };
+      // setSourceCode(e.target.files[0]);
+    }
   };
 
   const handleManuscript = (e) => {
     let file = e.target.files[0];
     let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (e) => {
-      const formData = { file: e.target.result };
-      setManuscript(formData);
-    };
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const formData = { file: e.target.result };
+        setManuscript(formData);
+      };
+    }
   };
 
   const handleJournal = (e) => {
     let file = e.target.files[0];
     let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (e) => {
-      const formData = { file: e.target.result };
-      setJournal(formData);
-    };
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const formData = { file: e.target.result };
+        setJournal(formData);
+      };
+    }
   };
 
   const handlePoster = (e) => {
     let file = e.target.files[0];
     let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (e) => {
-      const formData = { file: e.target.result };
-      setPoster(formData);
-    };
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const formData = { file: e.target.result };
+        setPoster(formData);
+      };
+    }
   };
 
   return (
@@ -406,14 +422,14 @@ const AddNewSPThesisForm = ({ props }) => {
               }}
             />
           </div>
-        </div>
 
-        <div class="primaryfields">
-          <label for="resId">Keywords: &nbsp; </label>
-          <ChipInput
-            onChange={(chips) => handleChips(chips)}
-            InputProps={{ borderbottom: "none" }}
-          />
+          <div class="primaryfields">
+            <label for="resId">Keywords: &nbsp; </label>
+            <ChipInput
+              onChange={(chips) => handleChips(chips)}
+              InputProps={{ borderbottom: "none" }}
+            />
+          </div>
         </div>
 
         <button type="submit" id="saveResource">
