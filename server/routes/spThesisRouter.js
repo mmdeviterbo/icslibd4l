@@ -511,15 +511,15 @@ router.get("/search", async (req, res) => {
             });
         }
 
-        // Filter by 1 keyword (case insensitive, checks for substring match)
+        // Filter by keywords (case insensitive, checks for substring match)
+        // req.body.keyword: string of multiple keywords concat with whitespace
         if ("keyword" in req.body) {
             let keywordFilter = req.body.keyword.toLowerCase();
             final_arr = final_arr.filter((item) => {
                 if ("keywords" in item) {
                     return item.keywords.some((keyw) => {
-                        return keyw.sp_thesis_keyword
-                            .toLowerCase()
-                            .includes(keywordFilter);
+                        return keywordFilter
+                            .includes(keyw.sp_thesis_keyword.toLowerCase());
                     });
                 }
             });
