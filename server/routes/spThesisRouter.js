@@ -449,12 +449,14 @@ router.get("/search", async (req, res) => {
             });
         }
 
-        // Filter by year (number-number and string-number comparison accepted)
+        // Filter by year (year in request can be string or number)
         if ("year" in req.body) {
             let yearFilter = req.body.year;
             final_arr = final_arr.filter((item) => {
                 if ("year" in item) {
                     return item.year == yearFilter;
+                }else if ("datePublished" in item) {
+                    return item.datePublished.getFullYear() == yearFilter;
                 }
             });
         }
