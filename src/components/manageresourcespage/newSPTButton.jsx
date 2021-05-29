@@ -1,9 +1,9 @@
 import React from "react";
 
-const AddNewResource = () => {
+const AddNewSPT = () => {
     return (
         <div className="new-res-container">
-            <a href="/add-new-book">
+            <a href="/add-new-spt">
                 <button className="new-res-button">
                     <span class="res-icon">
                         <svg
@@ -17,11 +17,11 @@ const AddNewResource = () => {
                         </svg>
                     </span>
 
-                    <span class="res-btn-txt">Add New Resource</span>
+                    <span class="res-btn-txt">Add SP / Thesis</span>
                 </button>
             </a>
         </div>
     );
 };
 
-export default AddNewResource;
+export default AddNewSPT;
