@@ -17,9 +17,10 @@ const browseResources = (resourceType) => {
     return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
 }
 
-const searchSpThesis = (filter) => {
-    return http.get(`${apiEndpoint}/thesis/create`, filter, {withCredentials: true})
+const searchSpThesis = (filter, query) => {
+    return http.get(`${apiEndpoint}/thesis${query}`, filter, {withCredentials: true})
 }
+
 
 const searchBook = (filter) => {
     return http.get(`${apiEndpoint}/book/search`, filter, {withCredentials: true})

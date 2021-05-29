@@ -14,7 +14,7 @@ const DeletePopUpCont = () => {
   const [show, setShow] = useState(true);
   const handleClose = () => {
     setShow(false);
-    // history.goBack();
+    history.goBack();
   };
 
   const handleSubmit = async (event) => {
@@ -84,18 +84,30 @@ const DeletePopUpCont = () => {
         backdrop="static"
         keyboard={false}
         centered
-        onModalHide={IsDeleted}
       >
         <Modal.Header closeButton>
           {item == "resource" ? (
             <Modal.Title>Delete Resource?</Modal.Title>
           ) : (
-            <Modal.Title>Delete User?</Modal.Title>
+            [
+              item == "user" ? (
+                <Modal.Title>Delete User?</Modal.Title>
+              ) : (
+                <Modal.Title>Remove Account</Modal.Title>
+              ),
+            ]
           )}
         </Modal.Header>
 
         <Modal.Body>
-          Are you sure you want to delete {id}?
+          {item == "account" ? (
+            <Modal.Body>
+              Are you sure you want to remove your account? Removing your
+              accounts means dissociating your account from the app.
+            </Modal.Body>
+          ) : (
+            <Modal.Body>Are you sure you want to delete {id}?</Modal.Body>
+          )}
           {/* read resource title and author here */}
         </Modal.Body>
 
