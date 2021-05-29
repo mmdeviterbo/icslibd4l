@@ -5,10 +5,12 @@ import '../../styles/searchResultStyle/advancedSearch.css';
 import FilterSidebar from './filterSidebar';
 import ResultContainer from './resultContainer';
 import ResourceService from '../../services/resourceService';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 export default function AdvancedSearch({appRef}){
     const [query, setQuery] = useState("");
     const [objFilter, setObjFilter] = useState("");
+    const [urlRequest, setUrlRequest] = useState(`${useLocation().pathname}${useLocation().search}`);
     const history = useHistory();
 
     //filters
@@ -85,19 +87,21 @@ export default function AdvancedSearch({appRef}){
 
     // console.log(filterArray);
     // console.log(fieldArray);
-    console.log("results:"+resultsFilterArr);
-    console.log(urlFilter);
+    // console.log("results:"+resultsFilterArr);
+    // console.log(urlRequest);
+
+    // http req
+    async function fetchData() {
+        try{
+            const {data} = await ResourceService.searchSpThesis(objFilter,urlRequest);
+            setResultsFilterArr(data);
+        }catch (err){
+            console.log(err);
+        }
+    }
 
     // get filtered results to backend
-    useEffect(() => {
-        async function fetchData() {
-            try{
-                const {data} = await ResourceService.searchSpThesis(objFilter);
-                setResultsFilterArr(data);
-            }catch (err){
-                console.log(err);
-            }
-        }        
+    useEffect(() => {        
         fetchData()
     }, [objFilter]);
 
@@ -107,9 +111,13 @@ export default function AdvancedSearch({appRef}){
     
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             history.push(`/search?q=${tempStr}`);
+            console.log(history);
         }
+        // let loc = useLocation();
+        // setUrlRequest(`${loc.pathname}${loc.search}`);
         // call convert filter to object
-        filterParser()        
+        filterParser();
+        console.log(objFilter);       
     }
 
     // parse Filter array into object
@@ -117,13 +125,28 @@ export default function AdvancedSearch({appRef}){
     const filterParser = () =>{
         let obj = {};
         for (var i = 0; i < fieldArray.length; i++){
-            if(fieldArray[i] === "Adviser" || fieldArray[i] === "Author"){
+            if( fieldArray[i] === "Adviser" || 
+                fieldArray[i] === "Author" ||
+                fieldArray[i] === "Title" ||
+                fieldArray[i] === "Year"
+            ){
                 continue;
             }
             obj[fieldArray[i]] = filterArray[i];
         }
+        if(searchFilterAuthor !== ""){
+            obj["Author"] = searchFilterAuthor;
+        }
+        if(searchFilterAdviser !== ""){
+            obj["Adviser"] = searchFilterAdviser;
+        }
+        if(searchFilterTitle !== ""){
+            obj["Title"] = searchFilterTitle;
+        }
+        if(searchFilterYear !== ""){
+            obj["Year"] = parseInt(searchFilterYear);
+        }
         setObjFilter(obj);
-        console.log(objFilter);
     }
 
     return (
