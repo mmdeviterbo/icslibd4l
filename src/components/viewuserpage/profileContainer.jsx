@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { Button, Modal, makeStyles } from "@material-ui/core/";
+
+import DeleteIcon from "@material-ui/icons/Delete";
 import { jwtPrivateKey } from "../../config.json";
 import { jwtEncryptionKey } from "../../config.json";
 import * as jwtEncrypt from "jwt-token-encrypt";
@@ -36,6 +40,8 @@ const getCurrentToken = () => {
 // A component that contains the information regarding the current user
 //</output>
 export default function ProfileContainer() {
+    const location = useLocation();
+
     const [user, setUser] = useState(getCurrentToken()); // lazy initializer to immediately get the user state
 
     const [type, setType] = useState(null);
@@ -86,6 +92,29 @@ export default function ProfileContainer() {
         }
     };
 
+    const RemoveAccount = (id) => {
+        return (
+            <Link
+                to={{
+                    pathname: "/account-setting/remove-account",
+                    state: {
+                        background: location,
+                        id: id,
+                        item: "account",
+                    },
+                }}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    className="delete-button"
+                    startIcon={<DeleteIcon />}
+                    fontWeight="900">
+                    Remove Account
+                </Button>
+            </Link>
+        );
+    };
+
     // convert userType to its corresponding string representation
     useEffect(() => {
         // console.log(userinfos);
@@ -121,7 +150,7 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Nickname:
                     </div>
                 </Col>
@@ -165,7 +194,7 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Name:
                     </div>
                 </Col>
@@ -184,7 +213,7 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Classification:
                     </div>
                 </Col>
@@ -203,7 +232,7 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Email:
                     </div>
                 </Col>
@@ -241,7 +270,7 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
                 <Col xs={8}>
-                    <DeleteAccount user={user} />
+                    <RemoveAccount id={user.googleId} />
                 </Col>
             </Row>
         </Container>
