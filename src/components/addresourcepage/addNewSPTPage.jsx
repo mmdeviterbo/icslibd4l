@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 // import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
+import ChipInput from "material-ui-chip-input";
 // import AddResSidebar from './addResHeader';
 // import ChipInput from "material-ui-chip-input";
 
@@ -144,6 +145,48 @@ const AddNewSPThesisForm = ({props}) => {
     const handleChips = (chip) => {
         setKeyword(chip);
     };
+
+    const handleSourceCode = (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const formData = { file: e.target.result };
+      // sourceCode.append("File", source_code);
+      setSourceCode(formData);
+    };
+    // setSourceCode(e.target.files[0]);
+  };
+
+  const handleManuscript = (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const formData = { file: e.target.result };
+      setManuscript(formData);
+    };
+  };
+
+  const handleJournal = (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const formData = { file: e.target.result };
+      setJournal(formData);
+    };
+  };
+
+  const handlePoster = (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const formData = { file: e.target.result };
+      setPoster(formData);
+    };
+  };
 
 
     // ==============================================================
@@ -299,19 +342,63 @@ const AddNewSPThesisForm = ({props}) => {
 
                         </div>
                         
-                        <div className = "spthesisfiles">
+                        <div className="spthesisfiles">
+                            <h5>Upload Source Code</h5>
+                            <input
+                            type="file"
+                            className="resourcefiles"
+                            id="spthesisJournal"
+                            onChange={(e) => {
+                                handleSourceCode(e);
+                            }}
+                            />
+                        </div>
+
+                        <div className="spthesisfiles">
                             <h5>Upload Manuscript</h5>
-                            <input type="file" className="resourcefiles" id="spthesisManuscript"/>
+                            <input
+                            type="file"
+                            className="resourcefiles"
+                            id="spthesisManuscript"
+                            onChange={(e) => {
+                                handleManuscript(e);
+                            }}
+                            />
                         </div>
 
-                        <div className = "spthesisfiles">
+                        
+                        <div className="spthesisfiles">
                             <h5>Upload Journal</h5>
-                            <input type="file" className="resourcefiles" id="spthesisJournal"/>
+                            <input
+                            type="file"
+                            className="resourcefiles"
+                            id="spthesisJournal"
+                            onChange={(e) => {
+                                handleJournal(e);
+                            }}
+                            />
                         </div>
 
-                        <div className = "spthesisfiles">
+                        <div className="spthesisfiles">
                             <h5>Upload Poster</h5>
-                            <input type="file" className="resourcefiles" id="spthesisPoster"/>
+                            <input
+                            type="file"
+                            className="resourcefiles"
+                            id="spthesisPoster"
+                            onChange={(e) => {
+                                handlePoster(e);
+                            }}
+                            />
+                        </div>
+                        
+
+                        <div class="primaryfields">
+                            <label for="resId">Keywords: &nbsp; </label>
+                            <ChipInput
+                                id = "keywords-field"
+                                onChange={(chips) => handleChips(chips)}
+                                InputProps={{ borderbottom: "none" }}
+                            />
                         </div>
 
                         <button type="submit" id="saveResource">
