@@ -15,6 +15,7 @@ const jwtPublicKey = process.env.jwtPublicKey;
 //   email,
 //   fullName }
 router.post("/create", async (req, res) => {
+    console.log("here");
     var loggedUser;
     try {
         const { googleId, email, fullName } = req.body;
@@ -35,7 +36,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
-                userType:1,
+                userType: 4,
                 nickname,
             });
 
