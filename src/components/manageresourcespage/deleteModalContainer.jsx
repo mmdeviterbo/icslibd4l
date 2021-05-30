@@ -122,7 +122,7 @@ const DeletePopUpCont = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant="danger" onClick={handleSubmit}>
             Delete
           </Button>
         </Modal.Footer>

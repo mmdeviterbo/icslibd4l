@@ -11,10 +11,11 @@ import Notfound from "./components/notfound";
 import EditResourcePage from "./components/editresourcepage/editResourceForm";
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
 import AddBookFormContainer from "./components/addresourcepage/addBookFormContainer";
-import ManageUser from "./components/manageuserpage/manageUserPage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
+import ManageUser from "./components/manageuserpage/manageUserPage";
+import ViewUserModal from "./components/manageuserpage/viewUserModal";
 import PersonService from "./services/personService";
-import DeletePopUpCont from "./components/manageresourcespage/deleteModalContainer";
+import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
 import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 import BrowseResources from "./components/browseresources/browseResources";
@@ -94,6 +95,16 @@ function App() {
     };
     // CLEAR UNTIL HERE
 
+    // DUMMY USER
+    const dummy = {
+        googleId: 1000,
+        nickname: "dummyNick",
+        fullName: "dummyFN",
+        userType: 2,
+        email: "dummy@email.com",
+    };
+    // CLEAR UNTIL HERE
+
     return (
         <div className="App" ref={appRef}>
             <NavigationBar
@@ -133,7 +144,9 @@ function App() {
                     render={() => <BrowseResources type={"book"} />}></Route>
                 <Route
                     path="/browse-special-problems"
-                    render={() => <BrowseResources type={"Special Problem"} />}></Route>
+                    render={() => (
+                        <BrowseResources type={"Special Problem"} />
+                    )}></Route>
                 <Route
                     path="/browse-theses"
                     render={() => <BrowseResources type={"Thesis"} />}></Route>
@@ -146,6 +159,10 @@ function App() {
                 <Route path="/manage-resources" component={ManageResourcesPage}></Route>
                 <Route path="/manage-users" component={ManageUser}></Route>
 
+                {/* TEST ROUTE */}
+                <Route path="/test" component={ViewUserModal}></Route>
+                {/* TEST ROUTE */}
+
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route
                     path="/add-new-book"
@@ -156,7 +173,7 @@ function App() {
                 <Route
                     path="/view-sp-thesis"
                     render={() => (
-                        <ReadingSPTContainer resourceData={sampleSP}/>
+                        <ReadingSPTContainer resourceData={sampleSP} />
                     )}></Route>
 
                 {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
@@ -173,13 +190,13 @@ function App() {
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"
-                    children={<DeletePopUpCont />}
+                    children={<DeleteModalContainer />}
                 />
             )}
             {background && (
                 <Route
                     path="/manage-users/delete-user"
-                    children={<DeletePopUpCont />}
+                    children={<DeleteModalContainer />}
                 />
             )}
             <Footer />

@@ -7,9 +7,11 @@ const addSpThesis = (resourceData) => {
     return http.post(`${apiEndpoint}/thesis/create`, resourceData, {withCredentials: true})
 }
 
-const addBook = (resourceData, fileUploaded) => {
-    // console.log(resourceData)
-    return http.post(`${apiEndpoint}/books/create`, {resourceData}, {withCredentials: true}, {
+const addBook = (formData) => {
+    for (var key of formData.entries()) {
+        console.log(key[0] + ", " + key[1]);
+      }
+    return http.post(`${apiEndpoint}/books/create`, formData, {withCredentials: true}, {
         headers: {
             'content-type': 'multipart/form-data'
         }

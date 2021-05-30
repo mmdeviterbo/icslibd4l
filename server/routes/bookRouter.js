@@ -143,7 +143,7 @@ const upload = multer({ storage });
 
 //creates a book and uploads its book cover
 router.post("/create", authFaculty, upload.any(), async (req, res) => {
-    console.log(req.body)
+    console.log((req.body))
     try {
         const {
             bookId,

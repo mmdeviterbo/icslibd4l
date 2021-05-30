@@ -46,6 +46,10 @@ const AddBookFormContainer = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
+  const FormData = require("form-data");
+  const fs = require("fs");
+  const formData = new FormData();
+
   useEffect(() => {
     function updateList() {
       if (author.fname && author.lname) {
@@ -84,8 +88,9 @@ const AddBookFormContainer = () => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        const formData = { file: e.target.result };
-        setImage(formData);
+        // const formData = { file: e.target.result };
+        // formData.append("file", file);
+        setImage(file);
       };
     }
   };
@@ -105,9 +110,15 @@ const AddBookFormContainer = () => {
         numberOfCopies: numOfCopies,
       };
       console.log(userInput);
+      console.log(image);
       // console.log(typeof dateAcquired);
       // console.log(typeof datePublished);
-      const { data } = await ResourceServices.addBook(userInput, image);
+      formData.append("body", userInput);
+      formData.append("file", image);
+      for (var key of formData.entries()) {
+        console.log(key[0] + ", " + key[1]);
+      }
+      const { data } = await ResourceServices.addBook(formData);
       alert("New book has been successfully added to the library");
       window.location = "/add-new-resource";
     } catch (err) {
