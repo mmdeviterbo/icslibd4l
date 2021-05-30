@@ -65,7 +65,7 @@ const AddNewSPThesisForm = ({props}) => {
 
     const [authorList, setAuthorList] = useState([
         {
-            authorid:"test01", 
+            authorid:nanoid(5), 
             fname:"defaultfirstname", 
             lname:"defaultlastname"
         }
@@ -78,32 +78,13 @@ const AddNewSPThesisForm = ({props}) => {
     // const [description, setDescription] = useState("");
 
     useEffect(() => {
-        function isInArray(arr, item) {
-        if (arr.indexOf(item) > -1) {
-            console.log("true");
-        } else {
-            console.log("false");
-        }
-        }
         function updateList() {
-        if (adviser.fname && adviser.lname) {
-            // console.log('adding', adviser.fname, adviser.lname);
-            // isInArray(adviserList, adviser)
-            if (adviserList.indexOf(adviser)) {
-            setAdviserList([]);
-            setAdviserList([...adviserList, adviser]);
-            }
-        } else if (author.fname && author.lname) {
-            // console.log('adding', author.fname, author.lname);
-            // isInArray(authorList, author)
-            if (authorList.indexOf(author)) {
-            setAuthorList([]);
+        if (author.fname && author.lname) {
             setAuthorList([...authorList, author]);
-            }
         }
         }
         updateList();
-    }, [author, adviser]);
+    }, [author]);
 
     const addAuthor = (e) => {
         setAuthor({
