@@ -91,7 +91,8 @@ const DropdownFilter = ({setFilterTag, filterTag}) =>{
     const options = [
         { key: 1, text: 'Any', value: 'any'},
         { key: 2, text: 'Books', value: 'books' },
-        { key: 3, text: 'SP/Thesis', value: 'spthesis' },
+        { key: 3, text: 'Special Problem', value: 'special problem' },
+        { key: 4, text: 'Thesis', value: 'thesis' },
     ]
     const handleChange=(e, data)=>setFilterTag(data.value);
     return(

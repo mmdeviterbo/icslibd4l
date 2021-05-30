@@ -4,6 +4,19 @@ const UserLogModel = require("../models/userLogModel");
 const authAdmin = require("../middleware/authAdmin");
 
 //read all admin entries
+/**************************************************** 
+Request Object:
+NULL
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.get("/readAdmins", authAdmin, async (req, res) => {
     UserModel.find({ userType: 1 }, (err, result) => {
         //reads all the documents and sends as response
@@ -16,6 +29,19 @@ router.get("/readAdmins", authAdmin, async (req, res) => {
 });
 
 //read all users
+/**************************************************** 
+Request Object:
+NULL
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.get("/readAllUsers", authAdmin, async (req, res) => {
     UserModel.find({}, (err, result) => {
         //reads all the documents and sends as response
@@ -27,7 +53,23 @@ router.get("/readAllUsers", authAdmin, async (req, res) => {
     });
 });
 
-//read all users
+//read all user logs
+/**************************************************** 
+Request Object:
+NULL
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+    activity: activity,
+    createdAt: date
+    updatedAt: date
+}
+********************************************************/
 router.get("/readUserLogs", authAdmin, async (req, res) => {
     UserLogModel.find({}, (err, result) => {
         //reads all the documents and sends as response
@@ -39,7 +81,46 @@ router.get("/readUserLogs", authAdmin, async (req, res) => {
     });
 });
 
+//delete all User Logs
+/**************************************************** 
+Request Object:
+NULL
+
+Response String: 
+"All Entries Deleted"
+********************************************************/
+router.delete("/deleteAllUserLogs", async (req, res) => {
+    try {
+        UserLogModel.deleteMany({}, function (err, result) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send("All Entries Deleted");
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+});
+
 //update
+/**************************************************** 
+Request Object:
+{
+    googleId: googleId,
+    newNickname: newNickname,
+}
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.put("/updateOtherUser", authAdmin, async (req, res) => {
     try {
         const { googleId, userType } = req.body; //get googleId and newNickname from body
@@ -71,7 +152,16 @@ router.put("/updateOtherUser", authAdmin, async (req, res) => {
 });
 
 //search function
-router.get("/search", authAdmin, async (req, res) => {
+/**************************************************** 
+Req object: 
+    query: search (optional)
+Res object:
+    If search query is not empty: 
+        Array of objects with all of the attributes of users.
+    If empty:
+        Returns all users in the collection.
+********************************************************/
+router.get("/search", async (req, res) => {
     let idList = [];
     let init_output;
     let final_output;

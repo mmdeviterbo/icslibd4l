@@ -1,26 +1,28 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import CardBook from './cardBook';
 import latestAcqBg from '../../assets/searchBg_4.png';
 import { useHistory } from 'react-router-dom';
+import ResourceService from '../../services/resourceService'
 
 export default function LatestAcquisitions({latestAcqRef}) {
     const history = useHistory();
-
-    const [acquisitions, setacquisitions] = useState([
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover1', linkTo:'/home'},
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover2', linkTo:'/home'},
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover3', linkTo:'/home'},
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover4', linkTo:'/home'},
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover5', linkTo:'/home'},
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover6', linkTo:'/home'},
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover7', linkTo:'/home'},
-        {imageSrc:'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/action-thriller-book-cover-design-template-3675ae3e3ac7ee095fc793ab61b812cc_screen.jpg?ts=1588152105', title:'My Book Cover8', linkTo:'/home'},
-    ]);
-
     const [hoverText, setHoverText] = useState("");
+    const [acquisitions, setacquisitions] = useState([])
+    const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
+
+    useEffect(async()=>{
+        // get title and year (of 12 books, sorted array)
+        const {data} = await ResourceService.getBooks();
+        setacquisitions(data);
+    },[])
+
     const handleViewAllBooks=()=>{
         history.push('/view-all-books');
     }
+
+    useEffect(()=>{
+        acquisitions.sort((a,b) => (a.year < b.year) ? 1 : ((b.year < a.year) ? -1 : 0))
+    },[acquisitions])
 
     return (
         <div className="latestAcquisitions" style={latestAcquisitionsContainer} ref={latestAcqRef}>
@@ -30,8 +32,10 @@ export default function LatestAcquisitions({latestAcqRef}) {
                     <span style={hoverTextStyleWhite}>{hoverText}</span>
                     <div style={acquisitionsInnerContainer} className="acquisitionsInnerContainer">
                         {acquisitions.map(book=><CardBook className="cardContainer"
-                            imageSrc={book.imageSrc} title={book.title} 
-                            linkTo={book.linkTo} key={book.title}
+                            imageSrc={imgNotAvailable} title={book.title || "No title"} 
+                            key={book.title}
+                            linkTo="/home"
+                            year={book.dateAcquired || book.Published || "No date"}
                             setHoverText={setHoverText}
                         />)}
                     </div>
@@ -43,7 +47,7 @@ export default function LatestAcquisitions({latestAcqRef}) {
                         <p style={{fontSize:"calc(10px + 0.5vw)", textAlign:"center",marginTop:"3%"}} className="latestAcqDiscover">Discover and browse the latest books</p>
                     </div>
                     <div style={buttonViewAllBooks}>
-                        <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button>
+                        {/* <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button> */}
                     </div>
                 </div>
             </div>

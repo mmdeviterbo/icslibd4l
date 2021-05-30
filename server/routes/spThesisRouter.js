@@ -74,8 +74,45 @@ const upload = multer({ storage });
 
 // ---------------------------------------- HTTP REQUESTS
 // create new sp entry
+/**************************************************** 
+Request Object:
+req object: Multipart form
+body: {
+  sp_thesis_id: sp_thesis_id,
+  type: type,
+  title" title,
+  abstract" abstract,
+  year: year,
+  source_code: source_code,
+  manuscript: manuscript,
+  journal: journal,
+  poster: poster,
+  keywords : ["keywords1",...],
+  authors : [ {fname, lname}, ... ]
+  advisers: [ {fname, lname}, ... ]
+}
+file : pdf
 
-router.post("/create", authFaculty, upload.any(), async (req, res) => {
+Response Object:
+{
+  "advisers": [ {fname, lname}, ... ],
+  "authors": [ {fname, lname}, ... ],
+  "keywords": ["keywords1",...],
+  "_id": "60af1328d7eebc0068eac4c5",
+  "sp_thesis_id": sp_thesis_id,
+  "type": type,
+  "title": title,
+  "abstract": abstract,
+  "year":year,
+  "source_code": source_code,
+  "manuscript": "manuscrip,
+  "journal": journal,
+  "poster": poster,
+  "__v": 0
+}
+********************************************************/
+// AUTHENTICATION REMOVED FROM THE PARAMeTERES
+router.post("/create", async (req, res) => {
     try {
         const {
             sp_thesis_id, // common ID
@@ -90,7 +127,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
             advisers, // thesisAdviserModel
             authors, // thesisAuthorModel
             keywords, // thesisKeyModel
-        } = JSON.parse(req.body.body);
+        } = req.body;
 
         // sample verification: incomplete fields
         if (
@@ -115,9 +152,10 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         // search if book exists
         const existingThesis = await thesisModel.findOne({ sp_thesis_id });
 
+        console.log(sp_thesis_id);
+
         if (!existingThesis) {
             // if does not exist, proceed in creating entry
-
             // save thesisModel
             const newThesis = new thesisModel({
                 sp_thesis_id,
@@ -144,7 +182,10 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                     adviser_lname,
                     adviser_name,
                 });
+
                 const savedThesisAdv = await newThesisAdv.save();
+                console.log(newThesisAdv);
+                console.log(savedThesisAdv);
             });
 
             // save thesisAuthorModel
@@ -160,6 +201,8 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                     author_name,
                 });
                 const savedThesisAu = await newThesisAu.save();
+                // console.log(newThesisAu)
+                // console.log(savedThesisAu)
             });
 
             // save thesisKeyModel
@@ -170,22 +213,33 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                     sp_thesis_id,
                     sp_thesis_keyword,
                 });
+
                 const savedThesisKey = await newThesisKey.save();
             });
 
             // recheck if correctly sent by sending entry : thesisModel
             res.json(savedThesis);
         } else {
-            res.status(400).send("SP already exists!");
+            res.status(400).send({ errorMessage: "SP already exists!" });
         }
     } catch (err) {
         console.log(err);
-        res.status(500).send();
+        res.status(500).json({ errorMessage: "Cannot create resource." });
     }
 });
 
 // get the pdf of a particular sp
 // version 1: display file
+/**************************************************** 
+Request Object:
+req object: JSON
+body: {
+  sp_thesis_id,
+}
+
+Response Object:
+pdf Filestream
+********************************************************/
 router.get("/download1", async (req, res) => {
     const { sp_thesis_id } = req.body;
 
@@ -200,6 +254,25 @@ router.get("/download1", async (req, res) => {
     });
 });
 // version 2: display file object
+/**************************************************** 
+Request Object:
+req object: JSON
+body: {
+  sp_thesis_id,
+}
+
+Response Object:
+{
+  "_id": _id,
+  "length": length,
+  "chunkSize": chunkSize,
+  "uploadDate": uploadDate,
+  "filename": filename,
+  "md5": md5,
+  "contentType": contentType,
+  "metadata": "sp_thesis_id
+}
+********************************************************/
 router.get("/download2", async (req, res) => {
     const { sp_thesis_id } = req.body;
 
@@ -213,10 +286,31 @@ router.get("/download2", async (req, res) => {
 });
 
 // browse all entries, default sort: alphabetical by title
-router.get("/browse", async (req, res) => {
-    const { type } = req.body;
+/**************************************************** 
+Request Object:
+req object: JSON
+body: {
+ type,
+}
 
-    if (type == "book") {
+Response Object: Array
+[
+    {
+    "_id": _id,
+    "length": length,
+    "chunkSize": chunkSize,
+    "uploadDate": uploadDate,
+    "filename": filename,
+    "md5": md5,
+    "contentType": contentType,
+    "metadata": "sp_thesis_id
+    },
+    ...
+]
+********************************************************/
+router.post("/browse", async (req, res) => {
+    const { type } = req.body;
+    if (type === "book") {
         // type value: SP or Thesis
         bookModel.aggregate(
             [
@@ -238,7 +332,6 @@ router.get("/browse", async (req, res) => {
                 },
                 { $sort: { title: 1 } },
             ],
-
             (err, result) => {
                 if (err) {
                     res.send(err);
@@ -248,10 +341,22 @@ router.get("/browse", async (req, res) => {
             }
         );
     } else {
-        // type value: SP or Thesis
+        // type value: Special Problem or Thesis
         thesisModel.aggregate(
             [
-                { $match: { type: type } },
+                {
+                    $match: {
+                        type: {
+                            $in: [
+                                "Thesis",
+                                "Special Problem",
+                                "thesis",
+                                "sp",
+                                "SP",
+                            ],
+                        },
+                    },
+                },
                 {
                     $lookup: {
                         from: "sp_thesis_advisers",
@@ -278,7 +383,6 @@ router.get("/browse", async (req, res) => {
                 },
                 { $sort: { title: 1 } },
             ],
-
             (err, result) => {
                 if (err) {
                     res.send(err);
@@ -292,18 +396,32 @@ router.get("/browse", async (req, res) => {
 
 // search data
 router.get("/search", async (req, res) => {
+    // Search and Filter Resources
+    //     http://localhost:3001/thesis/search
+    // REQUEST:
+    // - req.query
+    //     "type" (required) = All | title | author | adviser | subject
+    //     "search" (required) = <string in search bar>
+    // - req.body (json)
+    //     { "<field>" = "<value>", ... }
+    //     * all fields are optional
+    //     * there can be 0, 1, or multiple fields
+    //         <field> = type | title | year | publisher | author | adviser | subject | keyword
+    //         <value> = <search string/number>
+    //     * additional notes in filterEntries()
+    // RESULT:
+    // - array of objects (book/sp/thesis)
+
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
+    console.log(req.query);
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
 
-        // FILTER ENTRIES if req.body is not empty (has at least one "<field>:<value>") where:
-        //   <field> = type | title | year | publisher | author | adviser | subject | keyword
-        //   <value> = search string/number
-        //   final_arr = search results to be filtered
+        // FILTER ENTRIES (final_arr = search results to be filtered)
 
         // Filter by type
         // req.body.type = book | sp | thesis (case insensitive)
@@ -331,12 +449,14 @@ router.get("/search", async (req, res) => {
             });
         }
 
-        // Filter by year (number-number and string-number comparison accepted)
+        // Filter by year (year in request can be string or number)
         if ("year" in req.body) {
             let yearFilter = req.body.year;
             final_arr = final_arr.filter((item) => {
                 if ("year" in item) {
                     return item.year == yearFilter;
+                }else if ("datePublished" in item) {
+                    return item.datePublished.getFullYear() == yearFilter;
                 }
             });
         }
@@ -393,15 +513,15 @@ router.get("/search", async (req, res) => {
             });
         }
 
-        // Filter by 1 keyword (case insensitive, checks for substring match)
+        // Filter by keywords (case insensitive, checks for substring match)
+        // req.body.keyword: string of multiple keywords concat with whitespace
         if ("keyword" in req.body) {
             let keywordFilter = req.body.keyword.toLowerCase();
             final_arr = final_arr.filter((item) => {
                 if ("keywords" in item) {
                     return item.keywords.some((keyw) => {
-                        return keyw.sp_thesis_keyword
-                            .toLowerCase()
-                            .includes(keywordFilter);
+                        return keywordFilter
+                            .includes(keyw.sp_thesis_keyword.toLowerCase());
                     });
                 }
             });
@@ -464,6 +584,7 @@ router.get("/search", async (req, res) => {
             }
         );
     }
+
     function bookTitle(mode) {
         // get BOOK entries
         bookModel.aggregate(
@@ -889,10 +1010,33 @@ router.get("/search", async (req, res) => {
 // https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
 
 // update thesis data
-router.put("/update-sp-thesis", upload.any(), async (req, res) => {
+// AUTHENTICATION REMOVED
+
+/**************************************************** 
+Request Object:
+req object: JSON
+body: 
+{
+    old_sp_thesis_id: old_sp_thesis_id,
+    sp_thesis_id: sp_thesis_id,
+    type: type,
+    title: title,
+    abstract: abstract,
+    year: year,
+    source_code: source_code,
+    manuscript: manuscript,
+    journal: journal,
+    poster: poster,
+    authors : [ {fname, lname}, ... ],
+    advisers: [ {fname, lname}, ... ],
+    keywords : ["keywords1",...]
+}
+Response String:
+"Entry Updated"
+********************************************************/
+router.put("/update-sp-thesis", async (req, res) => {
     const {
         old_sp_thesis_id,
-        object_id,
         sp_thesis_id,
         type,
         title,
@@ -905,57 +1049,33 @@ router.put("/update-sp-thesis", upload.any(), async (req, res) => {
         authors,
         advisers,
         keywords,
-    } = JSON.parse(req.body.body);
-
-    if (
-        !sp_thesis_id ||
-        !object_id ||
-        !type ||
-        !title ||
-        !abstract ||
-        !year ||
-        !source_code ||
-        !manuscript ||
-        !journal ||
-        !poster ||
-        !advisers ||
-        !authors ||
-        !keywords
-    ) {
-        return res
-            .status(400)
-            .json({ errorMessage: "Please enter all required fields." });
-    }
-
-    // checks if sp_thesis_id inputted already exists
-    await thesisModel.findOne(
-        { sp_thesis_id: sp_thesis_id },
-        (err, checker) => {
-            if (checker) {
-                return res
-                    .status(400)
-                    .json({ errorMessage: "New ID inputted already exists." });
-            }
-        }
-    );
-
-    // removes file that comes along with the sp/thesis entry to update it later on
-    gfs.remove({ _id: object_id, root: "sp_pdf" }, (err, gridStore) => {
-        if (err) {
-            return res.status(404).json({ err: err });
-        }
-    });
-
+    } = req.body;
     try {
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisModel.findOne(
             { sp_thesis_id: old_sp_thesis_id },
             (err, updatedThesisSp) => {
-                if (!updatedThesisSp) {
-                    return res
-                        .status(404)
-                        .json({ errorMessage: "Entry not found." });
+                // await thesisModel.findOne({sp_thesis_id: old_sp_thesis_id}, (err, updatedThesisSp) => {
+                if (
+                    !sp_thesis_id ||
+                    !type ||
+                    !title ||
+                    !abstract ||
+                    !year ||
+                    !source_code ||
+                    !manuscript ||
+                    !journal ||
+                    !poster ||
+                    !advisers ||
+                    !authors ||
+                    !keywords
+                ) {
+                    return res.status(400).json({
+                        errorMessage: "Please enter all required fields.",
+                    });
                 }
+                console.log("====START UPDATE HERE=====");
+                console.log(req.body);
                 // changing values
                 updatedThesisSp.sp_thesis_id = sp_thesis_id;
                 updatedThesisSp.type = type;
@@ -967,21 +1087,38 @@ router.put("/update-sp-thesis", upload.any(), async (req, res) => {
                 updatedThesisSp.journal = journal;
                 updatedThesisSp.poster = poster;
 
+                console.log(updatedThesisSp);
                 // updates
                 updatedThesisSp.save();
             }
         );
 
         // deletes all authors with corresponding thesis/sp id
-        await thesisAuthorModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
-        await thesisAdviserModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
-        await thesisKeyModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
+        // await thesisAuthorModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisAdviserModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+        // await thesisKeyModel.deleteMany({"sp_thesis_id":old_sp_thesis_id});
+
+        // await thesisAuthorModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
+        // await thesisAdviserModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
+        // await thesisKeyModel.deleteMany({sp_thesis_id: old_sp_thesis_id});
+
+        // console.log(authors)
+        // console.log(adviser)
+        // console.log(keywords)
 
         // save updated thesisAuthorModel
         authors.forEach(async function (updatedEntry) {
-            const author_fname = updatedEntry.author_fname;
-            const author_lname = updatedEntry.author_lname;
+            console.log("AUTHORS");
+            // console.log(updatedEntry)
+            // console.log(updatedEntry.fname)
+            // console.log(updatedEntry.lname)
+
+            const author_fname = updatedEntry.fname;
+            const author_lname = updatedEntry.lname;
             const author_name = author_fname.concat(" ", author_lname);
+
+            console.log(author_fname);
+            console.log(author_lname);
 
             const newAuthor = new thesisAuthorModel({
                 sp_thesis_id,
@@ -994,9 +1131,14 @@ router.put("/update-sp-thesis", upload.any(), async (req, res) => {
 
         // save updated thesisAdviserModel
         advisers.forEach(async function (updatedEntry) {
-            const adviser_fname = updatedEntry.adviser_fname;
-            const adviser_lname = updatedEntry.adviser_lname;
+            console.log("ADVISERS");
+            // console.log(updatedEntry)
+            const adviser_fname = updatedEntry.fname;
+            const adviser_lname = updatedEntry.lname;
             const adviser_name = adviser_fname.concat(" ", adviser_lname);
+
+            console.log(adviser_fname);
+            console.log(adviser_lname);
 
             const newAdviser = new thesisAdviserModel({
                 sp_thesis_id,
@@ -1009,8 +1151,11 @@ router.put("/update-sp-thesis", upload.any(), async (req, res) => {
 
         // save updated thesisAdviserModel
         keywords.forEach(async function (updatedEntry) {
-            const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
+            console.log("KEYWORDS");
+            console.log(updatedEntry);
+            const sp_thesis_keyword = updatedEntry;
 
+            console.log(sp_thesis_keyword);
             const newKey = new thesisKeyModel({
                 sp_thesis_id,
                 sp_thesis_keyword,
@@ -1025,41 +1170,60 @@ router.put("/update-sp-thesis", upload.any(), async (req, res) => {
 });
 
 // delete entire sp/thesis entry
-router.delete("/remove-sp-thesis", async (req, res) => {
-    const { sp_thesis_id, object_id } = req.body;
+/**************************************************** 
+Request Object:
+req object: address parameter
+{
+    sp_thesis_id
+}
+Response String:
+"Entry Updated"
+********************************************************/
+router.delete("/remove-sp-thesis/:sp_thesis_id", async (req, res) => {
+    console.log("del");
+    const sp_thesis_id_holder = req.params.sp_thesis_id;
+    console.log(sp_thesis_id_holder);
+    console.log(req.params.sp_thesis_id);
 
-    if (!sp_thesis_id || !object_id) {
-        return res
-            .status(400)
-            .json({ errorMessage: "Input fields cannot be empty." });
+    if (!sp_thesis_id_holder) {
+        return res.status(400).json({ errorMessage: "Entry does not exist." });
     }
 
     // checks if entry to be deleted exists
-    await thesisModel.findOne({ sp_thesis_id: sp_thesis_id }, (err, object) => {
-        if (!object) {
-            return res
-                .status(404)
-                .json({ errorMessage: "Entry to be deleted not found." });
+    await thesisModel.findOne(
+        { sp_thesis_id: sp_thesis_id_holder },
+        (err, object) => {
+            if (!object) {
+                return res
+                    .status(404)
+                    .json({ errorMessage: "Entry to be deleted not found." });
+            }
         }
-    });
+    );
 
     // removes entries with corresponding sp_thesis_id
     try {
-        await thesisModel.findOneAndDelete({ sp_thesis_id: sp_thesis_id });
-        await thesisAuthorModel.deleteMany({ sp_thesis_id: sp_thesis_id });
-        await thesisAdviserModel.deleteMany({ sp_thesis_id: sp_thesis_id });
-        await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id });
+        await thesisModel.findOneAndDelete({
+            sp_thesis_id: sp_thesis_id_holder,
+        });
+        await thesisAuthorModel.deleteMany({
+            sp_thesis_id: sp_thesis_id_holder,
+        });
+        await thesisAdviserModel.deleteMany({
+            sp_thesis_id: sp_thesis_id_holder,
+        });
+        await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
         res.send("Entry Deleted");
     } catch {
         res.send(404).json({ errorMessage: "Cannot Delete." });
     }
 
     // removes file that comes along with the sp/thesis entry
-    gfs.remove({ _id: object_id, root: "sp_pdf" }, (err, gridStore) => {
-        if (err) {
-            return res.status(404).json({ err: err });
-        }
-    });
+    // gfs.remove({ _id: object_id, root: "sp_pdf" }, (err, gridStore) => {
+    //     if (err) {
+    //         return res.status(404).json({ err: err });
+    //     }
+    // });
 });
 
 module.exports = router;
