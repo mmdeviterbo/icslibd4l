@@ -251,34 +251,50 @@ const MainResourceTable = ({ resourceType }) => {
   const [rows, setRows] = React.useState([]);
   const [selectedEdit, setSelectedEdit] = useState();
 
-  useEffect(async () => {
-    try {
-      let tempRow = [...rows];
+  const [resourceList, setResourceList] = useState([]);
 
-      const { data } = await resourceService.browseResources({
-        type: "Thesis",
-      });
-
-      //   const { data } = await resourceService.searchSpThesis({}, "/search");
-      //   console.log(data);
-      for (let thesis of data) {
-        tempRow.push(
-          createResourceData(
-            thesis.sp_thesis_id,
-            thesis.title,
-            thesis.author[0] ? thesis.author[0].author_name : "N/A",
-            thesis.type,
-            thesis.type === "Thesis" ? "CMSC 199" : "CMSC 200",
-            thesis.year
-          )
-        );
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data } = await resourceService.browseResources({
+          resourceType: "book",
+        });
+        setResourceList(data);
+      } catch (error) {
+        console.log(error);
       }
-      setRows(tempRow);
-      setSelectedEdit(data);
-    } catch (err) {
-      console.log("ERRROR 304");
     }
+    fetchData();
   }, []);
+
+  // useEffect(async () => {
+  //   try {
+  //     let tempRow = [...rows];
+
+  //     const { data } = await resourceService.browseResources({
+  //       type: "Thesis",
+  //     });
+
+  //     //   const { data } = await resourceService.searchSpThesis({}, "/search");
+  //     //   console.log(data);
+  //     for (let thesis of data) {
+  //       tempRow.push(
+  //         createResourceData(
+  //           thesis.sp_thesis_id,
+  //           thesis.title,
+  //           thesis.author[0] ? thesis.author[0].author_name : "N/A",
+  //           thesis.type,
+  //           thesis.type === "Thesis" ? "CMSC 199" : "CMSC 200",
+  //           thesis.year
+  //         )
+  //       );
+  //     }
+  //     setRows(tempRow);
+  //     setSelectedEdit(data);
+  //   } catch (err) {
+  //     console.log("ERRROR 304");
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   try {
@@ -395,7 +411,7 @@ const MainResourceTable = ({ resourceType }) => {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(resourceList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);

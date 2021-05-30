@@ -12,9 +12,7 @@ const addBook = (formData) => {
         console.log(key[0] + ", " + key[1]);
       }
     return http.post(`${apiEndpoint}/books/create`, formData, {withCredentials: true}, {
-        headers: {
-            'content-type': 'multipart/form-data'
-        }
+        headers: formData.getHeaders()
     })
 }
 
