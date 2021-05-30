@@ -75,15 +75,16 @@ const upload = multer({ storage });
 // ---------------------------------------- HTTP REQUESTS
 // create new sp entry
 // AUTHENTICATION REMOVED FROM THE PARAMeTERES
-router.post("/create", async (req,res)=>{
+router.post("/create", upload.any(), async (req,res)=>{
     try{
         const {sp_thesis_id, // common ID
             type, title, abstract, year, source_code, manuscript, journal, poster, // thesisModel
             advisers,   // thesisAdviserModel
             authors,     // thesisAuthorModel
             keywords               // thesisKeyModel
-        } = (req.body); 
-
+        } = JSON.parse(req.body.body); 
+        
+        console.log('here')
         // sample verification: incomplete fields
         if (
             !sp_thesis_id ||

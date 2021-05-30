@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import ResourceServices from "../../services/resourceService";
+import MessagePopUpCont from "../messageModalContainer";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 //  TODO: add documentation
 const DeletePopUpCont = () => {
@@ -23,17 +24,19 @@ const DeletePopUpCont = () => {
     try {
       if (item == "resource") {
         const { data } = await ResourceServices.deleteSpThesis(id);
-        IsDeleted("success");
+        // handleClose();
+        // MessagePopUpCont(`${id} has been deleted successfully.`);
         handleClose();
         window.location = "/manage-resources";
       } else {
         const { data } = await ResourceServices.deleteUser(id);
-        IsDeleted("success");
-        // window.location = "/manage-users";
+        handleClose();
+        // MessagePopUpCont(`${id} has been deleted successfully.`);
+        window.location = "/manage-users";
       }
     } catch (err) {
       if (err.response && err.response.data) {
-        IsDeleted("fail");
+        IsDeleted(`Failed to delete ${id}`);
         alert(err.response.data.errorMessage); // some reason error message
       }
     }

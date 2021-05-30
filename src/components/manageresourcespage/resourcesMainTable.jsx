@@ -17,7 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import resourceService from "../../services/resourceService";
-// import DeletePopUpCont from "./deleteModalContainer";
+import MessagePopUpCont from "../messageModalContainer";
 
 function createResourceData(
   resid,
@@ -239,7 +239,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Main function
-const MainResourceTable = (props) => {
+const MainResourceTable = ({ resourceType }) => {
   const location = useLocation();
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -254,12 +254,6 @@ const MainResourceTable = (props) => {
   useEffect(async () => {
     try {
       let tempRow = [...rows];
-      // const {data} = await resourceService.browseResources({type:"book"});
-
-      // for(let book of data){
-      //     tempRow.push(createResourceData(book.bookId, book.title, book.author[0].author_name, "Book", book.subject[0].subject, book.datePublished[0]));
-      // }
-      // setRows(tempRow);
 
       const { data } = await resourceService.browseResources({
         type: "Thesis",
@@ -286,7 +280,14 @@ const MainResourceTable = (props) => {
     }
   }, []);
 
-  // kinda works, dont's remove yet
+  // useEffect(() => {
+  //   try {
+  //     MessagePopUpCont("hello");
+  //   } catch (err) {
+  //     console.log("ERRROR 304");
+  //   }
+  // }, [rows]);
+
   const DeleteBtn = (id) => {
     return (
       <Link

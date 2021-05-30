@@ -22,6 +22,7 @@ import UpdateResourceData from "./components/crud/update";
 import About from "./components/about/about";
 import GetResources from "./components/manageresourcespage/getResources";
 import "./App.css";
+import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
 
 function App() {
     const [user, setUser] = useState(null); //fullname, email, userType (integer)
@@ -137,11 +138,12 @@ function App() {
                     path="/browse-theses"
                     render={() => <BrowseResources type={"Thesis"} />}></Route>
 
-                <Route
+                {/* <Route
                     path="/manage-resources"
                     render={() => (
                         <GetResources resourceType={"Book"} />
-                    )}></Route>
+                    )}></Route> */}
+                <Route path="/manage-resources" component={ManageResourcesPage}></Route>
                 <Route path="/manage-users" component={ManageUser}></Route>
 
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
@@ -153,7 +155,6 @@ function App() {
                     component={EditResourcePage}></Route>
                 <Route
                     path="/view-sp-thesis"
-                    // component={ReadingSPTContainer}
                     render={() => (
                         <ReadingSPTContainer resourceData={sampleSP}/>
                     )}></Route>
@@ -162,7 +163,7 @@ function App() {
                 <Route
                     path="/view-book"
                     render={() => (
-                        <ReadingBookContainer sampleBook={sampleBook} />
+                        <ReadingBookContainer/>
                     )}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Route exact path="/not-found" component={Notfound}></Route>

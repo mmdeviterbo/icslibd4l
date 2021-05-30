@@ -44,6 +44,7 @@ const AddBookFormContainer = () => {
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     function updateList() {
@@ -66,6 +67,29 @@ const AddBookFormContainer = () => {
     });
   };
 
+  const handleImage = (e) => {
+    // let file = e.target.files[0];
+    // const formData = new FormData();
+    // formData.append("file", file);
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //   },
+    // };
+    // setImage(formData);
+    // return  post(url, formData,config)
+
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const formData = { file: e.target.result };
+        setImage(formData);
+      };
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -81,9 +105,9 @@ const AddBookFormContainer = () => {
         numberOfCopies: numOfCopies,
       };
       console.log(userInput);
-      console.log(typeof dateAcquired);
-      console.log(typeof datePublished);
-      const { data } = await ResourceServices.addBook(userInput);
+      // console.log(typeof dateAcquired);
+      // console.log(typeof datePublished);
+      const { data } = await ResourceServices.addBook(userInput, image);
       alert("New book has been successfully added to the library");
       window.location = "/add-new-resource";
     } catch (err) {
@@ -256,6 +280,18 @@ const AddBookFormContainer = () => {
                 value={courseList.find((obj) => obj.value === courses)}
                 onChange={(courses) => handleCourses(courses)}
               ></Select>
+            </div>
+            <br />
+            <div className="bookCover">
+              <h5>Upload Book Cover</h5>
+              <input
+                type="file"
+                className="resourcefiles"
+                id="bookCoverPage"
+                onChange={(e) => {
+                  handleImage(e);
+                }}
+              />
             </div>
             <br />
             <button type="submit" id="saveResource">
