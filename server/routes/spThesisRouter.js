@@ -490,22 +490,33 @@ router.get("/search", async (req, res) => {
         // req.query.keyword: array of keyword strings (use double quotes in request)
         // sample: keyword=["keyw1","keyw2","keyw3"]
         if ("keyword" in req.query) {
-            let keywordArrayFilter = JSON.parse(req.query.keyword);
-            keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
-            final_arr = final_arr.filter((item) => {
-                if ("keywords" in item) {
-                    return item.keywords.some((keyw) => {
-                        return keywordArrayFilter.some((keyFilter) => {
-                            return keyw.sp_thesis_keyword
-                                .toLowerCase()
-                                .includes(keyFilter);
+            try{
+                let keywordArrayFilter = JSON.parse(req.query.keyword);
+                keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
+                final_arr = final_arr.filter((item) => {
+                    if ("keywords" in item) {
+                        return item.keywords.some((keyw) => {
+                            return keywordArrayFilter.some((keyFilter) => {
+                                return keyw.sp_thesis_keyword
+                                    .toLowerCase()
+                                    .includes(keyFilter);
+                            });
                         });
-                    });
+                    }
+                });
+            }catch(error){
+                if(error instanceof SyntaxError){
+                    console.log("SyntaxError: Invalid req.query.keyword");
+                }else{
+                    console.log(error);
                 }
-            });
+                res.status(400).send(error);
+            }
         }
 
-        res.send(final_arr); // filtered search results
+        if (!res.headersSent){
+            res.send(final_arr); // filtered search results
+        }
     }
     // REFERENCES for search filter:
     // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
