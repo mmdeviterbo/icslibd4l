@@ -1,11 +1,5 @@
 /* ------------------------- */
 
-/* Add Resources buong page */
-.add-resource-page-container {
-    display:flex;
-    flex-direction: row;
-}
-
 /* ------ Add Resources Form container ------ */
 
 .add-res-sidebar h1{
@@ -22,24 +16,31 @@
 }
 
 .add-res-form-cont{
-    padding: 4rem;
     background-color:#F4F4F4;
     width: 100%;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.add-res-header{
+    background-color:white;
+    width: 20%;
+}
+
+.add-res-header h1 {
+    color: #0067a1;
+    padding: 3rem;
+    font-weight: normal;
+    font-size: 3rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .form-container{
     display:flex;
     flex-direction: row;
     justify-content: center;
-}
-
-#createForm{
-    padding: 1rem;
-}
-
-#createForm h5 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: normal;
+    padding-left: 8rem;
 }
 
 .res-primary-info{
@@ -102,6 +103,28 @@
 
 #addAuthor:hover{
     background-color:#0067A1;
+    color:white;
+    border-color:white;
+}
+
+#deleteAuthor{
+    font-family: 'Montserrat', sans-serif;
+    padding:0.5rem;
+    padding-right: 1rem;
+    float:right;
+    margin:0.2rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-style: solid;
+    border-radius: 0.5rem;
+    border-color:#dadada;
+    border-width:0.2rem;
+
+}
+
+#deleteAuthor:hover{
+    background-color:#d31c1ca9;
     color:white;
     border-color:white;
 }

@@ -3,8 +3,10 @@ import Select from 'react-select'
 // import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
 import ChipInput from "material-ui-chip-input";
-// import AddResSidebar from './addResHeader';
+import AddResourcesHeader from './addResourcesHeader';
 // import ChipInput from "material-ui-chip-input";
+import { nanoid } from 'nanoid'
+
 
 const classificationOptions = [
     {value:'Special Problem', label:'Special Problem'},
@@ -34,7 +36,9 @@ const adviserchoices = [
 
     ]   
 
-const AddNewSPThesisForm = ({props}) => {    
+    
+
+const AddNewSPThesisForm = ({props}) => { 
 
     // functionalities:
     const [type, setType] = useState("");
@@ -50,6 +54,7 @@ const AddNewSPThesisForm = ({props}) => {
     const [keywords, setKeyword] = useState();
     // multiple authors should be possible
     const [author, setAuthor] = useState({
+        authorid:"",
         fname: "",
         lname: "",
     });
@@ -58,7 +63,13 @@ const AddNewSPThesisForm = ({props}) => {
         lname: "",
     });
 
-    const [authorList, setAuthorList] = useState([]);
+    const [authorList, setAuthorList] = useState([
+        {
+            authorid:"test01", 
+            fname:"defaultfirstname", 
+            lname:"defaultlastname"
+        }
+        ]);
     const [adviserList, setAdviserList] = useState([]);
 
     // const [courses, setCourses] = useState([]);
@@ -178,43 +189,54 @@ const AddNewSPThesisForm = ({props}) => {
     };
   };
 
-  const handlePoster = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (e) => {
-      const formData = { file: e.target.result };
-      setPoster(formData);
+    const handlePoster = (e) => {
+        let file = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+        const formData = { file: e.target.result };
+        setPoster(formData);
+        };
     };
-  };
 
+
+    
+   
 
     // ==============================================================
 
     return(
         <div className = "add-res-form-cont">
-            <div className = "add-resource-header">Add a New Resource</div>
-            <form id = "mainForm" onSubmit = {handleSubmit}>
-                <div className = "form-container">
-                    <div className="res-primary-info">
-                    
+            {/* header at the side */}
+            <AddResourcesHeader/>
+
+            {/* main form */}
+            <form id = "addSPTForm" onSubmit = {handleSubmit} autocomplete="off"> 
+                <div className = "form-container">              {/* both parts of the form are inside this div for display:flex purposes */}
+                    <div className="res-primary-info">          {/* left side of the form */}
                         <h2>
                             <b>Primary Info</b>
                         </h2>
                         <hr/> 
 
+                        {/* ID Field */}
+                        {/* Disabled, uneditable */}
+                        {/* how to get generated ID? */}
                         <div className="primaryfields">
                             <label htmlFor="resId">ID: &nbsp; </label>
                             <input
                             required
                             type="text"
                             id="resId"
+                            value = "tempId00001"
+                            disabled
                             onChange={(event) => {
                                 setId(event.target.value);
                             }}
                             />
                         </div>
 
+                        {/* Title Field */}
                         <div className="primaryfields">
                             <label htmlFor="resTitle">Title: &nbsp; </label>
                             <input
@@ -227,6 +249,7 @@ const AddNewSPThesisForm = ({props}) => {
                             />
                         </div>
 
+                        {/* Date Published Field */}
                         <div className="primaryfields">
                             <label htmlFor="datePublished">Date Published: &nbsp; </label>
                             <input
@@ -239,6 +262,7 @@ const AddNewSPThesisForm = ({props}) => {
                             />
                         </div>
 
+                        {/* Date Acquired Field */}
                         <div className="primaryfields">
                             <label htmlFor="dateAcquired">Date Acquired: &nbsp; </label>
                             <input
@@ -251,55 +275,98 @@ const AddNewSPThesisForm = ({props}) => {
                             />
                         </div>
 
-                        {/* <AddAuthorField/> */}
-                        <h5>Author(s):</h5>
-                        <div className="primaryfields">
-                            <label htmlFor="resAuthor">
-                                &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
-                            </label>
-
-                            <input
-                            type="text"
-                            id="resAuthorFN"
-                            name="fname"
-                            required
-                            value={author.fname}
-                            onChange={addAuthor}
-                            />
-                        </div>
-
-                        <div className="primaryfields">
-                            <label htmlFor="resAuthor">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
-                            </label>
-                            <input
-                            type="text"
-                            id="resAuthorLN"
-                            required
-                            name="lname"
-                            value={author.lname}
-                            onChange={addAuthor}
-                            />
-                        </div>
-                        <button id="addAuthor">
+                        
+                        <div className= "authors-group">
+                            <h5>Author(s):</h5>
+                            {/* button adds fields for author */}
+                            <button 
+                                id="addAuthor"
+                                onClick = {() =>{
+                                setAuthorList(currentAuthors => [...currentAuthors, {
+                                    // author needs to generate ID para di madelete lahat in one button
+                                authorid:nanoid(5),
+                                fname: '',
+                                lname:'',
+                                    }])
+                                }}
+                            >
                             <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            className="bi bi-plus"
-                            viewBox="0 0 16 16"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-plus"
+                                viewBox="0 0 16 16"
                             >
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                             </svg>
                             Add Author
-                        </button>
-                    </div>
+                            </button>
 
+                            <br/><br/><br/>
+                            {authorList.map(p => {
+                                return(
+                                    <div key = {p.authorid}>
+                                        
+                                        <div className="primaryfields">
+                                            <label htmlFor="resAuthorFN">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
+                                            </label>
+
+                                            <input
+                                            type="text"
+                                            id="resAuthorFN"
+                                            name="fname"
+                                            required
+                                            value={author.fname}
+                                            onChange={addAuthor}
+                                            />
+                                        </div>
+                                    
+                                        <div className="primaryfields">
+                                            <label htmlFor="resAuthorLN">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
+                                            </label>
+                                            <input
+                                            type="text"
+                                            id="resAuthorLN"
+                                            required
+                                            name="lname"
+                                            value={author.lname}
+                                            onChange={addAuthor}
+                                            />
+                                        </div>
+
+                                        {/* button deletes author fields */}
+                                        <button
+                                        id = "deleteAuthor"
+                                        onClick = { () => {
+                                            setAuthorList(currentAuthors =>
+                                                currentAuthors.filter(x => x.authorid !== p.authorid))
+                                                // function checks if Author-To-Be-Deleted exists. 
+                                                // function deletes ALL instances of same author to be deleted
+                                                // we generate a random id so no 2 author fields are the same
+                                                // hence no faulty deleting
+                                                // wag nalang istore si author id sa db
+                                        }}
+                                        >
+                                        Delete Author
+                                        </button>
+                                        <br/><br/><br/>
+                                    </div>
+                                )
+                            })}
+                        </div> {/* closing tag for authors group */}
+                        
+                    </div> {/* closing tag for left side of form */}
+
+
+                    {/* Right side of the Form */}
                     <div className = "spthesisform">
-                        <h2><b>SP / Thesis</b></h2>
+                        <h2><b>SP / Thesis</b></h2>     {/* Header */}
                         <hr/>
 
+                        {/* Dropdown for classification: either sp or thesis */}
                         <div className = "classifSelect">
                                 <br/>
                                 Classification:
@@ -311,6 +378,7 @@ const AddNewSPThesisForm = ({props}) => {
                                 </Select>
                         </div>
 
+                        {/* Adviser Dropdown Multi */}
                         <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>
                         Adviser(s):</h5>
                         
@@ -325,6 +393,7 @@ const AddNewSPThesisForm = ({props}) => {
 
                         <br/>
 
+                        {/* Abstract TextArea */}
                         <div>
                             <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>Enter Abstract here:</h5>
                             <textarea
@@ -338,6 +407,7 @@ const AddNewSPThesisForm = ({props}) => {
 
                         </div>
                         
+                        {/* File uploads here */}
                         <div className="spthesisfiles">
                             <h5>Upload Source Code</h5>
                             <input
@@ -389,7 +459,7 @@ const AddNewSPThesisForm = ({props}) => {
                         
 
                         <div class="primaryfields">
-                            <label for="resId">Keywords: &nbsp; </label>
+                            <label htmlFor="keywords-field">Keywords: &nbsp; </label>
                             <ChipInput
                                 id = "keywords-field"
                                 onChange={(chips) => handleChips(chips)}
@@ -413,4 +483,4 @@ const AddNewSPThesisForm = ({props}) => {
     )
 }
 
-export default AddNewSPThesisForm
+export default AddNewSPThesisForm;

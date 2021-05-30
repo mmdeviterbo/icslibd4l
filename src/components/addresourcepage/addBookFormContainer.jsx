@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import ResourceServices from "../../services/resourceService";
-// import { ItemGroup } from 'semantic-ui-react'
+import AddResourcesHeader from './addResourcesHeader';
+import { nanoid } from 'nanoid'
 
 const courseList = [
     { value: "CMSC 12", label: "CMSC 12" },
@@ -35,14 +36,15 @@ const AddBookFormContainer = () => {
     const [datePublished, setDatePublished] = useState(0);
     const [dateAcquired, setDateAcquired] = useState(0);
     const [id, setId] = useState("");
-    const [journal, setJournal] = useState("");
-    const [manuscript, setManuscript] = useState("");
-    const [poster, setPoster] = useState("");
-    const [source_code, setSourceCode] = useState("");
-    const [abstract, setAbstract] = useState("");
+    // const [journal, setJournal] = useState("");
+    // const [manuscript, setManuscript] = useState("");
+    // const [poster, setPoster] = useState("");
+    // const [source_code, setSourceCode] = useState("");
+    // const [abstract, setAbstract] = useState("");
     const [keywords, setKeyword] = useState();
     // multiple authors should be possible
-    const [author, setAuthor] = useState({
+   const [author, setAuthor] = useState({
+        authorid:"",
         fname: "",
         lname: "",
     });
@@ -50,7 +52,13 @@ const AddBookFormContainer = () => {
         fname: "",
         lname: "",
     });
-    const [authorList, setAuthorList] = useState([]);
+    const [authorList, setAuthorList] = useState([
+        {
+            authorid:"test01", 
+            fname:"defaultfirstname", 
+            lname:"defaultlastname"
+        }
+        ]);
     const [adviserList, setAdviserList] = useState([]);
 
     const [courses, setCourses] = useState([]);
@@ -142,7 +150,8 @@ const AddBookFormContainer = () => {
 
     return (
         <div className="add-res-form-cont">
-            <form id="createForm" onSubmit={handleSubmit}>
+            <AddResourcesHeader/>
+            <form id="addBookForm" onSubmit={handleSubmit}>
                 <div className = "form-container">
 
                     <div className="res-primary-info">
@@ -151,11 +160,15 @@ const AddBookFormContainer = () => {
                         </h2>
                         <hr />
 
+                        {/* ID Field */}
+                        {/* Disabled, uneditable */}
+                        {/* how to get generated ID? */}
                         <div class="primaryfields">
                             <label for="resId">ID: &nbsp; </label>
                             <input
                                 type="text"
-                                id="resId"
+                                id="resId"  
+                                disabled
                                 onChange={(event) => {
                                     setId(event.target.value);
                                 }}
@@ -197,47 +210,90 @@ const AddBookFormContainer = () => {
                             />
                         </div>
 
-                        {/* <AddAuthorField/> */}
-                        <h5>Author(s):</h5>
-                        <div class="primaryfields">
-                            <label for="resAuthor">
-                                &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
-                            </label>
-
-                            <input
-                                type="text"
-                                id="resAuthorFN"
-                                name="fname"
-                                value={author.fname}
-                                onChange={addAuthor}
-                            />
-                        </div>
-
-                        <div class="primaryfields">
-                            <label for="resAuthor">
-                                &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
-                            </label>
-                            <input
-                                type="text"
-                                id="resAuthorLN"
-                                name="lname"
-                                value={author.lname}
-                                onChange={addAuthor}
-                            />
-                        </div>
-
-                        <button id="addAuthor">
+                        <div className= "authors-group">
+                            <h5>Author(s):</h5>
+                            {/* button adds fields for author */}
+                            <button 
+                                id="addAuthor"
+                                onClick = {() =>{
+                                setAuthorList(currentAuthors => [...currentAuthors, {
+                                    // author needs to generate ID para di madelete lahat in one button
+                                authorid:nanoid(5),
+                                fname: '',
+                                lname:'',
+                                    }])
+                                }}
+                            >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
                                 height="16"
                                 fill="currentColor"
-                                class="bi bi-plus"
-                                viewBox="0 0 16 16">
-                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                className="bi bi-plus"
+                                viewBox="0 0 16 16"
+                            >
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                             </svg>
                             Add Author
-                        </button>
+                            </button>
+
+                            <br/><br/><br/>
+                            {authorList.map(p => {
+                                return(
+                                    <div key = {p.authorid}>
+                                        
+                                        {/* AUTHOR FIRST NAME FIELD */}
+                                        <div className="primaryfields">
+                                            <label htmlFor="resAuthorFN">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
+                                            </label>
+
+                                            <input
+                                            type="text"
+                                            id="resAuthorFN"
+                                            name="fname"
+                                            required
+                                            value={author.fname}
+                                            onChange={addAuthor}
+                                            />
+                                        </div>
+
+                                        {/* AUTHOR LAST NAME FIELD */}
+                                        <div className="primaryfields">
+                                            <label htmlFor="resAuthorLN">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
+                                            </label>
+                                            <input
+                                            type="text"
+                                            id="resAuthorLN"
+                                            required
+                                            name="lname"
+                                            value={author.lname}
+                                            onChange={addAuthor}
+                                            />
+                                        </div>
+
+                                        {/* button deletes author fields */}
+                                        <button
+                                        id = "deleteAuthor"
+                                        onClick = { () => {
+                                            setAuthorList(currentAuthors =>
+                                                currentAuthors.filter(x => x.authorid !== p.authorid))
+                                                // function checks if Author-To-Be-Deleted exists. 
+                                                // function deletes ALL instances of same author to be deleted
+                                                // we generate a random id so no 2 author fields are the same
+                                                // hence no faulty deleting
+                                                // wag nalang istore si author id sa db
+                                        }}
+                                        >
+                                        Delete Author
+                                        </button>
+                                        <br/><br/><br/>
+                                    </div>
+                                )
+                            })}
+                        </div> {/* closing tag for authors group */}
+                    
                     </div>  {/* Primary Info closing tag */}
 
                     <div className="res-primary-info">
@@ -265,8 +321,8 @@ const AddBookFormContainer = () => {
                         <br />
 
                         <div class="primaryfields">
-                            <label for="availBookCopies">
-                                No. of copies available: &nbsp;{" "}
+                            <label htmlFor="availBookCopies">
+                               No. of copies available:
                             </label>
                             <input type="number" id="availBookCopies" />
                         </div>
