@@ -3,6 +3,10 @@ const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
 const authAdmin = require("../middleware/authAdmin");
 
+//for generating reports
+const puppeteer = require('puppeteer');
+const fs = require('fs-extra');
+
 //read all admin entries
 /**************************************************** 
 Request Object:
@@ -240,5 +244,29 @@ router.get("/search", async (req, res) => {
         res.status(500).send("Error Getting query");
     }
 });
+
+router.get("/report", async (req, res) => {
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        await page.setContent('<h1>hello</h1>');
+        await page.emulateMediaType('screen');
+        await page.pdf({
+            path: 'sample.pdf',
+            format: 'A4',
+            printBackground: true
+        });
+
+        console.log('done');
+        await browser.close();
+
+        res.send();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+});
+
 
 module.exports = router;
