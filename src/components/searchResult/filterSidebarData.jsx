@@ -103,14 +103,17 @@ export const FilterSidebarData = [
             {
                 label: "Book",
                 link: "/type/books",
+                value: "books"
             },
             {
-                label: "Special Project",
+                label: "Special Problem",
                 link: "/type/sp",
+                value: "special problem"
             },
             {
                 label: "Thesis",
                 link: "/type/thesis",
+                value: "thesis"
             }
         ]                 
     },

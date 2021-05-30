@@ -295,8 +295,6 @@ router.get("/search", async (req, res) => {
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
-    console.log(req.query)
-    console.log(req.query.search)
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
         // get unique entries
@@ -408,7 +406,7 @@ router.get("/search", async (req, res) => {
                 }
             });
         }
-
+        
         res.send(final_arr); // filtered search results
     }
     // REFERENCES for search filter:
