@@ -112,7 +112,8 @@ Response Object:
 }
 ********************************************************/
 // AUTHENTICATION REMOVED FROM THE PARAMeTERES
-router.post("/create", async (req, res) => {
+router.post("/create", authFaculty, upload.any(), async (req, res) => {
+    console.log(req.body);
     try {
         const {
             sp_thesis_id, // common ID
@@ -127,8 +128,21 @@ router.post("/create", async (req, res) => {
             advisers, // thesisAdviserModel
             authors, // thesisAuthorModel
             keywords, // thesisKeyModel
-        } = req.body;
-
+        } = JSON.parse(req.body.body);
+        console.log({
+            sp_thesis_id, // common ID
+            type,
+            title,
+            abstract,
+            year,
+            source_code,
+            manuscript,
+            journal,
+            poster, // thesisModel
+            advisers, // thesisAdviserModel
+            authors, // thesisAuthorModel
+            keywords, // thesisKeyModel
+        });
         // sample verification: incomplete fields
         if (
             !sp_thesis_id ||
