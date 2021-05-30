@@ -23,24 +23,52 @@ const Grid = require("gridfs-stream");
 const database = process.env.db;
 
 // ---------------------------------------- FILE STORAGE INITIALIZATION
+// https://www.section.io/engineering-education/uploading-files-using-multer-nodejs/
+// https://dev.to/aimalm/upload-single-file-in-node-js-using-express-and-multer-in-6-steps-4o9p
+// https://stackoverflow.com/questions/36096805/uploading-multiple-files-with-multer-but-from-different-fields
+// https://stackoverflow.com/questions/58173677/error-the-database-connection-must-be-open-to-store-files
+
+// File filter function
+const fileFilter = (req, file, cb) => {
+    if(file.fieldname === "manuscript" || file.fieldname === "journal"){
+        if ((file.mimetype).includes('pdf')) {
+            cb(null, true);
+          } else {
+            cb(new Error("Not a PDF File!!"), false);
+          };
+    }else if(file.fieldname == "poster"){
+        if((file.mimetype).includes('jpeg') || (file.mimetype).includes('png') || (file.mimetype).includes('jpg')){
+            cb(null, true);
+        } else{
+            cb(null, false);
+        };
+    }
+}
+
 // Create mongo connection
-const conn = mongoose.createConnection(database, {
+// const conn = mongoose.createConnection(database, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// });
+
+const promise = mongoose.connect(database, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
+const conn = mongoose.connection;
 
 // Init gfs
 let gfs;
 
+// Init stream
 conn.once("open", () => {
-    // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection("sp_pdf");
+    gfs.collection("sp_files");
 });
-
 // Create storage engine
 const storage = new GridFsStorage({
-    url: database,
+    // url: database,
+    db: promise,
     file: (req, file) => {
         return new Promise(async (resolve, reject) => {
             //get the sp_thesis_id from the multipart form of http request
@@ -60,17 +88,22 @@ const storage = new GridFsStorage({
                 }
                 const filename =
                     buf.toString("hex") + path.extname(file.originalname);
+
                 const fileInfo = {
                     filename: filename,
-                    metadata: sp_thesis_id, //store the book id in the metadata
-                    bucketName: "sp_pdf",
-                };
+                    bucketName: "sp_files",
+                    metadata: [sp_thesis_id, file.fieldname], //store the book id in the metadata
+                }
+
+                console.log(fileInfo);
+                console.log(fileInfo.metadata[0]);
+                console.log(fileInfo.metadata[1]);
                 resolve(fileInfo);
             });
         });
     },
 });
-const upload = multer({ storage });
+const upload = multer({ storage, fileFilter: fileFilter});
 
 // ---------------------------------------- HTTP REQUESTS
 // create new sp entry
@@ -111,8 +144,13 @@ Response Object:
   "__v": 0
 }
 ********************************************************/
-// AUTHENTICATION REMOVED FROM THE PARAMeTERES
-router.post("/create", authFaculty, upload.any(), async (req,res)=>{
+// AUTHENTICATION REMOVED FROM THE PARAMETERS
+// authFaculty
+router.post("/create", upload.fields([
+    { name: 'manuscript', maxCount: 1 }, 
+    { name: 'poster', maxCount: 1 },
+    { name: 'journal', maxCount: 1 }
+]), async (req,res)=>{
     try {
         const {
             sp_thesis_id, // common ID
@@ -120,10 +158,10 @@ router.post("/create", authFaculty, upload.any(), async (req,res)=>{
             title,
             abstract,
             year,
-            source_code,
-            manuscript,
-            journal,
-            poster, // thesisModel
+            // source_code,
+            // manuscript,
+            // journal,
+            // poster, // thesisModel
             advisers, // thesisAdviserModel
             authors, // thesisAuthorModel
             keywords, // thesisKeyModel
@@ -152,7 +190,7 @@ router.post("/create", authFaculty, upload.any(), async (req,res)=>{
         // search if book exists
         const existingThesis = await thesisModel.findOne({ sp_thesis_id });
 
-        console.log(sp_thesis_id);
+        // console.log(sp_thesis_id);
 
         if (!existingThesis) {
             // if does not exist, proceed in creating entry
@@ -163,10 +201,10 @@ router.post("/create", authFaculty, upload.any(), async (req,res)=>{
                 title,
                 abstract,
                 year,
-                source_code,
-                manuscript,
-                journal,
-                poster,
+                // source_code,
+                // manuscript,
+                // journal,
+                // poster,
             });
             const savedThesis = await newThesis.save();
 
@@ -184,8 +222,8 @@ router.post("/create", authFaculty, upload.any(), async (req,res)=>{
                 });
 
                 const savedThesisAdv = await newThesisAdv.save();
-                console.log(newThesisAdv);
-                console.log(savedThesisAdv);
+                // console.log(newThesisAdv);
+                // console.log(savedThesisAdv);
             });
 
             // save thesisAuthorModel
