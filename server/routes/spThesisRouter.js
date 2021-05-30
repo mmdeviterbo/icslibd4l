@@ -399,7 +399,7 @@ router.get("/search", async (req, res) => {
     // Search and Filter Resources
     // http://localhost:3001/thesis/search
     // REQUEST:
-    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword] 
+    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
     // RESPONSE:
     // - array of objects (book/sp/thesis)
 
@@ -487,14 +487,19 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // req.query.keyword: string of multiple keywords concat with whitespace
+        // req.query.keyword: array of keyword strings (use double quotes in request)
+        // sample: keyword=["keyw1","keyw2","keyw3"]
         if ("keyword" in req.query) {
-            let keywordFilter = req.query.keyword.toLowerCase();
+            let keywordArrayFilter = JSON.parse(req.query.keyword);
+            keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
             final_arr = final_arr.filter((item) => {
                 if ("keywords" in item) {
                     return item.keywords.some((keyw) => {
-                        return keywordFilter
-                            .includes(keyw.sp_thesis_keyword.toLowerCase());
+                        return keywordArrayFilter.some((keyFilter) => {
+                            return keyw.sp_thesis_keyword
+                                .toLowerCase()
+                                .includes(keyFilter);
+                        });
                     });
                 }
             });
@@ -506,6 +511,8 @@ router.get("/search", async (req, res) => {
     // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
     // String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
     // Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
+    // JSON.parse() https://stackoverflow.com/questions/22080770/i-need-to-create-url-for-get-which-is-going-to-accept-array-how-in-node-js-expr
+    // Array.map() https://attacomsian.com/blog/javascript-array-lowercase-uppercase
 
     function spTitle(mode) {
         // get THESIS entries
