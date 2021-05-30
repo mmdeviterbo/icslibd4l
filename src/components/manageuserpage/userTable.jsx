@@ -9,8 +9,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import httpService from "../../services/httpService";
-import { apiEndpoint } from "../../config.json";
+import PersonService from "../../services/personService";
 
 const tableHeader = [
   "User ID",
@@ -35,12 +34,10 @@ export default function UserTable({user}) {
   const [ userList, setUserList ] = useState([]);
 
   useEffect(() => {
-    console.log(user)
-
-    httpService.get(`${apiEndpoint}/admin/readAllUsers`, {withCredentials:true}).then((response) => {
+    PersonService.readAllUsers().then((response) => {
       setUserList(Array.from(response.data));
     });
-  }, [user]);
+  });
 
   tableEntry = userList;
 
