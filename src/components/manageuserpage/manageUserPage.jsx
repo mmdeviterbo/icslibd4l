@@ -8,7 +8,6 @@ export default function ManageUserPage({user}) {
   const history = useHistory();
 
   useEffect(() => {
-    console.log(user);
     if (user && user.userType !== 1){
       history.push("/not-found");
     }
