@@ -147,6 +147,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         const {
             bookId,
             title,
+            ISBN,
             authors,
             subjects,
             physicalDesc,
@@ -179,6 +180,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                 //add the non-array fields to the books collection
                 bookId,
                 title,
+                ISBN,
                 physicalDesc,
                 publisher,
                 numberOfCopies,

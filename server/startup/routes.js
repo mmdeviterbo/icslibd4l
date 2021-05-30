@@ -6,6 +6,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const path = require('path');
 const cors = require("cors");
 const methodOverride = require("method-override");
 
@@ -36,6 +37,9 @@ module.exports = function (app) {
             credentials: true,
         })
     );
+    //app.set('views', path.join(__dirname, 'views'));
+    app.set('view engine', 'jsx');
+    app.engine('jsx', require('express-react-views').createEngine());
 
     // set up routes
 
