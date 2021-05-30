@@ -185,7 +185,7 @@ function App() {
             {background && (
                 <Route
                     path="/manage-users/delete-user"
-                    children={<DeleteModalContainer />}
+                    children={<DeleteModalContainer user={user}/>}
                 />
             )}
             {background && (
