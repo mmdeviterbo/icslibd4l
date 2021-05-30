@@ -6,6 +6,8 @@ const authAdmin = require("../middleware/authAdmin");
 //for generating reports
 const puppeteer = require('puppeteer');
 const fs = require('fs-extra');
+const BookModel = require("../models/bookModel");
+const ThesisModel = require("../models/spThesisModel");
 
 //read all admin entries
 /**************************************************** 
@@ -246,10 +248,126 @@ router.get("/search", async (req, res) => {
 });
 
 router.get("/report", async (req, res) => {
+    //type of report to be generated
+    const type = req.query.type;
+    let userHTML;
+
+    console.log(type);
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
+        
+        //users
+        if(type === "all" || type === "users"){
+            const users = await UserModel.find().sort({userType:1});
+            console.log(users);
+        }
 
+        //user logs
+        if(type === "all" || type === "userLogs"){
+            const userLogs = await UserModel.aggregate([
+                {$match: {}},
+                {
+                    $lookup: {
+                        from: "userlogs",
+                        localField: "googleId",
+                        foreignField: "googleId",
+                        as: "logs"
+                    },
+                    $sort: {
+                        
+                    }
+                },
+                {
+                    $sort: {
+                        userType: -1
+                    }
+                }
+            ]);
+            console.log(userLogs);
+        }
+        
+        //books
+        if(type === "all" || type === "books"){
+            //copied from book router search book function
+            const books = await BookModel.aggregate(
+                [
+                    { $match: {}},
+                    {
+                        $lookup: {
+                            from: "book_authors",
+                            localField: "bookId",
+                            foreignField: "bookId",
+                            as: "author",
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "book_subjects",
+                            localField: "bookId",
+                            foreignField: "bookId",
+                            as: "subject",
+                        },
+                    },
+                ]
+            );
+            console.log(books);
+        }
+
+        //sp and thesis
+        if(type === "all" || type === "spThesis"){
+            //copied from spThesisRouter browse function 
+            const spThesis = await  ThesisModel.aggregate(
+                [
+                    {
+                        $match: {
+                            type: {
+                                $in: [
+                                    "Thesis",
+                                    "Special Problem",
+                                    "thesis",
+                                    "sp",
+                                    "SP",
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "sp_thesis_advisers",
+                            localField: "sp_thesis_id",
+                            foreignField: "sp_thesis_id",
+                            as: "adviser",
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "sp_thesis_authors",
+                            localField: "sp_thesis_id",
+                            foreignField: "sp_thesis_id",
+                            as: "author",
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "sp_thesis_keywords",
+                            localField: "sp_thesis_id",
+                            foreignField: "sp_thesis_id",
+                            as: "keywords",
+                        },
+                    },
+                    { 
+                        $sort: { 
+                            title: 1,
+                            type: 1
+                        } 
+                    },
+                ]
+            );
+            console.log(spThesis);
+        }
+        
+        
         await page.setContent('<h1>hello</h1>');
         await page.emulateMediaType('screen');
         await page.pdf({
