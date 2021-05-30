@@ -8,7 +8,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PersonService from "../../services/personService";
 
 const tableHeader = [
@@ -32,6 +32,8 @@ export const GlobalContext = createContext(initialState);
 export default function UserTable({user}) {
 
   const [ userList, setUserList ] = useState([]);
+  const location = useLocation();
+
 
   useEffect(() => {
     PersonService.readAllUsers().then((response) => {
@@ -72,7 +74,7 @@ export default function UserTable({user}) {
   const tableContainer = useStyles();
 
   const entries = tableEntry.map((entry, index) => (
-    <TableRow hover key={entry.googleId}>
+    <TableRow hover key={entry.googleId} user={entry}>
       <TableCell style={{ width: "80x", fontWeight: "bold" }}>
         <span>{entry.googleId}</span>
       </TableCell>
@@ -90,7 +92,23 @@ export default function UserTable({user}) {
       </TableCell>
       <TableCell style={{ textAlign: "center", fontSize: "1.5rem" }}>
         <i className="fa fa-ellipsis-h" style={{ margin: "10px", color: "#CFCFCF",  }}></i>
-        <i className="fa fa-trash-o" style={{ margin: "10px", color: "#CFCFCF" }}></i>
+        <Link to={{
+                pathname: "/manage-users/delete-user",
+                state: {
+                    background: location,
+                    id: entry.googleId,
+                    item: "account",
+                    user: { 
+                            googleId: entry.googleId,
+                            email: entry.email,
+                            fullName: entry.fullName,
+                            nickName: entry.nickname,
+                            userType: entry.userType,
+                         },
+                },
+            }}>
+          <i className="fa fa-trash-o" style={{ margin: "10px", color: "#CFCFCF" }}></i>
+        </Link>
       </TableCell>
     </TableRow>
   ));
