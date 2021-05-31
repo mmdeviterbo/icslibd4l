@@ -239,7 +239,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Main function
-const MainResourceTable = ({ resourceType }) => {
+const MainResourceTable = () => {
   const location = useLocation();
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -250,51 +250,54 @@ const MainResourceTable = ({ resourceType }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rows, setRows] = React.useState([]);
   const [selectedEdit, setSelectedEdit] = useState();
-
   const [resourceList, setResourceList] = useState([]);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const { data } = await resourceService.browseResources({
-  //         resourceType: "book",
-  //       });
-  //       setResourceList(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
-
-  useEffect(async () => {
-    try {
-      let tempRow = [...rows];
-
-      const { data } = await resourceService.browseResources({
-        type: "Thesis",
-      });
-
-      //   const { data } = await resourceService.searchSpThesis({}, "/search");
-      //   console.log(data);
-      for (let thesis of data) {
-        tempRow.push(
-          createResourceData(
-            thesis.sp_thesis_id,
-            thesis.title,
-            thesis.author[0] ? thesis.author[0].author_name : "N/A",
-            thesis.type,
-            thesis.type === "Thesis" ? "CMSC 199" : "CMSC 200",
-            thesis.year
-          )
-        );
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await resourceService.browseResources({
+          type: "book",
+        });
+        setResourceList(response.data);
+        console.log(response.data);
+        // setSpThesisList(spThesis_arr)
+      } catch (error) {
+        console.log(error);
       }
-      setRows(tempRow);
-      setSelectedEdit(data);
-    } catch (err) {
-      console.log("ERRROR 304");
     }
+    fetchData();
   }, []);
+
+  console.log(resourceList);
+
+  // useEffect(async () => {
+  //   try {
+  //     let tempRow = [...rows];
+
+  //     const { data } = await resourceService.browseResources({
+  //       type: "Thesis",
+  //     });
+
+  //     //   const { data } = await resourceService.searchSpThesis({}, "/search");
+  //     //   console.log(data);
+  //     for (let thesis of data) {
+  //       tempRow.push(
+  //         createResourceData(
+  //           thesis.sp_thesis_id,
+  //           thesis.title,
+  //           thesis.author[0] ? thesis.author[0].author_name : "N/A",
+  //           thesis.type,
+  //           thesis.type === "Thesis" ? "CMSC 199" : "CMSC 200",
+  //           thesis.year
+  //         )
+  //       );
+  //     }
+  //     setRows(tempRow);
+  //     setSelectedEdit(data);
+  //   } catch (err) {
+  //     console.log("ERRROR 304");
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   try {

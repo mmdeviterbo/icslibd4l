@@ -76,6 +76,7 @@ const upload = multer({ storage });
 // create new sp entry
 // AUTHENTICATION REMOVED FROM THE PARAMeTERES
 router.post("/create", upload.any(), async (req,res)=>{
+    console.log(JSON.parse(req.body.body))
     try{
         const {sp_thesis_id, // common ID
             type, title, abstract, year, source_code, manuscript, journal, poster, // thesisModel

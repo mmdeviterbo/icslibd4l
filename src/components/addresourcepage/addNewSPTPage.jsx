@@ -124,13 +124,14 @@ const AddNewSPThesisForm = ({ props }) => {
     event.preventDefault();
     // const sourceCode = new FormData();
     // sourceCode.append("File", source_code);
-    if (!source_code || !manuscript || !journal || !poster) {
-      return alert("Please upload the required files");
-    }
+    // if (!source_code || !manuscript || !journal || !poster) {
+    //   return alert("Please upload the required files");
+    // }
     console.log(source_code);
     console.log(poster);
     console.log(journal);
     console.log(manuscript);
+
     try {
       const userInput = {
         sp_thesis_id: id,
@@ -148,8 +149,12 @@ const AddNewSPThesisForm = ({ props }) => {
       };
 
       console.log(userInput);
-
-      const { data } = await ResourceServices.addSpThesis(userInput);
+      formData.append("file", source_code);
+      formData.append("body", userInput);
+      for (var key of formData.entries()) {
+        console.log(key[0] + ", " + key[1]);
+      }
+      const { data } = await ResourceServices.addSpThesis(formData);
       console.log(data);
       alert(`New Sp/Thesis has been successfully added to the library`);
       window.location = "/add-new-resource";

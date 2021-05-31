@@ -2,9 +2,13 @@ import http from './httpService';
 import {apiEndpoint} from '../config.json';
 
 // add a resource details (sp/thesis, book)
-const addSpThesis = (resourceData) => {
-    // console.log("hello sp/thesis")
-    return http.post(`${apiEndpoint}/thesis/create`, resourceData, {withCredentials: true})
+const addSpThesis = (formData) => {
+    for (var key of formData.entries()) {
+        console.log(key[0] + ", " + key[1]);
+      }
+    return http.post(`${apiEndpoint}/thesis/create`, formData, {withCredentials: true}, {
+        headers: { "Content-Type": "multipart/form-data" }
+    })
 }
 
 const addBook = (formData) => {
@@ -12,12 +16,13 @@ const addBook = (formData) => {
         console.log(key[0] + ", " + key[1]);
       }
     return http.post(`${apiEndpoint}/books/create`, formData, {withCredentials: true}, {
-        headers: formData.getHeaders()
+        headers: { "Content-Type": "multipart/form-data" }
     })
 }
 
 // read data of a resource
 const browseResources = (resourceType) => {
+    console.log(resourceType)
     return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
 }
 

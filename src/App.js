@@ -156,6 +156,9 @@ function App() {
                     render={() => (
                         <GetResources resourceType={"Book"} />
                     )}></Route> */}
+
+                {/* sp/thesis/Special Problem/Thesis ang types */}
+                {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
                 <Route path="/manage-resources" component={ManageResourcesPage}></Route>
                 <Route path="/manage-users" component={ManageUser}></Route>
 
@@ -173,7 +176,7 @@ function App() {
                 <Route
                     path="/view-sp-thesis"
                     render={() => (
-                        <ReadingSPTContainer resourceData={sampleSP} />
+                        <ReadingSPTContainer/>
                     )}></Route>
 
                 {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
