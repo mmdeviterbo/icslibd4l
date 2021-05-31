@@ -107,6 +107,10 @@ const AddNewSPThesisForm = ({ props }) => {
   const [authorList, setAuthorList] = useState([]);
   const [adviserList, setAdviserList] = useState([]);
 
+  const FormData = require("form-data");
+  // const fs = require("fs");
+  const formData = new FormData();
+
   useEffect(() => {
     function updateList() {
       if (author.fname && author.lname) {
@@ -163,22 +167,10 @@ const AddNewSPThesisForm = ({ props }) => {
     });
   };
 
-  //   const addAdviser = (e) => {
-  //     setAdviser({
-  //       ...adviser,
-  //       [e.target.name]: e.target.value,
-  //     });
-  //   };
-
   // get input from type selection
   const handleTypeChange = (e) => {
     setType(e.value);
   };
-
-  // adds the courses on array
-  // const handleCourseChange = (newCourse) => {
-  //     setCourses(newCourse);
-  // };
 
   // creates an array of keywords from the user input
   const handleChips = (chip) => {
@@ -197,11 +189,10 @@ const AddNewSPThesisForm = ({ props }) => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        const formData = { file: e.target.result };
-        // sourceCode.append("File", source_code);
-        setSourceCode(formData);
+        // const formData = { file: e.target.result };
+        // formData.append("file", file);
+        setSourceCode(file);
       };
-      // setSourceCode(e.target.files[0]);
     }
   };
 

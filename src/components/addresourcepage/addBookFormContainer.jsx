@@ -47,7 +47,7 @@ const AddBookFormContainer = () => {
   const [image, setImage] = useState("");
 
   const FormData = require("form-data");
-  const fs = require("fs");
+  // const fs = require("fs");
   const formData = new FormData();
 
   useEffect(() => {
