@@ -55,7 +55,7 @@ const sidebarNav = {
 }
 
 const wrapper = {
-    margin:"1vw 0 0 1.5vw"
+    margin:"1vw 0 0.5vw 1.5vw"
 }
 
 const sidebarTitle = {
