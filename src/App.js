@@ -149,7 +149,10 @@ function App() {
                 {/* sp/thesis/Special Problem/Thesis ang types */}
                 {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
                 <Route path="/manage-resources" component={ManageResourcesPage}></Route>
-                <Route path="/manage-users" component={ManageUser}></Route>
+                <Route 
+                    path="/manage-users" 
+                    render={()=><ManageUser user={user}/>}>                    
+                </Route>
 
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route
@@ -184,7 +187,7 @@ function App() {
             {background && (
                 <Route
                     path="/manage-users/delete-user"
-                    children={<DeleteModalContainer />}
+                    children={<DeleteModalContainer user={user}/>}
                 />
             )}
             {background && (
