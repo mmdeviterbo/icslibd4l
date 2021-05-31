@@ -114,7 +114,6 @@ const AddNewSPThesisForm = ({ props }) => {
       lname: "",
     },
   ]);
-  const [authorList, setAuthorList] = useState([]);
   const [adviserList, setAdviserList] = useState([]);
 
   const FormData = require("form-data");
@@ -129,13 +128,6 @@ const AddNewSPThesisForm = ({ props }) => {
     }
     updateList();
   }, [author]);
-
-  const addAuthor = (e) => {
-    setAuthor({
-      ...author,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();

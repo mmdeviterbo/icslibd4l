@@ -50,7 +50,6 @@ const AddBookFormContainer = () => {
       lname: "",
     },
   ]);
-  const [authorList, setAuthorList] = useState([]);
   const [courses, setCourses] = useState([]);
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
