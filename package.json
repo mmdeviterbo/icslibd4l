@@ -39,6 +39,7 @@
     "gridfs-stream": "^1.1.1",
     "gsap": "^3.6.1",
     "hookrouter": "^1.2.5",
+    "immer": "^8.0.1",
     "inherits": "^2.0.4",
     "isarray": "^2.0.5",
     "jsonwebtoken": "^8.5.1",
