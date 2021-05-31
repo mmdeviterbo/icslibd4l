@@ -115,7 +115,7 @@ export default function AdvancedSearch({appRef}){
         let tempStr = query.trim();
         console.log(tempStr);
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            history.push(`/search?search=${tempStr}`);
+            history.push(`/search?type=any&search=${tempStr}`); //change any to the variable that holds the search type
         }
         // call convert filter to object
         filterParser();    
@@ -308,7 +308,6 @@ const filterButton = {
     top: "-5%",
     left: "47%",
     border:"none",
-    // border: "0.08em solid",
     borderRadius:"10px",
     backgroundColor: "#0067A1",
     color: "white",
