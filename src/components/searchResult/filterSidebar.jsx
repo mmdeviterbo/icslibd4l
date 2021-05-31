@@ -21,7 +21,7 @@ export default function FilterSidebar({ searchFilterAuthor,
                 <div style={wrapper}>
                     <p style={sidebarTitle}>Filters</p>
                     {FilterSidebarData.map((item, index) => {
-                        return <FilterSubMenu 
+                        return <FilterSubMenu
                         item= {item} 
                         key={index}
                         searchFilterAuthor={searchFilterAuthor} 
@@ -45,7 +45,6 @@ export default function FilterSidebar({ searchFilterAuthor,
 }
 
 const sidebarNav = {
-    background: "white",
     display: "flex",
     height: "auto",
     width: "19vw",
@@ -55,13 +54,14 @@ const sidebarNav = {
     MsOverflowStyle:"none"
 }
 
+const wrapper = {
+    margin:"1vw 0 0 1.5vw"
+}
+
 const sidebarTitle = {
-    margin:"1vw 0 1vw 1.5vw",
+    // width: "100%",
+    marginBottom:"1vh",
     fontSize:"1.5em",
     fontWeight:"800",
     fontFamily:"Trebuchet MS"
-}
-
-const wrapper = {
-    width: "100%"
 }

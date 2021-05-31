@@ -278,6 +278,7 @@ const bottomContainer = {
 }
 
 const filtersContainer = {
+    background:"white",
     position:"sticky",
     overflowY:"overlay",
     top:"28vh",
@@ -303,10 +304,11 @@ const resultBottom = {
 const filterButton = {
     position: "relative",
     height: "2em",
-    width:"10em",
+    width:"8em",
     top: "-5%",
-    left: "35%",
-    border: "0.08em solid",
+    // left: "35%",
+    border:"none",
+    // border: "0.08em solid",
     borderRadius:"3px",
     backgroundColor: "#0067A1",
     color: "white",

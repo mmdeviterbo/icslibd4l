@@ -244,18 +244,19 @@ export default function FilterSubMenu({
 const sidebarLink = {
     display: "flex",
     color: "black",
-    justifyContent: "space-between",
     alignItems: "center",
-    padding: "0 1.5vw 0 0",
-    marginLeft: "1vw",
+    paddingLeft: "2vw",//margin
     listStyle: "none",
+    width:"17.5vw",
     height: "3vw",
-    fontSize: "1.1em",
+    fontSize: "1.2em",
     fontWeight: "600",
+    // justifyContent: "space-between",
+    // padding: "0 1.5vw 0 0",
 };
 
 const sidebarLabel = {
-    marginLeft: "0.75vw",
+    // marginLeft: "0.75vw",
 };
 
 // style for submenu
@@ -264,7 +265,7 @@ const dropdownNav = {
     display: "flex",
     color: "rgb(0, 103, 161)",
     fontSize: "1.3em",
-    marginLeft: "3rem",
+    paddingLeft: "3rem",//margin
     marginTop: "0.25em",
     marginBottom: "0.25em",
     textDecoration: "none",
@@ -273,20 +274,20 @@ const dropdownNav = {
 
 // style for more sub nav
 const moreOptionStyle = {
-    alignItems: "center",
-    display: "flex",
-    color: "rgb(0, 103, 161)",
-    fontSize: "0.75em",
-    left: "-20px",
-    position: "relative",
-    zIndex: "1",
+    // alignItems: "center",
+    // display: "flex",
+    // color: "rgb(0, 103, 161)",
+    // fontSize: "0.75em",
+    // left: "-20px",
+    // position: "relative",
+    // zIndex: "1",
 };
 
 const optionRowStyle = {
-    backgroundColor: "white",
-    overflowWrap: "break-word",
-    width: "15vw",
-    zIndex: "1",
+    // backgroundColor: "white",
+    // overflowWrap: "break-word",
+    // width: "15vw",
+    // zIndex: "1",
 };
 
 // const moreStyle = {
