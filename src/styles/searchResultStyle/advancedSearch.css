@@ -64,3 +64,8 @@
 .paginationDisabled a {
     visibility: hidden;
 }
+
+div .row {
+    position: relative;
+    left: 30px;
+}

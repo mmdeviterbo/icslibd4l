@@ -39,87 +39,102 @@ export const FilterSidebarData = [
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                label: "CMSC128",
-                link: "/subject/CMSC128",
-            },
-            {
                 label: "CMSC123",
-                link: "/subject/CMSC123",
             },
             {
-                label: "STAT101",
-                link: "/subject/STAT101",
+                label: "CMSC127",
+            },
+            {
+                label: "CMSC128",
             },
             {
                 label: "MORE",
-                iconClosed: <FaIcons.FaAngleDown/>,
-                iconOpened: <FaIcons.FaAngleUp/>,
-                link: "/",
+                iconClosed: <FaIcons.FaAngleRight/>,
+                iconOpened: <FaIcons.FaAngleLeft/>,
                 moreSubNav: [
-                    {
-                        mlabel: "MATH27"
-                    },
-                    {
-                        mlabel: "CMSC56"
-                    },
-                    {
-                        mlabel: "CMSC57"
-                    }
-                    
+                        {
+                            mlabel: "CMSC21"
+                        },
+                        {
+                            mlabel: "CMSC56"
+                        },
+                        {
+                            mlabel: "CMSC57"
+                        },
+                        {
+                            mlabel: "CMSC100"
+                        },
+                        {
+                            mlabel: "CMSC150"
+                        }
                 ]
             },
         ]             
     },
     {
         label: "Topic",
-        link: "/topic",
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Agriculture",
-                link: "/course/agriculture",
+
             },
             {
                 label: "Artificial Intelligence",
-                link: "/course/ai",
+
             },
             {
                 label: "Database",
-                link: "/course/database",
+
             },
             {
                 label: "MORE",
-                link: "/",
+                iconClosed: <FaIcons.FaAngleRight/>,
+                iconOpened: <FaIcons.FaAngleLeft/>,
+                moreSubNav: [
+                        {
+                            mlabel: "Algorithms"
+                        },
+                        {
+                            mlabel: "Neural Networks"
+                        },
+                        {
+                            mlabel: "Robot Modeling"
+                        },
+                        {
+                            mlabel: "Mobile Development"
+                        },
+                        {
+                            mlabel: "Web Development"
+                        }
+                ]
+                
             },
         ]                
     },
     {
         label: "Type",
-        link: "/type",
+
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
                 label: "Book",
-                link: "/type/books",
                 value: "books"
             },
             {
                 label: "Special Problem",
-                link: "/type/sp",
                 value: "special problem"
             },
             {
                 label: "Thesis",
-                link: "/type/thesis",
                 value: "thesis"
             }
         ]                 
     },
     {
         label: "Year",
-        link: "/year",
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [

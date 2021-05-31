@@ -411,7 +411,7 @@ router.get("/search", async (req, res) => {
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
-
+        console.log(final_arr);
         // FILTER ENTRIES in final_arr
 
         // Filter by title (case insensitive, checks for substring match)
@@ -513,10 +513,12 @@ router.get("/search", async (req, res) => {
                 res.status(400).send(error);
             }
         }
-
+        
         if (!res.headersSent){
+            console.log(final_arr);
             res.send(final_arr); // filtered search results
         }
+        
     }
     // REFERENCES for search filter:
     // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes

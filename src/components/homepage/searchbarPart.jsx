@@ -24,7 +24,7 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
         let tempStr = localSearch.trim();
     
         if(tempStr.length!==0  && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            history.push(`/search?st=${filterTag}&q=${tempStr}`);
+            history.push(`/search?type=${filterTag}&search=${tempStr}`);
         }
     }
 

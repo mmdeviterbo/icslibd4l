@@ -76,8 +76,8 @@ export default function AdvancedSearch({appRef}){
 
     url = url.replace('http://localhost:3000/search?',''); 
     //edit before prod; url = url.replace(/\+/g,' '); or should i use split and have ? as a delimeter tho the search string can also contain '?'
-    urlQuery = decodeURIComponent((url.split('&')[1]).replace('q=',''));
-    urlFilter = (url.split('&')[0]).replace('st=','');
+    urlQuery = decodeURIComponent((url.split('&')[1]).replace('search=',''));
+    urlFilter = (url.split('&')[0]).replace('type=','');
     // if(url.split('&').length > 1){
     //     urlQuery = decodeURIComponent((url.split('&')[0]).replace('q=',''));
     //     urlFilter = (url.split('&')[1]).replace('f=','');
@@ -91,12 +91,11 @@ export default function AdvancedSearch({appRef}){
     // console.log(urlRequest);
     console.log(resultsFilterArr)
 
-    // http req
+    // http request
     async function fetchData() {
         try{
             //  objFilter store filters in an object <field>:<value>
             //  urlRequest string that contains the search query -> example: search?type=title
-            // console.log(requestOptions.body);
             const response = await ResourceService.searchSpThesis(objFilter,urlRequest,);
             setResultsFilterArr(response);
             console.log(resultsFilterArr)
@@ -114,12 +113,10 @@ export default function AdvancedSearch({appRef}){
     const handleForm=(e)=>{
         e.preventDefault();
         let tempStr = query.trim();
-    
+        console.log(tempStr);
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            history.push(`/search?q=${tempStr}`);
+            history.push(`/search?search=${tempStr}`);
         }
-        // let loc = useLocation();
-        // setUrlRequest(`${loc.pathname}${loc.search}`);
         // call convert filter to object
         filterParser();    
     }
@@ -137,7 +134,6 @@ export default function AdvancedSearch({appRef}){
             ){
                 continue;
             }
-            console.log(fieldArray[i].toLowerCase());
             if(fieldArray[i].toLowerCase() === "subject" || fieldArray[i].toLowerCase() === "topic"){
                 obj["keyword"].push(filterArray[i]) ;
             }
@@ -154,15 +150,15 @@ export default function AdvancedSearch({appRef}){
         if(searchFilterYear !== ""){
             obj["year"] = parseInt(searchFilterYear);
         }
+        // update later from search dropdown
+        console.log(fieldArray);
+        if(fieldArray.indexOf("Type") !== -1){
+            obj.type = filterArray[fieldArray.indexOf("Type")];
+        }else{
+            obj.type = urlFilter;
+        }
         setObjFilter(obj);
     }
-
-    // include the object in the request body
-    // const requestOptions = {
-    //     method: 'GET',
-    //     body: objFilter
-    // }
-    // console.log(requestOptions)
 
     return (
         <form style={searchMainContainer} onSubmit={handleForm} className="searchMainContainer">
@@ -191,11 +187,10 @@ export default function AdvancedSearch({appRef}){
                     setfieldArray={setfieldArray}
                     />
 
-                    {/* TODO: STYLE AND HANDLE ON CLICK */}
-                    <button variant="primary">
-                        {/* onclick = call filterparse */}
+                    {/* Apply filters button */}
+                    <button style={filterButton} onClick={handleForm}>
                         Apply Filters
-                    </button>{' '}
+                    </button>
                 </div>
 
                 <div style={resultsOuterContainer}>
@@ -303,4 +298,20 @@ const resultTop = {
 
 const resultBottom = {
     marginLeft:"5vw"
+}
+
+const filterButton = {
+    position: "relative",
+    height: "2em",
+    width:"10em",
+    top: "-5%",
+    left: "35%",
+    border: "0.08em solid",
+    borderRadius:"3px",
+    backgroundColor: "#0067A1",
+    color: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "Montserrat",
+    textTransform: "capitalize",
 }
