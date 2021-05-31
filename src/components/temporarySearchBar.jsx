@@ -11,7 +11,7 @@ const SearchResources = ({ type }) => {
                 placeholder={
                     type === "resource"
                         ? "Search for Resources #temporary search"
-                        : "Search for users"
+                        : "Search for users #temporary search"
                 }
             />
             {/* temporary search bar */}

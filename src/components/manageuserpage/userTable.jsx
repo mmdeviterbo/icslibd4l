@@ -46,7 +46,7 @@ export default function UserTable({ user }) {
     // Array for user data retreived from database.
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     // Computes the number of rows missing in a 10 per item pagination
     const emptyRows =
         rowsPerPage -
@@ -69,7 +69,8 @@ export default function UserTable({ user }) {
             style={{
                 align: "left",
                 fontWeight: "bold",
-                fontSize: "14px",
+                fontSize: "1.4rem",
+                zIndex: "0",
             }}>
             <span>{header_text}</span>
         </TableCell>
@@ -77,7 +78,7 @@ export default function UserTable({ user }) {
 
     const useStyles = makeStyles({
         root: {
-            borderRadius: "8px",
+            // borderRadius: "8px",
         },
     });
 
@@ -87,33 +88,34 @@ export default function UserTable({ user }) {
         <TableRow hover key={entry.googleId} user={entry}>
             <TableCell
                 style={{
+                    fontSize: "16px",
                     width: "15%",
-                    fontWeight: "bold",
                 }}>
                 <span>{entry.googleId}</span>
             </TableCell>
             <TableCell
                 style={{
+                    fontSize: "16px",
                     width: "20%",
                     align: "left",
-                    fontWeight: "bolder",
                     color: "black",
                 }}>
                 <Link to={`/viewuser/${entry.googleId}`}>{entry.fullName}</Link>
             </TableCell>
             <TableCell
                 style={{
+                    fontSize: "16px",
                     width: "20%",
                     align: "left",
-                    fontWeight: "bolder",
                     color: "#FFFFFF",
                 }}>
                 <Link to={`/viewuser/${entry.googleId}`}>{entry.nickname}</Link>
             </TableCell>
-            <TableCell style={{ width: "20  %" }}>
+            <TableCell style={{ fontSize: "16px", width: "20%" }}>
                 <span>{entry.email}</span>
             </TableCell>
-            <TableCell style={{ width: "15%", textAlign: "left" }}>
+            <TableCell
+                style={{ fontSize: "16px", width: "15%", textAlign: "left" }}>
                 <span>{entry.userType}</span>
             </TableCell>
             <TableCell
@@ -123,8 +125,8 @@ export default function UserTable({ user }) {
                     fontSize: "1.5rem",
                 }}>
                 <i
-                    className="fa fa-ellipsis-h"
-                    style={{ margin: "10px", color: "#CFCFCF" }}></i>
+                    className="table-icons fa fa-pencil"
+                    style={{ margin: "10px", color: "gray" }}></i>
                 <Link
                     to={{
                         pathname: "/manage-users/delete-user",
@@ -142,8 +144,8 @@ export default function UserTable({ user }) {
                         },
                     }}>
                     <i
-                        className="fa fa-trash-o"
-                        style={{ margin: "10px", color: "#CFCFCF" }}></i>
+                        className="table-icons fa fa-trash-o"
+                        style={{ margin: "10px", color: "red" }}></i>
                 </Link>
             </TableCell>
         </TableRow>

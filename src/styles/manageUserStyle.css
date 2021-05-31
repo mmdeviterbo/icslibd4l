@@ -5,18 +5,47 @@
     padding-top: 50px;
     font-weight: bold;
     font-size: 2.75rem;
+    z-index: -1;
 }
 
 .input-group {
     padding: 0px 100px;
 }
     
+/* filter */
+
+.user-clrbtn{    
+    display:flex; 
+    margin-top: 0.4rem;
+}
+/* icon */
+.user-clrbtn svg{
+    vertical-align: -0.3rem;
+    padding-bottom: 0.2rem;
+    padding-right: 0.3rem;
+}
+.user-filter {
+    width : 17%;
+    font-size: 14px;
+}
+
+#user-filters-clear{
+    vertical-align:middle;
+    /* text-decoration: underline; */
+    color: #828282;
+}
+
 
 /* Table */
 
 .usertable-container {
-    padding: 2rem 2.5rem 1rem 2.5rem;
+    width: 100%;
+    padding-top: 1.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 4rem;
     background-color: #F5F5F5;
+    z-index: -2;
 }
 
 
@@ -28,4 +57,9 @@
 .user-table-cell {
     align-items: left;
     
+}
+
+.table-icons:hover {
+    transition: transform 100ms ease, box-shadow 125ms ease !important; 
+    transform: scale(1.25) !important;
 }
