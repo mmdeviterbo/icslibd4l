@@ -18,7 +18,7 @@ const AddNewResource = () => {
                         </svg>
                     </span>
 
-                    <span class="res-btn-txt">Add Book</span>
+                    <span className="res-btn-txt">Add Book</span>
                 </button>
             </a>
         </div>

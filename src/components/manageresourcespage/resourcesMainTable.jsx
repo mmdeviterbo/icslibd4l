@@ -57,9 +57,24 @@ function stableSort(array, comparator) {
 }
 
 const resHeadCells = [
-  { id: "resid", numeric: false, disablePadding: true, label: "ID" },
-  { id: "title", numeric: false, disablePadding: false, label: "Title" },
-  { id: "author", numeric: false, disablePadding: false, label: "Author" },
+  {
+    id: "resid",
+    numeric: false,
+    disablePadding: true,
+    label: "ID",
+  },
+  {
+    id: "title",
+    numeric: false,
+    disablePadding: false,
+    label: "Title",
+  },
+  {
+    id: "author",
+    numeric: false,
+    disablePadding: false,
+    label: "Author",
+  },
   {
     id: "resclassif",
     numeric: false,
@@ -85,11 +100,11 @@ const resHeadCells = [
 function EnhancedTableHead(props) {
   const {
     classes,
-    onSelectAllClick,
+    // onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
+    // numSelected,
+    // rowCount,
     onRequestSort,
   } = props;
   const createSortHandler = (property) => (event) => {
@@ -101,11 +116,11 @@ function EnhancedTableHead(props) {
       <TableRow>
         <TableCell padding="checkbox">
           {/* <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          /> */}
+                        indeterminate={numSelected > 0 && numSelected < rowCount}
+                        checked={rowCount > 0 && numSelected === rowCount}
+                        onChange={onSelectAllClick}
+                        inputProps={{ 'aria-label': 'select all desserts' }}
+                        /> */}
         </TableCell>
         {resHeadCells.map((headCell) => (
           <TableCell
@@ -114,6 +129,7 @@ function EnhancedTableHead(props) {
             align={"left"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{}}
           >
             <TableSortLabel
               active={orderBy === headCell.id}

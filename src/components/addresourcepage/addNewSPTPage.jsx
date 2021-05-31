@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-// import { ItemGroup } from "semantic-ui-react";
+// import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from "../../services/resourceService";
 import ChipInput from "material-ui-chip-input";
-import { set } from "mongoose";
-// import AddResourcesSidebar from "./addResourcesHeader";
+import AddResourcesHeader from "./addResourcesHeader";
+// import ChipInput from "material-ui-chip-input";
+import { nanoid } from "nanoid";
+import { produce } from "immer";
 
 const classificationOptions = [
   { value: "Special Problem", label: "Special Problem" },
@@ -97,6 +99,7 @@ const AddNewSPThesisForm = ({ props }) => {
   const [keywords, setKeyword] = useState();
   // multiple authors should be possible
   const [author, setAuthor] = useState({
+    authorid: "",
     fname: "",
     lname: "",
   });
@@ -104,6 +107,13 @@ const AddNewSPThesisForm = ({ props }) => {
     fname: "",
     lname: "",
   });
+  const [authorList, setAuthorList] = useState([
+    {
+      authorid: nanoid(5),
+      fname: "",
+      lname: "",
+    },
+  ]);
   const [authorList, setAuthorList] = useState([]);
   const [adviserList, setAdviserList] = useState([]);
 
@@ -119,6 +129,13 @@ const AddNewSPThesisForm = ({ props }) => {
     }
     updateList();
   }, [author]);
+
+  const addAuthor = (e) => {
+    setAuthor({
+      ...author,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
