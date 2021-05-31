@@ -68,9 +68,8 @@ export default function UserTable({ user }) {
             key={index}
             style={{
                 align: "left",
-                fontWeight: "bolder",
-                fontSize: "16px",
-                color: "black",
+                fontWeight: "bold",
+                fontSize: "14px",
             }}>
             <span>{header_text}</span>
         </TableCell>
