@@ -6,6 +6,7 @@ input {
   border-radius: 8px;
   padding: 12px;
   outline-style: none;
+  width: 100%;
 }
 
 input:focus {
@@ -36,13 +37,14 @@ input:focus {
   padding-left: none;
   padding-top: 21px;
   align-items: flex-start;
-
+  
 }
 
 .grid-columns {
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 12px 0px 12px 12px;
+  /* border: 1px solid red; */
 }
 
 .label-container {
