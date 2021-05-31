@@ -8,9 +8,9 @@ import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
 // import ManageResPage from './components/manageresourcespage/manageresourcespage'
 // import AddResourcePage from "./components/addresourcepage/addNewResourcesPage";
-import EditResourcePage from "./components/editresourcepage/editResourceForm";
+import EditSPThesisPage from "./components/editresourcepage/editSPTPage";
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
-import AddBookFormContainer from "./components/addresourcepage/addBookFormContainer";
+import AddBookPage from "./components/addresourcepage/addBookPage";
 import ManageUser from "./components/manageuserpage/manageUserPage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import PersonService from "./services/personService";
@@ -152,10 +152,10 @@ function App() {
 
                 <Route
                     path="/add-new-book"
-                    component={AddBookFormContainer}></Route>
+                    component={AddBookPage}></Route>
                 <Route
                     path="/edit-resource"
-                    component={EditResourcePage}></Route>
+                    component={EditSPThesisPage}></Route>
                 <Route
                     path="/view-sp-thesis"
                     render={() => (

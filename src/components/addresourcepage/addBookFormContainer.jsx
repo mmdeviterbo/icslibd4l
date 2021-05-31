@@ -132,7 +132,6 @@ const AddBookFormContainer = () => {
 
     return (
         <div className="add-res-form-cont">
-            <AddResourcesHeader/>
             <form id="addBookForm" onSubmit={handleSubmit} autocomplete="off">
                 <div className = "form-container">
 

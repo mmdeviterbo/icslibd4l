@@ -189,8 +189,6 @@ const AddNewSPThesisForm = ({props}) => {
 
     return(
         <div className = "add-res-form-cont">
-            {/* header at the side */}
-            <AddResourcesHeader/>
 
             {/* main form */}
             <form id = "addSPTForm" onSubmit = {handleSubmit} autocomplete="off"> 
