@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useLocation } from "react-router-dom";
 import PersonService from "../../services/personService";
-import { Select } from "@material-ui/core";
+import Select from "react-select";
 
 const tableHeader = [
   "User ID",
@@ -21,32 +21,60 @@ const tableHeader = [
   " ",
 ];
 
-let tableEntry = [];
-
-// const initialState = {
-//   users: [tableEntry],
-// };
-
 export default function UserTable({ user }) {
   // Array for user data retreived from database.
   const [userList, setUserList] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isEditing, setIsEditing] = useState(false);
+  const [newClassification, setNewClassification] = useState(0);
+  const [selectedUser, setSelectedUser] = useState({});
 
-  tableEntry = userList;
-
-  // Computes the number of rows missing in a 10 per item pagination
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
+  const location = useLocation();
+  let tableEntry = userList;
 
   const classificationString = ["Admin", "Faculty", "Staff", "Student"];
-  const location = useLocation();
+  const classificationObj = [
+    {
+      value: "Admin",
+      label: "Admin",
+    },
+    {
+      value: "Faculty",
+      label: "Faculty",
+    },
+    {
+      value: "Staff",
+      label: "Staff",
+    },
+    {
+      value: "Student",
+      label: "Student",
+    },
+  ];
 
+  // Column Header
+  const header = tableHeader.map((header_text, index) => {
+    return (
+      <TableCell key={index} style={{ fontWeight: "bolder" }}>
+        <span>{header_text}</span>
+      </TableCell>
+    );
+  });
+
+  // executes if the location is changed. (Opening modals)
   useEffect(() => {
     readUsers();
-  }, [user]);
+  }, [location]);
 
+  // Set the current page of table to the first page if the previous page becomes empty.
+  useEffect(() => {
+    if (userList.length === rowsPerPage && page > 0) {
+      setPage(0);
+    }
+  }, [userList.length, rowsPerPage, page]);
+
+  // Get users from database
   const readUsers = async () => {
     try {
       await PersonService.readAllUsers().then((response) => {
@@ -65,6 +93,7 @@ export default function UserTable({ user }) {
     setPage(0);
   };
 
+  // Table style
   const useStyles = makeStyles({
     root: {
       borderRadius: "10px",
@@ -73,24 +102,68 @@ export default function UserTable({ user }) {
 
   const tableContainer = useStyles();
 
-  const editClassification = () => {
+  // Sets newClassification variable if the select field is changed
+  const handleClassificationChange = (e) => {
+    const classificationIdx = classificationString.indexOf(e.value) + 1;
+    setNewClassification(classificationIdx);
+  };
+
+  // Functional component for new classification selection
+  const EditClassification = ({ entry, index }) => {
     return (
       <Select
-        className="classification-chuchu"
-        placeholder={"Classification"}
-        options={classificationString}
+        className="classification-select"
+        placeholder={`${classificationString[newClassification - 1]}`}
+        options={classificationObj}
+        id={`select-classification-${index}`}
+        onChange={handleClassificationChange}
       />
     );
   };
 
-  // Column Header
-  const header = tableHeader.map((header_text, index) => {
-    return (
-      <TableCell key={index} style={{ fontWeight: "bolder" }}>
-        <span>{header_text}</span>
-      </TableCell>
-    );
-  });
+  // Toggles the classification selection field when admin wants to edit a user.
+  const toggleEdit = (rowIndex) => {
+    setUserList((prev) => {
+      return userList.map((user, index) => {
+        if (rowIndex === index) {
+          // The selected user is being edited currently
+          if (isEditing && isEditing === user.isEditable) {
+            setNewClassification(user.userType);
+            setSelectedUser({});
+            setIsEditing(false);
+            return { ...user, isEditable: !user.isEditable };
+            // There is an ongoing edit but the selected user is not the one being edited
+          } else if (isEditing && isEditing !== user.isEditable) {
+            console.log("Still editing a different user.");
+            // No ongoing edits
+          } else {
+            setNewClassification(user.userType);
+            setSelectedUser(user);
+            setIsEditing(true);
+            return { ...user, isEditable: !user.isEditable };
+          }
+        }
+        return user;
+      });
+    });
+  };
+
+  // Handler function for saving the changes is user classification
+  // const handleSave = async (rowIndex) => {
+  //   toggleEdit(rowIndex);
+  // };
+
+  // Handler function for discarding the changes in user classification
+  const discardChange = (rowIndex) => {
+    // TODO: If the admin selected a new classification, there should be a prompt that ask if the user will discard the current changes.
+    // Else, if there are no changes, then the edit mode should quit immediately.
+    console.log(selectedUser);
+    toggleEdit(rowIndex);
+  };
+
+  // Computes the number of rows missing in a 10 per item pagination
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
 
   const entries = tableEntry.map((entry, index) => {
     return (
@@ -101,48 +174,84 @@ export default function UserTable({ user }) {
         <TableCell
           style={{ align: "left", fontWeight: "bolder", color: "black" }}
         >
-          <Link to={`/viewuser/${entry.googleId}`}>{entry.fullName}</Link>
+          <span>{entry.fullName}</span>
         </TableCell>
         <TableCell
-          style={{ align: "left", fontWeight: "bolder", color: "#FFFFFF" }}
+          style={{ align: "left", fontWeight: "bolder", color: "black" }}
         >
-          <Link to={`/viewuser/${entry.googleId}`}>{entry.nickname}</Link>
+          <span>{entry.nickname}</span>
         </TableCell>
         <TableCell style={{ width: "80px" }}>
           <span>{entry.email}</span>
         </TableCell>
         <TableCell style={{ width: "80px", textAlign: "center" }}>
-          <span className="user-classification-cell">
-            {classificationString[entry.userType - 1]}
-          </span>
+          {entry.isEditable ? (
+            <EditClassification entry={entry} index={index} />
+          ) : (
+            <span>{classificationString[entry.userType - 1]}</span>
+          )}
         </TableCell>
         <TableCell style={{ textAlign: "center", fontSize: "1.5rem" }}>
-          <i
-            className="fa fa-ellipsis-h"
-            style={{ margin: "10px", color: "#CFCFCF" }}
-          ></i>
-          <Link
-            to={{
-              pathname: "/manage-users/delete-user",
-              state: {
-                background: location,
-                id: entry.googleId,
-                item: "user",
-                user: {
-                  googleId: entry.googleId,
-                  email: entry.email,
-                  fullName: entry.fullName,
-                  nickName: entry.nickname,
-                  userType: entry.userType,
-                },
-              },
-            }}
-          >
-            <i
-              className="fa fa-trash-o"
-              style={{ margin: "10px", color: "#CFCFCF" }}
-            ></i>
-          </Link>
+          {entry.isEditable ? (
+            <>
+              <Link
+                to={{
+                  pathname: "/manage-users/save-changes",
+                  state: {
+                    background: location,
+                    id: entry.googleId,
+                    item: "user",
+                    user: {
+                      googleId: entry.googleId,
+                      userType: newClassification,
+                      fullName: entry.fullName,
+                    },
+                  },
+                }}
+              >
+                <i
+                  className={"fa fa-floppy-o"}
+                  onClick={(e) => toggleEdit(index)}
+                  style={{ margin: "10px", color: "#CFCFCF" }}
+                ></i>
+              </Link>
+              <i
+                className="fa fa-times"
+                onClick={(e) => discardChange(index)}
+                style={{ margin: "10px", color: "#CFCFCF" }}
+              ></i>
+            </>
+          ) : (
+            <>
+              <i
+                className={"fa fa-edit"}
+                onClick={(e) => toggleEdit(index)}
+                style={{ margin: "10px", color: "#CFCFCF" }}
+              ></i>
+              <Link
+                to={{
+                  pathname: "/manage-users/delete-user",
+                  state: {
+                    background: location,
+                    id: entry.googleId,
+                    item: "user",
+                    user: {
+                      googleId: entry.googleId,
+                      email: entry.email,
+                      fullName: entry.fullName,
+                      nickName: entry.nickname,
+                      userType: entry.userType,
+                    },
+                  },
+                }}
+              >
+                <i
+                  className="fa fa-trash-o"
+                  style={{ margin: "10px", color: "#CFCFCF" }}
+                ></i>
+              </Link>
+            </>
+          )}
         </TableCell>
       </TableRow>
     );
