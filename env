@@ -1,4 +1,0 @@
-jwtPublicKey = "C4XWnhT[^h]$#wc}"
-jwtPrivateKey = "EUTY8L,Gf9T5kkQ5"
-db = "mongodb+srv://sampleuser1:password1234@cluster0.0iawg.mongodb.net/icslibd4l?retryWrites=true&keepAlive=true&w=majority"
-SERVER_PORT = 3001
