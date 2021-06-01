@@ -247,48 +247,33 @@ router.get("/search", async (req, res) => {
     }
 });
 
+//summary report function
+/**************************************************** 
+Req object: 
+    query: type
+    values: [books, spThesis, all]
+TODO:
+    complete templates in the reportTemplate folder (add placeholders)
+    complete the function
+GUIDE:
+    https://www.youtube.com/watch?v=9VgghGKx_1c
+TIP:
+    how to generate pdf from multiple html:
+    https://stackoverflow.com/questions/48510210/puppeteer-generate-pdf-from-multiple-htmls
+********************************************************/
 router.get("/report", async (req, res) => {
     //type of report to be generated
     const type = req.query.type;
-    let userHTML;
 
     console.log(type);
     try {
+        //init
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        
-        //users
-        if(type === "all" || type === "users"){
-            const users = await UserModel.find().sort({userType:1});
-            console.log(users);
-        }
 
-        //user logs
-        if(type === "all" || type === "userLogs"){
-            const userLogs = await UserModel.aggregate([
-                {$match: {}},
-                {
-                    $lookup: {
-                        from: "userlogs",
-                        localField: "googleId",
-                        foreignField: "googleId",
-                        as: "logs"
-                    },
-                    $sort: {
-                        
-                    }
-                },
-                {
-                    $sort: {
-                        userType: -1
-                    }
-                }
-            ]);
-            console.log(userLogs);
-        }
-        
         //books
         if(type === "all" || type === "books"){
+            //query for all book information
             //copied from book router search book function
             const books = await BookModel.aggregate(
                 [
@@ -311,11 +296,11 @@ router.get("/report", async (req, res) => {
                     },
                 ]
             );
-            console.log(books);
         }
 
         //sp and thesis
         if(type === "all" || type === "spThesis"){
+            //query for all sp and thesis information
             //copied from spThesisRouter browse function 
             const spThesis = await  ThesisModel.aggregate(
                 [
@@ -364,9 +349,36 @@ router.get("/report", async (req, res) => {
                     },
                 ]
             );
-            console.log(spThesis);
         }
-        
+
+        //users, not a priority
+        if(type === "users"){
+            const users = await UserModel.find().sort({userType:1});
+            console.log(users);
+        }
+
+        //user logs, not a priority
+        if(type === "userLogs"){
+            const userLogs = await UserModel.aggregate([
+                {$match: {}},
+                {
+                    $lookup: {
+                        from: "userlogs",
+                        localField: "googleId",
+                        foreignField: "googleId",
+                        as: "logs"
+                    },
+                    $sort: {
+                        
+                    }
+                },
+                {
+                    $sort: {
+                        userType: -1
+                    }
+                }
+            ]);
+        }
         
         await page.setContent('<h1>hello</h1>');
         await page.emulateMediaType('screen');
@@ -376,7 +388,6 @@ router.get("/report", async (req, res) => {
             printBackground: true
         });
 
-        console.log('done');
         await browser.close();
 
         res.send();
