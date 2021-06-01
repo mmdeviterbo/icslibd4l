@@ -15,9 +15,12 @@ export default function AdvancedSearch({appRef}){
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
-    const [searchFilterAdviser, setSearchFilterAdviser] = useState("");
-    const [searchFilterTitle, setSearchFilterTitle] = useState("");
-    const [searchFilterYear, setSearchFilterYear] = useState("");
+    const [searchFilterAdviser, setSearchFilterAdviser] = useState(null);
+    const [searchFilterPublisher, setSearchFilterPublisher] = useState("");
+    // Date is set to Current Date extract year
+    const [searchFilterYear, setSearchFilterYear] = useState(null);
+    // use URL to change the resource type to be requested
+    const [resourceType, setResourceType] = useState(`${useLocation().search}`.substring(`${useLocation().search}`.indexOf("=")+1,`${useLocation().search}`.indexOf("&")));
 
     // test for multifiltering
     const [fieldArray, setfieldArray] = useState([]);
@@ -83,22 +86,21 @@ export default function AdvancedSearch({appRef}){
     //     urlFilter = (url.split('&')[1]).replace('f=','');
     // }else
     //     urlQuery = decodeURIComponent((url.replace('q=','')));
-
-
-    // console.log(filterArray);
-    // console.log(fieldArray);
+    console.log(searchFilterAdviser);
     // console.log("results:"+resultsFilterArr);
     // console.log(urlRequest);
-    console.log(resultsFilterArr)
+    // console.log(resultsFilterArr)
+    // console.log(searchFilterYear);
 
     // http request
     async function fetchData() {
         try{
             //  objFilter store filters in an object <field>:<value>
             //  urlRequest string that contains the search query -> example: search?type=title
+            console.log(urlRequest);
             const response = await ResourceService.searchSpThesis(objFilter,urlRequest,);
             setResultsFilterArr(response);
-            console.log(resultsFilterArr)
+            // console.log(resultsFilterArr)
         }catch (err){
             console.log(err);
         }
@@ -115,8 +117,9 @@ export default function AdvancedSearch({appRef}){
         let tempStr = query.trim();
         console.log(tempStr);
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            history.push(`/search?search=${tempStr}`);
+            history.push(`/search?type=${resourceType}&search=${tempStr}`);
         }
+        setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
         // call convert filter to object
         filterParser();    
     }
@@ -129,7 +132,6 @@ export default function AdvancedSearch({appRef}){
         for (var i = 0; i < fieldArray.length; i++){
             if( fieldArray[i] === "Adviser" || 
                 fieldArray[i] === "Author" ||
-                fieldArray[i] === "Title" ||
                 fieldArray[i] === "Year"
             ){
                 continue;
@@ -144,18 +146,13 @@ export default function AdvancedSearch({appRef}){
         if(searchFilterAdviser !== ""){
             obj["adviser"] = searchFilterAdviser;
         }
-        if(searchFilterTitle !== ""){
-            obj["title"] = searchFilterTitle;
+        if(searchFilterYear !== null){
+            // Year must be set to NUll
+            obj["year"] = searchFilterYear.getFullYear();
         }
-        if(searchFilterYear !== ""){
-            obj["year"] = parseInt(searchFilterYear);
-        }
-        // update later from search dropdown
         console.log(fieldArray);
-        if(fieldArray.indexOf("Type") !== -1){
-            obj.type = filterArray[fieldArray.indexOf("Type")];
-        }else{
-            obj.type = urlFilter;
+        if(obj["keyword"].length == 0){
+            delete obj.keyword;
         }
         setObjFilter(obj);
     }
@@ -177,10 +174,12 @@ export default function AdvancedSearch({appRef}){
                     setSearchFilterAuthor={setSearchFilterAuthor}
                     searchFilterAdviser={searchFilterAdviser} 
                     setSearchFilterAdviser={setSearchFilterAdviser}
-                    searchFilterTitle={searchFilterTitle}
-                    setSearchFilterTitle={setSearchFilterTitle}
+                    resourceType={resourceType}
+                    setResourceType={setResourceType}
                     searchFilterYear={searchFilterYear}
-                    setSearchFilterYear={setSearchFilterYear} 
+                    setSearchFilterYear={setSearchFilterYear}
+                    searchFilterPublisher={searchFilterPublisher}
+                    setSearchFilterPublisher={setSearchFilterPublisher}
                     filterArray={filterArray}
                     setfilterArray={setfilterArray}
                     fieldArray={fieldArray}
@@ -304,7 +303,6 @@ const filterButton = {
     position: "relative",
     height: "2em",
     width:"10em",
-    top: "-5%",
     left: "35%",
     border: "0.08em solid",
     borderRadius:"3px",

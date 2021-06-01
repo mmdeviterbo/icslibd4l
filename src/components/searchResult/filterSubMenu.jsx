@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import SearchBar from "./searchBar";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import {AdviserData} from "./adviserData";
 
 export default function FilterSubMenu({
     item,
@@ -7,25 +10,27 @@ export default function FilterSubMenu({
     setSearchFilterAuthor,
     searchFilterAdviser,
     setSearchFilterAdviser,
+    searchFilterPublisher,
+    setSearchFilterPublisher,
     filterArray,
     setfilterArray,
     fieldArray,
     setfieldArray,
-    searchFilterTitle,
-    setSearchFilterTitle,
-    searchFilterYear,
-    setSearchFilterYear,
 }) {
     const [subnav, setSubnav] = useState(false);
     const [moreSubnav, setmoreSubnav] = useState(false);
 
     // functions for opening and closing submenus
     const showSubnav = () => setSubnav(!subnav);
-    const showMoreSubnav = () => setmoreSubnav(!moreSubnav);
-    // const showMoreSubnav = (event) => {
-    //     setmoreSubnav(!moreSubnav);
-    //     event.target.style.backgroundColor = "white";
-    // }
+    const showMoreSubnav = () => {
+        setmoreSubnav(!moreSubnav);
+        let col_arr = document.getElementsByClassName("more");
+        for (let i = 0; i < col_arr.length; i++) {
+            if (col_arr[i].innerHTML === "MORE") {
+                col_arr[i].style.backgroundColor = "white";
+            }
+        }
+    };
 
     const moreTopics = [
         {
@@ -99,6 +104,14 @@ export default function FilterSubMenu({
         }
     };
 
+    // const handleAdviserChange = () => {
+    //     setSearchFilterAdviser({fname:adviserHolder.value.fname, lname:adviserHolder.value.lname});
+    // }
+
+    const handleAdviserChange = (newVal) => {
+        setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
+    }
+
     return (
         <div>
             {/*displays the submenu*/}
@@ -132,22 +145,16 @@ export default function FilterSubMenu({
                                 {/* SHOW MORE FILTERS */}
                                 <div className="row">
                                     <div
-                                        className="column"
+                                        className="more"
                                         onClick={
                                             item2.moreSubNav &&
-                                            // (()=> showMoreSubnav(Event))
+                                            // (()=> showMoreSubnav(item2))
                                             showMoreSubnav
                                         }
                                     >
                                         {item2.label}
                                     </div>
-                                    <div
-                                        className="column"
-                                        style={{
-                                            backgroundColor: "white",
-                                            width: "100px",
-                                        }}
-                                    >
+                                    <div className="column" style={moreStyle}>
                                         {item2.moreSubNav && moreSubnav
                                             ? item2.iconOpened
                                             : item2.moreSubNav
@@ -171,7 +178,7 @@ export default function FilterSubMenu({
                                                           handleFilter(moreitem2, item)
                                                       }
                                                   >
-                                                      <span style={moreOptionStyle}>
+                                                      <span style={moreOptions}>
                                                           {moreitem2.label}
                                                       </span>
                                                   </a>
@@ -181,7 +188,7 @@ export default function FilterSubMenu({
                                 </div>
 
                                 <div style={optionRowStyle} className="row">
-                                    {item.label === "Subject"
+                                    {item.label === "Courses"
                                         ? moreSubnav &&
                                           item2.moreSubNav &&
                                           moreSubjects.map((moreitem3, mIndexSubj) => {
@@ -197,7 +204,7 @@ export default function FilterSubMenu({
                                                               )
                                                           }
                                                       >
-                                                          <span style={moreOptionStyle}>
+                                                          <span style={moreOptions}>
                                                               {moreitem3.label}
                                                           </span>
                                                       </a>
@@ -215,21 +222,28 @@ export default function FilterSubMenu({
                                     />
                                 ) : null}
                                 {item2.searchbarAdviser ? (
-                                    <SearchBar
-                                        searchFilter={searchFilterAdviser}
-                                        setSearchFilter={setSearchFilterAdviser}
+                                    
+                                    <Autocomplete
+                                        value={searchFilterAdviser}
+                                        onChange={(event, newValue) => {
+                                            handleAdviserChange(newValue)
+                                        }}
+                                        id="combo-box-adviser"
+                                        options={AdviserData}
+                                        getOptionLabel={(option) => option.label}
+                                        style={{ width: 200, marginTop: "2vw", marginBottom: "2vw"}}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Adviser"
+                                            />
+                                        )}
                                     />
                                 ) : null}
-                                {item2.searchbarYear ? (
+                                {item2.searchbarPublisher ? (
                                     <SearchBar
-                                        searchFilter={searchFilterYear}
-                                        setSearchFilter={setSearchFilterYear}
-                                    />
-                                ) : null}
-                                {item2.searchbarTitle ? (
-                                    <SearchBar
-                                        searchFilter={searchFilterTitle}
-                                        setSearchFilter={setSearchFilterTitle}
+                                        searchFilter={searchFilterPublisher}
+                                        setSearchFilter={setSearchFilterPublisher}
                                     />
                                 ) : null}
                             </span>
@@ -248,6 +262,7 @@ const sidebarLink = {
     alignItems: "center",
     padding: "0 1.5vw 0 0",
     marginLeft: "1vw",
+    marginTop: "1vw",
     listStyle: "none",
     height: "3vw",
     fontSize: "1.1em",
@@ -264,7 +279,7 @@ const dropdownNav = {
     display: "flex",
     color: "rgb(0, 103, 161)",
     fontSize: "1.3em",
-    marginLeft: "3rem",
+    marginLeft: "2rem",
     marginTop: "0.25em",
     marginBottom: "0.25em",
     textDecoration: "none",
@@ -272,12 +287,13 @@ const dropdownNav = {
 };
 
 // style for more sub nav
-const moreOptionStyle = {
+const moreOptions = {
     alignItems: "center",
     display: "flex",
     color: "rgb(0, 103, 161)",
     fontSize: "0.75em",
     left: "-20px",
+    marginLeft: "0.5rem",
     position: "relative",
     zIndex: "1",
 };
@@ -289,13 +305,7 @@ const optionRowStyle = {
     zIndex: "1",
 };
 
-// const moreStyle = {
-//     backgroundColor:"white",
-//     width: "100px",
-// };
-
-// const arrowStyle = {
-//     backgroundColor:"white",
-//     width: "100px",
-//     height: "5vw"
-// };
+const moreStyle = {
+    backgroundColor: "white",
+    width: "100px",
+};

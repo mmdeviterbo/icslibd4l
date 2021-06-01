@@ -23,18 +23,18 @@ export const FilterSidebarData = [
         ]
     },
     {
-        label: "Title",
+        label: "Publisher",
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
             {
-                searchbarTitle: "searchbar"
+                searchbarPublisher: "searchbar"
             }
         ]
     },
     {
-        label: "Subject",
-        link: "/subject",
+        label: "Courses",
+        link: "/courses",
         iconClosed: <FaIcons.FaAngleDown/>,
         iconOpened: <FaIcons.FaAngleUp/>,
         subNav: [
@@ -112,36 +112,29 @@ export const FilterSidebarData = [
                 
             },
         ]                
-    },
-    {
-        label: "Type",
+    }
+    // {
+    //     label: "Type",
 
-        iconClosed: <FaIcons.FaAngleDown/>,
-        iconOpened: <FaIcons.FaAngleUp/>,
-        subNav: [
-            {
-                label: "Book",
-                value: "books"
-            },
-            {
-                label: "Special Problem",
-                value: "special problem"
-            },
-            {
-                label: "Thesis",
-                value: "thesis"
-            }
-        ]                 
-    },
-    {
-        label: "Year",
-        iconClosed: <FaIcons.FaAngleDown/>,
-        iconOpened: <FaIcons.FaAngleUp/>,
-        subNav: [
-            {    
-                searchbarYear: "searchbar"
-            },
-        ]
-    },
+    //     // iconClosed: <FaIcons.FaAngleDown/>,
+    //     // iconOpened: <FaIcons.FaAngleUp/>,
+    //     // subNav: [
+    //     //     {
+    //     //         label: "Book",
+    //     //         value: "books"
+    //     //     },
+    //     //     {
+    //     //         label: "Special Problem",
+    //     //         value: "special problem"
+    //     //     },
+    //     //     {
+    //     //         label: "Thesis",
+    //     //         value: "thesis"
+    //     //     }
+    //     // ]                 
+    // },
+    // {
+    //     label: "Year",
+    // },
 
 ]
