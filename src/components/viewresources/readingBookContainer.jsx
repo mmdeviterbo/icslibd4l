@@ -1,4 +1,6 @@
 import React from "react";
+
+import { useHistory, useParams } from "react-router-dom";
 import TitleAuthorHere from "./titleContainer";
 import BookCoverandInfo from "./bookCoverInfoSide";
 import BookPhysDescription from "./bookPhysicalDescription";

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Route, Link, useLocation } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
 import viewTable from "./viewTable";
 import { TableBody, TableCell, TableRow, TableHead } from "@material-ui/core";
 import dateFormat from "dateformat";
-// import ResTableContainer from "../manageresourcespage/resource-table-cont";
+import ReadingSPTContainer from "../viewresources/readingSPTContainer";
 // import ReadingSPTContainer from "../viewresources/readingsptcontainer";
 
 export default function BrowseResources({ type }) {
@@ -59,18 +59,22 @@ export default function BrowseResources({ type }) {
                         {resourceList.map((item) => (
                             <TableRow key={item && item.sp_thesis_id}>
                                 <TableCell>
-                                    <Route
-                                        exact
-                                        path="/view-resource/:sp_thesis_id"
-                                        render={{ match }}
-                                    />
+                                    {/* <Route
+                                        path={`/view-resource/${item.sp_thesis_id}`}
+                                        render={() => (
+                                            <ReadingSPTContainer
+                                                resourceData={item}
+                                            />
+                                        )}
+                                    /> */}
                                     <Link
                                         to={{
-                                            pathname: "/view-sp-thesis/:",
+                                            pathname: `/view-resource/sp-thesis/${item.sp_thesis_id}`,
                                             state: {
                                                 background: location,
                                                 resourceData: item,
                                             },
+                                            component: ReadingSPTContainer,
                                         }}>
                                         <p style={captionStyle}>
                                             {item && item.title}
