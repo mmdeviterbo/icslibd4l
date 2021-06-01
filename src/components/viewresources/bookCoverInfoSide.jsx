@@ -1,10 +1,16 @@
 import React from "react";
 
-const BookCoverandInfo = ({ publisher, numOfCopies, subjects }) => {
+const BookCoverandInfo = ({ isbn, publisher, numOfCopies, subjects }) => {
     return (
         <div className="book-cover-info-side">
             <img src="https://via.placeholder.com/300x400" />
             <table id="bookinfo">
+                <tr className="bookinfotr">
+                    {/* <th className = "bookinfotr"> ISBN </th>
+                    <td className = "bookinfotr"> 123-123456789</td> */}
+                    <th className="bookinfotr"> ISBN: </th>
+                    <th className="bookinfotr"> {isbn} </th>
+                </tr>
                 <tr className="bookinfotr">
                     {/* <th className = "bookinfotr"> ISBN </th>
                     <td className = "bookinfotr"> 123-123456789</td> */}
@@ -22,7 +28,7 @@ const BookCoverandInfo = ({ publisher, numOfCopies, subjects }) => {
                 <tr className="bookinfotr">
                     <th className="bookinfotr"> Subject(s) </th>
                     {subjects.map((item, key) => (
-                        <div key={key}>{item}</div>
+                        <div key={key}>{item.subject}</div>
                     ))}
                     {/* <td className = "bookinfotr"> Agriculture</td> */}
                 </tr>

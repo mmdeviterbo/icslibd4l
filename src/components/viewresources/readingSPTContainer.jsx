@@ -1,23 +1,24 @@
-import React from "react";
-import { useLocation, useHistory, useParams } from "react-router-dom";
-import TitleAuthorHere from "./titleContainer";
+import React, { useEffect } from "react";
+import TitleContainer from "./titleContainer";
 import "../../styles/viewspt/viewSPTStyle.css";
 import AbstractContainer from "./abstractContainer";
 import InfoSidebar from "./sideInfoContainer";
 
-const ReadingSPTContainer = ({ resourceData }) => {
-    const { resourceData } = useParams();
-    const location = useLocation();
-    // console.log(resourceData);
-    // console.log(userType)
-    { location.
+const ReadingSPTContainer = (props) => {
+    const resourceData =
+        (props.location && props.location.state.resourceData) || {};
 
-    }
+    useEffect(() => {
+        console.log(resourceData);
+    }, []);
+
     return (
+        // <></>
+
         <div className="ViewSPTMainPageContainer">
-            <TitleAuthorHere
+            <TitleContainer
                 title={resourceData.title}
-                authorList={resourceData.authorList}
+                authorList={resourceData.author}
                 year={resourceData.year}
             />
 
@@ -25,7 +26,7 @@ const ReadingSPTContainer = ({ resourceData }) => {
                 <AbstractContainer abstract={resourceData.abstract} />
                 <InfoSidebar
                     type={resourceData.type}
-                    adviserList={resourceData.adviserList}
+                    adviserList={resourceData.adviser}
                     keywords={resourceData.keywords}
                 />
             </div>

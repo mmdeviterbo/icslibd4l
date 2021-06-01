@@ -1,26 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { useHistory, useParams } from "react-router-dom";
-import TitleAuthorHere from "./titleContainer";
+import TitleContainer from "./titleContainer";
 import BookCoverandInfo from "./bookCoverInfoSide";
 import BookPhysDescription from "./bookPhysicalDescription";
 import "../../styles/viewspt/viewSPTStyle.css";
 
-const ReadingBookContainer = ({ sampleBook }) => {
+const ReadingBookContainer = (props) => {
+    const resourceData =
+        (props.location && props.location.state.resourceData) || {};
+
+    useEffect(() => {
+        console.log(resourceData);
+    }, []);
     return (
         <div className="bookpagecontainer">
-            <TitleAuthorHere
-                title={sampleBook.title}
-                authorList={sampleBook.authorList}
-                year={sampleBook.year}
+            <TitleContainer
+                title={resourceData.title}
+                authorList={resourceData.author}
+                year={resourceData.datePublished}
+                item={"book"}
             />
             <div className="bookcover-and-desc">
                 <BookCoverandInfo
-                    publisher={sampleBook.publisher}
-                    numOfCopies={sampleBook.numOfCopies}
-                    subjects={sampleBook.subjects}
+                    isbn={resourceData.bookId}
+                    publisher={resourceData.publisher}
+                    numOfCopies={resourceData.numberOfCopies}
+                    subjects={resourceData.subject}
                 />
-                <BookPhysDescription physicalDesc={sampleBook.physicalDesc} />
+                <BookPhysDescription physicalDesc={resourceData.physicalDesc} />
             </div>
         </div>
     );

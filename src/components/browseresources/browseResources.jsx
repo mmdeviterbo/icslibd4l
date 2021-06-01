@@ -59,22 +59,12 @@ export default function BrowseResources({ type }) {
                         {resourceList.map((item) => (
                             <TableRow key={item && item.sp_thesis_id}>
                                 <TableCell>
-                                    {/* <Route
-                                        path={`/view-resource/${item.sp_thesis_id}`}
-                                        render={() => (
-                                            <ReadingSPTContainer
-                                                resourceData={item}
-                                            />
-                                        )}
-                                    /> */}
                                     <Link
                                         to={{
-                                            pathname: `/view-resource/sp-thesis/${item.sp_thesis_id}`,
+                                            pathname: `/sp-thesis/${item.sp_thesis_id}`,
                                             state: {
-                                                background: location,
                                                 resourceData: item,
                                             },
-                                            component: ReadingSPTContainer,
                                         }}>
                                         <p style={captionStyle}>
                                             {item && item.title}
@@ -137,14 +127,12 @@ export default function BrowseResources({ type }) {
 
                     <TableBody>
                         {resourceList.map((item) => (
-                            <TableRow key={item && item.sp_thesis_id}>
+                            <TableRow key={item && item.bookId}>
                                 <TableCell>
                                     <Link
                                         to={{
-                                            pathname:
-                                                "/view-sp-thesis/:sp_thesis_id",
+                                            pathname: `/book/${item.bookId}`,
                                             state: {
-                                                background: location,
                                                 resourceData: item,
                                             },
                                         }}>
