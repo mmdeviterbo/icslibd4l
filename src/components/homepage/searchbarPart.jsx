@@ -190,7 +190,8 @@ const searchBoxContainer = {
     alignItems:"center",
     background:"rgba(0,0,0,0.90)",          
     transition:"1s",
-    borderRadius: "15px",    
+    borderRadius: "2px",
+    boxShadow:"1px 1px 4px black"    
 }
 
 const inputCaptionContainer = {
