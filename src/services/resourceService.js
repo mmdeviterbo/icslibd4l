@@ -44,9 +44,7 @@ const editSpThesis = (resourceData) => {
 //delete resource
 const deleteSpThesis = (deleteId) => {
     return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis/${deleteId}`, {withCredentials: true})
-    // return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis`, {data:{id: deleteId}, headers:{Authorization: "token"}}, {withCredentials: true})
 }
-
 
 // get news from uplb news website
 function getNews(){

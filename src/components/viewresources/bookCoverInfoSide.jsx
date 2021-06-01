@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import resourceServices from "../../services/resourceService";
+import React from "react";
+// import resourceServices from "../../services/resourceService";
 
 const BookCoverandInfo = ({ isbn, publisher, numOfCopies, subjects }) => {
   console.log(isbn);
@@ -18,17 +18,16 @@ const BookCoverandInfo = ({ isbn, publisher, numOfCopies, subjects }) => {
   //     getBookCover();
   //   }, []);
 
-  const GetBookCover = async () => {
-    try {
-      const { data } = await resourceServices.getBookCover(isbn);
-      console.log(data);
-    } catch (err) {
-      if (err.response && err.response.data) {
-        alert(err.response.data.errorMessage); // some reason error message
-      }
-    }
-  };
-
+  //   const GetBookCover = async () => {
+  //     try {
+  //       const { data } = await resourceServices.getBookCover(isbn);
+  //       console.log(data);
+  //     } catch (err) {
+  //       if (err.response && err.response.data) {
+  //         alert(err.response.data.errorMessage); // some reason error message
+  //       }
+  //     }
+  //   };
   //   GetBookCover();
 
   return (

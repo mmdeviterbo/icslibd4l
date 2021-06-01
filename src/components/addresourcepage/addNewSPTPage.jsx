@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 // import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from "../../services/resourceService";
 import ChipInput from "material-ui-chip-input";
-import AddResourcesHeader from "./addResourcesHeader";
+// import AddResourcesHeader from "./addResourcesHeader";
 // import ChipInput from "material-ui-chip-input";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
@@ -99,11 +99,6 @@ const AddNewSPThesisForm = () => {
   const [keywords, setKeyword] = useState();
   // multiple authors should be possible
   // Bakit di nagagamit yung setter????
-  const [author, setAuthor] = useState({
-    authorid: "",
-    fname: "",
-    lname: "",
-  });
   const [adviser, setAdviser] = useState({
     fname: "",
     lname: "",
@@ -119,15 +114,6 @@ const AddNewSPThesisForm = () => {
 
   const FormData = require("form-data");
   const formData = new FormData();
-
-  // useEffect(() => {
-  //   function updateList() {
-  //     if (author.fname && author.lname) {
-  //       setAuthorList([...authorList, author]);
-  //     }
-  //   }
-  //   updateList();
-  // }, [author]);
 
   const handleSubmit = async (event) => {
     console.log("meow");
