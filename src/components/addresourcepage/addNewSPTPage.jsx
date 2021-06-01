@@ -3,7 +3,7 @@ import Select from 'react-select'
 // import { ItemGroup } from 'semantic-ui-react'
 import ResourceServices from '../../services/resourceService'
 import ChipInput from "material-ui-chip-input";
-import AddResourcesHeader from './addResourcesHeader';
+// import AddResourcesHeader from './addResourcesHeader';
 // import ChipInput from "material-ui-chip-input";
 import { nanoid } from 'nanoid'
 import { produce } from 'immer'
@@ -180,10 +180,6 @@ const AddNewSPThesisForm = ({props}) => {
         setPoster(formData);
         };
     };
-
-
-    
-   
 
     // ==============================================================
 
