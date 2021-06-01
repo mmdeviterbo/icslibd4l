@@ -121,12 +121,14 @@ function App() {
                     path="/account-setting/"
                     component={ViewUserPage}></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
-                {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
                 <Route
                     path="/update-sp-thesis"
                     component={UpdateResourceData}></Route>
-                {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
+                {/* <Route
+                    path="/manage-resources"
+                    component={ManageResPage}></Route> */}
 
+                {/* placeholder componenets */}
                 <Route
                     path="/browse-books"
                     render={() => <BrowseResources type={"book"} />}></Route>
@@ -140,12 +142,29 @@ function App() {
                     render={() => <BrowseResources type={"Thesis"} />}></Route>
 
                 <Route
+                    path="/sp-thesis/:id"
+                    render={(props) => (
+                        <ReadingSPTContainer {...props} />
+                    )}></Route>
+
+                <Route
+                    path="/book/:id"
+                    render={(props) => (
+                        <ReadingBookContainer {...props} />
+                    )}></Route>
+                {/* placeholder componenets */}
+
+                <Route
                     path="/manage-resources"
                     render={() => (
                         <GetResources resourceType={"Book"} />
                     )}></Route>
 
-                <Route path="/manage-users" component={ManageUser}></Route>
+                <Route 
+                    path="/manage-users" 
+                    render={()=><ManageUser user={user}/>}>                    
+                </Route>
+
 
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route
@@ -154,24 +173,13 @@ function App() {
                 <Route
                     path="/edit-resource"
                     component={EditResourcePage}></Route>
-                <Route
-                    path="/view-sp-thesis"
-                    // component={ReadingSPTContainer}
-                    render={() => (
-                        <ReadingSPTContainer resourceData={sampleSP} />
-                    )}></Route>
 
-                {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
-                <Route
-                    path="/view-book"
-                    render={() => (
-                        <ReadingBookContainer sampleBook={sampleBook} />
-                    )}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Route exact path="/not-found" component={Notfound}></Route>
                 <Redirect exact from="/" to="/home" />
                 <Redirect to="/not-found" />
             </Switch>
+
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"
@@ -181,7 +189,7 @@ function App() {
             {background && (
                 <Route
                     path="/manage-users/delete-user"
-                    children={<DeleteModalContainer />}
+                    children={<DeleteModalContainer user={user}/>}
                 />
             )}
             {background && (
