@@ -1,4 +1,18 @@
+
+table {
+    width: 100%
+}
+
 .book-page-container {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 10%;
+}
+
+.spt-page-container {
+    min-height: 90vh;
+
     display: flex;
     flex-direction: column;
     margin: 2rem 10%;
@@ -44,7 +58,9 @@
 }
 
 .abstract-container {
-    padding-right: 1.5rem;
+    margin: 0px 6%;
+
+    width: 60%;
 }
 
 .abstract-container h2 {
@@ -53,27 +69,36 @@
 }
 
 .abstract-container p{
+    font-size: 1.2rem;
     text-align: justify;
     text-justify: inter-word;
 }
 
 .abstract-and-info {
-    margin-left: 15rem;
-    margin-right: 15rem;
+    margin: 0px 6%;
     display: flex;
     flex-direction: row;
-    margin-bottom: 5rem;
+
+    justify-content: space-between;
 }
 
 .info-sidebar {
-    padding-left:5rem;
+    width: 40%;
+    padding: 0px 6%;
+
 }
 .spt-thtr{
+    font-size: 1.2rem;
     padding: 1.3rem;
-    padding-left:3rem;
-    padding-right: 3rem;
     border-bottom: 1px solid;
     border-color:#e5e5e5;
+}
+
+.keyword-container {
+    padding: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
 }
 
 .spt-view-buttons {
@@ -90,10 +115,13 @@
     border-style: solid;
     border-radius: 0.5rem;
     box-shadow: 1px 1px 0.3rem rgb(204, 204, 204);
+    font-size: 1.2rem;
 }
 
 .spt-view-buttons button:hover {
-    box-shadow: none;
+    /* box-shadow: none; */
+    transition: transform 100ms ease, box-shadow 125ms ease;
+    transform: scale(1.025);
 
 }
 
@@ -101,14 +129,19 @@
     display: flex;
     justify-content: space-between;  
 
-    margin: 2rem 10%;
-    /* margin-left: 15rem; */
-    /* margin-bottom: 8rem; */
+    margin: 2rem 6%;
+}
+
+.book-cover-info-side {
+    align-items: center;
+    justify-content: center;
+    margin: 0px 6%;
+    width: 40%
 }
 
 .book-info-tr {
+    font-size: 1.2rem;
     padding: 1.3rem;
-    padding-right: 3rem;
     border-bottom: 1px solid;
     border-color:#e5e5e5;
 }
@@ -116,16 +149,18 @@
 .bookcover-and-desc{
     display:flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
-.phys-description {
-    margin: 2rem 10%;
-    /* padding-left: 6rem;
-    padding-right: 15rem; */
+.physical-description {
+    font-size: 1.2rem;
+
+    padding: 1.3rem;
 }
 
-.phys-description p {
+
+.physical-text {
+    width: inherit;
     text-align: justify;
     text-justify: inter-word;
 }

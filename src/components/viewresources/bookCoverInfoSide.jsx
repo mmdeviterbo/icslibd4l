@@ -1,9 +1,14 @@
 import React from "react";
 
-const BookCoverandInfo = ({ isbn, publisher, numOfCopies, subjects }) => {
+const BookCoverandInfo = ({
+    isbn,
+    publisher,
+    numOfCopies,
+    subjects,
+    physicalDesc,
+}) => {
     return (
         <div className="book-cover-info-side">
-            <img src="https://via.placeholder.com/300x400" />
             <table id="bookinfo">
                 <tr className="book-info-tr">
                     {/* <th className = "book-info-tr"> ISBN </th>
@@ -28,11 +33,16 @@ const BookCoverandInfo = ({ isbn, publisher, numOfCopies, subjects }) => {
                 <tr className="book-info-tr">
                     <th className="book-info-tr"> Subject(s) </th>
                     {subjects.map((item, key) => (
-                        <div key={key}>{item.subject}</div>
+                        <th className="book-info-tr" key={key}>
+                            {item.subject}
+                        </th>
                     ))}
                     {/* <td className = "book-info-tr"> Agriculture</td> */}
                 </tr>
             </table>
+            <div className="physical-description">
+                <p className="physical-text">{physicalDesc}</p>
+            </div>
         </div>
     );
 };

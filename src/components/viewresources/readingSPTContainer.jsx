@@ -13,9 +13,7 @@ const ReadingSPTContainer = (props) => {
     }, []);
 
     return (
-        // <></>
-
-        <div className="ViewSPTMainPageContainer">
+        <div className="spt-page-container">
             <TitleContainer
                 title={resourceData.title}
                 authorList={resourceData.author}
