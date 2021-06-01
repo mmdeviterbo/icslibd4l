@@ -8,7 +8,8 @@ import ResourceService from '../../services/resourceService';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 export default function AdvancedSearch({appRef}){
-    const [query, setQuery] = useState("");
+    var queryStore = `${useLocation().search}`.substring(`${useLocation().search}`.indexOf("search=")+7,);
+    const [query, setQuery] = useState(queryStore);
     const [objFilter, setObjFilter] = useState({});
     const [urlRequest, setUrlRequest] = useState(`${useLocation().pathname}${useLocation().search}`);
     const history = useHistory();
@@ -88,15 +89,14 @@ export default function AdvancedSearch({appRef}){
     
     // console.log(searchFilterAdviser);
     // console.log(searchFilterYear);
-    console.log(urlRequest);
-
     // http request
     async function fetchData() {
         try{
             //  objFilter store filters in an object <field>:<value>
             //  urlRequest string that contains the search query -> example: search?type=title
-            
-            const response = await ResourceService.searchSpThesis(objFilter,urlRequest,);
+            console.log(objFilter); 
+            console.log(urlRequest);
+            const response = await ResourceService.searchSpThesis(objFilter,urlRequest);
             setResultsFilterArr(response);
             // console.log(resultsFilterArr)
         }catch (err){
@@ -119,7 +119,6 @@ export default function AdvancedSearch({appRef}){
         setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
         // call convert filter to object
         filterParser();   
-        console.log(objFilter); 
     }
 
     // parse Filter array into object
@@ -143,7 +142,7 @@ export default function AdvancedSearch({appRef}){
             obj["year"] = searchFilterYear.getFullYear();
         }
         if(course !== ""){
-            obj["courses"] = course;
+            obj["subject"] = course;
             // if courses field was cleared
             if(obj.courses === null){
                 delete obj.courses;

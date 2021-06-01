@@ -440,7 +440,6 @@ router.get("/search", async (req, res) => {
     // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
     // RESPONSE:
     // - array of objects (book/sp/thesis)
-
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -452,7 +451,6 @@ router.get("/search", async (req, res) => {
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
-        console.log(final_arr);
         // FILTER ENTRIES in final_arr
 
         // Filter by title (case insensitive, checks for substring match)
