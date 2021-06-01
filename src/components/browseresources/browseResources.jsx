@@ -17,6 +17,7 @@ export default function BrowseResources({ type }) {
     try {
       const { data } = await ResourceService.browseResources({ type });
       setResourceList(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -27,22 +28,18 @@ export default function BrowseResources({ type }) {
     window.scrollTo(0, 0);
   }, []);
 
-  const sampleSP = {
-    title:
-      "Adaptive Identification of Rice and Corn Pests (Order Hemiptera) using Back Propagation Neural Network Based on Intensity Histogram",
-    type: "Special Problem",
-    abstract:
-      "Pest identification through image processing using Back Propagation Neural Network with Intensity Histogram as the feature used as basis for classification yielded an accuracy of 100% using 15 test images from each species. However, the application is only limited to pest images that have distinguishable backgrounds. The reliability of the system can be further increased by adding more training data with plain background. This research aims to help users by giving additional information about the pest identified by the system such as description, treatment, and control.",
-    year: 1969,
-    authorList: ["Concepcion L. Khan", "John Viscel M. Sangkal"],
-    adviserList: [
-      "Maria Erika Dominique Cunanan",
-      "Katrina Joy M. Abriol-Santos",
-    ],
-    keywords: ["CMSC191", "CMSC173", "CMSC69"],
+  const getData = (resourceList) => {
+    return (
+      <div>
+        {resourceList.map((item) => (
+          <div key={item.sp_thesis_id}>{item}</div>
+        ))}
+      </div>
+    );
   };
 
   const ViewSPThesis = () => {
+    getData(resourceList);
     return (
       <div>
         <p style={{ fontSize: "calc(30px + 0.5vw)", fontWeight: "900" }}>

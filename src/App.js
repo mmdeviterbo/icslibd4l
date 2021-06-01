@@ -18,7 +18,6 @@ import DeleteModalContainer from "./components/manageresourcespage/deleteModalCo
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
 import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 import BrowseResources from "./components/browseresources/browseResources";
-import UpdateResourceData from "./components/crud/update";
 import About from "./components/about/about";
 import GetResources from "./components/manageresourcespage/getResources";
 import "./App.css";
@@ -123,9 +122,11 @@ function App() {
                     component={ViewUserPage}></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
                 {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
-                <Route
+
+                {/* <Route
                     path="/update-sp-thesis"
-                    component={UpdateResourceData}></Route>
+                    component={UpdateResourceData}></Route> */}
+                    
                 {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
 
                 <Route
@@ -164,7 +165,7 @@ function App() {
                 <Route
                     path="/view-sp-thesis"
                     render={() => (
-                        <ReadingSPTContainer/>
+                        <ReadingSPTContainer resourceData={sampleSP}/>
                     )}></Route>
 
                 {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}

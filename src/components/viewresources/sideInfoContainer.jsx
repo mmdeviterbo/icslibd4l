@@ -1,6 +1,7 @@
 import React from "react";
 
 const InfoSidebar = ({ type, adviserList, keywords }) => {
+  const handleDownload = () => {};
   return (
     <div className="infosidebardiv">
       <table id="spttableinfo">
@@ -31,7 +32,9 @@ const InfoSidebar = ({ type, adviserList, keywords }) => {
           View Poster
         </button>
 
-        <button id="downloadjournal">Download Journal</button>
+        <button id="downloadjournal" onClick={handleDownload}>
+          Download Journal
+        </button>
 
         <button id="downloadsourcecode">Download Source Code</button>
         <br />

@@ -77,12 +77,13 @@ const upload = multer({ storage });
 // AUTHENTICATION REMOVED FROM THE PARAMeTERES
 console.log('===============================')
 router.post("/create", upload.any(), async (req,res)=>{
-    console.log(req.file)
+    console.log(req.files)
+    console.log(req.body)
     try{
-        console.log('here')
         const {sp_thesis_id, // common ID
             type, title, abstract, year, 
-            // source_code, manuscript, journal, poster, // thesisModel
+            // source_code, 
+            manuscript, journal, poster, // thesisModel
             advisers,   // thesisAdviserModel
             authors,     // thesisAuthorModel
             keywords               // thesisKeyModel
@@ -110,8 +111,6 @@ router.post("/create", upload.any(), async (req,res)=>{
 
         // search if book exists
         const existingThesis = await thesisModel.findOne({sp_thesis_id});
-        
-        console.log(sp_thesis_id)
 
         if (!existingThesis){ // if does not exist, proceed in creating entry
             // save thesisModel
@@ -121,10 +120,10 @@ router.post("/create", upload.any(), async (req,res)=>{
                 title,
                 abstract,
                 year,
-                source_code,
-                manuscript,
-                journal,
-                poster,
+                // source_code,
+                // manuscript,
+                // journal,
+                // poster,
             });
             const savedThesis = await newThesis.save();
 
@@ -159,8 +158,6 @@ router.post("/create", upload.any(), async (req,res)=>{
                     author_name,
                 });
                 const savedThesisAu = await newThesisAu.save();
-                // console.log(newThesisAu)
-                // console.log(savedThesisAu)
             });
 
             // save thesisKeyModel
@@ -216,6 +213,7 @@ router.get("/download2", async (req, res) => {
 
 // browse all entries, default sort: alphabetical by title
 router.post("/browse", async (req,res)=> {
+    console.log('here at browse')
     const { type } = req.body;
     if (type==="book"){
         // type value: SP or Thesis

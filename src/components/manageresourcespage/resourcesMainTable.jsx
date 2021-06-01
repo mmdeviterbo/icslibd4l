@@ -186,21 +186,21 @@ const MainResourceTable = () => {
   const [selectedEdit, setSelectedEdit] = useState();
   const [resourceList, setResourceList] = useState([]);
 
-  //   useEffect(() => {
-  //     async function fetchData() {
-  //       try {
-  //         const response = await resourceService.browseResources({
-  //           type: "book",
-  //         });
-  //         setResourceList(response.data);
-  //         console.log(response.data);
-  //         // setSpThesisList(spThesis_arr)
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const { data } = await resourceService.browseResources({
+  //         type: "book",
+  //       });
+  //       setResourceList(data);
+  //       console.log(data);
+  //       // setSpThesisList(spThesis_arr)
+  //     } catch (error) {
+  //       console.log(error);
   //     }
-  //     fetchData();
-  //   }, []);
+  //   }
+  //   fetchData();
+  // }, []);
 
   console.log(resourceList);
 
@@ -359,7 +359,7 @@ const MainResourceTable = () => {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(resourceList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);

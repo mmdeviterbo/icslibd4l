@@ -87,6 +87,7 @@ const adviserchoices = [
 
 const AddNewSPThesisForm = () => {
   // functionalities:
+  const [id, setId] = useState("");
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(0);
@@ -117,26 +118,28 @@ const AddNewSPThesisForm = () => {
   const [adviserList, setAdviserList] = useState([]);
 
   const FormData = require("form-data");
-  // const fs = require("fs");
   const formData = new FormData();
 
-  useEffect(() => {
-    function updateList() {
-      if (author.fname && author.lname) {
-        setAuthorList([...authorList, author]);
-      }
-    }
-    updateList();
-  }, [author]);
+  // useEffect(() => {
+  //   function updateList() {
+  //     if (author.fname && author.lname) {
+  //       setAuthorList([...authorList, author]);
+  //     }
+  //   }
+  //   updateList();
+  // }, [author]);
 
   const handleSubmit = async (event) => {
     console.log("meow");
     event.preventDefault();
-    // const sourceCode = new FormData();
-    // sourceCode.append("File", source_code);
-    // if (!source_code || !manuscript || !journal || !poster) {
-    //   return alert("Please upload the required files");
-    // }
+    if (
+      // !source_code ||
+      !manuscript ||
+      !journal ||
+      !poster
+    ) {
+      return alert("Please upload the required files");
+    }
     console.log(source_code);
     console.log(poster);
     console.log(journal);
@@ -144,26 +147,27 @@ const AddNewSPThesisForm = () => {
 
     try {
       const userInput = {
-        sp_thesis_id: "123450",
+        sp_thesis_id: id,
         type,
         title,
         abstract,
         year,
-        source_code,
+        // source_code,
         manuscript,
         journal,
         poster,
         advisers: adviserList,
         authors: authorList,
-        keywords: keywords,
+        keywords,
       };
 
       console.log(userInput);
-      formData.append("file", source_code);
-      formData.append("body", userInput);
-      for (var key of formData.entries()) {
-        console.log(key[0] + ", " + key[1]);
-      }
+      formData.append("body", JSON.stringify(userInput)); // NEED MAUNA TO WTF
+      // formData.append("file", source_code);  // Leave it out for now since need ng clarification about this
+      formData.append("pdf", journal);
+      formData.append("pdf", manuscript);
+      formData.append("img files", poster);
+      // formData.append("body", userInput);
       const { data } = await ResourceServices.addSpThesis(formData);
       console.log(data);
       alert(`New Sp/Thesis has been successfully added to the library`);
@@ -174,13 +178,6 @@ const AddNewSPThesisForm = () => {
       }
     }
   };
-
-  // const addAuthor = (e) => {
-  //   setAuthor({
-  //     ...author,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
 
   // get input from type selection
   const handleTypeChange = (e) => {
@@ -199,6 +196,18 @@ const AddNewSPThesisForm = () => {
     setAdviserList(adviser);
   };
 
+  // not working qwq
+  // const handleFile = (e) => {
+  //   let file = e.target.files[0];
+  //   let reader = new FileReader();
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //     reader.onload = (e) => {
+  //       return file;
+  //     };
+  //   }
+  // };
+
   // Redundant handlefunctions. Find a way to make it reusable
   const handleSourceCode = (e) => {
     let file = e.target.files[0];
@@ -206,8 +215,6 @@ const AddNewSPThesisForm = () => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        // const formData = { file: e.target.result };
-        // formData.append("file", file);
         setSourceCode(file);
       };
     }
@@ -219,7 +226,6 @@ const AddNewSPThesisForm = () => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        // const formData = { file: e.target.result };
         setManuscript(file);
       };
     }
@@ -231,7 +237,6 @@ const AddNewSPThesisForm = () => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        // const formData = { file: e.target.result };
         setJournal(file);
       };
     }
@@ -243,7 +248,6 @@ const AddNewSPThesisForm = () => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        // const formData = { file: e.target.result };
         setPoster(file);
       };
     }
@@ -281,6 +285,18 @@ const AddNewSPThesisForm = () => {
                     </div> */}
             {/* Title Field */}
             <div className="primaryfields">
+              <label htmlFor="resId">ID: &nbsp; </label>
+              <input
+                type="text"
+                id="resId"
+                required
+                onChange={(event) => {
+                  setId(event.target.value);
+                }}
+              />
+            </div>
+            {/* Title Field */}
+            <div className="primaryfields">
               <label htmlFor="resTitle">Title: &nbsp; </label>
               <input
                 type="text"
@@ -298,7 +314,11 @@ const AddNewSPThesisForm = () => {
                 type="number"
                 id="datePublished"
                 required
+                defaultValue={0}
                 onChange={(event) => {
+                  if (event.target.value < 0) {
+                    event.target.value = event.target.defaultValue;
+                  }
                   setYear(event.target.value);
                 }}
               />
@@ -474,6 +494,9 @@ const AddNewSPThesisForm = () => {
                 id="spthesisJournal"
                 onClick={(e) => (e.target.value = null)}
                 onChange={(e) => {
+                  // const file = handleFile(e);
+                  // setSourceCode(file);
+                  // console.log(handleFile(e));
                   handleSourceCode(e);
                 }}
               />

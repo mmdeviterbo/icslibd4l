@@ -32,7 +32,6 @@ const courseList = [
 
 const AddBookFormContainer = () => {
   // functionalities:
-  const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [datePublished, setDatePublished] = useState();
   const [dateAcquired, setDateAcquired] = useState();
@@ -50,36 +49,35 @@ const AddBookFormContainer = () => {
       lname: "",
     },
   ]);
-  const [courses, setCourses] = useState(null);
+  const [courses, setCourses] = useState(null); // why null??
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
   const FormData = require("form-data");
-  // const fs = require("fs");
   const formData = new FormData();
 
-  useEffect(() => {
-    function updateList() {
-      if (author.fname && author.lname) {
-        // console.log('adding', author.fname, author.lname);
-        // isInArray(authorList, author)
-        if (authorList.indexOf(author)) {
-          setAuthorList([]);
-          setAuthorList([...authorList, author]);
-        }
-      }
-    }
-    updateList();
-  }, [author]);
+  // useEffect(() => {
+  //   function updateList() {
+  //     if (author.fname && author.lname) {
+  //       // console.log('adding', author.fname, author.lname);
+  //       // isInArray(authorList, author)
+  //       if (authorList.indexOf(author)) {
+  //         setAuthorList([]);
+  //         setAuthorList([...authorList, author]);
+  //       }
+  //     }
+  //   }
+  //   updateList();
+  // }, [author]);
 
-  const addAuthor = (e) => {
-    setAuthor({
-      ...author,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const addAuthor = (e) => {
+  //   setAuthor({
+  //     ...author,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   const handleImage = (e) => {
     // let file = e.target.files[0];
