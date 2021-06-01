@@ -85,9 +85,7 @@ export default function BrowseResources({ type }) {
                                         ))}
                                 </TableCell>
                                 <TableCell>
-                                    <p style={bodyStyle}>
-                                        {dateFormat(item.year, "mmmm yyyy")}
-                                    </p>
+                                    <p style={bodyStyle}>{item.year}</p>
                                 </TableCell>
                             </TableRow>
                         ))}
