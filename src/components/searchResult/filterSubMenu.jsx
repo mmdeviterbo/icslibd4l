@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SearchBar from "./searchBar";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {AdviserData} from "./adviserData";
+import { AdviserData } from "./adviserData";
 
 export default function FilterSubMenu({
     item,
@@ -12,10 +12,8 @@ export default function FilterSubMenu({
     setSearchFilterAdviser,
     searchFilterPublisher,
     setSearchFilterPublisher,
-    filterArray,
-    setfilterArray,
-    fieldArray,
-    setfieldArray,
+    course,
+    setCourse,
 }) {
     const [subnav, setSubnav] = useState(false);
     const [moreSubnav, setmoreSubnav] = useState(false);
@@ -32,85 +30,20 @@ export default function FilterSubMenu({
         }
     };
 
-    const moreTopics = [
-        {
-            label: "Algorithms",
-        },
-        {
-            label: "Neural Networks",
-        },
-        {
-            label: "Robot Modeling",
-        },
-        {
-            label: "Mobile Development",
-        },
-        {
-            label: "Web Development",
-        },
-    ];
-
-    const moreSubjects = [
-        {
-            label: "CMSC21",
-        },
-        {
-            label: "CMSC56",
-        },
-        {
-            label: "CMSC57",
-        },
-        {
-            label: "CMSC100",
-        },
-        {
-            label: "CMSC150",
-        },
-    ];
-
     // fixed warning for handlesearch filter
     const handleFilter = (data, parent) => {
         let filter = data.label ? data.label : null;
-        if (filter === "MORE") {
-            return;
-        }
-        // get all selected filters
-        // check if filter is already in the array
-        let filterIndex = filterArray.indexOf(filter);
-        let fieldIndex = fieldArray.indexOf(parent.label);
-
-        // (SELECT FILTER)
-        if (
-            parent.label === "Author" ||
-            parent.label === "Adviser" ||
-            parent.label === "Title" ||
-            parent.label === "Year"
-        ) {
-            return;
-        }
-        if (fieldIndex < 0) {
-            // field and filter not in the array
-            // add if filter is not in array
-            setfilterArray([...filterArray, filter]);
-            // add if field is not in field array
-            setfieldArray([...fieldArray, parent.label]);
-        } else {
-            // remove from the array if clicked again (DESELECT FILTER)
-            // change the filter
-            filterArray.splice(filterIndex, 1);
-            setfilterArray([...filterArray, filter]);
-            fieldArray.splice(fieldIndex, 1);
-            setfieldArray([...fieldArray, parent.label]);
+        if (parent.label === "Courses") {
+            setCourse(filter);
         }
     };
 
-    // const handleAdviserChange = () => {
-    //     setSearchFilterAdviser({fname:adviserHolder.value.fname, lname:adviserHolder.value.lname});
-    // }
-
     const handleAdviserChange = (newVal) => {
-        setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
-    }
+        if (newVal !== undefined || newVal !== null) {
+            setSearchFilterAdviser(newVal);
+            // setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
+        }
+    };
 
     return (
         <div>
@@ -121,8 +54,11 @@ export default function FilterSubMenu({
                 onClick={item.subNav && showSubnav}
             >
                 <div className="row">
-                    <span style={sidebarLabel}> {item.label} </span>
-                    <div className="column">
+                    <span style={sidebarLabel} className="column">
+                        {" "}
+                        {item.label}{" "}
+                    </span>
+                    <div style={sidebarLabel} className="column">
                         {item.subNav && subnav
                             ? item.iconOpened
                             : item.subNav
@@ -131,6 +67,7 @@ export default function FilterSubMenu({
                     </div>
                 </div>
             </span>
+
             {subnav &&
                 item.subNav.map((item2, index) => {
                     return (
@@ -143,78 +80,10 @@ export default function FilterSubMenu({
                         >
                             <span style={sidebarLabel}>
                                 {/* SHOW MORE FILTERS */}
-                                <div className="row">
-                                    <div
-                                        className="more"
-                                        onClick={
-                                            item2.moreSubNav &&
-                                            // (()=> showMoreSubnav(item2))
-                                            showMoreSubnav
-                                        }
-                                    >
-                                        {item2.label}
-                                    </div>
-                                    <div className="column" style={moreStyle}>
-                                        {item2.moreSubNav && moreSubnav
-                                            ? item2.iconOpened
-                                            : item2.moreSubNav
-                                            ? item2.iconClosed
-                                            : null}
-                                    </div>
-                                </div>
+
                                 {/* END OF SHOW MORE FILTERS */}
 
-                                <div style={optionRowStyle} className="row">
-                                    {item.label === "Topic"
-                                        ? moreSubnav &&
-                                          item2.moreSubNav &&
-                                          moreTopics.map((moreitem2, mIndexTopic) => {
-                                              return (
-                                                  <a
-                                                      style={dropdownNav}
-                                                      className="dropdownNav"
-                                                      key={mIndexTopic}
-                                                      onClick={() =>
-                                                          handleFilter(moreitem2, item)
-                                                      }
-                                                  >
-                                                      <span style={moreOptions}>
-                                                          {moreitem2.label}
-                                                      </span>
-                                                  </a>
-                                              );
-                                          })
-                                        : null}
-                                </div>
-
-                                <div style={optionRowStyle} className="row">
-                                    {item.label === "Courses"
-                                        ? moreSubnav &&
-                                          item2.moreSubNav &&
-                                          moreSubjects.map((moreitem3, mIndexSubj) => {
-                                              return (
-                                                  <div key={mIndexSubj}>
-                                                      <a
-                                                          style={dropdownNav}
-                                                          className="dropdownNav"
-                                                          onClick={() =>
-                                                              handleFilter(
-                                                                  moreitem3,
-                                                                  item
-                                                              )
-                                                          }
-                                                      >
-                                                          <span style={moreOptions}>
-                                                              {moreitem3.label}
-                                                          </span>
-                                                      </a>
-                                                  </div>
-                                              );
-                                          })
-                                        : null}
-                                </div>
-
-                                {/* ADD a searchbar for authors and advisers */}
+                                {/* searchbar for authors and advisers */}
                                 {item2.searchbarAuthor ? (
                                     <SearchBar
                                         searchFilter={searchFilterAuthor}
@@ -222,23 +91,34 @@ export default function FilterSubMenu({
                                     />
                                 ) : null}
                                 {item2.searchbarAdviser ? (
-                                    
-                                    <Autocomplete
-                                        value={searchFilterAdviser}
-                                        onChange={(event, newValue) => {
-                                            handleAdviserChange(newValue)
+                                    <div
+                                        style={{
+                                            position: "relative",
+                                            left: "-3.5vw",
                                         }}
-                                        id="combo-box-adviser"
-                                        options={AdviserData}
-                                        getOptionLabel={(option) => option.label}
-                                        style={{ width: 200, marginTop: "2vw", marginBottom: "2vw"}}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Adviser"
-                                            />
-                                        )}
-                                    />
+                                    >
+                                        <Autocomplete
+                                            freeSolo
+                                            id="combo-box-adviser"
+                                            value={searchFilterAdviser}
+                                            options={AdviserData.map(
+                                                (option) => option.label
+                                            )}
+                                            // options={AdviserData}
+                                            // getOptionLabel={(option) => option.label}
+                                            onChange={(e, newValue) => {
+                                                handleAdviserChange(newValue);
+                                            }}
+                                            style={{
+                                                width: 200,
+                                                marginTop: "2vw",
+                                                marginBottom: "2vw",
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="Adviser" />
+                                            )}
+                                        />
+                                    </div>
                                 ) : null}
                                 {item2.searchbarPublisher ? (
                                     <SearchBar
@@ -261,16 +141,19 @@ const sidebarLink = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0 1.5vw 0 0",
-    marginLeft: "1vw",
     marginTop: "1vw",
     listStyle: "none",
     height: "3vw",
     fontSize: "1.1em",
     fontWeight: "600",
+    position: "relative",
+    left: "-1.5vw",
 };
 
 const sidebarLabel = {
-    marginLeft: "0.75vw",
+    marginLeft: "1.5vw",
+    position: "relative",
+    left: "1vw",
 };
 
 // style for submenu
@@ -279,7 +162,7 @@ const dropdownNav = {
     display: "flex",
     color: "rgb(0, 103, 161)",
     fontSize: "1.3em",
-    marginLeft: "2rem",
+    marginLeft: "1rem",
     marginTop: "0.25em",
     marginBottom: "0.25em",
     textDecoration: "none",
@@ -293,7 +176,6 @@ const moreOptions = {
     color: "rgb(0, 103, 161)",
     fontSize: "0.75em",
     left: "-20px",
-    marginLeft: "0.5rem",
     position: "relative",
     zIndex: "1",
 };

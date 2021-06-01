@@ -17,14 +17,13 @@ export default function AdvancedSearch({appRef}){
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
     const [searchFilterAdviser, setSearchFilterAdviser] = useState(null);
     const [searchFilterPublisher, setSearchFilterPublisher] = useState("");
+    const [course, setCourse] = useState("");
     // Date is set to Current Date extract year
     const [searchFilterYear, setSearchFilterYear] = useState(null);
     // use URL to change the resource type to be requested
     const [resourceType, setResourceType] = useState(`${useLocation().search}`.substring(`${useLocation().search}`.indexOf("=")+1,`${useLocation().search}`.indexOf("&")));
 
-    // test for multifiltering
-    const [fieldArray, setfieldArray] = useState([]);
-    const [filterArray, setfilterArray] = useState([]);
+    const [keywords, setKeywords] = useState([]);
 
     // get results from db
     const [resultsFilterArr, setResultsFilterArr] = useState([]);
@@ -86,18 +85,17 @@ export default function AdvancedSearch({appRef}){
     //     urlFilter = (url.split('&')[1]).replace('f=','');
     // }else
     //     urlQuery = decodeURIComponent((url.replace('q=','')));
-    console.log(searchFilterAdviser);
-    // console.log("results:"+resultsFilterArr);
-    // console.log(urlRequest);
-    // console.log(resultsFilterArr)
+    
+    // console.log(searchFilterAdviser);
     // console.log(searchFilterYear);
+    console.log(urlRequest);
 
     // http request
     async function fetchData() {
         try{
             //  objFilter store filters in an object <field>:<value>
             //  urlRequest string that contains the search query -> example: search?type=title
-            console.log(urlRequest);
+            
             const response = await ResourceService.searchSpThesis(objFilter,urlRequest,);
             setResultsFilterArr(response);
             // console.log(resultsFilterArr)
@@ -109,50 +107,47 @@ export default function AdvancedSearch({appRef}){
     // get filtered results to backend
     useEffect(() => {        
         fetchData();
-        console.log(objFilter);
     }, [objFilter]);
 
     const handleForm=(e)=>{
         e.preventDefault();
         let tempStr = query.trim();
-        console.log(tempStr);
+        // NEED TO CLEAN resourcetype specialproblem
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             history.push(`/search?type=${resourceType}&search=${tempStr}`);
         }
         setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
         // call convert filter to object
-        filterParser();    
+        filterParser();   
+        console.log(objFilter); 
     }
 
     // parse Filter array into object
     // combines 2 array into an object
     const filterParser = () =>{
         let obj = {};
-        obj["keyword"] = [];
-        for (var i = 0; i < fieldArray.length; i++){
-            if( fieldArray[i] === "Adviser" || 
-                fieldArray[i] === "Author" ||
-                fieldArray[i] === "Year"
-            ){
-                continue;
-            }
-            if(fieldArray[i].toLowerCase() === "subject" || fieldArray[i].toLowerCase() === "topic"){
-                obj["keyword"].push(filterArray[i]) ;
-            }
+        if(keywords.length !== 0){
+            obj["keyword"] = keywords;
         }
         if(searchFilterAuthor !== ""){
             obj["author"] = searchFilterAuthor;
         }
-        if(searchFilterAdviser !== ""){
+        if(searchFilterAdviser !== null){
             obj["adviser"] = searchFilterAdviser;
+        }
+        if(searchFilterPublisher !== ""){
+            obj["publisher"] = searchFilterPublisher;
         }
         if(searchFilterYear !== null){
             // Year must be set to NUll
             obj["year"] = searchFilterYear.getFullYear();
         }
-        console.log(fieldArray);
-        if(obj["keyword"].length == 0){
-            delete obj.keyword;
+        if(course !== ""){
+            obj["courses"] = course;
+            // if courses field was cleared
+            if(obj.courses === null){
+                delete obj.courses;
+            }
         }
         setObjFilter(obj);
     }
@@ -180,10 +175,14 @@ export default function AdvancedSearch({appRef}){
                     setSearchFilterYear={setSearchFilterYear}
                     searchFilterPublisher={searchFilterPublisher}
                     setSearchFilterPublisher={setSearchFilterPublisher}
-                    filterArray={filterArray}
-                    setfilterArray={setfilterArray}
-                    fieldArray={fieldArray}
-                    setfieldArray={setfieldArray}
+                    course={course}
+                    setCourse={setCourse}
+                    // filterArray={filterArray}
+                    // setfilterArray={setfilterArray}
+                    // fieldArray={fieldArray}
+                    // setfieldArray={setfieldArray}
+                    keywords={keywords}
+                    setKeywords={setKeywords}
                     />
 
                     {/* Apply filters button */}
@@ -277,10 +276,11 @@ const bottomContainer = {
 }
 
 const filtersContainer = {
+    background:"white",
     position:"sticky",
     overflowY:"overlay",
     top:"28vh",
-    width:"26vw",
+    width:"20vw",
     height:"73vh"
 }
 
@@ -303,7 +303,8 @@ const filterButton = {
     position: "relative",
     height: "2em",
     width:"10em",
-    left: "35%",
+    top: "-2.5vh",
+    left: "20%",
     border: "0.08em solid",
     borderRadius:"3px",
     backgroundColor: "#0067A1",

@@ -18,4 +18,6 @@ const searchInput = {
     padding: "0.38vw",
     textIndent: "0.76vw",
     width: "95.3%",
+    position:"relative",
+    left:"-4vw"
 }
