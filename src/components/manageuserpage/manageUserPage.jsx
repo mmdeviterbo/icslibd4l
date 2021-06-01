@@ -1,25 +1,29 @@
-import React, { useEffect } from 'react'
-import FilterMenu from './filterMenu'
-import UserTable from './userTable'
-import UserSearch from './userSearch'
-import { useHistory } from 'react-router'
+import React, { useEffect } from "react";
+import FilterMenu from "./filterMenu";
+import { useHistory } from "react-router";
+import UserTable from "./userTable";
+import UserSearch from "./userSearch";
+import ManagementHeader from "../managementHeader";
 
-export default function ManageUserPage({user}) {
-  const history = useHistory();
+import "../../styles/manageUserStyle.css";
 
-  useEffect(() => {
-    if (user && user.userType !== 1){
-      history.push("/not-found");
-    }
-  })
+export default function ManageUserPage({ user }) {
+    const history = useHistory();
 
-  return (
-    <div className="manageuser-container">
-      <UserSearch />
-      <FilterMenu />
-      <div className="usertable-container" style={{padding: '50px', backgroundColor: '#F5F5F5'}}>
-        <UserTable user={user}/>
-      </div>
-    </div>
-  )
+    useEffect(() => {
+        if (user && user.userType !== 1) {
+            history.push("/not-found");
+        }
+    });
+
+    return (
+        <div className="manage-user-container">
+            {/* <UserSearch /> */}
+            <ManagementHeader />
+            <FilterMenu />
+            <div className="usertable-container" style={{}}>
+                <UserTable user={user} />
+            </div>
+        </div>
+    );
 }

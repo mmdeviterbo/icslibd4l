@@ -7,10 +7,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import { Link, useLocation } from "react-router-dom";
 import PersonService from "../../services/personService";
 import Select from "react-select";
+
+import "../../styles/manageUserStyle.css";
 
 const tableHeader = [
   "User ID",
@@ -54,13 +56,19 @@ export default function UserTable({ user }) {
   ];
 
   // Column Header
-  const header = tableHeader.map((header_text, index) => {
-    return (
-      <TableCell key={index} style={{ fontWeight: "bolder" }}>
-        <span>{header_text}</span>
-      </TableCell>
-    );
-  });
+  const header = tableHeader.map((header_text, index) => (
+    <TableCell
+      key={index}
+      style={{
+        align: "left",
+        fontWeight: "bold",
+        fontSize: "1.4rem",
+        zIndex: "0",
+      }}
+    >
+      <span>{header_text}</span>
+    </TableCell>
+  ));
 
   // executes if the location is changed. (Opening modals)
   useEffect(() => {
@@ -94,13 +102,13 @@ export default function UserTable({ user }) {
   };
 
   // Table style
-  const useStyles = makeStyles({
-    root: {
-      borderRadius: "10px",
-    },
-  });
+  // const useStyles = makeStyles({
+  //   root: {
+  //     borderRadius: "10px",
+  //   },
+  // });
 
-  const tableContainer = useStyles();
+  // const tableContainer = useStyles();
 
   // Sets newClassification variable if the select field is changed
   const handleClassificationChange = (e) => {
@@ -117,6 +125,11 @@ export default function UserTable({ user }) {
         options={classificationObj}
         id={`select-classification-${index}`}
         onChange={handleClassificationChange}
+        styles={{
+          // Fixes the overlapping problem of the component
+          menu: (provided) => ({ ...provided, zIndex: 9999 }),
+        }}
+        menuPortalTarget={document.querySelector(".main-table-container")}
       />
     );
   };
@@ -168,30 +181,53 @@ export default function UserTable({ user }) {
   const entries = tableEntry.map((entry, index) => {
     return (
       <TableRow hover key={entry.googleId} user={entry}>
-        <TableCell style={{ width: "80x", fontWeight: "bold" }}>
+        <TableCell
+          style={{
+            fontSize: "16px",
+            width: "15%",
+          }}
+        >
           <span>{entry.googleId}</span>
         </TableCell>
         <TableCell
-          style={{ align: "left", fontWeight: "bolder", color: "black" }}
+          style={{
+            fontSize: "16px",
+            width: "20%",
+            align: "left",
+            color: "black",
+          }}
         >
           <span>{entry.fullName}</span>
         </TableCell>
         <TableCell
-          style={{ align: "left", fontWeight: "bolder", color: "black" }}
+          style={{
+            fontSize: "16px",
+            width: "20%",
+            align: "left",
+            color: "black",
+          }}
         >
           <span>{entry.nickname}</span>
         </TableCell>
-        <TableCell style={{ width: "80px" }}>
+        <TableCell style={{ fontSize: "16px", width: "20%" }}>
           <span>{entry.email}</span>
         </TableCell>
-        <TableCell style={{ width: "80px", textAlign: "center" }}>
+        <TableCell
+          style={{ fontSize: "16px", width: "15%", textAlign: "left" }}
+        >
           {entry.isEditable ? (
             <EditClassification entry={entry} index={index} />
           ) : (
             <span>{classificationString[entry.userType - 1]}</span>
           )}
         </TableCell>
-        <TableCell style={{ textAlign: "center", fontSize: "1.5rem" }}>
+        <TableCell
+          style={{
+            width: " 10%",
+            textAlign: "center",
+            fontSize: "1.5rem",
+          }}
+        >
           {entry.isEditable ? (
             <>
               <Link
@@ -210,23 +246,23 @@ export default function UserTable({ user }) {
                 }}
               >
                 <i
-                  className={"fa fa-floppy-o"}
+                  className={"table-icons fa fa-floppy-o"}
                   onClick={(e) => toggleEdit(index)}
-                  style={{ margin: "10px", color: "#CFCFCF" }}
+                  style={{ margin: "10px", color: "gray" }}
                 ></i>
               </Link>
               <i
-                className="fa fa-times"
+                className="table-icons fa fa-times"
                 onClick={(e) => discardChange(index)}
-                style={{ margin: "10px", color: "#CFCFCF" }}
+                style={{ margin: "10px", color: "red" }}
               ></i>
             </>
           ) : (
             <>
               <i
-                className={"fa fa-edit"}
+                className="table-icons fa fa-pencil"
                 onClick={(e) => toggleEdit(index)}
-                style={{ margin: "10px", color: "#CFCFCF" }}
+                style={{ margin: "10px", color: "gray" }}
               ></i>
               <Link
                 to={{
@@ -246,8 +282,8 @@ export default function UserTable({ user }) {
                 }}
               >
                 <i
-                  className="fa fa-trash-o"
-                  style={{ margin: "10px", color: "#CFCFCF" }}
+                  className="table-icons fa fa-trash-o"
+                  style={{ margin: "10px", color: "red" }}
                 ></i>
               </Link>
             </>
@@ -259,7 +295,7 @@ export default function UserTable({ user }) {
 
   return (
     <>
-      <TableContainer component={Paper} className={tableContainer.root}>
+      <TableContainer component={Paper} className="main-table-container">
         <Table stickyHeader>
           <TableHead>{header}</TableHead>
           <TableBody>
