@@ -14,7 +14,7 @@ const multer = require("multer");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 
-const database = config.get("db");
+const database = process.env.db;
 
 router.post("/get-news", async (req, res) => {
     let options = {
@@ -102,6 +102,7 @@ const storage = new GridFsStorage({
     file: (req, file) => {
         return new Promise(async (resolve, reject) => {
             const bookId = JSON.parse(req.body.body).bookId; //parse the book id from the multipart form
+            const dateAcquired = JSON.parse(req.body.body).dateAcquired; //parse the date acquired from the multipart form
             const existingBook = await bookModel.findOne({ bookId }); //check if the book already exists
             if (existingBook) {
                 // for book create (no oldBookId in input)
@@ -110,12 +111,12 @@ const storage = new GridFsStorage({
                 }else{ //for book update
                     // delete the book cover's entry from .files and .chunks (book_id == metadata in book_covers.files)
                     // check first if the book has a saved book cover
-                    gfs.files.findOne({ metadata : bookId }, (err, existingBookCover) => {
+                    gfs.files.findOne({ "metadata.bookId" : bookId }, (err, existingBookCover) => {
                         if (existingBookCover) {   
                             // .chunks
                             mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
                             // .files
-                            gfs.files.deleteOne({metadata : bookId});
+                            gfs.files.deleteOne({"metadata.bookId" : bookId});
                         }
                     });
                 }          
@@ -130,7 +131,7 @@ const storage = new GridFsStorage({
                     buf.toString("hex") + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    metadata: bookId, //store the book id in the metadata
+                    metadata: {bookId, dateAcquired}, //store the book id in the metadata
                     bucketName: "book_covers",
                 };
                 resolve(fileInfo);
@@ -146,6 +147,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         const {
             bookId,
             title,
+            ISBN,
             authors,
             subjects,
             physicalDesc,
@@ -178,6 +180,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                 //add the non-array fields to the books collection
                 bookId,
                 title,
+                ISBN,
                 physicalDesc,
                 publisher,
                 numberOfCopies,
@@ -223,11 +226,33 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
     }
 });
 
-//display the latest 12 books on the homepage
-router.get("/display", async (req, res) => {
+//display the latest 12 book covers on the homepage
+router.get("/display_covers", async (req, res) => {
+    gfs.files.find().limit(12).sort({"metadata.dateAcquired":-1}).toArray((err, files) => {
+        // Check if files
+        if (!files || files.length === 0) {
+          res.render('index', { files: false });
+        } else {
+          files.map(file => {
+            if (
+              file.contentType === 'image/jpeg' ||
+              file.contentType === 'image/png'
+            ) {
+              file.isImage = true;
+            } else {
+              file.isImage = false;
+            }
+          });
+        //   res.render('index', { files: files });
+        res.send(files);
+        }
+      });
+});
+
+//display the latest 12 book infos on the homepage
+router.get("/display_infos", async (req, res) => {
     bookModel.aggregate(
         [{ $sort: { dateAcquired: -1 } }, { $limit: 12 }],
-
         (err, result) => {
             if (err) {
                 res.send(err);
@@ -243,7 +268,7 @@ router.get("/display", async (req, res) => {
 router.get("/download1", async (req, res) => {
     const { bookId } = req.body;
 
-    gfs.files.findOne({ metadata: bookId }, (err, file) => {
+    gfs.files.findOne({ "metadata.bookId": bookId }, (err, file) => {
         if (err) {
             res.send(err);
         } else {
@@ -257,7 +282,7 @@ router.get("/download1", async (req, res) => {
 router.get("/download2", async (req, res) => {
     const { bookId } = req.body;
 
-    gfs.files.findOne({ metadata: bookId }, (err, file) => {
+    gfs.files.findOne({ "metadata.bookId": bookId }, (err, file) => {
         if (err) {
             res.send(err);
         } else {

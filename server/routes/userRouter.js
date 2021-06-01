@@ -1,17 +1,21 @@
 const router = require("express").Router();
 const UserModel = require("../models/userModel");
 const UserLogModel = require("../models/userLogModel");
-const config = require("config");
 const jwtEncrypt = require("jwt-token-encrypt");
 
 const jwt = require("jsonwebtoken");
 const authFaculty = require("../middleware/authFaculty");
 const authStudent = require("../middleware/authStudent");
 
-const jwtPrivateKey = config.get("jwtPrivateKey");
-const jwtPublicKey = config.get("jwtPublicKey");
+const jwtPrivateKey = process.env.jwtPrivateKey;
+const jwtPublicKey = process.env.jwtPublicKey;
 //create or login account
+// {
+//   googleId,
+//   email,
+//   fullName }
 router.post("/create", async (req, res) => {
+    console.log("here");
     var loggedUser;
     try {
         const { googleId, email, fullName } = req.body;
@@ -32,6 +36,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
+                userType: 1,
                 nickname,
             });
 
@@ -50,8 +55,7 @@ router.post("/create", async (req, res) => {
         });
         await newUserLog.save();
 
-        //NEW IMPLEMENTATION
-        //TODO: MARTY AYUSIN MO TO
+        //NEW IMPLEMENTATION=
         const publicData = null;
         // Data that will only be available to users who know encryption details.
         const privateData = {
@@ -181,7 +185,7 @@ router.delete("/delete", authStudent, async (req, res) => {
 });
 
 //logout current signed in user. deletes cookie for user
-router.post("/logout", authStudent, async (req, res) => {
+router.post("/logout", async (req, res) => {
     const googleId = req.body.googleId;
     try {
         const loggedUser = await UserModel.findOne({ googleId });
@@ -194,11 +198,11 @@ router.post("/logout", authStudent, async (req, res) => {
             activity: "User logout",
         });
         await newUserLog.save();
-
-        res.cookie("token", "", {
-            httpOnly: false,
-            expires: new Date(0),
-        }).send("User Logged Out");
+        res.send();
+        // res.cookie("token", "", {
+        //     httpOnly: false,
+        //     expires: new Date(0),
+        // }).send("User Logged Out");
     } catch (err) {
         console.error(err);
         res.status(500).send();
