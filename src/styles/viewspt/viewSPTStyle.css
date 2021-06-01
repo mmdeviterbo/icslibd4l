@@ -2,36 +2,36 @@
     font-family: 'Montserrat', sans-serif
 } */
 
-.TitleAuthor {
+.title-author {
     margin-top: 8rem;
     margin-bottom:4rem;
     margin-left: 15rem;
     margin-right: 15rem;
 }
 
-.TitleAuthor h1{
+.title-author h1{
     font-size: 2.5rem;
     font-family: 'Montserrat';
     font-weight:bolder;
 }
 
-.TitleAuthor h3 {
+.title-author h3 {
     font-family: 'Montserrat',sans-serif;
     font-weight: normal;
     color: #0067A1;
 }
 
-.TitleAuthor p {
+.title-author p {
     color: #9b9b9b;
 }
 
-.dateandview{
+.date-and-view{
     display:flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.dateandview svg {
+.date-and-view svg {
     color:black;
 }
 
@@ -43,16 +43,16 @@
     text-decoration: underline;
 }
 
-.abstractdiv {
+.abstract-container {
     padding-right: 1.5rem;
 }
 
-.abstractdiv h2 {
+.abstract-container h2 {
     font-family: 'Montserrat', sans-serif;
     padding-bottom: 1rem;
 }
 
-.abstractdiv p{
+.abstract-container p{
     text-align: justify;
     text-justify: inter-word;
 }
@@ -65,7 +65,7 @@
     margin-bottom: 5rem;
 }
 
-.infosidebardiv {
+.info-sidebar {
     padding-left:5rem;
 }
 .spt-thtr{
@@ -76,11 +76,11 @@
     border-color:#e5e5e5;
 }
 
-.sptviewbuttons {
+.spt-view-buttons {
     margin-top: 2rem;
 }
 
-.sptviewbuttons button {
+.spt-view-buttons button {
     font-family: 'Montserrat', sans-serif;
     width: 100%;
     padding: 0.8rem;
@@ -92,7 +92,7 @@
     box-shadow: 1px 1px 0.3rem rgb(204, 204, 204);
 }
 
-.sptviewbuttons button:hover {
+.spt-view-buttons button:hover {
     box-shadow: none;
 
 }

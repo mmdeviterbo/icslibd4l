@@ -164,14 +164,14 @@ const AddNewSPThesisForm = () => {
       console.log(userInput);
       formData.append("body", JSON.stringify(userInput)); // NEED MAUNA TO WTF
       // formData.append("file", source_code);  // Leave it out for now since need ng clarification about this
-      formData.append("pdf", journal);
-      formData.append("pdf", manuscript);
-      formData.append("img files", poster);
+      formData.append("journal", journal);
+      formData.append("manuscript", manuscript);
+      formData.append("poster", poster);
       // formData.append("body", userInput);
       const { data } = await ResourceServices.addSpThesis(formData);
       console.log(data);
       alert(`New Sp/Thesis has been successfully added to the library`);
-      window.location = "/add-new-resource";
+      // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
         alert(err.response.data.errorMessage); // some reason error message

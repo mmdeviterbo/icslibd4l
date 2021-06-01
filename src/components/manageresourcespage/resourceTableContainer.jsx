@@ -1,6 +1,6 @@
 import React from "react";
 import MainResourceTable from "./resourcesMainTable";
-import AddNewResource from "./createNewResource";
+import AddNewResource from "./createNewResources";
 import AddNewSPT from "./newSPTButton";
 // import UserTable from '../manageuserpage/userTable'
 

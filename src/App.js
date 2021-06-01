@@ -6,22 +6,24 @@ import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
-// import ManageResPage from './components/manageresourcespage/manageResourcesPage'
-// import AddResourcePage from "./components/addresourcepage/addNewResourcesPage";
-import EditSPThesisPage from "./components/editresourcepage/editSPTPage";
+import About from "./components/about/about";
+
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
+import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
+import EditSPThesisPage from "./components/editresourcepage/editSPTPage";
+
 import AddBookPage from "./components/addresourcepage/addBookPage";
+import ReadingBookContainer from "./components/viewresources/readingBookContainer";
+
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import ManageUser from "./components/manageuserpage/manageUserPage";
+
 import PersonService from "./services/personService";
 import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
-import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
-import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 import BrowseResources from "./components/browseresources/browseResources";
-import About from "./components/about/about";
 import GetResources from "./components/manageresourcespage/getResources";
-import "./App.css";
 import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
+import "./App.css";
 
 function App() {
     const [user, setUser] = useState(null); //fullname, email, userType (integer)
@@ -61,38 +63,6 @@ function App() {
         } catch (err) {}
     };
 
-    // SAMPLE DATA ONLY
-    const sampleSP = {
-        title: "Adaptive Identification of Rice and Corn Pests (Order Hemiptera) using Back Propagation Neural Network Based on Intensity Histogram",
-        type: "Special Problem",
-        abstract:
-            "Pest identification through image processing using Back Propagation Neural Network with Intensity Histogram as the feature used as basis for classification yielded an accuracy of 100% using 15 test images from each species. However, the application is only limited to pest images that have distinguishable backgrounds. The reliability of the system can be further increased by adding more training data with plain background. This research aims to help users by giving additional information about the pest identified by the system such as description, treatment, and control.",
-        year: 1969,
-        authorList: ["Concepcion L. Khan", "John Viscel M. Sangkal"],
-        adviserList: [
-            "Maria Erika Dominique Cunanan",
-            "Katrina Joy M. Abriol-Santos",
-        ],
-        keywords: ["CMSC191", "CMSC173", "CMSC69"],
-    };
-
-    const sampleBook = {
-        title: "The Little Prince",
-        authorList: ["Antoine de Saint-Exupéry"],
-        physicalDesc: "Paperback : 96 pages \n ",
-        year: 1943,
-        publisher: "Mariner Books; 1st edition (May 15, 2000)",
-        numOfCopies: 5,
-        subjects: [
-            "moral education",
-            "personalism",
-            "dialogic approach",
-            "educational relationship",
-            "educational interaction",
-        ],
-    };
-    // CLEAR UNTIL HERE
-
     return (
         <div className="App" ref={appRef}>
             <NavigationBar
@@ -121,14 +91,15 @@ function App() {
                     path="/account-setting/"
                     component={ViewUserPage}></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
-                {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
 
                 {/* <Route
                     path="/update-sp-thesis"
                     component={UpdateResourceData}></Route> */}
-                    
-                {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
+                {/* <Route
+                    path="/manage-resources"
+                    component={ManageResPage}></Route> */}
 
+                {/* placeholder componenets */}
                 <Route
                     path="/browse-books"
                     render={() => <BrowseResources type={"book"} />}></Route>
@@ -140,6 +111,19 @@ function App() {
                 <Route
                     path="/browse-theses"
                     render={() => <BrowseResources type={"Thesis"} />}></Route>
+
+                <Route
+                    path="/sp-thesis/:id"
+                    render={(props) => (
+                        <ReadingSPTContainer {...props} />
+                    )}></Route>
+
+                <Route
+                    path="/book/:id"
+                    render={(props) => (
+                        <ReadingBookContainer {...props} />
+                    )}></Route>
+                {/* placeholder componenets */}
 
                 {/* <Route
                     path="/manage-resources"
@@ -162,23 +146,13 @@ function App() {
                 <Route
                     path="/edit-resource"
                     component={EditSPThesisPage}></Route>
-                <Route
-                    path="/view-sp-thesis"
-                    render={() => (
-                        <ReadingSPTContainer resourceData={sampleSP}/>
-                    )}></Route>
 
-                {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
-                <Route
-                    path="/view-book"
-                    render={() => (
-                        <ReadingBookContainer/>
-                    )}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
-                <Route exact path="/not-found" component={Notfound}></Route>
                 <Redirect exact from="/" to="/home" />
+                <Route exact path="/not-found" component={Notfound}></Route>
                 <Redirect to="/not-found" />
             </Switch>
+
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"

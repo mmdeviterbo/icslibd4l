@@ -142,6 +142,37 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 //creates a book and uploads its book cover
+/**************************************************** 
+Request Object:
+req object:
+Multipart form
+book: {
+    bookId,
+    title,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    datePublished,
+    dateAcquired,
+}
+file: jpeg/png
+
+res object:
+{
+    bookId,
+    title,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    datePublished,
+    dateAcquired,
+}
+
+********************************************************/
 router.post("/create", authFaculty, upload.any(), async (req, res) => {
     console.log(req.body)
     try {
@@ -263,6 +294,16 @@ router.get("/display_infos", async (req, res) => {
 });
 
 // get the pdf of a particular sp
+/**************************************************** 
+Request Object:
+req object: JSON
+body: {
+  book_id,
+}
+
+Response Object:
+pdf Filestream
+********************************************************/
 // version 1: display file
 router.get("/download1", async (req, res) => {
     const { bookId } = req.body;
@@ -278,6 +319,25 @@ router.get("/download1", async (req, res) => {
     });
 });
 // version 2: display file object
+/**************************************************** 
+Request Object:
+req object: JSON
+body: {
+  book_id,
+}
+
+Response Object:
+{
+  "_id": _id,
+  "length": length,
+  "chunkSize": chunkSize,
+  "uploadDate": uploadDate,
+  "filename": filename,
+  "md5": md5,
+  "contentType": contentType,
+  "metadata": book_id
+}
+********************************************************/
 router.get("/download2", async (req, res) => {
     const { bookId } = req.body;
 
@@ -291,6 +351,26 @@ router.get("/download2", async (req, res) => {
 });
 
 // search data
+/**************************************************** 
+Request Object:
+req query: JSON
+body: {
+  type,
+  search
+}
+
+Response Object: Array of Objects
+{
+  "_id": _id,
+  "length": length,
+  "chunkSize": chunkSize,
+  "uploadDate": uploadDate,
+  "filename": filename,
+  "md5": md5,
+  "contentType": contentType,
+  "metadata": book_id
+}
+********************************************************/
 router.get("/search", async (req, res) => {
     let final_array = [];
 
@@ -430,23 +510,26 @@ router.get("/search", async (req, res) => {
         }
     }
 });
+/**************************************************** 
+Request Object:
+req object:JSON
+book: {
+    oldBookId,
+    bookId,
+    title,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+}
+file: jpeg/png
 
+res String: 
+"Entry Updated"
 
-// acccept multipart form (json body, optional file):
-// {
-// 	"oldBookId" : "",
-// 	"bookId" : "",
-// 	"title" : "",
-// 	"authors" : [{"fname" : "", "lname" : ""}, {"fname" : "", "lname" : ""}],
-// 	"subjects" : ["", ""],
-// 	"physicalDesc" : "",
-// 	"publisher" : "",
-// 	"numberOfCopies" : 1,
-//  "datePublished" : "2021-01-30",
-//  "dateAcquired" : "2021-01-30",
-// }
-
-router.put("/update", authAdmin, upload.any(), async (req, res) => {
+********************************************************/
+router.put("/update-book", authAdmin, async (req, res) => {
     const {
         oldBookId,
         bookId,
@@ -554,11 +637,17 @@ router.put("/update", authAdmin, upload.any(), async (req, res) => {
     }
 });
 
+/**************************************************** 
+Request Object:
+req object:JSON
+book: {
+    bookId
+}
 
-// acccept json:
-// {
-// 	"bookId":""
-// }
+res String: 
+"Entry Deleted"
+
+********************************************************/
 router.delete("/delete", authAdmin, async (req, res) => {
     try {
         const {bookId} = req.body;

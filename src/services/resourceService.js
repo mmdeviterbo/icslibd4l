@@ -62,7 +62,18 @@ function getAllResources(){
     return http.get(`${apiEndpoint}/thesis/search`);
 }
 
+function getSPTFiles({ title, fileType }){
+    console.log(title)
+    console.log(fileType)
+    return http.post(`${apiEndpoint}/thesis/download`, { title, fileType }, {withCredentials: true}, {
+        responseType: 'stream'
+    });
+}
 
+function getBookCover(resourceId){
+    console.log(resourceId)
+    return http.post(`${apiEndpoint}/books/download1`, resourceId, {withCredentials: true});
+}
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
@@ -75,7 +86,9 @@ const exportFunctions = {
     editSpThesis,
     searchBook,
     getBooks,
-    getAllResources
+    getAllResources,
+    getSPTFiles,
+    getBookCover
 }
 
 export default exportFunctions;
