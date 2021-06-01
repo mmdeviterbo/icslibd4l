@@ -186,21 +186,21 @@ const MainResourceTable = () => {
   const [selectedEdit, setSelectedEdit] = useState();
   const [resourceList, setResourceList] = useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await resourceService.browseResources({
-          type: "book",
-        });
-        setResourceList(response.data);
-        console.log(response.data);
-        // setSpThesisList(spThesis_arr)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
+  //   useEffect(() => {
+  //     async function fetchData() {
+  //       try {
+  //         const response = await resourceService.browseResources({
+  //           type: "book",
+  //         });
+  //         setResourceList(response.data);
+  //         console.log(response.data);
+  //         // setSpThesisList(spThesis_arr)
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     }
+  //     fetchData();
+  //   }, []);
 
   console.log(resourceList);
 

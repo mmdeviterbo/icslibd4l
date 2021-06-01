@@ -54,7 +54,7 @@ const AddBookFormContainer = () => {
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
 
   const FormData = require("form-data");
   // const fs = require("fs");
@@ -121,13 +121,8 @@ const AddBookFormContainer = () => {
       };
       console.log(userInput);
       console.log(image);
-      // console.log(typeof dateAcquired);
-      // console.log(typeof datePublished);
-      formData.append("body", userInput);
+      formData.append("body", JSON.stringify(userInput));
       formData.append("file", image);
-      for (var key of formData.entries()) {
-        console.log(key[0] + ", " + key[1]);
-      }
       const { data } = await ResourceServices.addBook(formData);
       alert("New book has been successfully added to the library");
       window.location = "/add-new-resource";
@@ -360,12 +355,18 @@ const AddBookFormContainer = () => {
                 }}
               />
             </div>
-            ...or upload description file:
-            <input type="file" class="resourcefiles" id="uploadDesc" />
-            <br />
-            <br />
-            <br />
-            <br />
+            <div class="primaryfields">
+              <label for="availBookCopies">
+                No. of copies available: &nbsp;{" "}
+              </label>
+              <input
+                type="number"
+                id="availBookCopies"
+                onChange={(event) => {
+                  setNumOfCopies(event.target.value);
+                }}
+              />
+            </div>
             <div className="bookRelatedCourses">
               <br />
               Related Courses:

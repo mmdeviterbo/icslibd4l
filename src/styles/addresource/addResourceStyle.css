@@ -82,19 +82,35 @@
   padding: 0.5rem;
 }
 
-#createForm h5 {
-  font-family: "Montserrat", sans-serif;
-  font-weight: normal;
+.primaryfields textarea {
+  height: 20rem;
+  width: 21.3rem;
+  border-radius: 0.3rem;
+  border-color: #cfcfcf solid;
+  border-style: solid;
+  border-width: 0.2rem;
+  padding: 0.5rem;
 }
 
-.res-primary-info {
+#addAuthor {
+  font-family: "Montserrat", sans-serif;
+  padding: 0.5rem;
+  padding-right: 1rem;
+  float: right;
+  margin: 0.2rem;
+  display: flex;
+  align-items: center;
   background-color: white;
-  padding: 2.5rem;
-  border-width: 0.5rem;
-  border-radius: 0.3rem;
-  margin: 2rem;
-  width: 28rem;
-  height: 100%;
+  border-style: solid;
+  border-radius: 0.5rem;
+  border-color: #dadada;
+  border-width: 0.2rem;
+}
+
+#addAuthor:hover {
+  background-color: #0067a1;
+  color: white;
+  border-color: white;
 }
 
 #deleteAuthor {
@@ -177,11 +193,6 @@
   font-family: "Montserrat", sans-serif;
 }
 
-#sptform h5 {
-  font-weight: normal;
-  font-family: "Montserrat", sans-serif;
-}
-
 .spthesisfiles {
   font-weight: normal;
   font-family: "Montserrat", sans-serif;
@@ -202,7 +213,7 @@
 }
 /* 
 .spthesisfiles input{
-    width: 35rem;
+  width: 35rem;
 } */
 
 #addAdviser {
@@ -248,10 +259,6 @@
 .add-spt-page-container {
   display: flex;
   flex-direction: row;
-}
-
-#keywords-field {
-  border-color: #cfcfcf;
 }
 
 #keywords-field {

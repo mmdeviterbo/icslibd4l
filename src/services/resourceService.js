@@ -55,7 +55,7 @@ function getNews(){
 
 // get all books, sorted by date (latest acquisition feature)
 function getBooks(){
-    return http.get(`${apiEndpoint}/books/display`);
+    return http.get(`${apiEndpoint}/books/display_covers`);
 }
 
 function getAllResources(){
