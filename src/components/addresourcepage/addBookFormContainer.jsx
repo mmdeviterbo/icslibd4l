@@ -50,7 +50,7 @@ const AddBookFormContainer = () => {
       lname: "",
     },
   ]);
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState(null);
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
@@ -120,6 +120,7 @@ const AddBookFormContainer = () => {
         numberOfCopies: numOfCopies,
       };
       console.log(userInput);
+      console.log(courses);
       console.log(image);
       formData.append("body", JSON.stringify(userInput));
       formData.append("file", image);
@@ -362,7 +363,11 @@ const AddBookFormContainer = () => {
               <input
                 type="number"
                 id="availBookCopies"
+                defaultValue={0}
                 onChange={(event) => {
+                  if (event.target.value < 0 || !event.target.value) {
+                    event.target.value = event.target.defaultValue;
+                  }
                   setNumOfCopies(event.target.value);
                 }}
               />
