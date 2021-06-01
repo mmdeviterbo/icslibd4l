@@ -12,9 +12,11 @@ const methodOverride = require("method-override");
 module.exports = function (app) {
     //parser tools
     app.use(express.json());
-    app.use(express.urlencoded({
-      extended: true
-    }));
+    app.use(
+        express.urlencoded({
+            extended: true,
+        })
+    );
     app.use(cookieParser());
     app.use(methodOverride("_method"));
     app.use(function (req, res, next) {
@@ -38,18 +40,9 @@ module.exports = function (app) {
     );
 
     // set up routes
-
+    app.use("/admin", require("../routes/adminRouter"));
     app.use("/users", require("../routes/userRouter"));
     app.use("/books", require("../routes/bookRouter"));
-    app.use("/admin", require("../routes/adminRouter"));
-
-    // set up routes
-    app.use("/admin", require("../routes/adminRouter"));
-    app.use("/faculty", require("../routes/icsFacultyStaffRouter"));
-    app.use("/users", require("../routes/userRouter"));
-    app.use("/books", require("../routes/bookRouter"));
-
-    // set up routes: thesis
     app.use("/thesis", require("../routes/spThesisRouter"));
     app.use("/faculty", require("../routes/icsFacultyStaffRouter"));
 };
