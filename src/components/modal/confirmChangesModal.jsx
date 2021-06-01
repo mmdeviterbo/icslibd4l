@@ -6,21 +6,30 @@ import Button from "react-bootstrap/Button";
 // import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
-// import StatusModal from "./operationStatusModal";
+import StatusModal from "./operationStatusModal";
 
 //  TODO: add documentation
 const ConfirmChangeModal = ({ user }) => {
   const history = useHistory();
   const location = useLocation();
-  const id = location.state.id;
+  const { id } = location.state.id;
   const item = location.state.item;
   const toEdit = location.state.user; // Object containing user information to be deleted
   // const userState = user;
-  // const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const [itemName, setItemName] = useState("");
   const [show, setShow] = useState(true);
-  // const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [pathAfter, setPathAfter] = useState("");
+  const [isSelf, setIsSelf] = useState(false);
 
   const handleClose = () => {
+    setShow(false);
+    // history.goBack();
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
     setShow(false);
     history.goBack();
   };
@@ -31,31 +40,38 @@ const ConfirmChangeModal = ({ user }) => {
     try {
       if (item === "resource") {
         // const { data } = await ResourceService.deleteSpThesis(id);
-        // setMessage("success");
+        setMessage("success");
         handleClose();
-        window.location = "/manage-resources";
+        setPathAfter("/manage-resources");
+        // window.location = "/manage-resources";
       } else if (item === "account") {
         localStorage.removeItem(jwtPrivateKey); // remove token from the browser
-        await PersonService.logoutUser(user); // logs the user out
-
         await PersonService.updateNickname(user); //edit the user from the database
-        // setMessage("success");
-        window.location = "/";
+
+        await PersonService.logoutUser(user); // logs the user out
+        setIsSelf(true);
+        setMessage("success");
+        setItemName(user.fullName);
+        setPathAfter("/");
+        // window.location = "/";
       } else {
         if (toEdit.googleId === user.googleId) {
           localStorage.removeItem(jwtPrivateKey); // removes token from the browser
           await PersonService.logoutUser(user); // logs the user out
-          window.location = "/";
+          setIsSelf(true);
+          setPathAfter("/");
+          // window.location = "/";
         }
 
         await PersonService.updateClassification(toEdit);
 
-        // setMessage("success");
+        setMessage("success");
+        setItemName(toEdit.fullName);
         handleClose();
       }
     } catch (err) {
       if (err.response && err.response.data) {
-        // setMessage("fail");
+        setMessage("fail");
         alert(err.response.data.errorMessage); // some reason error message
       }
       console.log(err);
@@ -64,12 +80,15 @@ const ConfirmChangeModal = ({ user }) => {
 
   return (
     <>
-      {/* <StatusModal
+      <StatusModal
         show={visible}
+        setShow={setShow}
         message={message}
-        id={id}
+        name={itemName}
         operation={"edit"}
-      /> */}
+        pathAfter={pathAfter}
+        isSelf={isSelf}
+      />
       <Modal
         show={show}
         onHide={handleClose}
@@ -103,19 +122,18 @@ const ConfirmChangeModal = ({ user }) => {
           If account, else resource/user */}
         <Modal.Body>
           {item === "account" ? (
-            <Modal.Body>
-              Are you sure you want to remove your account?
-            </Modal.Body>
+            <Modal.Body>Save changes to your account?</Modal.Body>
           ) : (
             <Modal.Body>
-              Are you sure you want to save changes to {toEdit.fullName}?
+              Are you sure you want to save changes to{" "}
+              {item === "resource" ? id : toEdit.fullName}?
             </Modal.Body>
           )}
           {/* read resource title and author here */}
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCancel}>
             Cancel
           </Button>
           <Button variant="success" onClick={handleSubmit}>

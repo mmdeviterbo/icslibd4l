@@ -2,25 +2,34 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
-// import { useHistory } from "react-router";
+import { useHistory } from "react-router";
 
-const StatusModal = ({ message, id, show, operation }) => {
-  const [visible, setVisible] = useState(show);
-
-  useEffect(() => {
-    console.log(show);
-    console.log("Hello from status modal");
-  }, [show]);
+const StatusModal = ({
+  message,
+  name,
+  show,
+  setShow,
+  operation,
+  pathAfter,
+  item,
+  isSelf,
+}) => {
+  const history = useHistory();
 
   const handleClose = () => {
-    setVisible(false);
-    // history.goBack();
+    setShow(false);
+    if (pathAfter) {
+      // console.log(pathAfter);
+      window.location = pathAfter;
+    } else {
+      history.goBack();
+    }
   };
 
   return (
     <>
       <Modal
-        show={visible}
+        show={show}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
@@ -29,11 +38,13 @@ const StatusModal = ({ message, id, show, operation }) => {
         <Modal.Body>
           {message === "success" ? (
             <Modal.Title>
-              {id} has been {operation} successfully.
+              {isSelf ? "Your account" : name} has been{" "}
+              {operation === "edit" ? "edited" : "deleted"} successfully.
+              {isSelf ? " You will be logged out." : ""}
             </Modal.Title>
           ) : (
             <Modal.Title>
-              Failed to {operation} {id}.
+              Failed to {operation} {name}.
             </Modal.Title>
           )}
         </Modal.Body>
