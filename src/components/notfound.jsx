@@ -9,9 +9,9 @@ import {Link} from 'react-router-dom';
 export default function Notfound() {
     useEffect(()=>{
         gsap.from('.white-notfound',{
-            duration:1,
+            duration:0.5,
             x:-50,
-            scale:0.5
+            scale:0.7
         });
     },[])
 
