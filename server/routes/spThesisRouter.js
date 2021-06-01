@@ -124,7 +124,9 @@ body: {
   authors : [ {fname, lname}, ... ]
   advisers: [ {fname, lname}, ... ]
 }
-file : pdf
+manuscript : pdf
+poster : pdf
+journal : img file
 
 Response Object:
 {
@@ -137,10 +139,6 @@ Response Object:
   "title": title,
   "abstract": abstract,
   "year":year,
-  "source_code": source_code,
-  "manuscript": "manuscrip,
-  "journal": journal,
-  "poster": poster,
   "__v": 0
 }
 ********************************************************/
@@ -266,30 +264,50 @@ router.post("/create", upload.fields([
     }
 });
 
+// Reference:
+// https://stackoverflow.com/questions/36891931/gridfs-find-file-by-id-download-with-the-name-of-the-file
+
+
 // get the pdf of a particular sp
 // version 1: display file
 /**************************************************** 
-Request Object:
-req object: JSON
-body: {
-  sp_thesis_id,
-}
+Request Query:
+    title: 
+    type: "manuscript", "journal"
 
 Response Object:
 pdf Filestream
 ********************************************************/
-router.get("/download1", async (req, res) => {
-    const { sp_thesis_id } = req.body;
+router.get("/download", async (req, res) => {
 
-    gfs.files.findOne({ metadata: sp_thesis_id }, (err, file) => {
-        if (err) {
-            res.send(err);
-        } else {
-            // Read output to browser
-            const readstream = gfs.createReadStream(file.filename);
-            readstream.pipe(res);
+    thesisModel.findOne(
+        {"title":{$regex: req.query.search, $options:'i'}},
+        (err, result) =>{
+            if(err){
+                res.send(err);
+            }else{
+                console.log(result.sp_thesis_id)
+
+                gfs.files.findOne(
+                    {metadata: [result.sp_thesis_id ,req.query.type]}, 
+                    (err, file) => {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        // Read output to browser
+                        const readstream = gfs.createReadStream(file.filename);
+                        readstream.pipe(res);
+                    }
+                });
+
+            }
         }
-    });
+    );
+
+
+    
+   
+
 });
 // version 2: display file object
 /**************************************************** 
