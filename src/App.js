@@ -6,15 +6,15 @@ import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
-// import ManageResPage from './components/manageresourcespage/manageresourcespage'
+// import ManageResPage from './components/manageresourcespage/manageResourcesPage'
 // import AddResourcePage from "./components/addresourcepage/addNewResourcesPage";
 import EditResourcePage from "./components/editresourcepage/editResourceForm";
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
 import AddBookFormContainer from "./components/addresourcepage/addBookFormContainer";
-import ManageUser from "./components/manageuserpage/manageUserPage";
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
+import ManageUser from "./components/manageuserpage/manageUserPage";
 import PersonService from "./services/personService";
-import DeletePopUpCont from "./components/manageresourcespage/deleteModalContainer";
+import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
 import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 import BrowseResources from "./components/browseresources/browseResources";
@@ -120,36 +120,34 @@ function App() {
                 <Route
                     path="/account-setting/"
                     component={ViewUserPage}></Route>
-
-                <Route
-                    path="/home"
-                    render={() => (
-                        <Homepage
-                            browseRef={browseRef}
-                            appRef={appRef}
-                            latestAcqRef={latestAcqRef}
-                            newsRef={newsRef}
-                        />
-                    )}
-                />
                 <Route exact path="/not-found" component={Notfound}></Route>
-
-                {/* add your new route/path here */}
                 {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
                 <Route
                     path="/update-sp-thesis"
                     component={UpdateResourceData}></Route>
                 {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
+
                 <Route
-                    path="/browse-resources"
+                    path="/browse-books"
                     render={() => <BrowseResources type={"book"} />}></Route>
+                <Route
+                    path="/browse-special-problems"
+                    render={() => (
+                        <BrowseResources type={"Special Problem"} />
+                    )}></Route>
+                <Route
+                    path="/browse-theses"
+                    render={() => <BrowseResources type={"Thesis"} />}></Route>
+
                 <Route
                     path="/manage-resources"
                     render={() => (
                         <GetResources resourceType={"Book"} />
                     )}></Route>
-                <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
 
+                <Route path="/manage-users" component={ManageUser}></Route>
+
+                <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route
                     path="/add-new-book"
                     component={AddBookFormContainer}></Route>
@@ -158,16 +156,17 @@ function App() {
                     component={EditResourcePage}></Route>
                 <Route
                     path="/view-sp-thesis"
+                    // component={ReadingSPTContainer}
                     render={() => (
-                        <ReadingSPTContainer sampleSP={sampleSP} />
+                        <ReadingSPTContainer resourceData={sampleSP} />
                     )}></Route>
+
                 {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
                 <Route
                     path="/view-book"
                     render={() => (
                         <ReadingBookContainer sampleBook={sampleBook} />
                     )}></Route>
-                <Route path="/manage-users" component={ManageUser}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Route exact path="/not-found" component={Notfound}></Route>
                 <Redirect exact from="/" to="/home" />
@@ -176,7 +175,19 @@ function App() {
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"
-                    children={<DeletePopUpCont />}
+                    children={<DeleteModalContainer />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/delete-user"
+                    children={<DeleteModalContainer />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/account-setting/remove-account"
+                    children={<DeleteModalContainer user={user} />}
                 />
             )}
             <Footer />
