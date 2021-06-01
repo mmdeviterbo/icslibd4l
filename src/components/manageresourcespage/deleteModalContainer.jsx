@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
-// import StatusModal from "../modal/operationStatusModal";
+import StatusModal from "../modal/operationStatusModal";
 
 //  TODO: add documentation
 const DeletePopUpCont = ({ user }) => {
@@ -16,11 +16,20 @@ const DeletePopUpCont = ({ user }) => {
   const item = location.state.item;
   const toDelete = location.state.user; // Object containing user information to be deleted
   // const userState = user;
-  // const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
   const [show, setShow] = useState(true);
-  // const [visible, setVisible] = useState(false); // State for the status message modal
+  const [visible, setVisible] = useState(false); // State for the status message modal
+  const [itemName, setItemName] = useState("");
+  const [pathAfter, setPathAfter] = useState("");
+  const [isSelf, setIsSelf] = useState(false);
 
   const handleClose = () => {
+    setShow(false);
+    // history.goBack();
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
     setShow(false);
     history.goBack();
   };
@@ -32,33 +41,49 @@ const DeletePopUpCont = ({ user }) => {
     try {
       if (item === "resource") {
         await ResourceService.deleteSpThesis(id);
-        // setMessage("success");
+        console.log(id);
+        setItemName(id);
+        setMessage("success");
         handleClose();
         // setVisible(true);
-        window.location = "/manage-resources";
+        // window.location = "/manage-resources";
+        setPathAfter("/manage-resources");
       } else if (item === "account") {
-        localStorage.removeItem(jwtPrivateKey); // removes token from the browser
-        await PersonService.logoutUser(user); // logs the user out
-
+        setItemName(user.fullName);
+        console.log("error here");
         await PersonService.deleteUser(user); //deletes the user from the database
-        // setMessage("success");
-        window.location = "/";
+
+        await PersonService.logoutUser(user); // logs the user out
+        localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+        setIsSelf(true);
+        setMessage("success");
+        setPathAfter("/");
+        handleClose();
+        // window.location = "/";
       } else {
         if (toDelete.googleId === user.googleId) {
-          localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+          await PersonService.deleteUser(toDelete);
+
           await PersonService.logoutUser(user); // logs the user out
-          window.location = "/";
+          localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+          setIsSelf(true);
+          setMessage("success");
+          setPathAfter("/");
+          // window.location = "/";
+          handleClose();
+        } else {
+          await PersonService.deleteUser(toDelete);
+
+          setMessage("success");
+          setItemName(toDelete.fullName);
+          handleClose();
         }
-
-        await PersonService.deleteUser(toDelete);
-
-        // setMessage("success");
-        handleClose();
       }
     } catch (err) {
       if (err.response && err.response.data) {
-        // setMessage("fail");
-        alert(err.response.data.errorMessage); // some reason error message
+        setMessage("fail");
+        alert(err);
+        // alert(err.response.data.errorMessage); // some reason error message
       }
       console.log(err);
     }
@@ -66,6 +91,16 @@ const DeletePopUpCont = ({ user }) => {
 
   return (
     <>
+      <StatusModal
+        show={visible}
+        setShow={setVisible}
+        message={message}
+        name={itemName}
+        item={item}
+        operation={"delete"}
+        pathAfter={pathAfter}
+        isSelf={isSelf}
+      />
       <Modal
         show={show}
         onHide={handleClose}
@@ -103,13 +138,16 @@ const DeletePopUpCont = ({ user }) => {
               Are you sure you want to remove your account?
             </Modal.Body>
           ) : (
-            <Modal.Body>Are you sure you want to delete {id}?</Modal.Body>
+            <Modal.Body>
+              Are you sure you want to delete{" "}
+              {item === "resource" ? id : toDelete.fullName}?
+            </Modal.Body>
           )}
           {/* read resource title and author here */}
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCancel}>
             Close
           </Button>
           <Button variant="danger" onClick={handleSubmit}>
@@ -117,12 +155,6 @@ const DeletePopUpCont = ({ user }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      {/* <StatusModal
-        message={message}
-        id={id}
-        visible={visible}
-        operation={"delete"}
-      /> */}
     </>
   );
 };
