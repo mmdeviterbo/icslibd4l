@@ -6,6 +6,7 @@ input {
   border-radius: 8px;
   padding: 12px;
   outline-style: none;
+  width: 100%;
 }
 
 input:focus {
@@ -13,6 +14,12 @@ input:focus {
   border: inherit + .5px solid #90ee90;
 }
 
+.edit-icon:hover {
+  transition: transform 100ms ease, box-shadow 125ms ease;
+  transform: scale(1.25);
+  cursor: pointer;
+
+}
 
 /* profileContainer */
 .profile-container {
@@ -36,13 +43,14 @@ input:focus {
   padding-left: none;
   padding-top: 21px;
   align-items: flex-start;
-
+  
 }
 
 .grid-columns {
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 12px 0px 12px 12px;
+  /* border: 1px solid red; */
 }
 
 .label-container {
