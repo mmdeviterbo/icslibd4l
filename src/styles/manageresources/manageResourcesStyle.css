@@ -2,59 +2,6 @@ body{
     font-family: 'Montserrat', sans-serif;
 }
 
-/* Manage Resources + Search Bar Container */
-.manageresheader{
-    background-color:#CFCFCF;
-    width: 100%;
-    height: 14rem;
-    display:flex;
-    flex-direction:row; 
-    align-items: center;
-    justify-content: space-around;  
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    padding-left: 2.5rem; 
-    padding-right: 2.5rem;
-}
-
-.manageresheader h1{
-    font-family: 'Montserrat', sans-serif;
-    font-weight: normal;
-    font-size: 2.75rem;
-    text-decoration: none;
-    margin:0;
-    color: black;
-}
-
-/* Search Bar + Button Container */
-.staff-search-bar-container {
-    display:flex;
-    padding:0;
-}
-
-/* Search Field */
-#searchbarresources{
-    height: 3.5rem;
-    width: 32rem; 
-    padding:3px;
-    padding-left:10px;
-    border:none;
-    border-top-left-radius:8px;
-    border-bottom-left-radius:8px;
-    font-size:14px
-}
-
-/* Search Button */
-#searchbarresbutton {
-    border:none;
-    color:#EDEDED;
-    height: 3.5rem;
-    width:4rem;
-    border-top-right-radius:8px;
-    border-bottom-right-radius:8px;
-}
-
-
 
 /* Filter fields container */
 .res-filter-container {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,6 +13,7 @@ const DeletePopUpCont = ({ user }) => {
     const location = useLocation();
     const { id } = location.state.id;
     const item = location.state.item;
+    const toDelete = location.state.user;           // Object containing user information to be deleted
     // const userState = user;
     const [show, setShow] = useState(true);
     const handleClose = () => {
@@ -31,12 +32,20 @@ const DeletePopUpCont = ({ user }) => {
                 handleClose();
                 window.location = "/manage-resources";
             } else if (item == "account") {
-                localStorage.removeItem(jwtPrivateKey); // removes token from the browser
-                await PersonService.logoutUser(user); // logs the user out
+                if (toDelete && user.googleId !== toDelete.googleId) {        // The user to be deleted is not undefined and not the user currently logged in.
+                    await PersonService.deleteUser(toDelete);
+                    
+                    IsDeleted("sucess");
+                    handleClose();
+                }else{
+                    localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+                    await PersonService.logoutUser(user); // logs the user out
 
-                const { data } = await PersonService.deleteUser(user); //deletes the user from the database
-                IsDeleted("success");
-                window.location = "/";
+                    const { data } = await PersonService.deleteUser(user); //deletes the user from the database
+                    IsDeleted("success");
+                    window.location = "/";
+                }
+                
             } else {
                 const { data } = await PersonService.deleteUser(id);
                 IsDeleted("success");
@@ -47,6 +56,7 @@ const DeletePopUpCont = ({ user }) => {
                 IsDeleted("fail");
                 alert(err.response.data.errorMessage); // some reason error message
             }
+            console.log(err);
         }
     };
 
