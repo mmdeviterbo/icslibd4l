@@ -39,7 +39,7 @@ const InfoSidebar = ({ type, adviserList, keywords }) => {
                 <br />
                 <br />
                 {/* if guest/book -> display: none */}
-                <a id="viewmanuscript">
+                <a id="view-manuscript">
                     {/* <i class = "fas fa-book-open"></i> */}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

@@ -1,12 +1,12 @@
-/* .ViewSPTMainPageContainer {
-    font-family: 'Montserrat', sans-serif
-} */
+.book-page-container {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 10%;
+}
 
 .title-author {
-    margin-top: 8rem;
-    margin-bottom:4rem;
-    margin-left: 15rem;
-    margin-right: 15rem;
+    margin: 2rem 10%;
+
 }
 
 .title-author h1{
@@ -35,11 +35,11 @@
     color:black;
 }
 
-#viewmanuscript{
+#view-manuscript{
     color: #0067A1;
 }
 
-#viewmanuscript:hover{
+#view-manuscript:hover{
     text-decoration: underline;
 }
 
@@ -98,11 +98,15 @@
 }
 
 .bookcover-and-desc{
-    margin-left: 15rem;
-    margin-bottom: 8rem;
+    display: flex;
+    justify-content: space-between;  
+
+    margin: 2rem 10%;
+    /* margin-left: 15rem; */
+    /* margin-bottom: 8rem; */
 }
 
-.bookinfotr {
+.book-info-tr {
     padding: 1.3rem;
     padding-right: 3rem;
     border-bottom: 1px solid;
@@ -115,12 +119,13 @@
     justify-content: space-around;
 }
 
-.physdescdiv {
-    padding-left: 6rem;
-    padding-right: 15rem;
+.phys-description {
+    margin: 2rem 10%;
+    /* padding-left: 6rem;
+    padding-right: 15rem; */
 }
 
-.physdescdiv p {
+.phys-description p {
     text-align: justify;
     text-justify: inter-word;
 }

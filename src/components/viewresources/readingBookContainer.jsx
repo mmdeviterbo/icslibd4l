@@ -13,7 +13,7 @@ const ReadingBookContainer = (props) => {
         console.log(resourceData);
     }, []);
     return (
-        <div className="bookpagecontainer">
+        <div className="book-page-container">
             <TitleContainer
                 title={resourceData.title}
                 authorList={resourceData.author}
