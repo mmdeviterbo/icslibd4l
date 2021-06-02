@@ -266,15 +266,16 @@ router.get("/display_covers", async (req, res) => {
           files.map(file => {
             if (
               file.contentType === 'image/jpeg' ||
-              file.contentType === 'image/png'
+              file.contentType === 'image/png' ||
+              file.contentType === 'image/webp'
             ) {
               file.isImage = true;
             } else {
               file.isImage = false;
             }
           });
-        //   res.render('index', { files: files });
-        res.send(files);
+          // res.send(files);
+          res.render('index', { files: files });
         }
       });
 });

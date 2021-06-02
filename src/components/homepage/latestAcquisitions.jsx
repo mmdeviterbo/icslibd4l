@@ -3,19 +3,25 @@ import CardBook from "./cardBook";
 import latestAcqBg from "../../assets/searchBg_4.png";
 import { useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
+import Parser from 'html-react-parser';
 
 export default function LatestAcquisitions({ latestAcqRef }) {
   const history = useHistory();
   const [hoverText, setHoverText] = useState("");
   const [acquisitions, setacquisitions] = useState([]);
+  const [covers, setCovers] = useState("");
+
   const imgNotAvailable =
     "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
   useEffect(() => {
     async function getLatestAcquisition() {
       // get title and year (of 12 books, sorted array)
-      const { data } = await ResourceService.getBooks();
-      setacquisitions(data);
+      const booksInfo  = await ResourceService.getBooks();
+      setacquisitions(booksInfo.data);
+
+      const bookCovers = await ResourceService.getBookCovers();
+      setCovers(bookCovers.data);
     }
     getLatestAcquisition();
   }, []);
@@ -36,6 +42,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
       style={latestAcquisitionsContainer}
       ref={latestAcqRef}
     >
+      <div>{covers && Parser(covers)}</div>
       <img src={latestAcqBg} style={latestAcqBgStyle} alt="#" />
       <div style={colorsParent} className="latestAcqcolorsParent">
         <div style={whiteBg}>
