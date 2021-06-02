@@ -44,8 +44,10 @@ const fileFilter = (req, file, cb) => {
         ) {
             cb(null, true);
         } else {
-            cb(null, false);
+            cb(new Error("Not a IMG File!!"), false);
         }
+    } else if (file.fieldname == "source code") {
+        cb(null, true);
     }
 };
 
@@ -168,7 +170,6 @@ body: {
   title" title,
   abstract" abstract,
   year: year,
-  source_code: source_code,
   manuscript: manuscript,
   journal: journal,
   poster: poster,
@@ -179,6 +180,7 @@ body: {
 manuscript : pdf
 poster : pdf
 journal : img file
+source code : file
 
 Response Object:
 {
@@ -202,6 +204,7 @@ router.post(
         { name: "manuscript", maxCount: 1 },
         { name: "poster", maxCount: 1 },
         { name: "journal", maxCount: 1 },
+        { name: "source code", maxCount: 1 }
     ]),
     async (req, res) => {
         try {
@@ -328,15 +331,15 @@ router.post(
 // Reference:
 // https://stackoverflow.com/questions/36891931/gridfs-find-file-by-id-download-with-the-name-of-the-file
 
-// get the pdf of a particular sp
-// version 1: display file
+// get the manuscript, journal, or source code of a particular sp/thesis
 /**************************************************** 
 Request Query:
     title: 
-    type: "manuscript", "journal"
+    type: "manuscript", "journal", "source code"
 
 Response Object:
-pdf Filestream
+    * pdf Filestream for manuscript and journal
+    * Filestream for sourcecode
 ********************************************************/
 router.get("/download", async (req, res) => {
     thesisModel.findOne(
@@ -349,6 +352,42 @@ router.get("/download", async (req, res) => {
 
                 gfs.files.findOne(
                     { metadata: [result.sp_thesis_id, req.query.type] },
+                    (err, file) => {
+                        if (err) {
+                            res.send(err);
+                        } else {
+                            // Read output to browser
+                            const readstream = gfs.createReadStream(
+                                file.filename
+                            );
+                            readstream.pipe(res);
+                        }
+                    }
+                );
+            }
+        }
+    );
+});
+
+
+// get the poster of a particular sp/thesis
+/**************************************************** 
+Request Query:
+    title: 
+Response Object:
+img Filestream for poster
+********************************************************/
+router.get("/preview", async (req, res) => {
+    thesisModel.findOne(
+        { title: { $regex: req.query.search, $options: "i" } },
+        (err, result) => {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log(result.sp_thesis_id);
+
+                gfs.files.findOne(
+                    { metadata: [result.sp_thesis_id, "poster"] },
                     (err, file) => {
                         if (err) {
                             res.send(err);
@@ -1516,7 +1555,7 @@ router.get("/search", async (req, res) => {
     }
 
     // ---------------------------------------- SUB FUNCTIONS
-    if (req.query.type == "all") {
+    if (req.query.type == "any") {
         // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
         // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
         // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
