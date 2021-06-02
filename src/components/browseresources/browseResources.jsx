@@ -11,7 +11,7 @@ export default function BrowseResources({ type }) {
     // const location = useLocation();
     const [resourceList, setResourceList] = useState([]);
 
-    const { TblContainer } = viewTable();
+  const { TblContainer } = viewTable();
 
     async function fetchData() {
         try {
@@ -20,10 +20,10 @@ export default function BrowseResources({ type }) {
         } catch (error) {}
     }
 
-    useEffect(() => {
-        fetchData();
-        window.scrollTo(0, 0);
-    }, []);
+  useEffect(() => {
+    fetchData();
+    window.scrollTo(0, 0);
+  }, []);
 
     const ViewSPThesis = () => {
         return (
@@ -186,18 +186,19 @@ export default function BrowseResources({ type }) {
     };
 
     return (
-        <div
-            className="viewitem-container"
-            style={{ padding: "5vw 3vw", minHeight: "90vh" }}>
-            {type == "book" ? <ViewBook /> : <ViewSPThesis />}
-        </div>
-    );
+    <div
+      className="viewitem-container"
+      style={{ padding: "5vw 3vw", minHeight: "90vh" }}
+    >
+      {type == "book" ? <ViewBook /> : <ViewSPThesis />}
+    </div>
+  );
 }
 
 const captionStyle = {
-    fontSize: "calc(10px + 0.2vw)",
+  fontSize: "calc(10px + 0.2vw)",
 };
 
 const bodyStyle = {
-    fontSize: "calc(10px + 0.2vw)",
+  fontSize: "calc(10px + 0.2vw)",
 };

@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
-import ResourceService from "../../services/resourceService";
+// import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
-import StatusModal from "../modal/operationStatusModal";
+import StatusModal from "./operationStatusModal";
 
 //  TODO: add documentation
-const DeletePopUpCont = ({ user }) => {
+const ConfirmChangeModal = ({ user }) => {
   const history = useHistory();
   const location = useLocation();
   const { id } = location.state.id;
   const item = location.state.item;
-  const toDelete = location.state.user; // Object containing user information to be deleted
+  const toEdit = location.state.user; // Object containing user information to be deleted
   // const userState = user;
   const [message, setMessage] = useState("");
-  const [show, setShow] = useState(true);
-  const [visible, setVisible] = useState(false); // State for the status message modal
   const [itemName, setItemName] = useState("");
+  const [show, setShow] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [pathAfter, setPathAfter] = useState("");
   const [isSelf, setIsSelf] = useState(false);
 
@@ -34,55 +35,44 @@ const DeletePopUpCont = ({ user }) => {
   };
 
   const handleSubmit = async (event) => {
-    console.log(user);
     event.preventDefault();
     // handleClose();
     try {
       if (item === "resource") {
-        await ResourceService.deleteSpThesis(id);
-        console.log(id);
-        setItemName(id);
+        // const { data } = await ResourceService.deleteSpThesis(id);
         setMessage("success");
         handleClose();
-        // setVisible(true);
-        // window.location = "/manage-resources";
         setPathAfter("/manage-resources");
+        // window.location = "/manage-resources";
       } else if (item === "account") {
-        setItemName(user.fullName);
-        console.log("error here");
-        await PersonService.deleteUser(user); //deletes the user from the database
+        localStorage.removeItem(jwtPrivateKey); // remove token from the browser
+        await PersonService.updateNickname(user); //edit the user from the database
 
         await PersonService.logoutUser(user); // logs the user out
-        localStorage.removeItem(jwtPrivateKey); // removes token from the browser
         setIsSelf(true);
         setMessage("success");
+        setItemName(user.fullName);
         setPathAfter("/");
-        handleClose();
         // window.location = "/";
       } else {
-        if (toDelete.googleId === user.googleId) {
-          await PersonService.deleteUser(toDelete);
-
-          await PersonService.logoutUser(user); // logs the user out
+        if (toEdit.googleId === user.googleId) {
           localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+          await PersonService.logoutUser(user); // logs the user out
           setIsSelf(true);
-          setMessage("success");
           setPathAfter("/");
           // window.location = "/";
-          handleClose();
-        } else {
-          await PersonService.deleteUser(toDelete);
-
-          setMessage("success");
-          setItemName(toDelete.fullName);
-          handleClose();
         }
+
+        await PersonService.updateClassification(toEdit);
+
+        setMessage("success");
+        setItemName(toEdit.fullName);
+        handleClose();
       }
     } catch (err) {
       if (err.response && err.response.data) {
         setMessage("fail");
-        alert(err);
-        // alert(err.response.data.errorMessage); // some reason error message
+        alert(err.response.data.errorMessage); // some reason error message
       }
       console.log(err);
     }
@@ -92,11 +82,10 @@ const DeletePopUpCont = ({ user }) => {
     <>
       <StatusModal
         show={visible}
-        setShow={setVisible}
+        setShow={setShow}
         message={message}
         name={itemName}
-        item={item}
-        operation={"delete"}
+        operation={"edit"}
         pathAfter={pathAfter}
         isSelf={isSelf}
       />
@@ -112,17 +101,17 @@ const DeletePopUpCont = ({ user }) => {
         <Modal.Header closeButton>
           {item === "resource" ? (
             <Modal.Title style={{ fontWeight: "bold" }}>
-              Delete Resource?
+              Edit Resource?
             </Modal.Title>
           ) : (
             [
               item === "user" ? (
                 <Modal.Title style={{ fontWeight: "bold" }}>
-                  Delete User?
+                  Edit User?
                 </Modal.Title>
               ) : (
                 <Modal.Title style={{ fontWeight: "bold" }}>
-                  Remove Account
+                  Edit User
                 </Modal.Title>
               ),
             ]
@@ -133,13 +122,11 @@ const DeletePopUpCont = ({ user }) => {
           If account, else resource/user */}
         <Modal.Body>
           {item === "account" ? (
-            <Modal.Body>
-              Are you sure you want to remove your account?
-            </Modal.Body>
+            <Modal.Body>Save changes to your account?</Modal.Body>
           ) : (
             <Modal.Body>
-              Are you sure you want to delete{" "}
-              {item === "resource" ? id : toDelete.fullName}?
+              Are you sure you want to save changes to{" "}
+              {item === "resource" ? id : toEdit.fullName}?
             </Modal.Body>
           )}
           {/* read resource title and author here */}
@@ -147,10 +134,10 @@ const DeletePopUpCont = ({ user }) => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCancel}>
-            Close
+            Cancel
           </Button>
-          <Button variant="danger" onClick={handleSubmit}>
-            {item === "account" ? "Remove" : "Delete"}
+          <Button variant="success" onClick={handleSubmit}>
+            Save
           </Button>
         </Modal.Footer>
       </Modal>
@@ -158,4 +145,4 @@ const DeletePopUpCont = ({ user }) => {
   );
 };
 
-export default DeletePopUpCont;
+export default ConfirmChangeModal;
