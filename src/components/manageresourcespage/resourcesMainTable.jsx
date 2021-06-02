@@ -183,7 +183,6 @@ const MainResourceTable = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [rows, setRows] = React.useState([]);
   const [selectedEdit, setSelectedEdit] = useState();
   const [resourceList, setResourceList] = useState([]);
 
@@ -197,7 +196,8 @@ const MainResourceTable = () => {
           type: "thesis",
         });
 
-        let arr = books.data.concat(spThesis.data);
+        let arr =
+          books.data && books.data.concat(spThesis.data && spThesis.data);
         // arr.push(books.data);
         // arr.push(spThesis.data);
         console.log(arr);
@@ -378,7 +378,9 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.bookId ? row.bookId : row.sp_thesis_id}
+                          {row && row.bookId
+                            ? row && row.bookId
+                            : row && row.sp_thesis_id}
                           {/* {row.id} */}
                         </p>
                       </TableCell>
@@ -396,7 +398,7 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.title}
+                          {row && row.title}
                         </p>
                       </TableCell>
                       <TableCell
@@ -413,9 +415,10 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.author.map((item, key) => (
-                            <div key={key}>{item.author_name}</div>
-                          ))}
+                          {row.author &&
+                            row.author.map((item, key) => (
+                              <div key={key}>{item.author_name}</div>
+                            ))}
                         </p>
                       </TableCell>
                       <TableCell
@@ -433,7 +436,7 @@ const MainResourceTable = () => {
                           }}
                         >
                           {/* Checks if a resource is a book by using the bookId attribute as checker */}
-                          {row.bookId ? "Book" : row.type}
+                          {row && row.bookId ? "Book" : row && row.type}
                         </p>
                       </TableCell>
                       {/* <TableCell
@@ -470,9 +473,9 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.bookId
+                          {row && row.bookId
                             ? dateFormat(row.dateAcquired, "mmmm yyyy")
-                            : row.year}
+                            : row && row.year}
                         </p>
                       </TableCell>
                       {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
@@ -483,8 +486,8 @@ const MainResourceTable = () => {
                           fontSize: "1.5rem",
                         }}
                       >
-                        <EditBtn id={row.id} />
-                        <DeleteBtn id={row.id} />
+                        <EditBtn id={row && row.id} />
+                        <DeleteBtn id={row && row.id} />
                       </TableCell>
                     </TableRow>
                   );
