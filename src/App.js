@@ -40,16 +40,26 @@ function App() {
         getCurrentToken();
     }, []);
 
+
+    const decryptToken=(jwt)=>{
+        const encryption = {
+            key: jwtEncryptionKey,
+            algorithm: "aes-256-cbc",
+        };
+        return jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary").data;
+    }
+
     // see if there's current user logged in the browser
-    const getCurrentToken = () => {
+    const getCurrentToken = async() => {
         try {
+            //to know if there's is currently logged in
             const jwt = localStorage.getItem(jwtPrivateKey);
-            const encryption = {
-                key: jwtEncryptionKey,
-                algorithm: "aes-256-cbc",
-            };
-            const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
-            const userInfo = decrypted.data;
+            var userInfo = decryptToken(jwt);
+            setUser(userInfo);
+
+            // if there is (no error), then go to backend and get the updated userInfo
+            const { data } = await PersonService.getSpecificPerson({googleId : userInfo.googleId});
+            userInfo = decryptToken(data);
             setUser(userInfo);
         } catch (err) {}
     };
