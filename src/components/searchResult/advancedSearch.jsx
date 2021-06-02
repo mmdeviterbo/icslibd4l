@@ -62,7 +62,7 @@ export default function AdvancedSearch({appRef}){
         title={result.title}
         authors={result.authors||result.author} 
         // adviser={result.adviser}
-        // linkTo={result.linkTo} 
+        linkTo={result.linkTo} //linkTo yung 
         publishDate={result.year||result.datePublished}//publishDate
         />
       );
@@ -77,10 +77,13 @@ export default function AdvancedSearch({appRef}){
     let urlFilter = '';
     let urlQuery = '';
 
-    url = url.replace('http://localhost:3000/search?',''); 
+    url = url.replace('http://localhost:3000/search',''); 
     //edit before prod; url = url.replace(/\+/g,' '); or should i use split and have ? as a delimeter tho the search string can also contain '?'
-    urlQuery = decodeURIComponent((url.split('&')[1]).replace('search=',''));
-    urlFilter = (url.split('&')[0]).replace('type=','');
+    if(url.length>0){
+        url = url.slice(1,url.length);
+        urlQuery = decodeURIComponent((url.split('&')[1]).replace('search=',''));
+        urlFilter = (url.split('&')[0]).replace('type=','');
+    }
     // if(url.split('&').length > 1){
     //     urlQuery = decodeURIComponent((url.split('&')[0]).replace('q=',''));
     //     urlFilter = (url.split('&')[1]).replace('f=','');
@@ -91,6 +94,23 @@ export default function AdvancedSearch({appRef}){
     // console.log(searchFilterYear);
     // console.log(resultsFilterArr);
 
+    function makeLink(resultsFilterArr) {
+        if(resultsFilterArr.length==0)
+            return
+
+        for(let i=0; i<resultsFilterArr.length; i++){
+            let urlHolder='';
+
+            if(resultsFilterArr[i].bookId){ //if book
+                urlHolder="/book/"+resultsFilterArr[i].bookId
+            }else if(resultsFilterArr[i].sp_thesis_id){ //if sp/thesis
+                urlHolder="/sp-thesis/"+resultsFilterArr[i].sp_thesis_id
+            }
+
+            resultsFilterArr[i]["linkTo"] = urlHolder;
+        }
+    }
+
     // http request
     async function fetchData() {
         try{
@@ -100,7 +120,8 @@ export default function AdvancedSearch({appRef}){
             console.log(urlRequest);
             const {data} = await ResourceService.searchSpThesis(objFilter,urlRequest);
             setResultsFilterArr(data);
-            // console.log(resultsFilterArr)
+            makeLink(resultsFilterArr);
+            console.log(resultsFilterArr)
         }catch (err){
             console.log(err);
         }
