@@ -88,7 +88,6 @@ const storage = new GridFsStorage({
                             gfs.files.deleteOne({ metadata: [sp_thesis_id,"journal"] });
                         }
                     });
-                
                     gfs.files.findOne({ metadata: [sp_thesis_id,"poster"]}, (err, updatedSPT) => {
                         if(updatedSPT){
                             // .chunks
@@ -97,7 +96,6 @@ const storage = new GridFsStorage({
                             gfs.files.deleteOne({ metadata: [sp_thesis_id,"poster"] });
                         }
                     });
-                
                     gfs.files.findOne({ metadata: [sp_thesis_id,"manuscript"]}, (err, updatedSPT) => {
                         if(updatedSPT){
                             // .chunks
@@ -1449,7 +1447,7 @@ file: pdf
 Response String:
 "Entry Updated"
 ********************************************************/
-router.put("/update-sp-thesis", authAdmin, upload.fields([
+router.put("/update", authAdmin, upload.fields([
     { name: 'manuscript', maxCount: 1 }, 
     { name: 'poster', maxCount: 1 },
     { name: 'journal', maxCount: 1 }
@@ -1487,7 +1485,7 @@ router.put("/update-sp-thesis", authAdmin, upload.fields([
                 console.log("====START UPDATE HERE=====");
                 console.log(req.body);
                 // changing values
-                updatedThesisSp.sp_thesis_id = sp_thesis_id;
+                updatedThesisSp.sp_thesis_id = old_sp_thesis_id;
                 updatedThesisSp.type = type;
                 updatedThesisSp.title = title;
                 updatedThesisSp.abstract = abstract;
@@ -1500,7 +1498,7 @@ router.put("/update-sp-thesis", authAdmin, upload.fields([
         );
         
         // deletes author entries with corresponding id, then adds new values
-        await thesisAuthorModel.deleteMany({ sp_thesis_id:old_sp_thesis_id });
+        await thesisAuthorModel.deleteMany({ "sp_thesis_id":old_sp_thesis_id });
         authors.forEach(async function (updatedEntry) {
             const author_fname = updatedEntry.fname;
             const author_lname = updatedEntry.lname;
@@ -1519,7 +1517,7 @@ router.put("/update-sp-thesis", authAdmin, upload.fields([
         });
 
         // deletes adviser entries with corresponding id, then adds new values
-        await thesisAdviserModel.deleteMany({ sp_thesis_id:old_sp_thesis_id });
+        await thesisAdviserModel.deleteMany({ "sp_thesis_id":old_sp_thesis_id });
         advisers.forEach(async function (updatedEntry) {
             const adviser_fname = updatedEntry.fname;
             const adviser_lname = updatedEntry.lname;
@@ -1538,9 +1536,9 @@ router.put("/update-sp-thesis", authAdmin, upload.fields([
         });
 
         // deletes keyword entries with corresponding id, then adds new values
-        await thesisKeyModel.deleteMany({ sp_thesis_id:old_sp_thesis_id });
+        await thesisKeyModel.deleteMany({ "sp_thesis_id":old_sp_thesis_id });
         keywords.forEach(async function (updatedEntry) {
-            const sp_thesis_keyword = updatedEntry;
+            const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
 
             console.log(sp_thesis_keyword);
             const newKey = new thesisKeyModel({
@@ -1566,7 +1564,7 @@ req object: address parameter
 Response String:
 "Entry Updated"
 ********************************************************/
-router.delete("/remove-sp-thesis/:sp_thesis_id", authAdmin, async (req, res) => {
+router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
     console.log("del");
     const sp_thesis_id_holder = req.params.sp_thesis_id;
 
