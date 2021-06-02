@@ -9,7 +9,7 @@ const ReadingSPTContainer = (props) => {
     (props.location && props.location.state.resourceData) || {};
 
   useEffect(() => {
-    console.log(resourceData.sp_thesis_id);
+    window.scrollTo(0, 0);
   }, []);
 
   return (
