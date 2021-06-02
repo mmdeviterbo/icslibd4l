@@ -423,7 +423,6 @@ req object: JSON
 body: {
   sp_thesis_id,
 }
-
 Response Object:
 {
   "_id": _id,
@@ -455,7 +454,6 @@ req object: JSON
 body: {
  type,
 }
-
 Response Object: Array
 [
     {
@@ -817,7 +815,7 @@ router.get("/search", async (req, res) => {
             [
                 {
                     $match: {
-                        author_name: {
+                        sp_thesis_keyword: {
                             $regex: req.query.search,
                             $options: "i",
                         },
@@ -877,6 +875,7 @@ router.get("/search", async (req, res) => {
                                 },
                             },
                         ],
+
                         (error, results) => {
                             if (error) {
                                 res.send(error);

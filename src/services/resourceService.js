@@ -2,58 +2,84 @@ import http from "./httpService";
 import { apiEndpoint } from "../config.json";
 
 // add a resource details (sp/thesis, book)
-const addSpThesis = (resourceData) => {
-    // console.log("hello sp/thesis")
-    return http.post(`${apiEndpoint}/thesis/create`, resourceData, {withCredentials: true})
+const addSpThesis = (formData) => {
+    for (var key of formData.entries()) {
+        console.log(key[0] + ", " + key[1]);
+      }
+    return http.post(`${apiEndpoint}/thesis/create`, formData, {withCredentials: true}, {
+        headers: { "Content-Type": "multipart/form-data" }
+    })
 }
 
-const addBook = (resourceData) => {
-    // console.log(resourceData)
-    return http.post(`${apiEndpoint}/books/create`, resourceData, {withCredentials: true})
+const addBook = (formData) => {
+    for (var key of formData.entries()) {
+        console.log(key[0] + ", " + key[1]);
+      }
+    return http.post(`${apiEndpoint}/books/create`, formData, {withCredentials: true}, {
+        headers: { "Content-Type": "multipart/form-data" }
+    })
 }
 
 // read data of a resource
 const browseResources = (resourceType) => {
+    console.log(resourceType)
     return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
 }
 
 const searchSpThesis = (filter, query) => {
-    return http.get(`${apiEndpoint}/thesis${query}`, filter, {withCredentials: true})
-}
-
+    return http.get(`${apiEndpoint}/thesis${query}`, filter, {
+        withCredentials: true,
+    });
+};
 
 const searchBook = (filter) => {
-    return http.get(`${apiEndpoint}/book/search`, filter, {withCredentials: true})
-}
-
+    return http.get(`${apiEndpoint}/book/search`, filter, {
+        withCredentials: true,
+    });
+};
 
 // edit data of a resource
 const editSpThesis = (resourceData) => {
-    return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {withCredentials: true})
-}
+    return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {
+        withCredentials: true,
+    });
+};
 
 //delete resource
 const deleteSpThesis = (deleteId) => {
     return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis/${deleteId}`, {withCredentials: true})
-    // return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis`, {data:{id: deleteId}, headers:{Authorization: "token"}}, {withCredentials: true})
 }
-
 
 // get news from uplb news website
 function getNews() {
     return http.post(`${apiEndpoint}/books/get-news`);
 }
 
-// get all books, sorted by date (latest acquisition feature)
+// get all books (object of information only, not images), sorted by date (latest acquisition feature)
 function getBooks(){
-    return http.get(`${apiEndpoint}/books/display`);
+    return http.get(`${apiEndpoint}/books/display_infos`);
 }
 
-function getAllResources(){
+// get all books (object of images), sorted by date (latest acquisition feature)
+function getBookCovers(){
+    return http.get(`${apiEndpoint}/books/display_covers`);
+}
+
+
+function getAllResources() {
     return http.get(`${apiEndpoint}/thesis/search`);
 }
 
+function getSPTFiles({ title, fileType }){
+    return http.post(`${apiEndpoint}/thesis/download`, { title, fileType }, {withCredentials: true}, {
+        responseType: 'stream'
+    });
+}
 
+function getBookCover(resourceId){
+    console.log(resourceId)
+    return http.post(`${apiEndpoint}/books/download1`, resourceId, {withCredentials: true});
+}
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
@@ -66,7 +92,10 @@ const exportFunctions = {
     editSpThesis,
     searchBook,
     getBooks,
-    getAllResources
+    getAllResources,
+    getSPTFiles,
+    getBookCover,
+    getBookCovers
 }
 
 export default exportFunctions;

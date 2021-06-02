@@ -4,7 +4,6 @@ import { Container, Row, Col } from "react-bootstrap/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@material-ui/core/";
-
 import DeleteIcon from "@material-ui/icons/Delete";
 import { jwtPrivateKey } from "../../config.json";
 import { jwtEncryptionKey } from "../../config.json";
@@ -21,14 +20,16 @@ import "../../styles/profileContainerStyle.css";
 // an object containing the information of the logged in user
 //</output>
 const getCurrentToken = () => {
-    const jwt = localStorage.getItem("icslib-privateKey");
-    const encryption = {
-        key: jwtEncryptionKey,
-        algorithm: "aes-256-cbc",
-    };
-    const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
-    const userInfo = decrypted.data;
-    return userInfo;
+    try {
+        const jwt = localStorage.getItem("icslib-privateKey");
+        const encryption = {
+            key: jwtEncryptionKey,
+            algorithm: "aes-256-cbc",
+        };
+        const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
+        const userInfo = decrypted.data;
+        return userInfo;
+    } catch (err) {}
 };
 
 //<summary>
@@ -42,14 +43,13 @@ export default function ProfileContainer() {
     const location = useLocation();
 
     const [user, setUser] = useState(getCurrentToken()); // lazy initializer to immediately get the user state
+    const [type, setType] = useState();
+    const [nick, setNick] = useState(user ? user.nickname : "");
 
-    const [type, setType] = useState(null);
-    const [nick, setNick] = useState(user && user.nickname);
-
-    const [click, setClick] = useState(false);
+    const [click, setClick] = useState("false");
     const [buttonStyle, setButtonStyle] = useState(faPencilAlt);
     const [btnStyle, setBtnStyle] = useState("gray");
-    const [disable, setDisable] = useState(true);
+    const [disable, setDisable] = useState(toString(true));
 
     // handles appearance changing of the edit button
     const setIcon = (click, buttonStyle, style) => {
@@ -62,7 +62,6 @@ export default function ProfileContainer() {
     // updates the token stored in the local storage after making changes to the nickname
     const updateToken = async (user) => {
         try {
-            console.log("updateToken", user);
             localStorage.removeItem(jwtPrivateKey); //remove token from localStorage
             await PersonService.logoutUser(user);
 
@@ -82,10 +81,10 @@ export default function ProfileContainer() {
 
     // function that handles nickname changing
     const editNickname = (nicknameToken, userInfo) => {
-        if (click === false) {
-            setIcon(true, faCheck, "#90ee90");
-        } else if (click === true) {
-            setIcon(false, faPencilAlt, "gray");
+        if (click === "false") {
+            setIcon("true", faCheck, "#90ee90");
+        } else if (click === "true") {
+            setIcon("false", faPencilAlt, "gray");
             updateNick(nicknameToken);
             updateToken(userInfo);
         }
@@ -136,7 +135,7 @@ export default function ProfileContainer() {
 
     return (
         // column for the title bar "Profile Display"
-        <Container fixed className="profile-container">
+        <Container className="profile-container">
             <Row className="title-bar">
                 <Col xs={2} className="grid-columns"></Col>
                 <Col xs={8}>
@@ -162,12 +161,13 @@ export default function ProfileContainer() {
                         disabled={disable}
                         type="text"
                         className="text-field"
-                        value={nick}
+                        value={user ? nick : ""}
                     />
                 </Col>
                 <Col xs={1} className="edit-column">
-                    <div class="button">
+                    <div>
                         <FontAwesomeIcon
+                            className="edit-icon"
                             onClick={() => {
                                 editNickname(
                                     {
@@ -205,7 +205,7 @@ export default function ProfileContainer() {
                         disabled={true}
                         type="text"
                         className="text-field"
-                        value={user && user.fullName}
+                        defaultValue={user ? user.fullName : ""}
                     />
                 </Col>
                 <Col xs={1} className="grid-columns"></Col>
@@ -225,7 +225,7 @@ export default function ProfileContainer() {
                         type="text"
                         disabled={true}
                         className="text-field"
-                        value={type}
+                        defaultValue={user ? type : ""}
                     />
                 </Col>
                 <Col xs={1} className="grid-columns"></Col>
@@ -245,7 +245,7 @@ export default function ProfileContainer() {
                         disabled={true}
                         type="text"
                         className="text-field"
-                        value={user && user.email}
+                        defaultValue={user ? user.email : ""}
                     />
                 </Col>
                 <Col xs={1} className="grid-columns"></Col>
@@ -277,7 +277,7 @@ export default function ProfileContainer() {
                 <Col xs={2} className="grid-columns"></Col>
 
                 <Col xs={8}>
-                    <RemoveAccount id={user && user.googleId} user={user} />
+                    <RemoveAccount id={user ? user.googleId : ""} user={user} />
                 </Col>
             </Row>
         </Container>

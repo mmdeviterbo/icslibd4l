@@ -17,7 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import resourceService from "../../services/resourceService";
-// import DeletePopUpCont from "./deleteModalContainer";
+import MessagePopUpCont from "../messageModalContainer";
 
 function createResourceData(
     resid,
@@ -57,7 +57,7 @@ function stableSort(array, comparator) {
 }
 
 const resHeadCells = [
-    { id: "resid", numeric: false, disablePadding: true, label: "ID" },
+    { id: "resid", numeric: false, disablePadding: true, label: "Resource ID" },
     { id: "title", numeric: false, disablePadding: false, label: "Title" },
     { id: "author", numeric: false, disablePadding: false, label: "Author" },
     {
@@ -78,8 +78,7 @@ const resHeadCells = [
         disablePadding: false,
         label: "Publishing Year",
     },
-    { id: "act1", numeric: false, disablePadding: false, label: " " },
-    { id: "act2", numeric: false, disablePadding: false, label: " " },
+    {},
 ];
 
 function EnhancedTableHead(props) {
@@ -99,16 +98,9 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    {/* <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          /> */}
-                </TableCell>
                 {resHeadCells.map((headCell) => (
                     <TableCell
+                        style={{ backgroundColor: "#FAFAFA" }}
                         className={classes.tablecell}
                         key={headCell.id}
                         align={"left"}
@@ -146,67 +138,6 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles((theme) => ({
-    root: {
-        paddingLeft: theme.spacing(6),
-        paddingRight: theme.spacing(1),
-        paddingTop: theme.spacing(4),
-    },
-    highlight:
-        theme.palette.type === "light"
-            ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
-            : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
-    title: {
-        fontSize: "2rem",
-        flex: "1 1 100%",
-    },
-}));
-
-const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}
-        >
-            {numSelected > 0 ? (
-                <Typography
-                    className={classes.title}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <h3
-                    style={{
-                        fontWeight: "normal",
-                        fontFamily: "Montserrat",
-                        fontSize: "2rem",
-                        paddingBottom: "0.5rem",
-                    }}
-                >
-                    Resources
-                </h3>
-            )}
-        </Toolbar>
-    );
-};
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
-
 const useStyles = makeStyles((theme) => ({
     root: {
         // fontSize: '2rem',
@@ -222,10 +153,13 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         // fontSize: '2rem',
-        minWidth: 750,
+        // minWidth: 750,
     },
     tablecell: {
-        fontSize: "1.5rem",
+        padding: "16px",
+        fontSize: "1.4rem",
+        fontWeight: "bold",
+        // color: "#FFFFFF",
     },
     visuallyHidden: {
         border: 0,
@@ -241,7 +175,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Main function
-const MainResourceTable = (props) => {
+const MainResourceTable = () => {
     const location = useLocation();
     const classes = useStyles();
     const [order, setOrder] = React.useState("asc");
@@ -252,22 +186,34 @@ const MainResourceTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [rows, setRows] = React.useState([]);
     const [selectedEdit, setSelectedEdit] = useState();
+    // const [resourceList, setResourceList] = useState([]);
+
+    // useEffect(() => {
+    //   async function fetchData() {
+    //     try {
+    //       const { data } = await resourceService.browseResources({
+    //         type: "book",
+    //       });
+    //       setResourceList(data);
+    //       console.log(data);
+    //       // setSpThesisList(spThesis_arr)
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   }
+    //   fetchData();
+    // }, []);
 
     useEffect(async () => {
         try {
             let tempRow = [...rows];
-            // const {data} = await resourceService.browseResources({type:"book"});
-
-            // for(let book of data){
-            //     tempRow.push(createResourceData(book.bookId, book.title, book.author[0].author_name, "Book", book.subject[0].subject, book.datePublished[0]));
-            // }
-            // setRows(tempRow);
 
             const { data } = await resourceService.browseResources({
                 type: "Thesis",
             });
 
             //   const { data } = await resourceService.searchSpThesis({}, "/search");
+            //   console.log(data);
             for (let thesis of data) {
                 tempRow.push(
                     createResourceData(
@@ -287,7 +233,14 @@ const MainResourceTable = (props) => {
         }
     }, []);
 
-    // kinda works, dont's remove yet
+    useEffect(() => {
+        try {
+            MessagePopUpCont("hello");
+        } catch (err) {
+            console.log("ERRROR 304");
+        }
+    }, [rows]);
+
     const DeleteBtn = (id) => {
         return (
             <Link
@@ -300,7 +253,13 @@ const MainResourceTable = (props) => {
                     },
                 }}
             >
-                <DeleteForeverIcon />
+                <i
+                    className="table-icons fa fa-trash-o"
+                    style={{
+                        margin: "10px",
+                        color: "red",
+                    }}
+                ></i>
             </Link>
         );
     };
@@ -316,7 +275,13 @@ const MainResourceTable = (props) => {
                     state: { sourceInfo: selectedEdit, id },
                 }}
             >
-                <MoreHorizIcon />
+                <i
+                    className="table-icons fa fa-pencil"
+                    style={{
+                        margin: "10px",
+                        color: "gray",
+                    }}
+                ></i>
             </Link>
         );
     };
@@ -377,7 +342,6 @@ const MainResourceTable = (props) => {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -413,11 +377,11 @@ const MainResourceTable = (props) => {
                                             selected={isItemSelected}
                                         >
                                             {/* {row} */}
+
                                             <TableCell
-                                                padding="checkbox"
-                                                className={classes.tablecell}
-                                            ></TableCell>
-                                            <TableCell
+                                                style={{
+                                                    width: "15%",
+                                                }}
                                                 component="th"
                                                 id={labelId}
                                                 scope="row"
@@ -427,68 +391,108 @@ const MainResourceTable = (props) => {
                                                 {/* unique id */}
                                                 <p
                                                     style={{
-                                                        fontSize: "13px",
-                                                        fontWeight: "800",
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
                                                     }}
                                                 >
                                                     {row.resid}
                                                 </p>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "20%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* title of resources */}
-                                                <p style={{ fontSize: "14px" }}>
+                                                <p
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
                                                     {row.title}
                                                 </p>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "15%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* author */}
-                                                <p style={{ fontSize: "14px" }}>
+                                                <p
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
                                                     {row.author}
                                                 </p>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "12%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* classifcation */}
-                                                <p style={{ fontSize: "14px" }}>
+                                                <p
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
                                                     {row.resclassif}
                                                 </p>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "15%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* related courses */}
-                                                <p style={{ fontSize: "14px" }}>
+                                                <p
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
                                                     {row.relatedcourses}
                                                 </p>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "13%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* publishing year */}
-                                                <p style={{ fontSize: "14px" }}>
+                                                <p
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
                                                     {row.pubyr}
                                                 </p>
                                             </TableCell>
                                             {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
-                                            <TableCell>
-                                                {" "}
-                                                <EditBtn id={row.resid} />{" "}
-                                            </TableCell>
-                                            <TableCell>
-                                                {" "}
-                                                <DeleteBtn
-                                                    id={row.resid}
-                                                />{" "}
+                                            <TableCell
+                                                style={{
+                                                    width: "10%",
+                                                    textAlign: "center",
+                                                    fontSize: "1.5rem",
+                                                }}
+                                            >
+                                                <EditBtn id={row.resid} />
+                                                <DeleteBtn id={row.resid} />
                                             </TableCell>
                                         </TableRow>
                                     );

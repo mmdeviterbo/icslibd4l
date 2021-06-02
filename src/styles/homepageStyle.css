@@ -9,8 +9,8 @@
     min-height: 65px;
     display: flex;
     justify-content: center;
-    align-items:center;
-    background:rgb(0, 103, 161);
+    align-items: center;
+    background: rgb(0, 103, 161);
     box-shadow: 2px 2px 7px black;
 
     /* protect from copy paste  */
