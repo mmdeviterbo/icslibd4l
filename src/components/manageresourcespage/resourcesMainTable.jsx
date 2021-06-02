@@ -241,14 +241,23 @@ const MainResourceTable = () => {
     );
   };
 
+  // const DeleteBookBtn = (id) => {
+  //   return(
+  //     <Link 
+  //       to = {{
+  //         pathname :
+  //       }}
+  //   )
+  // }
+
   const EditSPTBtn = (id) => {
     // console.log("30888 res-main-t-2");
-    console.log(id);
-
+    // console.log(id);
+    
     return (
       <Link
         to={{
-          pathname: `/edit-spt/${id}`,
+          pathname: `/edit-spt/${id.id}`,
           state: { sourceInfo: selectedEdit, id },
         }}
       >
@@ -264,14 +273,11 @@ const MainResourceTable = () => {
   };
 
   const EditBookBtn = (id) => {
-    // console.log("30888 res-main-t-2");
-    console.log(id);
-
     return (
       <Link
         to={{
-          pathname: `/edit-book/`,
-          state: { sourceInfo: selectedEdit, id },
+          pathname: `/edit-book/${id.id}`,
+          state: { sourceInfo: selectedEdit, id  },
         }}
       >
         <i
@@ -386,7 +392,7 @@ const MainResourceTable = () => {
                         className={classes.tablecell}
                       >
                         {/* unique id */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -394,7 +400,7 @@ const MainResourceTable = () => {
                         >
                           {row.bookId ? row.bookId : row.sp_thesis_id}
                           {/* {row.id} */}
-                        </p>
+                        </div>
                       </TableCell>
                       <TableCell
                         style={{
@@ -404,14 +410,14 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* title of resources */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
                           }}
                         >
                           {row.title}
-                        </p>
+                        </div>
                       </TableCell>
                       <TableCell
                         style={{
@@ -421,7 +427,7 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* author */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -430,7 +436,7 @@ const MainResourceTable = () => {
                           {row.author.map((item, key) => (
                             <div key={key}>{item.author_name}</div>
                           ))}
-                        </p>
+                        </div>
                       </TableCell>
                       <TableCell
                         style={{
@@ -440,7 +446,7 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* classifcation */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -448,7 +454,7 @@ const MainResourceTable = () => {
                         >
                           {/* Checks if a resource is a book by using the bookId attribute as checker */}
                           {row.bookId ? "Book" : row.type}
-                        </p>
+                        </div>
                       </TableCell>
                       
                       <TableCell
@@ -459,7 +465,7 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* publishing year */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -468,7 +474,7 @@ const MainResourceTable = () => {
                           {row.bookId
                             ? dateFormat(row.dateAcquired, "mmmm yyyy")
                             : row.year}
-                        </p>
+                        </div>
                       </TableCell>
                       <TableCell
                         style={{

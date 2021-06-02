@@ -45,6 +45,20 @@ const editSpThesis = (resourceData) => {
     });
 };
 
+// edit book
+const editBook = (resourceData) => {
+    return http.put(`${apiEndpoint}/book/update-book`, resourceData, {
+        withCredentials: true,
+    });
+}
+
+// delete book
+// const deleteBook = (deleteId) => {
+//     return http.delete(`${apiEndpoint}/book/delete/$(deleteId)`, 
+//     {withCredentials: true})
+
+// }
+
 //delete resource
 const deleteSpThesis = (deleteId) => {
     return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis/${deleteId}`, {withCredentials: true})
@@ -86,8 +100,10 @@ const exportFunctions = {
     searchSpThesis,
     deleteSpThesis,
     editSpThesis,
+    editBook,
     searchBook,
     getBooks,
+    // deleteBook,
     getAllResources,
     getSPTFiles,
     getBookCover

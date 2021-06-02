@@ -148,7 +148,7 @@ function App() {
                     component={EditSPTFormContainer}></Route>
 
                 <Route
-                    path="/edit-book/"
+                    path="/edit-book/:id"
                     component={EditBookFormContainer}></Route>
 
                 <Route path="/about" render={() => <About appRef={appRef} />} />
@@ -163,6 +163,8 @@ function App() {
                     children={<DeleteModalContainer />}
                 />
             )}
+
+
             {background && (
                 <Route
                     path="/manage-users/delete-user"

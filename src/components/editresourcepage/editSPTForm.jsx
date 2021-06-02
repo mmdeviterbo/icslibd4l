@@ -80,8 +80,8 @@ export default function EditSPTFormContainer(props) {
         }
     }, []);
 
-    console.log(idSource)
-    console.log(spThInfoArr);
+    // console.log(idSource)
+    // console.log(spThInfoArr);
 
     useEffect(() => {
         try {
@@ -221,19 +221,19 @@ export default function EditSPTFormContainer(props) {
 
                         {/* ID Field */}
                         {/* Will delete this, just using if i can get access the data */}
-                        <div className="primaryfields">
+                        {/* <div className="primaryfields">
                             <label htmlFor="resId">ID: &nbsp; </label>
                             <input
                             required
                             type="text"
                             id="resId"
-                            value = {id}
-                            // disabled
+                            defaultValue = {id}
+                            disabled
                             // onchange = {(event => {
                             //     setId(event.target.value);
                             // })}
                             />
-                        </div>
+                        </div> */}
 
                         {/* Title Field */}
                         <div className="primaryfields">
@@ -241,7 +241,7 @@ export default function EditSPTFormContainer(props) {
                             <input
                             type="text"
                             id="resTitle"
-                            value = {title}
+                            defaultValue = {title}
                             required
                             onChange={(event) => {
                                 setTitle(event.target.value);
@@ -255,13 +255,13 @@ export default function EditSPTFormContainer(props) {
                             <input
                             type="number"
                             id="sptYear"
-                            value = {year}
+                            defaultValue = {year}
                             min={1800}
                             max={9999}
                             // TO-DO: VALIDATE INPUT !!!
                             required
                             onChange={(event) => {
-                                setTitle(event.target.value);
+                                setYear(event.target.value);
                             }}
                             />
                         </div>
@@ -370,7 +370,7 @@ export default function EditSPTFormContainer(props) {
 
                             {/* for testing only: */}
                             <div className = "testdiv">
-                                {JSON.stringify(author, null, 2)}
+                                {JSON.stringify(type, null, 2)}
                             </div>
 
                         </div> {/* closing tag for authors group */}
@@ -390,8 +390,6 @@ export default function EditSPTFormContainer(props) {
                                 <Select id="resClassification"
                                         defaultValue={type}
                                         options={classificationOptions}
-                                        // placeholder={type}
-                                        value={type}
                                         onChange={handleChange}>
                                 </Select>
                         </div>

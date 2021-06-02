@@ -41,6 +41,7 @@ export default function EditBookFormContainer(props) {
     const [datePublished, setDatePublished] = useState();
     const [dateAcquired, setDateAcquired] = useState();
     const [isbn, setISBN] = useState("");
+    const [bookId, setBookId] = useState("");
     const [author, setAuthor] = useState("");
     // multiple authors should be possible
     const [authorList, setAuthorList] = useState([
@@ -52,8 +53,8 @@ export default function EditBookFormContainer(props) {
     ]);
     const [courses, setCourses] = useState(null); // why null??
     const [publisher, setPublisher] = useState("");
-    const [numOfCopies, setNumOfCopies] = useState(0);
-    const [description, setDescription] = useState("");
+    const [numberOfCopies, setNumOfCopies] = useState(0);
+    const [physicalDesc, setDescription] = useState("");
     const [image, setImage] = useState(null);
 
     const FormData = require("form-data");
@@ -72,35 +73,38 @@ export default function EditBookFormContainer(props) {
         }
     }, []);
 
-    console.log(idSource)
-    console.log(bookInfoArr);
+    console.log(idSource)           //object is received
+    console.log(bookInfoArr);       //info of all res is received
 
+    // iterate through array to match id
     useEffect(() => {
         try {
             for (let sourceItem of bookInfoArr) {
-                if (sourceItem.sp_thesis_id === idSource.id) {
+                if (sourceItem.bookId=== idSource.id) {
                     const {
+                        bookId,
                         title,
                         publisher,
                         datePublished,
                         dateAcquired,
                         // author,
                         isbn,
-                        description,
-                        numOfCopies,
+                        physicalDesc,
+                        numberOfCopies,
                         courses,
                         image
 
                     } = sourceItem;
                     // setType(type);
+                    setBookId(bookId);
                     setTitle(title);
                     setPublisher(publisher)
                     setDatePublished(datePublished);
                     setDateAcquired(dateAcquired);
                     // setAuthorList(author);
                     setISBN(isbn);
-                    setDescription(description);
-                    setNumOfCopies(numOfCopies);
+                    setDescription(physicalDesc);
+                    setNumOfCopies(numberOfCopies);
                     setCourses(courses);
                     setImage(image)
 
@@ -115,7 +119,7 @@ export default function EditBookFormContainer(props) {
                     // });
 
                     // console.log("fsdfsdfd");
-                    console.log(sourceItem);
+                    // console.log(sourceItem);
 
                     // const tempKeyword = [];
                     // keywords.map((keyword) =>
@@ -134,7 +138,7 @@ export default function EditBookFormContainer(props) {
         function updateList() {
             if (author.fname && author.lname) {
                 if (authorList.indexOf(author) !== -1) {
-                    console.log("here1");
+                    // console.log("here1");
                     setAuthorList([...authorList, author]);
                 }
             }
@@ -154,9 +158,9 @@ export default function EditBookFormContainer(props) {
 
     // get input from type selection
 
-    const handleChange = (e) => {
-        setType("Book");
-    };
+    // const handleChange = (e) => {
+    //     setType("Book");
+    // };
 
 
      const handleImage = (e) => {
@@ -187,26 +191,29 @@ export default function EditBookFormContainer(props) {
         event.preventDefault();
         try {
         const userInput = {
-            bookId: isbn,
+            // oldBookId,
+            // bookId, 
+            isbn,
             title,
             datePublished,
             dateAcquired,
             authors: authorList,
             subjects: courses,
-            physicalDesc: description,
+            physicalDesc,
             publisher,
-            numberOfCopies: numOfCopies,
+            numberOfCopies,
         };
         console.log(userInput);
         console.log(courses);
         console.log(image);
         formData.append("body", JSON.stringify(userInput));
         formData.append("file", image);
-        const { data } = await ResourceServices.addBook(formData);
-        alert("New book has been successfully added to the library");
+        const { data } = await ResourceServices.editBook(formData);
+        alert("Successfully updated book.");
         // window.location = "/add-new-resource";
         } catch (err) {
         if (err.response && err.response.data) {
+            // alert("unsuccessful")
             alert(err.response.data.errorMessage); // some reason error message
         }
         }
@@ -244,49 +251,61 @@ export default function EditBookFormContainer(props) {
                     <input
                         type="text"
                         id="resId" 
-                        value = "tempId00001" // get autogenerated id here 
+                        // defaultValue = {bookId} // get autogenerated id here 
                         disabled
-                        onChange={(event) => {
-                            setId(event.target.value);
-                        }}
+                        // onChange={(event) => {
+                        //     setId(event.target.value);
+                        // }}
                     />
                 </div> */}
+
+                {/* Title */}
                 <div className="primaryfields">
                 <label htmlFor="resTitle">Title: &nbsp; </label>
                 <input
                     type="text"
                     id="resTitle"
+                    defaultValue = {title}
                     onChange={(event) => {
                     setTitle(event.target.value);
                     }}
                 />
                 </div>
+
+                {/* Publisher */}
                 <div className="primaryfields">
                 <label htmlFor="publisher">Publisher: &nbsp; </label>
                 <input
                     type="text"
                     id="publisher"
+                    defaultValue = {publisher}
                     onChange={(event) => {
                     setPublisher(event.target.value);
                     }}
                 />
                 </div>
+
+                {/* Publish Date */}
                 <div className="primaryfields">
                 <label htmlFor="datePublished">Date Published: &nbsp; </label>
                 <input
                     type="date"
                     id="datePublished"
+                    defaultValue = {datePublished}
                     required
                     onChange={(event) => {
                     setDatePublished(handleDate(event.target.value));
                     }}
                 />
                 </div>
+
+                {/* Acquisition Date */}
                 <div className="primaryfields">
                 <label htmlFor="dateAcquired">Date Acquired: &nbsp; </label>
                 <input
                     type="date"
                     id="dateAcquired"
+                    defaultValue = {dateAcquired}
                     required
                     onChange={(event) => {
                     setDateAcquired(handleDate(event.target.value));
@@ -380,6 +399,7 @@ export default function EditBookFormContainer(props) {
                         {/* button deletes author fields */}
                         <button
                         id="deleteAuthor"
+                        
                         onClick={() => {
                             setAuthorList((currentAuthors) =>
                             currentAuthors.filter(
@@ -402,13 +422,14 @@ export default function EditBookFormContainer(props) {
                     );
                 })}
 
-                {/* for testing only: */}
-                {/* <div className = "testdiv">
-                                    {JSON.stringify(authorList, null, 2)}
-                                </div> */}
-                </div>{" "}
+                        {/* for testing only: */}
+                    {/* <div className = "testdiv">
+                        {JSON.stringify(title, null, 2)}
+                    </div> */}
+
+                </div>
                 {/* closing tag for authors group */}
-            </div>{" "}
+            </div>
             {/* Primary Info closing tag */}
             <div className="res-primary-info">
                 <h2>
@@ -420,6 +441,7 @@ export default function EditBookFormContainer(props) {
                 <label htmlFor="bookISBN">ISBN: &nbsp; </label>
                 <input
                     type="text"
+                    defaultValue ={bookId}
                     id="bookISBN"
                     onChange={(event) => {
                     setISBN(event.target.value);
@@ -432,6 +454,7 @@ export default function EditBookFormContainer(props) {
                 </label>
                 <textarea
                     id="physDescription"
+                    defaultValue = {physicalDesc}
                     onChange={(event) => {
                     setDescription(event.target.value);
                     }}
@@ -444,7 +467,7 @@ export default function EditBookFormContainer(props) {
                 <input
                     type="number"
                     id="availBookCopies"
-                    defaultValue={0}
+                    defaultValue={numberOfCopies}
                     onChange={(event) => {
                     if (event.target.value < 0 || !event.target.value) {
                         event.target.value = event.target.defaultValue;
