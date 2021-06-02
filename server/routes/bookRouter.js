@@ -109,7 +109,7 @@ const storage = new GridFsStorage({
                 if(JSON.parse(req.body.body).oldBookId == undefined){
                     return reject("Book already exists!");
                 }else{ //for book update
-                    // delete the book cover's entry from .files and .chunks (book_id == metadata in book_covers.files)
+                    // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
                     // check first if the book has a saved book cover
                     gfs.files.findOne({ "metadata.bookId" : bookId }, (err, existingBookCover) => {
                         if (existingBookCover) {   
@@ -179,6 +179,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         const {
             bookId,
             title,
+            ISBN,
             authors,
             subjects,
             physicalDesc,
@@ -211,6 +212,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                 //add the non-array fields to the books collection
                 bookId,
                 title,
+                ISBN,
                 physicalDesc,
                 publisher,
                 numberOfCopies,
@@ -266,6 +268,7 @@ router.get("/display_covers", async (req, res) => {
           files.map(file => {
             if (
               file.contentType === 'image/jpeg' ||
+              file.contentType === 'image/jpg' ||
               file.contentType === 'image/png' ||
               file.contentType === 'image/webp'
             ) {
@@ -518,6 +521,7 @@ book: {
     oldBookId,
     bookId,
     title,
+    ISBN,
     authors,
     subjects,
     physicalDesc,
@@ -530,11 +534,12 @@ res String:
 "Entry Updated"
 
 ********************************************************/
-router.put("/update-book", authAdmin, async (req, res) => {
+router.put("/update", authAdmin, upload.any(), async (req, res) => {
     const {
         oldBookId,
         bookId,
         title,
+        ISBN,
         authors,
         subjects,
         physicalDesc,
@@ -583,6 +588,7 @@ router.put("/update-book", authAdmin, async (req, res) => {
                 (err, updatedBook) => {
                     updatedBook.bookId = bookId;
                     updatedBook.title = title;
+                    updatedBook.ISBN = ISBN;
                     updatedBook.physicalDesc = physicalDesc;
                     updatedBook.publisher = publisher;
                     updatedBook.numberOfCopies = numberOfCopies;
@@ -662,14 +668,14 @@ router.delete("/delete", authAdmin, async (req, res) => {
             await bookAuthorModel.deleteMany({ bookId });
             await bookSubjectModel.deleteMany({ bookId });
 
-            // delete the book cover's entry from .files and .chunks (book_id == metadata in book_covers.files)
+            // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
             // check first if the book has a saved book cover
-            gfs.files.findOne({ metadata : bookId }, (err, existingBookCover) => {
+            gfs.files.findOne({ "metadata.bookId" : bookId }, (err, existingBookCover) => {
                 if (existingBookCover) {   
                     // .chunks
                     mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
                     // .files
-                    gfs.files.deleteOne({metadata : bookId});
+                    gfs.files.deleteOne({"metadata.bookId" : bookId});
                 }
             });
             res.send("Entry Deleted");

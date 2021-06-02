@@ -5,9 +5,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const path = require('path');
 const cors = require("cors");
 const methodOverride = require("method-override");
-var path = require('path');
 
 module.exports = function (app) {
     //parser tools

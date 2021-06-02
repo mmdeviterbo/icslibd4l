@@ -255,7 +255,7 @@ Request Object:
 Response String:
 "User Logged Out"
 ********************************************************/
-router.post("/logout", async (req, res) => {
+router.post("/logout", authStudent, async (req, res) => {
   const token = req.cookies.token;
   // Encryption settings
   const encryption = {
