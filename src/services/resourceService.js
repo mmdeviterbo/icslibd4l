@@ -57,7 +57,10 @@ const editSpThesis = (resourceData) => {
 
 //delete resource
 const deleteSpThesis = (deleteId) => {
-    return http.delete(`${apiEndpoint}/thesis/remove-sp-thesis/${deleteId}`, {withCredentials: true})
+    return http.delete(`${apiEndpoint}/thesis/delete/${deleteId}`, {withCredentials: true})
+}
+const deleteBook = (deleteId) => {
+    return http.delete(`${apiEndpoint}/books/delete/${deleteId}`, {withCredentials: true})
 }
 
 // get news from uplb news website
@@ -106,7 +109,8 @@ const exportFunctions = {
     getSPTFiles,
     getBookCover,
     downloadFile,
-    getBookCovers
+    getBookCovers,
+    deleteBook
 }
 
 export default exportFunctions;

@@ -20,17 +20,6 @@ import resourceService from "../../services/resourceService";
 // import MessagePopUpCont from "../messageModalContainer";
 import dateFormat from "dateformat";
 
-function createResourceData(
-  resid,
-  title,
-  author,
-  resclassif,
-  relatedcourses,
-  pubyr
-) {
-  return { resid, title, author, resclassif, relatedcourses, pubyr };
-}
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -85,11 +74,11 @@ const resHeadCells = [
 function EnhancedTableHead(props) {
   const {
     classes,
-    onSelectAllClick,
+    // onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
+    // numSelected,
+    // rowCount,
     onRequestSort,
   } = props;
   const createSortHandler = (property) => (event) => {
@@ -181,7 +170,7 @@ const MainResourceTable = () => {
   const [orderBy, setOrderBy] = React.useState("resid");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  // const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [selectedEdit, setSelectedEdit] = useState();
   const [resourceList, setResourceList] = useState([]);
@@ -202,6 +191,7 @@ const MainResourceTable = () => {
         // arr.push(spThesis.data);
         console.log(arr);
         setResourceList(arr);
+        setSelectedEdit(arr);
         // setSpThesisList(spThesis_arr)
       } catch (error) {
         console.log(error);
@@ -226,15 +216,20 @@ const MainResourceTable = () => {
   //   fetchSPT();
   // }, []);
 
-  const DeleteBtn = (id) => {
+  // console.log(selectedEdit)
+
+  const DeleteBtn = ({ id, type }) => {
+    // console.log(id);
+    // console.log(type);
     return (
       <Link
         to={{
           pathname: "/manage-resources/delete-sp-thesis",
           state: {
             background: location,
-            id: id,
+            resid: id,
             item: "resource",
+            type: type,
           },
         }}
       >
@@ -249,14 +244,33 @@ const MainResourceTable = () => {
     );
   };
 
-  const EditBtn = (id) => {
+  const EditSPTBtn = (id) => {
     // console.log("30888 res-main-t-2");
     // console.log(id);
 
     return (
       <Link
         to={{
-          pathname: "/edit-resource",
+          pathname: `/edit-spt/${id.id}`,
+          state: { sourceInfo: selectedEdit, id },
+        }}
+      >
+        <i
+          className="table-icons fa fa-pencil"
+          style={{
+            margin: "10px",
+            color: "gray",
+          }}
+        ></i>
+      </Link>
+    );
+  };
+
+  const EditBookBtn = (id) => {
+    return (
+      <Link
+        to={{
+          pathname: `/edit-book/${id.id}`,
           state: { sourceInfo: selectedEdit, id },
         }}
       >
@@ -286,25 +300,25 @@ const MainResourceTable = () => {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
+  // const handleClick = (event, name) => {
+  //   const selectedIndex = selected.indexOf(name);
+  //   let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, name);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(
+  //       selected.slice(0, selectedIndex),
+  //       selected.slice(selectedIndex + 1)
+  //     );
+  //   }
 
-    setSelected(newSelected);
-  };
+  //   setSelected(newSelected);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -315,9 +329,9 @@ const MainResourceTable = () => {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
+  // const handleChangeDense = (event) => {
+  //   setDense(event.target.checked);
+  // };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -372,7 +386,7 @@ const MainResourceTable = () => {
                         className={classes.tablecell}
                       >
                         {/* unique id */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -382,7 +396,7 @@ const MainResourceTable = () => {
                             ? row && row.bookId
                             : row && row.sp_thesis_id}
                           {/* {row.id} */}
-                        </p>
+                        </div>
                       </TableCell>
                       <TableCell
                         style={{
@@ -392,14 +406,14 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* title of resources */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
                           }}
                         >
                           {row && row.title}
-                        </p>
+                        </div>
                       </TableCell>
                       <TableCell
                         style={{
@@ -429,7 +443,7 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* classifcation */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -437,28 +451,9 @@ const MainResourceTable = () => {
                         >
                           {/* Checks if a resource is a book by using the bookId attribute as checker */}
                           {row && row.bookId ? "Book" : row && row.type}
-                        </p>
+                        </div>
                       </TableCell>
-                      {/* <TableCell
-                        style={{
-                          width: "15%",
-                        }}
-                        className={classes.tablecell}
-                        align="left"
-                      >
-                        <p
-                          style={{
-                            fontSize: "16px",
-                            fontWeight: "normal",
-                          }}
-                        >
-                          {row.bookId
-                            ? row.subject.map((item, key) => (
-                                <div key={key}>{item.subject}</div>
-                              ))
-                            : row.type}
-                        </p>
-                      </TableCell> */}
+
                       <TableCell
                         style={{
                           width: "13%",
@@ -467,7 +462,7 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* publishing year */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -476,9 +471,8 @@ const MainResourceTable = () => {
                           {row && row.bookId
                             ? dateFormat(row.dateAcquired, "mmmm yyyy")
                             : row && row.year}
-                        </p>
+                        </div>
                       </TableCell>
-                      {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
                       <TableCell
                         style={{
                           width: "10%",
@@ -486,8 +480,16 @@ const MainResourceTable = () => {
                           fontSize: "1.5rem",
                         }}
                       >
-                        <EditBtn id={row && row.id} />
-                        <DeleteBtn id={row && row.id} />
+                        {row.bookId ? (
+                          <EditBookBtn id={row.bookId} />
+                        ) : (
+                          <EditSPTBtn id={row.sp_thesis_id} />
+                        )}
+                        {row && row.bookId ? (
+                          <DeleteBtn id={row.bookId} type={"book"} />
+                        ) : (
+                          <DeleteBtn id={row.sp_thesis_id} type={row.type} />
+                        )}
                       </TableCell>
                     </TableRow>
                   );
@@ -495,7 +497,7 @@ const MainResourceTable = () => {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: 53 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

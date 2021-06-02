@@ -11,7 +11,8 @@ import StatusModal from "../modal/operationStatusModal";
 const DeletePopUpCont = ({ user }) => {
   const history = useHistory();
   const location = useLocation();
-  const { id } = location.state.id;
+  const id = location.state.resid;
+  const type = location.state.type;
   const item = location.state.item;
   const toDelete = location.state.user; // Object containing user information to be deleted
   // const userState = user;
@@ -34,13 +35,18 @@ const DeletePopUpCont = ({ user }) => {
   };
 
   const handleSubmit = async (event) => {
-    console.log(user);
+    console.log(id);
+    console.log(type);
+    // console.log(id);
     event.preventDefault();
     // handleClose();
     try {
       if (item === "resource") {
-        await ResourceService.deleteSpThesis(id);
-        console.log(id);
+        if (type === "book") {
+          await ResourceService.deleteBook(id);
+        } else {
+          await ResourceService.deleteSpThesis(id);
+        }
         setItemName(id);
         setMessage("success");
         handleClose();

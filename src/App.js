@@ -146,14 +146,14 @@ function App() {
 
         {/* sp/thesis/Special Problem/Thesis ang types */}
         {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
-        <Route path="/manage-resources" component={ManageResourcesPage}></Route>
+        <Route exact path="/manage-resources" component={ManageResourcesPage}></Route>
         <Route
-          path="/manage-users"
+          exact path="/manage-users"
           render={() => <ManageUser user={user} />}
         ></Route>
 
-        <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
-        <Route path="/add-new-book" component={AddBookPage}></Route>
+        <Route exact path="/add-new-spt" component={AddSPThesisPage}></Route>
+        <Route exact path="/add-new-book" component={AddBookPage}></Route>
         <Route path="/edit-resource" component={EditSPThesisPage}></Route>
 
         <Route path="/about" render={() => <About appRef={appRef} />} />
