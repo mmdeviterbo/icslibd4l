@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
 import Parser from 'html-react-parser';
 
+
 export default function LatestAcquisitions({ latestAcqRef }) {
   const history = useHistory();
   const [hoverText, setHoverText] = useState("");
@@ -27,7 +28,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
   }, []);
 
   const handleViewAllBooks = () => {
-    history.push("/view-all-books");
+    history.push("/browse-books");
   };
 
   useEffect(() => {
@@ -57,9 +58,10 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                 imageSrc={imgNotAvailable}
                 title={book.title || "No title"}
                 key={book.title}
-                linkTo="/home"
+                linkTo={`/book/${book.bookId}`}
                 year={book.dateAcquired || book.Published || "No date"}
                 setHoverText={setHoverText}
+                book={book}
               />
             ))}
           </div>
@@ -84,7 +86,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
             </p>
           </div>
           <div style={buttonViewAllBooks}>
-            {/* <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button> */}
+            <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button>
           </div>
         </div>
       </div>
