@@ -20,7 +20,6 @@ export default function RecentNews({ appRef, newsRef }) {
     };
 
     useEffect(() => {
-        console.log("here?");
         getNewsData();
         return () => {
             setTitleNews([]);
@@ -34,13 +33,15 @@ export default function RecentNews({ appRef, newsRef }) {
         <div
             className="recentNewsContainer"
             style={recentNewsContainer}
-            ref={newsRef}>
+            ref={newsRef}
+        >
             <img src={recentNewsBg} style={recentNewsBgStyle} alt="#" />
             <div style={titleContentContainer}>
                 <p style={newsStyle}>UPLB NEWS</p>
                 <div
                     className="ui three stackable cards"
-                    style={recentNewsInnerContainer}>
+                    style={recentNewsInnerContainer}
+                >
                     {titleNews.map((title, index) => (
                         <ArticleContainer
                             title={title}
@@ -73,7 +74,8 @@ const ArticleContainer = ({ title, link, imgSrc, date }) => {
         <div
             className="ui fluid card"
             style={{ cursor: "pointer" }}
-            onClick={() => openInNewTab(link)}>
+            onClick={() => openInNewTab(link)}
+        >
             <div className="image" style={{}}>
                 <img src={imgSrc} alt="#" />
             </div>

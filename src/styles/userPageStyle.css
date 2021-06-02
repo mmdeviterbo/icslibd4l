@@ -1,36 +1,48 @@
+/* text field */
+input {
+    font-style: Montserrat;
+    font-size: 25px;
+    margin: 12px 20px;
+    border-radius: 8px;
+    padding: 12px;
+    outline-style: none;
+}
+
+input:focus {
+    border-radius: 8px;
+    border: inherit + 0.5px solid #90ee90;
+}
+
 /* profileContainer */
 .profile-container {
-  height: auto;
-  width: 100vw;
-  padding: 10vh;
-  margin: auto;
-  align-items: center;
-  justify-content: center;
+    display: grid;
+    height: auto;
+    gap: 20px;
+    width: 90vw;
+    padding: 10vh;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
 }
 
+/* remove account container */
 .removal-bar {
-  padding-top: 10vh;
-  padding-bottom: 12px;
-  padding-left: 12px;
-  padding-right: 12px;
-
+    padding-top: 10vh;
 }
 
+/* edit button cell */
 .edit-column {
-  padding-left: none;
-  padding-top: 21px;
-  align-items: flex-start;
-
+    padding-left: none;
+    padding-top: 21px;
+    align-items: flex-start;
 }
 
-.columns-temp {
-  align-items: center;
-  justify-content: center;
-  height:inherit;
-
-  padding: 12px;
+.grid-columns {
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
 }
 
 .label-container {
-  padding: 12px;
+    padding: 12px;
 }
