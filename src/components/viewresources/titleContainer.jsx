@@ -1,35 +1,41 @@
-import React from 'react' 
+import React from "react";
+import dateFormat from "dateformat";
 
-const TitleAuthorHere = ({title, authorList, year}) => {
-    return(
-        <div className = "TitleAuthor">
-
+const TitleContainer = ({ title, authorList, year, item }) => {
+    return (
+        <div className="title-author">
             {/* title in h1 */}
-            <h1>
-                {title}
-            </h1>
+            <h1>{title}</h1>
 
             {/* author in h3 */}
             <h3>
-                {authorList.map((item, key) =>
-                    <div key={key}>
-                        {item}
-                    </div>
-                )}
-            </h3>   
+                {authorList &&
+                    authorList.map((item, key) => (
+                        <div key={key}>{item.author_name}</div>
+                    ))}
+            </h3>
 
-            <div className = "dateandview">
-                {/* publish date in p */}
-                <p>
-                    {year}
-                    {/* Published on January 04, 2021 */}
-                </p>
-            </div>
+            {item === "book" ? (
+                <div className="date-and-view">
+                    {/* publish date in p */}
+                    <p>
+                        Date Published: {dateFormat(year, "mmmm yyyy")}
+                        {/* Published on January 04, 2021 */}
+                    </p>
+                </div>
+            ) : (
+                <div className="date-and-view">
+                    {/* publish date in p */}
+                    <p>
+                        {year}
+                        {/* Published on January 04, 2021 */}
+                    </p>
+                </div>
+            )}
 
-            <hr/>
-
+            <hr />
         </div>
-    )
-}
+    );
+};
 
-export default TitleAuthorHere
+export default TitleContainer;

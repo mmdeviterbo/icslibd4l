@@ -1,35 +1,40 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-import TitleAuthorHere from "./titleContainer";
+import React, { useEffect } from "react";
+import TitleContainer from "./titleContainer";
 import "../../styles/viewspt/viewSPTStyle.css";
 import AbstractContainer from "./abstractContainer";
 import InfoSidebar from "./sideInfoContainer";
 
-const ReadingSPTContainer = ({ sampleSP }) => {
-    const location = useLocation();
-    // const { resourceData } = location.state.resourceData;
-    // console.log(resourceData);
-    // console.log(userType)
-    return (
-        <div className="ViewSPTMainPageContainer">
-            <TitleAuthorHere
-                title={sampleSP.title}
-                authorList={sampleSP.authorList}
-                year={sampleSP.year}
-            />
+const ReadingSPTContainer = (props) => {
+  const resourceData =
+    (props.location && props.location.state.resourceData) || {};
 
-            <div className="abstract-and-info">
-                <AbstractContainer abstract={sampleSP.abstract} />
-                <InfoSidebar
-                    type={sampleSP.type}
-                    adviserList={sampleSP.adviserList}
-                    keywords={sampleSP.keywords}
-                />
-            </div>
-        </div>
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-        // add suggestions / related content at the bottom ..?
-    );
+  return (
+    <div className="spt-page-container">
+      <TitleContainer
+        title={resourceData.title}
+        authorList={resourceData.author}
+        year={resourceData.year}
+      />
+
+      <div className="abstract-and-info">
+        <AbstractContainer abstract={resourceData.abstract} />
+        <InfoSidebar
+          user={props.user}
+          title={resourceData.title}
+          id={resourceData.sp_thesis_id}
+          type={resourceData.type}
+          adviserList={resourceData.adviser}
+          keywords={resourceData.keywords}
+        />
+      </div>
+    </div>
+
+    // add suggestions / related content at the bottom ..?
+  );
 };
 
 export default ReadingSPTContainer;

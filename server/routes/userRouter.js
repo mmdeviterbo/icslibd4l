@@ -29,9 +29,7 @@ Response Object:
 }
 ********************************************************/
 router.post("/create", async (req, res) => {
-    console.log("here");
     var loggedUser;
-    console.log("here");
     try {
         const { googleId, email, fullName } = req.body;
 
@@ -51,7 +49,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
-                userType: 1,
+                userType: 4,
                 nickname,
             });
 
@@ -272,6 +270,55 @@ router.post("/logout", async (req, res) => {
     }
 });
 
+
+//find specific person
+/**************************************************** 
+Request Object:
+googleId
+
+Response Object: 
+"Specific person"
+********************************************************/
+router.post("/findperson", async (req, res) => {
+    try {
+        const { googleId } = req.body;
+
+        if (!googleId)
+            return res.status(400).json({
+                    errMessage: "Please enter All required fields. ",
+            });
+        const existingUser = await UserModel.findOne({ googleId });
+
+        //NEW IMPLEMENTATION=
+        const publicData = null;
+        // Data that will only be available to users who know encryption details.
+        const privateData = {
+            googleId: existingUser.googleId,
+            email: existingUser.email,
+            fullName: existingUser.fullName,
+            nickname: existingUser.nickname,
+            userType: existingUser.userType,
+        };
+
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: "aes-256-cbc",
+        };
+
+        // JWT Settings
+        const jwtDetails = {
+            secret: jwtPublicKey, // to sign the token
+            expiresIn: "24h",
+        };
+        const token = await jwtEncrypt.generateJWT(jwtDetails, publicData, encryption, privateData, "ICSlibrary");
+        res.send(token);
+    
+    }catch(err){
+        res.status(404).json({errMessage:"Not foundddd"});
+    }
+});
+
 //read all user logs
 /**************************************************** 
 Request Object:
@@ -291,7 +338,6 @@ router.get("/getUserLogs", async (req, res) => {
             }
         });
     } catch (err) {
-        console.error(err);
         res.status(500).send();
     }
 });

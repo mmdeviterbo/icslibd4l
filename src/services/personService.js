@@ -8,6 +8,12 @@ const loginRegisterUser = (userInfo) => {
     });
 };
 
+// get specific person
+const getSpecificPerson = (userInfo) => {
+    return http.post(`${apiEndpoint}/users/findperson`, userInfo);
+};
+
+
 // logout user
 const logoutUser = (userInfo) => {
     return http.post(`${apiEndpoint}/users/logout`, userInfo, {
@@ -50,6 +56,12 @@ const updateNickname = (userInfo) => {
     });
 };
 
+//read data of all users
+const readAllUsers = () => {
+    return http.get(`${apiEndpoint}/admin/readAllUsers`, {
+        withCredentials:true      
+    });
+};
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
     loginRegisterUser,
@@ -57,6 +69,8 @@ const exportFunctions = {
     readUser,
     updateNickname,
     deleteUser,
+    readAllUsers,
+    getSpecificPerson
 };
 
 export default exportFunctions;

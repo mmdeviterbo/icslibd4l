@@ -2,16 +2,16 @@ import React from "react";
 // import ReactDOM from 'react-dom';
 import "../../styles/addresource/addResourceStyle.css";
 import AddResourcesHeader from "./addResourcesHeader";
-import AddNewSPThesisForm from "./addNewSPTPage";
+import AddBookFormContainer from "./addBookFormContainer";
 
-const AddSPThesisPage = () => {
+const AddBookPage = () => {
     return (
         <div className="add-resource-page-container">
              {/* header at the side */}
             <AddResourcesHeader/>
-            <AddNewSPThesisForm />
+            <AddBookFormContainer/>
         </div>
     );
 };
 
-export default AddSPThesisPage;
+export default AddBookPage;
