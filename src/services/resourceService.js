@@ -71,8 +71,6 @@ function getAllResources() {
 }
 
 function getSPTFiles({ title, fileType }){
-    console.log(title)
-    console.log(fileType)
     return http.post(`${apiEndpoint}/thesis/download`, { title, fileType }, {withCredentials: true}, {
         responseType: 'stream'
     });

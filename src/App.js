@@ -136,7 +136,7 @@ function App() {
                 <Route
                     path="/book/:id"
                     render={(props) => (
-                        <ReadingBookContainer {...props} />
+                        <ReadingBookContainer appRef={appRef} {...props} />
                     )}></Route>
                 {/* placeholder componenets */}
 
