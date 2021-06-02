@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Route, Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
 import viewTable from "./viewTable";
 import { TableBody, TableCell, TableRow, TableHead } from "@material-ui/core";
 import dateFormat from "dateformat";
-import ReadingSPTContainer from "../viewresources/readingSPTContainer";
+// import ReadingSPTContainer from "../viewresources/readingSPTContainer";
 // import ReadingSPTContainer from "../viewresources/readingsptcontainer";
 
 export default function BrowseResources({ type }) {
-    const location = useLocation();
+    // const location = useLocation();
     const [resourceList, setResourceList] = useState([]);
 
     const { TblContainer } = viewTable();
@@ -30,13 +30,19 @@ export default function BrowseResources({ type }) {
     const ViewSPThesis = () => {
         return (
             <div>
-                <p
-                    style={{
-                        fontSize: "calc(30px + 0.5vw)",
-                        fontWeight: "900",
+                <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"20px"}}>
+                    <p style={{fontSize: "calc(30px + 0.5vw)", fontWeight: "900", margin:0}}>
+                        Special Problem and Thesis
+                    </p>
+                    <Link className="gotoBookClass" to="/browse-books" style={{float:"right", fontSize:"calc(14px + 0.2vw)", color:"black",
+                            borderRadius:"2px", padding:"10px 30px", transition:"0.2s",
                     }}>
-                    Special Problems and Theses
-                </p>
+                            Browse Books
+                            <i class="fa ml-2 fa-chevron-right"></i>
+                            <i class="fa fa-chevron-right"></i>
+                            <i class="fa fa-chevron-right"></i>
+                    </Link>
+                </div>
                 <TblContainer>
                     <TableHead>
                         <TableRow>
@@ -98,13 +104,19 @@ export default function BrowseResources({ type }) {
     const ViewBook = () => {
         return (
             <div>
-                <p
-                    style={{
-                        fontSize: "calc(30px + 0.5vw)",
-                        fontWeight: "900",
+                <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"20px"}}>
+                    <p style={{fontSize: "calc(30px + 0.5vw)", fontWeight: "900", margin:0}}>
+                        Books
+                    </p>
+                    <Link className="gotoBookClass" to="/browse-special-problems" style={{float:"right", fontSize:"calc(14px + 0.2vw)", color:"black",
+                            borderRadius:"2px", padding:"10px 30px", transition:"0.2s",
                     }}>
-                    Books
-                </p>
+                            Browse SP and Theses
+                            <i class="fa ml-2 fa-chevron-right"></i>
+                            <i class="fa fa-chevron-right"></i>
+                            <i class="fa fa-chevron-right"></i>
+                    </Link>
+                </div>
                 <TblContainer>
                     <TableHead>
                         <TableRow>

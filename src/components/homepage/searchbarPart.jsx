@@ -28,7 +28,9 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
         }
     }
 
-    const scrollIntoBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+    const scrollIntoBrowse=()=> {
+        history.push('/browse-special-problems');
+    }
     const scrollIntoLatestAcq=()=> latestAcqRef.current && latestAcqRef.current.scrollIntoView({behavior:"smooth",block:"start"});
     const scrollIntoNews=()=> newsRef.current && newsRef.current.scrollIntoView({behavior:"smooth",block:"start"});
 

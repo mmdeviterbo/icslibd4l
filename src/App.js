@@ -37,6 +37,8 @@ function App() {
     const background = location.state && location.state.background;
 
     useEffect(() => {
+        const currentUrl = window.location.pathname;
+        console.log(currentUrl);
         getCurrentToken();
     }, []);
 
@@ -69,7 +71,9 @@ function App() {
         try {
             const { data } = await PersonService.loginRegisterUser(userInfo);
             localStorage.setItem(jwtPrivateKey, data); //set token
-            window.location = "/home";
+            
+            // get current param, it must stay on where the user's current path
+            window.location = window.location.pathname;
         } catch (err) {}
     };
 

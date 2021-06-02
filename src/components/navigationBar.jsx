@@ -51,7 +51,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
                     behavior: "smooth",
                     block: "start",
                 });
-        else if (window.location.pathname === "/browse-books" || window.location.pathname === "/browse-special-problems"){
+        else if (["/browse-books","/browse-special-problems","/browse-theses"].includes(window.location.pathname)){
             appRef.current &&
             appRef.current.scrollIntoView({
                 behavior: "smooth",
@@ -140,7 +140,7 @@ const SearchFilter = ({ user }) => {
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            window.location = "/";
+            window.location = window.location.pathname;
         } catch (err) {}
     };
 
