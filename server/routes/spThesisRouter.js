@@ -637,7 +637,7 @@ router.get("/search", async (req, res) => {
         // sample: keyword=["keyw1","keyw2","keyw3"]
         if ("keyword" in req.query) {
             try{
-                let keywordArrayFilter = JSON.parse(req.query.keyword);
+                let keywordArrayFilter = req.query.keyword;
                 keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
                 final_arr = final_arr.filter((item) => {
                     if ("keywords" in item) {
