@@ -20,8 +20,8 @@ export default function LatestAcquisitions({ latestAcqRef }) {
             const booksInfo = await ResourceService.getBooks();
             setacquisitions(booksInfo.data);
 
-            const bookCovers = await ResourceService.getBookCovers();
-            setCovers(bookCovers.data);
+            // const bookCovers = await ResourceService.getBookCovers();
+            // setCovers(bookCovers.data);
         }
         getLatestAcquisition();
     }, []);
