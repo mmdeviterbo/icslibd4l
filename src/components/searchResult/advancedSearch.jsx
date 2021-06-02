@@ -132,6 +132,7 @@ export default function AdvancedSearch({appRef}){
         fetchData();
     }, [objFilter]);
 
+
     const handleForm=(e)=>{
         e.preventDefault();
         let tempStr = query.trim();
@@ -139,7 +140,14 @@ export default function AdvancedSearch({appRef}){
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
             history.push(`/search?type=${resourceType}&search=${tempStr}`);
         }
-        setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+        
+        if(!resourceType || resourceType === ""){
+            setUrlRequest(`/search?type=any&search=${tempStr}`);
+            history.push(`/search?type=any&search=${tempStr}`);
+        }else{
+            setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+        }
+        
         // call convert filter to object
         filterParser();   
     }
