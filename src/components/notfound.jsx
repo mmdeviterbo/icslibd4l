@@ -10,8 +10,8 @@ export default function Notfound() {
     useEffect(()=>{
         gsap.from('.white-notfound',{
             duration:0.5,
-            x:-50,
-            scale:0.7
+            xPercent:-50,
+            scale:1.5,
         });
     },[])
 
