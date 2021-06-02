@@ -11,7 +11,7 @@
     justify-content: center;
     align-items:center;
     background:rgb(0, 103, 161);
-    box-shadow: 4px 4px 20px black;
+    box-shadow: 2px 2px 7px black;
 
     /* protect from copy paste  */
     -webkit-user-select: none;
