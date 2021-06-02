@@ -37,19 +37,6 @@ export default function AdvancedSearch({appRef}){
     const [pageNumber,setPageNumber] = useState(0);
     const resultsPerPage = 10;
     const pagesVisited = pageNumber*resultsPerPage;
-
-    // const [results, setResults] = useState([
-    //     {title:'My Resource 1', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 2', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 3', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 4', author:['Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 5', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 6', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource 7', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 8', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 9', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    //     {title:'My Resource 10', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    // ]);
     const pageCount = Math.ceil(resultsFilterArr.length / resultsPerPage);
 
 
@@ -78,50 +65,21 @@ export default function AdvancedSearch({appRef}){
     let urlQuery = '';
 
     url = url.replace('http://localhost:3000/search',''); 
-    //edit before prod; url = url.replace(/\+/g,' '); or should i use split and have ? as a delimeter tho the search string can also contain '?'
+    //edit before prod; or should i use split and have ? as a delimeter tho the search string can also contain '?'
     if(url.length>0){
         url = url.slice(1,url.length);
         urlQuery = decodeURIComponent((url.split('&')[1]).replace('search=',''));
         urlFilter = (url.split('&')[0]).replace('type=','');
     }
-    // if(url.split('&').length > 1){
-    //     urlQuery = decodeURIComponent((url.split('&')[0]).replace('q=',''));
-    //     urlFilter = (url.split('&')[1]).replace('f=','');
-    // }else
-    //     urlQuery = decodeURIComponent((url.replace('q=','')));
-    
-    // console.log(searchFilterAdviser);
-    // console.log(searchFilterYear);
-    // console.log(resultsFilterArr);
 
-    // function makeLink(resultsFilterArr) {
-    //     if(resultsFilterArr.length==0)
-    //         return
-
-    //     for(let i=0; i<resultsFilterArr.length; i++){
-    //         let urlHolder='';
-
-    //         if(resultsFilterArr[i].bookId){ //if book
-    //             urlHolder="/book/"+resultsFilterArr[i].bookId
-    //         }else if(resultsFilterArr[i].sp_thesis_id){ //if sp/thesis
-    //             urlHolder="/sp-thesis/"+resultsFilterArr[i].sp_thesis_id
-    //         }
-
-    //         resultsFilterArr[i]["linkTo"] = urlHolder;
-    //     }
-    // }
 
     // http request
     async function fetchData() {
         try{
             //  objFilter store filters in an object <field>:<value>
             //  urlRequest string that contains the search query -> example: search?type=title
-            console.log(objFilter); 
-            console.log(urlRequest);
             const {data} = await ResourceService.searchSpThesis(objFilter,urlRequest);
             setResultsFilterArr(data);
-            // await makeLink(resultsFilterArr);
-            // console.log(resultsFilterArr)
         }catch (err){
             console.log(err);
         }
@@ -207,10 +165,6 @@ export default function AdvancedSearch({appRef}){
                     setSearchFilterPublisher={setSearchFilterPublisher}
                     course={course}
                     setCourse={setCourse}
-                    // filterArray={filterArray}
-                    // setfilterArray={setfilterArray}
-                    // fieldArray={fieldArray}
-                    // setfieldArray={setfieldArray}
                     keywords={keywords}
                     setKeywords={setKeywords}
                     />
