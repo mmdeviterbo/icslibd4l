@@ -4,8 +4,11 @@ const UserLogModel = require("../models/userLogModel");
 const authAdmin = require("../middleware/authAdmin");
 
 //for generating reports
-const puppeteer = require('puppeteer');
-const fs = require('fs-extra');
+const puppeteer = require("puppeteer");
+const fs = require("fs-extra");
+const hbs = require("handlebars");
+const path = require("path");
+const pdfMerge = require("pdf-merger-js");
 const BookModel = require("../models/bookModel");
 const ThesisModel = require("../models/spThesisModel");
 
@@ -156,7 +159,11 @@ router.put("/updateOtherUser", authAdmin, async (req, res) => {
         res.status(500).send();
     }
 });
-
+router.get("/", async (req, res) => {
+    console.log("here");
+    console.log(req.cookies);
+    res.send("done");
+});
 //search function
 /**************************************************** 
 Req object: 
@@ -171,7 +178,6 @@ router.get("/search", async (req, res) => {
     let idList = [];
     let init_output;
     let final_output;
-
     function saveId(item, index) {
         if (!idList) {
             idList = item._id;
@@ -247,6 +253,22 @@ router.get("/search", async (req, res) => {
     }
 });
 
+//compile function for pdf format
+/****************************************************
+ parameters: 
+    templateName, data 
+ output: 
+    html in string format
+ **************************************************/
+const compile = async function (templateName, data) {
+    const filePath = path.join(
+        process.cwd(),
+        `./server/reportTemplate/${templateName}.hbs`
+    );
+    console.log(data);
+    const html = await fs.readFile(filePath, "utf-8");
+    return hbs.compile(html)(data);
+};
 //summary report function
 /**************************************************** 
 Req object: 
@@ -268,134 +290,147 @@ router.get("/report", async (req, res) => {
     console.log(type);
     try {
         //init
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox"],
+        });
         const page = await browser.newPage();
-
+        let books, spThesis;
         //books
-        if(type === "all" || type === "books"){
+        if (type === "all" || type === "books") {
             //query for all book information
             //copied from book router search book function
-            const books = await BookModel.aggregate(
-                [
-                    { $match: {}},
-                    {
-                        $lookup: {
-                            from: "book_authors",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "author",
-                        },
+            books = await BookModel.aggregate([
+                { $match: {} },
+                {
+                    $lookup: {
+                        from: "book_authors",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "author",
                     },
-                    {
-                        $lookup: {
-                            from: "book_subjects",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "subject",
-                        },
+                },
+                {
+                    $lookup: {
+                        from: "book_subjects",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "subject",
                     },
-                ]
-            );
+                },
+            ]);
         }
 
         //sp and thesis
-        if(type === "all" || type === "spThesis"){
+        if (type === "all" || type === "spThesis") {
             //query for all sp and thesis information
-            //copied from spThesisRouter browse function 
-            const spThesis = await  ThesisModel.aggregate(
-                [
-                    {
-                        $match: {
-                            type: {
-                                $in: [
-                                    "Thesis",
-                                    "Special Problem",
-                                    "thesis",
-                                    "sp",
-                                    "SP",
-                                ],
-                            },
+            //copied from spThesisRouter browse function
+            spThesis = await ThesisModel.aggregate([
+                {
+                    $match: {
+                        type: {
+                            $in: [
+                                "Thesis",
+                                "Special Problem",
+                                "thesis",
+                                "sp",
+                                "SP",
+                            ],
                         },
                     },
-                    {
-                        $lookup: {
-                            from: "sp_thesis_advisers",
-                            localField: "sp_thesis_id",
-                            foreignField: "sp_thesis_id",
-                            as: "adviser",
-                        },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "adviser",
                     },
-                    {
-                        $lookup: {
-                            from: "sp_thesis_authors",
-                            localField: "sp_thesis_id",
-                            foreignField: "sp_thesis_id",
-                            as: "author",
-                        },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "author",
                     },
-                    {
-                        $lookup: {
-                            from: "sp_thesis_keywords",
-                            localField: "sp_thesis_id",
-                            foreignField: "sp_thesis_id",
-                            as: "keywords",
-                        },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
                     },
-                    { 
-                        $sort: { 
-                            title: 1,
-                            type: 1
-                        } 
+                },
+                {
+                    $sort: {
+                        title: 1,
+                        type: 1,
                     },
-                ]
-            );
+                },
+            ]);
         }
 
         //users, not a priority
-        if(type === "users"){
-            const users = await UserModel.find().sort({userType:1});
+        if (type === "users") {
+            const users = await UserModel.find().sort({ userType: 1 });
             console.log(users);
         }
 
         //user logs, not a priority
-        if(type === "userLogs"){
+        if (type === "userLogs") {
             const userLogs = await UserModel.aggregate([
-                {$match: {}},
+                { $match: {} },
                 {
                     $lookup: {
                         from: "userlogs",
                         localField: "googleId",
                         foreignField: "googleId",
-                        as: "logs"
+                        as: "logs",
                     },
-                    $sort: {
-                        
-                    }
+                    $sort: {},
                 },
                 {
                     $sort: {
-                        userType: -1
-                    }
-                }
+                        userType: -1,
+                    },
+                },
             ]);
         }
-        
-        await page.setContent('<h1>hello</h1>');
-        await page.emulateMediaType('screen');
-        await page.pdf({
-            path: 'sample.pdf',
-            format: 'A4',
-            printBackground: true
+
+        const bookContent = await compile("book", books);
+        const bookPage = await browser.newPage();
+        await bookPage.setContent(bookContent);
+        await bookPage.pdf({
+            path: "./Books.pdf",
+            format: "A4",
+            printBackground: true,
         });
+
+        const spThesisContent = await compile("spThesis", spThesis);
+        const spThesisPage = await browser.newPage();
+        await spThesisPage.setContent(spThesisContent);
+        await spThesisPage.pdf({
+            path: "./spThesis.pdf",
+            format: "A4",
+            printBackground: true,
+        });
+
+        const merger = new pdfMerge();
+
+        merger.add("Books.pdf");
+        merger.add("spThesis.pdf");
+
+        await merger.save("Merged.pdf");
 
         await browser.close();
 
-        res.send();
+        res.send(spThesis);
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        res.status(500).send(err);
     }
 });
-
 
 module.exports = router;
