@@ -5,19 +5,18 @@ import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 //  TODO: add documentation
-const MessagePopUpCont = ({ message, show }) => {
+const MessagePopUpCont = ({ message, show, setShow }) => {
   const history = useHistory();
-  const [visible, setVisible] = useState(false);
 
   const handleClose = () => {
-    setVisible(false);
+    setShow(false);
     history.goBack();
   };
 
   return (
     <>
       <Modal
-        show={visible}
+        show={show}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}

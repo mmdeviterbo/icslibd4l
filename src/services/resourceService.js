@@ -65,18 +65,22 @@ function getNews() {
     return http.post(`${apiEndpoint}/books/get-news`);
 }
 
-// get all books, sorted by date (latest acquisition feature)
+// get all books (object of information only, not images), sorted by date (latest acquisition feature)
 function getBooks(){
+    return http.get(`${apiEndpoint}/books/display_infos`);
+}
+
+// get all books (object of images), sorted by date (latest acquisition feature)
+function getBookCovers(){
     return http.get(`${apiEndpoint}/books/display_covers`);
 }
+
 
 function getAllResources() {
     return http.get(`${apiEndpoint}/thesis/search`);
 }
 
 function getSPTFiles({ title, fileType }){
-    console.log(title)
-    console.log(fileType)
     return http.post(`${apiEndpoint}/thesis/download`, { title, fileType }, {withCredentials: true}, {
         responseType: 'stream'
     });

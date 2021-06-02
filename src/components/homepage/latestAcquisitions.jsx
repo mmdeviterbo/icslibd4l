@@ -3,25 +3,32 @@ import CardBook from "./cardBook";
 import latestAcqBg from "../../assets/searchBg_4.png";
 import { useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
+import Parser from 'html-react-parser';
+
 
 export default function LatestAcquisitions({ latestAcqRef }) {
   const history = useHistory();
   const [hoverText, setHoverText] = useState("");
   const [acquisitions, setacquisitions] = useState([]);
+  const [covers, setCovers] = useState("");
+
   const imgNotAvailable =
     "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
   useEffect(() => {
     async function getLatestAcquisition() {
       // get title and year (of 12 books, sorted array)
-      const { data } = await ResourceService.getBooks();
-      setacquisitions(data);
+      const booksInfo  = await ResourceService.getBooks();
+      setacquisitions(booksInfo.data);
+
+      const bookCovers = await ResourceService.getBookCovers();
+      setCovers(bookCovers.data);
     }
     getLatestAcquisition();
   }, []);
 
   const handleViewAllBooks = () => {
-    history.push("/view-all-books");
+    history.push("/browse-books");
   };
 
   useEffect(() => {
@@ -36,6 +43,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
       style={latestAcquisitionsContainer}
       ref={latestAcqRef}
     >
+      <div>{covers && Parser(covers)}</div>
       <img src={latestAcqBg} style={latestAcqBgStyle} alt="#" />
       <div style={colorsParent} className="latestAcqcolorsParent">
         <div style={whiteBg}>
@@ -50,9 +58,10 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                 imageSrc={imgNotAvailable}
                 title={book.title || "No title"}
                 key={book.title}
-                linkTo="/home"
+                linkTo={`/book/${book.bookId}`}
                 year={book.dateAcquired || book.Published || "No date"}
                 setHoverText={setHoverText}
+                book={book}
               />
             ))}
           </div>
@@ -77,7 +86,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
             </p>
           </div>
           <div style={buttonViewAllBooks}>
-            {/* <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button> */}
+            <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button>
           </div>
         </div>
       </div>
