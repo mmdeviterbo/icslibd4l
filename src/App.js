@@ -125,7 +125,7 @@ function App() {
                 <Route
                     path="/sp-thesis/:id"
                     render={(props) => (
-                        <ReadingSPTContainer {...props} />
+                        <ReadingSPTContainer user={user} {...props} />
                     )}></Route>
 
                 <Route
