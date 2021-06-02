@@ -615,12 +615,13 @@ router.get("/search", async (req, res) => {
         // Filter by 1 adviser (case insensitive, checks for substring match)
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
+            let fnameFilter, lnameFilter;
+            [lnameFilter, fnameFilter] = adviserFilter.split(", ");
             final_arr = final_arr.filter((item) => {
                 if ("advisers" in item) {
                     return item.advisers.some((advi) => {
-                        return advi.adviser_name
-                            .toLowerCase()
-                            .includes(adviserFilter);
+                        return (advi.adviser_fname.toLowerCase()==fnameFilter 
+                        && advi.adviser_lname.toLowerCase()==lnameFilter);
                     });
                 }
             });
