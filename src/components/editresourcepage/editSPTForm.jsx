@@ -80,6 +80,8 @@ export default function EditSPTFormContainer(props) {
         }
     }, []);
 
+    console.log(idSource)
+    console.log(spThInfoArr);
 
     useEffect(() => {
         try {
@@ -110,14 +112,14 @@ export default function EditSPTFormContainer(props) {
                     setSourceCode(source_code);
                     setAbstract(abstract);
 
-                    setAdviser({
-                        fname: adviser[0]?.adviser_fname,
-                        lname: adviser[0]?.adviser_lname,
-                    });
-                    setAuthor({
-                        fname: author[0]?.author_fname,
-                        lname: author[0]?.author_lname,
-                    });
+                    // setAdviser({
+                    //     fname: adviser[0]?.adviser_fname,
+                    //     lname: adviser[0]?.adviser_lname,
+                    // });
+                    // setAuthor({
+                    //     fname: author[0]?.author_fname,
+                    //     lname: author[0]?.author_lname,
+                    // });
 
                     // console.log("fsdfsdfd");
                     console.log(sourceItem);
@@ -152,15 +154,15 @@ export default function EditSPTFormContainer(props) {
         updateList();
     }, [author, adviser]);
 
-    const addAuthor = (e) => {
-        const { name, value } = e.target;
-        setAuthor({ ...author, [name]: value });
-    };
+    // const addAuthor = (e) => {
+    //     const { name, value } = e.target;
+    //     setAuthor({ ...author, [name]: value });
+    // };
 
-    const addAdviser = (e) => {
-        const { name, value } = e.target;
-        setAdviser({ ...adviser, [name]: value });
-    };
+    // const addAdviser = (e) => {
+    //     const { name, value } = e.target;
+    //     setAdviser({ ...adviser, [name]: value });
+    // };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -178,8 +180,8 @@ export default function EditSPTFormContainer(props) {
                 poster,
                 // advisers: adviserList,
                 // authors: authorList,
-                adviser: [adviser],
-                author: [author],
+                advisers: [adviser],
+                authors: [author],
                 keywords,
             };
             console.log(userInput);
@@ -204,10 +206,12 @@ export default function EditSPTFormContainer(props) {
     };
 
     return (
+
         <div className = "add-res-form-cont">
             <EditResourceHeader/>
             {/* main form */}
             <form id = "addSPTForm" onSubmit = {handleSubmit} autoComplete="off"> 
+                            
                 <div className = "form-container">              {/* both parts of the form are inside this div for display:flex purposes */}
                     <div className="res-primary-info">          {/* left side of the form */}
                         <h2>
@@ -223,7 +227,7 @@ export default function EditSPTFormContainer(props) {
                             required
                             type="text"
                             id="resId"
-                            // value = {id}
+                            value = {id}
                             // disabled
                             // onchange = {(event => {
                             //     setId(event.target.value);
@@ -384,10 +388,10 @@ export default function EditSPTFormContainer(props) {
                                 <br/>
                                 Type:
                                 <Select id="resClassification"
-                                        defaultValue={{type}}
+                                        defaultValue={type}
                                         options={classificationOptions}
                                         // placeholder={type}
-                                        // value={type}
+                                        value={type}
                                         onChange={handleChange}>
                                 </Select>
                         </div>
