@@ -6,7 +6,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const path = require("path");
 const cors = require("cors");
 const methodOverride = require("method-override");
 var path = require("path");

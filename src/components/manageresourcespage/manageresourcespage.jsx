@@ -1,18 +1,21 @@
 import React from "react";
-import ManageItemsHeader from "./manageItemsHeader";
-import FieldsContainerRes from "./filterFieldsResources";
-import ResourceTableContainer from "./resourceTableContainer";
-import "../../styles/manageresources/manageResourcesStyle.css";
+import MainResourceTable from "./resourcesMainTable";
+import AddNewResource from "./createNewResource";
+import AddNewSPT from "./newSPTButton";
+// import UserTable from '../manageuserpage/userTable'
 
-const ManageResourcesPage = ({ resourceList }) => {
+const ResourcesTableContainer = () => {
     return (
-        <div className="manage-resources-page-container">
-            <ManageItemsHeader />
-            <FieldsContainerRes />
-            {/* <ResTableContainer resourceList={resourceList} /> */}
-            <ResourceTableContainer />
+        <div className="res-table-cont">
+            <MainResourceTable />
+            <br />
+
+            <div className="addBtns">
+                <AddNewResource /> {/* Add book */}
+                <AddNewSPT /> {/* Add Sp/Thesis */}
+            </div>
         </div>
     );
 };
 
-export default ManageResourcesPage;
+export default ResourcesTableContainer;
