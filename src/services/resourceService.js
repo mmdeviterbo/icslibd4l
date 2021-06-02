@@ -1,5 +1,5 @@
-import http from './httpService';
-import {apiEndpoint} from '../config.json';
+import http from "./httpService";
+import { apiEndpoint } from "../config.json";
 
 // add a resource details (sp/thesis, book)
 const addSpThesis = (formData) => {
@@ -27,19 +27,23 @@ const browseResources = (resourceType) => {
 }
 
 const searchSpThesis = (filter, query) => {
-    return http.get(`${apiEndpoint}/thesis${query}`, filter, {withCredentials: true})
-}
-
+    return http.get(`${apiEndpoint}/thesis${query}`, filter, {
+        withCredentials: true,
+    });
+};
 
 const searchBook = (filter) => {
-    return http.get(`${apiEndpoint}/book/search`, filter, {withCredentials: true})
-}
-
+    return http.get(`${apiEndpoint}/book/search`, filter, {
+        withCredentials: true,
+    });
+};
 
 // edit data of a resource
 const editSpThesis = (resourceData) => {
-    return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {withCredentials: true})
-}
+    return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {
+        withCredentials: true,
+    });
+};
 
 //delete resource
 const deleteSpThesis = (deleteId) => {
@@ -47,8 +51,8 @@ const deleteSpThesis = (deleteId) => {
 }
 
 // get news from uplb news website
-function getNews(){
-    return http.post(`${apiEndpoint}/books/get-news`)
+function getNews() {
+    return http.post(`${apiEndpoint}/books/get-news`);
 }
 
 // get all books, sorted by date (latest acquisition feature)
@@ -56,7 +60,7 @@ function getBooks(){
     return http.get(`${apiEndpoint}/books/display_covers`);
 }
 
-function getAllResources(){
+function getAllResources() {
     return http.get(`${apiEndpoint}/thesis/search`);
 }
 
