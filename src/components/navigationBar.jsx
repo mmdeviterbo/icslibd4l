@@ -238,7 +238,7 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[3])
+                    : optionsNotAdmin.concat(options[options.length-1])
             }
         />
     );
