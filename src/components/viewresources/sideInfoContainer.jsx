@@ -1,25 +1,30 @@
 import React from "react";
-import resourceServices from "../../services/resourceService";
+import resourceService from "../../services/resourceService";
+import { saveAs } from "file-saver";
+// import { useHistory } from "react-router-dom";
 
 const InfoSidebar = ({ title, type, adviserList, keywords }) => {
   console.log(title);
+  // const history = useHistory();
 
-  const handleDownload = async (e) => {
-    const fileType = e.target.value;
-    console.log(fileType);
+  const handleDownload = async (value) => {
     try {
-      const { data } = await resourceServices.getSPTFiles({ title, fileType });
-      console.log(data);
+      // title = req.query, type = req.params
+      const urlRequest = `/download?type=${value}`;
+      // console.log(value);
+      const { data } = await resourceService.downloadFile(
+        { title: title },
+        urlRequest
+      );
+      data.overrideMimeType("text/plain; charset=x-user-defined");
+      const abyte = data.charCodeAt(0) & 0xff;
+      // history.push(urlRequest);
+      // saveAs("file.pdf");
+      console.log(abyte);
     } catch (err) {
-      if (err.response && err.response.data) {
-        alert(err.response.data.errorMessage); // some reason error message
-      }
+      console.log(err);
     }
   };
-
-  // const handleDownload = (e) => {
-  //   console.log(e.target.value);
-  // };
 
   return (
     <div className="info-sidebar">
@@ -50,8 +55,11 @@ const InfoSidebar = ({ title, type, adviserList, keywords }) => {
       <div className="spt-view-buttons">
         <button
           id="viewposter"
-          value="poster"
-          onClick={(e) => handleDownload(e)}
+          value={"poster"}
+          onClick={(e) => {
+            // setFileType("poster");
+            handleDownload(e.target.value);
+          }}
         >
           <i className="fas fa-file-image"></i>
           View Poster
@@ -59,16 +67,22 @@ const InfoSidebar = ({ title, type, adviserList, keywords }) => {
 
         <button
           id="downloadjournal"
-          value="journal"
-          onClick={(e) => handleDownload(e)}
+          value={"journal"}
+          onClick={(e) => {
+            // setFileType(e.target.value);
+            handleDownload(e.target.value);
+          }}
         >
           Download Journal
         </button>
 
         <button
           id="downloadsourcecode"
-          value="soureCode"
-          onClick={(e) => handleDownload(e)}
+          value={"soureCode"}
+          onClick={(e) => {
+            // setFileType(e.target.value);
+            handleDownload(e.target.value);
+          }}
         >
           Download Source Code
         </button>
@@ -77,8 +91,11 @@ const InfoSidebar = ({ title, type, adviserList, keywords }) => {
         {/* if guest/book -> display: none */}
         <a
           id="viewmanuscript"
-          value="manuscript"
-          onClick={(e) => handleDownload(e)}
+          value={"manuscript"}
+          onClick={(e) => {
+            // setFileType(e.target.value);
+            handleDownload(e.target.value);
+          }}
         >
           {/* <i class = "fas fa-book-open"></i> */}
           <svg

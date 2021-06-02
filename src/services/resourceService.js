@@ -38,6 +38,16 @@ const searchBook = (filter) => {
     });
 };
 
+const downloadFile = (fileType, query) => {
+    console.log(fileType)
+    console.log(query)
+    return http.get(`${apiEndpoint}/thesis${query}`, {params:fileType}, {
+        withCredentials: true,
+    }, {
+        responseType: 'blob',
+    });
+};
+
 // edit data of a resource
 const editSpThesis = (resourceData) => {
     return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {
@@ -90,7 +100,8 @@ const exportFunctions = {
     getBooks,
     getAllResources,
     getSPTFiles,
-    getBookCover
+    getBookCover,
+    downloadFile
 }
 
 export default exportFunctions;

@@ -23,6 +23,7 @@ export default function BrowseResources({ type }) {
   }
 
   useEffect(() => {
+    console.log(resourceList);
     fetchData();
     window.scrollTo(0, 0);
   }, []);
@@ -76,7 +77,7 @@ export default function BrowseResources({ type }) {
                 </TableCell>
                 <TableCell key={item && item.sp_thesis_id}>
                   {item &&
-                    item.author.map((author, key) => (
+                    item.authors.map((author, key) => (
                       <div key={key}>
                         <p style={bodyStyle}>{author.author_name}</p>
                       </div>
