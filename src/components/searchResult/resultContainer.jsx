@@ -1,14 +1,21 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-export default function ResultContainer({title, author, adviser, linkTo, publishDate}){
+export default function ResultContainer({title, authors, publishDate}){//linkTo, 
+    let authorString = '';
+    for (let i=0; i < authors.length; i++) {
+        if(i!=(authors.length)-1)
+            authorString+=authors[i].author_name + ", ";
+        else
+            authorString+=authors[i].author_name;
+    }
+
     return (
         <div style={resultMainContainer} className="resultMainContainer">
-            <Link to={linkTo} style={resultLinkContainer}>
+            <Link to='/search' style={resultLinkContainer}>
                 <h3 style={resultTitle}>{title}</h3>
-                <p style={authAdv}>{author.toString().replace(/,+/g,', ')}</p>
-                <p style={authAdv}>Adviser/s: {adviser.toString().replace(/,+/g,', ')}</p><br/>
-                <p style={resultBottomText}>Published in {publishDate}</p>
+                <p style={authAdv}>{authorString}</p><br/>
+                <p style={resultBottomText}>Published in {publishDate.toString().length == 4 ? publishDate.toString() : publishDate.toString().slice(0,4)}</p>
             </Link>
         </div>
     )
