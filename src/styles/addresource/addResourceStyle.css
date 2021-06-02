@@ -2,265 +2,269 @@
 
 /* ------ Add Resources Form container ------ */
 
-.add-res-sidebar h1 {
-  font-family: "Montserrat", sans-serif;
-  font-weight: normal;
-  font-size: 2.7rem;
-  color: #0067a1;
-  background-color: white;
-  padding-top: 5rem;
-  padding-left: 4rem;
-  padding-right: 2.5rem;
-  padding-bottom: 5rem;
-  width: 25rem;
+.add-res-sidebar h1{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 2.7rem;
+    color:#0067A1;
+    background-color:white;
+    padding-top: 5rem;
+    padding-left: 4rem;
+    padding-right: 2.5rem;
+    padding-bottom: 5rem;
+    width: 25rem;
 }
 
-.add-res-form-cont {
-  background-color: #f4f4f4;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+.add-res-form-cont{
+    background-color:#F4F4F4;
+    width: 100%;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 .add-resource-page-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
-.add-res-header {
-  background-color: white;
-  width: 20%;
+.add-res-header{
+    background-color:white;
+    width: 20%;
 }
 
 .add-res-header h1 {
-  color: #0067a1;
-  padding: 3rem;
-  font-weight: normal;
-  font-size: 3rem;
-  font-family: "Montserrat", sans-serif;
+    color: #0067a1;
+    padding: 3rem;
+    font-weight: normal;
+    font-size: 3rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.form-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding-left: 8rem;
+.form-container{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 8rem;
 }
 
-.res-primary-info {
-  background-color: white;
-  padding: 2.5rem;
-  border-width: 0.5rem;
-  border-radius: 0.3rem;
-  margin: 2rem;
-  width: 28rem;
-  height: 100%;
+.res-primary-info{
+    background-color: white;
+    padding: 2.5rem;
+    border-width: 0.5rem;
+    border-radius: 0.3rem;
+    margin: 2rem;
+    width: 28rem;
+    height: 100%;
 }
 
 .primaryfields {
-  margin-bottom: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 0.3rem;
-  font-weight: normal;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius:0.3rem;
+    font-weight: normal;
+    text-align: center;
 }
 
-.primaryfields label {
-  font-weight: normal;
+.primaryfields label{
+    margin:0;
+    font-weight: normal;
 }
 
-.primaryfields input {
-  height: 2rem;
-  border-radius: 0.3rem;
-  border-color: #cfcfcf solid;
-  border-style: solid;
-  border-width: 0.2rem;
-  padding: 0.5rem;
+.primaryfields input{
+    height: 2rem;
+    border-radius: 0.3rem;
+    border-color:#cfcfcf solid;
+    border-style: solid;
+    border-width: 0.2rem;
+    padding: 0.5rem;
+    width: 50%;
 }
 
-.primaryfields textarea {
-  height: 20rem;
-  width: 21.3rem;
-  border-radius: 0.3rem;
-  border-color: #cfcfcf solid;
-  border-style: solid;
-  border-width: 0.2rem;
-  padding: 0.5rem;
+.primaryfields textarea{
+    height: 20rem;
+    width: 21.3rem;
+    border-radius: 0.3rem;
+    border-color:#cfcfcf solid;
+    border-style: solid;
+    border-width: 0.2rem;
+    padding: 0.5rem;
 }
 
-#addAuthor {
-  font-family: "Montserrat", sans-serif;
-  padding: 0.5rem;
-  padding-right: 1rem;
-  float: right;
-  margin: 0.2rem;
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border-style: solid;
-  border-radius: 0.5rem;
-  border-color: #dadada;
-  border-width: 0.2rem;
+#addAuthor{
+    font-family: 'Montserrat', sans-serif;
+    padding:0.5rem;
+    padding-right: 1rem;
+    float:right;
+    margin:0.2rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-style: solid;
+    border-radius: 0.5rem;
+    border-color:#dadada;
+    border-width:0.2rem;
 }
 
-#addAuthor:hover {
-  background-color: #0067a1;
-  color: white;
-  border-color: white;
+#addAuthor:hover{
+    background-color:#0067A1;
+    color:white;
+    border-color:white;
 }
 
-#deleteAuthor {
-  font-family: "Montserrat", sans-serif;
-  padding: 0.5rem;
-  padding-right: 1rem;
-  float: right;
-  margin: 0.2rem;
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border-style: solid;
-  border-radius: 0.5rem;
-  border-color: #dadada;
-  border-width: 0.2rem;
+#deleteAuthor{
+    font-family: 'Montserrat', sans-serif;
+    padding:0.5rem;
+    padding-right: 1rem;
+    float:right;
+    margin:0.2rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-style: solid;
+    border-radius: 0.5rem;
+    border-color:#dadada;
+    border-width:0.2rem;
+
 }
 
-#deleteAuthor:hover {
-  background-color: #d31c1ca9;
-  color: white;
-  border-color: white;
+#deleteAuthor:hover{
+    background-color:#d31c1ca9;
+    color:white;
+    border-color:white;
 }
 
-#abstractText {
-  height: 15rem;
-  border-radius: 0.3rem;
-  border-color: #cfcfcf solid;
-  border-style: solid;
-  border-width: 0.2rem;
-  padding: 0.5rem;
-  width: 100%;
+#abstractText{
+    height: 15rem;
+    border-radius: 0.3rem;
+    border-color:#cfcfcf solid;
+    border-style: solid;
+    border-width: 0.2rem;
+    padding: 0.5rem;
+    width: 100%
 }
 
-.resClassification-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.resClassification-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .resClassification-container p {
-  padding-top: 0.8rem;
+    padding-top: 0.8rem;
 }
 
 .popupForm {
-  background-color: white;
-  padding: 2.5rem;
-  border-width: 0.5rem;
-  border-radius: 0.3rem;
-  margin: 2rem;
-  width: 35rem;
+    background-color: white;
+    padding: 2.5rem;
+    border-width: 0.5rem;
+    border-radius: 0.3rem;
+    margin: 2rem;
+    width: 35rem;
 }
 
 #resClassification {
-  width: 100%;
+    width: 100%;
 }
 
-.resourcefiles {
-  padding: 1rem;
-  width: 100%;
-  color: #dadada;
-  background-color: white;
-  border-width: 0.1rem;
-  border-radius: 0.5rem;
-  border-style: solid;
-  float: right;
+.resourcefiles{
+    padding: 1rem;
+    width: 100%;
+    color: #dadada;
+    background-color:white;
+    border-width: 0.1rem;
+    border-radius: 0.5rem;
+    border-style: solid;
+    float:right;
 }
 
 .spthesisform {
-  background-color: white;
-  padding: 2.5rem;
-  border-width: 0.5rem;
-  border-radius: 0.3rem;
-  margin: 2rem;
-  width: 28rem;
-  height: 100%;
+    background-color: white;
+    padding: 2.5rem;
+    border-width: 0.5rem;
+    border-radius: 0.3rem;
+    margin: 2rem;
+    width: 28rem;
+    height: 100%;
 }
 
-#sptform h5 {
-  font-weight: normal;
-  font-family: "Montserrat", sans-serif;
+#sptform h5{
+    font-weight: normal;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.spthesisfiles {
-  font-weight: normal;
-  font-family: "Montserrat", sans-serif;
-  display: flex;
-  flex: row;
-  justify-content: space-between;
-  margin-top: 1rem;
-  align-items: center;
-  margin-bottom: 2rem;
+.spthesisfiles{
+    font-weight:normal;
+    font-family: 'Montserrat', sans-serif;
+    display:flex;
+    flex: row;
+    justify-content: space-between;
+    margin-top:1rem;
+    align-items:center;
+    margin-bottom: 2rem;
 }
 
-.spthesisfiles h5 {
-  font-weight: normal;
-  font-family: "Montserrat", sans-serif;
-  width: 12rem;
-  margin-right: 1rem;
-  margin-bottom: 0;
+.spthesisfiles h5{
+    font-weight:normal;
+    font-family: 'Montserrat', sans-serif;
+    width: 12rem;
+    margin-right: 1rem;
+    margin-bottom:0;
 }
 /* 
 .spthesisfiles input{
-  width: 35rem;
+    width: 35rem;
 } */
 
-#addAdviser {
-  font-weight: normal;
-  font-family: "Montserrat", sans-serif;
-  float: right;
-  display: flex;
-  align-items: center;
-  padding: 0.8rem;
-  padding-right: 1rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  border-style: solid;
+#addAdviser{
+    font-weight:normal;
+    font-family: 'Montserrat', sans-serif;
+    float:right;
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    padding-right: 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    border-style: solid;
 }
 
-#addAdviser:hover {
-  background-color: #0067a1;
-  color: white;
-  border-color: white;
+#addAdviser:hover{
+    background-color:#0067A1;
+    color:white;
+    border-color:white;
 }
 
-#saveResource {
-  height: 3rem;
-  border-radius: 0.5rem;
-  border-style: solid;
-  border-color: #0067a1;
-  color: white;
-  background-color: #0067a1;
-  width: 100%;
+#saveResource{
+    height: 3rem;
+    border-radius:0.5rem;
+    border-style: solid;
+    border-color:#0067A1;
+    color:white;
+    background-color: #0067A1;
+    width: 100%;
 }
 
-#saveResource:hover {
-  color: #0067a1;
-  background-color: white;
+#saveResource:hover{
+    color:#0067A1;
+    background-color:white;
 }
 
-#mainAddBookForm {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+#mainAddBookForm{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.add-spt-page-container {
-  display: flex;
-  flex-direction: row;
+.add-spt-page-container{
+    display: flex;
+    flex-direction: row;
 }
 
-#keywords-field {
-  border-color: #cfcfcf;
+#keywords-field{
+    border-color:#cfcfcf
 }

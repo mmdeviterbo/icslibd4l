@@ -10,9 +10,10 @@ import About from "./components/about/about";
 
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
-import EditSPThesisPage from "./components/editresourcepage/editSPTPage";
+import EditSPTFormContainer from "./components/editresourcepage/editSPTForm";
 
 import AddBookPage from "./components/addresourcepage/addBookPage";
+import EditBookFormContainer from "./components/editresourcepage/editBookForm";
 import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
@@ -108,7 +109,6 @@ function App() {
                     component={ViewUserPage}
                 ></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
-
                 {/* <Route
                     path="/update-sp-thesis"
                     component={UpdateResourceData}></Route> */}
@@ -165,13 +165,18 @@ function App() {
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route path="/add-new-book" component={AddBookPage}></Route>
                 <Route
-                    path="/edit-resource"
-                    component={EditSPThesisPage}
+                    path="/edit-spt/:id"
+                    component={EditSPTFormContainer}
+                ></Route>
+
+                <Route
+                    path="/edit-book/:id"
+                    component={EditBookFormContainer}
                 ></Route>
 
                 <Route path="/about" render={() => <About appRef={appRef} />} />
-                <Redirect exact from="/" to="/home" />
                 <Route exact path="/not-found" component={Notfound}></Route>
+                <Redirect exact from="/" to="/home" />
                 <Redirect to="/not-found" />
             </Switch>
 
@@ -181,6 +186,7 @@ function App() {
                     children={<DeleteModalContainer />}
                 />
             )}
+
             {background && (
                 <Route
                     path="/manage-users/delete-user"
