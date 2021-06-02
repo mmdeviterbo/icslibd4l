@@ -24,8 +24,11 @@ function authenticationAdmin(req, res, next) {
         const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
         const verified = decrypted.data;
 
-        //attaches a user property to the req object in the request Router function
-        req.user = verified.user;
+    //checks if token exists
+    if (!token)
+      return res.sendStatus(401).json({
+        errorMessage: "Unauthorized Access",
+      });
 
         if (verified.userType === 1) next();
         else

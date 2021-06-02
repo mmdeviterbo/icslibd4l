@@ -9,11 +9,25 @@ const authStudent = require("../middleware/authStudent");
 
 const jwtPrivateKey = process.env.jwtPrivateKey;
 const jwtPublicKey = process.env.jwtPublicKey;
+
 //create or login account
-// {
-//   googleId,
-//   email,
-//   fullName }
+/**************************************************** 
+Request Object:
+{
+   googleId: googleId,
+   email: email,
+   fullName: fullName 
+}
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.post("/create", async (req, res) => {
     var loggedUser;
     try {
@@ -35,6 +49,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
+                userType: 4,
                 nickname,
             });
 
@@ -98,7 +113,21 @@ router.post("/create", async (req, res) => {
 });
 
 //read all students (Faculty and above only)
+/**************************************************** 
+Request Object:
+NULL
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.get("/readStudents", authFaculty, async (req, res) => {
+    console.log("here");
     UserModel.find({ userType: 4 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
@@ -110,6 +139,22 @@ router.get("/readStudents", authFaculty, async (req, res) => {
 });
 
 //update
+/**************************************************** 
+Request Object:
+{
+    googleId: googleId,
+    newNickname: newNickname,
+}
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.put("/update", authStudent, async (req, res) => {
     try {
         const { googleId, newNickname } = req.body; //get googleId and newNickname from body
@@ -176,6 +221,15 @@ router.put("/update", authStudent, async (req, res) => {
 });
 
 //delete
+/**************************************************** 
+Request Object:
+{
+    googleId: googleId,
+}
+
+Response String: 
+"Entry Deleted"
+********************************************************/
 router.delete("/delete", authStudent, async (req, res) => {
     const googleId = req.body.googleId;
     await UserModel.findOneAndDelete({ googleId });
@@ -183,10 +237,28 @@ router.delete("/delete", authStudent, async (req, res) => {
 });
 
 //logout current signed in user. deletes cookie for user
+/**************************************************** 
+Request Object:
+{
+    googleId: googleId,
+}
+
+Response String:
+"User Logged Out"
+********************************************************/
 router.post("/logout", authStudent, async (req, res) => {
-    const googleId = req.body.googleId;
+    const token = req.cookies.token;
+    // Encryption settings
+    const encryption = {
+        key: jwtPrivateKey,
+        algorithm: "aes-256-cbc",
+    };
+
+    // decrypt token and verifies jwt payload
+    const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
+    const loggedUser = decrypted.data;
+
     try {
-        const loggedUser = await UserModel.findOne({ googleId });
         //logs user login to collection
         const newUserLog = new UserLogModel({
             googleId: loggedUser.googleId,
@@ -196,25 +268,14 @@ router.post("/logout", authStudent, async (req, res) => {
             activity: "User logout",
         });
         await newUserLog.save();
-
         res.cookie("token", "", {
             httpOnly: false,
             expires: new Date(0),
         }).send("User Logged Out");
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        res.status(500).send(err);
     }
 });
 
-router.get("/getUserLogs", async (req, res) => {
-    UserLogModel.find({}, (err, result) => {
-        //reads all the documents and sends as response
-        if (err) {
-            res.send(err);
-        } else {
-            res.send(result);
-        }
-    });
-});
 module.exports = router;
