@@ -132,6 +132,21 @@ const storage = new GridFsStorage({
                             }
                         }
                     );
+                    gfs.files.findOne(
+                        { metadata: [sp_thesis_id, "source code"] },
+                        (err, updatedSPT) => {
+                            if (updatedSPT) {
+                                // .chunks
+                                mongoose.connection.db
+                                    .collection("sp_files.chunks")
+                                    .deleteMany({ files_id: updatedSPT._id });
+                                // .files
+                                gfs.files.deleteOne({
+                                    metadata: [sp_thesis_id, "source code"],
+                                });
+                            }
+                        }
+                    );
                 }
             }
 
@@ -1613,6 +1628,7 @@ router.put(
         { name: "manuscript", maxCount: 1 },
         { name: "poster", maxCount: 1 },
         { name: "journal", maxCount: 1 },
+        { name: "source code", maxCount: 1 }
     ]),
     async (req, res) => {
         const {
@@ -1810,6 +1826,22 @@ router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
                 // .files
                 gfs.files.deleteOne({
                     metadata: [sp_thesis_id_holder, "manuscript"],
+                });
+            }
+        }
+    );
+
+    gfs.files.findOne(
+        { metadata: [sp_thesis_id_holder, "source code"] },
+        (err, updatedSPT) => {
+            if (updatedSPT) {
+                // .chunks
+                mongoose.connection.db
+                    .collection("sp_files.chunks")
+                    .deleteMany({ files_id: updatedSPT._id });
+                // .files
+                gfs.files.deleteOne({
+                    metadata: [sp_thesis_id_holder, "source code"],
                 });
             }
         }
