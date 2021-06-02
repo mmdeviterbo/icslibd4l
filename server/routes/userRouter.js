@@ -29,9 +29,7 @@ Response Object:
 }
 ********************************************************/
 router.post("/create", async (req, res) => {
-    console.log("here");
     var loggedUser;
-    console.log("here");
     try {
         const { googleId, email, fullName } = req.body;
 
@@ -248,7 +246,7 @@ Request Object:
 Response String:
 "User Logged Out"
 ********************************************************/
-router.post("/logout", async (req, res) => {
+router.post("/logout", authStudent, async (req, res) => {
     const token = req.cookies.token;
     // Encryption settings
     const encryption = {
@@ -260,7 +258,6 @@ router.post("/logout", async (req, res) => {
     const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
     const loggedUser = decrypted.data;
 
-    console.log(loggedUser);
     try {
         //logs user login to collection
         const newUserLog = new UserLogModel({
@@ -278,30 +275,6 @@ router.post("/logout", async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send(err);
-    }
-});
-
-//read all user logs
-/**************************************************** 
-Request Object:
-NULL
-
-Response String: 
-"User Logged Out"
-********************************************************/
-router.get("/getUserLogs", async (req, res) => {
-    try {
-        UserLogModel.find({}, (err, result) => {
-            //reads all the documents and sends as response
-            if (err) {
-                res.send(err);
-            } else {
-                res.send(result);
-            }
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send();
     }
 });
 

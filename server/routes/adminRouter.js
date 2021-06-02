@@ -159,11 +159,7 @@ router.put("/updateOtherUser", authAdmin, async (req, res) => {
         res.status(500).send();
     }
 });
-router.get("/", async (req, res) => {
-    console.log("here");
-    console.log(req.cookies);
-    res.send("done");
-});
+
 //search function
 /**************************************************** 
 Req object: 
