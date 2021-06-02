@@ -9,11 +9,25 @@ const authStudent = require("../middleware/authStudent");
 
 const jwtPrivateKey = process.env.jwtPrivateKey;
 const jwtPublicKey = process.env.jwtPublicKey;
+
 //create or login account
-// {
-//   googleId,
-//   email,
-//   fullName }
+/**************************************************** 
+Request Object:
+{
+   googleId: googleId,
+   email: email,
+   fullName: fullName 
+}
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.post("/create", async (req, res) => {
     var loggedUser;
     try {
@@ -35,6 +49,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
+                userType: 4,
                 nickname,
             });
 
@@ -98,7 +113,21 @@ router.post("/create", async (req, res) => {
 });
 
 //read all students (Faculty and above only)
+/**************************************************** 
+Request Object:
+NULL
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.get("/readStudents", authFaculty, async (req, res) => {
+    console.log("here");
     UserModel.find({ userType: 4 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
@@ -110,6 +139,22 @@ router.get("/readStudents", authFaculty, async (req, res) => {
 });
 
 //update
+/**************************************************** 
+Request Object:
+{
+    googleId: googleId,
+    newNickname: newNickname,
+}
+
+Response Object:
+{
+    googleId: googleId,
+    email: email,
+    fullName: fullName,
+    nickname: nickname,
+    userType: userType,
+}
+********************************************************/
 router.put("/update", authStudent, async (req, res) => {
     try {
         const { googleId, newNickname } = req.body; //get googleId and newNickname from body
@@ -176,6 +221,15 @@ router.put("/update", authStudent, async (req, res) => {
 });
 
 //delete
+/**************************************************** 
+Request Object:
+{
+    googleId: googleId,
+}
+
+Response String: 
+"Entry Deleted"
+********************************************************/
 router.delete("/delete", authStudent, async (req, res) => {
     const googleId = req.body.googleId;
     await UserModel.findOneAndDelete({ googleId });
@@ -183,7 +237,16 @@ router.delete("/delete", authStudent, async (req, res) => {
 });
 
 //logout current signed in user. deletes cookie for user
-router.post("/logout", authStudent, async (req, res) => {
+/**************************************************** 
+Request Object:
+{
+    googleId: googleId,
+}
+
+Response String:
+"User Logged Out"
+********************************************************/
+router.post("/logout", async (req, res) => {
     const googleId = req.body.googleId;
     try {
         const loggedUser = await UserModel.findOne({ googleId });
@@ -196,7 +259,7 @@ router.post("/logout", authStudent, async (req, res) => {
             activity: "User logout",
         });
         await newUserLog.save();
-
+        // res.send();
         res.cookie("token", "", {
             httpOnly: false,
             expires: new Date(0),
@@ -207,14 +270,76 @@ router.post("/logout", authStudent, async (req, res) => {
     }
 });
 
-router.get("/getUserLogs", async (req, res) => {
-    UserLogModel.find({}, (err, result) => {
-        //reads all the documents and sends as response
-        if (err) {
-            res.send(err);
-        } else {
-            res.send(result);
-        }
-    });
+
+//find specific person
+/**************************************************** 
+Request Object:
+googleId
+
+Response Object: 
+"Specific person"
+********************************************************/
+router.post("/findperson", async (req, res) => {
+    try {
+        const { googleId } = req.body;
+
+        if (!googleId)
+            return res.status(400).json({
+                    errMessage: "Please enter All required fields. ",
+            });
+        const existingUser = await UserModel.findOne({ googleId });
+
+        //NEW IMPLEMENTATION=
+        const publicData = null;
+        // Data that will only be available to users who know encryption details.
+        const privateData = {
+            googleId: existingUser.googleId,
+            email: existingUser.email,
+            fullName: existingUser.fullName,
+            nickname: existingUser.nickname,
+            userType: existingUser.userType,
+        };
+
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: "aes-256-cbc",
+        };
+
+        // JWT Settings
+        const jwtDetails = {
+            secret: jwtPublicKey, // to sign the token
+            expiresIn: "24h",
+        };
+        const token = await jwtEncrypt.generateJWT(jwtDetails, publicData, encryption, privateData, "ICSlibrary");
+        res.send(token);
+    
+    }catch(err){
+        res.status(404).json({errMessage:"Not foundddd"});
+    }
 });
+
+//read all user logs
+/**************************************************** 
+Request Object:
+NULL
+
+Response String: 
+"User Logged Out"
+********************************************************/
+router.get("/getUserLogs", async (req, res) => {
+    try {
+        UserLogModel.find({}, (err, result) => {
+            //reads all the documents and sends as response
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(result);
+            }
+        });
+    } catch (err) {
+        res.status(500).send();
+    }
+});
+
 module.exports = router;

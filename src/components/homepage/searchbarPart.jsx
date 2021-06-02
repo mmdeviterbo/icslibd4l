@@ -12,7 +12,7 @@ import {gsap, Power3} from 'gsap';
 
 export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
     const [localSearch, setLocalSearch] = useState("");
-    const [filterTag, setFilterTag] = useState("");
+    const [filterTag, setFilterTag] = useState("any");
     const history = useHistory();
 
     useEffect(()=>{
@@ -21,14 +21,16 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 
     const handleForm=(e)=>{
         e.preventDefault();
-        const tempStr = localSearch.replace(/\s/g,'_'); 
-        if(tempStr.length!==0 && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            if(filterTag.length!==0) history.push(`/search/${filterTag}/${tempStr}`);
-            else history.push(`/search/any/${tempStr}`);
+        let tempStr = localSearch.trim();
+    
+        if(tempStr.length!==0  && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
+            history.push(`/search?type=${filterTag}&search=${tempStr}`);
         }
     }
 
-    const scrollIntoBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+    const scrollIntoBrowse=()=> {
+        history.push('/browse-special-problems');
+    }
     const scrollIntoLatestAcq=()=> latestAcqRef.current && latestAcqRef.current.scrollIntoView({behavior:"smooth",block:"start"});
     const scrollIntoNews=()=> newsRef.current && newsRef.current.scrollIntoView({behavior:"smooth",block:"start"});
 
@@ -90,10 +92,9 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 const DropdownFilter = ({setFilterTag, filterTag}) =>{ 
     const options = [
         { key: 1, text: 'Any', value: 'any'},
-        { key: 2, text: 'Title', value: 'title' },
-        { key: 3, text: 'Author', value: 'author' },
-        { key: 4, text: 'Adviser', value: 'adviser' },
-        { key: 5, text: 'Subject', value: 'subject' },
+        { key: 2, text: 'Books', value: 'books' },
+        { key: 3, text: 'Special Problem', value: 'special problem' },
+        { key: 4, text: 'Thesis', value: 'thesis' },
     ]
     const handleChange=(e, data)=>setFilterTag(data.value);
     return(
@@ -123,7 +124,6 @@ const advanceSearch = {
     display:"flex",
     justifyContent:"center",
     alignItems:"center",
-    padding:"0px 2vw",
     overflow:"hidden",
     transition:"1s",
     "WebkitTouchCallout": "none",  
@@ -136,7 +136,7 @@ const advanceSearch = {
 const titleSearchContainer ={
     borderLeft:"10px solid white",
     position:"relative",
-    width:"40%",
+    width:"45%",
     height:"75%",
     background: "linear-gradient(90deg, rgba(0,103,161,1) 0%, rgba(0,101,158,1) 43%, rgba(0,74,116,1) 100%)",
     boxShadow:"4px 4px 7px 0 rgba(0, 0, 0, 0.55),-1px -2px 4px 0 rgba(255, 255, 255, 0.3)",
@@ -182,7 +182,7 @@ const icsStyle={
 
 const searchBoxContainer = {
     position:"relative",
-    width:"40%",
+    width:"45%",
     height:"90%",
     display:"flex",
     flexDirection:"column",
@@ -190,7 +190,8 @@ const searchBoxContainer = {
     alignItems:"center",
     background:"rgba(0,0,0,0.90)",          
     transition:"1s",
-    borderRadius: "15px",    
+    borderRadius: "2px",
+    boxShadow:"1px 1px 4px black"    
 }
 
 const inputCaptionContainer = {
@@ -244,7 +245,7 @@ const homeItems = {
 };
 
 const buttonsContainer ={
-    gap:"10px",
+    width:"100%",
     flexGrow:1,
     display:"flex",
     justifyContent:"space-evenly",
@@ -252,10 +253,10 @@ const buttonsContainer ={
 }
 const buttonSelect = {
     background:"none",
-    border:"2px solid white",
+    border:"1px solid white",
     color:"white",
     fontSize:"15px",
-    padding:"8px",
+    padding:"calc(8px + 0.3vw)",
     transition:"0.1s",
     zIndex:1000
 }

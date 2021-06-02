@@ -1,0 +1,19 @@
+{
+    //this will be used for log in/log out sessions of the current user
+    "jwtPrivateKey": "icslib-privateKey",
+    
+    //link of the database from mongodb
+    "db": "mongodb+srv://sampleuser:password1234@cluster0.0iawg.mongodb.net/icslibd4l?retryWrites=true&keepAlive=true&w=majority",
+
+    //3001 port is used by backend, 3000 port is used by frontend
+    "port": "3001", 
+    
+    //set default at false
+    "requiresAuth": false
+}
+
+
+//how to use this default.json for all backend files/services?
+
+// const config = require('config'); 
+// var db = config.get('port')  -- this returns 3001
