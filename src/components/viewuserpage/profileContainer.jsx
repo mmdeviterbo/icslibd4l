@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "@material-ui/core/";
+
+import DeleteIcon from "@material-ui/icons/Delete";
 import { jwtPrivateKey } from "../../config.json";
 import { jwtEncryptionKey } from "../../config.json";
 import * as jwtEncrypt from "jwt-token-encrypt";
 import PersonService from "../../services/personService";
-import DeleteAccount from "./deleteAccount";
 
-import "../../styles/userPageStyle.css";
+import "../../styles/profileContainerStyle.css";
 
 //<summary>
 // gets the jwt token from the localStorage and decrypts it to get the infor of
@@ -36,6 +39,8 @@ const getCurrentToken = () => {
 // A component that contains the information regarding the current user
 //</output>
 export default function ProfileContainer() {
+    const location = useLocation();
+
     const [user, setUser] = useState(getCurrentToken()); // lazy initializer to immediately get the user state
 
     const [type, setType] = useState(null);
@@ -86,6 +91,30 @@ export default function ProfileContainer() {
         }
     };
 
+    // functional component that renders a remove account button and redirects to a modal
+    const RemoveAccount = (id) => {
+        return (
+            <Link
+                to={{
+                    pathname: "/account-setting/remove-account",
+                    state: {
+                        background: location,
+                        id: id,
+                        item: "account",
+                    },
+                }}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    className="delete-button"
+                    startIcon={<DeleteIcon />}
+                    fontWeight="900">
+                    Remove Account
+                </Button>
+            </Link>
+        );
+    };
+
     // convert userType to its corresponding string representation
     useEffect(() => {
         // console.log(userinfos);
@@ -121,11 +150,11 @@ export default function ProfileContainer() {
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Nickname:
                     </div>
                 </Col>
-                <Col xs={4} className="grid-columns">
+                <Col xs={5} className="grid-columns">
                     <input
                         onChange={(e) => {
                             setNick(e.target.value);
@@ -154,6 +183,7 @@ export default function ProfileContainer() {
                                 width: "20px",
                                 height: "20px",
                                 color: `${btnStyle}`,
+                                marginLeft: "-20px",
                             }}
                             icon={buttonStyle}
                         />
@@ -164,12 +194,13 @@ export default function ProfileContainer() {
             {/* full name section */}
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
+
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Name:
                     </div>
                 </Col>
-                <Col xs={4} className="grid-columns">
+                <Col xs={5} className="grid-columns">
                     <input
                         disabled={true}
                         type="text"
@@ -183,12 +214,13 @@ export default function ProfileContainer() {
             {/* user classification section */}
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
+
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Classification:
                     </div>
                 </Col>
-                <Col xs={4} className="grid-columns">
+                <Col xs={5} className="grid-columns">
                     <input
                         type="text"
                         disabled={true}
@@ -202,12 +234,13 @@ export default function ProfileContainer() {
             {/* user email section */}
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
+
                 <Col xs={4} className="grid-columns">
-                    <div class="col-4" className="label-text" style={labelText}>
+                    <div className="label-text" style={labelText}>
                         Email:
                     </div>
                 </Col>
-                <Col xs={4} className="grid-columns">
+                <Col xs={5} className="grid-columns">
                     <input
                         disabled={true}
                         type="text"
@@ -221,6 +254,7 @@ export default function ProfileContainer() {
             {/* part for account removal */}
             <Row className="removal-bar">
                 <Col xs={2} className="grid-columns"></Col>
+
                 <Col xs={8}>
                     <div
                         className="header-text"
@@ -231,6 +265,7 @@ export default function ProfileContainer() {
             </Row>
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
+
                 <Col xs={8} className="grid-columns">
                     <div style={{ padding: "5px", fontSize: "15px" }}>
                         Removing your accounts means dissociating your account
@@ -240,8 +275,9 @@ export default function ProfileContainer() {
             </Row>
             <Row>
                 <Col xs={2} className="grid-columns"></Col>
+
                 <Col xs={8}>
-                    <DeleteAccount user={user} />
+                    <RemoveAccount id={user && user.googleId} user={user} />
                 </Col>
             </Row>
         </Container>
