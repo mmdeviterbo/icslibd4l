@@ -486,7 +486,15 @@ const MainResourceTable = () => {
                                                     textAlign: "center",
                                                     fontSize: "1.5rem",
                                                 }}>
-                                                <EditBtn id={row && row.id} />
+                                                {row.bookId ? (
+                                                    <EditBookBtn
+                                                        id={row.bookId}
+                                                    />
+                                                ) : (
+                                                    <EditSPTBtn
+                                                        id={row.sp_thesis_id}
+                                                    />
+                                                )}
                                                 <DeleteBtn id={row && row.id} />
                                             </TableCell>
                                         </TableRow>
