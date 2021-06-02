@@ -1,32 +1,48 @@
 import React from "react";
 
-const BookCoverandInfo = ({ publisher, numOfCopies, subjects }) => {
+const BookCoverandInfo = ({
+    isbn,
+    publisher,
+    numOfCopies,
+    subjects,
+    physicalDesc,
+}) => {
     return (
         <div className="book-cover-info-side">
-            <img src="https://via.placeholder.com/300x400" />
             <table id="bookinfo">
-                <tr className="bookinfotr">
-                    {/* <th className = "bookinfotr"> ISBN </th>
-                    <td className = "bookinfotr"> 123-123456789</td> */}
-                    <th className="bookinfotr"> Publisher: </th>
-                    <th className="bookinfotr"> {publisher} </th>
+                <tr className="book-info-tr">
+                    {/* <th className = "book-info-tr"> ISBN </th>
+                    <td className = "book-info-tr"> 123-123456789</td> */}
+                    <th className="book-info-tr"> ISBN: </th>
+                    <th className="book-info-tr"> {isbn} </th>
+                </tr>
+                <tr className="book-info-tr">
+                    {/* <th className = "book-info-tr"> ISBN </th>
+                    <td className = "book-info-tr"> 123-123456789</td> */}
+                    <th className="book-info-tr"> Publisher: </th>
+                    <th className="book-info-tr"> {publisher} </th>
                 </tr>
 
-                <tr className="bookinfotr">
-                    {/* <th className = "bookinfotr"> ISBN </th>
-                    <td className = "bookinfotr"> 123-123456789</td> */}
-                    <th className="bookinfotr"> Number of copies: </th>
-                    <th className="bookinfotr"> {numOfCopies} </th>
+                <tr className="book-info-tr">
+                    {/* <th className = "book-info-tr"> ISBN </th>
+                    <td className = "book-info-tr"> 123-123456789</td> */}
+                    <th className="book-info-tr"> Number of copies: </th>
+                    <th className="book-info-tr"> {numOfCopies} </th>
                 </tr>
 
-                <tr className="bookinfotr">
-                    <th className="bookinfotr"> Subject(s) </th>
+                <tr className="book-info-tr">
+                    <th className="book-info-tr"> Subject(s) </th>
                     {subjects.map((item, key) => (
-                        <div key={key}>{item}</div>
+                        <th className="book-info-tr" key={key}>
+                            {item.subject}
+                        </th>
                     ))}
-                    {/* <td className = "bookinfotr"> Agriculture</td> */}
+                    {/* <td className = "book-info-tr"> Agriculture</td> */}
                 </tr>
             </table>
+            <div className="physical-description">
+                <p className="physical-text">{physicalDesc}</p>
+            </div>
         </div>
     );
 };

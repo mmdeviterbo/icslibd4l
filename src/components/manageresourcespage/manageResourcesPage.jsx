@@ -4,7 +4,7 @@ import FieldsContainerRes from "./filterFieldsResources";
 import ResourceTableContainer from "./resourceTableContainer";
 import "../../styles/manageresources/manageResourcesStyle.css";
 
-const ManageResourcesPage = ({ resourceList }) => {
+const ManageResourcesPage = () => {
   return (
     <div className="manage-resources-page-container">
       <ManagementHeader type={"resource"} />
