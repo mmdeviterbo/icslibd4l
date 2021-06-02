@@ -8,7 +8,7 @@ import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
 
 // the entire navigation bar
-export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
+export default function NavigationBar({ loginRegisterUser, browseRef, user, appRef }) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory();
 
@@ -51,7 +51,14 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                     behavior: "smooth",
                     block: "start",
                 });
-        else history.push("/browse");
+        else if (["/browse-books","/browse-special-problems","/browse-theses"].includes(window.location.pathname)){
+            appRef.current &&
+            appRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+        else history.push("/browse-special-problems");
     };
     const logInButton = () => {
         return (
@@ -133,7 +140,7 @@ const SearchFilter = ({ user }) => {
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            window.location = "/";
+            window.location = window.location.pathname;
         } catch (err) {}
     };
 
@@ -207,6 +214,17 @@ const SearchFilter = ({ user }) => {
             onClick: () => history.push("/view-activitylogs"),
         },
         {
+            key: "viewSummaryReports",
+            text: (
+                <span>
+                    <i className="fa fa-lg fa-print mr-3 ml-2" />
+                    View Summary Report
+                </span>
+            ),
+            value: "View Summary Report",
+            onClick: () => history.push("/view-summaryreport"),
+        },
+        {
             key: "sign-out",
             text: (
                 <span>
@@ -224,7 +242,7 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[3])
+                    : optionsNotAdmin.concat(options[options.length-1])
             }
         />
     );

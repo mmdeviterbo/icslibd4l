@@ -5,9 +5,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const methodOverride = require("method-override");
+var path = require('path');
 
 module.exports = function (app) {
     //parser tools
@@ -43,7 +43,10 @@ module.exports = function (app) {
             credentials: true,
         })
     );
-
+    app.engine('jsx', require('express-react-views').createEngine());
+    app.set('view engine', 'jsx');
+    app.set('views', path.join(__dirname, '../../src/components/homepage/'));
+    
     // set up routes
     app.use("/admin", require("../routes/adminRouter"));
     app.use("/users", require("../routes/userRouter"));

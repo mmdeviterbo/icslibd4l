@@ -38,6 +38,16 @@ const searchBook = (filter) => {
     });
 };
 
+const downloadFile = (fileType, query) => {
+    console.log(fileType)
+    console.log(query)
+    return http.get(`${apiEndpoint}/thesis${query}`, {params:fileType}, {
+        withCredentials: true,
+    }, {
+        responseType: 'blob',
+    });
+};
+
 // edit data of a resource
 const editSpThesis = (resourceData) => {
     return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {
@@ -69,18 +79,22 @@ function getNews() {
     return http.post(`${apiEndpoint}/books/get-news`);
 }
 
-// get all books, sorted by date (latest acquisition feature)
+// get all books (object of information only, not images), sorted by date (latest acquisition feature)
 function getBooks(){
+    return http.get(`${apiEndpoint}/books/display_infos`);
+}
+
+// get all books (object of images), sorted by date (latest acquisition feature)
+function getBookCovers(){
     return http.get(`${apiEndpoint}/books/display_covers`);
 }
+
 
 function getAllResources() {
     return http.get(`${apiEndpoint}/thesis/search`);
 }
 
 function getSPTFiles({ title, fileType }){
-    console.log(title)
-    console.log(fileType)
     return http.post(`${apiEndpoint}/thesis/download`, { title, fileType }, {withCredentials: true}, {
         responseType: 'stream'
     });
@@ -106,7 +120,9 @@ const exportFunctions = {
     // deleteBook,
     getAllResources,
     getSPTFiles,
-    getBookCover
+    getBookCover,
+    downloadFile,
+    getBookCovers
 }
 
 export default exportFunctions;
