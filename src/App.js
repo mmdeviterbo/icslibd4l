@@ -121,9 +121,9 @@ function App() {
                     path="/account-setting/"
                     component={ViewUserPage}></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
-                <Route
+                {/* <Route
                     path="/update-sp-thesis"
-                    component={UpdateResourceData}></Route>
+                    component={UpdateResourceData}></Route> */}
                 {/* <Route
                     path="/manage-resources"
                     component={ManageResPage}></Route> */}
@@ -171,7 +171,7 @@ function App() {
                     path="/add-new-book"
                     component={AddBookPage}></Route>
                 <Route
-                    path="/edit-resource"
+                    path="/edit-spt/:id"
                     component={EditSPTFormContainer}></Route>
 
                 <Route path="/about" render={() => <About appRef={appRef} />} />

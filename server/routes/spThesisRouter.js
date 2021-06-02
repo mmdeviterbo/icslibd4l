@@ -1040,10 +1040,10 @@ router.put("/update-sp-thesis", async (req, res) => {
         title,
         abstract,
         year,
-        source_code,
-        manuscript,
-        journal,
-        poster,
+        // source_code,
+        // manuscript,
+        // journal,
+        // poster,
         authors,
         advisers,
         keywords,
@@ -1060,10 +1060,10 @@ router.put("/update-sp-thesis", async (req, res) => {
                     !title ||
                     !abstract ||
                     !year ||
-                    !source_code ||
-                    !manuscript ||
-                    !journal ||
-                    !poster ||
+                    // !source_code ||
+                    // !manuscript ||
+                    // !journal ||
+                    // !poster ||
                     !advisers ||
                     !authors ||
                     !keywords
@@ -1075,15 +1075,15 @@ router.put("/update-sp-thesis", async (req, res) => {
                 console.log("====START UPDATE HERE=====");
                 console.log(req.body);
                 // changing values
-                updatedThesisSp.sp_thesis_id = sp_thesis_id;
+                // updatedThesisSp.sp_thesis_id = sp_thesis_id;
                 updatedThesisSp.type = type;
                 updatedThesisSp.title = title;
                 updatedThesisSp.abstract = abstract;
                 updatedThesisSp.year = year;
-                updatedThesisSp.source_code = source_code;
-                updatedThesisSp.manuscript = manuscript;
-                updatedThesisSp.journal = journal;
-                updatedThesisSp.poster = poster;
+                // updatedThesisSp.source_code = source_code;
+                // updatedThesisSp.manuscript = manuscript;
+                // updatedThesisSp.journal = journal;
+                // updatedThesisSp.poster = poster;
 
                 console.log(updatedThesisSp);
                 // updates

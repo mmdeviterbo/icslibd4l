@@ -14,6 +14,31 @@ const classificationOptions = [
     { value: "Thesis", label: "Thesis" },
 ];
 
+const adviserchoices = [
+    {value:
+        {fname:'Eliezer A.', lname:'Albacea'}, 
+        label: 'Albacea, Aliezer A.'
+    },
+    // follow format 
+    {value:{fname:'Maria Art Antonette D.', lname:'Clariño'}, label: 'Clariño, Maria Art Antonette D.'},
+    {value:{fname:'Lailanie R.', lname:'Danila'}, label: 'Danila, Lailanie R.'},
+    {value:{fname:'Joseph Anthony C.', lname:'Hermocilla'}, label: 'Hermocilla, Joseph Anthony C.'},
+    {value:{fname:'Arian J.', lname:'Jacildo'}, label: 'Jacildo, Arian J.'},
+    {value:{fname:'Concepcion L.', lname:'Khan'}, label: 'Khan, Concepcion L.'},
+    {value:{fname:'Fermin Roberto G', lname:'Lapitan'}, label: 'Lapitan, Fermin Roberto G.'}, //hi ser
+    {value:{fname:'Val Randolf M.', lname:'Madrid'}, label: 'Madrid, Val Randolf M.'},
+    {value:{fname:'Katrina Joy H', lname:'Magno'}, label: 'Magno, Katrina Joy H.'},
+    {value:{fname:'Rozano S.', lname:'Maniaol'}, label: 'Maniaol, Rozano S.'},
+    {value:{fname:'Danilo J.', lname:'Mercado'}, label: 'Mercado, Danilo J.'},
+    {value:{fname:'Rizza DC', lname:'Mercado'}, label: 'Mercado, Rizza DC.'},
+    {value:{fname:'Toni-Jan Keith P.', lname:'Monserrat'}, label: 'Monserrat, Toni-Jan Keith P.'},
+    {value:{fname:'Jaderick P.', lname:'Pabico'}, label: 'Pabico, Jaderick P.'},
+    {value:{fname:'Margarita Carmen S.', lname:'Paterno'}, label: 'Paterno, Margarita Carmen S.'},
+    {value:{fname:'Reginald Neil C.', lname:'Recario'}, label: 'Recario, Reginald Neil C.'},
+    {value:{fname:'Samaniego, Jaime M.', lname:'Samaniego'}, label: 'Samaniego, Jaime M.'},
+
+    ]   
+
 // !!! Should receive an sp/thesis object
 export default function EditSPTFormContainer(props) {
     const [resourceData, setResourceData] = useState({});
@@ -49,13 +74,12 @@ export default function EditSPTFormContainer(props) {
     useEffect(() => {
         try {
             setIdSource(props.location.state.id);
-            setSpThInfoArr(props.location.state.sourceInfo);
+            setSpThInfoArr(props.location.state.sourceInfo);  //all objects from table
         } catch (err) {
             window.location = "/not-found";
         }
     }, []);
 
-    console.log(props.location.state.sourceInfo)
 
     useEffect(() => {
         try {
@@ -95,7 +119,7 @@ export default function EditSPTFormContainer(props) {
                         lname: author[0]?.author_lname,
                     });
 
-                    console.log("fsdfsdfd");
+                    // console.log("fsdfsdfd");
                     console.log(sourceItem);
 
                     const tempKeyword = [];
@@ -115,7 +139,7 @@ export default function EditSPTFormContainer(props) {
         function updateList() {
             if (adviser.fname && adviser.lname) {
                 if (adviserList.indexOf(adviser) !== -1) {
-                    console.log("here2");
+                    // console.log("here2");
                     setAdviserList([...adviserList, adviser]);
                 }
             } else if (author.fname && author.lname) {
@@ -154,9 +178,9 @@ export default function EditSPTFormContainer(props) {
                 poster,
                 // advisers: adviserList,
                 // authors: authorList,
-                advisers: [adviser],
-                authors: [author],
-                keywords: keywords,
+                adviser: [adviser],
+                author: [author],
+                keywords,
             };
             console.log(userInput);
             const { data } = await ResourceServices.editSpThesis(userInput);
@@ -199,8 +223,11 @@ export default function EditSPTFormContainer(props) {
                             required
                             type="text"
                             id="resId"
-                            value = {id}
-                            disabled
+                            // value = {id}
+                            // disabled
+                            // onchange = {(event => {
+                            //     setId(event.target.value);
+                            // })}
                             />
                         </div>
 
@@ -338,9 +365,9 @@ export default function EditSPTFormContainer(props) {
                             })}
 
                             {/* for testing only: */}
-                            {/* <div className = "testdiv">
-                                {JSON.stringify(authorList, null, 2)}
-                            </div> */}
+                            <div className = "testdiv">
+                                {JSON.stringify(author, null, 2)}
+                            </div>
 
                         </div> {/* closing tag for authors group */}
                         
@@ -355,11 +382,11 @@ export default function EditSPTFormContainer(props) {
                         {/* Dropdown for classification: either sp or thesis */}
                         <div className = "classifSelect">
                                 <br/>
-                                Classification:
+                                Type:
                                 <Select id="resClassification"
-                                        // defaultValue={"Select..."}
+                                        defaultValue={{type}}
                                         options={classificationOptions}
-                                        placeholder={type}
+                                        // placeholder={type}
                                         // value={type}
                                         onChange={handleChange}>
                                 </Select>
@@ -371,7 +398,8 @@ export default function EditSPTFormContainer(props) {
                         
                         <div className="selectadvisers">
                             <Select id ="advsel"
-                                    // options={adviserchoices}
+                                    options={adviserchoices}
+                                    // placeholder={adviser.adviser_fname}
                                     // value={adviserchoices.find((obj)=>obj.value===adviser)}
                                     onChange={handleChange}
                                     isMulti>

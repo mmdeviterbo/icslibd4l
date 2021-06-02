@@ -64,14 +64,14 @@ const resHeadCells = [
         id: "resclassif",
         numeric: false,
         disablePadding: false,
-        label: "Classification",
+        label: "Type",
     },
-    {
-        id: "relatedcourses",
-        numeric: false,
-        disablePadding: false,
-        label: "Related Courses",
-    },
+    // {
+    //     id: "relatedcourses",
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: "Related Courses",
+    // },
     {
         id: "pubyr",
         numeric: true,
@@ -172,6 +172,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
 // Main function
 const MainResourceTable = (props) => {
     const location = useLocation();
@@ -185,6 +186,7 @@ const MainResourceTable = (props) => {
     const [rows, setRows] = React.useState([]);
     const [selectedEdit, setSelectedEdit] = useState();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(async () => {
         try {
             let tempRow = [...rows];
@@ -248,8 +250,8 @@ const MainResourceTable = (props) => {
         return (
             <Link
                 to={{
-                    pathname: "/edit-resource",
-                    state: { sourceInfo: selectedEdit, id },
+                    pathname: `/edit-spt/${id}`,  //TO-DO: FIX THIS ID
+                    state: { sourceInfo: selectedEdit, id: id },
                 }}>
                 <i
                     className="table-icons fa fa-pencil"
@@ -414,13 +416,14 @@ const MainResourceTable = (props) => {
                                                     {row.resclassif}
                                                 </p>
                                             </TableCell>
+
+                                            {/*                                             
                                             <TableCell
                                                 style={{
                                                     width: "15%",
                                                 }}
                                                 className={classes.tablecell}
                                                 align="left">
-                                                {/* related courses */}
                                                 <p
                                                     style={{
                                                         fontSize: "16px",
@@ -428,7 +431,9 @@ const MainResourceTable = (props) => {
                                                     }}>
                                                     {row.relatedcourses}
                                                 </p>
-                                            </TableCell>
+                                            </TableCell> 
+                                            */}
+
                                             <TableCell
                                                 style={{
                                                     width: "13%",
