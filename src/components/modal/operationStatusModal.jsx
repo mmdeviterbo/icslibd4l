@@ -39,7 +39,8 @@ const StatusModal = ({
           {message === "success" ? (
             <Modal.Title>
               {isSelf ? "Your account" : name} has been{" "}
-              {operation === "edit" ? "edited" : "deleted"} successfully.
+              {(operation === "edit") | "add" ? `${operation}ed` : "deleted"}{" "}
+              successfully.
               {isSelf ? " You will be logged out." : ""}
             </Modal.Title>
           ) : (
