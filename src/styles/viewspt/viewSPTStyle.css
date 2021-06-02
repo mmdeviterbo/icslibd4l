@@ -8,6 +8,8 @@ table {
     display: flex;
     flex-direction: column;
     margin: 2rem 10%;
+
+    border: 0px solid red;
 }
 
 .spt-page-container {
