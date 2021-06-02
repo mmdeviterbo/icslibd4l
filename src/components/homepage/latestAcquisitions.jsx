@@ -42,7 +42,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
             style={latestAcquisitionsContainer}
             ref={latestAcqRef}
         >
-            <div>{covers && Parser(covers)}</div>
+            {/* <div>{covers && Parser(covers)}</div> */}
             <img src={latestAcqBg} style={latestAcqBgStyle} alt="#" />
             <div style={colorsParent} className="latestAcqcolorsParent">
                 <div style={whiteBg}>

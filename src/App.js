@@ -25,7 +25,6 @@ import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 // import GetResources from "./components/manageresourcespage/getResources";
 import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
 import "./App.css";
-import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 
 function App() {
     const [user, setUser] = useState(null); //fullname, email, userType (integer)
