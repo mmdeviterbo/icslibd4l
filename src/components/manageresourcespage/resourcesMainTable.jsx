@@ -409,7 +409,7 @@ const MainResourceTable = () => {
                         align="left"
                       >
                         {/* author */}
-                        <p
+                        <div
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
@@ -419,7 +419,7 @@ const MainResourceTable = () => {
                             row.author.map((item, key) => (
                               <div key={key}>{item.author_name}</div>
                             ))}
-                        </p>
+                        </div>
                       </TableCell>
                       <TableCell
                         style={{

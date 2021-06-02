@@ -105,7 +105,8 @@ const exportFunctions = {
     getAllResources,
     getSPTFiles,
     getBookCover,
-    downloadFile
+    downloadFile,
+    getBookCovers
 }
 
 export default exportFunctions;
