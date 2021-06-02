@@ -150,10 +150,10 @@ export default function FilterSidebar({
                             <MenuItem style={menuItems} value="any">
                                 Any
                             </MenuItem>
-                            <MenuItem style={menuItems} value="books">
-                                Books
+                            <MenuItem style={menuItems} value="book">
+                                Book
                             </MenuItem>
-                            <MenuItem style={menuItems} value="special problem">
+                            <MenuItem style={menuItems} value="sp">
                                 Special Problem
                             </MenuItem>
                             <MenuItem style={menuItems} value="thesis">

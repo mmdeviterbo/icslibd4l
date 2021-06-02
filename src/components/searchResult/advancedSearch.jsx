@@ -90,7 +90,7 @@ export default function AdvancedSearch({appRef}){
     // console.log(searchFilterAdviser);
     // console.log(searchFilterYear);
     // console.log(resultsFilterArr);
-    
+
     // http request
     async function fetchData() {
         try{
@@ -116,9 +116,9 @@ export default function AdvancedSearch({appRef}){
         let tempStr = query.trim();
         // NEED TO CLEAN resourcetype specialproblem
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            history.push(`/search?type=any&search=${tempStr}`);
+            history.push(`/search?type=${resourceType}&search=${tempStr}`);
         }
-        setUrlRequest(`/search?type=any&search=${tempStr}`);
+        setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
         // call convert filter to object
         filterParser();   
     }
