@@ -1,5 +1,5 @@
-import http from './httpService';
-import {apiEndpoint} from '../config.json';
+import http from "./httpService";
+import { apiEndpoint } from "../config.json";
 
 // add a resource details (sp/thesis, book)
 const addSpThesis = (resourceData) => {
@@ -40,8 +40,8 @@ const deleteSpThesis = (deleteId) => {
 
 
 // get news from uplb news website
-function getNews(){
-    return http.post(`${apiEndpoint}/books/get-news`)
+function getNews() {
+    return http.post(`${apiEndpoint}/books/get-news`);
 }
 
 // get all books, sorted by date (latest acquisition feature)

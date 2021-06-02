@@ -64,7 +64,12 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                 cookiePolicy={"single_host_origin"}
                 className="login-link"
                 hostedDomain={"up.edu.ph"}
+<<<<<<< HEAD
                 icon={false}>
+=======
+                icon={false}
+            >
+>>>>>>> sprint4-resoles
                 <i className="fa fa-lg fa-sign-in mr-2" />
                 <span className="login-link-label">Login</span>
             </GoogleLogin>
@@ -82,7 +87,12 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                     <div
                         draggable="false"
                         className="ics-uplb-caption"
+<<<<<<< HEAD
                         to="/home">
+=======
+                        to="/home"
+                    >
+>>>>>>> sprint4-resoles
                         <span className="ics-caption">
                             Institute of Computer Science Online Library
                         </span>
@@ -102,7 +112,12 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                     <div
                         className="navItem"
                         onClick={scrollToBrowse}
+<<<<<<< HEAD
                         style={{ cursor: "pointer" }}>
+=======
+                        style={{ cursor: "pointer" }}
+                    >
+>>>>>>> sprint4-resoles
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"

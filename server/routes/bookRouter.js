@@ -17,6 +17,7 @@ const Grid = require("gridfs-stream");
 const database = process.env.db;
 
 router.post("/get-news", async (req, res) => {
+    // console.log('hello')
     let options = {
         url: "https://uplb.edu.ph/news-and-updates-2/",
         headers: {
@@ -319,7 +320,6 @@ router.get("/download1", async (req, res) => {
         }
     });
 });
-
 // version 2: display file object
 /**************************************************** 
 Request Object:
@@ -512,7 +512,6 @@ router.get("/search", async (req, res) => {
         }
     }
 });
-
 /**************************************************** 
 Request Object:
 req object:JSON
