@@ -29,9 +29,6 @@ export default function FilterSidebar({
     course,
     setCourse,
     filterArray,
-    // setfilterArray,
-    // fieldArray,
-    // setfieldArray,
     keywords,
     setKeywords
 }) {
@@ -85,10 +82,6 @@ export default function FilterSidebar({
                                 setSearchFilterPublisher={setSearchFilterPublisher}
                                 course={course}
                                 setCourse={setCourse}
-                                // filterArray={filterArray}
-                                // setfilterArray={setfilterArray}
-                                // fieldArray={fieldArray}
-                                // setfieldArray={setfieldArray}
                             />
                         );
                     })}
