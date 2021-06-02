@@ -21,9 +21,11 @@ import ManageUser from "./components/manageuserpage/manageUserPage";
 import PersonService from "./services/personService";
 import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
 import BrowseResources from "./components/browseresources/browseResources";
+import GetResources from "./components/manageresourcespage/getResources";
+import ConfirmChangeModal from "./components/modal/confirmChangesModal";
+import "./App.css";
 // import GetResources from "./components/manageresourcespage/getResources";
 import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
-import "./App.css";
 
 function App() {
     const [user, setUser] = useState(null); //fullname, email, userType (integer)
@@ -169,6 +171,12 @@ function App() {
                 <Route
                     path="/account-setting/remove-account"
                     children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                path="/manage-users/save-changes"
+                children={<ConfirmChangeModal user={user} />}
                 />
             )}
             <Footer />
