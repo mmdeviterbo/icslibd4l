@@ -550,7 +550,7 @@ router.get("/search", async (req, res) => {
     // Search and Filter Resources
     // http://localhost:3001/thesis/search
     // REQUEST:
-    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
+    // - req.query: type, search [, year, publisher, author, adviser, subject, keyword]
     // RESPONSE:
     // - array of objects (book/sp/thesis)
 
@@ -567,14 +567,6 @@ router.get("/search", async (req, res) => {
         let final_arr = [...new Set(total)];
 
         // FILTER ENTRIES in final_arr
-
-        // Filter by title (case insensitive, checks for substring match)
-        if ("title" in req.query) {
-            let titleFilter = req.query.title.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                return item.title.toLowerCase().includes(titleFilter);
-            });
-        }
 
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
