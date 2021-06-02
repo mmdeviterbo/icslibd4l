@@ -22,6 +22,7 @@ import ManageUser from "./components/manageuserpage/manageUserPage";
 import PersonService from "./services/personService";
 import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
 import BrowseResources from "./components/browseresources/browseResources";
+import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
 import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";

@@ -10,7 +10,7 @@ import { coursesData } from "./coursesData";
 import { topicData } from "./topicData";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {Multiselect} from "multiselect-react-dropdown";
+import { Multiselect } from "multiselect-react-dropdown";
 
 import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSubMenu from "./filterSubMenu";
@@ -30,7 +30,7 @@ export default function FilterSidebar({
     setCourse,
     filterArray,
     keywords,
-    setKeywords
+    setKeywords,
 }) {
     const useStyles = makeStyles((theme) => ({
         formControl: {
@@ -56,13 +56,13 @@ export default function FilterSidebar({
     };
 
     const getSelected = (data) => {
-        setKeywords(keywords => [...keywords, data[data.length-1].label]);
-    }
+        setKeywords((keywords) => [...keywords, data[data.length - 1].label]);
+    };
 
     const deselect = (data) => {
-        const newArray = data.map(e => e.label);
+        const newArray = data.map((e) => e.label);
         setKeywords(newArray);
-    }    
+    };
 
     return (
         <div>
@@ -79,7 +79,9 @@ export default function FilterSidebar({
                                 searchFilterAdviser={searchFilterAdviser}
                                 setSearchFilterAdviser={setSearchFilterAdviser}
                                 searchFilterPublisher={searchFilterPublisher}
-                                setSearchFilterPublisher={setSearchFilterPublisher}
+                                setSearchFilterPublisher={
+                                    setSearchFilterPublisher
+                                }
                                 course={course}
                                 setCourse={setCourse}
                             />
@@ -115,11 +117,12 @@ export default function FilterSidebar({
                     <span style={sidebarLink} className="sidebarLink">
                         <span style={sidebarLabel}>Topic</span>
                     </span>
-                    <Multiselect    options={topicData} 
-                                    displayValue="label"
-                                    style={multipleSearchStyle}
-                                    onSelect={getSelected}
-                                    onRemove={deselect}
+                    <Multiselect
+                        options={topicData}
+                        displayValue="label"
+                        style={multipleSearchStyle}
+                        onSelect={getSelected}
+                        onRemove={deselect}
                     />
 
                     {/* TYPE filter */}
@@ -160,12 +163,17 @@ export default function FilterSidebar({
                         </span>
 
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <div style={{ marginLeft: "2rem" }} className="picker">
+                            <div
+                                style={{ marginLeft: "2rem" }}
+                                className="picker"
+                            >
                                 <DatePicker
                                     selected={searchFilterYear}
                                     value={searchFilterYear}
                                     views={["year"]}
-                                    onChange={(date) => setSearchFilterYear(date)}
+                                    onChange={(date) =>
+                                        setSearchFilterYear(date)
+                                    }
                                     animateYearScrolling
                                     placeholder={"Year"}
                                 />
@@ -228,36 +236,37 @@ const sidebarLabel = {
 const optionRowStyle = {
     backgroundColor: "white",
     overflowWrap: "break-word",
-    marginLeft:"2rem",
-    position:"relative",
+    marginLeft: "2rem",
+    position: "relative",
     width: "15vw",
     zIndex: "1",
 };
 
 const multipleSearchStyle = {
-    display:"flex",
-    searchBox: { // To change search box element look
+    display: "flex",
+    searchBox: {
+        // To change search box element look
         // border:"none",
-        borderRadius:"0",
-        borderTop:"0",
-        borderRight:"0",
-        borderLeft:"0",
-        borderColor:"gray",
-        outline:"none",
-        padding:"0",
-        margin:"0",
+        borderRadius: "0",
+        borderTop: "0",
+        borderRight: "0",
+        borderLeft: "0",
+        borderColor: "gray",
+        outline: "none",
+        padding: "0",
+        margin: "0",
         minHeight: "30px",
         maxWidth: "120px",
         position: "relative",
-        left:"2vw",
+        left: "2vw",
     },
     inputField: {
-        padding:"0",
-        margin:"1px",
+        padding: "0",
+        margin: "1px",
     },
     chips: {
-        whiteSpace:"normal",
-    }
-}
+        whiteSpace: "normal",
+    },
+};
 
 // for classes of Select

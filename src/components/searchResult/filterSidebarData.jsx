@@ -1,35 +1,35 @@
-import React from 'react'
-import * as FaIcons from 'react-icons/fa'
+import React from "react";
+import * as FaIcons from "react-icons/fa";
 
 export const FilterSidebarData = [
     {
         label: "Author",
-        iconClosed: <FaIcons.FaAngleDown/>,
-        iconOpened: <FaIcons.FaAngleUp/>,
+        iconClosed: <FaIcons.FaAngleDown />,
+        iconOpened: <FaIcons.FaAngleUp />,
         subNav: [
             {
-                searchbarAuthor: "searchbar"
-            }
-        ]
+                searchbarAuthor: "searchbar",
+            },
+        ],
     },
     {
         label: "Adviser",
-        iconClosed: <FaIcons.FaAngleDown/>,
-        iconOpened: <FaIcons.FaAngleUp/>,
+        iconClosed: <FaIcons.FaAngleDown />,
+        iconOpened: <FaIcons.FaAngleUp />,
         subNav: [
             {
-                searchbarAdviser: "searchbar"
-            }
-        ]
+                searchbarAdviser: "searchbar",
+            },
+        ],
     },
     {
         label: "Publisher",
-        iconClosed: <FaIcons.FaAngleDown/>,
-        iconOpened: <FaIcons.FaAngleUp/>,
+        iconClosed: <FaIcons.FaAngleDown />,
+        iconOpened: <FaIcons.FaAngleUp />,
         subNav: [
             {
-                searchbarPublisher: "searchbar"
-            }
-        ]
+                searchbarPublisher: "searchbar",
+            },
+        ],
     },
-]
+];
