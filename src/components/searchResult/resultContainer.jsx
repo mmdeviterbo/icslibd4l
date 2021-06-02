@@ -4,10 +4,12 @@ import {Link} from 'react-router-dom'
 export default function ResultContainer({title, authors, id, publishDate}){//  
     let urlHolder='';
 
-    if(id.slice(0,3)==="SPT"){ //if spt
-        urlHolder="/book/"+id
-    }else{
+    if(id.slice(0,3)==="SPT"){ 
+        //sp/thesis resource
         urlHolder="/sp-thesis/"+id
+    }else{ 
+        //book resource
+        urlHolder="/book/"+id
     }
 
 
@@ -18,7 +20,7 @@ export default function ResultContainer({title, authors, id, publishDate}){//
         else
             authorString+=authors[i].author_name;
     }
-// console.log(linkTo)
+
     return (
         <div style={resultMainContainer} className="resultMainContainer">
             <Link to={urlHolder} style={resultLinkContainer}>
