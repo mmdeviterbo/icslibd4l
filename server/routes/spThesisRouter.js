@@ -80,14 +80,32 @@ const storage = new GridFsStorage({
                 if(JSON.parse(req.body.body).old_sp_thesis_id == undefined){
                     return reject("Thesis already exists!");
                 }else{  // thesis update
-                    gfs.files.findOne({ metadata: sp_thesis_id}, (err, updatedSPT) => {
+                    gfs.files.findOne({ metadata: [sp_thesis_id,"journal"]}, (err, updatedSPT) => {
                         if(updatedSPT){
                             // .chunks
-                            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ metadata:updatedSPT._id });
+                            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ files_id:updatedSPT._id });
                             // .files
-                            gfs.files.deleteOne({ metadata:updatedSPT._id });
+                            gfs.files.deleteOne({ metadata: [sp_thesis_id,"journal"] });
                         }
-                    });                    
+                    });
+                
+                    gfs.files.findOne({ metadata: [sp_thesis_id,"poster"]}, (err, updatedSPT) => {
+                        if(updatedSPT){
+                            // .chunks
+                            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ files_id:updatedSPT._id });
+                            // .files
+                            gfs.files.deleteOne({ metadata: [sp_thesis_id,"poster"] });
+                        }
+                    });
+                
+                    gfs.files.findOne({ metadata: [sp_thesis_id,"manuscript"]}, (err, updatedSPT) => {
+                        if(updatedSPT){
+                            // .chunks
+                            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ files_id:updatedSPT._id });
+                            // .files
+                            gfs.files.deleteOne({ metadata: [sp_thesis_id,"manuscript"] });
+                        }
+                    });                   
                 }
                 
             }
@@ -1452,7 +1470,6 @@ router.put("/update-sp-thesis", authAdmin, upload.fields([
         await thesisModel.findOne(
             { sp_thesis_id: old_sp_thesis_id },
             (err, updatedThesisSp) => {
-                // await thesisModel.findOne({sp_thesis_id: old_sp_thesis_id}, (err, updatedThesisSp) => {
                 if (
                     !sp_thesis_id ||
                     !type ||
@@ -1583,12 +1600,30 @@ router.delete("/remove-sp-thesis/:sp_thesis_id", authAdmin, async (req, res) => 
     }
 
     // deletes associated files
-    gfs.files.findOne({ metadata: sp_thesis_id_holder}, (err, updatedSPT) => {
+    gfs.files.findOne({ metadata: [sp_thesis_id_holder,"journal"]}, (err, updatedSPT) => {
         if(updatedSPT){
             // .chunks
-            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ metadata:updatedSPT._id });
+            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ files_id:updatedSPT._id });
             // .files
-            mongoose.connection.db.collection("sp_files.files").deleteMany({ metadata:updatedSPT._id });
+            gfs.files.deleteOne({ metadata: [sp_thesis_id_holder,"journal"] });
+        }
+    });
+
+    gfs.files.findOne({ metadata: [sp_thesis_id_holder,"poster"]}, (err, updatedSPT) => {
+        if(updatedSPT){
+            // .chunks
+            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ files_id:updatedSPT._id });
+            // .files
+            gfs.files.deleteOne({ metadata: [sp_thesis_id_holder,"poster"] });
+        }
+    });
+
+    gfs.files.findOne({ metadata: [sp_thesis_id_holder,"manuscript"]}, (err, updatedSPT) => {
+        if(updatedSPT){
+            // .chunks
+            mongoose.connection.db.collection("sp_files.chunks").deleteMany({ files_id:updatedSPT._id });
+            // .files
+            gfs.files.deleteOne({ metadata: [sp_thesis_id_holder,"manuscript"] });
         }
     });
 
