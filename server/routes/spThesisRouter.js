@@ -196,7 +196,6 @@ manuscript : pdf
 poster : pdf
 journal : img file
 source code : file
-
 Response Object:
 {
   "advisers": [ {fname, lname}, ... ],
@@ -349,7 +348,6 @@ router.post(
 Request Query:
     title: 
     type: "manuscript", "journal", "source code"
-
 Response Object:
     * pdf Filestream for manuscript and journal
     * Filestream for sourcecode
@@ -1652,7 +1650,6 @@ body:
 file: pdf
 file: jpeg
 file: pdf
-
 Response String:
 "Entry Updated"
 ********************************************************/

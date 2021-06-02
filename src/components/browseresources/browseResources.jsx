@@ -86,40 +86,44 @@ export default function BrowseResources({ type }) {
                     </TableHead>
 
                     <TableBody>
-                        {resourceList.map((item) => (
-                            <TableRow key={item && item.sp_thesis_id}>
-                                <TableCell>
-                                    <Link
-                                        to={{
-                                            pathname: `/sp-thesis/${item.sp_thesis_id}`,
-                                            state: {
-                                                resourceData: item,
-                                            },
-                                        }}
-                                    >
-                                        <p style={captionStyle}>
-                                            {item && item.title}
+                        {resourceList &&
+                            resourceList.map((item) => (
+                                <TableRow key={item && item.sp_thesis_id}>
+                                    <TableCell>
+                                        <Link
+                                            to={{
+                                                pathname: `/sp-thesis/${item.sp_thesis_id}`,
+                                                state: {
+                                                    resourceData: item,
+                                                },
+                                            }}
+                                        >
+                                            <p style={captionStyle}>
+                                                {item && item.title}
+                                            </p>
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell>
+                                        <p style={bodyStyle}>
+                                            {item && item.type}
                                         </p>
-                                    </Link>
-                                </TableCell>
-                                <TableCell>
-                                    <p style={bodyStyle}>{item && item.type}</p>
-                                </TableCell>
-                                <TableCell key={item && item.sp_thesis_id}>
-                                    {item &&
-                                        item.author.map((author, key) => (
-                                            <div key={key}>
-                                                <p style={bodyStyle}>
-                                                    {author.author_name}
-                                                </p>
-                                            </div>
-                                        ))}
-                                </TableCell>
-                                <TableCell>
-                                    <p style={bodyStyle}>{item.year}</p>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                    </TableCell>
+                                    <TableCell key={item && item.sp_thesis_id}>
+                                        {item &&
+                                            item.author &&
+                                            item.author.map((author, key) => (
+                                                <div key={key}>
+                                                    <p style={bodyStyle}>
+                                                        {author.author_name}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                    </TableCell>
+                                    <TableCell>
+                                        <p style={bodyStyle}>{item.year}</p>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </TblContainer>
             </div>
@@ -188,47 +192,48 @@ export default function BrowseResources({ type }) {
                     </TableHead>
 
                     <TableBody>
-                        {resourceList.map((item) => (
-                            <TableRow key={item && item.bookId}>
-                                <TableCell>
-                                    <Link
-                                        to={{
-                                            pathname: `/book/${item.bookId}`,
-                                            state: {
-                                                resourceData: item,
-                                            },
-                                        }}
-                                    >
-                                        <p style={captionStyle}>
-                                            {item && item.title}
+                        {resourceList &&
+                            resourceList.map((item) => (
+                                <TableRow key={item && item.bookId}>
+                                    <TableCell>
+                                        <Link
+                                            to={{
+                                                pathname: `/book/${item.bookId}`,
+                                                state: {
+                                                    resourceData: item,
+                                                },
+                                            }}
+                                        >
+                                            <p style={captionStyle}>
+                                                {item && item.title}
+                                            </p>
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell key={item && item.sp_thesis_id}>
+                                        {item &&
+                                            item.author.map((author, key) => (
+                                                <div key={key}>
+                                                    <p style={bodyStyle}>
+                                                        {author.author_name}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                    </TableCell>
+                                    <TableCell>
+                                        <p style={bodyStyle}>
+                                            {item && item.publisher}
                                         </p>
-                                    </Link>
-                                </TableCell>
-                                <TableCell key={item && item.sp_thesis_id}>
-                                    {item &&
-                                        item.author.map((author, key) => (
-                                            <div key={key}>
-                                                <p style={bodyStyle}>
-                                                    {author.author_name}
-                                                </p>
-                                            </div>
-                                        ))}
-                                </TableCell>
-                                <TableCell>
-                                    <p style={bodyStyle}>
-                                        {item && item.publisher}
-                                    </p>
-                                </TableCell>
-                                <TableCell>
-                                    <p style={bodyStyle}>
-                                        {dateFormat(
-                                            item.datePublished,
-                                            "mmmm yyyy"
-                                        )}
-                                    </p>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                    </TableCell>
+                                    <TableCell>
+                                        <p style={bodyStyle}>
+                                            {dateFormat(
+                                                item.datePublished,
+                                                "mmmm yyyy"
+                                            )}
+                                        </p>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </TblContainer>
             </div>
