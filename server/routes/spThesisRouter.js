@@ -545,15 +545,49 @@ router.post("/browse", async (req, res) => {
     }
 });
 
-// search data
+// search and filter resources
+/**************************************************** 
+http://localhost:3001/thesis/search
+Request Object:
+query: {
+    type (any/book/sp/thesis),
+    search,
+    year,
+    publisher,
+    author,
+    adviser,
+    subject,
+    keyword (string array)
+}
+Response Object: Array of book/sp/thesis
+[
+    {
+        advisers: [],
+        authors: [],
+        keywords: [],
+        sp_thesis_id,
+        type,
+        title,
+        abstract,
+        year
+    },
+    ...
+    {
+        author: [],
+        subject: [],
+        bookId,
+        ISBN,
+        title,
+        physicalDesc,
+        publisher,
+        numberOfCopies,
+        datePublished,
+        dateAcquired
+    },
+    ...
+]
+********************************************************/
 router.get("/search", async (req, res) => {
-    // Search and Filter Resources
-    // http://localhost:3001/thesis/search
-    // REQUEST:
-    // - req.query: type, search [, year, publisher, author, adviser, subject, keyword]
-    // RESPONSE:
-    // - array of objects (book/sp/thesis)
-
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -613,6 +647,7 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
+        // format of req.query.adviser = "Lastname, Firstname"
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
             let fnameFilter, lnameFilter;
@@ -642,8 +677,7 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // req.query.keyword: array of keyword strings (use double quotes in request)
-        // sample: keyword=["keyw1","keyw2","keyw3"]
+        // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
         if ("keyword" in req.query) {
             try{
                 let keywordArrayFilter = req.query.keyword;
