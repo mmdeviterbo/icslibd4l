@@ -29,9 +29,7 @@ Response Object:
 }
 ********************************************************/
 router.post("/create", async (req, res) => {
-    console.log("here");
     var loggedUser;
-    console.log("here");
     try {
         const { googleId, email, fullName } = req.body;
 
@@ -340,7 +338,6 @@ router.get("/getUserLogs", async (req, res) => {
             }
         });
     } catch (err) {
-        console.error(err);
         res.status(500).send();
     }
 });
