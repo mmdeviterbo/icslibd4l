@@ -8,6 +8,12 @@ const loginRegisterUser = (userInfo) => {
     });
 };
 
+// get specific person
+const getSpecificPerson = (userInfo) => {
+    return http.post(`${apiEndpoint}/users/findperson`, userInfo);
+};
+
+
 // logout user
 const logoutUser = (userInfo) => {
     return http.post(`${apiEndpoint}/users/logout`, userInfo, {
@@ -64,6 +70,7 @@ const exportFunctions = {
     updateNickname,
     deleteUser,
     readAllUsers,
+    getSpecificPerson
 };
 
 export default exportFunctions;

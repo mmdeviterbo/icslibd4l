@@ -42,7 +42,10 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
         console.log(response.profileObj);
         loginRegisterUser(userInfo);
     };
-    const responseGoogleFail = (response) => {};
+    const responseGoogleFail = (response) => {
+        // put modal here if fail (dont put modal if user only closes the window)
+
+    };
 
     const scrollToBrowse = () => {
         if (window.location.pathname === "/home")
