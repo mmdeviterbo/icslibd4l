@@ -53,5 +53,5 @@ module.exports = function (app) {
     app.use("/users", require("../routes/userRouter"));
     app.use("/books", require("../routes/bookRouter"));
     app.use("/thesis", require("../routes/spThesisRouter"));
-    app.use("/faculty", require("../routes/icsFacultyStaffRouter"));
+    app.use("/report", require("../routes/reportRouter"));
 };

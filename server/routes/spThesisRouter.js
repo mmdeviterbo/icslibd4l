@@ -596,6 +596,12 @@ Response Object: Array of book/sp/thesis
 ]
 ********************************************************/
 router.get("/search", async (req, res) => {
+    // Search and Filter Resources
+    // http://localhost:3001/thesis/search
+    // REQUEST:
+    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
+    // RESPONSE:
+    // - array of objects (book/sp/thesis)
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -607,7 +613,6 @@ router.get("/search", async (req, res) => {
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
-
         // FILTER ENTRIES in final_arr
 
         // Filter by year (year in request can be string or number)

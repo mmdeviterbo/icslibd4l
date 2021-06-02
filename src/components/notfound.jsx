@@ -30,7 +30,7 @@ export default function Notfound() {
                     <img src="https://img.icons8.com/wired/64/ffffff/road-closure.png" alt="#"/>
                 </div>
                 <hr style={{borderTop:"0.5px solid white"}}/>
-                <p className="caption-notfound">The page you are looking for might have been removed.</p>
+                <p className="caption-notfound">The page you are looking for might been removed.</p>
             </div>
         </Link>
     )

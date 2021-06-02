@@ -27,16 +27,14 @@ const browseResources = (resourceType) => {
 }
 
 const searchSpThesis = (filter, query) => {
-    return http.get(`${apiEndpoint}/thesis${query}`, filter, {
-        withCredentials: true,
-    });
-};
+    return http.get(`${apiEndpoint}/thesis${query}`, {params:filter}, {withCredentials: true})
+}
+
 
 const searchBook = (filter) => {
-    return http.get(`${apiEndpoint}/book/search`, filter, {
-        withCredentials: true,
-    });
-};
+    return http.get(`${apiEndpoint}/book/search`, {body:filter}, {withCredentials: true})
+}
+
 
 const downloadFile = (fileType, query) => {
     console.log(fileType)

@@ -12,7 +12,7 @@ import {gsap, Power3} from 'gsap';
 
 export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
     const [localSearch, setLocalSearch] = useState("");
-    const [filterTag, setFilterTag] = useState("");
+    const [filterTag, setFilterTag] = useState("any");
     const history = useHistory();
 
     useEffect(()=>{
@@ -21,10 +21,10 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 
     const handleForm=(e)=>{
         e.preventDefault();
-        const tempStr = localSearch.replace(/\s/g,'_'); 
-        if(tempStr.length!==0 && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            if(filterTag.length!==0) history.push(`/search/${filterTag}/${tempStr}`);
-            else history.push(`/search/any/${tempStr}`);
+        let tempStr = localSearch.trim();
+    
+        if(tempStr.length!==0  && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
+            history.push(`/search?type=${filterTag}&search=${tempStr}`);
         }
     }
 
@@ -92,10 +92,9 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 const DropdownFilter = ({setFilterTag, filterTag}) =>{ 
     const options = [
         { key: 1, text: 'Any', value: 'any'},
-        { key: 2, text: 'Title', value: 'title' },
-        { key: 3, text: 'Author', value: 'author' },
-        { key: 4, text: 'Adviser', value: 'adviser' },
-        { key: 5, text: 'Subject', value: 'subject' },
+        { key: 2, text: 'Books', value: 'books' },
+        { key: 3, text: 'Special Problem', value: 'special problem' },
+        { key: 4, text: 'Thesis', value: 'thesis' },
     ]
     const handleChange=(e, data)=>setFilterTag(data.value);
     return(
