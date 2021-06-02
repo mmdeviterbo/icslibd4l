@@ -461,19 +461,10 @@ router.post("/browse", async (req, res) => {
 // search data
 router.get("/search", async (req, res) => {
     // Search and Filter Resources
-    //     http://localhost:3001/thesis/search
+    // http://localhost:3001/thesis/search
     // REQUEST:
-    // - req.query
-    //     "type" (required) = All | title | author | adviser | subject
-    //     "search" (required) = <string in search bar>
-    // - req.body (json)
-    //     { "<field>" = "<value>", ... }
-    //     * all fields are optional
-    //     * there can be 0, 1, or multiple fields
-    //         <field> = type | title | year | publisher | author | adviser | subject | keyword
-    //         <value> = <search string/number>
-    //     * additional notes in filterEntries()
-    // RESULT:
+    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
+    // RESPONSE:
     // - array of objects (book/sp/thesis)
 
     var idArr_book = []; // array for BookIDs
@@ -488,47 +479,31 @@ router.get("/search", async (req, res) => {
         // get unique entries
         let final_arr = [...new Set(total)];
 
-        // FILTER ENTRIES (final_arr = search results to be filtered)
-
-        // Filter by type
-        // req.body.type = book | sp | thesis (case insensitive)
-        if ("type" in req.body) {
-            let typeFilter = req.body.type.toLowerCase();
-            if (typeFilter == "book") {
-                final_arr = final_arr.filter((item) => {
-                    return "bookId" in item;
-                });
-            } else {
-                // "sp" or "thesis" (case insensitive)
-                final_arr = final_arr.filter((item) => {
-                    if ("sp_thesis_id" in item) {
-                        return item.type.toLowerCase() == typeFilter;
-                    }
-                });
-            }
-        }
+        // FILTER ENTRIES in final_arr
 
         // Filter by title (case insensitive, checks for substring match)
-        if ("title" in req.body) {
-            let titleFilter = req.body.title.toLowerCase();
+        if ("title" in req.query) {
+            let titleFilter = req.query.title.toLowerCase();
             final_arr = final_arr.filter((item) => {
                 return item.title.toLowerCase().includes(titleFilter);
             });
         }
 
-        // Filter by year (number-number and string-number comparison accepted)
-        if ("year" in req.body) {
-            let yearFilter = req.body.year;
+        // Filter by year (year in request can be string or number)
+        if ("year" in req.query) {
+            let yearFilter = req.query.year;
             final_arr = final_arr.filter((item) => {
                 if ("year" in item) {
                     return item.year == yearFilter;
+                }else if ("datePublished" in item) {
+                    return item.datePublished.getFullYear() == yearFilter;
                 }
             });
         }
 
         // Filter by publisher (case insensitive, checks for substring match)
-        if ("publisher" in req.body) {
-            let publisherFitler = req.body.publisher.toLowerCase();
+        if ("publisher" in req.query) {
+            let publisherFitler = req.query.publisher.toLowerCase();
             final_arr = final_arr.filter((item) => {
                 if ("publisher" in item) {
                     return item.publisher
@@ -539,8 +514,8 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by 1 author (case insensitive, checks for substring match)
-        if ("author" in req.body) {
-            let authorFilter = req.body.author.toLowerCase();
+        if ("author" in req.query) {
+            let authorFilter = req.query.author.toLowerCase();
             final_arr = final_arr.filter((item) => {
                 return item.author.some((auth) => {
                     return auth.author_name
@@ -551,8 +526,8 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
-        if ("adviser" in req.body) {
-            let adviserFilter = req.body.adviser.toLowerCase();
+        if ("adviser" in req.query) {
+            let adviserFilter = req.query.adviser.toLowerCase();
             final_arr = final_arr.filter((item) => {
                 if ("adviser" in item) {
                     return item.adviser.some((advi) => {
@@ -565,8 +540,8 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by 1 subject (case insensitive, checks for substring match)
-        if ("subject" in req.body) {
-            let subjectFilter = req.body.subject.toLowerCase();
+        if ("subject" in req.query) {
+            let subjectFilter = req.query.subject.toLowerCase();
             final_arr = final_arr.filter((item) => {
                 if ("subject" in item) {
                     return item.subject.some((subj) => {
@@ -578,26 +553,44 @@ router.get("/search", async (req, res) => {
             });
         }
 
-        // Filter by 1 keyword (case insensitive, checks for substring match)
-        if ("keyword" in req.body) {
-            let keywordFilter = req.body.keyword.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                if ("keywords" in item) {
-                    return item.keywords.some((keyw) => {
-                        return keyw.sp_thesis_keyword
-                            .toLowerCase()
-                            .includes(keywordFilter);
-                    });
+        // Filter by keywords (case insensitive, checks for substring match)
+        // req.query.keyword: array of keyword strings (use double quotes in request)
+        // sample: keyword=["keyw1","keyw2","keyw3"]
+        if ("keyword" in req.query) {
+            try{
+                let keywordArrayFilter = JSON.parse(req.query.keyword);
+                keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
+                final_arr = final_arr.filter((item) => {
+                    if ("keywords" in item) {
+                        return item.keywords.some((keyw) => {
+                            return keywordArrayFilter.some((keyFilter) => {
+                                return keyw.sp_thesis_keyword
+                                    .toLowerCase()
+                                    .includes(keyFilter);
+                            });
+                        });
+                    }
+                });
+            }catch(error){
+                if(error instanceof SyntaxError){
+                    console.log("SyntaxError: Invalid req.query.keyword");
+                }else{
+                    console.log(error);
                 }
-            });
+                res.status(400).send(error);
+            }
         }
 
-        res.send(final_arr); // filtered search results
+        if (!res.headersSent){
+            res.send(final_arr); // filtered search results
+        }
     }
     // REFERENCES for search filter:
     // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
     // String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
     // Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
+    // JSON.parse() https://stackoverflow.com/questions/22080770/i-need-to-create-url-for-get-which-is-going-to-accept-array-how-in-node-js-expr
+    // Array.map() https://attacomsian.com/blog/javascript-array-lowercase-uppercase
 
     // ------- SEARCH SP FUNCTIONS
     function spMain(mode) {
