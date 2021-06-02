@@ -528,7 +528,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_advisers",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "adviser",
+                        as: "advisers",
                     },
                 },
                 {
@@ -536,7 +536,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_authors",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "author",
+                        as: "authors",
                     },
                 },
                 {
@@ -560,15 +560,49 @@ router.post("/browse", async (req, res) => {
     }
 });
 
-// search data
+// search and filter resources
+/**************************************************** 
+http://localhost:3001/thesis/search
+Request Object:
+query: {
+    type (any/book/sp/thesis),
+    search,
+    year,
+    publisher,
+    author,
+    adviser,
+    subject,
+    keyword (string array)
+}
+Response Object: Array of book/sp/thesis
+[
+    {
+        advisers: [],
+        authors: [],
+        keywords: [],
+        sp_thesis_id,
+        type,
+        title,
+        abstract,
+        year
+    },
+    ...
+    {
+        author: [],
+        subject: [],
+        bookId,
+        ISBN,
+        title,
+        physicalDesc,
+        publisher,
+        numberOfCopies,
+        datePublished,
+        dateAcquired
+    },
+    ...
+]
+********************************************************/
 router.get("/search", async (req, res) => {
-    // Search and Filter Resources
-    // http://localhost:3001/thesis/search
-    // REQUEST:
-    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
-    // RESPONSE:
-    // - array of objects (book/sp/thesis)
-
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -582,14 +616,6 @@ router.get("/search", async (req, res) => {
         let final_arr = [...new Set(total)];
 
         // FILTER ENTRIES in final_arr
-
-        // Filter by title (case insensitive, checks for substring match)
-        if ("title" in req.query) {
-            let titleFilter = req.query.title.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                return item.title.toLowerCase().includes(titleFilter);
-            });
-        }
 
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
@@ -619,23 +645,33 @@ router.get("/search", async (req, res) => {
         if ("author" in req.query) {
             let authorFilter = req.query.author.toLowerCase();
             final_arr = final_arr.filter((item) => {
-                return item.author.some((auth) => {
-                    return auth.author_name
-                        .toLowerCase()
-                        .includes(authorFilter);
-                });
+                if ("author" in item){
+                    return item.author.some((auth) => {
+                        return auth.author_name
+                            .toLowerCase()
+                            .includes(authorFilter);
+                    });
+                }else{
+                    return item.authors.some((auth) => {
+                        return auth.author_name
+                            .toLowerCase()
+                            .includes(authorFilter);
+                    });
+                }
             });
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
+        // format of req.query.adviser = "Lastname, Firstname"
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
+            let fnameFilter, lnameFilter;
+            [lnameFilter, fnameFilter] = adviserFilter.split(", ");
             final_arr = final_arr.filter((item) => {
-                if ("adviser" in item) {
-                    return item.adviser.some((advi) => {
-                        return advi.adviser_name
-                            .toLowerCase()
-                            .includes(adviserFilter);
+                if ("advisers" in item) {
+                    return item.advisers.some((advi) => {
+                        return (advi.adviser_fname.toLowerCase()==fnameFilter 
+                        && advi.adviser_lname.toLowerCase()==lnameFilter);
                     });
                 }
             });
@@ -656,11 +692,10 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // req.query.keyword: array of keyword strings (use double quotes in request)
-        // sample: keyword=["keyw1","keyw2","keyw3"]
+        // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
         if ("keyword" in req.query) {
             try{
-                let keywordArrayFilter = JSON.parse(req.query.keyword);
+                let keywordArrayFilter = req.query.keyword;
                 keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
                 final_arr = final_arr.filter((item) => {
                     if ("keywords" in item) {
@@ -991,7 +1026,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1000,7 +1035,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "author",
+                                    as: "authors",
                                 },
                             },
                             {
@@ -1333,7 +1368,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1342,7 +1377,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "author",
+                                    as: "authors",
                                 },
                             },
                             {
