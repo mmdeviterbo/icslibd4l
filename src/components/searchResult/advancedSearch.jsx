@@ -62,7 +62,7 @@ export default function AdvancedSearch({appRef}){
         title={result.title}
         authors={result.authors||result.author} 
         // adviser={result.adviser}
-        linkTo={result.linkTo} //linkTo yung 
+        id={result.bookId||result.sp_thesis_id} //linkTo yung 
         publishDate={result.year||result.datePublished}//publishDate
         />
       );
@@ -94,22 +94,22 @@ export default function AdvancedSearch({appRef}){
     // console.log(searchFilterYear);
     // console.log(resultsFilterArr);
 
-    function makeLink(resultsFilterArr) {
-        if(resultsFilterArr.length==0)
-            return
+    // function makeLink(resultsFilterArr) {
+    //     if(resultsFilterArr.length==0)
+    //         return
 
-        for(let i=0; i<resultsFilterArr.length; i++){
-            let urlHolder='';
+    //     for(let i=0; i<resultsFilterArr.length; i++){
+    //         let urlHolder='';
 
-            if(resultsFilterArr[i].bookId){ //if book
-                urlHolder="/book/"+resultsFilterArr[i].bookId
-            }else if(resultsFilterArr[i].sp_thesis_id){ //if sp/thesis
-                urlHolder="/sp-thesis/"+resultsFilterArr[i].sp_thesis_id
-            }
+    //         if(resultsFilterArr[i].bookId){ //if book
+    //             urlHolder="/book/"+resultsFilterArr[i].bookId
+    //         }else if(resultsFilterArr[i].sp_thesis_id){ //if sp/thesis
+    //             urlHolder="/sp-thesis/"+resultsFilterArr[i].sp_thesis_id
+    //         }
 
-            resultsFilterArr[i]["linkTo"] = urlHolder;
-        }
-    }
+    //         resultsFilterArr[i]["linkTo"] = urlHolder;
+    //     }
+    // }
 
     // http request
     async function fetchData() {
@@ -120,8 +120,8 @@ export default function AdvancedSearch({appRef}){
             console.log(urlRequest);
             const {data} = await ResourceService.searchSpThesis(objFilter,urlRequest);
             setResultsFilterArr(data);
-            makeLink(resultsFilterArr);
-            console.log(resultsFilterArr)
+            // await makeLink(resultsFilterArr);
+            // console.log(resultsFilterArr)
         }catch (err){
             console.log(err);
         }

@@ -1,7 +1,16 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-export default function ResultContainer({title, authors, publishDate}){//linkTo, 
+export default function ResultContainer({title, authors, id, publishDate}){//  
+    let urlHolder='';
+
+    if(id.slice(0,3)==="SPT"){ //if spt
+        urlHolder="/book/"+id
+    }else{
+        urlHolder="/sp-thesis/"+id
+    }
+
+
     let authorString = '';
     for (let i=0; i < authors.length; i++) {
         if(i!=(authors.length)-1)
@@ -9,10 +18,10 @@ export default function ResultContainer({title, authors, publishDate}){//linkTo,
         else
             authorString+=authors[i].author_name;
     }
-
+// console.log(linkTo)
     return (
         <div style={resultMainContainer} className="resultMainContainer">
-            <Link to='/search' style={resultLinkContainer}>
+            <Link to={urlHolder} style={resultLinkContainer}>
                 <h3 style={resultTitle}>{title}</h3>
                 <p style={authAdv}>{authorString}</p><br/>
                 <p style={resultBottomText}>Published in {publishDate.toString().length == 4 ? publishDate.toString() : publishDate.toString().slice(0,4)}</p>
