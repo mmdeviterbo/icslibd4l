@@ -8,7 +8,7 @@ import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
 
 // the entire navigation bar
-export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
+export default function NavigationBar({ loginRegisterUser, browseRef, user, appRef }) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory();
 
@@ -42,10 +42,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
         console.log(response.profileObj);
         loginRegisterUser(userInfo);
     };
-    const responseGoogleFail = (response) => {
-        // put modal here if fail (dont put modal if user only closes the window)
-        console.log(response);  
-    };
+    const responseGoogleFail = (response) => {};
 
     const scrollToBrowse = () => {
         if (window.location.pathname === "/home")
@@ -54,7 +51,14 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                     behavior: "smooth",
                     block: "start",
                 });
-        else history.push("/browse");
+        else if (window.location.pathname === "/browse-books" || window.location.pathname === "/browse-special-problems"){
+            appRef.current &&
+            appRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+        else history.push("/browse-special-problems");
     };
     const logInButton = () => {
         return (

@@ -79,6 +79,7 @@ function App() {
                 loginRegisterUser={loginRegisterUser}
                 browseRef={browseRef}
                 user={user}
+                appRef={appRef}
             />
 
             <Switch location={background || location}>
