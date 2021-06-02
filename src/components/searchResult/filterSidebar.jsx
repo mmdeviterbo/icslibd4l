@@ -110,7 +110,7 @@ export default function FilterSidebar({
                                 handleCourseChange(newValue);
                             }}
                             style={{
-                                width: 120,
+                                width: "120px",
                             }}
                             renderInput={(params) => (
                                 <TextField {...params} label="Course" />
@@ -243,7 +243,28 @@ const optionRowStyle = {
 
 const multipleSearchStyle = {
     display:"flex",
-    width: "80%",
+    searchBox: { // To change search box element look
+        // border:"none",
+        borderRadius:"0",
+        borderTop:"0",
+        borderRight:"0",
+        borderLeft:"0",
+        borderColor:"gray",
+        outline:"none",
+        padding:"0",
+        margin:"0",
+        minHeight: "30px",
+        maxWidth: "120px",
+        position: "relative",
+        left:"2vw",
+    },
+    inputField: {
+        padding:"0",
+        margin:"1px",
+    },
+    chips: {
+        whiteSpace:"normal",
+    }
 }
 
 // for classes of Select
