@@ -126,10 +126,10 @@ const AddNewSPThesisForm = () => {
     ) {
       return alert("Please upload the required files");
     }
-    console.log(source_code);
-    console.log(poster);
-    console.log(journal);
-    console.log(manuscript);
+    // console.log(source_code);
+    // console.log(poster);
+    // console.log(journal);
+    // console.log(manuscript);
 
     try {
       const userInput = {
@@ -157,6 +157,7 @@ const AddNewSPThesisForm = () => {
       const { data } = await ResourceServices.addSpThesis(formData);
       console.log(data);
       alert(`New Sp/Thesis has been successfully added to the library`);
+      event.target.reset();
       // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
@@ -242,7 +243,7 @@ const AddNewSPThesisForm = () => {
   return (
     <div className="add-res-form-cont">
       {/* main form */}
-      <form id="addSPTForm" onSubmit={handleSubmit} autocomplete="off">
+      <form id="addSPTForm" onSubmit={handleSubmit} autoComplete="off">
         <div className="form-container">
           {" "}
           {/* both parts of the form are inside this div for display:flex purposes */}
@@ -257,18 +258,18 @@ const AddNewSPThesisForm = () => {
             {/* Disabled, uneditable */}
             {/* how to get generated ID? */}
             {/* <div className="primaryfields">
-                        <label htmlFor="resId">ID: &nbsp; </label>
-                        <input
-                        required
-                        type="text"
-                        id="resId"
-                        value = "tempId00001"
-                        disabled
-                        onChange={(event) => {
-                            setId(event.target.value);
-                        }}
-                        />
-                    </div> */}
+                <label htmlFor="resId">ID: &nbsp; </label>
+                <input
+                required
+                type="text"
+                id="resId"
+                value = "tempId00001"
+                disabled
+                onChange={(event) => {
+                    setId(event.target.value);
+                }}
+                />
+            </div> */}
             {/* Title Field */}
             <div className="primaryfields">
               <label htmlFor="resId">ID: &nbsp; </label>
@@ -523,7 +524,7 @@ const AddNewSPThesisForm = () => {
                 }}
               />
             </div>
-            <div class="primaryfields">
+            <div className="primaryfields">
               <label htmlFor="keywords-field">Keywords: &nbsp; </label>
               <ChipInput
                 id="keywords-field"
