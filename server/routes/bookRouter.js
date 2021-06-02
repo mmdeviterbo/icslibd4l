@@ -653,32 +653,36 @@ res String:
 "Entry Deleted"
 
 ********************************************************/
-router.delete("/delete", authAdmin, async (req, res) => {
-    try {
-        const {bookId} = req.body;
-        
+router.delete("/delete/:bookId", authAdmin, async (req, res) => {
+    const bookIdHolder = req.params.bookId;
+
+    if(!bookIdHolder){
+        return res.status(404).json({ errorMessage: "Not found." });
+    }
+
+    try {      
         // search if book exists in book collection
-        const existingBook = await bookModel.findOne({ bookId });
+        const existingBook = await bookModel.findOne({ bookId: bookIdHolder });
 
         // if book exists, delete its entries from book, book_author, book_subject, and book_cover
         if (existingBook) {
-            await bookModel.findOneAndDelete({ bookId });
-            await bookAuthorModel.deleteMany({ bookId });
-            await bookSubjectModel.deleteMany({ bookId });
+            await bookModel.findOneAndDelete({ bookId: bookIdHolder });
+            await bookAuthorModel.deleteMany({ bookId: bookIdHolder});
+            await bookSubjectModel.deleteMany({ bookId: bookIdHolder});
 
             // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
             // check first if the book has a saved book cover
-            gfs.files.findOne({ "metadata.bookId" : bookId }, (err, existingBookCover) => {
+            gfs.files.findOne({ "metadata.bookId" : bookIdHolder }, (err, existingBookCover) => {
                 if (existingBookCover) {   
                     // .chunks
                     mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
                     // .files
-                    gfs.files.deleteOne({"metadata.bookId" : bookId});
+                    gfs.files.deleteOne({"metadata.bookId" : bookIdHolder});
                 }
             });
             res.send("Entry Deleted");
         } else {
-            res.status(400).send("This book does not exist! Cannot delete.");
+            res.status(400).json({errorMessage:"This book does not exist! Cannot delete."});
         }
     } catch (err) {
         console.log(err);
