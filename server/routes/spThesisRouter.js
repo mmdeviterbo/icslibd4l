@@ -596,11 +596,19 @@ router.get("/search", async (req, res) => {
         if ("author" in req.query) {
             let authorFilter = req.query.author.toLowerCase();
             final_arr = final_arr.filter((item) => {
-                return item.author.some((auth) => {
-                    return auth.author_name
-                        .toLowerCase()
-                        .includes(authorFilter);
-                });
+                if ("author" in item){
+                    return item.author.some((auth) => {
+                        return auth.author_name
+                            .toLowerCase()
+                            .includes(authorFilter);
+                    });
+                }else{
+                    return item.authors.some((auth) => {
+                        return auth.author_name
+                            .toLowerCase()
+                            .includes(authorFilter);
+                    });
+                }
             });
         }
 
@@ -608,8 +616,8 @@ router.get("/search", async (req, res) => {
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
             final_arr = final_arr.filter((item) => {
-                if ("adviser" in item) {
-                    return item.adviser.some((advi) => {
+                if ("advisers" in item) {
+                    return item.advisers.some((advi) => {
                         return advi.adviser_name
                             .toLowerCase()
                             .includes(adviserFilter);
