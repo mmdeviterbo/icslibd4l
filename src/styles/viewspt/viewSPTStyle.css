@@ -1,86 +1,111 @@
-/* .ViewSPTMainPageContainer {
-    font-family: 'Montserrat', sans-serif
-} */
 
-.TitleAuthor {
-    margin-top: 8rem;
-    margin-bottom:4rem;
-    margin-left: 15rem;
-    margin-right: 15rem;
+table {
+    width: 100%
 }
 
-.TitleAuthor h1{
+.book-page-container {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 10%;
+}
+
+.spt-page-container {
+    min-height: 90vh;
+
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 10%;
+}
+
+.title-author {
+    margin: 2rem 10%;
+
+}
+
+.title-author h1{
     font-size: 2.5rem;
     font-family: 'Montserrat';
     font-weight:bolder;
 }
 
-.TitleAuthor h3 {
+.title-author h3 {
     font-family: 'Montserrat',sans-serif;
     font-weight: normal;
     color: #0067A1;
 }
 
-.TitleAuthor p {
+.title-author p {
     color: #9b9b9b;
 }
 
-.dateandview{
+.date-and-view{
     display:flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.dateandview svg {
+.date-and-view svg {
     color:black;
 }
 
-#viewmanuscript{
+#view-manuscript{
     color: #0067A1;
 }
 
-#viewmanuscript:hover{
+#view-manuscript:hover{
     text-decoration: underline;
 }
 
-.abstractdiv {
-    padding-right: 1.5rem;
+.abstract-container {
+    margin: 0px 6%;
+
+    width: 60%;
 }
 
-.abstractdiv h2 {
+.abstract-container h2 {
     font-family: 'Montserrat', sans-serif;
     padding-bottom: 1rem;
 }
 
-.abstractdiv p{
+.abstract-container p{
+    font-size: 1.2rem;
     text-align: justify;
     text-justify: inter-word;
 }
 
 .abstract-and-info {
-    margin-left: 15rem;
-    margin-right: 15rem;
+    margin: 0px 6%;
     display: flex;
     flex-direction: row;
-    margin-bottom: 5rem;
+
+    justify-content: space-between;
 }
 
-.infosidebardiv {
-    padding-left:5rem;
+.info-sidebar {
+    width: 40%;
+    padding: 0px 6%;
+
 }
 .spt-thtr{
+    font-size: 1.2rem;
     padding: 1.3rem;
-    padding-left:3rem;
-    padding-right: 3rem;
     border-bottom: 1px solid;
     border-color:#e5e5e5;
 }
 
-.sptviewbuttons {
+.keyword-container {
+    padding: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.spt-view-buttons {
     margin-top: 2rem;
 }
 
-.sptviewbuttons button {
+.spt-view-buttons button {
     font-family: 'Montserrat', sans-serif;
     width: 100%;
     padding: 0.8rem;
@@ -90,21 +115,33 @@
     border-style: solid;
     border-radius: 0.5rem;
     box-shadow: 1px 1px 0.3rem rgb(204, 204, 204);
+    font-size: 1.2rem;
 }
 
-.sptviewbuttons button:hover {
-    box-shadow: none;
+.spt-view-buttons button:hover {
+    /* box-shadow: none; */
+    transition: transform 100ms ease, box-shadow 125ms ease;
+    transform: scale(1.025);
 
 }
 
 .bookcover-and-desc{
-    margin-left: 15rem;
-    margin-bottom: 8rem;
+    display: flex;
+    justify-content: space-between;  
+
+    margin: 2rem 6%;
 }
 
-.bookinfotr {
+.book-cover-info-side {
+    align-items: center;
+    justify-content: center;
+    margin: 0px 6%;
+    width: 40%
+}
+
+.book-info-tr {
+    font-size: 1.2rem;
     padding: 1.3rem;
-    padding-right: 3rem;
     border-bottom: 1px solid;
     border-color:#e5e5e5;
 }
@@ -112,15 +149,18 @@
 .bookcover-and-desc{
     display:flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
-.physdescdiv {
-    padding-left: 6rem;
-    padding-right: 15rem;
+.physical-description {
+    font-size: 1.2rem;
+
+    padding: 1.3rem;
 }
 
-.physdescdiv p {
+
+.physical-text {
+    width: inherit;
     text-align: justify;
     text-justify: inter-word;
 }

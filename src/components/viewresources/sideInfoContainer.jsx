@@ -1,8 +1,28 @@
 import React from "react";
+import resourceServices from "../../services/resourceService";
 
-const InfoSidebar = ({ type, adviserList, keywords }) => {
+const InfoSidebar = ({ title, type, adviserList, keywords }) => {
+  console.log(title);
+
+  const handleDownload = async (e) => {
+    const fileType = e.target.value;
+    console.log(fileType);
+    try {
+      const { data } = await resourceServices.getSPTFiles({ title, fileType });
+      console.log(data);
+    } catch (err) {
+      if (err.response && err.response.data) {
+        alert(err.response.data.errorMessage); // some reason error message
+      }
+    }
+  };
+
+  // const handleDownload = (e) => {
+  //   console.log(e.target.value);
+  // };
+
   return (
-    <div className="infosidebardiv">
+    <div className="info-sidebar">
       <table id="spttableinfo">
         <br />
         <tr>
@@ -12,32 +32,54 @@ const InfoSidebar = ({ type, adviserList, keywords }) => {
 
         <tr>
           <th className="spt-thtr">Adviser</th>
-          {adviserList.map((item, key) => (
-            <div key={key}>{item}</div>
-          ))}
+          {adviserList &&
+            adviserList.map((item, key) => (
+              <div key={key}>{item.adviser_name}</div>
+            ))}
         </tr>
 
         <tr>
           <th className="spt-thtr">Keywords</th>
-          {keywords.map((item, key) => (
-            <div key={key}>{item}</div>
-          ))}
+          {keywords &&
+            keywords.map((item, key) => (
+              <div key={key}>{item.sp_thesis_keyword}</div>
+            ))}
         </tr>
       </table>
 
-      <div className="sptviewbuttons">
-        <button id="viewposter">
+      <div className="spt-view-buttons">
+        <button
+          id="viewposter"
+          value="poster"
+          onClick={(e) => handleDownload(e)}
+        >
           <i className="fas fa-file-image"></i>
           View Poster
         </button>
 
-        <button id="downloadjournal">Download Journal</button>
+        <button
+          id="downloadjournal"
+          value="journal"
+          onClick={(e) => handleDownload(e)}
+        >
+          Download Journal
+        </button>
 
-        <button id="downloadsourcecode">Download Source Code</button>
+        <button
+          id="downloadsourcecode"
+          value="soureCode"
+          onClick={(e) => handleDownload(e)}
+        >
+          Download Source Code
+        </button>
         <br />
         <br />
         {/* if guest/book -> display: none */}
-        <a id="viewmanuscript">
+        <a
+          id="viewmanuscript"
+          value="manuscript"
+          onClick={(e) => handleDownload(e)}
+        >
           {/* <i class = "fas fa-book-open"></i> */}
           <svg
             xmlns="http://www.w3.org/2000/svg"

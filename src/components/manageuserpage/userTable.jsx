@@ -8,125 +8,178 @@ import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import httpService from "../../services/httpService";
-import { apiEndpoint } from "../../config.json";
+import { Link, useLocation } from "react-router-dom";
+import PersonService from "../../services/personService";
+
+import "../../styles/manageUserStyle.css";
 
 const tableHeader = [
-  "User ID",
-  "Full Name",
-  "Display Name",
-  "Email",
-  "Classification",
-  " ",
+    "User ID",
+    "Full Name",
+    "Display Name",
+    "Email",
+    "Classification",
+    " ",
 ];
 
 let tableEntry = [];
 
 const initialState = {
-  users: [tableEntry],
+    users: [tableEntry],
 };
 
 // Data can be used in view user page
 export const GlobalContext = createContext(initialState);
 
-export default function UserTable({user}) {
+export default function UserTable({ user }) {
+    const [userList, setUserList] = useState([]);
+    const location = useLocation();
 
-  const [ userList, setUserList ] = useState([]);
-
-  useEffect(() => {
-    console.log(user)
-
-    httpService.get(`${apiEndpoint}/admin/readAllUsers`, {withCredentials:true}).then((response) => {
-      setUserList(Array.from(response.data));
+    useEffect(() => {
+        PersonService.readAllUsers().then((response) => {
+            setUserList(Array.from(response.data));
+        });
     });
-  }, [user]);
 
-  tableEntry = userList;
+    tableEntry = userList;
 
-  // Array for user data retreived from database.
- 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  // Computes the number of rows missing in a 10 per item pagination
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
+    // Array for user data retreived from database.
 
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    // Computes the number of rows missing in a 10 per item pagination
+    const emptyRows =
+        rowsPerPage -
+        Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
 
-  // Handler event for page change in user table
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+    const handlePageChange = (event, newPage) => {
+        setPage(newPage);
+    };
 
-  // Column Header
-  const header = tableHeader.map((header_text, index) => (
-    <TableCell key={index} style={{ fontWeight: "bolder" }}><span>{header_text}</span></TableCell>
-  ));
+    // Handler event for page change in user table
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
-  const useStyles = makeStyles({
-    root: {
-      borderRadius: "10px",
-    },
-  });
+    // Column Header
+    const header = tableHeader.map((header_text, index) => (
+        <TableCell
+            key={index}
+            style={{
+                align: "left",
+                fontWeight: "bold",
+                fontSize: "1.4rem",
+                zIndex: "0",
+            }}>
+            <span>{header_text}</span>
+        </TableCell>
+    ));
 
-  const tableContainer = useStyles();
+    const useStyles = makeStyles({
+        root: {
+            // borderRadius: "8px",
+        },
+    });
 
-  const entries = tableEntry.map((entry, index) => (
-    <TableRow hover key={entry.googleId}>
-      <TableCell style={{ width: "80x", fontWeight: "bold" }}>
-        <span>{entry.googleId}</span>
-      </TableCell>
-      <TableCell style={{ align: "left", fontWeight: "bolder", color: "black"}}>
-        <Link to={`/viewuser/${entry.googleId}`}>{entry.fullName}</Link>
-      </TableCell>
-      <TableCell style={{ align: "left", fontWeight: "bolder", color: "#FFFFFF" }}>
-        <Link to={`/viewuser/${entry.googleId}`}>{entry.nickname}</Link>
-      </TableCell>
-      <TableCell style={{ width: "80px" }}>
-        <span>{entry.email}</span>
-      </TableCell>
-      <TableCell style={{ width: "80px", textAlign: "center"}}>
-        <span>{entry.userType}</span>
-      </TableCell>
-      <TableCell style={{ textAlign: "center", fontSize: "1.5rem" }}>
-        <i className="fa fa-ellipsis-h" style={{ margin: "10px", color: "#CFCFCF",  }}></i>
-        <i className="fa fa-trash-o" style={{ margin: "10px", color: "#CFCFCF" }}></i>
-      </TableCell>
-    </TableRow>
-  ));
+    const tableContainer = useStyles();
 
-  return (
-    <>
-      <TableContainer component={Paper} className={tableContainer.root}>
-        <Table stickyHeader>
-          <TableHead>{header}</TableHead>
-          <TableBody>
-            {entries.slice(
-              page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage
-            )}
+    const entries = tableEntry.map((entry, index) => (
+        <TableRow hover key={entry.googleId} user={entry}>
+            <TableCell
+                style={{
+                    fontSize: "16px",
+                    width: "15%",
+                }}>
+                <span>{entry.googleId}</span>
+            </TableCell>
+            <TableCell
+                style={{
+                    fontSize: "16px",
+                    width: "20%",
+                    align: "left",
+                    color: "black",
+                }}>
+                <Link to={`/viewuser/${entry.googleId}`}>{entry.fullName}</Link>
+            </TableCell>
+            <TableCell
+                style={{
+                    fontSize: "16px",
+                    width: "20%",
+                    align: "left",
+                    color: "#FFFFFF",
+                }}>
+                <Link to={`/viewuser/${entry.googleId}`}>{entry.nickname}</Link>
+            </TableCell>
+            <TableCell style={{ fontSize: "16px", width: "20%" }}>
+                <span>{entry.email}</span>
+            </TableCell>
+            <TableCell
+                style={{ fontSize: "16px", width: "15%", textAlign: "left" }}>
+                <span>{entry.userType}</span>
+            </TableCell>
+            <TableCell
+                style={{
+                    width: " 10%",
+                    textAlign: "center",
+                    fontSize: "1.5rem",
+                }}>
+                <i
+                    className="table-icons fa fa-pencil"
+                    style={{ margin: "10px", color: "gray" }}></i>
+                <Link
+                    to={{
+                        pathname: "/manage-users/delete-user",
+                        state: {
+                            background: location,
+                            id: entry.googleId,
+                            item: "account",
+                            user: {
+                                googleId: entry.googleId,
+                                email: entry.email,
+                                fullName: entry.fullName,
+                                nickName: entry.nickname,
+                                userType: entry.userType,
+                            },
+                        },
+                    }}>
+                    <i
+                        className="table-icons fa fa-trash-o"
+                        style={{ margin: "10px", color: "red" }}></i>
+                </Link>
+            </TableCell>
+        </TableRow>
+    ));
 
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+    return (
+        <>
+            <TableContainer component={Paper} className={tableContainer.root}>
+                <Table stickyHeader>
+                    <TableHead>{header}</TableHead>
+                    <TableBody>
+                        {entries.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                        )}
 
-        <TablePagination
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[5]}
-          component="div"
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-          page={page}
-          count={entries.length}
-        />
-      </TableContainer>
-    </>
-  );
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+
+                <TablePagination
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[5]}
+                    component="div"
+                    onChangePage={handlePageChange}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    page={page}
+                    count={entries.length}
+                />
+            </TableContainer>
+        </>
+    );
 }

@@ -14,12 +14,18 @@ input:focus {
   border: inherit + .5px solid #90ee90;
 }
 
+.edit-icon:hover {
+  transition: transform 100ms ease, box-shadow 125ms ease;
+  transform: scale(1.25);
+  cursor: pointer;
+
+}
 
 /* profileContainer */
 .profile-container {
   display: grid;
-  height: auto;
   gap: 20px;
+  min-height: 90vh;
   width: 90vw;
   padding: 10vh;
   margin: auto;

@@ -1,13 +1,13 @@
 import React from "react";
-import ManageItemsHeader from "./manageItemsHeader";
+import ManagementHeader from "../managementHeader";
 import FieldsContainerRes from "./filterFieldsResources";
 import ResourceTableContainer from "./resourceTableContainer";
 import "../../styles/manageresources/manageResourcesStyle.css";
 
-const ManageResourcesPage = ({ resourceList }) => {
+const ManageResourcesPage = () => {
   return (
     <div className="manage-resources-page-container">
-      <ManageItemsHeader />
+      <ManagementHeader type={"resource"} />
       <FieldsContainerRes />
       {/* <ResTableContainer resourceList={resourceList} /> */}
       <ResourceTableContainer />
