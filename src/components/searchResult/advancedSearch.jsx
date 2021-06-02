@@ -38,32 +38,32 @@ export default function AdvancedSearch({appRef}){
     const resultsPerPage = 10;
     const pagesVisited = pageNumber*resultsPerPage;
 
-    const [results, setResults] = useState([
-        {title:'My Resource 1', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 2', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 3', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 4', author:['Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 5', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 6', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource 7', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 8', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 9', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-        {title:'My Resource 10', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
-    ]);
-    const pageCount = Math.ceil(results.length / resultsPerPage);
+    // const [results, setResults] = useState([
+    //     {title:'My Resource 1', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 2', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 3', author:['Name Surname','Name Surname','Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 4', author:['Name Surname'], adviser:['Name Surname','Name Surname','Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 5', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 6', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource My Resource 7', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 8', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 9', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    //     {title:'My Resource 10', author:['Name Surname'], adviser:['Name Surname'], linkTo:'/search', publishDate:"18 May 2021"},
+    // ]);
+    const pageCount = Math.ceil(resultsFilterArr.length / resultsPerPage);
 
 
-    const displayresults = results
+    const displayresults = resultsFilterArr
     .slice(pagesVisited, pagesVisited + resultsPerPage)
     .map((result, index) => {
       return (
         <ResultContainer
         key={index}
         title={result.title}
-        author={result.author} 
-        adviser={result.adviser}
-        linkTo={result.linkTo} 
-        publishDate={result.publishDate}
+        authors={result.authors||result.author} 
+        // adviser={result.adviser}
+        // linkTo={result.linkTo} 
+        publishDate={result.year||result.datePublished}//publishDate
         />
       );
     });
@@ -89,6 +89,8 @@ export default function AdvancedSearch({appRef}){
     
     // console.log(searchFilterAdviser);
     // console.log(searchFilterYear);
+    // console.log(resultsFilterArr);
+    
     // http request
     async function fetchData() {
         try{
@@ -96,8 +98,8 @@ export default function AdvancedSearch({appRef}){
             //  urlRequest string that contains the search query -> example: search?type=title
             console.log(objFilter); 
             console.log(urlRequest);
-            const response = await ResourceService.searchSpThesis(objFilter,urlRequest);
-            setResultsFilterArr(response);
+            const {data} = await ResourceService.searchSpThesis(objFilter,urlRequest);
+            setResultsFilterArr(data);
             // console.log(resultsFilterArr)
         }catch (err){
             console.log(err);
@@ -114,9 +116,9 @@ export default function AdvancedSearch({appRef}){
         let tempStr = query.trim();
         // NEED TO CLEAN resourcetype specialproblem
         if(tempStr.length!==0  && (query.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            history.push(`/search?type=${resourceType}&search=${tempStr}`);
+            history.push(`/search?type=any&search=${tempStr}`);
         }
-        setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+        setUrlRequest(`/search?type=any&search=${tempStr}`);
         // call convert filter to object
         filterParser();   
     }
@@ -191,13 +193,13 @@ export default function AdvancedSearch({appRef}){
                 </div>
 
                 <div style={resultsOuterContainer}>
-                    <div style={resultTop}>{results.length>0 ? 
+                    <div style={resultTop}>{resultsFilterArr.length>0 ? 
                         <p className="textStyle">Showing results {((pageNumber+1)*resultsPerPage)-(resultsPerPage-1)}
                         -
-                        {results && 
-                            ((pageNumber+1)*resultsPerPage)<results.length 
+                        {resultsFilterArr && 
+                            ((pageNumber+1)*resultsPerPage)<resultsFilterArr.length 
                             ? 
-                            ((pageNumber+1)*resultsPerPage) : results.length} out of {results && results.length}
+                            ((pageNumber+1)*resultsPerPage) : resultsFilterArr.length} out of {resultsFilterArr && resultsFilterArr.length}
                         </p>
                         :
                         <p className="textStyle">No results</p>
@@ -205,8 +207,8 @@ export default function AdvancedSearch({appRef}){
                     </div>
 
                     <div style={resultBottom}>
-                        {displayresults}
-                        {results.length>0 ?
+                        {resultsFilterArr && displayresults}
+                        {resultsFilterArr.length>0 ?
                             <ReactPaginate
                                 previousLabel={"Previous"}
                                 nextLabel={"Next"}

@@ -1362,7 +1362,7 @@ router.get("/search", async (req, res) => {
     }
 
     // ---------------------------------------- SUB FUNCTIONS
-    if (req.query.type == "all") {
+    if (req.query.type == "any") {
         // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
         // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
         // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
