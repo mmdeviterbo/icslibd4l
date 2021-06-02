@@ -1,10 +1,9 @@
 import React from "react";
 
-const InfoSidebar = ({ type, adviserList, keywords }) => {
+const InfoSidebar = ({ type, adviserList, keywords, user }) => {
     return (
         <div className="info-sidebar">
             <table id="spttableinfo">
-                <br />
                 <tr>
                     <th className="spt-thtr">Type</th>
                     <th className="spt-thtr">{type}</th>
@@ -33,7 +32,7 @@ const InfoSidebar = ({ type, adviserList, keywords }) => {
                 </tr>
             </table>
 
-            <div className="spt-view-buttons">
+            {user && user.userType!==4 && (<div className="spt-view-buttons">
                 <button id="viewposter">
                     <i className="fas fa-file-image"></i>
                     View Poster
@@ -58,7 +57,7 @@ const InfoSidebar = ({ type, adviserList, keywords }) => {
                     </svg>
                     &nbsp; View Manuscript
                 </a>
-            </div>
+            </div>)}
         </div>
     );
 };

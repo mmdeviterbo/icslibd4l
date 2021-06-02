@@ -23,6 +23,7 @@ const ReadingSPTContainer = (props) => {
       <div className="abstract-and-info">
         <AbstractContainer abstract={resourceData.abstract} />
         <InfoSidebar
+          user={props.user}
           title={resourceData.title}
           id={resourceData.sp_thesis_id}
           type={resourceData.type}
