@@ -18,6 +18,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import resourceService from "../../services/resourceService";
 import MessagePopUpCont from "../messageModalContainer";
+import dateFormat from "dateformat";
 
 function createResourceData(
   resid,
@@ -64,14 +65,14 @@ const resHeadCells = [
     id: "resclassif",
     numeric: false,
     disablePadding: false,
-    label: "Classification",
+    label: "Type",
   },
-  {
-    id: "relatedcourses",
-    numeric: false,
-    disablePadding: false,
-    label: "Related Courses",
-  },
+  // {
+  //   id: "relatedcourses",
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: "Related Courses",
+  // },
   {
     id: "pubyr",
     numeric: true,
@@ -184,60 +185,46 @@ const MainResourceTable = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rows, setRows] = React.useState([]);
   const [selectedEdit, setSelectedEdit] = useState();
-  // const [resourceList, setResourceList] = useState([]);
+  const [resourceList, setResourceList] = useState([]);
+
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const books = await resourceService.browseResources({
+          type: "book",
+        });
+        const spThesis = await resourceService.browseResources({
+          type: "thesis",
+        });
+
+        let arr = books.data.concat(spThesis.data);
+        // arr.push(books.data);
+        // arr.push(spThesis.data);
+        console.log(arr);
+        setResourceList(arr);
+        // setSpThesisList(spThesis_arr)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchBooks();
+  }, []);
 
   // useEffect(() => {
-  //   async function fetchData() {
+  //   async function fetchSPT() {
   //     try {
-  //       const { data } = await resourceService.browseResources({
-  //         type: "book",
+  //       const spThesis = await resourceService.browseResources({
+  //         type: "thesis",
   //       });
-  //       setResourceList(data);
-  //       console.log(data);
-  //       // setSpThesisList(spThesis_arr)
+  //       // setResourceList([]);
+  //       console.log(resourceList);
+  //       // setResourceList([...resourceList, spThesis.data]);
   //     } catch (error) {
   //       console.log(error);
   //     }
   //   }
-  //   fetchData();
+  //   fetchSPT();
   // }, []);
-
-  useEffect(async () => {
-    try {
-      let tempRow = [...rows];
-
-      const { data } = await resourceService.browseResources({
-        type: "Thesis",
-      });
-
-      //   const { data } = await resourceService.searchSpThesis({}, "/search");
-      //   console.log(data);
-      for (let thesis of data) {
-        tempRow.push(
-          createResourceData(
-            thesis.sp_thesis_id,
-            thesis.title,
-            thesis.author[0] ? thesis.author[0].author_name : "N/A",
-            thesis.type,
-            thesis.type === "Thesis" ? "CMSC 199" : "CMSC 200",
-            thesis.year
-          )
-        );
-      }
-      setRows(tempRow);
-      setSelectedEdit(data);
-    } catch (err) {
-      console.log("ERRROR 304");
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      MessagePopUpCont("hello");
-    } catch (err) {
-      console.log("ERRROR 304");
-    }
-  }, [rows]);
 
   const DeleteBtn = (id) => {
     return (
@@ -292,7 +279,7 @@ const MainResourceTable = () => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = resourceList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -335,7 +322,8 @@ const MainResourceTable = () => {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage -
+    Math.min(rowsPerPage, resourceList.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -354,10 +342,10 @@ const MainResourceTable = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={resourceList.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(resourceList, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -390,7 +378,8 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.resid}
+                          {row.bookId ? row.bookId : row.sp_thesis_id}
+                          {/* {row.id} */}
                         </p>
                       </TableCell>
                       <TableCell
@@ -424,7 +413,9 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.author}
+                          {row.author.map((item, key) => (
+                            <div key={key}>{item.author_name}</div>
+                          ))}
                         </p>
                       </TableCell>
                       <TableCell
@@ -441,26 +432,30 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.resclassif}
+                          {/* Checks if a resource is a book by using the bookId attribute as checker */}
+                          {row.bookId ? "Book" : row.type}
                         </p>
                       </TableCell>
-                      <TableCell
+                      {/* <TableCell
                         style={{
                           width: "15%",
                         }}
                         className={classes.tablecell}
                         align="left"
                       >
-                        {/* related courses */}
                         <p
                           style={{
                             fontSize: "16px",
                             fontWeight: "normal",
                           }}
                         >
-                          {row.relatedcourses}
+                          {row.bookId
+                            ? row.subject.map((item, key) => (
+                                <div key={key}>{item.subject}</div>
+                              ))
+                            : row.type}
                         </p>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell
                         style={{
                           width: "13%",
@@ -475,7 +470,9 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.pubyr}
+                          {row.bookId
+                            ? dateFormat(row.dateAcquired, "mmmm yyyy")
+                            : row.year}
                         </p>
                       </TableCell>
                       {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
@@ -486,8 +483,8 @@ const MainResourceTable = () => {
                           fontSize: "1.5rem",
                         }}
                       >
-                        <EditBtn id={row.resid} />
-                        <DeleteBtn id={row.resid} />
+                        <EditBtn id={row.id} />
+                        <DeleteBtn id={row.id} />
                       </TableCell>
                     </TableRow>
                   );
@@ -507,7 +504,7 @@ const MainResourceTable = () => {
         <TablePagination
           rowsPerPageOptions={[5]}
           component="div"
-          count={rows.length}
+          count={resourceList.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
