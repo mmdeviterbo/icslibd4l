@@ -5,33 +5,35 @@ import AbstractContainer from "./abstractContainer";
 import InfoSidebar from "./sideInfoContainer";
 
 const ReadingSPTContainer = (props) => {
-    const resourceData =
-        (props.location && props.location.state.resourceData) || {};
+  const resourceData =
+    (props.location && props.location.state.resourceData) || {};
 
-    useEffect(() => {
-        console.log(resourceData);
-    }, []);
+  useEffect(() => {
+    console.log(resourceData.sp_thesis_id);
+  }, []);
 
-    return (
-        <div className="spt-page-container">
-            <TitleContainer
-                title={resourceData.title}
-                authorList={resourceData.author}
-                year={resourceData.year}
-            />
+  return (
+    <div className="spt-page-container">
+      <TitleContainer
+        title={resourceData.title}
+        authorList={resourceData.author}
+        year={resourceData.year}
+      />
 
-            <div className="abstract-and-info">
-                <AbstractContainer abstract={resourceData.abstract} />
-                <InfoSidebar
-                    type={resourceData.type}
-                    adviserList={resourceData.adviser}
-                    keywords={resourceData.keywords}
-                />
-            </div>
-        </div>
+      <div className="abstract-and-info">
+        <AbstractContainer abstract={resourceData.abstract} />
+        <InfoSidebar
+          title={resourceData.title}
+          id={resourceData.sp_thesis_id}
+          type={resourceData.type}
+          adviserList={resourceData.adviser}
+          keywords={resourceData.keywords}
+        />
+      </div>
+    </div>
 
-        // add suggestions / related content at the bottom ..?
-    );
+    // add suggestions / related content at the bottom ..?
+  );
 };
 
 export default ReadingSPTContainer;
