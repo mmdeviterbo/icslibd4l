@@ -44,7 +44,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
     };
     const responseGoogleFail = (response) => {
         // put modal here if fail (dont put modal if user only closes the window)
-
+        console.log(response);  
     };
 
     const scrollToBrowse = () => {
@@ -208,6 +208,17 @@ const SearchFilter = ({ user }) => {
             ),
             value: "View Activity Logs",
             onClick: () => history.push("/view-activitylogs"),
+        },
+        {
+            key: "viewSummaryReports",
+            text: (
+                <span>
+                    <i className="fa fa-lg fa-print mr-3 ml-2" />
+                    View Summary Report
+                </span>
+            ),
+            value: "View Summary Report",
+            onClick: () => history.push("/view-summaryreport"),
         },
         {
             key: "sign-out",
