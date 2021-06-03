@@ -8,9 +8,10 @@ import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 // import { makeStyles } from "@material-ui/core/styles";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import PersonService from "../../services/personService";
 import Select from "react-select";
+import { jwtPrivateKey } from "./../../config.json";
 
 import "../../styles/manageUserStyle.css";
 
@@ -24,6 +25,7 @@ const tableHeader = [
 ];
 
 export default function UserTable({ user }) {
+
     // Array for user data retreived from database.
     const [userList, setUserList] = useState([]);
     const [page, setPage] = useState(0);
@@ -33,6 +35,8 @@ export default function UserTable({ user }) {
     const [selectedUser, setSelectedUser] = useState({});
 
     const location = useLocation();
+    const history = useHistory();
+
     let tableEntry = userList;
 
     const classificationString = ["Admin", "Faculty", "Staff", "Student"];
@@ -69,8 +73,17 @@ export default function UserTable({ user }) {
         </TableCell>
     ));
 
+
     // executes if the location is changed. (Opening modals)
     useEffect(() => {
+        //if no user is logged in, redirect it to homepage  
+        try{
+            const jwt = localStorage.getItem(jwtPrivateKey);
+            var userInfo = PersonService.decryptToken(jwt);
+            if(userInfo?.userType!==1) history.push("/home");
+        }catch(err){
+            history.push("/home");
+        }
         readUsers();
     }, [location]);
 
@@ -228,7 +241,7 @@ export default function UserTable({ user }) {
                         <span>{classificationString[entry.userType - 1]}</span>
                     )}
                 </TableCell>
-                <TableCell
+                {user?.fullName!==entry?.fullName? <TableCell
                     style={{
                         width: " 10%",
                         textAlign: "center",
@@ -305,7 +318,7 @@ export default function UserTable({ user }) {
                             </Link>
                         </>
                     )}
-                </TableCell>
+                </TableCell> : <TableCell></TableCell>}
             </TableRow>
         );
     });

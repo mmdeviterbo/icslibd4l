@@ -37,7 +37,7 @@ const courseList = [
 export default function EditBookFormContainer(props) {
         // functionalities:
     const [title, setTitle] = useState("");
-    const [type, setType] = useState("");
+    // const [type, setType] = useState("");
     const [datePublished, setDatePublished] = useState();
     const [dateAcquired, setDateAcquired] = useState();
     const [isbn, setISBN] = useState("");
@@ -72,9 +72,6 @@ export default function EditBookFormContainer(props) {
             // window.location = "/not-found";
         }
     }, []);
-
-    console.log(idSource)           //object is received
-    console.log(bookInfoArr);       //info of all res is received
 
     // iterate through array to match id
     useEffect(() => {

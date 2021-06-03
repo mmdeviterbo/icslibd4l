@@ -16,7 +16,6 @@ const ThesisModel = require("../models/spThesisModel");
 /**************************************************** 
 Request Object:
 NULL
-
 Response Object:
 {
     googleId: googleId,
@@ -41,7 +40,6 @@ router.get("/readAdmins", authAdmin, async (req, res) => {
 /**************************************************** 
 Request Object:
 NULL
-
 Response Object:
 {
     googleId: googleId,
@@ -66,7 +64,6 @@ router.get("/readAllUsers", authAdmin, async (req, res) => {
 /**************************************************** 
 Request Object:
 NULL
-
 Response Object:
 {
     googleId: googleId,
@@ -94,7 +91,6 @@ router.get("/readUserLogs", authAdmin, async (req, res) => {
 /**************************************************** 
 Request Object:
 NULL
-
 Response String: 
 "All Entries Deleted"
 ********************************************************/
@@ -120,7 +116,6 @@ Request Object:
     googleId: googleId,
     newNickname: newNickname,
 }
-
 Response Object:
 {
     googleId: googleId,

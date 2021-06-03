@@ -18,7 +18,6 @@ Request Object:
    email: email,
    fullName: fullName 
 }
-
 Response Object:
 {
     googleId: googleId,
@@ -116,7 +115,6 @@ router.post("/create", async (req, res) => {
 /**************************************************** 
 Request Object:
 NULL
-
 Response Object:
 {
     googleId: googleId,
@@ -145,7 +143,6 @@ Request Object:
     googleId: googleId,
     newNickname: newNickname,
 }
-
 Response Object:
 {
     googleId: googleId,
@@ -226,7 +223,6 @@ Request Object:
 {
     googleId: googleId,
 }
-
 Response String: 
 "Entry Deleted"
 ********************************************************/
@@ -247,7 +243,6 @@ Request Object:
 {
     googleId: googleId,
 }
-
 Response String:
 "User Logged Out"
 ********************************************************/
@@ -288,7 +283,6 @@ router.post("/logout", async (req, res) => {
 /**************************************************** 
 Request Object:
 googleId
-
 Response Object: 
 "Specific person"
 ********************************************************/

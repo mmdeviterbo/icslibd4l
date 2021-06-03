@@ -169,7 +169,6 @@ book: {
     dateAcquired,
 }
 file: jpeg/png
-
 res object:
 {
     bookId,
@@ -182,7 +181,6 @@ res object:
     datePublished,
     dateAcquired,
 }
-
 ********************************************************/
 router.post("/create", authFaculty, upload.any(), async (req, res) => {
     console.log(req.body);
@@ -317,7 +315,6 @@ req object: JSON
 body: {
   book_id,
 }
-
 Response Object:
 pdf Filestream
 ********************************************************/
@@ -342,7 +339,6 @@ req object: JSON
 body: {
   book_id,
 }
-
 Response Object:
 {
   "_id": _id,
@@ -375,7 +371,6 @@ body: {
   type,
   search
 }
-
 Response Object: Array of Objects
 {
   "_id": _id,
@@ -542,10 +537,8 @@ book: {
     numberOfCopies,
 }
 file: jpeg/png
-
 res String: 
 "Entry Updated"
-
 ********************************************************/
 router.put("/update", authAdmin, upload.any(), async (req, res) => {
     const {
@@ -663,10 +656,8 @@ req object:JSON
 book: {
     bookId
 }
-
 res String: 
 "Entry Deleted"
-
 ********************************************************/
 router.delete("/delete", authAdmin, async (req, res) => {
     try {

@@ -6,7 +6,6 @@ const authAdmin = require("../middleware/authAdmin");
 /**************************************************** 
 Request Object:
 NULL
-
 Response Object:
 {
     googleId: googleId,
