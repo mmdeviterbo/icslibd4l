@@ -13,6 +13,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
+var uniqid = require('uniqid');
 
 const database = process.env.db;
 
@@ -145,7 +146,6 @@ const upload = multer({ storage });
 router.post("/create", authFaculty, upload.any(), async (req, res) => {
     try {
         const {
-            bookId,
             title,
             ISBN,
             authors,
@@ -159,7 +159,6 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
 
         // sample verification: incomplete fields
         if (
-            !bookId ||
             !title ||
             !authors ||
             !subjects ||
@@ -171,10 +170,12 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         }
 
         //search if book exists
-        const existingBook = await bookModel.findOne({ bookId });
+        const existingBook = await bookModel.findOne({ ISBN });
 
         if (!existingBook) {
             //if book does not exist, add the book
+
+            const bookId = uniqid('BOOK_'); //generate a unique id for the book
 
             const newBook = new bookModel({
                 //add the non-array fields to the books collection
