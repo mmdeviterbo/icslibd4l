@@ -9,21 +9,16 @@ import "../../styles/manageUserStyle.css";
 
 export default function ManageUserPage({ user }) {
     const history = useHistory();
-
-    useEffect(() => {
-        if (user && user.userType !== 1) {
-            history.push("/not-found");
-        }
-    });
-
     return (
-        <div className="manage-user-container">
+        <>
+        {(user && user.userType !== 1)? <div className="manage-user-container">
             {/* <UserSearch /> */}
             <ManagementHeader />
             <FilterMenu />
             <div className="usertable-container" style={{}}>
                 <UserTable user={user} />
             </div>
-        </div>
+        </div> : history.push("/home")}
+        </>
     );
 }
