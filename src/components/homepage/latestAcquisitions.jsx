@@ -213,11 +213,14 @@ const buttonViewAllBooks = {
     zIndex: 10000,
 };
 const buttonStyle = {
-    border: "1px solid white",
-    background: "none",
-    color: "white",
+    background: "#e0e0e0",
+    border:"none",
+    color:"black",
+    borderRadius:"7px",
     padding: "3% 10%",
+    boxShadow: "3px 3px 7px black",
     fontSize: "calc(12px + 0.5vw)",
+    transition:"0.2s"
 };
 
 // mobile responsiveness is in homepagestyle.css

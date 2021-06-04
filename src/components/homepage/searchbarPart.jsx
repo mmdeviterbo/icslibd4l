@@ -3,12 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { Dropdown } from 'semantic-ui-react'
 import searchBg from '../../assets/searchBg_4.png';
 import homepageBg from '../../assets/homepage/homepage-bg.png';
-import homeItem1 from '../../assets/homepage/homeItem-1.png';
 import homeItem2 from '../../assets/homepage/homeItem-2.png';
-import homeItem3 from '../../assets/homepage/homeItem-3.png';
-import homeItem4 from '../../assets/homepage/homeItem-4.png';
 
-import {gsap, Power3} from 'gsap';
+import { gsap } from 'gsap';
 
 export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
     const [localSearch, setLocalSearch] = useState("");
@@ -38,29 +35,18 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
         <form onSubmit={handleForm} style={advanceSearch} className="searchMainContainer">
             <img draggable="false" src={searchBg} style={mainBgSearchStyle} alt="#"/>
             <div style={titleSearchContainer} className="titleSearchContainer">
-                <div style={textStylesContainer}>
-                    <div style={uplbContainerStyle} className="searchUPanimation">
-                        <p style={uplbStyle}>UNIVERSITY</p>
-                        <p style={uplbStyle}>OF</p>
-                        <p style={uplbStyle}>THE</p>
-                        <p style={uplbStyle}>PHILIPPINES</p>
-                        <p style={{...uplbStyle,fontWeight:0,fontSize:"30px"}}>Los Baños</p>
-                    </div>
-                    <div style={icsStyle}><p className="searchAnimationICS">Institute of Computer Science Online Library</p></div>
-                </div>
-                <div style={buttonsContainer} className="buttonsSearchContainer">
-                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoBrowse}>
-                        <i className="fa fa-lg fa-list-ul mr-2"/>
-                        BROWSE
-                    </button>
-                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoLatestAcq}>
-                        <i className="fa fa-lg fa-file mr-2"/>
-                        LATEST ACQUISITIONS</button>
-                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoNews}>
-                        <i className="fa fa-lg fa-globe mr-2"/>
-                        NEWS
-                    </button>
-                </div>
+                <h2>insert our logo here and/or projectName</h2>
+                <button type="button" style={buttonSelect} className="btn btn-warning homeBtn" onClick={scrollIntoBrowse}>
+                    <i className="fa fa-lg fa-list-ul mr-2"/>
+                    BROWSE
+                </button>
+                <button type="button" style={buttonSelect} className="btn btn-warning homeBtn" onClick={scrollIntoLatestAcq}>
+                    <i className="fa fa-lg fa-file mr-2"/>
+                    LATEST ACQUISITIONS</button>
+                <button type="button" style={buttonSelect} className="btn btn-warning homeBtn" onClick={scrollIntoNews}>
+                    <i className="fa fa-lg fa-globe mr-2"/>
+                    NEWS
+                </button>
             </div>
 
             <div style={searchBoxContainer}  className="searchBoxContainer">
@@ -78,10 +64,7 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
                 </div>
                 
                 <div style={homepageBgParent} className="homepageBgParent">
-                    <img draggable="false" className="homeItem homeItem1" src={homeItem1} style={homeItems} alt="#"/> 
                     <img draggable="false" className="homeItem homeItem2" src={homeItem2} style={homeItems} alt="#"/> 
-                    <img draggable="false" className="homeItem homeItem3" src={homeItem3} style={homeItems} alt="#"/> 
-                    <img draggable="false" className="homeItem homeItem4" src={homeItem4} style={homeItems} alt="#"/> 
                     <img draggable="false" src={homepageBg} style={homepageBgStyle} alt="#"/> 
                 </div>
             </div>
@@ -134,50 +117,19 @@ const advanceSearch = {
 	"userSelect": "none", 
 }
 const titleSearchContainer ={
-    borderLeft:"10px solid white",
+    border:"1px solid black",
     position:"relative",
     width:"45%",
-    height:"75%",
-    background: "linear-gradient(90deg, rgba(0,103,161,1) 0%, rgba(0,101,158,1) 43%, rgba(0,74,116,1) 100%)",
+    height:"90%",
+    background: "rgb(0, 103, 161)",
     boxShadow:"4px 4px 7px 0 rgba(0, 0, 0, 0.55),-1px -2px 4px 0 rgba(255, 255, 255, 0.3)",
-    borderRadius: "4px  0px  0px  4px",    
+    borderRadius: "10px  0px  0px  10px",    
     transition:"1s",
     display:"flex",
     flexDirection:"column",
-    justifyContent:"space-around",
-    alignItems:"center",
-}
-const textStylesContainer = {
-    width:"100%",
-    flexGrow:1,
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"space-around"
-
-}
-const uplbContainerStyle={
-    textAlign:"center",
-}
-const uplbStyle={
-    position:"relative",
-    fontSize:"calc(37px + 1vw)",
-    color:"white",
-    fontWeight:"900",
-    lineHeight:0.9,
-    margin:0,
-    padding:0,
-}
-const icsStyle={
-    width:"100%",
-    overflowX:"hidden",
-    padding:"10px",
-    color:"black",
-    textAlign:"center",
-    fontSize:"calc(10px + 0.5vw)",
-    fontWeight:300,
-    background:"white",
-    boxShadow:" 2px 2px 5px 0 rgba(0, 0, 0, 0.3),-1px -1px 3px 0 rgba(255, 255, 255, 0.1)",
-
+    justifyContent:"center",
+    padding:"0 9%",
+    gap:"4%"
 }
 
 const searchBoxContainer = {
@@ -206,7 +158,7 @@ const inputCaptionContainer = {
 
 const inputSearch={
     width:"100%",
-    padding:"25px 25px",
+    padding:"26px 25px",
     margin:0,
     borderRadius:"5px 0 0 5px",
     backgroundColor:"rgba(255,255,255,0.98)",
@@ -244,31 +196,20 @@ const homeItems = {
     transform:"scale(1)"
 };
 
-const buttonsContainer ={
-    width:"100%",
-    flexGrow:1,
-    display:"flex",
-    justifyContent:"space-evenly",
-    alignItems:"center",
-}
 const buttonSelect = {
-    background:"none",
-    border:"1px solid white",
-    color:"white",
-    fontSize:"15px",
-    padding:"calc(8px + 0.3vw)",
-    transition:"0.1s",
-    zIndex:1000
+    background: "#e0e0e0",
+    border:"none",
+    color:"black",
+    borderRadius:"7px",
+    fontSize:"calc(13px + 0.2vw)",
+    padding:"calc(15px + 0.3vw)",
+    transition:"0.5s",
+    zIndex:1000,
+    boxShadow: "1px 1px 2px black"
 }
 
 const animateSearchBox=()=>{
     gsap.from('.formSearchHomepage',{opacity:0,yPercent:200, duration:0.6,scale:0.1});
     gsap.from('.homepageBgParent',{duration:0.8,scale:0.85});
-    gsap.from('.homeItem1',{duration:0.6,scale:4, opacity:0.8});
     gsap.from('.homeItem2',{duration:0.6,scale:4, opacity:0.8});
-    gsap.from('.homeItem3',{duration:0.6,scale:3, opacity:0.8});
-    gsap.from('.homeItem4',{duration:0.6,scale:3, opacity:0.8});
-    gsap.from('.searchAnimationICS',{duration:0.7,x:100, ease: Power3});
-    gsap.from('.searchUPanimation',{duration:0.9,x:-70, ease: Power3});
-    
 }

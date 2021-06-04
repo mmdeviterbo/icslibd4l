@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
 import viewTable from "./viewTable";
 import { TableBody, TableCell, TableRow, TableHead } from "@material-ui/core";
@@ -8,22 +8,20 @@ import dateFormat from "dateformat";
 // import ReadingSPTContainer from "../viewresources/readingsptcontainer";
 
 export default function BrowseResources({ type }) {
-    // const location = useLocation();
     const [resourceList, setResourceList] = useState([]);
 
     const { TblContainer } = viewTable();
 
-    async function fetchData() {
-        try {
-            const { data } = await ResourceService.browseResources({ type });
-            setResourceList(data);
-        } catch (error) {}
-    }
-
     useEffect(() => {
+        async function fetchData() {
+            try {
+                const { data } = await ResourceService.browseResources({ type });
+                setResourceList(data);
+            } catch (error) {}
+        }
         fetchData();
         window.scrollTo(0, 0);
-    }, []);
+    },[]);
 
     const ViewSPThesis = () => {
         return (
@@ -245,7 +243,7 @@ export default function BrowseResources({ type }) {
             className="viewitem-container"
             style={{ padding: "5vw 3vw", minHeight: "90vh" }}
         >
-            {type == "book" ? <ViewBook /> : <ViewSPThesis />}
+            {type === "book" ? <ViewBook /> : <ViewSPThesis />}
         </div>
     );
 }

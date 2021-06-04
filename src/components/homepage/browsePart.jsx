@@ -173,8 +173,7 @@ const browseBox = {
   width: "28vh",
   cursor: "pointer",
   background: "#e0e0e0",
-  boxShadow:
-    "3px 3px 2px 0 rgba(0, 0, 0, 0.2), -3px -3px 2px 0 rgba(255, 255, 255, 0.3)",
+  boxShadow:"3px 3px 5px 0 rgba(0, 0, 0, 0.5), -3px -3px 5px 0 rgba(255, 255, 255, 0.3)",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",

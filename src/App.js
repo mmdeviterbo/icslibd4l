@@ -1,7 +1,6 @@
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { jwtPrivateKey, jwtEncryptionKey } from "./config.json";
-import * as jwtEncrypt from "jwt-token-encrypt";
+import { jwtPrivateKey } from "./config.json";
 import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
@@ -25,11 +24,11 @@ import BrowseResources from "./components/browseresources/browseResources";
 import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
-import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
+import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
 import "./App.css";
 
 function App() {
-    const [user, setUser] = useState(null); //fullname, email, userType (integer)
+    const [user, setUser] = useState(null); //fullName, email, userType (integer)
 
     const browseRef = useRef(null);
     const latestAcqRef = useRef(null);
@@ -40,35 +39,24 @@ function App() {
     const background = location.state && location.state.background;
 
     useEffect(() => {
-        const currentUrl = window.location.pathname;
-        console.log(currentUrl);
-        getCurrentToken();
-    }, []);
+        // see if there's current user logged in the browser
+        const getCurrentToken = async () => {
+            try {
+                //to know if there's is currently logged in
+                const jwt = localStorage.getItem(jwtPrivateKey);
+                var userInfo = PersonService.decryptToken(jwt);
+                setUser(userInfo);
 
-    const decryptToken = (jwt) => {
-        const encryption = {
-            key: jwtEncryptionKey,
-            algorithm: "aes-256-cbc",
+                // if there is (no error), then go to backend and get the updated userInfo
+                const { data } = await PersonService.getSpecificPerson({
+                    googleId: userInfo.googleId,
+                });
+                userInfo = PersonService.decryptToken(data);
+                setUser(userInfo);
+            } catch (err) {}
         };
-        return jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary").data;
-    };
-
-    // see if there's current user logged in the browser
-    const getCurrentToken = async () => {
-        try {
-            //to know if there's is currently logged in
-            const jwt = localStorage.getItem(jwtPrivateKey);
-            var userInfo = decryptToken(jwt);
-            setUser(userInfo);
-
-            // if there is (no error), then go to backend and get the updated userInfo
-            const { data } = await PersonService.getSpecificPerson({
-                googleId: userInfo.googleId,
-            });
-            userInfo = decryptToken(data);
-            setUser(userInfo);
-        } catch (err) {}
-    };
+        getCurrentToken();
+    },[]);
 
     // login/register a user
     const loginRegisterUser = async (userInfo) => {
