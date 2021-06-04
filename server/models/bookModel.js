@@ -5,6 +5,9 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    ISBN: {
+        type: String
+    },
     title: {
         type: String, 
         required: true

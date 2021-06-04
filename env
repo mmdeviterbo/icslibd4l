@@ -1,0 +1,4 @@
+jwtPublicKey = "C4XWnhT[^h]$#wc}"
+jwtPrivateKey = "EUTY8L,Gf9T5kkQ5"
+db = "mongodb+srv://sampleuser1:password1234@cluster0.0iawg.mongodb.net/test4-cabuslay?retryWrites=true&keepAlive=true&w=majority"
+SERVER_PORT = 3001

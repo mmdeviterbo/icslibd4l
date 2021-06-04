@@ -6,12 +6,14 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
+const config = require("config");
 const path = require("path");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
+var uniqid = require('uniqid');
 
 const database = process.env.db;
 
@@ -73,7 +75,6 @@ router.post("/get-news", async (req, res) => {
 // Create mongo connection
 let gfs;
 let conn;
-
 mongoose.connection.on("connected", () => {
     conn = mongoose.createConnection(
         database,
@@ -102,11 +103,26 @@ const storage = new GridFsStorage({
     file: (req, file) => {
         return new Promise(async (resolve, reject) => {
             const bookId = JSON.parse(req.body.body).bookId; //parse the book id from the multipart form
+            const dateAcquired = JSON.parse(req.body.body).dateAcquired; //parse the date acquired from the multipart form
             const existingBook = await bookModel.findOne({ bookId }); //check if the book already exists
             if (existingBook) {
-                //don't upload if book already exists
-                return reject("Book already exists!");
+                // for book create (no oldBookId in input)
+                if(JSON.parse(req.body.body).oldBookId == undefined){
+                    return reject("Book already exists!");
+                }else{ //for book update
+                    // delete the book cover's entry from .files and .chunks (book_id == metadata in book_covers.files)
+                    // check first if the book has a saved book cover
+                    gfs.files.findOne({ "metadata.bookId" : bookId }, (err, existingBookCover) => {
+                        if (existingBookCover) {   
+                            // .chunks
+                            mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
+                            // .files
+                            gfs.files.deleteOne({"metadata.bookId" : bookId});
+                        }
+                    });
+                }          
             }
+
             crypto.randomBytes(16, (err, buf) => {
                 //gives the file a different name
                 if (err) {
@@ -116,7 +132,7 @@ const storage = new GridFsStorage({
                     buf.toString("hex") + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    metadata: bookId, //store the book id in the metadata
+                    metadata: {bookId, dateAcquired}, //store the book id in the metadata
                     bucketName: "book_covers",
                 };
                 resolve(fileInfo);
@@ -130,8 +146,8 @@ const upload = multer({ storage });
 router.post("/create", authFaculty, upload.any(), async (req, res) => {
     try {
         const {
-            bookId,
             title,
+            ISBN,
             authors,
             subjects,
             physicalDesc,
@@ -143,7 +159,6 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
 
         // sample verification: incomplete fields
         if (
-            !bookId ||
             !title ||
             !authors ||
             !subjects ||
@@ -155,15 +170,18 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         }
 
         //search if book exists
-        const existingBook = await bookModel.findOne({ bookId });
+        const existingBook = await bookModel.findOne({ ISBN });
 
         if (!existingBook) {
             //if book does not exist, add the book
+
+            const bookId = uniqid('BOOK_'); //generate a unique id for the book
 
             const newBook = new bookModel({
                 //add the non-array fields to the books collection
                 bookId,
                 title,
+                ISBN,
                 physicalDesc,
                 publisher,
                 numberOfCopies,
@@ -209,11 +227,33 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
     }
 });
 
-//display the latest 12 books on the homepage
-router.get("/display", async (req, res) => {
+//display the latest 12 book covers on the homepage
+router.get("/display_covers", async (req, res) => {
+    gfs.files.find().limit(12).sort({"metadata.dateAcquired":-1}).toArray((err, files) => {
+        // Check if files
+        if (!files || files.length === 0) {
+          res.render('index', { files: false });
+        } else {
+          files.map(file => {
+            if (
+              file.contentType === 'image/jpeg' ||
+              file.contentType === 'image/png'
+            ) {
+              file.isImage = true;
+            } else {
+              file.isImage = false;
+            }
+          });
+        //   res.render('index', { files: files });
+        res.send(files);
+        }
+      });
+});
+
+//display the latest 12 book infos on the homepage
+router.get("/display_infos", async (req, res) => {
     bookModel.aggregate(
         [{ $sort: { dateAcquired: -1 } }, { $limit: 12 }],
-
         (err, result) => {
             if (err) {
                 res.send(err);
@@ -229,7 +269,7 @@ router.get("/display", async (req, res) => {
 router.get("/download1", async (req, res) => {
     const { bookId } = req.body;
 
-    gfs.files.findOne({ metadata: bookId }, (err, file) => {
+    gfs.files.findOne({ "metadata.bookId": bookId }, (err, file) => {
         if (err) {
             res.send(err);
         } else {
@@ -243,7 +283,7 @@ router.get("/download1", async (req, res) => {
 router.get("/download2", async (req, res) => {
     const { bookId } = req.body;
 
-    gfs.files.findOne({ metadata: bookId }, (err, file) => {
+    gfs.files.findOne({ "metadata.bookId": bookId }, (err, file) => {
         if (err) {
             res.send(err);
         } else {
@@ -393,7 +433,22 @@ router.get("/search", async (req, res) => {
     }
 });
 
-router.put("/update-book", authAdmin, async (req, res) => {
+
+// acccept multipart form (json body, optional file):
+// {
+// 	"oldBookId" : "",
+// 	"bookId" : "",
+// 	"title" : "",
+// 	"authors" : [{"fname" : "", "lname" : ""}, {"fname" : "", "lname" : ""}],
+// 	"subjects" : ["", ""],
+// 	"physicalDesc" : "",
+// 	"publisher" : "",
+// 	"numberOfCopies" : 1,
+//  "datePublished" : "2021-01-30",
+//  "dateAcquired" : "2021-01-30",
+// }
+
+router.put("/update", authAdmin, upload.any(), async (req, res) => {
     const {
         oldBookId,
         bookId,
@@ -403,7 +458,9 @@ router.put("/update-book", authAdmin, async (req, res) => {
         physicalDesc,
         publisher,
         numberOfCopies,
-    } = req.body;
+        datePublished,
+        dateAcquired
+    } = JSON.parse(req.body.body);
 
     // verification: incomplete fields
     if (
@@ -421,6 +478,17 @@ router.put("/update-book", authAdmin, async (req, res) => {
             .json({ errorMessage: "Please enter all required fields." });
     }
 
+    // if user wants to update bookId, check first if the given bookId (new) already exists
+    if(oldBookId != bookId){
+        await bookModel.findOne({"bookId": bookId}, (err, exists) => {
+            if(exists){
+                return res
+                    .status(400)
+                    .json({errorMessage: "New bookId already exists."});
+            }
+        })
+    }
+
     try {
         //search if book exists
         const existingBook = await bookModel.findOne({ bookId: oldBookId });
@@ -436,6 +504,8 @@ router.put("/update-book", authAdmin, async (req, res) => {
                     updatedBook.physicalDesc = physicalDesc;
                     updatedBook.publisher = publisher;
                     updatedBook.numberOfCopies = numberOfCopies;
+                    updatedBook.datePublished = datePublished;
+                    updatedBook.dateAcquired = dateAcquired;
 
                     updatedBook.save();
                 }
@@ -486,18 +556,34 @@ router.put("/update-book", authAdmin, async (req, res) => {
     }
 });
 
-router.delete("/delete-book", authAdmin, async (req, res) => {
-    try {
-        const bookId = req.body.bookId;
 
-        // search if book exists
+// acccept json:
+// {
+// 	"bookId":""
+// }
+router.delete("/delete", authAdmin, async (req, res) => {
+    try {
+        const {bookId} = req.body;
+        
+        // search if book exists in book collection
         const existingBook = await bookModel.findOne({ bookId });
 
-        // if book exists, delete its entries from book, book_author, and book_subject
+        // if book exists, delete its entries from book, book_author, book_subject, and book_cover
         if (existingBook) {
             await bookModel.findOneAndDelete({ bookId });
             await bookAuthorModel.deleteMany({ bookId });
             await bookSubjectModel.deleteMany({ bookId });
+
+            // delete the book cover's entry from .files and .chunks (book_id == metadata in book_covers.files)
+            // check first if the book has a saved book cover
+            gfs.files.findOne({ metadata : bookId }, (err, existingBookCover) => {
+                if (existingBookCover) {   
+                    // .chunks
+                    mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
+                    // .files
+                    gfs.files.deleteOne({metadata : bookId});
+                }
+            });
             res.send("Entry Deleted");
         } else {
             res.status(400).send("This book does not exist! Cannot delete.");

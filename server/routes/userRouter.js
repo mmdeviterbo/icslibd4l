@@ -15,6 +15,7 @@ const jwtPublicKey = process.env.jwtPublicKey;
 //   email,
 //   fullName }
 router.post("/create", async (req, res) => {
+    console.log("here");
     var loggedUser;
     try {
         const { googleId, email, fullName } = req.body;
@@ -35,6 +36,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
+                userType: 1,
                 nickname,
             });
 
@@ -183,7 +185,7 @@ router.delete("/delete", authStudent, async (req, res) => {
 });
 
 //logout current signed in user. deletes cookie for user
-router.post("/logout", authStudent, async (req, res) => {
+router.post("/logout", async (req, res) => {
     const googleId = req.body.googleId;
     try {
         const loggedUser = await UserModel.findOne({ googleId });
@@ -196,11 +198,11 @@ router.post("/logout", authStudent, async (req, res) => {
             activity: "User logout",
         });
         await newUserLog.save();
-
-        res.cookie("token", "", {
-            httpOnly: false,
-            expires: new Date(0),
-        }).send("User Logged Out");
+        res.send();
+        // res.cookie("token", "", {
+        //     httpOnly: false,
+        //     expires: new Date(0),
+        // }).send("User Logged Out");
     } catch (err) {
         console.error(err);
         res.status(500).send();

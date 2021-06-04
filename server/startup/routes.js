@@ -6,13 +6,16 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const path = require('path');
 const cors = require("cors");
 const methodOverride = require("method-override");
 
 module.exports = function (app) {
     //parser tools
     app.use(express.json());
-    app.use(bodyParser.json());
+    app.use(express.urlencoded({
+      extended: true
+    }));
     app.use(cookieParser());
     app.use(methodOverride("_method"));
     app.use(function (req, res, next) {
@@ -34,6 +37,9 @@ module.exports = function (app) {
             credentials: true,
         })
     );
+    //app.set('views', path.join(__dirname, 'views'));
+    app.set('view engine', 'jsx');
+    app.engine('jsx', require('express-react-views').createEngine());
 
     // set up routes
     app.use("/admin", require("../routes/adminRouter"));
