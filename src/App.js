@@ -26,8 +26,6 @@ import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
 import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
 
-import { NotificationContainer } from "react-light-notifications";
-
 import "./App.css";
 
 function App() {
@@ -204,7 +202,6 @@ function App() {
                 />
             )}
             <Footer />
-            <NotificationContainer />
         </div>
     );
 }

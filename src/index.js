@@ -7,7 +7,6 @@ import './index.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'semantic-ui-css/semantic.min.css'
-import "react-light-notifications/lib/main.css";
 import "@fontsource/montserrat";
 
 
