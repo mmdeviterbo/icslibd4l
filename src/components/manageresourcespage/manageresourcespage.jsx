@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import ManagementHeader from "../managementHeader";
 import FieldsContainerRes from "./filterFieldsResources";
 import ResourceTableContainer from "./resourceTableContainer";
@@ -10,29 +10,26 @@ import "../../styles/manageresources/manageResourcesStyle.css";
 
 const ManageResourcesPage = () => {
     const history = useHistory();
-    const [userInfo, setUserInfo] = useState(null);
-
+    // executes if the location is changed. (Opening modals)
     useEffect(() => {
         //if no user is logged in, redirect it to homepage  
         try{
             const jwt = localStorage.getItem(jwtPrivateKey);
             var userInfo = PersonService.decryptToken(jwt);
-            setUserInfo(userInfo);
+            if(userInfo?.userType!==1) return history.push("/home");
         }catch(err){
-            history.push("/home");
+            return history.push("/home");
         }
     },[]);
 
 
     return (
-        <>
-        {userInfo?.userType!==1? <div className="manage-resources-page-container">
+        <div className="manage-resources-page-container">
             <ManagementHeader type={"resource"} />
             <FieldsContainerRes />
             {/* <ResTableContainer resourceList={resourceList} /> */}
             <ResourceTableContainer />
-        </div> : history.push("/home")}
-        </>
+        </div>
     );
 };
 

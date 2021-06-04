@@ -104,7 +104,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "dev": "nodemon app.js ./server/index.js",
+        "dev": "nodemon ./server/index.js",
         "server": "node ./server/index.js"
     },
     "eslintConfig": {
