@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import FilterMenu from "./filterMenu";
 import { useHistory } from "react-router";
 import UserTable from "./userTable";
-import UserSearch from "./userSearch";
+// import UserSearch from "./userSearch";
 import ManagementHeader from "../managementHeader";
 
 import "../../styles/manageUserStyle.css";

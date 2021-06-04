@@ -25,6 +25,9 @@ import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
 import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
+
+import { NotificationContainer } from "react-light-notifications";
+
 import "./App.css";
 
 function App() {
@@ -63,7 +66,7 @@ function App() {
         try {
             const { data } = await PersonService.loginRegisterUser(userInfo);
             localStorage.setItem(jwtPrivateKey, data); //set token
-
+            
             // get current param, it must stay on where the user's current path
             window.location = window.location.pathname;
         } catch (err) {}
@@ -201,6 +204,7 @@ function App() {
                 />
             )}
             <Footer />
+            <NotificationContainer />
         </div>
     );
 }
