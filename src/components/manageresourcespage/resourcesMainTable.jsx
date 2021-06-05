@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+// import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -11,24 +11,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+// import Toolbar from "@material-ui/core/Toolbar";
+// import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+// import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+// import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import resourceService from "../../services/resourceService";
-// import DeletePopUpCont from "./deleteModalContainer";
-
-function createResourceData(
-    resid,
-    title,
-    author,
-    resclassif,
-    relatedcourses,
-    pubyr
-) {
-    return { resid, title, author, resclassif, relatedcourses, pubyr };
-}
+// import MessagePopUpCont from "../messageModalContainer";
+import dateFormat from "dateformat";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -57,39 +47,38 @@ function stableSort(array, comparator) {
 }
 
 const resHeadCells = [
-    { id: "resid", numeric: false, disablePadding: true, label: "ID" },
+    { id: "resid", numeric: false, disablePadding: true, label: "Resource ID" },
     { id: "title", numeric: false, disablePadding: false, label: "Title" },
     { id: "author", numeric: false, disablePadding: false, label: "Author" },
     {
         id: "resclassif",
         numeric: false,
         disablePadding: false,
-        label: "Classification",
+        label: "Type",
     },
-    {
-        id: "relatedcourses",
-        numeric: false,
-        disablePadding: false,
-        label: "Related Courses",
-    },
+    // {
+    //   id: "relatedcourses",
+    //   numeric: false,
+    //   disablePadding: false,
+    //   label: "Related Courses",
+    // },
     {
         id: "pubyr",
         numeric: true,
         disablePadding: false,
         label: "Publishing Year",
     },
-    { id: "act1", numeric: false, disablePadding: false, label: " " },
-    { id: "act2", numeric: false, disablePadding: false, label: " " },
+    {},
 ];
 
 function EnhancedTableHead(props) {
     const {
         classes,
-        onSelectAllClick,
+        // onSelectAllClick,
         order,
         orderBy,
-        numSelected,
-        rowCount,
+        // numSelected,
+        // rowCount,
         onRequestSort,
     } = props;
     const createSortHandler = (property) => (event) => {
@@ -99,16 +88,9 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    {/* <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          /> */}
-                </TableCell>
                 {resHeadCells.map((headCell) => (
                     <TableCell
+                        style={{ backgroundColor: "#FAFAFA" }}
                         className={classes.tablecell}
                         key={headCell.id}
                         align={"left"}
@@ -146,67 +128,6 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles((theme) => ({
-    root: {
-        paddingLeft: theme.spacing(6),
-        paddingRight: theme.spacing(1),
-        paddingTop: theme.spacing(4),
-    },
-    highlight:
-        theme.palette.type === "light"
-            ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
-            : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
-    title: {
-        fontSize: "2rem",
-        flex: "1 1 100%",
-    },
-}));
-
-const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}
-        >
-            {numSelected > 0 ? (
-                <Typography
-                    className={classes.title}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <h3
-                    style={{
-                        fontWeight: "normal",
-                        fontFamily: "Montserrat",
-                        fontSize: "2rem",
-                        paddingBottom: "0.5rem",
-                    }}
-                >
-                    Resources
-                </h3>
-            )}
-        </Toolbar>
-    );
-};
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
-
 const useStyles = makeStyles((theme) => ({
     root: {
         // fontSize: '2rem',
@@ -222,10 +143,13 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         // fontSize: '2rem',
-        minWidth: 750,
+        // minWidth: 750,
     },
     tablecell: {
-        fontSize: "1.5rem",
+        padding: "16px",
+        fontSize: "1.4rem",
+        fontWeight: "bold",
+        // color: "#FFFFFF",
     },
     visuallyHidden: {
         border: 0,
@@ -241,53 +165,62 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Main function
-const MainResourceTable = (props) => {
+const MainResourceTable = () => {
     const location = useLocation();
     const classes = useStyles();
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("resid");
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
+    // const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [rows, setRows] = React.useState([]);
     const [selectedEdit, setSelectedEdit] = useState();
+    const [resourceList, setResourceList] = useState([]);
 
-    useEffect(async () => {
-        try {
-            let tempRow = [...rows];
-            // const {data} = await resourceService.browseResources({type:"book"});
+    useEffect(() => {
+        async function fetchBooks() {
+            try {
+                const books = await resourceService.browseResources({
+                    type: "book",
+                });
+                const spThesis = await resourceService.browseResources({
+                    type: "thesis",
+                });
 
-            // for(let book of data){
-            //     tempRow.push(createResourceData(book.bookId, book.title, book.author[0].author_name, "Book", book.subject[0].subject, book.datePublished[0]));
-            // }
-            // setRows(tempRow);
-
-            const { data } = await resourceService.browseResources({
-                type: "Thesis",
-            });
-
-            //   const { data } = await resourceService.searchSpThesis({}, "/search");
-            for (let thesis of data) {
-                tempRow.push(
-                    createResourceData(
-                        thesis.sp_thesis_id,
-                        thesis.title,
-                        thesis.author[0] ? thesis.author[0].author_name : "N/A",
-                        thesis.type,
-                        thesis.type === "Thesis" ? "CMSC 199" : "CMSC 200",
-                        thesis.year
-                    )
-                );
+                let arr =
+                    books.data &&
+                    books.data.concat(spThesis.data && spThesis.data);
+                // arr.push(books.data);
+                // arr.push(spThesis.data);
+                console.log(arr);
+                setResourceList(arr);
+                setSelectedEdit(arr);
+                // setSpThesisList(spThesis_arr)
+            } catch (error) {
+                console.log(error);
             }
-            setRows(tempRow);
-            setSelectedEdit(data);
-        } catch (err) {
-            console.log("ERRROR 304");
         }
+        fetchBooks();
     }, []);
 
-    // kinda works, dont's remove yet
+    // useEffect(() => {
+    //   async function fetchSPT() {
+    //     try {
+    //       const spThesis = await resourceService.browseResources({
+    //         type: "thesis",
+    //       });
+    //       // setResourceList([]);
+    //       console.log(resourceList);
+    //       // setResourceList([...resourceList, spThesis.data]);
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   }
+    //   fetchSPT();
+    // }, []);
+
+    // console.log(selectedEdit)
+
     const DeleteBtn = (id) => {
         return (
             <Link
@@ -300,23 +233,63 @@ const MainResourceTable = (props) => {
                     },
                 }}
             >
-                <DeleteForeverIcon />
+                <i
+                    className="table-icons fa fa-trash-o"
+                    style={{
+                        margin: "10px",
+                        color: "red",
+                    }}
+                ></i>
             </Link>
         );
     };
 
-    const EditBtn = (id) => {
+    // const DeleteBookBtn = (id) => {
+    //   return(
+    //     <Link
+    //       to = {{
+    //         pathname :
+    //       }}
+    //   )
+    // }
+
+    const EditSPTBtn = (id) => {
         // console.log("30888 res-main-t-2");
         // console.log(id);
 
         return (
             <Link
                 to={{
-                    pathname: "/edit-resource",
+                    pathname: `/edit-spt/${id.id}`,
                     state: { sourceInfo: selectedEdit, id },
                 }}
             >
-                <MoreHorizIcon />
+                <i
+                    className="table-icons fa fa-pencil"
+                    style={{
+                        margin: "10px",
+                        color: "gray",
+                    }}
+                ></i>
+            </Link>
+        );
+    };
+
+    const EditBookBtn = (id) => {
+        return (
+            <Link
+                to={{
+                    pathname: `/edit-book/${id.id}`,
+                    state: { sourceInfo: selectedEdit, id },
+                }}
+            >
+                <i
+                    className="table-icons fa fa-pencil"
+                    style={{
+                        margin: "10px",
+                        color: "gray",
+                    }}
+                ></i>
             </Link>
         );
     };
@@ -329,32 +302,32 @@ const MainResourceTable = (props) => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = resourceList.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
+    // const handleClick = (event, name) => {
+    //   const selectedIndex = selected.indexOf(name);
+    //   let newSelected = [];
 
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            );
-        }
+    //   if (selectedIndex === -1) {
+    //     newSelected = newSelected.concat(selected, name);
+    //   } else if (selectedIndex === 0) {
+    //     newSelected = newSelected.concat(selected.slice(1));
+    //   } else if (selectedIndex === selected.length - 1) {
+    //     newSelected = newSelected.concat(selected.slice(0, -1));
+    //   } else if (selectedIndex > 0) {
+    //     newSelected = newSelected.concat(
+    //       selected.slice(0, selectedIndex),
+    //       selected.slice(selectedIndex + 1)
+    //     );
+    //   }
 
-        setSelected(newSelected);
-    };
+    //   setSelected(newSelected);
+    // };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -365,19 +338,19 @@ const MainResourceTable = (props) => {
         setPage(0);
     };
 
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
+    // const handleChangeDense = (event) => {
+    //   setDense(event.target.checked);
+    // };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows =
-        rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+        rowsPerPage -
+        Math.min(rowsPerPage, resourceList.length - page * rowsPerPage);
 
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -392,10 +365,13 @@ const MainResourceTable = (props) => {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
+                            rowCount={resourceList.length}
                         />
                         <TableBody>
-                            {stableSort(rows, getComparator(order, orderBy))
+                            {stableSort(
+                                resourceList,
+                                getComparator(order, orderBy)
+                            )
                                 .slice(
                                     page * rowsPerPage,
                                     page * rowsPerPage + rowsPerPage
@@ -413,11 +389,11 @@ const MainResourceTable = (props) => {
                                             selected={isItemSelected}
                                         >
                                             {/* {row} */}
+
                                             <TableCell
-                                                padding="checkbox"
-                                                className={classes.tablecell}
-                                            ></TableCell>
-                                            <TableCell
+                                                style={{
+                                                    width: "15%",
+                                                }}
                                                 component="th"
                                                 id={labelId}
                                                 scope="row"
@@ -425,70 +401,122 @@ const MainResourceTable = (props) => {
                                                 className={classes.tablecell}
                                             >
                                                 {/* unique id */}
-                                                <p
+                                                <div
                                                     style={{
-                                                        fontSize: "13px",
-                                                        fontWeight: "800",
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
                                                     }}
                                                 >
-                                                    {row.resid}
-                                                </p>
+                                                    {row && row.bookId
+                                                        ? row && row.bookId
+                                                        : row &&
+                                                          row.sp_thesis_id}
+                                                    {/* {row.id} */}
+                                                </div>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "20%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* title of resources */}
-                                                <p style={{ fontSize: "14px" }}>
-                                                    {row.title}
-                                                </p>
+                                                <div
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
+                                                    {row && row.title}
+                                                </div>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "15%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* author */}
-                                                <p style={{ fontSize: "14px" }}>
-                                                    {row.author}
-                                                </p>
+                                                <div
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
+                                                    {row.author &&
+                                                        row.author.map(
+                                                            (item, key) => (
+                                                                <div key={key}>
+                                                                    {
+                                                                        item.author_name
+                                                                    }
+                                                                </div>
+                                                            )
+                                                        )}
+                                                </div>
                                             </TableCell>
                                             <TableCell
+                                                style={{
+                                                    width: "12%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* classifcation */}
-                                                <p style={{ fontSize: "14px" }}>
-                                                    {row.resclassif}
-                                                </p>
+                                                <div
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
+                                                    {/* Checks if a resource is a book by using the bookId attribute as checker */}
+                                                    {row && row.bookId
+                                                        ? "Book"
+                                                        : row && row.type}
+                                                </div>
                                             </TableCell>
+
                                             <TableCell
-                                                className={classes.tablecell}
-                                                align="left"
-                                            >
-                                                {/* related courses */}
-                                                <p style={{ fontSize: "14px" }}>
-                                                    {row.relatedcourses}
-                                                </p>
-                                            </TableCell>
-                                            <TableCell
+                                                style={{
+                                                    width: "13%",
+                                                }}
                                                 className={classes.tablecell}
                                                 align="left"
                                             >
                                                 {/* publishing year */}
-                                                <p style={{ fontSize: "14px" }}>
-                                                    {row.pubyr}
-                                                </p>
+                                                <div
+                                                    style={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "normal",
+                                                    }}
+                                                >
+                                                    {row && row.bookId
+                                                        ? dateFormat(
+                                                              row.dateAcquired,
+                                                              "mmmm yyyy"
+                                                          )
+                                                        : row && row.year}
+                                                </div>
                                             </TableCell>
-                                            {/* <TableCell> <a className = "editResourceBtn" href="#"> <MoreHorizIcon/> </a></TableCell> */}
-                                            <TableCell>
-                                                {" "}
-                                                <EditBtn id={row.resid} />{" "}
-                                            </TableCell>
-                                            <TableCell>
-                                                {" "}
-                                                <DeleteBtn
-                                                    id={row.resid}
-                                                />{" "}
+                                            <TableCell
+                                                style={{
+                                                    width: "10%",
+                                                    textAlign: "center",
+                                                    fontSize: "1.5rem",
+                                                }}
+                                            >
+                                                {row.bookId ? (
+                                                    <EditBookBtn
+                                                        id={row.bookId}
+                                                    />
+                                                ) : (
+                                                    <EditSPTBtn
+                                                        id={row.sp_thesis_id}
+                                                    />
+                                                )}
+                                                <DeleteBtn id={row && row.id} />
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -496,7 +524,7 @@ const MainResourceTable = (props) => {
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
+                                        height: 53 * emptyRows,
                                     }}
                                 >
                                     <TableCell colSpan={6} />
@@ -508,7 +536,7 @@ const MainResourceTable = (props) => {
                 <TablePagination
                     rowsPerPageOptions={[5]}
                     component="div"
-                    count={rows.length}
+                    count={resourceList.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}

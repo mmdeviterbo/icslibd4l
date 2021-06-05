@@ -18,7 +18,6 @@ Request Object:
    email: email,
    fullName: fullName 
 }
-
 Response Object:
 {
     googleId: googleId,
@@ -116,7 +115,6 @@ router.post("/create", async (req, res) => {
 /**************************************************** 
 Request Object:
 NULL
-
 Response Object:
 {
     googleId: googleId,
@@ -145,7 +143,6 @@ Request Object:
     googleId: googleId,
     newNickname: newNickname,
 }
-
 Response Object:
 {
     googleId: googleId,
@@ -226,7 +223,6 @@ Request Object:
 {
     googleId: googleId,
 }
-
 Response String: 
 "Entry Deleted"
 ********************************************************/
@@ -236,17 +232,21 @@ router.delete("/delete", authStudent, async (req, res) => {
     res.send("Entry Deleted");
 });
 
+router.get("/", async (req, res) => {
+    console.log("here");
+    console.log(req.cookies);
+    res.send("done");
+});
 //logout current signed in user. deletes cookie for user
 /**************************************************** 
 Request Object:
 {
     googleId: googleId,
 }
-
 Response String:
 "User Logged Out"
 ********************************************************/
-router.post("/logout", authStudent, async (req, res) => {
+router.post("/logout", async (req, res) => {
     const token = req.cookies.token;
     // Encryption settings
     const encryption = {
@@ -268,13 +268,66 @@ router.post("/logout", authStudent, async (req, res) => {
             activity: "User logout",
         });
         await newUserLog.save();
+        // res.send();
         res.cookie("token", "", {
             httpOnly: false,
             expires: new Date(0),
         }).send("User Logged Out");
     } catch (err) {
         console.error(err);
-        res.status(500).send(err);
+        res.status(500).send();
+    }
+});
+
+//find specific person
+/**************************************************** 
+Request Object:
+googleId
+Response Object: 
+"Specific person"
+********************************************************/
+router.post("/findperson", async (req, res) => {
+    try {
+        const { googleId } = req.body;
+
+        if (!googleId)
+            return res.status(400).json({
+                errMessage: "Please enter All required fields. ",
+            });
+        const existingUser = await UserModel.findOne({ googleId });
+
+        //NEW IMPLEMENTATION=
+        const publicData = null;
+        // Data that will only be available to users who know encryption details.
+        const privateData = {
+            googleId: existingUser.googleId,
+            email: existingUser.email,
+            fullName: existingUser.fullName,
+            nickname: existingUser.nickname,
+            userType: existingUser.userType,
+        };
+
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: "aes-256-cbc",
+        };
+
+        // JWT Settings
+        const jwtDetails = {
+            secret: jwtPublicKey, // to sign the token
+            expiresIn: "24h",
+        };
+        const token = await jwtEncrypt.generateJWT(
+            jwtDetails,
+            publicData,
+            encryption,
+            privateData,
+            "ICSlibrary"
+        );
+        res.send(token);
+    } catch (err) {
+        res.status(404).json({ errMessage: "Not foundddd" });
     }
 });
 

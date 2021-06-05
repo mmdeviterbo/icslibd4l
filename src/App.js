@@ -1,30 +1,35 @@
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { jwtPrivateKey, jwtEncryptionKey } from "./config.json";
-import * as jwtEncrypt from "jwt-token-encrypt";
+import { jwtPrivateKey } from "./config.json";
 import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
-// import ManageResPage from './components/manageresourcespage/manageResourcesPage'
-// import AddResourcePage from "./components/addresourcepage/addNewResourcesPage";
-import EditResourcePage from "./components/editresourcepage/editResourceForm";
+import About from "./components/about/about";
+
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
-import AddBookFormContainer from "./components/addresourcepage/addBookFormContainer";
+import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
+import EditSPTFormContainer from "./components/editresourcepage/editSPTForm";
+
+import AddBookPage from "./components/addresourcepage/addBookPage";
+import EditBookFormContainer from "./components/editresourcepage/editBookForm";
+import ReadingBookContainer from "./components/viewresources/readingBookContainer";
+
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
 import ManageUser from "./components/manageuserpage/manageUserPage";
+
 import PersonService from "./services/personService";
 import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
-import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
-import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 import BrowseResources from "./components/browseresources/browseResources";
-import UpdateResourceData from "./components/crud/update";
-import About from "./components/about/about";
-import GetResources from "./components/manageresourcespage/getResources";
+import ConfirmChangeModal from "./components/modal/confirmChangesModal";
+import Search from "./components/searchResult/advancedSearch.jsx";
+// import GetResources from "./components/manageresourcespage/getResources";
+import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
+
 import "./App.css";
 
 function App() {
-    const [user, setUser] = useState(null); //fullname, email, userType (integer)
+    const [user, setUser] = useState(null); //fullName, email, userType (integer)
 
     const browseRef = useRef(null);
     const latestAcqRef = useRef(null);
@@ -35,63 +40,35 @@ function App() {
     const background = location.state && location.state.background;
 
     useEffect(() => {
-        getCurrentToken();
-    }, []);
+        // see if there's current user logged in the browser
+        const getCurrentToken = async () => {
+            try {
+                //to know if there's is currently logged in
+                const jwt = localStorage.getItem(jwtPrivateKey);
+                var userInfo = PersonService.decryptToken(jwt);
+                setUser(userInfo);
 
-    // see if there's current user logged in the browser
-    const getCurrentToken = () => {
-        try {
-            const jwt = localStorage.getItem(jwtPrivateKey);
-            const encryption = {
-                key: jwtEncryptionKey,
-                algorithm: "aes-256-cbc",
-            };
-            const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
-            const userInfo = decrypted.data;
-            setUser(userInfo);
-        } catch (err) {}
-    };
+                // if there is (no error), then go to backend and get the updated userInfo
+                const { data } = await PersonService.getSpecificPerson({
+                    googleId: userInfo.googleId,
+                });
+                userInfo = PersonService.decryptToken(data);
+                setUser(userInfo);
+            } catch (err) {}
+        };
+        getCurrentToken();
+    },[]);
 
     // login/register a user
     const loginRegisterUser = async (userInfo) => {
         try {
             const { data } = await PersonService.loginRegisterUser(userInfo);
             localStorage.setItem(jwtPrivateKey, data); //set token
-            window.location = "/home";
+            
+            // get current param, it must stay on where the user's current path
+            window.location = window.location.pathname;
         } catch (err) {}
     };
-
-    // SAMPLE DATA ONLY
-    const sampleSP = {
-        title: "Adaptive Identification of Rice and Corn Pests (Order Hemiptera) using Back Propagation Neural Network Based on Intensity Histogram",
-        type: "Special Problem",
-        abstract:
-            "Pest identification through image processing using Back Propagation Neural Network with Intensity Histogram as the feature used as basis for classification yielded an accuracy of 100% using 15 test images from each species. However, the application is only limited to pest images that have distinguishable backgrounds. The reliability of the system can be further increased by adding more training data with plain background. This research aims to help users by giving additional information about the pest identified by the system such as description, treatment, and control.",
-        year: 1969,
-        authorList: ["Concepcion L. Khan", "John Viscel M. Sangkal"],
-        adviserList: [
-            "Maria Erika Dominique Cunanan",
-            "Katrina Joy M. Abriol-Santos",
-        ],
-        keywords: ["CMSC191", "CMSC173", "CMSC69"],
-    };
-
-    const sampleBook = {
-        title: "The Little Prince",
-        authorList: ["Antoine de Saint-Exupéry"],
-        physicalDesc: "Paperback : 96 pages \n ",
-        year: 1943,
-        publisher: "Mariner Books; 1st edition (May 15, 2000)",
-        numOfCopies: 5,
-        subjects: [
-            "moral education",
-            "personalism",
-            "dialogic approach",
-            "educational relationship",
-            "educational interaction",
-        ],
-    };
-    // CLEAR UNTIL HERE
 
     return (
         <div className="App" ref={appRef}>
@@ -99,8 +76,8 @@ function App() {
                 loginRegisterUser={loginRegisterUser}
                 browseRef={browseRef}
                 user={user}
+                appRef={appRef}
             />
-
             <Switch location={background || location}>
                 <Route
                     path="/home"
@@ -119,75 +96,109 @@ function App() {
                 {/* <Route path="/view-user/:googleId" component={ViewUser}></Route> */}
                 <Route
                     path="/account-setting/"
-                    component={ViewUserPage}></Route>
+                    component={ViewUserPage}
+                ></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
-                {/* <Route path="/view-resources" component={BrowseResources}></Route> */}
-                <Route
-                    path="/update-sp-thesis"
-                    component={UpdateResourceData}></Route>
-                {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
 
+                <Route
+                    path="/search"
+                    render={() => <Search appRef={appRef} />}
+                />
+
+                {/* <Route
+                    path="/update-sp-thesis"
+                    component={UpdateResourceData}></Route> */}
+                {/* <Route
+                    path="/manage-resources"
+                    component={ManageResPage}></Route> */}
+
+                {/* placeholder componenets */}
                 <Route
                     path="/browse-books"
-                    render={() => <BrowseResources type={"book"} />}></Route>
+                    render={() => <BrowseResources type={"book"} />}
+                ></Route>
                 <Route
                     path="/browse-special-problems"
-                    render={() => (
-                        <BrowseResources type={"Special Problem"} />
-                    )}></Route>
+                    render={() => <BrowseResources type={"Special Problem"} />}
+                ></Route>
                 <Route
                     path="/browse-theses"
-                    render={() => <BrowseResources type={"Thesis"} />}></Route>
+                    render={() => <BrowseResources type={"Thesis"} />}
+                ></Route>
 
                 <Route
+                    path="/sp-thesis/:id"
+                    render={(props) => (
+                        <ReadingSPTContainer user={user} {...props} />
+                    )}
+                ></Route>
+
+                <Route
+                    path="/book/:id"
+                    render={(props) => (
+                        <ReadingBookContainer appRef={appRef} {...props} />
+                    )}
+                ></Route>
+                {/* placeholder componenets */}
+
+                {/* <Route
                     path="/manage-resources"
                     render={() => (
                         <GetResources resourceType={"Book"} />
-                    )}></Route>
+                    )}></Route> */}
 
-                <Route path="/manage-users" component={ManageUser}></Route>
+                {/* sp/thesis/Special Problem/Thesis ang types */}
+                {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
+                <Route
+                    path="/manage-resources"
+                    component={ManageResourcesPage}
+                ></Route>
+                <Route
+                    path="/manage-users"
+                    render={() => <ManageUser user={user} />}
+                ></Route>
 
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
+                <Route path="/add-new-book" component={AddBookPage}></Route>
                 <Route
-                    path="/add-new-book"
-                    component={AddBookFormContainer}></Route>
-                <Route
-                    path="/edit-resource"
-                    component={EditResourcePage}></Route>
-                <Route
-                    path="/view-sp-thesis"
-                    // component={ReadingSPTContainer}
-                    render={() => (
-                        <ReadingSPTContainer resourceData={sampleSP} />
-                    )}></Route>
+                    path="/edit-spt/:id"
+                    component={EditSPTFormContainer}
+                ></Route>
 
-                {/* <Route path ="/view-sp-thesis" component={ReadingSPTContainer}></Route> */}
                 <Route
-                    path="/view-book"
-                    render={() => (
-                        <ReadingBookContainer sampleBook={sampleBook} />
-                    )}></Route>
+                    path="/edit-book/:id"
+                    component={EditBookFormContainer}
+                ></Route>
+
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Route exact path="/not-found" component={Notfound}></Route>
                 <Redirect exact from="/" to="/home" />
                 <Redirect to="/not-found" />
             </Switch>
+
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"
                     children={<DeleteModalContainer />}
                 />
             )}
+
             {background && (
                 <Route
                     path="/manage-users/delete-user"
-                    children={<DeleteModalContainer />}
+                    children={<DeleteModalContainer user={user} />}
                 />
             )}
             {background && (
                 <Route
                     path="/account-setting/remove-account"
                     children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/save-changes"
+                    children={<ConfirmChangeModal user={user} />}
                 />
             )}
             <Footer />

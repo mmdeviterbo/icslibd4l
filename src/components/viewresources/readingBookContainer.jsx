@@ -1,24 +1,43 @@
-import React from "react";
-import TitleAuthorHere from "./titleContainer";
+import React, { useEffect } from "react";
+import TitleContainer from "./titleContainer";
 import BookCoverandInfo from "./bookCoverInfoSide";
-import BookPhysDescription from "./bookPhysicalDescription";
+// import BookPhysDescription from "./bookPhysicalDescription";
 import "../../styles/viewspt/viewSPTStyle.css";
 
-const ReadingBookContainer = ({ sampleBook }) => {
+const ReadingBookContainer = (props) => {
+    const resourceData =
+        (props.location && props.location.state.resourceData) || {};
+
+    useEffect(() => {
+        const {appRef} = props;
+        appRef.current &&
+        appRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }, []);
     return (
-        <div className="bookpagecontainer">
-            <TitleAuthorHere
-                title={sampleBook.title}
-                authorList={sampleBook.authorList}
-                year={sampleBook.year}
+        <div className="book-page-container">
+            <TitleContainer
+                title={resourceData.title}
+                authorList={resourceData.author}
+                year={resourceData.datePublished}
+                item={"book"}
             />
+
             <div className="bookcover-and-desc">
-                <BookCoverandInfo
-                    publisher={sampleBook.publisher}
-                    numOfCopies={sampleBook.numOfCopies}
-                    subjects={sampleBook.subjects}
+                <img
+                    style={{ height: "400px", width: "300px", margin: "0% 6%" }}
+                    src="https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg"
                 />
-                <BookPhysDescription physicalDesc={sampleBook.physicalDesc} />
+                <BookCoverandInfo
+                    isbn={resourceData.bookId}
+                    publisher={resourceData.publisher}
+                    numOfCopies={resourceData.numberOfCopies}
+                    subjects={resourceData.subject}
+                    physicalDesc={resourceData.physicalDesc}
+                />
+                {/* <BookPhysDescription physicalDesc={resourceData.physicalDesc} /> */}
             </div>
         </div>
     );

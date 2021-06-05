@@ -11,7 +11,7 @@ const ResourcesTableContainer = () => {
             <MainResourceTable />
             <br />
 
-            <div class="addBtns">
+            <div className="addBtns">
                 <AddNewResource /> {/* Add book */}
                 <AddNewSPT /> {/* Add Sp/Thesis */}
             </div>

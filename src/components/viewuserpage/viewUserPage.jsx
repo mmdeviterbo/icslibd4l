@@ -1,16 +1,25 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useHistory } from 'react-router-dom';
 import ProfileContainer from "./profileContainer";
+import { jwtPrivateKey } from "./../../config.json";
 
 export default function ViewUserPage() {
-    // from manage users (to be fixed for sprint3)
-    // const { users } = useContext(GlobalContext);
+    const history = useHistory();
 
-    // const history = useHistory();
-
-    // const googleId = user.googleId;
+    useEffect(() => {
+        //if no user is logged in, redirect it to homepage  
+        try{
+            if(!localStorage.getItem(jwtPrivateKey)) history.push("/home");
+        }catch(err){
+            history.push("/home");
+        }
+    }, []);
+    
     return (
         <>
-            <div className="view-user-info-container">
+            <div
+                className="view-user-info-container"
+                style={{ minHeight: "90vh" }}>
                 <ProfileContainer />
             </div>
         </>
