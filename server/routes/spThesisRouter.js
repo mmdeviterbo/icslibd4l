@@ -1617,6 +1617,7 @@ body:
 file: pdf
 file: jpeg
 file: pdf
+file: any
 
 Response String:
 "Entry Updated"
