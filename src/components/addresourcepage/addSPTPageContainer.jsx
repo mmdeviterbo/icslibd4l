@@ -7,7 +7,6 @@ import AddNewSPThesisForm from "./addNewSPTPage";
 const AddSPThesisPage = () => {
     return (
         <div className="add-resource-page-container">
-             {/* header at the side */}
             <AddResourcesHeader/>
             <AddNewSPThesisForm />
         </div>

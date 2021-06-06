@@ -200,24 +200,6 @@ const MainResourceTable = () => {
     fetchBooks();
   }, []);
 
-  // useEffect(() => {
-  //   async function fetchSPT() {
-  //     try {
-  //       const spThesis = await resourceService.browseResources({
-  //         type: "thesis",
-  //       });
-  //       // setResourceList([]);
-  //       console.log(resourceList);
-  //       // setResourceList([...resourceList, spThesis.data]);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //   fetchSPT();
-  // }, []);
-
-  // console.log(selectedEdit)
-
   const DeleteBtn = ({ id, type }) => {
     // console.log(id);
     // console.log(type);

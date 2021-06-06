@@ -264,31 +264,20 @@ const AddNewSPThesisForm = () => {
             {/* ID Field */}
             {/* Disabled, uneditable */}
             {/* how to get generated ID? */}
-            {/* <div className="primaryfields">
+            <div className="primaryfields">
                 <label htmlFor="resId">ID: &nbsp; </label>
                 <input
                 required
                 type="text"
                 id="resId"
-                value = "tempId00001"
-                disabled
+                // value = 
+                // disabled
                 onChange={(event) => {
                     setId(event.target.value);
                 }}
                 />
-            </div> */}
-            {/* Title Field */}
-            <div className="primaryfields">
-              <label htmlFor="resId">ID: &nbsp; </label>
-              <input
-                type="text"
-                id="resId"
-                required
-                onChange={(event) => {
-                  setId(event.target.value);
-                }}
-              />
             </div>
+            
             {/* Title Field */}
             <div className="primaryfields">
               <label htmlFor="resTitle">Title: &nbsp; </label>
@@ -308,6 +297,8 @@ const AddNewSPThesisForm = () => {
                 type="number"
                 id="datePublished"
                 required
+                min={1908}
+                max={9999}
                 defaultValue={0}
                 onChange={(event) => {
                   if (event.target.value < 0) {

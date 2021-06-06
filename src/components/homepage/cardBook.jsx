@@ -1,5 +1,5 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function CardBook({imageSrc, title, linkTo, setHoverText, year, book}) {
     return (
@@ -18,12 +18,12 @@ export default function CardBook({imageSrc, title, linkTo, setHoverText, year, b
 }
 
 const cardContainer = {
-    width:"150px",   
-    color:"black",
-    margin:"8px",
-    transition:"0.3s",
-    transform:"scale(1)",
-}
+    width: "150px",
+    color: "black",
+    margin: "8px",
+    transition: "0.3s",
+    transform: "scale(1)",
+};
 const imgContainer = {
     height:"90%",
     position:"relative"

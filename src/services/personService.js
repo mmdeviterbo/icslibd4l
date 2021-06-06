@@ -1,5 +1,6 @@
 import http from "./httpService";
-import { apiEndpoint } from "../config.json";
+import { apiEndpoint, jwtEncryptionKey } from "../config.json";
+import * as jwtEncrypt from "jwt-token-encrypt";
 
 // login/register a person (guess, student, admin, faculty)
 const loginRegisterUser = (userInfo) => {
@@ -68,6 +69,19 @@ const updateClassification = (userInfo) => {
     withCredentials: true,
   });
 };
+
+
+//decrypt data
+const decryptToken = (jwt) => {
+  const encryption = {
+      key: jwtEncryptionKey,
+      algorithm: "aes-256-cbc",
+  };
+  return jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary").data;
+};
+
+
+
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
     loginRegisterUser,
@@ -78,6 +92,7 @@ const exportFunctions = {
     readAllUsers,
     getSpecificPerson,
     updateClassification,
+    decryptToken
 };
 
 export default exportFunctions;

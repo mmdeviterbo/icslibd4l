@@ -218,7 +218,7 @@ router.post(
         { name: "manuscript", maxCount: 1 },
         { name: "poster", maxCount: 1 },
         { name: "journal", maxCount: 1 },
-        { name: "source code", maxCount: 1 }
+        { name: "source code", maxCount: 1 },
     ]),
     async (req, res) => {
         try {
@@ -252,11 +252,9 @@ router.post(
                 !authors ||
                 !keywords
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        errorMessage: "Please enter all required fields.",
-                    });
+                return res.status(400).json({
+                    errorMessage: "Please enter all required fields.",
+                });
             }
 
             // search if book exists
@@ -383,7 +381,6 @@ router.get("/download", async (req, res) => {
         }
     );
 });
-
 
 // get the poster of a particular sp/thesis
 /**************************************************** 
@@ -601,6 +598,12 @@ Response Object: Array of book/sp/thesis
 ]
 ********************************************************/
 router.get("/search", async (req, res) => {
+    // Search and Filter Resources
+    // http://localhost:3001/thesis/search
+    // REQUEST:
+    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
+    // RESPONSE:
+    // - array of objects (book/sp/thesis)
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -612,7 +615,6 @@ router.get("/search", async (req, res) => {
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
-
         // FILTER ENTRIES in final_arr
 
         // Filter by year (year in request can be string or number)
@@ -621,7 +623,7 @@ router.get("/search", async (req, res) => {
             final_arr = final_arr.filter((item) => {
                 if ("year" in item) {
                     return item.year == yearFilter;
-                }else if ("datePublished" in item) {
+                } else if ("datePublished" in item) {
                     return item.datePublished.getFullYear() == yearFilter;
                 }
             });
@@ -643,13 +645,13 @@ router.get("/search", async (req, res) => {
         if ("author" in req.query) {
             let authorFilter = req.query.author.toLowerCase();
             final_arr = final_arr.filter((item) => {
-                if ("author" in item){
+                if ("author" in item) {
                     return item.author.some((auth) => {
                         return auth.author_name
                             .toLowerCase()
                             .includes(authorFilter);
                     });
-                }else{
+                } else {
                     return item.authors.some((auth) => {
                         return auth.author_name
                             .toLowerCase()
@@ -668,8 +670,10 @@ router.get("/search", async (req, res) => {
             final_arr = final_arr.filter((item) => {
                 if ("advisers" in item) {
                     return item.advisers.some((advi) => {
-                        return (advi.adviser_fname.toLowerCase()==fnameFilter 
-                        && advi.adviser_lname.toLowerCase()==lnameFilter);
+                        return (
+                            advi.adviser_fname.toLowerCase() == fnameFilter &&
+                            advi.adviser_lname.toLowerCase() == lnameFilter
+                        );
                     });
                 }
             });
@@ -692,9 +696,11 @@ router.get("/search", async (req, res) => {
         // Filter by keywords (case insensitive, checks for substring match)
         // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
         if ("keyword" in req.query) {
-            try{
+            try {
                 let keywordArrayFilter = req.query.keyword;
-                keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
+                keywordArrayFilter = keywordArrayFilter.map((k) =>
+                    k.toLowerCase()
+                );
                 final_arr = final_arr.filter((item) => {
                     if ("keywords" in item) {
                         return item.keywords.some((keyw) => {
@@ -706,17 +712,17 @@ router.get("/search", async (req, res) => {
                         });
                     }
                 });
-            }catch(error){
-                if(error instanceof SyntaxError){
+            } catch (error) {
+                if (error instanceof SyntaxError) {
                     console.log("SyntaxError: Invalid req.query.keyword");
-                }else{
+                } else {
                     console.log(error);
                 }
                 res.status(400).send(error);
             }
         }
 
-        if (!res.headersSent){
+        if (!res.headersSent) {
             res.send(final_arr); // filtered search results
         }
     }
@@ -814,7 +820,7 @@ router.get("/search", async (req, res) => {
             [
                 {
                     $match: {
-                        author_name: {
+                        sp_thesis_keyword: {
                             $regex: req.query.search,
                             $options: "i",
                         },
@@ -874,6 +880,7 @@ router.get("/search", async (req, res) => {
                                 },
                             },
                         ],
+
                         (error, results) => {
                             if (error) {
                                 res.send(error);
@@ -1660,7 +1667,7 @@ router.put(
         { name: "manuscript", maxCount: 1 },
         { name: "poster", maxCount: 1 },
         { name: "journal", maxCount: 1 },
-        { name: "source code", maxCount: 1 }
+        { name: "source code", maxCount: 1 },
     ]),
     async (req, res) => {
         const {

@@ -86,7 +86,7 @@ const AddBookFormContainer = () => {
       console.log(image);
       formData.append("body", JSON.stringify(userInput));
       formData.append("file", image);
-      const { data } = await ResourceServices.addBook(formData);
+      await ResourceServices.addBook(formData);
 
       setSuccess("success");
       setShow(true);
@@ -366,7 +366,7 @@ const AddBookFormContainer = () => {
                 }}
               />
             </div>
-            <br />
+            <br/><br/><br/>
             <button type="submit" id="saveResource">
               Save
             </button>

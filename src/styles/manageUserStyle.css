@@ -1,71 +1,71 @@
 .user-search-container {
-  height: 20vh;
-  display: flex;
-  place-items: center;
-  padding-top: 50px;
-  font-weight: bold;
-  font-size: 2.75rem;
-  z-index: -1;
+    height: 20vh;
+    display: flex;
+    place-items: center;
+    padding-top: 50px;
+    font-weight: bold;
+    font-size: 2.75rem;
+    z-index: -1;
 }
 
 .input-group {
-  padding: 0px 100px;
+    padding: 0px 100px;
 }
 
 /* filter */
 
 .user-clrbtn {
-  display: flex;
-  margin-top: 0.4rem;
+    display: flex;
+    margin-top: 0.4rem;
 }
 /* icon */
 .user-clrbtn svg {
-  vertical-align: -0.3rem;
-  padding-bottom: 0.2rem;
-  padding-right: 0.3rem;
+    vertical-align: -0.3rem;
+    padding-bottom: 0.2rem;
+    padding-right: 0.3rem;
 }
 .user-filter {
-  width: 17%;
-  font-size: 14px;
+    width: 17%;
+    font-size: 14px;
 }
 
 #user-filters-clear {
-  vertical-align: middle;
-  /* text-decoration: underline; */
-  color: #828282;
+    vertical-align: middle;
+    /* text-decoration: underline; */
+    color: #828282;
 }
 
 /* Table */
 
 .usertable-container {
-  width: 100%;
-  padding-top: 1.5rem;
-  padding-left: 4rem;
-  padding-right: 4rem;
-  padding-bottom: 4rem;
-  background-color: #f5f5f5;
-  z-index: -2;
+    width: 100%;
+    padding-top: 1.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 4rem;
+    background-color: #f5f5f5;
+    z-index: -2;
 }
 
 .table-header-text {
-  font-weight: bold;
-  font-size: 1.5rem;
+    font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .user-table-cell {
-  align-items: left;
+    align-items: left;
 }
 
-.table-icons{
-  -webkit-user-select: none !important;  /* Chrome all / Safari all */
-  -moz-user-select: none !important;     /* Firefox all */
-  -ms-user-select: none !important;      /* IE 10+ */
-  -o-user-select: none !important;
-  user-select: none !important;
+.table-icons {
+    -webkit-user-select: none !important; /* Chrome all / Safari all */
+    -moz-user-select: none !important; /* Firefox all */
+    -ms-user-select: none !important; /* IE 10+ */
+    -o-user-select: none !important;
+    user-select: none !important;
 }
 
 .table-icons:hover {
-  transition: transform 100ms ease, box-shadow 125ms ease !important;
-  transform: scale(1.25) !important;
-  cursor: pointer;
+    transition: transform 100ms ease, box-shadow 125ms ease !important;
+    transform: scale(1.25) !important;
+    cursor: pointer;
 }
