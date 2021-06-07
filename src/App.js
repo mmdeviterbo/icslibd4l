@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect, useHistory } from "react-router-dom";
+import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { jwtPrivateKey } from "./config.json";
 import Footer from "./components/footer";
@@ -38,7 +38,8 @@ function App() {
     const newsRef = useRef(null);
     const appRef = useRef(null);
 
-    const history = useHistory();
+    const location = useLocation();
+    const background = location.state && location.state.background;
 
     useEffect(() => {
         // see if there's current user logged in the browser
@@ -80,7 +81,7 @@ function App() {
                 user={user}
                 appRef={appRef}
             />
-            <Switch>
+            <Switch location={background || location}>
                 <Route
                     path="/home"
                     render={() => (
@@ -138,28 +139,7 @@ function App() {
                     path="/manage-users"
                     render={() => <ManageUserPage user={user} />}
                 />
-                <Route
-                    path="/manage-resources/delete-sp-thesis"
-                    children={<DeleteModalContainer />}
-                />
 
-                <Route
-                    path="/manage-users/delete-user"
-                    children={<DeleteModalContainer user={user} />}
-                />
-                <Route
-                    path="/account-setting/remove-account"
-                    children={<DeleteModalContainer user={user} />}
-                />
-                <Route
-                    path="/manage-users/save-changes"
-                    children={<ConfirmChangeModal user={user} />}
-                />
-
-                <Route
-                    path="/view-activitylogs/clear-activitylogs"
-                    children={<DeleteModalContainer />}
-                />
                 <Route path="/add-new-spt" component={AddSPThesisPage} />
                 <Route path="/add-new-book" component={AddBookPage}></Route>
                 <Route path="/edit-spt/:id" component={EditSPTFormContainer} />
@@ -171,11 +151,38 @@ function App() {
                     path="/view-activitylogs"
                     component={activityLogsContainer}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
+
                 <Route exact path="/not-found" component={Notfound}></Route>
                 <Route exact path="/unauthorized" component={Unauthorized} />
                 <Redirect exact from="/" to="/home" />
                 <Redirect to="/not-found" />
             </Switch>
+
+            {background && (
+                <Route
+                    path="/manage-resources/delete-sp-thesis"
+                    children={<DeleteModalContainer />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/delete-user"
+                    children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/account-setting/remove-account"
+                    children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/save-changes"
+                    children={<ConfirmChangeModal user={user} />}
+                />
+            )}
+
             <Footer />
         </div>
     );
