@@ -200,26 +200,14 @@ router.get("/display_latest", async (req, res) => {
 
 /**************************************************** 
 Request Object:
-req object:JSON
-book: {
-    oldBookId, (will remove)
-    bookId,
-    title,
-    ISBN,
-    authors,
-    subjects,
-    physicalDesc,
-    publisher,
-    numberOfCopies,
-    bookCoverLink
+req object: address parameter
+{
+    bookId
 }
-file: jpeg/png
-res String: 
-"Entry Updated"
-********************************************************/
-router.put("/update", authAdmin, async (req, res) => {
-    const {
-        oldBookId,
+
+res object: array containing book, book_authors, and book_subjects
+[
+    {
         bookId,
         title,
         ISBN,
@@ -230,7 +218,90 @@ router.put("/update", authAdmin, async (req, res) => {
         numberOfCopies,
         bookCoverLink,
         datePublished,
-        dateAcquired,
+        dateAcquired
+    },
+    [
+        NOTE: can be multiple
+        {
+            bookId,
+            author_fname,
+            author_lname,
+            author_name
+        } 
+    ],
+    [
+        NOTE: can be multiple
+        {
+            bookId,
+            subject
+        } 
+    ]
+]
+
+file: jpeg/png
+res String: 
+"Entry Updated"
+********************************************************/
+
+router.get("/search-book/:bookId", async (req, res)=>{
+    var returnObject = [];
+    const bookIdHolder = req.params.bookId;
+   
+    if(!bookIdHolder){
+        return res.status(404).json({ errorMessage: "Not found. No bookID in parameters." });
+    }
+
+    try{
+        const BookEntry = await bookModel.findOne({bookId:bookIdHolder});
+        if(!BookEntry){
+            return res.status(404).json({errorMessage: "Entry not found."});
+        }
+
+        const BookAuthors = await bookAuthorModel.find({bookId:bookIdHolder});
+        const BookSubjects = await bookSubjectModel.find({bookId:bookIdHolder});
+    
+        returnObject.push(BookEntry);
+        returnObject.push(BookAuthors);
+        returnObject.push(BookSubjects);
+        res.send(returnObject);
+    }catch{
+        return res.status(404).json({errorMessage: "Not found."});
+    }
+});
+
+/**************************************************** 
+Request Object:
+req object:JSON
+book: {
+    bookId,
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    bookCoverLink,
+    datePublished,
+    dateAcquired
+}
+file: jpeg/png
+res String: 
+"Entry Updated"
+********************************************************/
+router.put("/update", authAdmin, async (req, res) => {
+    const {
+        bookId,
+        title,
+        ISBN,
+        authors,
+        subjects,
+        physicalDesc,
+        publisher,
+        numberOfCopies,
+        bookCoverLink,
+        datePublished,
+        dateAcquired
     } = req.body;
 
     // verification: incomplete fields
@@ -256,7 +327,7 @@ router.put("/update", authAdmin, async (req, res) => {
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
             await bookModel.findOne(
-                { bookId: oldBookId },
+                { bookId: bookId },
                 (err, updatedBook) => {
                     updatedBook.title = title;
                     updatedBook.ISBN = ISBN;
@@ -318,8 +389,8 @@ router.put("/update", authAdmin, async (req, res) => {
 
 /**************************************************** 
 Request Object:
-req object:JSON
-book: {
+req object: address parameter
+{
     bookId
 }
 res String: 
@@ -330,7 +401,7 @@ router.delete("/delete/:bookId", authAdmin, async (req, res) => {
     const bookIdHolder = req.params.bookId;
 
     if(!bookIdHolder){
-        return res.status(404).json({ errorMessage: "Not found." });
+        return res.status(404).json({ errorMessage: "Not found. No bookID in parameters." });
     }
 
     try {      
