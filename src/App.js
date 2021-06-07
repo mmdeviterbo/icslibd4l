@@ -142,6 +142,7 @@ function App() {
                     path="/manage-resources/delete-sp-thesis"
                     children={<DeleteModalContainer />}
                 />
+
                 <Route
                     path="/manage-users/delete-user"
                     children={<DeleteModalContainer user={user} />}
@@ -153,6 +154,11 @@ function App() {
                 <Route
                     path="/manage-users/save-changes"
                     children={<ConfirmChangeModal user={user} />}
+                />
+
+                <Route
+                    path="/view-activitylogs/clear-activitylogs"
+                    children={<DeleteModalContainer />}
                 />
                 <Route path="/add-new-spt" component={AddSPThesisPage} />
                 <Route path="/add-new-book" component={AddBookPage}></Route>

@@ -8,50 +8,11 @@ import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import dateFormat from "dateformat";
-import ClearLogs from "./clearLogs";
+import PersonService from "../../services/personService";
+import { Link, useLocation, useHistory } from "react-router-dom";
+import { jwtPrivateKey } from "./../../config.json";
 
 import "../../styles/activityLogsStyle.css";
-
-// DUMMY DATA
-
-const logs = [
-    {
-        googleId: "109795266748670169483",
-        email: "escruzado@up.edu.ph",
-        fullName: "Elcid Cruzado",
-        userType: 1,
-        activity: "User login",
-        createdAt: "2021-06-02T12:50:04.572+00:00",
-        updatedAt: "2021-06-02T12:50:04.572+00:00",
-    },
-    {
-        googleId: "109795266742734169483",
-        email: "dumdum@up.edu.ph",
-        fullName: "Dum Dum",
-        userType: 4,
-        activity: "User login",
-        createdAt: "2021-07-02T12:50:04.572+00:00",
-        updatedAt: "2021-07-02T12:50:04.572+00:00",
-    },
-    {
-        googleId: "109795266742734122483",
-        email: "dummydum@up.edu.ph",
-        fullName: "Dummy Dum",
-        userType: 4,
-        activity: "User login",
-        createdAt: "2021-07-02T12:50:04.572+00:00",
-        updatedAt: "2021-07-02T12:50:04.572+00:00",
-    },
-    {
-        googleId: "109005266742734169483",
-        email: "dummydum@up.edu.ph",
-        fullName: "Dummy Dum",
-        userType: 4,
-        activity: "User login",
-        createdAt: "2021-07-02T12:50:04.572+00:00",
-        updatedAt: "2021-07-02T12:50:04.572+00:00",
-    },
-];
 
 const tableHeader = [
     "User ID",
@@ -63,10 +24,13 @@ const tableHeader = [
 ];
 
 export default function ActivityTable() {
-    const [activityLogs, setActivityLogs] = useState(logs);
+    const [activityLogs, setActivityLogs] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [selectedActivity, setSelectedActivity] = useState({});
+
+    const location = useLocation();
+    const history = useHistory();
 
     let tableEntry = activityLogs;
 
@@ -84,6 +48,47 @@ export default function ActivityTable() {
             <span>{headerTxt}</span>
         </TableCell>
     ));
+
+    // executes if the location is changed. (Opening modals)
+    useEffect(() => {
+        //if no user is logged in, redirect it to homepage
+        try {
+            const jwt = localStorage.getItem(jwtPrivateKey);
+            var userInfo = PersonService.decryptToken(jwt);
+            if (userInfo?.userType !== 1) history.push("/home");
+        } catch (err) {
+            history.push("/home");
+        }
+        readLogs();
+    }, [location]);
+
+    // Get activity logs from database
+    const readLogs = async () => {
+        try {
+            const { data } = await PersonService.readUserLogs();
+            setActivityLogs(data);
+        } catch (err) {}
+    };
+
+    const ClearLogs = () => {
+        return (
+            <Link
+                to={{
+                    pathname: "/view-activitylogs/clear-activitylogs",
+                    state: {
+                        background: location,
+                        item: "logs",
+                        id: "",
+                    },
+                }}>
+                <div className="clear-container">
+                    <button className="clear-logs-btn">
+                        <span className="clear-btn-txt">Clear Logs</span>
+                    </button>
+                </div>
+            </Link>
+        );
+    };
 
     // Set the current page of table to the first page if the previous page becomes empty.
     useEffect(() => {
@@ -109,7 +114,10 @@ export default function ActivityTable() {
 
     const entries = tableEntry.map((entry, index) => {
         return (
-            <TableRow hover key={entry.googleId} activity={entry}>
+            <TableRow
+                hover
+                key={`${entry.googleId}-${entry.updatedAt}`}
+                activity={entry}>
                 <TableCell
                     style={{
                         fontSize: "16px",
@@ -180,13 +188,13 @@ export default function ActivityTable() {
                 </Table>
 
                 <TablePagination
-                    rowsPerPage={rowsPerPage}
                     rowsPerPageOptions={[5]}
                     component="div"
+                    count={entries.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
                     onChangePage={handlePageChange}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
-                    page={page}
-                    count={entries.length}
                 />
             </TableContainer>
             <br />
