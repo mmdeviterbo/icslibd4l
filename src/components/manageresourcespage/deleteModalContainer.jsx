@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
+import StatusModal from "../modal/operationStatusModal";
 
 //  TODO: add documentation
 const DeletePopUpCont = ({ user }) => {
@@ -15,8 +16,20 @@ const DeletePopUpCont = ({ user }) => {
   const item = location.state.item;
   const toDelete = location.state.user; // Object containing user information to be deleted
   // const userState = user;
+  const [message, setMessage] = useState("");
   const [show, setShow] = useState(true);
+  const [visible, setVisible] = useState(false); // State for the status message modal
+  const [itemName, setItemName] = useState("");
+  const [pathAfter, setPathAfter] = useState("");
+  const [isSelf, setIsSelf] = useState(false);
+
   const handleClose = () => {
+    setShow(false);
+    // history.goBack();
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
     setShow(false);
     history.goBack();
   };
@@ -26,71 +39,68 @@ const DeletePopUpCont = ({ user }) => {
     event.preventDefault();
     // handleClose();
     try {
-      if (item == "resource") {
-        const { data } = await ResourceService.deleteSpThesis(id);
-        IsDeleted("success");
+      if (item === "resource") {
+        await ResourceService.deleteSpThesis(id);
+        console.log(id);
+        setItemName(id);
+        setMessage("success");
         handleClose();
-        window.location = "/manage-resources";
-      } else if (item == "account") {
-        if (toDelete && user.googleId !== toDelete.googleId) {
-          // The user to be deleted is not undefined and not the user currently logged in.
+        // setVisible(true);
+        // window.location = "/manage-resources";
+        setPathAfter("/manage-resources");
+      } else if (item === "account") {
+        setItemName(user.fullName);
+        console.log("error here");
+        await PersonService.deleteUser(user); //deletes the user from the database
+
+        await PersonService.logoutUser(user); // logs the user out
+        localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+        setIsSelf(true);
+        setMessage("success");
+        setPathAfter("/");
+        handleClose();
+        // window.location = "/";
+      } else {
+        if (toDelete.googleId === user.googleId) {
           await PersonService.deleteUser(toDelete);
 
-          IsDeleted("sucess");
+          await PersonService.logoutUser(user); // logs the user out
+          localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+          setIsSelf(true);
+          setMessage("success");
+          setPathAfter("/");
+          // window.location = "/";
           handleClose();
         } else {
-          localStorage.removeItem(jwtPrivateKey); // removes token from the browser
-          await PersonService.logoutUser(user); // logs the user out
+          await PersonService.deleteUser(toDelete);
 
-          const { data } = await PersonService.deleteUser(user); //deletes the user from the database
-          IsDeleted("success");
-          window.location = "/";
+          setMessage("success");
+          setItemName(toDelete.fullName);
+          handleClose();
         }
-      } else {
-        const { data } = await PersonService.deleteUser(id);
-        IsDeleted("success");
-        // window.location = "/manage-users";
       }
     } catch (err) {
       if (err.response && err.response.data) {
-        IsDeleted("fail");
-        alert(err.response.data.errorMessage); // some reason error message
+        setMessage("fail");
+        alert(err);
+        // alert(err.response.data.errorMessage); // some reason error message
       }
       console.log(err);
     }
   };
 
-  const IsDeleted = ({ message }) => {
-    console.log(message);
-    return (
-      <>
-        <Modal
-          show={show}
-          onHide={handleClose}
-          backdrop="static"
-          keyboard={false}
-          centered
-        >
-          <Modal.Body>
-            {message == "success" ? (
-              <Modal.Title>{id} has been deleted successfully.</Modal.Title>
-            ) : (
-              <Modal.Title>Failed to delete {id}.</Modal.Title>
-            )}
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  };
-
   return (
     <>
+      <StatusModal
+        show={visible}
+        setShow={setVisible}
+        message={message}
+        name={itemName}
+        item={item}
+        operation={"delete"}
+        pathAfter={pathAfter}
+        isSelf={isSelf}
+      />
       <Modal
         show={show}
         onHide={handleClose}
@@ -101,13 +111,13 @@ const DeletePopUpCont = ({ user }) => {
         {/* Renders according to item.
           If resource, else if user, else account */}
         <Modal.Header closeButton>
-          {item == "resource" ? (
+          {item === "resource" ? (
             <Modal.Title style={{ fontWeight: "bold" }}>
               Delete Resource?
             </Modal.Title>
           ) : (
             [
-              item == "user" ? (
+              item === "user" ? (
                 <Modal.Title style={{ fontWeight: "bold" }}>
                   Delete User?
                 </Modal.Title>
@@ -123,22 +133,25 @@ const DeletePopUpCont = ({ user }) => {
         {/* Renders according to item.
           If account, else resource/user */}
         <Modal.Body>
-          {item == "account" ? (
+          {item === "account" ? (
             <Modal.Body>
               Are you sure you want to remove your account?
             </Modal.Body>
           ) : (
-            <Modal.Body>Are you sure you want to delete {id}?</Modal.Body>
+            <Modal.Body>
+              Are you sure you want to delete{" "}
+              {item === "resource" ? id : toDelete.fullName}?
+            </Modal.Body>
           )}
           {/* read resource title and author here */}
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCancel}>
             Close
           </Button>
           <Button variant="danger" onClick={handleSubmit}>
-            {item == "account" ? "Remove" : "Delete"}
+            {item === "account" ? "Remove" : "Delete"}
           </Button>
         </Modal.Footer>
       </Modal>

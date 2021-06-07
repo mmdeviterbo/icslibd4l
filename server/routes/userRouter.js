@@ -18,7 +18,6 @@ Request Object:
    email: email,
    fullName: fullName 
 }
-
 Response Object:
 {
     googleId: googleId,
@@ -29,9 +28,7 @@ Response Object:
 }
 ********************************************************/
 router.post("/create", async (req, res) => {
-    console.log("here");
     var loggedUser;
-    console.log("here");
     try {
         const { googleId, email, fullName } = req.body;
 
@@ -118,7 +115,6 @@ router.post("/create", async (req, res) => {
 /**************************************************** 
 Request Object:
 NULL
-
 Response Object:
 {
     googleId: googleId,
@@ -147,7 +143,6 @@ Request Object:
     googleId: googleId,
     newNickname: newNickname,
 }
-
 Response Object:
 {
     googleId: googleId,
@@ -228,7 +223,6 @@ Request Object:
 {
     googleId: googleId,
 }
-
 Response String: 
 "Entry Deleted"
 ********************************************************/
@@ -238,20 +232,33 @@ router.delete("/delete", authStudent, async (req, res) => {
     res.send("Entry Deleted");
 });
 
+router.get("/", async (req, res) => {
+    console.log("here");
+    console.log(req.cookies);
+    res.send("done");
+});
 //logout current signed in user. deletes cookie for user
 /**************************************************** 
 Request Object:
 {
     googleId: googleId,
 }
-
 Response String:
 "User Logged Out"
 ********************************************************/
 router.post("/logout", async (req, res) => {
-    const googleId = req.body.googleId;
+    const token = req.cookies.token;
+    // Encryption settings
+    const encryption = {
+        key: jwtPrivateKey,
+        algorithm: "aes-256-cbc",
+    };
+
+    // decrypt token and verifies jwt payload
+    const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
+    const loggedUser = decrypted.data;
+
     try {
-        const loggedUser = await UserModel.findOne({ googleId });
         //logs user login to collection
         const newUserLog = new UserLogModel({
             googleId: loggedUser.googleId,
@@ -272,27 +279,55 @@ router.post("/logout", async (req, res) => {
     }
 });
 
-//read all user logs
+//find specific person
 /**************************************************** 
 Request Object:
-NULL
-
-Response String: 
-"User Logged Out"
+googleId
+Response Object: 
+"Specific person"
 ********************************************************/
-router.get("/getUserLogs", async (req, res) => {
+router.post("/findperson", async (req, res) => {
     try {
-        UserLogModel.find({}, (err, result) => {
-            //reads all the documents and sends as response
-            if (err) {
-                res.send(err);
-            } else {
-                res.send(result);
-            }
-        });
+        const { googleId } = req.body;
+
+        if (!googleId)
+            return res.status(400).json({
+                errMessage: "Please enter All required fields. ",
+            });
+        const existingUser = await UserModel.findOne({ googleId });
+
+        //NEW IMPLEMENTATION=
+        const publicData = null;
+        // Data that will only be available to users who know encryption details.
+        const privateData = {
+            googleId: existingUser.googleId,
+            email: existingUser.email,
+            fullName: existingUser.fullName,
+            nickname: existingUser.nickname,
+            userType: existingUser.userType,
+        };
+
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: "aes-256-cbc",
+        };
+
+        // JWT Settings
+        const jwtDetails = {
+            secret: jwtPublicKey, // to sign the token
+            expiresIn: "24h",
+        };
+        const token = await jwtEncrypt.generateJWT(
+            jwtDetails,
+            publicData,
+            encryption,
+            privateData,
+            "ICSlibrary"
+        );
+        res.send(token);
     } catch (err) {
-        console.error(err);
-        res.status(500).send();
+        res.status(404).json({ errMessage: "Not foundddd" });
     }
 });
 

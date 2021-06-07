@@ -1,7 +1,6 @@
 import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { jwtPrivateKey, jwtEncryptionKey } from "./config.json";
-import * as jwtEncrypt from "jwt-token-encrypt";
+import { jwtPrivateKey } from "./config.json";
 import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
@@ -22,12 +21,15 @@ import ManageUser from "./components/manageuserpage/manageUserPage";
 import PersonService from "./services/personService";
 import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
 import BrowseResources from "./components/browseresources/browseResources";
+import ConfirmChangeModal from "./components/modal/confirmChangesModal";
+import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
-import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
+import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
+
 import "./App.css";
 
 function App() {
-    const [user, setUser] = useState(null); //fullname, email, userType (integer)
+    const [user, setUser] = useState(null); //fullName, email, userType (integer)
 
     const browseRef = useRef(null);
     const latestAcqRef = useRef(null);
@@ -38,29 +40,33 @@ function App() {
     const background = location.state && location.state.background;
 
     useEffect(() => {
-        getCurrentToken();
-    }, []);
+        // see if there's current user logged in the browser
+        const getCurrentToken = async () => {
+            try {
+                //to know if there's is currently logged in
+                const jwt = localStorage.getItem(jwtPrivateKey);
+                var userInfo = PersonService.decryptToken(jwt);
+                setUser(userInfo);
 
-    // see if there's current user logged in the browser
-    const getCurrentToken = () => {
-        try {
-            const jwt = localStorage.getItem(jwtPrivateKey);
-            const encryption = {
-                key: jwtEncryptionKey,
-                algorithm: "aes-256-cbc",
-            };
-            const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
-            const userInfo = decrypted.data;
-            setUser(userInfo);
-        } catch (err) {}
-    };
+                // if there is (no error), then go to backend and get the updated userInfo
+                const { data } = await PersonService.getSpecificPerson({
+                    googleId: userInfo.googleId,
+                });
+                userInfo = PersonService.decryptToken(data);
+                setUser(userInfo);
+            } catch (err) {}
+        };
+        getCurrentToken();
+    },[]);
 
     // login/register a user
     const loginRegisterUser = async (userInfo) => {
         try {
             const { data } = await PersonService.loginRegisterUser(userInfo);
             localStorage.setItem(jwtPrivateKey, data); //set token
-            window.location = "/home";
+            
+            // get current param, it must stay on where the user's current path
+            window.location = window.location.pathname;
         } catch (err) {}
     };
 
@@ -70,8 +76,8 @@ function App() {
                 loginRegisterUser={loginRegisterUser}
                 browseRef={browseRef}
                 user={user}
+                appRef={appRef}
             />
-
             <Switch location={background || location}>
                 <Route
                     path="/home"
@@ -90,8 +96,15 @@ function App() {
                 {/* <Route path="/view-user/:googleId" component={ViewUser}></Route> */}
                 <Route
                     path="/account-setting/"
-                    component={ViewUserPage}></Route>
+                    component={ViewUserPage}
+                ></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
+
+                <Route
+                    path="/search"
+                    render={() => <Search appRef={appRef} />}
+                />
+
                 {/* <Route
                     path="/update-sp-thesis"
                     component={UpdateResourceData}></Route> */}
@@ -102,27 +115,30 @@ function App() {
                 {/* placeholder componenets */}
                 <Route
                     path="/browse-books"
-                    render={() => <BrowseResources type={"book"} />}></Route>
+                    render={() => <BrowseResources type={"book"} />}
+                ></Route>
                 <Route
                     path="/browse-special-problems"
-                    render={() => (
-                        <BrowseResources type={"Special Problem"} />
-                    )}></Route>
+                    render={() => <BrowseResources type={"Special Problem"} />}
+                ></Route>
                 <Route
                     path="/browse-theses"
-                    render={() => <BrowseResources type={"Thesis"} />}></Route>
+                    render={() => <BrowseResources type={"Thesis"} />}
+                ></Route>
 
                 <Route
                     path="/sp-thesis/:id"
                     render={(props) => (
-                        <ReadingSPTContainer {...props} />
-                    )}></Route>
+                        <ReadingSPTContainer user={user} {...props} />
+                    )}
+                ></Route>
 
                 <Route
                     path="/book/:id"
                     render={(props) => (
-                        <ReadingBookContainer {...props} />
-                    )}></Route>
+                        <ReadingBookContainer appRef={appRef} {...props} />
+                    )}
+                ></Route>
                 {/* placeholder componenets */}
 
                 {/* <Route
@@ -133,23 +149,26 @@ function App() {
 
                 {/* sp/thesis/Special Problem/Thesis ang types */}
                 {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
-                <Route path="/manage-resources" component={ManageResourcesPage}></Route>
-                <Route 
-                    path="/manage-users" 
-                    render={()=><ManageUser user={user}/>}>                    
-                </Route>
+                <Route
+                    path="/manage-resources"
+                    component={ManageResourcesPage}
+                ></Route>
+                <Route
+                    path="/manage-users"
+                    render={() => <ManageUser user={user} />}
+                ></Route>
 
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
-                <Route
-                    path="/add-new-book"
-                    component={AddBookPage}></Route>
+                <Route path="/add-new-book" component={AddBookPage}></Route>
                 <Route
                     path="/edit-spt/:id"
-                    component={EditSPTFormContainer}></Route>
+                    component={EditSPTFormContainer}
+                ></Route>
 
                 <Route
                     path="/edit-book/:id"
-                    component={EditBookFormContainer}></Route>
+                    component={EditBookFormContainer}
+                ></Route>
 
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Route exact path="/not-found" component={Notfound}></Route>
@@ -164,17 +183,22 @@ function App() {
                 />
             )}
 
-
             {background && (
                 <Route
                     path="/manage-users/delete-user"
-                    children={<DeleteModalContainer user={user}/>}
+                    children={<DeleteModalContainer user={user} />}
                 />
             )}
             {background && (
                 <Route
                     path="/account-setting/remove-account"
                     children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/save-changes"
+                    children={<ConfirmChangeModal user={user} />}
                 />
             )}
             <Footer />

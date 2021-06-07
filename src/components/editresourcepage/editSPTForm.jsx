@@ -1,5 +1,4 @@
 // import { SignalCellularNoSimOutlined } from "@material-ui/icons";
-import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 // import { ItemGroup } from "semantic-ui-react";
@@ -65,7 +64,6 @@ export default function EditSPTFormContainer(props) {
     });
     const [authorList, setAuthorList] = useState([]);
     const [adviserList, setAdviserList] = useState([]);
-    const location = useLocation();
 
     // return ALL resources (dahil walang search na gumagamit ng id)
     const [spThInfoArr, setSpThInfoArr] = useState([]); //all sp/thesis array
@@ -73,10 +71,10 @@ export default function EditSPTFormContainer(props) {
 
     useEffect(() => {
         try {
-            setIdSource(props.location.state.id);
-            setSpThInfoArr(props.location.state.sourceInfo);  //all objects from table
+            setIdSource(props.location?.state.id);
+            setSpThInfoArr(props.location?.state.sourceInfo);  //all objects from table
         } catch (err) {
-            window.location = "/not-found";
+            // window.location = "/not-found";
         }
     }, []);
 
@@ -184,8 +182,7 @@ export default function EditSPTFormContainer(props) {
                 authors: [author],
                 keywords,
             };
-            console.log(userInput);
-            const { data } = await ResourceServices.editSpThesis(userInput);
+            await ResourceServices.editSpThesis(userInput);
             alert(`${id} has been successfully updated.`);
             window.location = "/manage-resources";
         } catch (err) {

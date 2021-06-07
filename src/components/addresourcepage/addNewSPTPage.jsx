@@ -7,6 +7,7 @@ import ChipInput from "material-ui-chip-input";
 // import ChipInput from "material-ui-chip-input";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
+import StatusModal from "../modal/operationStatusModal";
 
 const classificationOptions = [
   { value: "Special Problem", label: "Special Problem" },
@@ -111,9 +112,10 @@ const AddNewSPThesisForm = () => {
     },
   ]);
   const [adviserList, setAdviserList] = useState([]);
-
   const FormData = require("form-data");
   const formData = new FormData();
+  const [show, setShow] = useState(false);
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (event) => {
     console.log("meow");
@@ -156,12 +158,17 @@ const AddNewSPThesisForm = () => {
       // formData.append("body", userInput);
       const { data } = await ResourceServices.addSpThesis(formData);
       console.log(data);
-      alert(`New Sp/Thesis has been successfully added to the library`);
+
+      setSuccess("success");
+      setShow(true);
+      //   alert(`New Sp/Thesis has been successfully added to the library`);
       event.target.reset();
       // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
-        alert(err.response.data.errorMessage); // some reason error message
+        setSuccess("fail");
+        setShow(true);
+        // alert(err.response.data.errorMessage); // some reason error message
       }
     }
   };
@@ -529,6 +536,14 @@ const AddNewSPThesisForm = () => {
           </div>
         </div>
       </form>
+      <StatusModal
+        message={success}
+        name={"Sp/Thesis"}
+        show={show}
+        setShow={setShow}
+        operation={"add"}
+        pathAfter={"/add-new-spt/"}
+      />
     </div>
   );
 };

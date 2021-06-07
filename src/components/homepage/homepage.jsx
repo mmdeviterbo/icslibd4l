@@ -4,7 +4,7 @@ import LatestAcquisitions from './latestAcquisitions';
 import RecentNews from './recentNews';
 import SearchbarPart from './searchbarPart'
 
-export default function Homepage({browseRef, appRef, newsRef, latestAcqRef}) {
+export default function Homepage({ browseRef, appRef, newsRef, latestAcqRef }) {
     return (
         <div className="homepage-container">
             <SearchbarPart newsRef={newsRef} latestAcqRef={latestAcqRef} browseRef={browseRef}/>
@@ -12,5 +12,5 @@ export default function Homepage({browseRef, appRef, newsRef, latestAcqRef}) {
             <LatestAcquisitions latestAcqRef={latestAcqRef}/>
             <RecentNews appRef={appRef} newsRef={newsRef}/>
         </div>
-    )
+    );
 }

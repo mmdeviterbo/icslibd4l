@@ -1,0 +1,48 @@
+/* text field */
+input {
+    font-style: Montserrat;
+    font-size: 25px;
+    margin: 12px 20px;
+    border-radius: 8px;
+    padding: 12px;
+    outline-style: none;
+}
+
+input:focus {
+    border-radius: 8px;
+    border: inherit + 0.5px solid #90ee90;
+}
+
+/* profileContainer */
+.profile-container {
+    display: grid;
+    height: auto;
+    gap: 20px;
+    width: 90vw;
+    padding: 10vh;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+/* remove account container */
+.removal-bar {
+    padding-top: 10vh;
+}
+
+/* edit button cell */
+.edit-column {
+    padding-left: none;
+    padding-top: 21px;
+    align-items: flex-start;
+}
+
+.grid-columns {
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+
+.label-container {
+    padding: 12px;
+}

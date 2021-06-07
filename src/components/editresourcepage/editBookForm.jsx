@@ -37,7 +37,7 @@ const courseList = [
 export default function EditBookFormContainer(props) {
         // functionalities:
     const [title, setTitle] = useState("");
-    const [type, setType] = useState("");
+    // const [type, setType] = useState("");
     const [datePublished, setDatePublished] = useState();
     const [dateAcquired, setDateAcquired] = useState();
     const [isbn, setISBN] = useState("");

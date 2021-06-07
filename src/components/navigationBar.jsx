@@ -8,7 +8,7 @@ import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
 
 // the entire navigation bar
-export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
+export default function NavigationBar({ loginRegisterUser, browseRef, user, appRef }) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory();
 
@@ -51,7 +51,14 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                     behavior: "smooth",
                     block: "start",
                 });
-        else history.push("/browse");
+        else if (["/browse-books","/browse-special-problems","/browse-theses"].includes(window.location.pathname)){
+            appRef.current &&
+            appRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+        else history.push("/browse-special-problems");
     };
     const logInButton = () => {
         return (
@@ -64,7 +71,8 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                 cookiePolicy={"single_host_origin"}
                 className="login-link"
                 hostedDomain={"up.edu.ph"}
-                icon={false}>
+                icon={false}
+            >
                 <i className="fa fa-lg fa-sign-in mr-2" />
                 <span className="login-link-label">Login</span>
             </GoogleLogin>
@@ -82,7 +90,8 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                     <div
                         draggable="false"
                         className="ics-uplb-caption"
-                        to="/home">
+                        to="/home"
+                    >
                         <span className="ics-caption">
                             Institute of Computer Science Online Library
                         </span>
@@ -102,7 +111,8 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user }) {
                     <div
                         className="navItem"
                         onClick={scrollToBrowse}
-                        style={{ cursor: "pointer" }}>
+                        style={{ cursor: "pointer" }}
+                    >
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
@@ -133,7 +143,7 @@ const SearchFilter = ({ user }) => {
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            window.location = "/";
+            window.location = window.location.pathname;
         } catch (err) {}
     };
 
@@ -207,6 +217,17 @@ const SearchFilter = ({ user }) => {
             onClick: () => history.push("/view-activitylogs"),
         },
         {
+            key: "viewSummaryReports",
+            text: (
+                <span>
+                    <i className="fa fa-lg fa-print mr-3 ml-2" />
+                    View Summary Report
+                </span>
+            ),
+            value: "View Summary Report",
+            onClick: () => history.push("/view-summaryreport"),
+        },
+        {
             key: "sign-out",
             text: (
                 <span>
@@ -224,7 +245,7 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[3])
+                    : optionsNotAdmin.concat(options[options.length-1])
             }
         />
     );

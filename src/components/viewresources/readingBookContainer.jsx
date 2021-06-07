@@ -1,15 +1,21 @@
 import React, { useEffect } from "react";
-
 import TitleContainer from "./titleContainer";
 import BookCoverandInfo from "./bookCoverInfoSide";
-import BookPhysDescription from "./bookPhysicalDescription";
+// import BookPhysDescription from "./bookPhysicalDescription";
 import "../../styles/viewspt/viewSPTStyle.css";
 
 const ReadingBookContainer = (props) => {
     const resourceData =
         (props.location && props.location.state.resourceData) || {};
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        const {appRef} = props;
+        appRef.current &&
+        appRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }, []);
     return (
         <div className="book-page-container">
             <TitleContainer

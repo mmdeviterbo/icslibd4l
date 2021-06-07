@@ -27,14 +27,22 @@ const browseResources = (resourceType) => {
 }
 
 const searchSpThesis = (filter, query) => {
-    return http.get(`${apiEndpoint}/thesis${query}`, filter, {
-        withCredentials: true,
-    });
-};
+    return http.get(`${apiEndpoint}/thesis${query}`, {params:filter}, {withCredentials: true})
+}
+
 
 const searchBook = (filter) => {
-    return http.get(`${apiEndpoint}/book/search`, filter, {
+    return http.get(`${apiEndpoint}/book/search`, {body:filter}, {withCredentials: true})
+}
+
+
+const downloadFile = (fileType, query) => {
+    console.log(fileType)
+    console.log(query)
+    return http.get(`${apiEndpoint}/thesis${query}`, {params:fileType}, {
         withCredentials: true,
+    }, {
+        responseType: 'blob',
     });
 };
 
@@ -69,18 +77,22 @@ function getNews() {
     return http.post(`${apiEndpoint}/books/get-news`);
 }
 
-// get all books, sorted by date (latest acquisition feature)
+// get all books (object of information only, not images), sorted by date (latest acquisition feature)
 function getBooks(){
+    return http.get(`${apiEndpoint}/books/display_infos`);
+}
+
+// get all books (object of images), sorted by date (latest acquisition feature)
+function getBookCovers(){
     return http.get(`${apiEndpoint}/books/display_covers`);
 }
+
 
 function getAllResources() {
     return http.get(`${apiEndpoint}/thesis/search`);
 }
 
 function getSPTFiles({ title, fileType }){
-    console.log(title)
-    console.log(fileType)
     return http.post(`${apiEndpoint}/thesis/download`, { title, fileType }, {withCredentials: true}, {
         responseType: 'stream'
     });
@@ -106,7 +118,9 @@ const exportFunctions = {
     // deleteBook,
     getAllResources,
     getSPTFiles,
-    getBookCover
+    getBookCover,
+    downloadFile,
+    getBookCovers
 }
 
 export default exportFunctions;

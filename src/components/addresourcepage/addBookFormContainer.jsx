@@ -4,6 +4,7 @@ import ResourceServices from "../../services/resourceService";
 // import AddResourcesHeader from "./addResourcesHeader";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
+import StatusModal from "../modal/operationStatusModal";
 
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
@@ -52,26 +53,15 @@ const AddBookFormContainer = () => {
 
   const FormData = require("form-data");
   const formData = new FormData();
+  const [show, setShow] = useState(false);
+  const [success, setSuccess] = useState("");
 
   const handleImage = (e) => {
-    // let file = e.target.files[0];
-    // const formData = new FormData();
-    // formData.append("file", file);
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // };
-    // setImage(formData);
-    // return  post(url, formData,config)
-
     let file = e.target.files[0];
     let reader = new FileReader();
     if (file) {
       reader.readAsDataURL(file);
       reader.onload = (e) => {
-        // const formData = { file: e.target.result };
-        // formData.append("file", file);
         setImage(file);
       };
     }
@@ -96,12 +86,18 @@ const AddBookFormContainer = () => {
       console.log(image);
       formData.append("body", JSON.stringify(userInput));
       formData.append("file", image);
-      const { data } = await ResourceServices.addBook(formData);
-      alert("New book has been successfully added to the library");
+      await ResourceServices.addBook(formData);
+
+      setSuccess("success");
+      setShow(true);
+      event.target.reset();
+      // alert("New book has been successfully added to the library");
       // window.location = "/add-new-resource";
     } catch (err) {
       if (err.response && err.response.data) {
-        alert(err.response.data.errorMessage); // some reason error message
+        setSuccess("fail");
+        setShow(true);
+        // alert(err.response.data.errorMessage); // some reason error message
       }
     }
   };
@@ -377,6 +373,14 @@ const AddBookFormContainer = () => {
           </div>
         </div>
       </form>
+      <StatusModal
+        message={success}
+        name={"Book"}
+        show={show}
+        setShow={setShow}
+        operation={"add"}
+        pathAfter={"/add-new-spt/"}
+      />
     </div>
   );
 };
