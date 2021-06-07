@@ -724,7 +724,6 @@ router.get("/search", async (req, res) => {
         }
 
         // Send filtered search results
-        console.log(spthesis_arr.length, book_arr.length)
         if (!res.headersSent) {
             res.send(spthesis_arr.concat(book_arr));  //concat arrays
         }
