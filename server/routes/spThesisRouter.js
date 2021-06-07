@@ -606,12 +606,18 @@ router.get("/search", async (req, res) => {
 
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
-        // get unique entries
-        let final_arr = [...new Set(total)];
+        let final_arr = total;
 
         // separate books and spthesis
         let book_arr = final_arr.filter(item => "bookId" in item);
         let spthesis_arr = final_arr.filter(item => "sp_thesis_id" in item);
+
+        // get unique entries
+        function getUniqueListBy(arr, key) {
+            return [...new Map(arr.map(item => [item[key], item])).values()]
+        }
+        book_arr = getUniqueListBy(book_arr, 'bookId');
+        spthesis_arr = getUniqueListBy(spthesis_arr, 'sp_thesis_id');
 
         // sort by title
         function compareByTitle( a, b ) {
