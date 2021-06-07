@@ -19,14 +19,14 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
     // if not found (404), hide the navbar component
     useEffect(() => {
         return history.listen((location) => {
-            if (location.pathname === "/not-found")
+            if (["/not-found", "/unauthorized"].includes(location.pathname))
                 setClassNavBar("navbar-container-none");
             else setClassNavBar("navbar-container");
         });
     }, [history]);
 
     useEffect(() => {
-        if (window.location.pathname === "/not-found")
+        if (["/not-found", "/unauthorized"].includes(window.location.pathname))
             setClassNavBar("navbar-container-none");
         else setClassNavBar("navbar-container");
     }, [classNavBar]);
@@ -39,7 +39,6 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
             fullName: name,
             surname: familyName,
         };
-        console.log(response.profileObj);
         loginRegisterUser(userInfo);
     };
     const responseGoogleFail = (response) => {};
