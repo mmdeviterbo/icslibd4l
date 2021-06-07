@@ -743,6 +743,7 @@ router.get("/search", async (req, res) => {
         Array.sort() https://devdocs.io/javascript/global_objects/array/sort
         Array.sort() https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
         Array.concat(Array) https://devdocs.io/javascript/global_objects/array/concat
+        getUniqueListBy() https://stackoverflow.com/questions/2218999/how-to-remove-all-duplicates-from-an-array-of-objects/56768137#56768137
     */
 
     // ------- SEARCH SP FUNCTIONS
