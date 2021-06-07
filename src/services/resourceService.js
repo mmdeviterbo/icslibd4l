@@ -10,6 +10,9 @@ const addBook = (bookData) => {
     return http.post(`${apiEndpoint}/books/create`, bookData, {withCredentials: true})
 }
 
+const viewFile = (fileName) => {
+    return http.post(`${apiEndpoint}/thesis/download`, fileName, {withCredentials: true})
+}
 // read data of a resource
 const browseResources = (resourceType) => {
     console.log(resourceType)
@@ -49,13 +52,6 @@ const editBook = (resourceData) => {
         withCredentials: true,
     });
 }
-
-// delete book
-// const deleteBook = (deleteId) => {
-//     return http.delete(`${apiEndpoint}/book/delete/$(deleteId)`, 
-//     {withCredentials: true})
-
-// }
 
 //delete resource
 const deleteSpThesis = (deleteId) => {
@@ -114,7 +110,8 @@ const exportFunctions = {
     getBookCover,
     downloadFile,
     getBookCovers,
-    deleteBook
+    deleteBook,
+    viewFile
 }
 
 export default exportFunctions;

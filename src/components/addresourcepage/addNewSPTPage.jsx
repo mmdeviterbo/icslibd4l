@@ -8,6 +8,8 @@ import ChipInput from "material-ui-chip-input";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
+import ToastNotification from "../toastNotification";
+import "react-toastify/dist/ReactToastify.css";
 
 const classificationOptions = [
   { value: "Special Problem", label: "Special Problem" },
@@ -88,7 +90,6 @@ const adviserchoices = [
 
 const AddNewSPThesisForm = () => {
   // functionalities:
-  const [id, setId] = useState("");
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(0);
@@ -122,7 +123,6 @@ const AddNewSPThesisForm = () => {
 
     try {
       const userInput = {
-        sp_thesis_id: id,
         type,
         title,
         abstract,
@@ -146,8 +146,7 @@ const AddNewSPThesisForm = () => {
       // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
-        setSuccess("fail");
-        setShow(true);
+        ToastNotification({ content: err.response.data.errorMessage });
       }
     }
   };
@@ -183,22 +182,6 @@ const AddNewSPThesisForm = () => {
               <b>Primary Info</b>
             </h2>
             <hr />
-            {/* ID Field */}
-            {/* Disabled, uneditable */}
-            {/* how to get generated ID? */}
-            <div className="primaryfields">
-              <label htmlFor="resId">ID: &nbsp; </label>
-              <input
-                required
-                type="text"
-                id="resId"
-                // value =
-                // disabled
-                onChange={(event) => {
-                  setId(event.target.value);
-                }}
-              />
-            </div>
             {/* Title Field */}
             <div className="primaryfields">
               <label htmlFor="resTitle">Title: &nbsp; </label>
@@ -389,6 +372,13 @@ const AddNewSPThesisForm = () => {
                 onChange={(event) => {
                   setAbstract(event.target.value);
                 }}
+              />
+            </div>
+            <div className="primaryfields">
+              <label htmlFor="keywords-field">Keywords: &nbsp; </label>
+              <ChipInput
+                id="keywords-field"
+                onChange={(chips) => handleChips(chips)}
               />
             </div>
             {/* Redirect links start here */}
