@@ -112,7 +112,7 @@ export default function ActivityTable() {
         rowsPerPage -
         Math.min(rowsPerPage, tableEntry.length - page * rowsPerPage);
 
-    const entries = tableEntry.map((entry, index) => {
+    const entries = tableEntry.reverse().map((entry, index) => {
         return (
             <TableRow
                 hover
@@ -160,7 +160,7 @@ export default function ActivityTable() {
                         textAlign: "left",
                     }}>
                     <span>
-                        {dateFormat(entry.createdAt, "yyyy, mmmm dd;  hh:mm")}
+                        {dateFormat(entry.updatedAt, "yyyy, mmmm dd; HH:MM")}
                     </span>
                 </TableCell>
             </TableRow>

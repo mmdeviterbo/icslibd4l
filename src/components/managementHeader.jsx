@@ -8,17 +8,21 @@ import "../styles/managementHeaderStyle.css";
 const ManagementHeader = ({ type }) => {
     return (
         <div className="manage-header-container">
-            <div className="search-bar-container">
-                <TemporarySearchBar />
-            </div>
+            {type === "logs" ? (
+                <></>
+            ) : (
+                <div className="search-bar-container">
+                    <TemporarySearchBar />
+                </div>
+            )}
             {type == "resource" ? (
-                <h1>Manage Resources</h1>
+                <h1 style={{ textAlign: "right" }}>Manage Resources</h1>
             ) : (
                 [
                     type === "user" ? (
-                        <h1>Manage Users</h1>
+                        <h1 style={{ textAlign: "right" }}>Manage Users</h1>
                     ) : (
-                        <h1>Activity Logs</h1>
+                        <h1 style={{ textAlign: "left" }}>Activity Logs</h1>
                     ),
                 ]
             )}
