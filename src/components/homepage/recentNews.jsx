@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import recentNewsBg from "../../assets/searchBg_4.png";
 import NewsService from "../../services/resourceService";
+import PropagateLoader from "react-spinners/PropagateLoader";
+
+
 export default function RecentNews({ appRef, newsRef }) {
   const [titleNews, setTitleNews] = useState([]);
   const [dateNews, setDateNews] = useState([]);
   const [imgNews, setImgNews] = useState([]);
   const [linkNews, setLinkNews] = useState([]);
+  const [loader, setLoader] = useState(true);
 
   const scrollToTop = () =>
     appRef.current &&
@@ -17,6 +21,7 @@ export default function RecentNews({ appRef, newsRef }) {
     setDateNews(data.newsDate);
     setImgNews(data.newsImg);
     setLinkNews(data.newsLinks);
+    setLoader(false);
   };
 
   useEffect(() => {
@@ -39,8 +44,9 @@ export default function RecentNews({ appRef, newsRef }) {
         <p style={newsStyle}>UPLB NEWS</p>
         <div
           className="ui three stackable cards"
-          style={recentNewsInnerContainer}>
-          {titleNews.map((title, index) => (
+          style={loader? displayLoader : recentNewsInnerContainer}>
+          {loader? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
+          titleNews.map((title, index) => (
             <ArticleContainer
               title={title}
               link={linkNews[index]}
@@ -160,3 +166,9 @@ const recentNewsBgStyle = {
   zIndex: -1,
   transform: "scaleY(-1)",
 };
+
+const displayLoader = {
+  display:"grid",
+  placeItems: "center",
+  height:"100%"
+}

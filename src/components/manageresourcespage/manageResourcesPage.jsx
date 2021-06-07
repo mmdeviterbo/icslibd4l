@@ -1,33 +1,56 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ManagementHeader from "../managementHeader";
 import FieldsContainerRes from "./filterFieldsResources";
 import ResourceTableContainer from "./resourceTableContainer";
 import PersonService from "../../services/personService";
-import { jwtPrivateKey } from "../../config.json";
+import { jwtPrivateKey } from "./../../config.json";
 import { useHistory } from "react-router-dom";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/manageresources/manageResourcesStyle.css";
 
-const ManageResourcesPage = () => {
+const ManageResourcesPage = ({ user }) => {
     const history = useHistory();
-    // executes if the location is changed. (Opening modals)
-    useEffect(() => {
-        //if no user is logged in, redirect it to homepage
-        try {
-            const jwt = localStorage.getItem(jwtPrivateKey);
-            var userInfo = PersonService.decryptToken(jwt);
-            if (userInfo?.userType !== 1) return history.push("/home");
-        } catch (err) {
-            return history.push("/home");
-        }
-    }, []);
+
+    const accessPrivilege = () => {
+        setTimeout(() => {
+            try {
+                const user = PersonService.decryptToken(
+                    localStorage.getItem(jwtPrivateKey)
+                );
+                if (!user || (user && user.userType !== 1))
+                    return history.push("/unauthorized");
+            } catch (err) {
+                return history.push("/unauthorized");
+            }
+        }, 700);
+    };
 
     return (
-        <div className="manage-resources-page-container">
-            <ManagementHeader type={"resource"} />
-            <FieldsContainerRes />
-            {/* <ResTableContainer resourceList={resourceList} /> */}
-            <ResourceTableContainer />
-        </div>
+        <>
+            {user && user.userType === 1 ? (
+                <div className="manage-resources-page-container">
+                    <ManagementHeader type={"resource"} />
+                    <FieldsContainerRes />
+                    {/* <ResTableContainer resourceList={resourceList} /> */}
+                    <ResourceTableContainer />
+                </div>
+            ) : (
+                <div
+                    style={{
+                        minHeight: "80vh",
+                        display: "grid",
+                        placeItems: "center",
+                    }}>
+                    <PropagateLoader
+                        color={"#0067a1"}
+                        speedMultiplier={2}
+                        loading={true}
+                        size={20}
+                    />
+                    {accessPrivilege()}
+                </div>
+            )}
+        </>
     );
 };
 

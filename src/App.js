@@ -1,10 +1,11 @@
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { jwtPrivateKey } from "./config.json";
 import Footer from "./components/footer";
 import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
+import Unauthorized from "./components/unauthorized";
 import About from "./components/about/about";
 
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
@@ -16,7 +17,7 @@ import EditBookFormContainer from "./components/editresourcepage/editBookForm";
 import ReadingBookContainer from "./components/viewresources/readingBookContainer";
 
 import ViewUserPage from "./components/viewuserpage/viewUserPage";
-import ManageUser from "./components/manageuserpage/manageUserPage";
+import ManageUserPage from "./components/manageuserpage/manageUserPage";
 
 import PersonService from "./services/personService";
 import DeleteModalContainer from "./components/manageresourcespage/deleteModalContainer";
@@ -37,8 +38,7 @@ function App() {
     const newsRef = useRef(null);
     const appRef = useRef(null);
 
-    const location = useLocation();
-    const background = location.state && location.state.background;
+    const history = useHistory();
 
     useEffect(() => {
         // see if there's current user logged in the browser
@@ -53,6 +53,7 @@ function App() {
                 const { data } = await PersonService.getSpecificPerson({
                     googleId: userInfo.googleId,
                 });
+                localStorage.setItem(jwtPrivateKey, data); //set token
                 userInfo = PersonService.decryptToken(data);
                 setUser(userInfo);
             } catch (err) {}
@@ -79,7 +80,7 @@ function App() {
                 user={user}
                 appRef={appRef}
             />
-            <Switch location={background || location}>
+            <Switch>
                 <Route
                     path="/home"
                     render={() => (
@@ -91,113 +92,84 @@ function App() {
                         />
                     )}
                 />
-                {/* this route returns component depending on the route */}
-                {/* add your new route/path here */}
-
                 {/* <Route path="/view-user/:googleId" component={ViewUser}></Route> */}
                 <Route
                     path="/account-setting/"
-                    component={ViewUserPage}></Route>
-                <Route exact path="/not-found" component={Notfound}></Route>
-
+                    render={() => <ViewUserPage user={user} />}
+                />
+                <Route exact path="/not-found" component={Notfound} />
                 <Route
                     path="/search"
                     render={() => <Search appRef={appRef} />}
                 />
-
-                {/* <Route
-                    path="/update-sp-thesis"
-                    component={UpdateResourceData}></Route> */}
-                {/* <Route
-                    path="/manage-resources"
-                    component={ManageResPage}></Route> */}
-
-                {/* placeholder componenets */}
+                {/* <Route path="/update-sp-thesis" component={UpdateResourceData}></Route> */}
+                {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
                 <Route
                     path="/browse-books"
-                    render={() => <BrowseResources type={"book"} />}></Route>
+                    render={() => <BrowseResources type={"book"} />}
+                />
                 <Route
                     path="/browse-special-problems"
-                    render={() => (
-                        <BrowseResources type={"Special Problem"} />
-                    )}></Route>
+                    render={() => <BrowseResources type={"Special Problem"} />}
+                />
                 <Route
                     path="/browse-theses"
-                    render={() => <BrowseResources type={"Thesis"} />}></Route>
-
+                    render={() => <BrowseResources type={"Thesis"} />}
+                />
                 <Route
                     path="/sp-thesis/:id"
                     render={(props) => (
                         <ReadingSPTContainer user={user} {...props} />
-                    )}></Route>
-
+                    )}
+                />
                 <Route
                     path="/book/:id"
                     render={(props) => (
                         <ReadingBookContainer appRef={appRef} {...props} />
-                    )}></Route>
-                {/* placeholder componenets */}
-
-                {/* <Route
-                    path="/manage-resources"
-                    render={() => (
-                        <GetResources resourceType={"Book"} />
-                    )}></Route> */}
-
-                {/* sp/thesis/Special Problem/Thesis ang types */}
+                    )}
+                />
+                {/* <Route path="/manage-resources" render={() => <GetResources resourceType={"Book"} />}/>*/}
                 {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
                 <Route
                     path="/manage-resources"
-                    component={ManageResourcesPage}></Route>
+                    render={() => <ManageResourcesPage user={user} />}
+                />
                 <Route
                     path="/manage-users"
-                    render={() => <ManageUser user={user} />}></Route>
-
-                <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
-                <Route path="/add-new-book" component={AddBookPage}></Route>
-                <Route
-                    path="/edit-spt/:id"
-                    component={EditSPTFormContainer}></Route>
-
-                <Route
-                    path="/edit-book/:id"
-                    component={EditBookFormContainer}></Route>
-
-                <Route
-                    path="/view-activitylogs"
-                    component={activityLogsContainer}></Route>
-
-                <Route path="/about" render={() => <About appRef={appRef} />} />
-                <Route exact path="/not-found" component={Notfound}></Route>
-                <Redirect exact from="/" to="/home" />
-                <Redirect to="/not-found" />
-            </Switch>
-
-            {background && (
+                    render={() => <ManageUserPage user={user} />}
+                />
                 <Route
                     path="/manage-resources/delete-sp-thesis"
                     children={<DeleteModalContainer />}
                 />
-            )}
-
-            {background && (
                 <Route
                     path="/manage-users/delete-user"
                     children={<DeleteModalContainer user={user} />}
                 />
-            )}
-            {background && (
                 <Route
                     path="/account-setting/remove-account"
                     children={<DeleteModalContainer user={user} />}
                 />
-            )}
-            {background && (
                 <Route
                     path="/manage-users/save-changes"
                     children={<ConfirmChangeModal user={user} />}
                 />
-            )}
+                <Route path="/add-new-spt" component={AddSPThesisPage} />
+                <Route path="/add-new-book" component={AddBookPage}></Route>
+                <Route path="/edit-spt/:id" component={EditSPTFormContainer} />
+                <Route
+                    path="/edit-book/:id"
+                    component={EditBookFormContainer}
+                />
+                <Route
+                    path="/view-activitylogs"
+                    component={activityLogsContainer}></Route>
+                <Route path="/about" render={() => <About appRef={appRef} />} />
+                <Route exact path="/not-found" component={Notfound}></Route>
+                <Route exact path="/unauthorized" component={Unauthorized} />
+                <Redirect exact from="/" to="/home" />
+                <Redirect to="/not-found" />
+            </Switch>
             <Footer />
         </div>
     );
