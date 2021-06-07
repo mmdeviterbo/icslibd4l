@@ -24,7 +24,7 @@ import BrowseResources from "./components/browseresources/browseResources";
 import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
-import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
+import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
 
 import "./App.css";
 
@@ -158,14 +158,14 @@ function App() {
                 <Route exact path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route exact path="/add-new-book" component={AddBookPage}></Route>
                 <Route
-                            path="/edit-spt/:id"
-                            component={EditSPTFormContainer}
-                        ></Route>
+                    path="/edit-spt/:id"
+                    component={EditSPTFormContainer}
+                ></Route>
 
-                        <Route
-                            path="/edit-book/:id"
-                            component={EditBookFormContainer}
-                        ></Route>
+                <Route
+                    path="/edit-book/:id"
+                    component={EditBookFormContainer}
+                ></Route>
 
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Redirect exact from="/" to="/home" />

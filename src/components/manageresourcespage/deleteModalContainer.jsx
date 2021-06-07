@@ -116,7 +116,7 @@ const DeletePopUpCont = ({ user }) => {
       >
         {/* Renders according to item.
           If resource, else if user, else account */}
-        <Modal.Header closeButton>
+        <Modal.Header>
           {item === "resource" ? (
             <Modal.Title style={{ fontWeight: "bold" }}>
               Delete Resource?
