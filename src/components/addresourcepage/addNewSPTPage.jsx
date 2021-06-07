@@ -147,6 +147,10 @@ const AddNewSPThesisForm = () => {
     } catch (err) {
       if (err.response && err.response.data) {
         ToastNotification({ content: err.response.data.errorMessage });
+        // <ToastNotification
+        //   content={err.response.data.errorMessage}
+        //   style={{ width: "2000px" }}
+        // />;
       }
     }
   };

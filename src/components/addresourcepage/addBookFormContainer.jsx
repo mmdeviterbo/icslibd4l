@@ -81,17 +81,6 @@ const AddBookFormContainer = () => {
       // window.location = "/add-new-book";
     } catch (err) {
       if (err.response && err.response.data) {
-        // alert(err.response.data.errorMessage);
-        // toast(err.response.data.errorMessage, {
-        //   position: "top-right",
-        //   autoClose: 5000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        //   progress: undefined,
-        // });
-        // toast("jhi");
         ToastNotification({ content: "hellohehe" });
         // setSuccess("fail");
         // setShow(true);

@@ -1,14 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TitleContainer from "./titleContainer";
 import "../../styles/viewspt/viewSPTStyle.css";
 import AbstractContainer from "./abstractContainer";
+import ResourceService from "../../services/resourceService";
 import InfoSidebar from "./sideInfoContainer";
 
 const ReadingSPTContainer = (props) => {
-  const resourceData =
-    (props.location && props.location.state.resourceData) || {};
+  // const resourceData =
+  //   (props.location && props.location.state.resourceData) || {};
+
+  const [resourceData, setResourceData] = useState({});
+  const resourceID = props.match.params;
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data } = await ResourceService.searchByID(resourceID);
+        setResourceData(data && data[0]);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
     window.scrollTo(0, 0);
   }, []);
 
@@ -16,7 +29,7 @@ const ReadingSPTContainer = (props) => {
     <div className="spt-page-container">
       <TitleContainer
         title={resourceData.title}
-        authorList={resourceData.authors}
+        authorList={resourceData.author}
         year={resourceData.year}
       />
 

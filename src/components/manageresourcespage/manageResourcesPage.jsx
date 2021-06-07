@@ -10,16 +10,16 @@ import "../../styles/manageresources/manageResourcesStyle.css";
 const ManageResourcesPage = () => {
   const history = useHistory();
   // executes if the location is changed. (Opening modals)
-  useEffect(() => {
-    //if no user is logged in, redirect it to homepage
-    try {
-      const jwt = localStorage.getItem(jwtPrivateKey);
-      var userInfo = PersonService.decryptToken(jwt);
-      if (userInfo?.userType !== 1) return history.push("/home");
-    } catch (err) {
-      return history.push("/home");
-    }
-  }, []);
+  // useEffect(() => {
+  //   //if no user is logged in, redirect it to homepage
+  //   try {
+  //     const jwt = localStorage.getItem(jwtPrivateKey);
+  //     var userInfo = PersonService.decryptToken(jwt);
+  //     if (userInfo?.userType !== 1) return history.push("/home");
+  //   } catch (err) {
+  //     return history.push("/home");
+  //   }
+  // }, []);
 
   return (
     <div className="manage-resources-page-container">

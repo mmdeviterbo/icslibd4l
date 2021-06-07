@@ -28,14 +28,16 @@ const searchBook = (filter) => {
     return http.get(`${apiEndpoint}/book/search`, {body:filter}, {withCredentials: true})
 }
 
+const searchByID = (resourceID) => {
+    console.log(resourceID)
+    return http.get(`${apiEndpoint}/thesis/search-id`, {params:resourceID}, {withCredentials: true});
+}
 
 const downloadFile = (fileType, query) => {
     console.log(fileType)
     console.log(query)
     return http.get(`${apiEndpoint}/thesis${query}`, {params:fileType}, {
         withCredentials: true,
-    }, {
-        responseType: 'blob',
     });
 };
 
@@ -111,7 +113,8 @@ const exportFunctions = {
     downloadFile,
     getBookCovers,
     deleteBook,
-    viewFile
+    viewFile,
+    searchByID
 }
 
 export default exportFunctions;

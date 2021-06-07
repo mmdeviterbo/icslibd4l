@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import TitleContainer from "./titleContainer";
 import BookCoverandInfo from "./bookCoverInfoSide";
-// import BookPhysDescription from "./bookPhysicalDescription";
+import ResourceServices from "../../services/resourceService";
 import "../../styles/viewspt/viewSPTStyle.css";
 
 const ReadingBookContainer = (props) => {

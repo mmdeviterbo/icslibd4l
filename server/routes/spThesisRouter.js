@@ -1333,7 +1333,7 @@ Response:
     * array of objects
 ********************************************************/
 router.get("/search-id", async (req, res) => {
-
+    console.log(req.query.id);
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
