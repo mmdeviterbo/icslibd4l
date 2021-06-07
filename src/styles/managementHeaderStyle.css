@@ -1,12 +1,12 @@
 .manage-header-container {
     background-color: white;
     width: 100%;
-    height: 14rem;
+    height: 8rem;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-top: 2rem;
+    padding-top: 6rem;
     padding-bottom: 2rem;
     padding-left: 6%;
     padding-right: 15%;
@@ -14,11 +14,12 @@
 
 .manage-header-container h1 {
     font-family: "Montserrat", sans-serif;
+    color: #0067a1;
     font-weight: bold;
     font-size: 2.75rem;
     margin: 0;
     text-align: right;
-    width: 25%;
+    width: 50%;
 }
 
 .header-label {
@@ -27,15 +28,11 @@
     color: black;
     height: 40%;
     align-items: flex-start;
-
-    /* align-items: center; */
 }
 
 .search-bar-container {
     display: flex;
     padding: 0;
-
-    /* border: 1px dotted red; */
 }
 
 /* Search Bar + Button Container */

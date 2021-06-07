@@ -24,7 +24,8 @@ import BrowseResources from "./components/browseresources/browseResources";
 import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
-import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
+import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
+import activityLogsContainer from "./components/activitylogs/activityLogsContainer";
 
 import "./App.css";
 
@@ -57,14 +58,14 @@ function App() {
             } catch (err) {}
         };
         getCurrentToken();
-    },[]);
+    }, []);
 
     // login/register a user
     const loginRegisterUser = async (userInfo) => {
         try {
             const { data } = await PersonService.loginRegisterUser(userInfo);
             localStorage.setItem(jwtPrivateKey, data); //set token
-            
+
             // get current param, it must stay on where the user's current path
             window.location = window.location.pathname;
         } catch (err) {}
@@ -96,8 +97,7 @@ function App() {
                 {/* <Route path="/view-user/:googleId" component={ViewUser}></Route> */}
                 <Route
                     path="/account-setting/"
-                    component={ViewUserPage}
-                ></Route>
+                    component={ViewUserPage}></Route>
                 <Route exact path="/not-found" component={Notfound}></Route>
 
                 <Route
@@ -115,30 +115,27 @@ function App() {
                 {/* placeholder componenets */}
                 <Route
                     path="/browse-books"
-                    render={() => <BrowseResources type={"book"} />}
-                ></Route>
+                    render={() => <BrowseResources type={"book"} />}></Route>
                 <Route
                     path="/browse-special-problems"
-                    render={() => <BrowseResources type={"Special Problem"} />}
-                ></Route>
+                    render={() => (
+                        <BrowseResources type={"Special Problem"} />
+                    )}></Route>
                 <Route
                     path="/browse-theses"
-                    render={() => <BrowseResources type={"Thesis"} />}
-                ></Route>
+                    render={() => <BrowseResources type={"Thesis"} />}></Route>
 
                 <Route
                     path="/sp-thesis/:id"
                     render={(props) => (
                         <ReadingSPTContainer user={user} {...props} />
-                    )}
-                ></Route>
+                    )}></Route>
 
                 <Route
                     path="/book/:id"
                     render={(props) => (
                         <ReadingBookContainer appRef={appRef} {...props} />
-                    )}
-                ></Route>
+                    )}></Route>
                 {/* placeholder componenets */}
 
                 {/* <Route
@@ -151,24 +148,24 @@ function App() {
                 {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
                 <Route
                     path="/manage-resources"
-                    component={ManageResourcesPage}
-                ></Route>
+                    component={ManageResourcesPage}></Route>
                 <Route
                     path="/manage-users"
-                    render={() => <ManageUser user={user} />}
-                ></Route>
+                    render={() => <ManageUser user={user} />}></Route>
 
                 <Route path="/add-new-spt" component={AddSPThesisPage}></Route>
                 <Route path="/add-new-book" component={AddBookPage}></Route>
                 <Route
                     path="/edit-spt/:id"
-                    component={EditSPTFormContainer}
-                ></Route>
+                    component={EditSPTFormContainer}></Route>
 
                 <Route
                     path="/edit-book/:id"
-                    component={EditBookFormContainer}
-                ></Route>
+                    component={EditBookFormContainer}></Route>
+
+                <Route
+                    path="/view-activitylogs"
+                    component={activityLogsContainer}></Route>
 
                 <Route path="/about" render={() => <About appRef={appRef} />} />
                 <Route exact path="/not-found" component={Notfound}></Route>

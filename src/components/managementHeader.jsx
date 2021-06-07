@@ -1,6 +1,7 @@
 import React from "react";
 import SearchResources from "./temporarySearchBar";
 import SearchUsers from "./temporarySearchBar";
+import SearchLogs from "./temporarySearchBar";
 import "../styles/managementHeaderStyle.css";
 
 // <summary>
@@ -13,13 +14,25 @@ const ManagementHeader = ({ type }) => {
                 {type === "resource" ? (
                     <SearchResources type={type} />
                 ) : (
-                    <SearchUsers type={type} />
+                    [
+                        type === "user" ? (
+                            <SearchUsers type={type} />
+                        ) : (
+                            <SearchLogs type={type} />
+                        ),
+                    ]
                 )}
             </div>
             {type == "resource" ? (
                 <h1>Manage Resources</h1>
             ) : (
-                <h1>Manage Users</h1>
+                [
+                    type === "user" ? (
+                        <h1>Manage Users</h1>
+                    ) : (
+                        <h1>Activity Logs</h1>
+                    ),
+                ]
             )}
         </div>
     );

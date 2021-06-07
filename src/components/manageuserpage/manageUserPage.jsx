@@ -11,14 +11,18 @@ export default function ManageUserPage({ user }) {
     const history = useHistory();
     return (
         <>
-        {(!user || (user && user.userType !== 1))? history.push("/home") : <div className="manage-user-container">
-            {/* <UserSearch /> */}
-            <ManagementHeader />
-            <FilterMenu />
-            <div className="usertable-container" style={{}}>
-                <UserTable user={user} />
-            </div>
-        </div>}
+            {!user || (user && user.userType !== 1) ? (
+                history.push("/home")
+            ) : (
+                <div className="manage-user-container">
+                    {/* <UserSearch /> */}
+                    <ManagementHeader type={"user"} />
+                    <FilterMenu />
+                    <div className="usertable-container" style={{}}>
+                        <UserTable user={user} />
+                    </div>
+                </div>
+            )}
         </>
     );
 }
