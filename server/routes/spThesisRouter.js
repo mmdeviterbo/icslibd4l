@@ -44,8 +44,10 @@ const fileFilter = (req, file, cb) => {
         ) {
             cb(null, true);
         } else {
-            cb(null, false);
+            cb(new Error("Not a IMG File!!"), false);
         }
+    } else if (file.fieldname == "source code") {
+        cb(null, true);
     }
 };
 
@@ -130,6 +132,21 @@ const storage = new GridFsStorage({
                             }
                         }
                     );
+                    gfs.files.findOne(
+                        { metadata: [sp_thesis_id, "source code"] },
+                        (err, updatedSPT) => {
+                            if (updatedSPT) {
+                                // .chunks
+                                mongoose.connection.db
+                                    .collection("sp_files.chunks")
+                                    .deleteMany({ files_id: updatedSPT._id });
+                                // .files
+                                gfs.files.deleteOne({
+                                    metadata: [sp_thesis_id, "source code"],
+                                });
+                            }
+                        }
+                    );
                 }
             }
 
@@ -168,7 +185,6 @@ body: {
   title" title,
   abstract" abstract,
   year: year,
-  source_code: source_code,
   manuscript: manuscript,
   journal: journal,
   poster: poster,
@@ -179,7 +195,7 @@ body: {
 manuscript : pdf
 poster : pdf
 journal : img file
-
+source code : file
 Response Object:
 {
   "advisers": [ {fname, lname}, ... ],
@@ -202,6 +218,7 @@ router.post(
         { name: "manuscript", maxCount: 1 },
         { name: "poster", maxCount: 1 },
         { name: "journal", maxCount: 1 },
+        { name: "source code", maxCount: 1 },
     ]),
     async (req, res) => {
         try {
@@ -235,11 +252,9 @@ router.post(
                 !authors ||
                 !keywords
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        errorMessage: "Please enter all required fields.",
-                    });
+                return res.status(400).json({
+                    errorMessage: "Please enter all required fields.",
+                });
             }
 
             // search if book exists
@@ -328,15 +343,14 @@ router.post(
 // Reference:
 // https://stackoverflow.com/questions/36891931/gridfs-find-file-by-id-download-with-the-name-of-the-file
 
-// get the pdf of a particular sp
-// version 1: display file
+// get the manuscript, journal, or source code of a particular sp/thesis
 /**************************************************** 
 Request Query:
     title: 
-    type: "manuscript", "journal"
-
+    type: "manuscript", "journal", "source code"
 Response Object:
-pdf Filestream
+    * pdf Filestream for manuscript and journal
+    * Filestream for sourcecode
 ********************************************************/
 router.get("/download", async (req, res) => {
     thesisModel.findOne(
@@ -365,6 +379,41 @@ router.get("/download", async (req, res) => {
         }
     );
 });
+
+// get the poster of a particular sp/thesis
+/**************************************************** 
+Request Query:
+    title: 
+Response Object:
+img Filestream for poster
+********************************************************/
+router.get("/preview", async (req, res) => {
+    thesisModel.findOne(
+        { title: { $regex: req.query.search, $options: "i" } },
+        (err, result) => {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log(result.sp_thesis_id);
+
+                gfs.files.findOne(
+                    { metadata: [result.sp_thesis_id, "poster"] },
+                    (err, file) => {
+                        if (err) {
+                            res.send(err);
+                        } else {
+                            // Read output to browser
+                            const readstream = gfs.createReadStream(
+                                file.filename
+                            );
+                            readstream.pipe(res);
+                        }
+                    }
+                );
+            }
+        }
+    );
+});
 // version 2: display file object
 /**************************************************** 
 Request Object:
@@ -372,7 +421,6 @@ req object: JSON
 body: {
   sp_thesis_id,
 }
-
 Response Object:
 {
   "_id": _id,
@@ -404,7 +452,6 @@ req object: JSON
 body: {
  type,
 }
-
 Response Object: Array
 [
     {
@@ -474,7 +521,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_advisers",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "adviser",
+                        as: "advisers",
                     },
                 },
                 {
@@ -482,7 +529,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_authors",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "author",
+                        as: "authors",
                     },
                 },
                 {
@@ -506,7 +553,48 @@ router.post("/browse", async (req, res) => {
     }
 });
 
-// search data
+// search and filter resources
+/**************************************************** 
+http://localhost:3001/thesis/search
+Request Object:
+query: {
+    type (any/book/sp/thesis),
+    search,
+    year,
+    publisher,
+    author,
+    adviser,
+    subject,
+    keyword (string array)
+}
+Response Object: Array of book/sp/thesis
+[
+    {
+        advisers: [],
+        authors: [],
+        keywords: [],
+        sp_thesis_id,
+        type,
+        title,
+        abstract,
+        year
+    },
+    ...
+    {
+        author: [],
+        subject: [],
+        bookId,
+        ISBN,
+        title,
+        physicalDesc,
+        publisher,
+        numberOfCopies,
+        datePublished,
+        dateAcquired
+    },
+    ...
+]
+********************************************************/
 router.get("/search", async (req, res) => {
     // Search and Filter Resources
     // http://localhost:3001/thesis/search
@@ -514,7 +602,6 @@ router.get("/search", async (req, res) => {
     // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
     // RESPONSE:
     // - array of objects (book/sp/thesis)
-
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -526,16 +613,7 @@ router.get("/search", async (req, res) => {
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
-
         // FILTER ENTRIES in final_arr
-
-        // Filter by title (case insensitive, checks for substring match)
-        if ("title" in req.query) {
-            let titleFilter = req.query.title.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                return item.title.toLowerCase().includes(titleFilter);
-            });
-        }
 
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
@@ -543,7 +621,7 @@ router.get("/search", async (req, res) => {
             final_arr = final_arr.filter((item) => {
                 if ("year" in item) {
                     return item.year == yearFilter;
-                }else if ("datePublished" in item) {
+                } else if ("datePublished" in item) {
                     return item.datePublished.getFullYear() == yearFilter;
                 }
             });
@@ -565,23 +643,35 @@ router.get("/search", async (req, res) => {
         if ("author" in req.query) {
             let authorFilter = req.query.author.toLowerCase();
             final_arr = final_arr.filter((item) => {
-                return item.author.some((auth) => {
-                    return auth.author_name
-                        .toLowerCase()
-                        .includes(authorFilter);
-                });
+                if ("author" in item) {
+                    return item.author.some((auth) => {
+                        return auth.author_name
+                            .toLowerCase()
+                            .includes(authorFilter);
+                    });
+                } else {
+                    return item.authors.some((auth) => {
+                        return auth.author_name
+                            .toLowerCase()
+                            .includes(authorFilter);
+                    });
+                }
             });
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
+        // format of req.query.adviser = "Lastname, Firstname"
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
+            let fnameFilter, lnameFilter;
+            [lnameFilter, fnameFilter] = adviserFilter.split(", ");
             final_arr = final_arr.filter((item) => {
-                if ("adviser" in item) {
-                    return item.adviser.some((advi) => {
-                        return advi.adviser_name
-                            .toLowerCase()
-                            .includes(adviserFilter);
+                if ("advisers" in item) {
+                    return item.advisers.some((advi) => {
+                        return (
+                            advi.adviser_fname.toLowerCase() == fnameFilter &&
+                            advi.adviser_lname.toLowerCase() == lnameFilter
+                        );
                     });
                 }
             });
@@ -602,12 +692,13 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // req.query.keyword: array of keyword strings (use double quotes in request)
-        // sample: keyword=["keyw1","keyw2","keyw3"]
+        // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
         if ("keyword" in req.query) {
-            try{
-                let keywordArrayFilter = JSON.parse(req.query.keyword);
-                keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
+            try {
+                let keywordArrayFilter = req.query.keyword;
+                keywordArrayFilter = keywordArrayFilter.map((k) =>
+                    k.toLowerCase()
+                );
                 final_arr = final_arr.filter((item) => {
                     if ("keywords" in item) {
                         return item.keywords.some((keyw) => {
@@ -619,17 +710,17 @@ router.get("/search", async (req, res) => {
                         });
                     }
                 });
-            }catch(error){
-                if(error instanceof SyntaxError){
+            } catch (error) {
+                if (error instanceof SyntaxError) {
                     console.log("SyntaxError: Invalid req.query.keyword");
-                }else{
+                } else {
                     console.log(error);
                 }
                 res.status(400).send(error);
             }
         }
 
-        if (!res.headersSent){
+        if (!res.headersSent) {
             res.send(final_arr); // filtered search results
         }
     }
@@ -727,7 +818,7 @@ router.get("/search", async (req, res) => {
             [
                 {
                     $match: {
-                        author_name: {
+                        sp_thesis_keyword: {
                             $regex: req.query.search,
                             $options: "i",
                         },
@@ -787,6 +878,7 @@ router.get("/search", async (req, res) => {
                                 },
                             },
                         ],
+
                         (error, results) => {
                             if (error) {
                                 res.send(error);
@@ -937,7 +1029,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -946,7 +1038,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "author",
+                                    as: "authors",
                                 },
                             },
                             {
@@ -1279,7 +1371,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1288,7 +1380,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "author",
+                                    as: "authors",
                                 },
                             },
                             {
@@ -1516,7 +1608,7 @@ router.get("/search", async (req, res) => {
     }
 
     // ---------------------------------------- SUB FUNCTIONS
-    if (req.query.type == "all") {
+    if (req.query.type == "any") {
         // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
         // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
         // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
@@ -1563,7 +1655,6 @@ body:
 file: pdf
 file: jpeg
 file: pdf
-
 Response String:
 "Entry Updated"
 ********************************************************/
@@ -1574,6 +1665,7 @@ router.put(
         { name: "manuscript", maxCount: 1 },
         { name: "poster", maxCount: 1 },
         { name: "journal", maxCount: 1 },
+        { name: "source code", maxCount: 1 },
     ]),
     async (req, res) => {
         const {
@@ -1771,6 +1863,22 @@ router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
                 // .files
                 gfs.files.deleteOne({
                     metadata: [sp_thesis_id_holder, "manuscript"],
+                });
+            }
+        }
+    );
+
+    gfs.files.findOne(
+        { metadata: [sp_thesis_id_holder, "source code"] },
+        (err, updatedSPT) => {
+            if (updatedSPT) {
+                // .chunks
+                mongoose.connection.db
+                    .collection("sp_files.chunks")
+                    .deleteMany({ files_id: updatedSPT._id });
+                // .files
+                gfs.files.deleteOne({
+                    metadata: [sp_thesis_id_holder, "source code"],
                 });
             }
         }

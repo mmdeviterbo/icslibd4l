@@ -1,28 +1,40 @@
-import React, {useState, useEffect} from 'react'
-import CardBook from './cardBook';
-import latestAcqBg from '../../assets/searchBg_4.png';
-import { useHistory } from 'react-router-dom';
-import ResourceService from '../../services/resourceService'
+import React, { useState, useEffect } from "react";
+import CardBook from "./cardBook";
+import latestAcqBg from "../../assets/searchBg_4.png";
+import { useHistory } from "react-router-dom";
+import ResourceService from "../../services/resourceService";
+import Parser from "html-react-parser";
 
 export default function LatestAcquisitions({ latestAcqRef }) {
     const history = useHistory();
     const [hoverText, setHoverText] = useState("");
-    const [acquisitions, setacquisitions] = useState([])
-    const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
+    const [acquisitions, setacquisitions] = useState([]);
+    const [covers, setCovers] = useState("");
 
-    useEffect(async()=>{
-        // get title and year (of 12 books, sorted array)
-        const {data} = await ResourceService.getBooks();
-        setacquisitions(data);
-    },[])
+    const imgNotAvailable =
+        "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
-    const handleViewAllBooks=()=>{
-        history.push('/view-all-books');
-    }
+    useEffect(() => {
+        async function getLatestAcquisition() {
+            // get title and year (of 12 books, sorted array)
+            const booksInfo = await ResourceService.getBooks();
+            setacquisitions(booksInfo.data);
 
-    useEffect(()=>{
-        acquisitions.sort((a,b) => (a.year < b.year) ? 1 : ((b.year < a.year) ? -1 : 0))
-    },[acquisitions])
+            // const bookCovers = await ResourceService.getBookCovers();
+            // setCovers(bookCovers.data);
+        }
+        getLatestAcquisition();
+    }, []);
+
+    const handleViewAllBooks = () => {
+        history.push("/browse-books");
+    };
+
+    useEffect(() => {
+        acquisitions.sort((a, b) =>
+            a.year < b.year ? 1 : b.year < a.year ? -1 : 0
+        );
+    }, [acquisitions]);
 
     return (
         <div
@@ -30,18 +42,31 @@ export default function LatestAcquisitions({ latestAcqRef }) {
             style={latestAcquisitionsContainer}
             ref={latestAcqRef}
         >
+            {/* <div>{covers && Parser(covers)}</div> */}
             <img src={latestAcqBg} style={latestAcqBgStyle} alt="#" />
             <div style={colorsParent} className="latestAcqcolorsParent">
                 <div style={whiteBg}>
                     <span style={hoverTextStyleWhite}>{hoverText}</span>
-                    <div style={acquisitionsInnerContainer} className="acquisitionsInnerContainer">
-                        {acquisitions.map(book=><CardBook className="cardContainer"
-                            imageSrc={imgNotAvailable} title={book.title || "No title"} 
-                            key={book.title}
-                            linkTo="/home"
-                            year={book.dateAcquired || book.Published || "No date"}
-                            setHoverText={setHoverText}
-                        />)}
+                    <div
+                        style={acquisitionsInnerContainer}
+                        className="acquisitionsInnerContainer"
+                    >
+                        {acquisitions.map((book) => (
+                            <CardBook
+                                className="cardContainer"
+                                imageSrc={imgNotAvailable}
+                                title={book.title || "No title"}
+                                key={book.title}
+                                linkTo={`/book/${book.bookId}`}
+                                year={
+                                    book.dateAcquired ||
+                                    book.Published ||
+                                    "No date"
+                                }
+                                setHoverText={setHoverText}
+                                book={book}
+                            />
+                        ))}
                     </div>
                 </div>
                 <div style={blueBg}>
@@ -64,7 +89,14 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                         </p>
                     </div>
                     <div style={buttonViewAllBooks}>
-                        {/* <button type="button" className="btn btn-success btnViewAll" style={buttonStyle} onClick={handleViewAllBooks}>View All</button> */}
+                        <button
+                            type="button"
+                            className="btn btn-success btnViewAll"
+                            style={buttonStyle}
+                            onClick={handleViewAllBooks}
+                        >
+                            View All
+                        </button>
                     </div>
                 </div>
             </div>
@@ -181,11 +213,14 @@ const buttonViewAllBooks = {
     zIndex: 10000,
 };
 const buttonStyle = {
-    border: "1px solid white",
-    background: "none",
-    color: "white",
+    background: "#e0e0e0",
+    border:"none",
+    color:"black",
+    borderRadius:"7px",
     padding: "3% 10%",
+    boxShadow: "3px 3px 7px black",
     fontSize: "calc(12px + 0.5vw)",
+    transition:"0.2s"
 };
 
 // mobile responsiveness is in homepagestyle.css

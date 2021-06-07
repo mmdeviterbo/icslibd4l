@@ -9,8 +9,8 @@
     min-height: 65px;
     display: flex;
     justify-content: center;
-    align-items:center;
-    background:rgb(0, 103, 161);
+    align-items: center;
+    background: rgb(0, 103, 161);
     box-shadow: 2px 2px 7px black;
 
     /* protect from copy paste  */
@@ -122,6 +122,14 @@
     background: rgb(207, 207, 207) !important;
 }
 
+.homeBtn:hover{
+    transform: scale(1.01);
+    box-shadow: 3px 3px 5px black;
+    background:rgba(255,255,255) !important;
+    box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.5), -3px -3px 5px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+
 /* hover effects */
 .acquisitionsInnerContainer:hover {
     filter: brightness(0.95) !important;
@@ -140,7 +148,8 @@
     transition: 0.5s;
 }
 .browseBox:hover {
-    transform: scale(1.06);
+    transform: scale(1.04);
+    background:white !important;
 }
 
 .hoverForImagesVector:hover ~ .homepageBgParent .homeItem {
@@ -456,5 +465,6 @@
     filter: invert(1) !important;
 }
 .btnViewAll:hover {
-    filter: invert(1) !important;
+    background: white !important;
+    transform: scale(1.02);
 }

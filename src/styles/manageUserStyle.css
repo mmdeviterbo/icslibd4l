@@ -56,7 +56,16 @@
     align-items: left;
 }
 
+.table-icons {
+    -webkit-user-select: none !important; /* Chrome all / Safari all */
+    -moz-user-select: none !important; /* Firefox all */
+    -ms-user-select: none !important; /* IE 10+ */
+    -o-user-select: none !important;
+    user-select: none !important;
+}
+
 .table-icons:hover {
     transition: transform 100ms ease, box-shadow 125ms ease !important;
     transform: scale(1.25) !important;
+    cursor: pointer;
 }

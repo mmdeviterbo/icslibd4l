@@ -1,29 +1,33 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import TitleAuthorHere from "./titleContainer";
+import React, { useEffect } from "react";
+import TitleContainer from "./titleContainer";
 import "../../styles/viewspt/viewSPTStyle.css";
 import AbstractContainer from "./abstractContainer";
 import InfoSidebar from "./sideInfoContainer";
 
-const ReadingSPTContainer = ({ resourceData }) => {
-  const location = useLocation();
-  // const { resourceData } = location.state.resourceData;
-  // console.log(resourceData);
-  // console.log(userType)
+const ReadingSPTContainer = (props) => {
+  const resourceData =
+    (props.location && props.location.state.resourceData) || {};
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <div className="ViewSPTMainPageContainer">
-      <TitleAuthorHere
+    <div className="spt-page-container">
+      <TitleContainer
         title={resourceData.title}
-        authorList={resourceData.authorList}
+        authorList={resourceData.author}
         year={resourceData.year}
       />
 
       <div className="abstract-and-info">
         <AbstractContainer abstract={resourceData.abstract} />
         <InfoSidebar
+          user={props.user}
+          title={resourceData.title}
+          id={resourceData.sp_thesis_id}
           type={resourceData.type}
-          adviserList={resourceData.adviserList}
+          adviserList={resourceData.adviser}
           keywords={resourceData.keywords}
         />
       </div>
