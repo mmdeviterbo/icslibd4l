@@ -374,8 +374,8 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row && row.bookId
-                            ? row && row.bookId
+                          {row && row.ISBN
+                            ? row && row.ISBN
                             : row && row.sp_thesis_id}
                           {/* {row.id} */}
                         </div>

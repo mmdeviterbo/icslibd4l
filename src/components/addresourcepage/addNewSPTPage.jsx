@@ -112,8 +112,7 @@ const AddNewSPThesisForm = () => {
     },
   ]);
   const [adviserList, setAdviserList] = useState([]);
-  const FormData = require("form-data");
-  const formData = new FormData();
+
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
@@ -138,7 +137,7 @@ const AddNewSPThesisForm = () => {
       };
 
       console.log(userInput);
-      const { data } = await ResourceServices.addSpThesis(formData);
+      const { data } = await ResourceServices.addSpThesis(userInput);
       console.log(data);
 
       setSuccess("success");
@@ -168,63 +167,6 @@ const AddNewSPThesisForm = () => {
     const adviser = [...adviserList].map((obj) => obj.value);
     // setCourses(values);
     setAdviserList(adviser);
-  };
-
-  // not working qwq
-  // const handleFile = (e) => {
-  //   let file = e.target.files[0];
-  //   let reader = new FileReader();
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //     reader.onload = (e) => {
-  //       return file;
-  //     };
-  //   }
-  // };
-
-  // Redundant handlefunctions. Find a way to make it reusable
-  const handleSourceCode = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setSourceCode(file);
-      };
-    }
-  };
-
-  const handleManuscript = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setManuscript(file);
-      };
-    }
-  };
-
-  const handleJournal = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setJournal(file);
-      };
-    }
-  };
-
-  const handlePoster = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setPoster(file);
-      };
-    }
   };
 
   return (
@@ -449,63 +391,45 @@ const AddNewSPThesisForm = () => {
                 }}
               />
             </div>
-            {/* File uploads here */}
-            <div className="spthesisfiles">
-              <h5>Upload Source Code</h5>
+            {/* Redirect links start here */}
+            <div class="primaryfields">
+              <label for="resId">Manuscript: &nbsp; </label>
               <input
-                type="file"
-                className="resourcefiles"
-                id="spthesisJournal"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  // const file = handleFile(e);
-                  // setSourceCode(file);
-                  // console.log(handleFile(e));
-                  handleSourceCode(e);
+                type="text"
+                id="resId"
+                onChange={(event) => {
+                  setManuscript(event.target.value);
                 }}
               />
             </div>
-            <div className="spthesisfiles">
-              <h5>Upload Manuscript</h5>
+            <div class="primaryfields">
+              <label for="resId">Journal: &nbsp; </label>
               <input
-                type="file"
-                className="resourcefiles"
-                id="spthesisManuscript"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  handleManuscript(e);
+                type="text"
+                id="resId"
+                onChange={(event) => {
+                  setJournal(event.target.value);
                 }}
               />
             </div>
-            <div className="spthesisfiles">
-              <h5>Upload Journal</h5>
+            <div class="primaryfields">
+              <label for="resId">Poster: &nbsp; </label>
               <input
-                type="file"
-                className="resourcefiles"
-                id="spthesisJournal"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  handleJournal(e);
+                type="text"
+                id="resId"
+                onChange={(event) => {
+                  setPoster(event.target.value);
                 }}
               />
             </div>
-            <div className="spthesisfiles">
-              <h5>Upload Poster</h5>
+            <div class="primaryfields">
+              <label for="resId">Source Code: &nbsp; </label>
               <input
-                type="file"
-                className="resourcefiles"
-                id="spthesisPoster"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  handlePoster(e);
+                type="text"
+                id="resId"
+                onChange={(event) => {
+                  setSourceCode(event.target.value);
                 }}
-              />
-            </div>
-            <div className="primaryfields">
-              <label htmlFor="keywords-field">Keywords: &nbsp; </label>
-              <ChipInput
-                id="keywords-field"
-                onChange={(chips) => handleChips(chips)}
               />
             </div>
             <br />

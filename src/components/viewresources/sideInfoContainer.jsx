@@ -1,56 +1,37 @@
 import React from "react";
-import resourceService from "../../services/resourceService";
-import { saveAs } from "file-saver";
-// import { useHistory } from "react-router-dom";
 
-const InfoSidebar = ({ type, adviserList, keywords, user }) => {
-  // console.log(title);
-  // // const history = useHistory();
-
-  // const handleDownload = async (value) => {
-  //   try {
-  //     // title = req.query, type = req.params
-  //     const urlRequest = `/download?type=${value}`;
-  //     // console.log(value);
-  //     const { data } = await resourceService.downloadFile(
-  //       { title: title },
-  //       urlRequest
-  //     );
-  //     data.overrideMimeType("text/plain; charset=x-user-defined");
-  //     const abyte = data.charCodeAt(0) & 0xff;
-  //     // history.push(urlRequest);
-  //     // saveAs("file.pdf");
-  //     console.log(abyte);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+// TO-DO: Change the links according to the appropriate SPT attributes
+const InfoSidebar = ({ user, resourceData }) => {
+  let link = "https://www.youtube.com/watch?v=m4gnMWua4xo";
+  const handleRedirect = (redirectHere) => {
+    window.location.href = redirectHere;
+  };
   return (
     <div className="info-sidebar">
       <table id="spttableinfo">
         <tr>
           <th className="spt-thtr">Type</th>
-          <th className="spt-thtr">{type}</th>
+          <th className="spt-thtr">{resourceData.type}</th>
         </tr>
 
         <tr>
           <th className="spt-thtr">Adviser</th>
-          {adviserList &&
-            adviserList.map((item, key) => (
-              <th className="spt-thtr" key={key}>
+          {resourceData.advisers &&
+            resourceData.advisers.map((item, key) => (
+              <div className="spt-thtr-multi" key={key}>
                 {item.adviser_name}
-              </th>
+              </div>
             ))}
         </tr>
 
         <tr>
           <th className="spt-thtr">Keywords</th>
           <th className="keyword-container">
-            {keywords &&
-              keywords.map((item, key) => (
-                <th className="spt-thr" key={key}>
+            {resourceData.keywords &&
+              resourceData.keywords.map((item, key) => (
+                <div className="spt-thtr-multi" key={key}>
                   {item.sp_thesis_keyword}
-                </th>
+                </div>
               ))}
           </th>
         </tr>
@@ -58,19 +39,35 @@ const InfoSidebar = ({ type, adviserList, keywords, user }) => {
 
       {user && (
         <div className="spt-view-buttons">
-          <button id="viewposter">
+          <button
+            id="viewposter"
+            value={link}
+            onClick={(e) => handleRedirect(e.target.value)}
+          >
             <i className="fas fa-file-image"></i>
             View Poster
           </button>
           {/* if guest/book -> display: none */}
 
-          <button id="downloadjournal">Download Journal</button>
+          <button
+            id="downloadjournal"
+            value={link}
+            onClick={(e) => handleRedirect(e.target.value)}
+          >
+            View Journal
+          </button>
           {user && user.userType !== 4 && (
             <>
-              <button id="downloadsourcecode">Download Source Code</button>
+              <button
+                id="downloadsourcecode"
+                value={link}
+                onClick={(e) => handleRedirect(e.target.value)}
+              >
+                View Source Code
+              </button>
               <br />
               <br />
-              <a id="view-manuscript">
+              <a id="view-manuscript" href={link}>
                 {/* <i class = "fas fa-book-open"></i> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

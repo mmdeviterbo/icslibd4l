@@ -16,7 +16,7 @@ const ReadingSPTContainer = (props) => {
     <div className="spt-page-container">
       <TitleContainer
         title={resourceData.title}
-        authorList={resourceData.author}
+        authorList={resourceData.authors}
         year={resourceData.year}
       />
 
@@ -24,11 +24,12 @@ const ReadingSPTContainer = (props) => {
         <AbstractContainer abstract={resourceData.abstract} />
         <InfoSidebar
           user={props.user}
-          title={resourceData.title}
-          id={resourceData.sp_thesis_id}
-          type={resourceData.type}
-          adviserList={resourceData.adviser}
-          keywords={resourceData.keywords}
+          // title={resourceData.title}
+          // id={resourceData.sp_thesis_id}
+          // type={resourceData.type}
+          // adviserList={resourceData.advisers}
+          // keywords={resourceData.keywords}
+          resourceData={resourceData}
         />
       </div>
     </div>

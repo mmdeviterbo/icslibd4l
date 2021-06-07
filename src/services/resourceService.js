@@ -2,13 +2,8 @@ import http from "./httpService";
 import { apiEndpoint } from "../config.json";
 
 // add a resource details (sp/thesis, book)
-const addSpThesis = (formData) => {
-    for (var key of formData.entries()) {
-        console.log(key[0] + ", " + key[1]);
-      }
-    return http.post(`${apiEndpoint}/thesis/create`, formData, {withCredentials: true}, {
-        headers: { "Content-Type": "multipart/form-data" }
-    })
+const addSpThesis = (sptData) => {
+    return http.post(`${apiEndpoint}/thesis/create`, sptData, {withCredentials: true})
 }
 
 const addBook = (bookData) => {
