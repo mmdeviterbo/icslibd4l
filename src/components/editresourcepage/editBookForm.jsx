@@ -73,7 +73,7 @@ export default function EditBookFormContainer(props) {
         }
     }, []);
 
-    console.log(idSource)           //object is received
+    console.log(idSource)           //object id is received
     console.log(bookInfoArr);       //info of all res is received
 
     // iterate through array to match id
@@ -87,7 +87,7 @@ export default function EditBookFormContainer(props) {
                         publisher,
                         datePublished,
                         dateAcquired,
-                        // author,
+                        author,
                         isbn,
                         physicalDesc,
                         numberOfCopies,
@@ -101,6 +101,7 @@ export default function EditBookFormContainer(props) {
                     setPublisher(publisher)
                     setDatePublished(datePublished);
                     setDateAcquired(dateAcquired);
+                    setAuthor(author);
                     // setAuthorList(author);
                     setISBN(isbn);
                     setDescription(physicalDesc);
@@ -360,6 +361,7 @@ export default function EditBookFormContainer(props) {
                             id="resAuthorFN"
                             // name="fname"
                             required
+                            defaultValue={author.author_fname}
                             value={p.fname}
                             onChange={(e) => {
                             const fname = e.target.value;
@@ -382,8 +384,9 @@ export default function EditBookFormContainer(props) {
                             type="text"
                             id="resAuthorLN"
                             required
+                            defaultValue={author.author_lname}
                             // name="lname"
-                            value={p.lname}
+                            // value={p.lname}
                             onChange={(e) => {
                             const lname = e.target.value;
                             setAuthorList((currentAuthors) =>
@@ -424,7 +427,7 @@ export default function EditBookFormContainer(props) {
 
                         {/* for testing only: */}
                     {/* <div className = "testdiv">
-                        {JSON.stringify(title, null, 2)}
+                        {JSON.stringify(author, null, 2)}
                     </div> */}
 
                 </div>

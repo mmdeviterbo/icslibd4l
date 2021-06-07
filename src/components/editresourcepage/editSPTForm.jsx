@@ -370,7 +370,7 @@ export default function EditSPTFormContainer(props) {
 
                             {/* for testing only: */}
                             <div className = "testdiv">
-                                {JSON.stringify(type, null, 2)}
+                                {JSON.stringify(author[0], null, 2)}
                             </div>
 
                         </div> {/* closing tag for authors group */}
