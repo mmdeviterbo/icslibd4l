@@ -1,5 +1,7 @@
+.manage-user-container{
+    min-height: 85vh;
+}
 .user-search-container {
-    height: 20vh;
     display: flex;
     place-items: center;
     padding-top: 50px;
