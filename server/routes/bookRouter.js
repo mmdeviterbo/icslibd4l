@@ -6,15 +6,7 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
-const config = require("config");
-const path = require("path");
-const crypto = require("crypto");
-const mongoose = require("mongoose");
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
-const Grid = require("gridfs-stream");
-
-const database = process.env.db;
+var uniqid = require('uniqid');
 
 router.post("/get-news", async (req, res) => {
     // console.log('hello')
@@ -72,121 +64,43 @@ router.post("/get-news", async (req, res) => {
     }
 });
 
-// Create mongo connection
-let gfs;
-let conn;
-mongoose.connection.on("connected", () => {
-    conn = mongoose.createConnection(
-        database,
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            socketTimeoutMS: 10000,
-        },
-        (err) => {
-            if (err) return console.error(err);
-        }
-    );
-
-    // Init gfs
-
-    conn.once("open", () => {
-        // Init stream
-        gfs = Grid(conn.db, mongoose.mongo);
-        gfs.collection("book_covers");
-    });
-});
-
-// Create storage engine
-const storage = new GridFsStorage({
-    url: database,
-    file: (req, file) => {
-        return new Promise(async (resolve, reject) => {
-            const bookId = JSON.parse(req.body.body).bookId; //parse the book id from the multipart form
-            const dateAcquired = JSON.parse(req.body.body).dateAcquired; //parse the date acquired from the multipart form
-            const existingBook = await bookModel.findOne({ bookId }); //check if the book already exists
-            if (existingBook) {
-                // for book create (no oldBookId in input)
-                if (JSON.parse(req.body.body).oldBookId == undefined) {
-                    return reject("Book already exists!");
-                } else {
-                    //for book update
-                    // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
-                    // check first if the book has a saved book cover
-                    gfs.files.findOne(
-                        { "metadata.bookId": bookId },
-                        (err, existingBookCover) => {
-                            if (existingBookCover) {
-                                // .chunks
-                                mongoose.connection.db
-                                    .collection("book_covers.chunks")
-                                    .deleteOne({
-                                        files_id: existingBookCover._id,
-                                    });
-                                // .files
-                                gfs.files.deleteOne({
-                                    "metadata.bookId": bookId,
-                                });
-                            }
-                        }
-                    );
-                }
-            }
-
-            crypto.randomBytes(16, (err, buf) => {
-                //gives the file a different name
-                if (err) {
-                    return reject(err);
-                }
-                const filename =
-                    buf.toString("hex") + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    metadata: { bookId, dateAcquired }, //store the book id in the metadata
-                    bucketName: "book_covers",
-                };
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const upload = multer({ storage });
-
 //creates a book and uploads its book cover
 /**************************************************** 
 Request Object:
 req object:
-Multipart form
+json
 book: {
-    bookId,
     title,
+    ISBN,
     authors,
     subjects,
     physicalDesc,
     publisher,
     numberOfCopies,
+    bookCoverLink,
     datePublished,
     dateAcquired,
 }
-file: jpeg/png
+
 res object:
 {
     bookId,
     title,
+    ISBN,
     authors,
     subjects,
     physicalDesc,
     publisher,
     numberOfCopies,
+    bookCoverLink,
     datePublished,
     dateAcquired,
 }
 ********************************************************/
-router.post("/create", authFaculty, upload.any(), async (req, res) => {
+router.post("/create", authFaculty, async (req, res) => {
     console.log(req.body);
     try {
         const {
-            bookId,
             title,
             ISBN,
             authors,
@@ -194,13 +108,13 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
             physicalDesc,
             publisher,
             numberOfCopies,
+            bookCoverLink,
             datePublished,
             dateAcquired,
-        } = JSON.parse(req.body.body);
+        } = req.body;
 
         // sample verification: incomplete fields
         if (
-            !bookId ||
             !title ||
             !authors ||
             !subjects ||
@@ -212,10 +126,12 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
         }
 
         //search if book exists
-        const existingBook = await bookModel.findOne({ bookId });
+        const existingBook = await bookModel.findOne({ ISBN });
 
         if (!existingBook) {
             //if book does not exist, add the book
+
+            const bookId = uniqid('BOOK_'); //generate a unique id for the book
 
             const newBook = new bookModel({
                 //add the non-array fields to the books collection
@@ -225,6 +141,7 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
                 physicalDesc,
                 publisher,
                 numberOfCopies,
+                bookCoverLink,
                 datePublished,
                 dateAcquired,
             });
@@ -267,35 +184,8 @@ router.post("/create", authFaculty, upload.any(), async (req, res) => {
     }
 });
 
-//display the latest 12 book covers on the homepage
-router.get("/display_covers", async (req, res) => {
-    gfs.files
-        .find()
-        .limit(12)
-        .sort({ "metadata.dateAcquired": -1 })
-        .toArray((err, files) => {
-            // Check if files
-            if (!files || files.length === 0) {
-                res.render("index", { files: false });
-            } else {
-                files.map((file) => {
-                    if (
-                        file.contentType === "image/jpeg" ||
-                        file.contentType === "image/png"
-                    ) {
-                        file.isImage = true;
-                    } else {
-                        file.isImage = false;
-                    }
-                });
-                //   res.render('index', { files: files });
-                res.send(files);
-            }
-        });
-});
-
 //display the latest 12 book infos on the homepage
-router.get("/display_infos", async (req, res) => {
+router.get("/display_latest", async (req, res) => {
     bookModel.aggregate(
         [{ $sort: { dateAcquired: -1 } }, { $limit: 12 }],
         (err, result) => {
@@ -308,220 +198,6 @@ router.get("/display_infos", async (req, res) => {
     );
 });
 
-// get the pdf of a particular sp
-/**************************************************** 
-Request Object:
-req object: JSON
-body: {
-  book_id,
-}
-Response Object:
-pdf Filestream
-********************************************************/
-// version 1: display file
-router.get("/download1", async (req, res) => {
-    const { bookId } = req.body;
-
-    gfs.files.findOne({ "metadata.bookId": bookId }, (err, file) => {
-        if (err) {
-            res.send(err);
-        } else {
-            // Read output to browser
-            const readstream = gfs.createReadStream(file.filename);
-            readstream.pipe(res);
-        }
-    });
-});
-// version 2: display file object
-/**************************************************** 
-Request Object:
-req object: JSON
-body: {
-  book_id,
-}
-Response Object:
-{
-  "_id": _id,
-  "length": length,
-  "chunkSize": chunkSize,
-  "uploadDate": uploadDate,
-  "filename": filename,
-  "md5": md5,
-  "contentType": contentType,
-  "metadata": book_id
-}
-********************************************************/
-router.get("/download2", async (req, res) => {
-    const { bookId } = req.body;
-
-    gfs.files.findOne({ "metadata.bookId": bookId }, (err, file) => {
-        if (err) {
-            res.send(err);
-        } else {
-            return res.json(file);
-        }
-    });
-});
-
-// search data
-/**************************************************** 
-Request Object:
-req query: JSON
-body: {
-  type,
-  search
-}
-Response Object: Array of Objects
-{
-  "_id": _id,
-  "length": length,
-  "chunkSize": chunkSize,
-  "uploadDate": uploadDate,
-  "filename": filename,
-  "md5": md5,
-  "contentType": contentType,
-  "metadata": book_id
-}
-********************************************************/
-router.get("/search", async (req, res) => {
-    let final_array = [];
-
-    if (req.query.type == "Book") {
-        // RESOURCE: Book
-        if (req.query.field == "title") {
-            // search by TITLE
-            bookModel.aggregate(
-                [
-                    { $match: { title: { $regex: req.query.search } } },
-                    {
-                        $lookup: {
-                            from: "book_authors",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "author",
-                        },
-                    },
-                    {
-                        $lookup: {
-                            from: "book_subjects",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "subject",
-                        },
-                    },
-                ],
-
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        res.send(result);
-                    }
-                }
-            );
-        } else if (req.query.field == "subject") {
-            // search by SUBJECT
-            bookSubjectModel.aggregate(
-                // get matches based from queries
-                [{ $match: { subject: { $regex: req.query.search } } }],
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        // extract all IDs from matches
-                        result.forEach((item, index) => {
-                            final_array.push(item.bookId);
-                        });
-
-                        // get unique IDs
-                        let unique_ID = [...new Set(final_array)];
-
-                        // extract equivalent entries from bookModel
-                        bookModel.aggregate(
-                            [
-                                { $match: { bookId: { $in: unique_ID } } },
-                                {
-                                    $lookup: {
-                                        from: "book_authors",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "author",
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: "book_subjects",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "subject",
-                                    },
-                                },
-                            ],
-
-                            (error, results) => {
-                                if (error) {
-                                    res.send(error);
-                                } else {
-                                    res.send(results);
-                                }
-                            }
-                        );
-                    }
-                }
-            );
-        } else if (req.query.field == "author") {
-            // search by AUTHOR
-            bookAuthorModel.aggregate(
-                // get matches based from queries
-                [{ $match: { author_name: { $regex: req.query.search } } }],
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        // extract all IDs from matches
-                        result.forEach((item, index) => {
-                            final_array.push(item.bookId);
-                        });
-
-                        // get unique IDs
-                        let unique_ID = [...new Set(final_array)];
-
-                        // extract equivalent entries from bookModel
-                        bookModel.aggregate(
-                            [
-                                { $match: { bookId: { $in: unique_ID } } },
-                                {
-                                    $lookup: {
-                                        from: "book_authors",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "author",
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: "book_subjects",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "subject",
-                                    },
-                                },
-                            ],
-
-                            (error, results) => {
-                                if (error) {
-                                    res.send(error);
-                                } else {
-                                    res.send(results);
-                                }
-                            }
-                        );
-                    }
-                }
-            );
-        }
-    }
-});
 /**************************************************** 
 Request Object:
 req object:JSON
@@ -540,7 +216,7 @@ file: jpeg/png
 res String: 
 "Entry Updated"
 ********************************************************/
-router.put("/update", authAdmin, upload.any(), async (req, res) => {
+router.put("/update", authAdmin, async (req, res) => {
     const {
         oldBookId,
         bookId,
@@ -553,7 +229,7 @@ router.put("/update", authAdmin, upload.any(), async (req, res) => {
         numberOfCopies,
         datePublished,
         dateAcquired,
-    } = JSON.parse(req.body.body);
+    } = req.body;
 
     // verification: incomplete fields
     if (
@@ -679,11 +355,11 @@ router.delete("/delete", authAdmin, async (req, res) => {
                 (err, existingBookCover) => {
                     if (existingBookCover) {
                         // .chunks
-                        mongoose.connection.db
-                            .collection("book_covers.chunks")
-                            .deleteOne({ files_id: existingBookCover._id });
-                        // .files
-                        gfs.files.deleteOne({ "metadata.bookId": bookId });
+                        // mongoose.connection.db
+                        //     .collection("book_covers.chunks")
+                        //     .deleteOne({ files_id: existingBookCover._id });
+                        // // .files
+                        // gfs.files.deleteOne({ "metadata.bookId": bookId });
                     }
                 }
             );
