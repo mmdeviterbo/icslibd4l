@@ -238,7 +238,6 @@ res object: array containing book, book_authors, and book_subjects
     ]
 ]
 
-file: jpeg/png
 res String: 
 "Entry Updated"
 ********************************************************/
@@ -285,7 +284,7 @@ book: {
     datePublished,
     dateAcquired
 }
-file: jpeg/png
+
 res String: 
 "Entry Updated"
 ********************************************************/
