@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
 import { toast } from "react-toastify";
-// import ToastNotification from "../toastNotification";
+import ToastNotification from "../toastNotification";
 import "react-toastify/dist/ReactToastify.css";
 
 const courseList = [
@@ -81,17 +81,18 @@ const AddBookFormContainer = () => {
       // window.location = "/add-new-book";
     } catch (err) {
       if (err.response && err.response.data) {
-        alert(err.response.data.errorMessage);
-        toast(err.response.data.errorMessage, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        // ToastNotification();
+        // alert(err.response.data.errorMessage);
+        // toast(err.response.data.errorMessage, {
+        //   position: "top-right",
+        //   autoClose: 5000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
+        // toast("jhi");
+        ToastNotification({ content: "hellohehe" });
         // setSuccess("fail");
         // setShow(true);
         // alert(err.response.data.errorMessage); // some reason error message

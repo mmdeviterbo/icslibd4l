@@ -45,6 +45,7 @@ const ReadingBookContainer = (props) => {
           subjects={resourceData.subject}
           physicalDesc={resourceData.physicalDesc}
         />
+
         {/* <BookPhysDescription physicalDesc={resourceData.physicalDesc} /> */}
       </div>
     </div>

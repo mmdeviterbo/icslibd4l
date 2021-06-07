@@ -72,7 +72,7 @@ function getNews() {
 
 // get all books (object of information only, not images), sorted by date (latest acquisition feature)
 function getBooks(){
-    return http.get(`${apiEndpoint}/books/display_infos`);
+    return http.get(`${apiEndpoint}/books/display_latest`);
 }
 
 // get all books (object of images), sorted by date (latest acquisition feature)

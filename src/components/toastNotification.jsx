@@ -4,22 +4,36 @@ import { ToastContainer, toast } from "react-toastify";
 // minified version is also included
 import "react-toastify/dist/ReactToastify.min.css";
 
+toast.configure();
 export default function ToastNotification({ content }) {
-  console.log("at here");
+  console.log(content);
+  const showToast = (content) => {
+    toast.warn(content, {
+      position: "top-center",
+      hideProgressBar: true,
+    });
+  };
+  // toast.warn(content, {
+  //   position: "top-center",
+  //   autoClose: 5000,
+  //   hideProgressBar: true,
+  //   closeOnClick: true,
+  //   pauseOnHover: true,
+  //   draggable: false,
+  //   progress: undefined,
+  // });
   return (
     <div>
       <ToastContainer
-        position="top-right"
         autoClose={5000}
-        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        draggable
+        draggable={false}
         pauseOnHover
       />
-      {content}
+      {showToast(content)}
       <ToastContainer />
     </div>
   );

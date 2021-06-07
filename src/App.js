@@ -126,6 +126,8 @@ function App() {
                     render={() => <BrowseResources type={"Thesis"} />}
                 ></Route>
 
+
+                {/* Call the function for search specific resource */}
                 <Route
                     path="/sp-thesis/:id"
                     render={(props) => (
