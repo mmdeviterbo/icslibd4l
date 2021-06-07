@@ -259,7 +259,6 @@ const compile = async function (templateName, data) {
         process.cwd(),
         `./server/reportTemplate/${templateName}.hbs`
     );
-    console.log(data);
     const html = await fs.readFile(filePath, "utf-8");
     return hbs.compile(html)(data);
 };
@@ -281,7 +280,6 @@ router.get("/report", async (req, res) => {
     //type of report to be generated
     const type = req.query.type;
 
-    console.log(type);
     try {
         //init
         const browser = await puppeteer.launch({
@@ -369,7 +367,6 @@ router.get("/report", async (req, res) => {
         //users, not a priority
         if (type === "users") {
             const users = await UserModel.find().sort({ userType: 1 });
-            console.log(users);
         }
 
         //user logs, not a priority
@@ -397,7 +394,7 @@ router.get("/report", async (req, res) => {
         const bookPage = await browser.newPage();
         await bookPage.setContent(bookContent);
         await bookPage.pdf({
-            path: "./Books.pdf",
+            path: "./download/Books.pdf",
             format: "A4",
             printBackground: true,
         });
@@ -406,21 +403,21 @@ router.get("/report", async (req, res) => {
         const spThesisPage = await browser.newPage();
         await spThesisPage.setContent(spThesisContent);
         await spThesisPage.pdf({
-            path: "./spThesis.pdf",
+            path: "./download/spThesis.pdf",
             format: "A4",
             printBackground: true,
         });
 
         const merger = new pdfMerge();
 
-        merger.add("Books.pdf");
-        merger.add("spThesis.pdf");
+        merger.add("./download/Books.pdf");
+        merger.add("./download/spThesis.pdf");
 
-        await merger.save("Merged.pdf");
+        await merger.save("./download/Merged.pdf");
 
         await browser.close();
 
-        res.send(spThesis);
+        res.send();
     } catch (err) {
         console.error(err);
         res.status(500).send(err);
