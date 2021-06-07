@@ -4,7 +4,6 @@ import "../../styles/viewspt/viewSPTStyle.css";
 import AbstractContainer from "./abstractContainer";
 import ResourceService from "../../services/resourceService";
 import InfoSidebar from "./sideInfoContainer";
-import { css } from "@emotion/react";
 import PropagateLoader from "react-spinners/PropagateLoader";
 
 const ReadingSPTContainer = (props) => {

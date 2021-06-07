@@ -1594,6 +1594,7 @@ router.get("/search-id", async (req, res) => {
     }
     // ------- SEARCH BOOK FUNCTIONS
     function bookMain() {
+        console.log('at here')
         // get book matches on bookModel based from req.query.id
         bookModel.aggregate(
             [
