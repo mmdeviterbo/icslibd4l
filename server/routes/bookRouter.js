@@ -8,8 +8,6 @@ const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
 var uniqid = require('uniqid');
 
-const database = process.env.db;
-
 router.post("/get-news", async (req, res) => {
     // console.log('hello')
     let options = {
@@ -355,17 +353,22 @@ router.delete("/delete/:bookId", authAdmin, async (req, res) => {
 
             // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
             // check first if the book has a saved book cover
-            gfs.files.findOne({ "metadata.bookId" : bookIdHolder }, (err, existingBookCover) => {
-                if (existingBookCover) {   
-                    // .chunks
-                    mongoose.connection.db.collection("book_covers.chunks").deleteOne({"files_id": existingBookCover._id});
-                    // .files
-                    gfs.files.deleteOne({"metadata.bookId" : bookIdHolder});
+            gfs.files.findOne(
+                { "metadata.bookId": bookId },
+                (err, existingBookCover) => {
+                    if (existingBookCover) {
+                        // .chunks
+                        // mongoose.connection.db
+                        //     .collection("book_covers.chunks")
+                        //     .deleteOne({ files_id: existingBookCover._id });
+                        // // .files
+                        // gfs.files.deleteOne({ "metadata.bookId": bookId });
+                    }
                 }
-            });
+            );
             res.send("Entry Deleted");
         } else {
-            res.status(400).json({errorMessage:"This book does not exist! Cannot delete."});
+            res.status(400).send("This book does not exist! Cannot delete.");
         }
     } catch (err) {
         console.log(err);

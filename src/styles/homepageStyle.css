@@ -10,7 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgb(0, 103, 161);
+    background: #0067a1;
     box-shadow: 2px 2px 7px black;
 
     /* protect from copy paste  */
@@ -120,7 +120,23 @@
     font-weight: 900 !important;
     color: black !important;
     background: rgb(207, 207, 207) !important;
+    text-align: center !important;
+    
 }
+
+.loginModal{
+    width:70%;
+    background: #0067a1 !important;
+    padding: 2% !important;
+    display: flex;
+    justify-content: center;
+    box-shadow: 1px 1px 3px rgb(105, 105, 105) !important;
+    font-size: 1vw !important;
+    border-radius: 5px !important;
+    color:black !important;
+    z-index: 10;
+}
+
 
 .homeBtn:hover{
     transform: scale(1.01);

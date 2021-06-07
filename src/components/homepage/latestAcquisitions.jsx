@@ -3,25 +3,22 @@ import CardBook from "./cardBook";
 import latestAcqBg from "../../assets/searchBg_4.png";
 import { useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
-import Parser from "html-react-parser";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 export default function LatestAcquisitions({ latestAcqRef }) {
     const history = useHistory();
     const [hoverText, setHoverText] = useState("");
     const [acquisitions, setacquisitions] = useState([]);
-    const [covers, setCovers] = useState("");
-
-    const imgNotAvailable =
-        "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
+    const [loader, setLoader] = useState(true);
+    
+    const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
     useEffect(() => {
         async function getLatestAcquisition() {
             // get title and year (of 12 books, sorted array)
             const booksInfo = await ResourceService.getBooks();
+            setLoader(false);
             setacquisitions(booksInfo.data);
-
-            // const bookCovers = await ResourceService.getBookCovers();
-            // setCovers(bookCovers.data);
         }
         getLatestAcquisition();
     }, []);
@@ -48,10 +45,13 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                 <div style={whiteBg}>
                     <span style={hoverTextStyleWhite}>{hoverText}</span>
                     <div
-                        style={acquisitionsInnerContainer}
+                        style={loader? displayLoader : acquisitionsInnerContainer}
                         className="acquisitionsInnerContainer"
                     >
-                        {acquisitions.map((book) => (
+                        {loader? 
+                         <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />
+                        :
+                        (acquisitions.map((book) => (
                             <CardBook
                                 className="cardContainer"
                                 imageSrc={imgNotAvailable}
@@ -66,7 +66,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                                 setHoverText={setHoverText}
                                 book={book}
                             />
-                        ))}
+                        )))}
                     </div>
                 </div>
                 <div style={blueBg}>
@@ -131,6 +131,13 @@ const acquisitionsInnerContainer = {
     overflow: "auto auto",
     transition: "0.8s",
 };
+const displayLoader = {
+    display:"grid",
+    placeItems: "center",
+    height:"100%"
+}
+
+
 const latestAcqBgStyle = {
     position: "absolute",
     height: "100%",
