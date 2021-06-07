@@ -16,9 +16,9 @@ const ManageResourcesPage = () => {
         try{
             const jwt = localStorage.getItem(jwtPrivateKey);
             var userInfo = PersonService.decryptToken(jwt);
-            if(userInfo?.userType!==1) history.push("/home");
+            if(userInfo?.userType!==1) return history.push("/home");
         }catch(err){
-            history.push("/home");
+            return history.push("/home");
         }
     },[]);
 
