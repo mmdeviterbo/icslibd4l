@@ -1,7 +1,5 @@
 import React from "react";
-import SearchResources from "./temporarySearchBar";
-import SearchUsers from "./temporarySearchBar";
-import SearchLogs from "./temporarySearchBar";
+import TemporarySearchBar from "./temporarySearchBar";
 import "../styles/managementHeaderStyle.css";
 
 // <summary>
@@ -11,17 +9,7 @@ const ManagementHeader = ({ type }) => {
     return (
         <div className="manage-header-container">
             <div className="search-bar-container">
-                {type === "resource" ? (
-                    <SearchResources type={type} />
-                ) : (
-                    [
-                        type === "user" ? (
-                            <SearchUsers type={type} />
-                        ) : (
-                            <SearchLogs type={type} />
-                        ),
-                    ]
-                )}
+                <TemporarySearchBar />
             </div>
             {type == "resource" ? (
                 <h1>Manage Resources</h1>

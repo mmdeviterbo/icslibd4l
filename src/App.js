@@ -183,6 +183,13 @@ function App() {
                 />
             )}
 
+            {background && (
+                <Route
+                    path="/view-activitylogs/clear-activitylogs"
+                    children={<DeleteModalContainer />}
+                />
+            )}
+
             <Footer />
         </div>
     );

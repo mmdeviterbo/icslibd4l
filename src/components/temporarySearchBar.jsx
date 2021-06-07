@@ -8,15 +8,7 @@ const TemporarySearchBar = ({ type }) => {
         <div className="staff-search-bar-container">
             <input
                 className="search-bar-temp"
-                placeholder={
-                    type === "resource"
-                        ? "Search for Resources #temporary search"
-                        : [
-                              type === "user"
-                                  ? "Search for users #temporary search"
-                                  : "Search for an activity # temporary search",
-                          ]
-                }
+                placeholder={"Search for something #temporary search"}
             />
             {/* temporary search bar */}
             <div className="input-group-append">
