@@ -568,6 +568,7 @@ query: {
     keyword (string array)
 }
 Response Object: Array of book/sp/thesis
+    (sp/thesis sorted by title + books sorted by title)
 [
     {
         advisers: [],
@@ -596,12 +597,6 @@ Response Object: Array of book/sp/thesis
 ]
 ********************************************************/
 router.get("/search", async (req, res) => {
-    // Search and Filter Resources
-    // http://localhost:3001/thesis/search
-    // REQUEST:
-    // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
-    // RESPONSE:
-    // - array of objects (book/sp/thesis)
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -613,49 +608,63 @@ router.get("/search", async (req, res) => {
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
-        // FILTER ENTRIES in final_arr
+
+        // separate books and spthesis
+        let book_arr = final_arr.filter(item => "bookId" in item);
+        let spthesis_arr = final_arr.filter(item => "sp_thesis_id" in item);
+
+        // sort by title
+        function compareByTitle( a, b ) {
+            let titleA = a.title.toLowerCase();
+            let titleB = b.title.toLowerCase();
+            if (titleA < titleB){
+                return -1;
+            }
+            if (titleA > titleB){
+                return 1;
+            }
+            return 0;
+        }
+        book_arr.sort(compareByTitle);
+        spthesis_arr.sort(compareByTitle);
 
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
             let yearFilter = req.query.year;
-            final_arr = final_arr.filter((item) => {
-                if ("year" in item) {
-                    return item.year == yearFilter;
-                } else if ("datePublished" in item) {
-                    return item.datePublished.getFullYear() == yearFilter;
-                }
+            spthesis_arr = spthesis_arr.filter((item) => {
+                return item.year == yearFilter;
+            });
+            book_arr = book_arr.filter((item) => {
+                return item.datePublished.getFullYear() == yearFilter;
             });
         }
 
         // Filter by publisher (case insensitive, checks for substring match)
         if ("publisher" in req.query) {
             let publisherFitler = req.query.publisher.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                if ("publisher" in item) {
-                    return item.publisher
-                        .toLowerCase()
-                        .includes(publisherFitler);
-                }
+            book_arr = book_arr.filter((item) => {
+                return item.publisher
+                    .toLowerCase()
+                    .includes(publisherFitler);
             });
         }
 
         // Filter by 1 author (case insensitive, checks for substring match)
         if ("author" in req.query) {
             let authorFilter = req.query.author.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                if ("author" in item) {
-                    return item.author.some((auth) => {
-                        return auth.author_name
-                            .toLowerCase()
-                            .includes(authorFilter);
-                    });
-                } else {
-                    return item.authors.some((auth) => {
-                        return auth.author_name
-                            .toLowerCase()
-                            .includes(authorFilter);
-                    });
-                }
+            spthesis_arr = spthesis_arr.filter((item) => {
+                return item.authors.some((auth) => {
+                    return auth.author_name
+                        .toLowerCase()
+                        .includes(authorFilter);
+                });
+            });
+            book_arr = book_arr.filter((item) => {
+                return item.author.some((auth) => {
+                    return auth.author_name
+                        .toLowerCase()
+                        .includes(authorFilter);
+                });
             });
         }
 
@@ -665,29 +674,25 @@ router.get("/search", async (req, res) => {
             let adviserFilter = req.query.adviser.toLowerCase();
             let fnameFilter, lnameFilter;
             [lnameFilter, fnameFilter] = adviserFilter.split(", ");
-            final_arr = final_arr.filter((item) => {
-                if ("advisers" in item) {
-                    return item.advisers.some((advi) => {
-                        return (
-                            advi.adviser_fname.toLowerCase() == fnameFilter &&
-                            advi.adviser_lname.toLowerCase() == lnameFilter
-                        );
-                    });
-                }
+            spthesis_arr = spthesis_arr.filter((item) => {
+                return item.advisers.some((advi) => {
+                    return (
+                        advi.adviser_fname.toLowerCase() == fnameFilter &&
+                        advi.adviser_lname.toLowerCase() == lnameFilter
+                    );
+                });
             });
         }
 
         // Filter by 1 subject (case insensitive, checks for substring match)
         if ("subject" in req.query) {
             let subjectFilter = req.query.subject.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                if ("subject" in item) {
-                    return item.subject.some((subj) => {
-                        return subj.subject
-                            .toLowerCase()
-                            .includes(subjectFilter);
-                    });
-                }
+            book_arr = book_arr.filter((item) => {
+                return item.subject.some((subj) => {
+                    return subj.subject
+                        .toLowerCase()
+                        .includes(subjectFilter);
+                });
             });
         }
 
@@ -699,16 +704,14 @@ router.get("/search", async (req, res) => {
                 keywordArrayFilter = keywordArrayFilter.map((k) =>
                     k.toLowerCase()
                 );
-                final_arr = final_arr.filter((item) => {
-                    if ("keywords" in item) {
-                        return item.keywords.some((keyw) => {
-                            return keywordArrayFilter.some((keyFilter) => {
-                                return keyw.sp_thesis_keyword
-                                    .toLowerCase()
-                                    .includes(keyFilter);
-                            });
+                spthesis_arr = spthesis_arr.filter((item) => {
+                    return item.keywords.some((keyw) => {
+                        return keywordArrayFilter.some((keyFilter) => {
+                            return keyw.sp_thesis_keyword
+                                .toLowerCase()
+                                .includes(keyFilter);
                         });
-                    }
+                    });
                 });
             } catch (error) {
                 if (error instanceof SyntaxError) {
@@ -720,16 +723,22 @@ router.get("/search", async (req, res) => {
             }
         }
 
+        // Send filtered search results
+        console.log(spthesis_arr.length, book_arr.length)
         if (!res.headersSent) {
-            res.send(final_arr); // filtered search results
+            res.send(spthesis_arr.concat(book_arr));  //concat arrays
         }
     }
-    // REFERENCES for search filter:
-    // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
-    // String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
-    // Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
-    // JSON.parse() https://stackoverflow.com/questions/22080770/i-need-to-create-url-for-get-which-is-going-to-accept-array-how-in-node-js-expr
-    // Array.map() https://attacomsian.com/blog/javascript-array-lowercase-uppercase
+    /* References for search filter:
+        Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
+        String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
+        Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
+        JSON.parse() https://stackoverflow.com/questions/22080770/i-need-to-create-url-for-get-which-is-going-to-accept-array-how-in-node-js-expr
+        Array.map() https://attacomsian.com/blog/javascript-array-lowercase-uppercase
+        Array.sort() https://devdocs.io/javascript/global_objects/array/sort
+        Array.sort() https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+        Array.concat(Array) https://devdocs.io/javascript/global_objects/array/concat
+    */
 
     // ------- SEARCH SP FUNCTIONS
     function spMain(mode) {
