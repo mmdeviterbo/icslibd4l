@@ -123,7 +123,7 @@ router.post("/create", authFaculty, async (req, res) => {
             !publisher ||
             !numberOfCopies
         ) {
-            return res.status(400).send("Please enter all required fields.");
+            return res.status(400).send({errorMessage:"Please enter all required fields."});
         }
 
         //search if book exists
@@ -177,7 +177,7 @@ router.post("/create", authFaculty, async (req, res) => {
             res.json(savedBook);
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send("Book already exists!");
+            res.status(400).send({errorMessage:"Book already exists!"});
         }
     } catch (err) {
         console.log(err);

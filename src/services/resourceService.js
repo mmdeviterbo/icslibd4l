@@ -11,13 +11,8 @@ const addSpThesis = (formData) => {
     })
 }
 
-const addBook = (formData) => {
-    for (var key of formData.entries()) {
-        console.log(key[0] + ", " + key[1]);
-      }
-    return http.post(`${apiEndpoint}/books/create`, formData, {withCredentials: true}, {
-        headers: { "Content-Type": "multipart/form-data" }
-    })
+const addBook = (bookData) => {
+    return http.post(`${apiEndpoint}/books/create`, bookData, {withCredentials: true})
 }
 
 // read data of a resource

@@ -120,18 +120,6 @@ const AddNewSPThesisForm = () => {
   const handleSubmit = async (event) => {
     console.log("meow");
     event.preventDefault();
-    if (
-      // !source_code ||
-      !manuscript ||
-      !journal ||
-      !poster
-    ) {
-      return alert("Please upload the required files");
-    }
-    // console.log(source_code);
-    // console.log(poster);
-    // console.log(journal);
-    // console.log(manuscript);
 
     try {
       const userInput = {
@@ -140,7 +128,7 @@ const AddNewSPThesisForm = () => {
         title,
         abstract,
         year,
-        // source_code,
+        source_code,
         manuscript,
         journal,
         poster,
@@ -150,25 +138,17 @@ const AddNewSPThesisForm = () => {
       };
 
       console.log(userInput);
-      formData.append("body", JSON.stringify(userInput)); // NEED MAUNA TO WTF
-      // formData.append("file", source_code);  // Leave it out for now since need ng clarification about this
-      formData.append("journal", journal);
-      formData.append("manuscript", manuscript);
-      formData.append("poster", poster);
-      // formData.append("body", userInput);
       const { data } = await ResourceServices.addSpThesis(formData);
       console.log(data);
 
       setSuccess("success");
       setShow(true);
-      //   alert(`New Sp/Thesis has been successfully added to the library`);
       event.target.reset();
       // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
         setSuccess("fail");
         setShow(true);
-        // alert(err.response.data.errorMessage); // some reason error message
       }
     }
   };
@@ -265,19 +245,18 @@ const AddNewSPThesisForm = () => {
             {/* Disabled, uneditable */}
             {/* how to get generated ID? */}
             <div className="primaryfields">
-                <label htmlFor="resId">ID: &nbsp; </label>
-                <input
+              <label htmlFor="resId">ID: &nbsp; </label>
+              <input
                 required
                 type="text"
                 id="resId"
-                // value = 
+                // value =
                 // disabled
                 onChange={(event) => {
-                    setId(event.target.value);
+                  setId(event.target.value);
                 }}
-                />
+              />
             </div>
-            
             {/* Title Field */}
             <div className="primaryfields">
               <label htmlFor="resTitle">Title: &nbsp; </label>
