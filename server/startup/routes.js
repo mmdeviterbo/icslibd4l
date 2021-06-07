@@ -39,8 +39,8 @@ module.exports = function (app) {
     });
     app.use(
         cors({
-            allowedHeaders: ['sessionId', 'Content-Type'],
-            exposedHeaders: ['sessionId'],
+            allowedHeaders: ["sessionId", "Content-Type"],
+            exposedHeaders: ["sessionId"],
             origin: "http://localhost:3000",
             methods: ["POST", "GET", "PUT", "DELETE"],
             credentials: true,
@@ -53,7 +53,8 @@ module.exports = function (app) {
     // set up routes
     app.use("/admin", require("../routes/adminRouter"));
     app.use("/users", require("../routes/userRouter"));
+    app.use("/userlogs", require("../routes/userLogRouter"));
     app.use("/books", require("../routes/bookRouter"));
     app.use("/thesis", require("../routes/spThesisRouter"));
-    app.use("/report", require("../routes/reportRouter"));
+    app.use("/reports", require("../routes/reportRouter"));
 };

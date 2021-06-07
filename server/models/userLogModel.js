@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const userLogSchema = new mongoose.Schema(
     {
         //insert schema from the database team
         googleId: {
@@ -29,6 +29,6 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-const User = mongoose.model("userLog", userSchema);
+const UserLog = mongoose.model("userLog", userLogSchema);
 
-module.exports = User;
+module.exports = UserLog;
