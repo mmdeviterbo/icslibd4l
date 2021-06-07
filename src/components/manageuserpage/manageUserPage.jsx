@@ -29,7 +29,7 @@ export default function ManageUserPage({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="manage-user-container">
-                    <ManagementHeader />
+                    <ManagementHeader type={"user"} />
                     <FilterMenu />
                     <div className="usertable-container">
                         <UserTable user={user} />
