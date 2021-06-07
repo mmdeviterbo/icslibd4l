@@ -410,10 +410,10 @@ router.get("/report", async (req, res) => {
 
         const merger = new pdfMerge();
 
-        merger.add("./download/Books.pdf");
-        merger.add("./download/spThesis.pdf");
+        merger.add("./src/download/Books.pdf");
+        merger.add("./src/download/spThesis.pdf");
 
-        await merger.save("./download/Merged.pdf");
+        await merger.save("./src/download/Merged.pdf");
 
         await browser.close();
 
