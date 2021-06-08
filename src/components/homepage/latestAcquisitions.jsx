@@ -15,6 +15,10 @@ export default function LatestAcquisitions({ latestAcqRef }) {
 
     useEffect(async() => {
         const booksInfo = await ResourceService.getLatestBooks();
+        for(var book of booksInfo.data){
+            book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${
+                book.bookCoverLink.replace("https://drive.google.com/file/d/","").replace("/view","")}`;
+        }
         setacquisitions(booksInfo.data);
         setLoader(false); //hide loader animation 
     }, []);
@@ -49,7 +53,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                         (acquisitions.map((book) => (
                             <CardBook
                                 className="cardContainer"
-                                imageSrc={imgNotAvailable}
+                                imageSrc={book.bookCoverLink || imgNotAvailable}
                                 title={book.title || "No title"}
                                 key={book.title}
                                 linkTo={`/book/${book.bookId}`}
@@ -122,7 +126,7 @@ const acquisitionsInnerContainer = {
     maxHeight: "100%",
     display: "grid",
     justifyContent: "space-around",
-    gridTemplateColumns: "auto auto auto",
+    gridTemplateColumns: "auto auto",
     overflow: "auto auto",
     transition: "0.8s",
 };
@@ -156,6 +160,7 @@ const whiteBg = {
     width: "60%",
     background: "rgba(255,255,255,0.8)",
     zIndex: 1,
+    padding:"0.5% 0"
 };
 const blueBg = {
     position: "relative",
