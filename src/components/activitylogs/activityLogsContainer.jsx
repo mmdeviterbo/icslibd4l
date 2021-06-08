@@ -31,7 +31,6 @@ export default function ActivityLogsContainer({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="activity-logs-container">
-                    <img src={searchBg} style={searchBgStyle} alt="#" />
                     <ManagementHeader type={"logs"} />
                     <br />
                     {/* <ActivityFilterContainer /> */}
@@ -58,11 +57,3 @@ export default function ActivityLogsContainer({ user }) {
         </>
     );
 }
-
-const searchBgStyle = {
-    position: "absolute",
-    height: "100%",
-    width: "100%",
-    zIndex: "-1",
-    transform: "scaleY(-1.5)",
-};

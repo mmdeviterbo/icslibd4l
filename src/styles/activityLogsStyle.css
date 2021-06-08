@@ -1,9 +1,8 @@
 .activity-logs-container {
-    /* position:relative; */
-    min-height: 90vh;
+    position:relative !important;
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
-    /* margin: 2rem 10%; */
 }
 
 /* filter */
