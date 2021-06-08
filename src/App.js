@@ -29,6 +29,7 @@ import ManageResourcesPage from "./components/manageresourcespage/manageResource
 import activityLogsContainer from "./components/activitylogs/activityLogsContainer";
 
 import "./App.css";
+import ActivityLogsContainer from "./components/activitylogs/activityLogsContainer";
 
 function App() {
     const [user, setUser] = useState(null); //fullName, email, userType (integer)
@@ -149,7 +150,9 @@ function App() {
                 />
                 <Route
                     path="/view-activitylogs"
-                    component={activityLogsContainer}></Route>
+                    render={() => (
+                        <ActivityLogsContainer user={user} />
+                    )}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
 
                 <Route exact path="/not-found" component={Notfound}></Route>
@@ -161,7 +164,7 @@ function App() {
             {background && (
                 <Route
                     path="/manage-resources/delete-sp-thesis"
-                    children={<DeleteModalContainer />}
+                    children={<DeleteModalContainer user={user} />}
                 />
             )}
             {background && (

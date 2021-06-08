@@ -59,7 +59,7 @@ export default function ActivityTable() {
             history.push("/home");
         }
         readLogs();
-    }, [location]);
+    }, [location, history]);
 
     // Get activity logs from database
     const readLogs = async () => {
