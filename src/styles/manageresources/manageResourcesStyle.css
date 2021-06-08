@@ -1,9 +1,8 @@
-body{
-    font-family: 'Montserrat', sans-serif;
+/* Filter fields container */
+.manage-resources-page-container{
+    min-height: 80vh;
 }
 
-
-/* Filter fields container */
 .res-filter-container {
     display: flex;
     flex-direction: row;

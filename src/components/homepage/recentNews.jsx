@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
 import recentNewsBg from "../../assets/searchBg_4.png";
 import NewsService from "../../services/resourceService";
+import PropagateLoader from "react-spinners/PropagateLoader";
+
+
 export default function RecentNews({ appRef, newsRef }) {
   const [titleNews, setTitleNews] = useState([]);
   const [dateNews, setDateNews] = useState([]);
   const [imgNews, setImgNews] = useState([]);
   const [linkNews, setLinkNews] = useState([]);
+  const [loader, setLoader] = useState(true);
 
   const scrollToTop = () =>
     appRef.current &&
     appRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
 
   const getNewsData = async () => {
+    setLoader(true);
     let { data } = await NewsService.getNews();
     setTitleNews(data.newsTitle);
     setDateNews(data.newsDate);
     setImgNews(data.newsImg);
     setLinkNews(data.newsLinks);
+    setLoader(false);
   };
 
   useEffect(() => {
@@ -39,8 +45,9 @@ export default function RecentNews({ appRef, newsRef }) {
         <p style={newsStyle}>UPLB NEWS</p>
         <div
           className="ui three stackable cards"
-          style={recentNewsInnerContainer}>
-          {titleNews.map((title, index) => (
+          style={loader? displayLoader : recentNewsInnerContainer}>
+          {loader? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
+          titleNews.map((title, index) => (
             <ArticleContainer
               title={title}
               link={linkNews[index]}
@@ -118,7 +125,7 @@ const recentNewsContainer = {
 const titleContentContainer = {
   position: "relative",
   height: "100%",
-  width: "80%",
+  width: "95%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -134,13 +141,13 @@ const recentNewsInnerContainer = {
   padding: "1% 2%",
 };
 const newsStyle = {
-  padding: "30px",
+  padding: "12px",
   width: "100%",
   color: "white",
   background: "rgb(0, 0, 0)",
   borderRadius: "5px 5px 0 0",
   display: "flex",
-  fontSize: "calc(30px + 2vw)",
+  fontSize: "calc(26px + 2vw)",
   fontWeight: 900,
   margin: 0,
 
@@ -160,3 +167,9 @@ const recentNewsBgStyle = {
   zIndex: -1,
   transform: "scaleY(-1)",
 };
+
+const displayLoader = {
+  display:"grid",
+  placeItems: "center",
+  height:"100%"
+}

@@ -19,14 +19,14 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
     // if not found (404), hide the navbar component
     useEffect(() => {
         return history.listen((location) => {
-            if (location.pathname === "/not-found")
+            if (["/not-found", "/unauthorized"].includes(location.pathname))
                 setClassNavBar("navbar-container-none");
             else setClassNavBar("navbar-container");
         });
     }, [history]);
 
     useEffect(() => {
-        if (window.location.pathname === "/not-found")
+        if (["/not-found", "/unauthorized"].includes(window.location.pathname))
             setClassNavBar("navbar-container-none");
         else setClassNavBar("navbar-container");
     }, [classNavBar]);
@@ -39,7 +39,6 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
             fullName: name,
             surname: familyName,
         };
-        console.log(response.profileObj);
         loginRegisterUser(userInfo);
     };
     const responseGoogleFail = (response) => {};
@@ -87,18 +86,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
             <div style={mainBgStyleContainer} />
             <ul className="navbar-elements">
                 <Link className="left-half" to="/home">
-                    <div
-                        draggable="false"
-                        className="ics-uplb-caption"
-                        to="/home"
-                    >
-                        <span className="ics-caption">
-                            Institute of Computer Science Online Library
-                        </span>
-                        <span className="uplb-caption">
-                            University of the Philippines Los Baños
-                        </span>
-                    </div>
+                    ourProjectName
                 </Link>
                 <div className="right-half">
                     <Link to="/home" className="navItem">
@@ -143,7 +131,9 @@ const SearchFilter = ({ user }) => {
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            window.location = window.location.pathname;
+            if(["/manage-users","/manage-resources","/view-activitylogs", "/view-summaryreport"].includes(window.location.pathname)) 
+                window.location = "/home";
+            else window.location = window.location.pathname;
         } catch (err) {}
     };
 
@@ -261,9 +251,6 @@ const mainBgStyleContainer = {
 };
 
 const animationTitle = (classNavBar) => {
-    gsap.from(".ics-caption", { xPercent: -20, duration: 1 });
-    gsap.from(".uplb-caption", { xPercent: -20, duration: 1.5 });
-
     let tempClassName = "." + classNavBar;
     gsap.from(tempClassName, { yPercent: -50, duration: 0.8 });
 };

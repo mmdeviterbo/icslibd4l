@@ -116,6 +116,14 @@ function getAllResources() {
     return http.get(`${apiEndpoint}/thesis/search`);
 }
 
+function getLatestBooks() {
+    return http.get(`${apiEndpoint}/books/display_latest`);
+}
+
+function getAllBooks() {
+    // return http.get(`${apiEndpoint}/thesis/search?type=book&search=all`);
+}
+
 function getSPTFiles({ title, fileType }) {
     return http.post(
         `${apiEndpoint}/thesis/download`,
@@ -150,9 +158,8 @@ const exportFunctions = {
     editSpThesis,
     editBook,
     searchBook,
-    getBooks,
-    // deleteBook,
-    getAllResources,
+    getAllBooks,
+    getLatestBooks,
     getSPTFiles,
     getBookCover,
     downloadFile,

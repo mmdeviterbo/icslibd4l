@@ -57,14 +57,15 @@
     border: 1px solid white;
     padding:50px;
     transition: 0.8s;
+    word-wrap: break-word;
 }
 
 .title-notfound{
-    font-size:70px;
+    font-size:calc(40px + 0.7vw);
     font-weight: 700;
     color:rgb(235, 231, 231);
     text-align:center;
-    line-height: 1;
+    line-height: 1.2;
 }
 .caption-notfound{
     font-size:15px;

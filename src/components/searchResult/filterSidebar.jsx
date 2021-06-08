@@ -6,14 +6,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
-import { coursesData } from "./coursesData";
+// import { coursesData } from "./coursesData";
 import { topicData } from "./topicData";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+// import TextField from "@material-ui/core/TextField";
+// import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Multiselect } from "multiselect-react-dropdown";
-
+import ClearIcon from "@material-ui/icons/Clear";
+import { IconButton } from "@material-ui/core";
 import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSubMenu from "./filterSubMenu";
+import CourseComboBox from "./courseComboBox";
 
 export default function FilterSidebar({
     searchFilterAuthor,
@@ -28,7 +30,6 @@ export default function FilterSidebar({
     setSearchFilterPublisher,
     course,
     setCourse,
-    filterArray,
     keywords,
     setKeywords,
 }) {
@@ -48,12 +49,12 @@ export default function FilterSidebar({
         setResourceType(event.target.value);
     };
 
-    const handleCourseChange = (newVal) => {
-        if (newVal !== undefined || newVal !== null) {
-            setCourse(newVal);
-            // setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
-        }
-    };
+    // const handleCourseChange = (newVal) => {
+    //     if (newVal !== undefined || newVal !== null) {
+    //         setCourse(newVal);
+    //         // setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
+    //     }
+    // };
 
     const getSelected = (data) => {
         setKeywords((keywords) => [...keywords, data[data.length - 1].label]);
@@ -70,6 +71,18 @@ export default function FilterSidebar({
                 <div style={wrapper}>
                     <p style={sidebarTitle}>Filters</p>
                     {FilterSidebarData.map((item, index) => {
+                        if (
+                            item.label === "Adviser" &&
+                            (resourceType === "books" || resourceType === "book")
+                        ) {
+                            return null;
+                        }
+                        if (
+                            item.label === "Publisher" &&
+                            (resourceType === "sp" || resourceType === "thesis")
+                        ) {
+                            return null;
+                        }
                         return (
                             <FilterSubMenu
                                 item={item}
@@ -79,39 +92,18 @@ export default function FilterSidebar({
                                 searchFilterAdviser={searchFilterAdviser}
                                 setSearchFilterAdviser={setSearchFilterAdviser}
                                 searchFilterPublisher={searchFilterPublisher}
-                                setSearchFilterPublisher={
-                                    setSearchFilterPublisher
-                                }
-                                course={course}
+                                setSearchFilterPublisher={setSearchFilterPublisher}
                                 setCourse={setCourse}
                             />
                         );
                     })}
 
                     {/* Courses */}
-                    <span style={sidebarLink} className="sidebarLink">
-                        <span style={sidebarLabel}>Courses</span>
-                    </span>
 
-                    <div style={optionRowStyle} className="row">
-                        <Autocomplete
-                            freeSolo
-                            id="combo-box-courses"
-                            value={course}
-                            options={coursesData.map((option) => option.label)}
-                            // options={AdviserData}
-                            // getOptionLabel={(option) => option.label}
-                            onChange={(e, newValue) => {
-                                handleCourseChange(newValue);
-                            }}
-                            style={{
-                                width: "120px",
-                            }}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Course" />
-                            )}
-                        />
-                    </div>
+                    {(resourceType === "books" || resourceType === "book" || resourceType === "any")
+                        ? <CourseComboBox course={course} setCourse={setCourse} /> 
+                        : null
+                    }
 
                     {/* Topics */}
                     <span style={sidebarLink} className="sidebarLink">
@@ -163,20 +155,25 @@ export default function FilterSidebar({
                         </span>
 
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <div
-                                style={{ marginLeft: "2rem" }}
-                                className="picker"
-                            >
+                            <div style={{ marginLeft: "2rem" }} className="picker">
                                 <DatePicker
                                     selected={searchFilterYear}
                                     value={searchFilterYear}
                                     views={["year"]}
-                                    onChange={(date) =>
-                                        setSearchFilterYear(date)
-                                    }
+                                    onChange={(date) => setSearchFilterYear(date)}
                                     animateYearScrolling
+                                    isclearable="true"
                                     placeholder={"Year"}
+                                    style={{ width: "50px" }}
                                 />
+                                <IconButton
+                                    edge="end"
+                                    size="small"
+                                    disabled={!searchFilterYear}
+                                    onClick={() => setSearchFilterYear(null)}
+                                >
+                                    <ClearIcon />
+                                </IconButton>
                             </div>
                         </MuiPickersUtilsProvider>
                     </div>
@@ -231,15 +228,6 @@ const sidebarLink = {
 
 const sidebarLabel = {
     marginLeft: "1.3vw",
-};
-
-const optionRowStyle = {
-    backgroundColor: "white",
-    overflowWrap: "break-word",
-    marginLeft: "2rem",
-    position: "relative",
-    width: "15vw",
-    zIndex: "1",
 };
 
 const multipleSearchStyle = {
