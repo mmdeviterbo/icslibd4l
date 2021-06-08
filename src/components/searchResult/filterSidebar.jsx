@@ -11,6 +11,9 @@ import { topicData } from "./topicData";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Multiselect } from "multiselect-react-dropdown";
+import ClearIcon from "@material-ui/icons/Clear";
+import  {IconButton} from "@material-ui/core";
+
 
 import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSubMenu from "./filterSubMenu";
@@ -175,8 +178,17 @@ export default function FilterSidebar({
                                         setSearchFilterYear(date)
                                     }
                                     animateYearScrolling
+                                    isClearable
                                     placeholder={"Year"}
                                 />
+                                <IconButton
+                                    edge="end"
+                                    size="small"
+                                    disabled={!searchFilterYear}
+                                    onClick={() => setSearchFilterYear(null)}
+                                    >
+                                    <ClearIcon />
+                                </IconButton>
                             </div>
                         </MuiPickersUtilsProvider>
                     </div>
