@@ -179,14 +179,12 @@ const barStyleOne = {
     top:"30%",
     width:"60%",
     backgroundColor:"rgb(0, 103, 161,0.85)",
-    boxShadow:"1px 1px 3px black"
 }
 const barStyleTwo = {
     ...barStyle,
     top:"50%",
     width:"60%",
     backgroundColor:"rgb(0, 103, 161,0.8)",
-    boxShadow:"1px 1px 3px black"
     
 }
 const barStyleThree = {
@@ -194,18 +192,15 @@ const barStyleThree = {
     top:"60%",
     width:"20%",
     backgroundColor:"rgb(0, 103, 135)",
-    boxShadow:"1px 1px 3px black"
 }
 const barStyleFour = {
     ...barStyle,
     top:"20%",
     width:"30%",
     backgroundColor:"rgb(0, 103, 161,0.6)",
-    boxShadow:"1px 1px 3px black"
 }
 const barStyleFive = {
     ...barStyle,
-    boxShadow:"1px 1px 3px black",
     backgroundColor:"rgb(0, 103, 161,0.8)",
     width:"10%",
     top:"69.5%",
