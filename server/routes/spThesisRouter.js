@@ -211,7 +211,28 @@ router.get("/download", async (req, res) => {
 });
 
 
-// browse all entries, default sort: alphabetical by title
+/// browse all entries, default sort: alphabetical by title
+/**************************************************** 
+Request Object:
+req object: JSON
+body: {
+ type,
+}
+Response Object: Array
+[
+    {
+    "_id": _id,
+    "length": length,
+    "chunkSize": chunkSize,
+    "uploadDate": uploadDate,
+    "filename": filename,
+    "md5": md5,
+    "contentType": contentType,
+    "metadata": "sp_thesis_id
+    },
+    ...
+]
+********************************************************/
 router.post("/browse", async (req, res) => {
     const { type } = req.body;
     if (type === "book") {
@@ -266,7 +287,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_advisers",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "adviser",
+                        as: "advisers",
                     },
                 },
                 {
@@ -274,7 +295,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_authors",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "author",
+                        as: "authors",
                     },
                 },
                 {
@@ -297,6 +318,7 @@ router.post("/browse", async (req, res) => {
         );
     }
 });
+
 
 // search data
 router.get("/search", async (req, res) => {
@@ -1915,7 +1937,7 @@ req object: address parameter
 Response String:
 "Entry Updated"
 ********************************************************/
-router.delete("/delete/:sp_thesis_id", async (req, res) => {
+router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
     console.log("del");
     const sp_thesis_id_holder = req.params.sp_thesis_id;
 

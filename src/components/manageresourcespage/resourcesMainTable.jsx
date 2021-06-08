@@ -354,7 +354,7 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row && row.ISBN
+                          {row && row.bookId
                             ? row && row.ISBN
                             : row && row.sp_thesis_id}
                           {/* {row.id} */}
@@ -391,10 +391,15 @@ const MainResourceTable = () => {
                             fontWeight: "normal",
                           }}
                         >
-                          {row.author &&
-                            row.author.map((item, key) => (
-                              <div key={key}>{item.author_name}</div>
-                            ))}
+                          {row && row.bookId
+                            ? row.author &&
+                              row.author.map((item, key) => (
+                                <div key={key}>{item.author_name}</div>
+                              ))
+                            : row.authors &&
+                              row.authors.map((item, key) => (
+                                <div key={key}>{item.author_name}</div>
+                              ))}
                         </div>
                       </TableCell>
                       <TableCell
