@@ -1309,51 +1309,199 @@ router.get("/search", async (req, res) => {
         );
     }
 
-    // ---------------------------------------- SUB FUNCTIONS
-    if (req.query.type == "any") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
-        // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
-        // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
-        spMain(1);
-    } else if (req.query.type == "book") {
-        // bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
-        bookMain(0);
-    } else if (req.query.type == "sp") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
-        spMain(0);
-    } else if (req.query.type == "thesis") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
-        thesisMain(0);
+    // ------- SEARCH WITH EMPTY REQ.QUERY.SEARCH
+    function noBook(mode){
+        bookModel.aggregate(
+            [
+                {
+                    $lookup: {
+                        from: "book_authors",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "author",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "book_subjects",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "subject",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // mode 0 is browse by book, else it is browse by all 3 types
+                    if (mode == 0) {
+                        filterEntries();
+                    } else {
+                        noSP(mode);
+                    }
+                }
+            }
+        );
     }
+    function noSP(mode){
+        thesisModel.aggregate(
+            [
+                {$match: { type : "SP" }},
+                {
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // mode 0 is browse by SP, else it is browse by all 3 types
+                    if (mode == 0) {
+                        filterEntries();
+                    } else {
+                        noThesis();
+                    }
+                }
+            }
+        );
+    }
+    function noThesis(){
+        thesisModel.aggregate(
+            [
+                {$match: { type : "Thesis" }},
+                {
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // regardless if browse by Thesis or all, it is the last part.
+                    // hence continue to filterEntries()
+                    filterEntries();
+                }
+            }
+        );
+    }
+
+    // ---------------------------------------- MAIN
+    if (!req.query.search){ // if req.query.search is empty, it will return all values within a type
+        if (req.query.type == "any") {
+            // noBook() -> noSP() -> noThesis() -> filterEntries()
+            noBook(1);
+        } else if (req.query.type == "book") {
+            // noBook() -> filterEntries()
+            noBook(0);
+        } else if (req.query.type == "sp") {
+            // noSP() -> filterEntries()
+            noSP(0);
+        } else if (req.query.type == "thesis") {
+            // noThesis() -> filterEntries()
+            noThesis();
+        }
+    }else{ // else, continue with search
+        if (req.query.type == "any") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
+            // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
+            // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
+            spMain(1);
+        } else if (req.query.type == "book") {
+            // bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
+            bookMain(0);
+        } else if (req.query.type == "sp") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
+            spMain(0);
+        } else if (req.query.type == "thesis") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
+            thesisMain(0);
+        }
+    }
+
 });
 
 // search data by id
 /**************************************************** 
 Request Query:
     id :
+    type
 Response:
-    * array of objects
+    * 1 object
 ********************************************************/
+// REFERENCE:
+// https://stackoverflow.com/questions/37582331/how-to-return-only-the-first-occurrence-of-an-id-with-mongoose
+
 router.get("/search-id", async (req, res) => {
 
-    var idArr_book = []; // array for BookIDs
-    var idArr_thesis = []; // array for ThesisIDs
-    var total = []; // array for resulting entries
-
     // ---------------------------------------- SUB FUNCTIONS
-    function filterEntries(){
-        // get unique entries
-        let final_arr = [...new Set(total)];
-
-        // return entries
-        res.send(final_arr);
-    }
-
+ 
     function spMain() {
-        // get sp matches on thesisModel based from req.query.id
         thesisModel.aggregate(
             [
-                {$match: {sp_thesis_id : req.query.id }},
+                { 
+                    $match: {
+                        sp_thesis_id : req.query.id,
+                        type : "SP", 
+                    }
+                },
                 {
                     // populate advisers field
                     $lookup: {
@@ -1381,225 +1529,71 @@ router.get("/search-id", async (req, res) => {
                         as: "keywords",
                     },
                 },
+                { $limit:1 }
             ],
             (err, result) => {
                 if (err) {
                     res.send(err);
                 } else {
-                    // iterate each element and push to total array
-                    result.forEach((item) => {
-                        total.push(item);
-                    });
-
-                    // jump to search thru SP authors
-                    spAuthor();
+                    res.send(result);
                 }
             }
         );
     }
-    function spAuthor() {
-        // get sp matches on thesisAuthorModel based from req.query.id
-        thesisAuthorModel.aggregate(
-            [ {$match: {sp_thesis_id : req.query.id }},
-            ],
-            (err, result) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    // extract all IDs from matches
-                    result.forEach((item) => {
-                        idArr_thesis.push(item.sp_thesis_id);
-                    });
 
-                    // extract equivalent entries from thesisModel
-                    thesisModel.aggregate(
-                        [
-                            { $match: {sp_thesis_id: { $in: idArr_thesis }} },
-                            {
-                                $lookup: {
-                                    // populate advisers field
-                                    from: "sp_thesis_advisers",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "advisers",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    // populate authors field
-                                    from: "sp_thesis_authors",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "authors",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    // populate keywords field
-                                    from: "sp_thesis_keywords",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "keywords",
-                                },
-                            },
-                        ],
-                        (error, results) => {
-                            if (error) {
-                                res.send(error);
-                            } else {
-                                // iterate each element and push to total array
-                                results.forEach((item) => {
-                                    total.push(item);
-                                });
-
-                                // reset placeholder array
-                                idArr_thesis = [];
-                                // jump to search thru SP advisers
-                                spAdviser();
-                            }
-                        }
-                    );
-                }
-            }
-        );
-    }
-    function spAdviser() {
-        // get sp matches on thesisAdviserModel based from req.query.id
-        thesisAdviserModel.aggregate(
-            [ {$match: {sp_thesis_id : req.query.id }},
-            ],
-            (err, result) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    // extract all IDs from matches
-                    result.forEach((item) => {
-                        idArr_thesis.push(item.sp_thesis_id);
-                    });
-
-                    // extract equivalent entries from thesisModel
-                    thesisModel.aggregate(
-                        [
-                            { $match: {sp_thesis_id: { $in: idArr_thesis }} },
-                            {
-                                $lookup: {
-                                    // populate advisers field
-                                    from: "sp_thesis_advisers",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "advisers",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    // populate authors field
-                                    from: "sp_thesis_authors",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "authors",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    // populate keywords field
-                                    from: "sp_thesis_keywords",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "keywords",
-                                },
-                            },
-                        ],
-                        (error, results) => {
-                            if (error) {
-                                res.send(error);
-                            } else {
-                                // iterate each element and push to total array
-                                results.forEach((item) => {
-                                    total.push(item);
-                                });
-
-                                // reset placeholder array
-                                idArr_thesis = [];
-                                // jump to search thru SP keywords
-                                spKeyword();
-                            }
-                        }
-                    );
-                }
-            }
-        );
-    }
-    function spKeyword() {
-        // get sp matches on thesisKeywordModel based from req.query.id
-        thesisKeyModel.aggregate(
+    function thesisMain() {
+        thesisModel.aggregate(
             [
-                {$match: {sp_thesis_id : req.query.id }},
+                { 
+                    $match: {
+                        sp_thesis_id : req.query.id,
+                        type : "Thesis", 
+                    }
+                },
+                {
+                    // populate advisers field
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    // populate authors field
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    // populate keywords field
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+                { $limit:1 }
             ],
             (err, result) => {
                 if (err) {
                     res.send(err);
                 } else {
-                    // extract all IDs from matches
-                    result.forEach((item) => {
-                        idArr_thesis.push(item.sp_thesis_id);
-                    });
-
-                    // extract equivalent entries from thesisModel
-                    thesisModel.aggregate(
-                        [
-                            { $match: {sp_thesis_id: { $in: idArr_thesis }} },
-                            {
-                                $lookup: {
-                                    // populate advisers field
-                                    from: "sp_thesis_advisers",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "adviser",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    // populate authors field
-                                    from: "sp_thesis_authors",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "authors",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    // populate keywords field
-                                    from: "sp_thesis_keywords",
-                                    localField: "sp_thesis_id",
-                                    foreignField: "sp_thesis_id",
-                                    as: "keywords",
-                                },
-                            },
-                        ],
-
-                        (error, results) => {
-                            if (error) {
-                                res.send(error);
-                            } else {
-                                // iterate each element and push to total array
-                                results.forEach((item) => {
-                                    total.push(item);
-                                });
-
-                                bookMain();
-                            }
-                        }
-                    );
+                    res.send(result);
                 }
             }
         );
     }
-    // ------- SEARCH BOOK FUNCTIONS
+
     function bookMain() {
         // get book matches on bookModel based from req.query.id
         bookModel.aggregate(
             [
-                {$match: {bookID : req.query.id }},
+                {$match: { bookID : req.query.id }},
                 {
                     $lookup: {
                         // populate authors field
@@ -1618,144 +1612,27 @@ router.get("/search-id", async (req, res) => {
                         as: "subject",
                     },
                 },
-            ],
-            (error, results) => {
-                if (error) {
-                    res.send(error);
-                } else {
-                    // iterate each element and push to total array
-                    results.forEach((item) => {
-                        total.push(item);
-                    });
-
-                    // jump to search thru Book authors
-                    bookAuthor();
-                }
-            }
-        );
-    }
-    function bookAuthor() {
-        // get book matches on bookAuthorModel based from req.query.search
-        bookAuthorModel.aggregate(
-            [
-                {$match: {bookID : req.query.id }},
-            ],
-            (err, result) => {
-                if (err) {
-                    res.send(result);
-                } else {
-                    // extract all IDs from matches
-                    result.forEach((item) => {
-                        idArr_book.push(item.bookId);
-                    });
-
-                    // extract equivalent entries from bookModel
-                    bookModel.aggregate(
-                        [
-                            { $match: { bookId: { $in: idArr_book } } },
-                            {
-                                $lookup: {
-                                    // populate authors field
-                                    from: "book_authors",
-                                    localField: "bookId",
-                                    foreignField: "bookId",
-                                    as: "author",
-                                },
-                            },
-                            {
-                                // populate subject field
-                                $lookup: {
-                                    from: "book_subjects",
-                                    localField: "bookId",
-                                    foreignField: "bookId",
-                                    as: "subject",
-                                },
-                            },
-                        ],
-                        (error, results) => {
-                            if (error) {
-                                res.send(error);
-                            } else {
-                                // iterate each element and push to total array
-                                results.forEach((item) => {
-                                    total.push(item);
-                                });
-
-                                // reset placeholder array
-                                idArr_book = [];
-                                // jump to search thru Thesis keywords
-                                bookSubject();
-                            }
-                        }
-                    );
-                }
-            }
-        );
-    }
-    function bookSubject() {
-        // get book matches on bookSubjectModel based from req.query.search
-        bookSubjectModel.aggregate(
-            [
-                {$match: {bookID : req.query.id }},
+                { $limit:1 }
             ],
             (err, result) => {
                 if (err) {
                     res.send(err);
                 } else {
-                    // extract all IDs from matches
-                    result.forEach((item) => {
-                        idArr_book.push(item.bookId);
-                    });
-
-                    // extract equivalent entries from bookModel
-                    bookModel.aggregate(
-                        [
-                            { $match: { bookId: { $in: idArr_book } } },
-                            {
-                                $lookup: {
-                                    // populate authors field
-                                    from: "book_authors",
-                                    localField: "bookId",
-                                    foreignField: "bookId",
-                                    as: "author",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    // populate subject field
-                                    from: "book_subjects",
-                                    localField: "bookId",
-                                    foreignField: "bookId",
-                                    as: "subject",
-                                },
-                            },
-                        ],
-
-                        (error, results) => {
-                            if (error) {
-                                res.send(error);
-                            } else {
-                                // iterate each element and push to total array
-                                results.forEach((item) => {
-                                    total.push(item);
-                                });
-
-                                // regardless if search by Book or All Fields, this function is at the last part
-                                // hence, pass data to filterEntries fxn
-                                filterEntries();
-                            }
-                        }
-                    );
+                    res.send(result);
                 }
             }
         );
     }
+   
+    // ---------------------------------------- MAIN
 
-    // ---------------------------------------- SUB FUNCTIONS
-
-    // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
-    // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
-    spMain();
+    if (req.query.type == "SP"){
+        spMain();
+    }else if (type == "Book"){
+        bookMain();
+    }else if (type =="Thesis"){
+        thesisMain();
+    }   
 });
 
 
