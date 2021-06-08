@@ -6,9 +6,15 @@ import { Dropdown, Icon } from "semantic-ui-react";
 import { gsap } from "gsap";
 import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
+import ResourceService from "../services/resourceService";
 
 // the entire navigation bar
-export default function NavigationBar({ loginRegisterUser, browseRef, user, appRef }) {
+export default function NavigationBar({
+    loginRegisterUser,
+    browseRef,
+    user,
+    appRef,
+}) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory();
 
@@ -50,14 +56,19 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
                     behavior: "smooth",
                     block: "start",
                 });
-        else if (["/browse-books","/browse-special-problems","/browse-theses"].includes(window.location.pathname)){
+        else if (
+            [
+                "/browse-books",
+                "/browse-special-problems",
+                "/browse-theses",
+            ].includes(window.location.pathname)
+        ) {
             appRef.current &&
-            appRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }
-        else history.push("/browse-special-problems");
+                appRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+        } else history.push("/browse-special-problems");
     };
     const logInButton = () => {
         return (
@@ -131,7 +142,14 @@ const SearchFilter = ({ user }) => {
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            if(["/manage-users","/manage-resources","/view-activitylogs", "/view-summaryreport"].includes(window.location.pathname)) 
+            if (
+                [
+                    "/manage-users",
+                    "/manage-resources",
+                    "/view-activitylogs",
+                    "/view-summaryreport",
+                ].includes(window.location.pathname)
+            )
                 window.location = "/home";
             else window.location = window.location.pathname;
         } catch (err) {}
@@ -215,7 +233,16 @@ const SearchFilter = ({ user }) => {
                 </span>
             ),
             value: "View Summary Report",
-            onClick: () => history.push("/view-summaryreport"),
+            onClick: () => {
+                const generateSummary = async () => {
+                    try {
+                        await ResourceService.generateReport("all");
+                        console.log("Generating");
+                    } catch (error) {}
+                };
+                generateSummary();
+                history.push("/view-summaryreport");
+            },
         },
         {
             key: "sign-out",
@@ -235,7 +262,7 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[options.length-1])
+                    : optionsNotAdmin.concat(options[options.length - 1])
             }
         />
     );
