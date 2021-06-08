@@ -28,9 +28,10 @@ const searchBook = (filter) => {
     return http.get(`${apiEndpoint}/book/search`, {body:filter}, {withCredentials: true})
 }
 
-const searchByID = (resourceID) => {
-    console.log(resourceID)
-    return http.get(`${apiEndpoint}/thesis/search-id`, {params:resourceID}, {withCredentials: true});
+const searchByID = (urlRequest, type) => {
+    // console.log(id)
+    console.log(type)
+    return http.get(`${apiEndpoint}/thesis${urlRequest}`, {params:{type:type}}, {withCredentials: true});
 }
 
 const downloadFile = (fileType, query) => {

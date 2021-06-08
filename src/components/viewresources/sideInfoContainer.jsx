@@ -29,12 +29,12 @@ const InfoSidebar = ({ user, resourceData }) => {
       <table id="spttableinfo">
         <tr>
           <th className="spt-thtr">Type</th>
-          <th className="spt-thtr">{resourceData.type}</th>
+          <th className="spt-thtr">{resourceData && resourceData.type}</th>
         </tr>
 
         <tr>
           <th className="spt-thtr">Adviser</th>
-          {resourceData.advisers &&
+          {resourceData &&
             resourceData.advisers.map((item, key) => (
               <div className="spt-thtr-multi" key={key}>
                 {item.adviser_name}
@@ -45,7 +45,7 @@ const InfoSidebar = ({ user, resourceData }) => {
         <tr>
           <th className="spt-thtr">Keywords</th>
           <th className="keyword-container">
-            {resourceData.keywords &&
+            {resourceData &&
               resourceData.keywords.map((item, key) => (
                 <div className="spt-thtr-multi" key={key}>
                   {item.sp_thesis_keyword}
@@ -59,7 +59,7 @@ const InfoSidebar = ({ user, resourceData }) => {
         <div className="spt-view-buttons">
           <button
             id="viewposter"
-            value={resourceData.poster && resourceData.poster}
+            value={resourceData && resourceData.poster}
             onClick={(e) => handleRedirect(e.target.value)}
           >
             <i className="fas fa-file-image"></i>
@@ -69,7 +69,7 @@ const InfoSidebar = ({ user, resourceData }) => {
 
           <button
             id="downloadjournal"
-            value={resourceData.journal && resourceData.journal}
+            value={resourceData && resourceData.journal}
             onClick={(e) => handleRedirect(e.target.value)}
           >
             View Journal
@@ -85,10 +85,7 @@ const InfoSidebar = ({ user, resourceData }) => {
               </button>
               <br />
               <br />
-              <a
-                target="_blank"
-                href={resourceData.manuscript && resourceData.journal}
-              >
+              <a target="_blank" href={resourceData && resourceData.journal}>
                 {/* <i class = "fas fa-book-open"></i> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -8,8 +8,8 @@ toast.configure();
 export default function ToastNotification({ content }) {
   console.log(content);
   const showToast = (content) => {
-    toast.warn(content, {
-      position: "bottom-left",
+    toast.error(content, {
+      position: "bottom-right",
       hideProgressBar: true,
     });
   };

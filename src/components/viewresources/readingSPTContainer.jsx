@@ -9,14 +9,27 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 const ReadingSPTContainer = (props) => {
   let [loading, setLoading] = useState(true);
   const [resourceData, setResourceData] = useState({});
-  const resourceID = props.match.params;
+  const resourceID = props.match.params.id;
+  console.log(resourceID);
+
+  let type = "";
+  if (resourceID.slice(0, 3) === "SP_") {
+    type = "Special Problem";
+  } else if (resourceID.slice(0, 7) === "Thesis_") {
+    type = "Thesis";
+  } else if (resourceID.slice(0, 5) === "BOOK_") {
+    type = "Book";
+  }
+  console.log(type);
 
   useEffect(() => {
     // <RingLoader loading />;
     async function fetchData() {
       try {
-        const { data } = await ResourceService.searchByID(resourceID);
+        const urlRequest = `/search-id?id=${resourceID}`;
+        const { data } = await ResourceService.searchByID(urlRequest, type);
         setResourceData(data && data[0]);
+        console.log(data);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -38,13 +51,15 @@ const ReadingSPTContainer = (props) => {
       ) : (
         <div className="spt-page-container">
           <TitleContainer
-            title={resourceData.title}
-            authorList={resourceData.authors}
-            year={resourceData.year}
+            title={resourceData && resourceData.title}
+            authorList={resourceData && resourceData.authors}
+            year={resourceData && resourceData.year}
           />
 
           <div className="abstract-and-info">
-            <AbstractContainer abstract={resourceData.abstract} />
+            <AbstractContainer
+              abstract={resourceData && resourceData.abstract}
+            />
             <InfoSidebar
               user={props.user}
               // title={resourceData.title}

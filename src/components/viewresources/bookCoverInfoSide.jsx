@@ -10,28 +10,30 @@ const BookCoverandInfo = ({
   return (
     <div className="book-cover-info-side">
       <table id="bookinfo">
-        <tr className="book-info-tr">
-          <th className="book-info-tr"> ISBN: </th>
-          <th className="book-info-tr"> {isbn} </th>
-        </tr>
-        <tr className="book-info-tr">
-          <th className="book-info-tr"> Publisher: </th>
-          <th className="book-info-tr"> {publisher} </th>
-        </tr>
+        <tbody>
+          <tr className="book-info-tr">
+            <th className="book-info-tr"> ISBN: </th>
+            <th className="book-info-tr"> {isbn} </th>
+          </tr>
+          <tr className="book-info-tr">
+            <th className="book-info-tr"> Publisher: </th>
+            <th className="book-info-tr"> {publisher} </th>
+          </tr>
 
-        <tr className="book-info-tr">
-          <th className="book-info-tr"> Number of copies: </th>
-          <th className="book-info-tr"> {numOfCopies} </th>
-        </tr>
+          <tr className="book-info-tr">
+            <th className="book-info-tr"> Number of copies: </th>
+            <th className="book-info-tr"> {numOfCopies} </th>
+          </tr>
 
-        <tr className="book-info-tr">
-          <th className="book-info-tr"> Subject(s) </th>
-          {subjects.map((item, key) => (
-            <div className="book-info-multi" key={key}>
-              {item.subject}
-            </div>
-          ))}
-        </tr>
+          <tr className="book-info-tr">
+            <th className="book-info-tr"> Subject(s) </th>
+            {subjects.map((item, key) => (
+              <div className="book-info-multi" key={key}>
+                {item.subject}
+              </div>
+            ))}
+          </tr>
+        </tbody>
       </table>
       <div className="physical-description">
         <p className="physical-text">{physicalDesc}</p>

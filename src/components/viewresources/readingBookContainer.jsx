@@ -6,19 +6,20 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/viewspt/viewSPTStyle.css";
 
 const ReadingBookContainer = (props) => {
-  const resourceData =
-    (props.location && props.location.state.resourceData) || {};
+  // const resourceData =
+  //   (props.location && props.location.state.resourceData) || {};
 
   let [loading, setLoading] = useState(true);
-  // const [resourceData, setResourceData] = useState({});
-  const resourceID = props.match.params;
-  console.log(props.match.params);
+  const [resourceData, setResourceData] = useState({});
+  const resourceID = props.match.params.id;
+  // console.log(props.match.params);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data } = await ResourceService.searchByID(resourceID);
-        // setResourceData(data && data[0]);
+        const urlRequest = `/search-id?id=${resourceID}`;
+        const { data } = await ResourceService.searchByID(urlRequest, "Book");
+        setResourceData(data && data[0]);
         console.log(data);
         setLoading(false);
       } catch (err) {
@@ -46,14 +47,14 @@ const ReadingBookContainer = (props) => {
       ) : (
         <div className="book-page-container">
           <TitleContainer
-            title={resourceData.title}
-            authorList={resourceData.author}
-            year={resourceData.datePublished}
+            title={resourceData && resourceData.title}
+            authorList={resourceData && resourceData.author}
+            year={resourceData && resourceData.datePublished}
             item={"book"}
           />
 
           <div className="bookcover-and-desc">
-            {resourceData.bookCoverLink ? (
+            {resourceData && resourceData.bookCoverLink ? (
               <img
                 style={{ height: "auto", margin: "0% 6%" }}
                 src={resourceData.bookCoverLink}
@@ -66,11 +67,11 @@ const ReadingBookContainer = (props) => {
             )}
 
             <BookCoverandInfo
-              isbn={resourceData.bookId}
-              publisher={resourceData.publisher}
-              numOfCopies={resourceData.numberOfCopies}
-              subjects={resourceData.subject}
-              physicalDesc={resourceData.physicalDesc}
+              isbn={resourceData && resourceData.bookId}
+              publisher={resourceData && resourceData.publisher}
+              numOfCopies={resourceData && resourceData.numberOfCopies}
+              subjects={resourceData && resourceData.subject}
+              physicalDesc={resourceData && resourceData.physicalDesc}
             />
 
             {/* <BookPhysDescription physicalDesc={resourceData.physicalDesc} /> */}

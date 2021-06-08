@@ -81,10 +81,10 @@ const AddBookFormContainer = () => {
       // window.location = "/add-new-book";
     } catch (err) {
       if (err.response && err.response.data) {
-        // ToastNotification({ content: err.response.data.message });
+        ToastNotification({ content: err.response.data.errorMessage });
         // setSuccess("fail");
         // setShow(true);
-        alert(err.response.data.errorMessage); // some reason error message
+        // alert(err.response.data.errorMessage); // some reason error message
       }
     }
   };
