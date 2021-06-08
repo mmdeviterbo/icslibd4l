@@ -413,6 +413,7 @@ const AddNewSPThesisForm = () => {
                         Classification:
                         <Select
                             id="resClassification"
+                            required
                             // defaultValue={"Select..."}
                             options={classificationOptions}
                             value={classificationOptions.find((obj) => obj.value === type)}
@@ -427,6 +428,7 @@ const AddNewSPThesisForm = () => {
                         >Advisers:</label>
                     <Select
                         id="advsel"
+                        required
                         options={adviserchoices}
                         value={adviserchoices.find((obj) => obj.value === adviser)}
                         onChange={handleAdviserChange}
@@ -438,6 +440,7 @@ const AddNewSPThesisForm = () => {
                     <div className = "abstract-div">
                         <label htmlFor= "abstractText">Abstract:</label>
                         <textarea
+                            required
                             id="abstractText"
                             onChange={(event) => {
                             setAbstract(event.target.value);

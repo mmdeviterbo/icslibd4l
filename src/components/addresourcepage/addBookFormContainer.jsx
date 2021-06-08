@@ -132,6 +132,7 @@ const AddBookFormContainer = () => {
             <div className="primaryfields">
                   <label htmlFor="resTitle">Title: &nbsp; </label>
                   <input
+                    required
                     type="text"
                     id="resTitle"
                     onChange={(event) => 
@@ -146,6 +147,7 @@ const AddBookFormContainer = () => {
             <div className="primaryfields">
               <label htmlFor="publisher">Publisher: &nbsp; </label>
               <input
+                required
                 type="text"
                 id="publisher"
                 onChange={(event) => {
@@ -161,7 +163,6 @@ const AddBookFormContainer = () => {
                 <input
                   type="date"
                   id="datePublished"
-                  required
                   onChange={(event) => {
                     setDatePublished(handleDate(event.target.value));
                   }}
@@ -174,7 +175,6 @@ const AddBookFormContainer = () => {
                 <input
                   type="date"
                   id="dateAcquired"
-                  required
                   onChange={(event) => {
                     setDateAcquired(handleDate(event.target.value));
                   }}
@@ -318,6 +318,7 @@ const AddBookFormContainer = () => {
               </label>
               <textarea
                 id="physDescription"
+                required
                 onChange={(event) => {
                   setDescription(event.target.value);
                 }}
@@ -335,6 +336,7 @@ const AddBookFormContainer = () => {
               </label>
               <input
                 type="number"
+                required
                 id="availBookCopies"
                 defaultValue={0}
                 onChange={(event) => {
@@ -351,6 +353,7 @@ const AddBookFormContainer = () => {
               <Select
                 id="relatedCourses"
                 isMulti
+                required
                 placeholder={"Courses..."}
                 options={courseList}
                 value={courseList.find((obj) => obj.value === courses)}
