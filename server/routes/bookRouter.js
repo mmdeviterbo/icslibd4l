@@ -14,12 +14,11 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
-var uniqid = require('uniqid');
+var uniqid = require("uniqid");
 
 const database = process.env.db;
 
 router.post("/get-news", async (req, res) => {
-    // console.log('hello')
     let options = {
         url: "https://uplb.edu.ph/news-and-updates-2/",
         headers: {
@@ -73,6 +72,87 @@ router.post("/get-news", async (req, res) => {
         res.status(404).send("404 Not Found");
     }
 });
+
+// Create mongo connection
+let gfs;
+let conn;
+mongoose.connection.on("connected", () => {
+    conn = mongoose.createConnection(
+        database,
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            socketTimeoutMS: 10000,
+        },
+        (err) => {
+            if (err) return console.error(err);
+        }
+    );
+
+    // Init gfs
+
+    conn.once("open", () => {
+        // Init stream
+        console.log("Book database Connected!");
+        gfs = Grid(conn.db, mongoose.mongo);
+        gfs.collection("book_covers");
+    });
+});
+
+// Create storage engine
+const storage = new GridFsStorage({
+    url: database,
+    file: (req, file) => {
+        return new Promise(async (resolve, reject) => {
+            const bookId = JSON.parse(req.body.body).bookId; //parse the book id from the multipart form
+            const dateAcquired = JSON.parse(req.body.body).dateAcquired; //parse the date acquired from the multipart form
+            const existingBook = await bookModel.findOne({ bookId }); //check if the book already exists
+            if (existingBook) {
+                // for book create (no oldBookId in input)
+                if (JSON.parse(req.body.body).oldBookId == undefined) {
+                    return reject("Book already exists!");
+                } else {
+                    //for book update
+                    // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
+                    // check first if the book has a saved book cover
+                    gfs.files.findOne(
+                        { "metadata.bookId": bookId },
+                        (err, existingBookCover) => {
+                            if (existingBookCover) {
+                                // .chunks
+                                mongoose.connection.db
+                                    .collection("book_covers.chunks")
+                                    .deleteOne({
+                                        files_id: existingBookCover._id,
+                                    });
+                                // .files
+                                gfs.files.deleteOne({
+                                    "metadata.bookId": bookId,
+                                });
+                            }
+                        }
+                    );
+                }
+            }
+
+            crypto.randomBytes(16, (err, buf) => {
+                //gives the file a different name
+                if (err) {
+                    return reject(err);
+                }
+                const filename =
+                    buf.toString("hex") + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    metadata: { bookId, dateAcquired }, //store the book id in the metadata
+                    bucketName: "book_covers",
+                };
+                resolve(fileInfo);
+            });
+        });
+    },
+});
+const upload = multer({ storage });
 
 //creates a book and uploads its book cover
 /**************************************************** 
@@ -141,7 +221,7 @@ router.post("/create", authFaculty, async (req, res) => {
         if (!existingBook) {
             //if book does not exist, add the book
 
-            const bookId = uniqid('BOOK_'); //generate a unique id for the book
+            const bookId = uniqid("BOOK_"); //generate a unique id for the book
 
             const newBook = new bookModel({
                 //add the non-array fields to the books collection
