@@ -145,11 +145,6 @@ const exportFunctions = {
     getSPTFiles,
     getBookCover,
     downloadFile,
-<<<<<<< HEAD
-}
-=======
-    getBookCovers,
 };
->>>>>>> sprint5-cruzado
 
 export default exportFunctions;
