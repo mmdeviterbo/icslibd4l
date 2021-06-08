@@ -34,12 +34,12 @@ const courseList = [
 ];   
 
 export default function EditBookFormContainer(props) {
-        // functionalities:
+
     const [title, setTitle] = useState("");
     // const [type, setType] = useState("");
     const [datePublished, setDatePublished] = useState();
     const [dateAcquired, setDateAcquired] = useState();
-    const [isbn, setISBN] = useState("");
+    const [ISBN, setISBN] = useState("");
     const [bookId, setBookId] = useState("");
     const [author, setAuthor] = useState("");
     // multiple authors should be possible
@@ -50,11 +50,11 @@ export default function EditBookFormContainer(props) {
         lname: "",
         },
     ]);
-    const [courses, setCourses] = useState(null); // why null??
+    const [subject, setSubject] = useState([]);
     const [publisher, setPublisher] = useState("");
     const [numberOfCopies, setNumOfCopies] = useState(0);
     const [physicalDesc, setDescription] = useState("");
-    const [image, setImage] = useState(null);
+    const [bookCoverLink, setBookCoverLink] = useState("");
 
     const FormData = require("form-data");
     const formData = new FormData();
@@ -73,7 +73,7 @@ export default function EditBookFormContainer(props) {
     }, []);
 
     console.log(idSource)           //object id is received
-    console.log(bookInfoArr);       //info of all res is received
+    // console.log(bookInfoArr);       //info of all res is received
 
     // iterate through array to match id
     useEffect(() => {
@@ -87,11 +87,11 @@ export default function EditBookFormContainer(props) {
                         datePublished,
                         dateAcquired,
                         author,
-                        isbn,
+                        ISBN,
                         physicalDesc,
                         numberOfCopies,
-                        courses,
-                        image
+                        subject,
+                        bookCoverLink
 
                     } = sourceItem;
                     // setType(type);
@@ -102,30 +102,12 @@ export default function EditBookFormContainer(props) {
                     setDateAcquired(dateAcquired);
                     setAuthor(author);
                     // setAuthorList(author);
-                    setISBN(isbn);
+                    setISBN(ISBN);
                     setDescription(physicalDesc);
                     setNumOfCopies(numberOfCopies);
-                    setCourses(courses);
-                    setImage(image)
+                    setSubject(subject);
+                    setBookCoverLink(bookCoverLink)
 
-
-                    // setAdviser({
-                    //     fname: adviser[0]?.adviser_fname,
-                    //     lname: adviser[0]?.adviser_lname,
-                    // });
-                    // setAuthor({
-                    //     fname: author[0]?.author_fname,
-                    //     lname: author[0]?.author_lname,
-                    // });
-
-                    // console.log("fsdfsdfd");
-                    // console.log(sourceItem);
-
-                    // const tempKeyword = [];
-                    // keywords.map((keyword) =>
-                    //     tempKeyword.push(keyword.sp_thesis_keyword)
-                    // );
-                    // setKeyword(tempKeyword);
                     break;
                 }
             }
@@ -146,46 +128,7 @@ export default function EditBookFormContainer(props) {
         updateList();
     }, [author]);
 
-    // const addAuthor = (e) => {
-    //     const { name, value } = e.target;
-    //     setAuthor({ ...author, [name]: value });
-    // };
 
-    // const addAdviser = (e) => {
-    //     const { name, value } = e.target;
-    //     setAdviser({ ...adviser, [name]: value });
-    // };
-
-    // get input from type selection
-
-    // const handleChange = (e) => {
-    //     setType("Book");
-    // };
-
-
-     const handleImage = (e) => {
-    // let file = e.target.files[0];
-    // const formData = new FormData();
-    // formData.append("file", file);
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // };
-    // setImage(formData);
-    // return  post(url, formData,config)
-
-    let file = e.target.files[0];
-    let reader = new FileReader();
-        if (file) {
-            reader.readAsDataURL(file);
-            reader.onload = (e) => {
-                // const formData = { file: e.target.result };
-                // formData.append("file", file);
-                setImage(file);
-            };
-        }
-    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -193,21 +136,21 @@ export default function EditBookFormContainer(props) {
         const userInput = {
             // oldBookId,
             // bookId, 
-            isbn,
+            ISBN,
             title,
             datePublished,
             dateAcquired,
             authors: authorList,
-            subjects: courses,
+            subject,
             physicalDesc,
             publisher,
             numberOfCopies,
         };
         console.log(userInput);
-        console.log(courses);
-        console.log(image);
+        console.log(subject);
+
         formData.append("body", JSON.stringify(userInput));
-        formData.append("file", image);
+
         const { data } = await ResourceServices.editBook(formData);
         alert("Successfully updated book.");
         // window.location = "/add-new-resource";
@@ -220,9 +163,9 @@ export default function EditBookFormContainer(props) {
     };
 
     // adds the courses on array
-    const handleCourses = (courses) => {
-        const values = [...courses].map((opt) => opt.value);
-        setCourses(values);
+    const handleSubject = (subject) => {
+        const values = [...subject].map((opt) => opt.value);
+        setSubject(values);
     };
 
     const handleDate = (date) => {
@@ -233,10 +176,30 @@ export default function EditBookFormContainer(props) {
         // setDateAcquired(date);
     };
 
+    const renderAuthorFields  = () =>   {
+        setAuthorList((currentAuthors) => [
+            ...currentAuthors,
+            {
+            // author needs to generate ID para di madelete lahat ng fields in one button click
+            authorid: nanoid(5),
+            fname: "",
+            lname: "",
+            },
+        ]);
+    }
+
+    // console.log(author[0].author_fname)
+    console.log(author)
+    // console.log(subject)
+
     return (
         <div className="add-res-form-cont">
             <EditResourceHeader/>
-            <form className= "main-form" id="addBookForm" onSubmit={handleSubmit} autoComplete="off">
+            <form 
+                className= "main-form" 
+                id="addBookForm" 
+                onSubmit={handleSubmit} 
+                autoComplete="off">
             {/* 
             <h2>Book</h2>
             <hr/> */}
@@ -272,6 +235,7 @@ export default function EditBookFormContainer(props) {
                         />
                     </div>
 
+                    {/* !!! TO-DO !!! Fix date magic in defaultValues */}
                     <div className = "dates-group">
                         {/* Date Published */}
                         <div className="primaryfields-date">
@@ -279,7 +243,7 @@ export default function EditBookFormContainer(props) {
                             <input
                             type="date"
                             id="datePublished"
-                            defaultValue = {datePublished}
+                            defaultValue = {"2001-06-09"}
                             required
                             onChange={(event) => {
                                 setDatePublished(handleDate(event.target.value));
@@ -294,6 +258,7 @@ export default function EditBookFormContainer(props) {
                             type="date"
                             id="dateAcquired"
                             required
+                            defaultValue = {"2016-07-23"}
                             onChange={(event) => {
                                 setDateAcquired(handleDate(event.target.value));
                             }}
@@ -308,17 +273,7 @@ export default function EditBookFormContainer(props) {
 
                         <button
                             id="addAuthor"
-                            onClick={() => {
-                            setAuthorList((currentAuthors) => [
-                                ...currentAuthors,
-                                {
-                                // author needs to generate ID para di madelete lahat ng fields in one button click
-                                authorid: nanoid(5),
-                                fname: "",
-                                lname: "",
-                                },
-                            ]);
-                            }}
+                            onClick={renderAuthorFields}
                             >
                             <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -348,6 +303,7 @@ export default function EditBookFormContainer(props) {
                                             // name="fname"
                                             required
                                             value={p.fname}
+                                            // defaultValue = {author[0].author_fname}  //cant access?????
                                             onChange={(e) => {
                                                 const fname = e.target.value;
                                                 setAuthorList((currentAuthors) =>
@@ -369,6 +325,7 @@ export default function EditBookFormContainer(props) {
                                             required
                                             // name="lname"
                                             value={p.lname}
+                                            // defaultValue={author.author_lname}   //cant access?????
                                             onChange={(e) => {
                                                 const lname = e.target.value;
                                                 setAuthorList((currentAuthors) =>
@@ -420,7 +377,8 @@ export default function EditBookFormContainer(props) {
                         <input
                             type="text"
                             id="bookISBN"
-                            defaultValue={bookId}
+                            key={`${Math.floor((Math.random() * 1000))}-min`} 
+                            defaultValue={ISBN}
                             placeholder={"XXX-X-XXXXXXXXX"}
                             onChange={(event) => {
                             setISBN(event.target.value);
@@ -452,6 +410,8 @@ export default function EditBookFormContainer(props) {
                         </label>
                         <input
                             type="number"
+                            key={`${Math.floor((Math.random() * 1000))}-min`} 
+                            //need random key para lumabas yung defaultValue, sa initial render lang kasi lumalabas nang maayos yung numberOfCopies
                             id="availBookCopies"
                             defaultValue={numberOfCopies} //bakit di lumalabas what the fuck???
                             onChange={(event) => {
@@ -470,8 +430,8 @@ export default function EditBookFormContainer(props) {
                             isMulti
                             placeholder={"Courses..."}
                             options={courseList}
-                            defaultValue={courseList.find((obj) => obj.value === courses)}
-                            onChange={(courses) => handleCourses(courses)}
+                            defaultValue={"CMSC 12"}
+                            onChange={(subject) => handleSubject(subject)}
                         ></Select>
                     </div>
 
@@ -480,8 +440,12 @@ export default function EditBookFormContainer(props) {
                         <input
                             type = "url"
                             placeholder ={"https://www.example.com/"}
+                            defaultValue = {bookCoverLink}
                             className= "resourcefiles"
                             id="bookcover"
+                            onChange={(event) => {
+                                setBookCoverLink(event.target.value);
+                            }}
                             />
                     </div>
 

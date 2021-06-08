@@ -54,9 +54,17 @@ const searchBook = (filter) => {
     );
 };
 
+const searchById = (id) => {
+    return http.get(
+        `${apiEndpoint}/thesis/search-id`,
+        { params: id },
+        { withCredentials: true }
+    )
+}
+
 const downloadFile = (fileType, query) => {
-    console.log(fileType);
-    console.log(query);
+    // console.log(fileType);
+    // console.log(query);
     return http.get(
         `${apiEndpoint}/thesis${query}`,
         { params: fileType },
@@ -140,6 +148,7 @@ const exportFunctions = {
     editSpThesis,
     editBook,
     searchBook,
+    searchById,
     getAllBooks,
     getLatestBooks,
     getSPTFiles,
