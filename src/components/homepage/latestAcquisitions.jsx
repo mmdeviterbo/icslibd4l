@@ -13,14 +13,10 @@ export default function LatestAcquisitions({ latestAcqRef }) {
     
     const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
-    useEffect(() => {
-        async function getLatestAcquisition() {
-            // get title and year (of 12 books, sorted array)
-            const booksInfo = await ResourceService.getBooks();
-            setLoader(false);
-            setacquisitions(booksInfo.data);
-        }
-        getLatestAcquisition();
+    useEffect(async() => {
+        const booksInfo = await ResourceService.getLatestBooks();
+        setacquisitions(booksInfo.data);
+        setLoader(false); //hide loader animation 
     }, []);
 
     const handleViewAllBooks = () => {
@@ -39,7 +35,6 @@ export default function LatestAcquisitions({ latestAcqRef }) {
             style={latestAcquisitionsContainer}
             ref={latestAcqRef}
         >
-            {/* <div>{covers && Parser(covers)}</div> */}
             <img src={latestAcqBg} style={latestAcqBgStyle} alt="#" />
             <div style={colorsParent} className="latestAcqcolorsParent">
                 <div style={whiteBg}>
@@ -147,8 +142,8 @@ const latestAcqBgStyle = {
 
 const colorsParent = {
     position: "relative",
-    height: "80%",
-    width: "80%",
+    height: "85%",
+    width: "95%",
     zIndex: 0,
     display: "flex",
     borderRadius: "0px 4px 4px 0px",
@@ -169,8 +164,7 @@ const blueBg = {
     width: "40%",
     zIndex: 1,
     overflow: "hidden",
-    boxShadow:
-        "2px 5px 10px 0 rgba(0, 0, 0, 0.8), -6px -6px 6px 0 rgba(255, 255, 255, 0.8)",
+    boxShadow: "2px 4px 6px 0 rgba(0, 0, 0, 0.8), -6px -6px 4px 0 rgba(255, 255, 255, 0.8)",
     display: "flex",
     flexDirection: "column",
 };
@@ -193,6 +187,7 @@ const textBg = {
     fontWeight: 900,
     width: "100%",
     textAlign: "center",
+    padding:"15px"
 };
 
 const hoverTextStyle = {

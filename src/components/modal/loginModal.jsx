@@ -12,6 +12,8 @@ export default function LoginModal() {
     useEffect(()=>{
         gsap.from('.animationLabel',{ duration:1, x:-50});
         gsap.from('.signInLabel',{duration:1.3, x:-100});
+        gsap.from('.circleOne',{duration:1, x:-50,y:60, scale:0.5});
+        gsap.from('.circleTwo',{duration:1, x:50,y:-60, scale:2});
     },[])
 
     const responseGoogleSuccess = async(response) => {
@@ -65,8 +67,8 @@ export default function LoginModal() {
             <Modal.Body style={{padding:"5%", minHeight:"35vh", display:"grid", placeItems:"center", position:"relative", overflow:"hidden"}}>
                 <h1 className="signInLabel" style={{zIndex:10}}>Sign in to continue ...</h1>
                 {logInButton()}
-                <div style={circleOneStyle}></div>
-                <div style={circleTwoStyle}></div>
+                <div className="circleOne" style={circleOneStyle}></div>
+                <div className="circleTwo" style={circleTwoStyle}></div>
             </Modal.Body>
         </Modal>
         </>

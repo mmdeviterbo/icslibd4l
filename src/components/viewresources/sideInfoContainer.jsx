@@ -1,10 +1,28 @@
 import React from "react";
+// import ToastNotification from "../toastNotification";
+// import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 // TO-DO: Change the links according to the appropriate SPT attributes
 const InfoSidebar = ({ user, resourceData }) => {
   let link = "https://www.youtube.com/watch?v=m4gnMWua4xo";
   const handleRedirect = (redirectHere) => {
-    window.location.href = redirectHere;
+    // window.location.href = redirectHere;
+    if (redirectHere == "") {
+      toast.info("Unavailable", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      window.open(redirectHere, "_blank") ||
+        window.location.replace(redirectHere);
+      // window.open(redirectHere, "_blank");
+    }
   };
   return (
     <div className="info-sidebar">
@@ -41,7 +59,7 @@ const InfoSidebar = ({ user, resourceData }) => {
         <div className="spt-view-buttons">
           <button
             id="viewposter"
-            value={link}
+            value={resourceData.poster && resourceData.poster}
             onClick={(e) => handleRedirect(e.target.value)}
           >
             <i className="fas fa-file-image"></i>
@@ -51,7 +69,7 @@ const InfoSidebar = ({ user, resourceData }) => {
 
           <button
             id="downloadjournal"
-            value={link}
+            value={resourceData.journal && resourceData.journal}
             onClick={(e) => handleRedirect(e.target.value)}
           >
             View Journal
@@ -67,7 +85,10 @@ const InfoSidebar = ({ user, resourceData }) => {
               </button>
               <br />
               <br />
-              <a id="view-manuscript" href={link}>
+              <a
+                target="_blank"
+                href={resourceData.manuscript && resourceData.journal}
+              >
                 {/* <i class = "fas fa-book-open"></i> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -7,6 +7,16 @@ const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
 var uniqid = require('uniqid');
+const config = require("config");
+const path = require("path");
+const crypto = require("crypto");
+const mongoose = require("mongoose");
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+var uniqid = require('uniqid');
+
+const database = process.env.db;
 
 router.post("/get-news", async (req, res) => {
     // console.log('hello')

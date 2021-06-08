@@ -69,18 +69,12 @@ function getNews() {
 }
 
 // get all books (object of information only, not images), sorted by date (latest acquisition feature)
-function getBooks(){
+function getLatestBooks(){
     return http.get(`${apiEndpoint}/books/display_latest`);
 }
 
-// get all books (object of images), sorted by date (latest acquisition feature)
-function getBookCovers(){
-    return http.get(`${apiEndpoint}/books/display_covers`);
-}
-
-
-function getAllResources() {
-    return http.get(`${apiEndpoint}/thesis/search`);
+function getAllBooks() {
+    // return http.get(`${apiEndpoint}/thesis/search?type=book&search=all`);
 }
 
 function getSPTFiles({ title, fileType }){
@@ -105,13 +99,11 @@ const exportFunctions = {
     editSpThesis,
     editBook,
     searchBook,
-    getBooks,
-    // deleteBook,
-    getAllResources,
+    getAllBooks,
+    getLatestBooks,
     getSPTFiles,
     getBookCover,
     downloadFile,
-    getBookCovers,
     deleteBook,
     viewFile,
     searchByID
