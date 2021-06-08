@@ -86,18 +86,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
             <div style={mainBgStyleContainer} />
             <ul className="navbar-elements">
                 <Link className="left-half" to="/home">
-                    <div
-                        draggable="false"
-                        className="ics-uplb-caption"
-                        to="/home"
-                    >
-                        <span className="ics-caption">
-                            Institute of Computer Science Online Library
-                        </span>
-                        <span className="uplb-caption">
-                            University of the Philippines Los Baños
-                        </span>
-                    </div>
+                    ourProjectName
                 </Link>
                 <div className="right-half">
                     <Link to="/home" className="navItem">
@@ -260,9 +249,6 @@ const mainBgStyleContainer = {
 };
 
 const animationTitle = (classNavBar) => {
-    gsap.from(".ics-caption", { xPercent: -20, duration: 1 });
-    gsap.from(".uplb-caption", { xPercent: -20, duration: 1.5 });
-
     let tempClassName = "." + classNavBar;
     gsap.from(tempClassName, { yPercent: -50, duration: 0.8 });
 };

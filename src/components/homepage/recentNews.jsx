@@ -16,6 +16,7 @@ export default function RecentNews({ appRef, newsRef }) {
     appRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
 
   const getNewsData = async () => {
+    setLoader(true);
     let { data } = await NewsService.getNews();
     setTitleNews(data.newsTitle);
     setDateNews(data.newsDate);
@@ -124,7 +125,7 @@ const recentNewsContainer = {
 const titleContentContainer = {
   position: "relative",
   height: "100%",
-  width: "80%",
+  width: "95%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -140,13 +141,13 @@ const recentNewsInnerContainer = {
   padding: "1% 2%",
 };
 const newsStyle = {
-  padding: "30px",
+  padding: "12px",
   width: "100%",
   color: "white",
   background: "rgb(0, 0, 0)",
   borderRadius: "5px 5px 0 0",
   display: "flex",
-  fontSize: "calc(30px + 2vw)",
+  fontSize: "calc(26px + 2vw)",
   fontWeight: 900,
   margin: 0,
 
