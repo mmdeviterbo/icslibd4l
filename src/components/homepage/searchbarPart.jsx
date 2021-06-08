@@ -79,7 +79,6 @@ const dropDownFilter = {
     padding:0,
     zIndex:1000,
     borderRadius:"10px",
-    boxShadow:"2px 2px 8px 0px black",
 }
 const alignSearchIcon = {
     zIndex:100,
@@ -138,10 +137,9 @@ const inputSearch={
     padding:"26px 25px",    
     margin:0,
     borderRadius:"10px 0 0 10px",
-    backgroundColor:"rgba(255,255,255,1)",
+    backgroundColor:"rgba(255,255,255)",
     zIndex:10,
     border:0,
-    boxShadow:"2px 2px 8px 0px black"
 }
 const mainBgSearchStyle = {
     position:"absolute",
@@ -222,12 +220,6 @@ const barStyleSix = {
 
 const animateSearchBox=()=>{
     gsap.from('.formSearchHomepage',{opacity:0,yPercent:10, duration:0.5,scale:0.8, ease:Power3});
-    gsap.from('.homepageBgParent',{duration:0.8,scale:0.85});
-    gsap.from('.homeItem2',{duration:0.6,scale:4, opacity:0.8});
-    gsap.from('.btnOne',{duration:0.6,xPercent:-30});
-    gsap.from('.btnTwo',{duration:0.6,xPercent:30});
-    gsap.from('.btnThree',{duration:0.6,xPercent:-30});
-
     gsap.from('.barStyle',{xPercent:-50, duration:0.8});
     gsap.from('.barStyle1',{xPercent:-30, duration:1});
 }
