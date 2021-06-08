@@ -32,9 +32,8 @@ export default function ManageUserPage({ user }) {
             {user && user.userType === 1 ? (
                 <div className="manage-user-container">
                     <img src={background} style={backgroundStyle} alt="#" />
-
                     <ManagementHeader type={"user"} />
-                    <FilterMenu />
+                    {/* <FilterMenu /> */}
                     <div className="usertable-container">
                         <UserTable user={user} />
                     </div>
@@ -59,7 +58,6 @@ export default function ManageUserPage({ user }) {
     );
 }
 const backgroundStyle = {
-    paddingLeft: "-6%",
     position: "absolute",
     height: "100%",
     width: "100%",

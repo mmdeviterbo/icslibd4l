@@ -1,5 +1,6 @@
 .manage-user-container{
     min-height: 85vh;
+    position:relative;
 }
 .user-search-container {
     display: flex;

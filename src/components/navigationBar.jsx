@@ -105,16 +105,14 @@ export default function NavigationBar({
                         />
                         Home
                     </Link>
-                    <div
-                        className="navItem"
-                        onClick={scrollToBrowse}
-                        style={{ cursor: "pointer" }}>
+                    <Link to="/browse-special-problems"
+                        className="navItem">
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
                         />
                         Browse
-                    </div>
+                    </Link>
                     <Link to="/about" className="navItem">
                         <i
                             className="fa fa-lg fa-info-circle mr-2"

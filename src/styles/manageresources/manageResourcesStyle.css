@@ -1,6 +1,7 @@
 /* Filter fields container */
 .manage-resources-page-container{
-    min-height: 90;
+    min-height: 90vh;
+    position: relative;
 }
 
 .res-filter-container {

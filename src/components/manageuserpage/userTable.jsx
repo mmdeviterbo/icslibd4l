@@ -187,7 +187,6 @@ export default function UserTable({ user }) {
     const discardChange = (rowIndex) => {
         // TODO: If the admin selected a new classification, there should be a prompt that ask if the user will discard the current changes.
         // Else, if there are no changes, then the edit mode should quit immediately.
-        console.log(selectedUser);
         toggleEdit(rowIndex);
     };
 
@@ -343,15 +342,12 @@ export default function UserTable({ user }) {
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                         )}
-
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
+                        {emptyRows > 0 &&
+                            (<TableRow style={{ height: 40 * emptyRows}}>
+                            </TableRow>)
+                        }
                     </TableBody>
                 </Table>
-
                 <TablePagination
                     rowsPerPage={rowsPerPage}
                     rowsPerPageOptions={[5]}

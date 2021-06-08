@@ -33,7 +33,7 @@ const ManageResourcesPage = ({ user }) => {
                     <img src={background} style={backgroundStyle} alt="#" />
 
                     <ManagementHeader type={"resource"} />
-                    <FieldsContainerRes />
+                    {/* <FieldsContainerRes /> */}
                     {/* <ResTableContainer resourceList={resourceList} /> */}
                     <ResourceTableContainer />
                 </div>

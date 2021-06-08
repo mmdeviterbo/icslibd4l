@@ -15,7 +15,7 @@ const ManagementHeader = ({ type }) => {
                     <></>
                 ) : (
                     <div className="search-bar-container">
-                        <TemporarySearchBar />
+                        {/* <TemporarySearchBar /> */}
                     </div>
                 )}
                 {type == "resource" ? (
