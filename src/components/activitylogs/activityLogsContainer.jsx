@@ -4,7 +4,7 @@ import { jwtPrivateKey } from "../../config.json";
 import { useHistory } from "react-router-dom";
 import ManagementHeader from "../managementHeader";
 import ActivityTable from "./activityTable";
-import ActivityFilterContainer from "./activityFilterContainer";
+import searchBg from "../../assets/searchBg_4.png";
 
 import "../../styles/activityLogsStyle.css";
 
@@ -25,11 +25,21 @@ export default function ActivityLogsContainer() {
 
     return (
         <div className="activity-logs-container">
+            <img src={searchBg} style={searchBgStyle} alt="#" />
             <ManagementHeader type={"logs"} />
-            <ActivityFilterContainer />
+            <br />
+            {/* <ActivityFilterContainer /> */}
             <div className="activitytable-container">
                 <ActivityTable />
             </div>
         </div>
     );
 }
+
+const searchBgStyle = {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    zIndex: "-1",
+    transform: "scaleY(-1.5)",
+};

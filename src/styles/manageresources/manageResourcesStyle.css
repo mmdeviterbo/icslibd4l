@@ -1,6 +1,6 @@
 /* Filter fields container */
 .manage-resources-page-container{
-    min-height: 80vh;
+    min-height: 90;
 }
 
 .res-filter-container {
@@ -50,7 +50,7 @@
 /* Table Container */
 .res-table-cont {
     width: 100%;
-    background-color: #f5f5f5;
+    /* background-color: #f5f5f5; */
     padding-top: 1.5rem;
     padding-left: 4rem;
     padding-right: 4rem;

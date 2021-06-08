@@ -157,12 +157,12 @@ const useStyles = makeStyles((theme) => ({
 const MainResourceTable = () => {
     const location = useLocation();
     const classes = useStyles();
-    const [order, setOrder] = React.useState("asc");
-    const [orderBy, setOrderBy] = React.useState("resid");
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    // const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [order, setOrder] = useState("asc");
+    const [orderBy, setOrderBy] = useState("resid");
+    const [selected, setSelected] = useState([]);
+    const [page, setPage] = useState(0);
+    // const [dense, setDense] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selectedEdit, setSelectedEdit] = useState();
     const [resourceList, setResourceList] = useState([]);
 
@@ -367,7 +367,11 @@ const MainResourceTable = () => {
                                             className={classes.tablecell}
                                             hover
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={
+                                                row.bookId
+                                                    ? row.bookId
+                                                    : row.sp_thesis_id
+                                            }
                                             selected={isItemSelected}>
                                             {/* {row} */}
 

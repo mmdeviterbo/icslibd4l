@@ -27,7 +27,6 @@ export default function ActivityTable() {
     const [activityLogs, setActivityLogs] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [selectedActivity, setSelectedActivity] = useState({});
 
     const location = useLocation();
     const history = useHistory();
@@ -160,7 +159,7 @@ export default function ActivityTable() {
                         textAlign: "left",
                     }}>
                     <span>
-                        {dateFormat(entry.updatedAt, "yyyy, mmmm dd; HH:MM")}
+                        {dateFormat(entry.updatedAt, "mmmm dd yyyy h:MM TT")}
                     </span>
                 </TableCell>
             </TableRow>

@@ -6,6 +6,8 @@ import ManagementHeader from "../managementHeader";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
+import background from "../../assets/searchBg_4.png";
+
 import "../../styles/manageUserStyle.css";
 
 export default function ManageUserPage({ user }) {
@@ -29,6 +31,8 @@ export default function ManageUserPage({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="manage-user-container">
+                    <img src={background} style={backgroundStyle} alt="#" />
+
                     <ManagementHeader type={"user"} />
                     <FilterMenu />
                     <div className="usertable-container">
@@ -54,3 +58,11 @@ export default function ManageUserPage({ user }) {
         </>
     );
 }
+const backgroundStyle = {
+    paddingLeft: "-6%",
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    zIndex: "-1",
+    transform: "scaleY(-1)",
+};
