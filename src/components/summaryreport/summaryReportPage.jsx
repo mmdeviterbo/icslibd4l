@@ -7,6 +7,8 @@ import Merged from "../../download/Merged.pdf";
 import Books from "../../download/Books.pdf";
 import SpThesis from "../../download/spThesis.pdf";
 
+import "./summaryReportStyle.css";
+
 const FilterOptions = [
     { label: "All", value: Merged },
     { label: "Books", value: Books },
@@ -37,26 +39,27 @@ export default function SummaryReportPage(user) {
 
     const ResourceTypeSelect = () => {
         return (
-            <>
-                <h1>Generate report for: {selection}</h1>
-                <Select
-                    className="resource-type-selector"
-                    options={FilterOptions}
-                    placeholder={selection}
-                    onChange={handleChange}
-                />
-            </>
+            <div className="summary-header-container">
+                <div className="resource-label">
+                    <div className="generate-header-label">
+                        <h3>View summary report for: </h3>
+                    </div>
+                    <Select
+                        className="resource-type-selector"
+                        options={FilterOptions}
+                        placeholder={selection}
+                        onChange={handleChange}
+                    />
+                </div>
+                <h1>Summary Report</h1>
+            </div>
         );
     };
 
     return (
         <div className="summary-report-container">
             <ResourceTypeSelect className="summary-header" />
-            <DocumentViewer
-                pdfFile={pdfFile}
-                fileName={`${selection}.pdf`}
-                style={{ display: "flex" }}
-            />
+            <DocumentViewer pdfFile={pdfFile} />
         </div>
     );
 }
