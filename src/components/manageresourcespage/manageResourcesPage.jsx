@@ -51,4 +51,4 @@ const ManageResourcesPage = ({ user }) => {
   );
 };
 
-export defau
+export default ManageResourcesPage;

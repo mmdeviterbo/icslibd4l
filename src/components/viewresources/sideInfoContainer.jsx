@@ -16,8 +16,8 @@ const InfoSidebar = ({ user, resourceData }) => {
 
         <tr>
           <th className="spt-thtr">Adviser</th>
-          {resourceData.adviser &&
-            resourceData.adviser.map((item, key) => (
+          {resourceData.advisers &&
+            resourceData.advisers.map((item, key) => (
               <div className="spt-thtr-multi" key={key}>
                 {item.adviser_name}
               </div>

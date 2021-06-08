@@ -1915,7 +1915,7 @@ req object: address parameter
 Response String:
 "Entry Updated"
 ********************************************************/
-router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
+router.delete("/delete/:sp_thesis_id", async (req, res) => {
     console.log("del");
     const sp_thesis_id_holder = req.params.sp_thesis_id;
 

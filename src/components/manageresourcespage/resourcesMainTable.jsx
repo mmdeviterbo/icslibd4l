@@ -88,11 +88,11 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        {resHeadCells.map((headCell) => (
+        {resHeadCells.map((headCell, index) => (
           <TableCell
             style={{ backgroundColor: "#FAFAFA" }}
             className={classes.tablecell}
-            key={headCell.id}
+            key={index}
             align={"left"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -282,26 +282,6 @@ const MainResourceTable = () => {
     setSelected([]);
   };
 
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1)
-  //     );
-  //   }
-
-  //   setSelected(newSelected);
-  // };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -352,7 +332,7 @@ const MainResourceTable = () => {
                       className={classes.tablecell}
                       hover
                       tabIndex={-1}
-                      key={row.name}
+                      key={index}
                       selected={isItemSelected}
                     >
                       {/* {row} */}
