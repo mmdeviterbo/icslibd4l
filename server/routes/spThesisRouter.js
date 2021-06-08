@@ -22,7 +22,7 @@ Request Object:
 req object: Multipart form
 body: {
     REQUIRED:
-        type: "Thesis" or "SP"
+        type: "Thesis" or "Special Problem"
         title: title,
         abstract abstract,
         year: year,
@@ -103,7 +103,7 @@ router.post(
             if (!existingThesis) { 
                 var unique_ID = " ";
 
-                if(type == "SP"){
+                if(type == "Special Problem"){
                     var unique_ID = uniqid('SP_'); //generate a unique id for the book
                 }else if (type == "Thesis"){
                     var unique_ID = uniqid('Thesis_'); //generate a unique id for the book
@@ -268,7 +268,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_advisers",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "adviser",
+                        as: "advisers",
                     },
                 },
                 {
@@ -276,7 +276,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_authors",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "author",
+                        as: "authors",
                     },
                 },
                 {
@@ -731,7 +731,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1073,7 +1073,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1082,7 +1082,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "author",
+                                    as: "authors",
                                 },
                             },
                             {
@@ -1482,7 +1482,7 @@ router.get("/search", async (req, res) => {
 /**************************************************** 
 Request Query:
     id :
-    type
+    type: ["Special Problem", "Book", "Thesis"]
 Response:
     * 1 object
 ********************************************************/
@@ -1499,7 +1499,7 @@ router.get("/search-id", async (req, res) => {
                 { 
                     $match: {
                         sp_thesis_id : req.query.id,
-                        type : "SP", 
+                        type : "Special Problem", 
                     }
                 },
                 {
@@ -1593,7 +1593,7 @@ router.get("/search-id", async (req, res) => {
         // get book matches on bookModel based from req.query.id
         bookModel.aggregate(
             [
-                {$match: { bookID : req.query.id }},
+                {$match: { bookId : req.query.id }},
                 {
                     $lookup: {
                         // populate authors field
@@ -1626,11 +1626,11 @@ router.get("/search-id", async (req, res) => {
    
     // ---------------------------------------- MAIN
 
-    if (req.query.type == "SP"){
+    if (req.query.type == "Special Problem"){
         spMain();
-    }else if (type == "Book"){
+    }else if (req.query.type == "Book"){
         bookMain();
-    }else if (type =="Thesis"){
+    }else if (req.query.type =="Thesis"){
         thesisMain();
     }   
 });
