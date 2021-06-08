@@ -25,6 +25,7 @@ import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
 import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
+import SummaryReportPage from "./components/summaryreport/summaryReportPage";
 
 import "./App.css";
 
@@ -57,14 +58,14 @@ function App() {
             } catch (err) {}
         };
         getCurrentToken();
-    },[]);
+    }, []);
 
     // login/register a user
     const loginRegisterUser = async (userInfo) => {
         try {
             const { data } = await PersonService.loginRegisterUser(userInfo);
             localStorage.setItem(jwtPrivateKey, data); //set token
-            
+
             // get current param, it must stay on where the user's current path
             window.location = window.location.pathname;
         } catch (err) {}
@@ -168,6 +169,11 @@ function App() {
                 <Route
                     path="/edit-book/:id"
                     component={EditBookFormContainer}
+                ></Route>
+
+                <Route
+                    path="/view-summaryreport"
+                    render={() => <SummaryReportPage user={user} />}
                 ></Route>
 
                 <Route path="/about" render={() => <About appRef={appRef} />} />
