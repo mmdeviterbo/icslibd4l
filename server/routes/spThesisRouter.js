@@ -268,7 +268,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_advisers",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "adviser",
+                        as: "advisers",
                     },
                 },
                 {
@@ -276,7 +276,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_authors",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "author",
+                        as: "authors",
                     },
                 },
                 {
@@ -731,7 +731,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1073,7 +1073,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1082,7 +1082,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "author",
+                                    as: "authors",
                                 },
                             },
                             {
@@ -1593,7 +1593,7 @@ router.get("/search-id", async (req, res) => {
         // get book matches on bookModel based from req.query.id
         bookModel.aggregate(
             [
-                {$match: { bookID : req.query.id }},
+                {$match: { bookId : req.query.id }},
                 {
                     $lookup: {
                         // populate authors field
@@ -1628,9 +1628,9 @@ router.get("/search-id", async (req, res) => {
 
     if (req.query.type == "Special Problem"){
         spMain();
-    }else if (type == "Book"){
+    }else if (req.query.type == "Book"){
         bookMain();
-    }else if (type =="Thesis"){
+    }else if (req.query.type =="Thesis"){
         thesisMain();
     }   
 });
