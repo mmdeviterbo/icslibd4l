@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import Select from "react-select";
 import ResourceService from "../../services/resourceService";
+import PersonService from "../../services/personService";
 import DocumentViewer from "./documentViewer";
+import { jwtPrivateKey } from "../../config.json";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 import Merged from "../../download/Merged.pdf";
 import Books from "../../download/Books.pdf";
@@ -9,28 +13,44 @@ import SpThesis from "../../download/spThesis.pdf";
 
 import "./summaryReportStyle.css";
 
-const FilterOptions = [
-    { label: "All", value: Merged },
-    { label: "Books", value: Books },
-    { label: "SP/Thesis", value: SpThesis },
-];
+export default function SummaryReportPage({ user }) {
+    const FilterOptions = [
+        { label: "All", value: Merged },
+        { label: "Books", value: Books },
+        { label: "SP/Thesis", value: SpThesis },
+    ];
 
-export default function SummaryReportPage(user) {
     const [selection, setSelection] = useState(FilterOptions[0].label);
     const [pdfFile, setPdfFile] = useState(Merged);
+    const history = useHistory();
 
     // UseEffect to get the summary report from the backend.
     // useEffect(() => {
-    //     // Calls backend to generate a new pdf file of the selected resourceType
-    //     const generateSummary = async () => {
-    //         try {
-    //             await ResourceService.generateReport("all");
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
     //     generateSummary();
     // }, []);
+
+    // const generateSummary = async () => {
+    //     try {
+    //         await ResourceService.generateReport("all");
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //     return "";
+    // };
+
+    const accessPrivilege = () => {
+        setTimeout(() => {
+            try {
+                const user = PersonService.decryptToken(
+                    localStorage.getItem(jwtPrivateKey)
+                );
+                if (!user || (user && user.userType !== 1))
+                    return history.push("/unauthorized");
+            } catch (err) {
+                return history.push("/unauthorized");
+            }
+        }, 700);
+    };
 
     const handleChange = (e) => {
         setSelection(e.label);
@@ -57,9 +77,30 @@ export default function SummaryReportPage(user) {
     };
 
     return (
-        <div className="summary-report-container">
-            <ResourceTypeSelect className="summary-header" />
-            <DocumentViewer pdfFile={pdfFile} />
-        </div>
+        <>
+            {user && user.userType === 1 ? (
+                <div className="summary-report-container">
+                    {/* {generateSummary()} */}
+                    <ResourceTypeSelect className="summary-header" />
+                    <DocumentViewer pdfFile={pdfFile} />
+                </div>
+            ) : (
+                <div
+                    style={{
+                        minHeight: "80vh",
+                        display: "grid",
+                        placeItems: "center",
+                    }}
+                >
+                    <PropagateLoader
+                        color={"#0067a1"}
+                        speedMultiplier={2}
+                        loading={true}
+                        size={20}
+                    />
+                    {accessPrivilege()}
+                </div>
+            )}
+        </>
     );
 }
