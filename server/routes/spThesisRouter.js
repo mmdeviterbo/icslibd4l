@@ -12,167 +12,8 @@ const thesisKeyModel = require("../models/spThesisKeyModel");
 const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
-// file database
-const path = require("path");
-const crypto = require("crypto");
-const mongoose = require("mongoose");
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
-const Grid = require("gridfs-stream");
-
-const database = process.env.db;
-
-// ---------------------------------------- FILE STORAGE INITIALIZATION
-// https://www.section.io/engineering-education/uploading-files-using-multer-nodejs/
-// https://dev.to/aimalm/upload-single-file-in-node-js-using-express-and-multer-in-6-steps-4o9p
-// https://stackoverflow.com/questions/36096805/uploading-multiple-files-with-multer-but-from-different-fields
-// https://stackoverflow.com/questions/58173677/error-the-database-connection-must-be-open-to-store-files
-
-// File filter function
-const fileFilter = (req, file, cb) => {
-    if (file.fieldname === "manuscript" || file.fieldname === "journal") {
-        if (file.mimetype.includes("pdf")) {
-            cb(null, true);
-        } else {
-            cb(new Error("Not a PDF File!!"), false);
-        }
-    } else if (file.fieldname == "poster") {
-        if (
-            file.mimetype.includes("jpeg") ||
-            file.mimetype.includes("png") ||
-            file.mimetype.includes("jpg")
-        ) {
-            cb(null, true);
-        } else {
-            cb(new Error("Not a IMG File!!"), false);
-        }
-    } else if (file.fieldname == "source code") {
-        cb(null, true);
-    }
-};
-
-// Create mongo connection
-// const conn = mongoose.createConnection(database, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// });
-
-const promise = mongoose.connect(database, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-const conn = mongoose.connection;
-
-// Init gfs
-let gfs;
-
-// Init stream
-conn.once("open", () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection("sp_files");
-});
-// Create storage engine
-const storage = new GridFsStorage({
-    // url: database,
-    db: promise,
-    file: (req, file) => {
-        return new Promise(async (resolve, reject) => {
-            //get the sp_thesis_id from the multipart form of http request
-            const sp_thesis_id = JSON.parse(req.body.body).sp_thesis_id;
-            // check if sp is existing
-            const existingThesis = await thesisModel.findOne({ sp_thesis_id });
-            // return error as thesis already exists
-            if (existingThesis) {
-                if (JSON.parse(req.body.body).old_sp_thesis_id == undefined) {
-                    return reject("Thesis already exists!");
-                } else {
-                    // thesis update
-                    gfs.files.findOne(
-                        { metadata: [sp_thesis_id, "journal"] },
-                        (err, updatedSPT) => {
-                            if (updatedSPT) {
-                                // .chunks
-                                mongoose.connection.db
-                                    .collection("sp_files.chunks")
-                                    .deleteMany({ files_id: updatedSPT._id });
-                                // .files
-                                gfs.files.deleteOne({
-                                    metadata: [sp_thesis_id, "journal"],
-                                });
-                            }
-                        }
-                    );
-                    gfs.files.findOne(
-                        { metadata: [sp_thesis_id, "poster"] },
-                        (err, updatedSPT) => {
-                            if (updatedSPT) {
-                                // .chunks
-                                mongoose.connection.db
-                                    .collection("sp_files.chunks")
-                                    .deleteMany({ files_id: updatedSPT._id });
-                                // .files
-                                gfs.files.deleteOne({
-                                    metadata: [sp_thesis_id, "poster"],
-                                });
-                            }
-                        }
-                    );
-                    gfs.files.findOne(
-                        { metadata: [sp_thesis_id, "manuscript"] },
-                        (err, updatedSPT) => {
-                            if (updatedSPT) {
-                                // .chunks
-                                mongoose.connection.db
-                                    .collection("sp_files.chunks")
-                                    .deleteMany({ files_id: updatedSPT._id });
-                                // .files
-                                gfs.files.deleteOne({
-                                    metadata: [sp_thesis_id, "manuscript"],
-                                });
-                            }
-                        }
-                    );
-                    gfs.files.findOne(
-                        { metadata: [sp_thesis_id, "source code"] },
-                        (err, updatedSPT) => {
-                            if (updatedSPT) {
-                                // .chunks
-                                mongoose.connection.db
-                                    .collection("sp_files.chunks")
-                                    .deleteMany({ files_id: updatedSPT._id });
-                                // .files
-                                gfs.files.deleteOne({
-                                    metadata: [sp_thesis_id, "source code"],
-                                });
-                            }
-                        }
-                    );
-                }
-            }
-
-            //gives the file a different name
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename =
-                    buf.toString("hex") + path.extname(file.originalname);
-
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: "sp_files",
-                    metadata: [sp_thesis_id, file.fieldname], //store the book id in the metadata
-                };
-
-                console.log(fileInfo);
-                console.log(fileInfo.metadata[0]);
-                console.log(fileInfo.metadata[1]);
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const upload = multer({ storage, fileFilter: fileFilter });
+// unique ID generator
+const uniqid = require('uniqid');
 
 // ---------------------------------------- HTTP REQUESTS
 // create new sp entry
@@ -180,22 +21,24 @@ const upload = multer({ storage, fileFilter: fileFilter });
 Request Object:
 req object: Multipart form
 body: {
-  sp_thesis_id: sp_thesis_id,
-  type: type,
-  title" title,
-  abstract" abstract,
-  year: year,
-  manuscript: manuscript,
-  journal: journal,
-  poster: poster,
-  keywords : ["keywords1",...],
-  authors : [ {fname, lname}, ... ]
-  advisers: [ {fname, lname}, ... ]
+    REQUIRED:
+        type: "Thesis" or "SP"
+        title: title,
+        abstract abstract,
+        year: year,
+        manuscript: manuscript,
+        journal: journal,
+        poster: poster,
+        keywords : ["keywords1",...],
+        authors : [ {fname, lname}, ... ]
+        advisers: [ {fname, lname}, ... ]
+    NOT REQUIRED:
+        source_code,
+        manuscript,
+        journal,
+        poster,
 }
-manuscript : pdf
-poster : pdf
-journal : img file
-source code : file
+
 Response Object:
 {
   "advisers": [ {fname, lname}, ... ],
@@ -213,68 +56,70 @@ Response Object:
 // AUTHENTICATION REMOVED FROM THE PARAMETERS
 // authFaculty
 router.post(
-    "/create",
-    upload.fields([
-        { name: "manuscript", maxCount: 1 },
-        { name: "poster", maxCount: 1 },
-        { name: "journal", maxCount: 1 },
-        { name: "source code", maxCount: 1 },
-    ]),
-    async (req, res) => {
+    "/create", async (req, res) => {
         try {
             const {
-                sp_thesis_id, // common ID
+                // REQUIRED
                 type,
                 title,
                 abstract,
                 year,
-                // source_code,
-                // manuscript,
-                // journal,
-                // poster, // thesisModel
                 advisers, // thesisAdviserModel
                 authors, // thesisAuthorModel
                 keywords, // thesisKeyModel
-            } = JSON.parse(req.body.body);
+
+                // NOT REQUIRED
+                source_code,
+                manuscript,
+                journal,
+                poster, // thesisModel
+            } = req.body;
 
             // sample verification: incomplete fields
             if (
-                !sp_thesis_id ||
                 !type ||
                 !title ||
                 !abstract ||
                 !year ||
-                // !source_code ||
-                // !manuscript ||
-                // !journal ||
-                // !poster ||
                 !advisers ||
                 !authors ||
                 !keywords
             ) {
-                return res.status(400).json({
-                    errorMessage: "Please enter all required fields.",
-                });
+                return res
+                    .status(400)
+                    .json({
+                        errorMessage: "Please enter all required fields.",
+                    });
             }
 
-            // search if book exists
-            const existingThesis = await thesisModel.findOne({ sp_thesis_id });
+            // search if thesis exists
+            const existingThesis = await thesisModel.findOne({ 
+                title: title, 
+                type: type, 
+                year:year,  
+            });
 
-            // console.log(sp_thesis_id);
+            // if does not exist, proceed in creating entry
+            if (!existingThesis) { 
+                var unique_ID = " ";
 
-            if (!existingThesis) {
-                // if does not exist, proceed in creating entry
+                if(type == "SP"){
+                    var unique_ID = uniqid('SP_'); //generate a unique id for the book
+                }else if (type == "Thesis"){
+                    var unique_ID = uniqid('Thesis_'); //generate a unique id for the book
+                }
+
                 // save thesisModel
                 const newThesis = new thesisModel({
-                    sp_thesis_id,
+                    sp_thesis_id : unique_ID,
                     type,
                     title,
                     abstract,
                     year,
-                    // source_code,
-                    // manuscript,
-                    // journal,
-                    // poster,
+                    source_code,
+                    manuscript,
+                    journal,
+                    poster,
                 });
                 const savedThesis = await newThesis.save();
 
@@ -288,15 +133,13 @@ router.post(
                     );
 
                     const newThesisAdv = new thesisAdviserModel({
-                        sp_thesis_id,
+                        sp_thesis_id : unique_ID,
                         adviser_fname,
                         adviser_lname,
                         adviser_name,
                     });
 
                     const savedThesisAdv = await newThesisAdv.save();
-                    // console.log(newThesisAdv);
-                    // console.log(savedThesisAdv);
                 });
 
                 // save thesisAuthorModel
@@ -306,14 +149,12 @@ router.post(
                     const author_name = author_fname.concat(" ", author_lname);
 
                     const newThesisAu = new thesisAuthorModel({
-                        sp_thesis_id,
+                        sp_thesis_id : unique_ID,
                         author_fname,
                         author_lname,
                         author_name,
                     });
                     const savedThesisAu = await newThesisAu.save();
-                    // console.log(newThesisAu)
-                    // console.log(savedThesisAu)
                 });
 
                 // save thesisKeyModel
@@ -321,7 +162,7 @@ router.post(
                     const sp_thesis_keyword = entry;
 
                     const newThesisKey = new thesisKeyModel({
-                        sp_thesis_id,
+                        sp_thesis_id : unique_ID,
                         sp_thesis_keyword,
                     });
 
@@ -331,7 +172,7 @@ router.post(
                 // recheck if correctly sent by sending entry : thesisModel
                 res.json(savedThesis);
             } else {
-                res.status(400).send({ errorMessage: "SP already exists!" });
+                res.status(400).send({ errorMessage: "It already exists!" });
             }
         } catch (err) {
             console.log(err);
@@ -340,17 +181,14 @@ router.post(
     }
 );
 
-// Reference:
-// https://stackoverflow.com/questions/36891931/gridfs-find-file-by-id-download-with-the-name-of-the-file
-
 // get the manuscript, journal, or source code of a particular sp/thesis
 /**************************************************** 
 Request Query:
     title: 
-    type: "manuscript", "journal", "source code"
-Response Object:
-    * pdf Filestream for manuscript and journal
-    * Filestream for sourcecode
+    type: ["manuscript", "journal", "source code", "poster"]
+
+Response:
+    * String (link of the entry) 
 ********************************************************/
 router.get("/download", async (req, res) => {
     thesisModel.findOne(
@@ -359,114 +197,23 @@ router.get("/download", async (req, res) => {
             if (err) {
                 res.send(err);
             } else {
-                console.log(result.sp_thesis_id);
-
-                gfs.files.findOne(
-                    { metadata: [result.sp_thesis_id, req.query.type] },
-                    (err, file) => {
-                        if (err) {
-                            res.send(err);
-                        } else {
-                            // Read output to browser
-                            const readstream = gfs.createReadStream(
-                                file.filename
-                            );
-                            readstream.pipe(res);
-                        }
-                    }
-                );
+                if (req.query.type == "manuscript"){
+                    res.send(result.manuscript);
+                }else if (req.query.type == "journal"){
+                    res.send(result.journal);
+                }else if(req.query.type == "source code"){
+                    res.send(result.source_code);
+                }else if(req.query.type =="poster"){
+                    res.send(result.poster);
+                }
+                
             }
         }
     );
 });
 
-// get the poster of a particular sp/thesis
-/**************************************************** 
-Request Query:
-    title: 
-Response Object:
-img Filestream for poster
-********************************************************/
-router.get("/preview", async (req, res) => {
-    thesisModel.findOne(
-        { title: { $regex: req.query.search, $options: "i" } },
-        (err, result) => {
-            if (err) {
-                res.send(err);
-            } else {
-                console.log(result.sp_thesis_id);
-
-                gfs.files.findOne(
-                    { metadata: [result.sp_thesis_id, "poster"] },
-                    (err, file) => {
-                        if (err) {
-                            res.send(err);
-                        } else {
-                            // Read output to browser
-                            const readstream = gfs.createReadStream(
-                                file.filename
-                            );
-                            readstream.pipe(res);
-                        }
-                    }
-                );
-            }
-        }
-    );
-});
-// version 2: display file object
-/**************************************************** 
-Request Object:
-req object: JSON
-body: {
-  sp_thesis_id,
-}
-Response Object:
-{
-  "_id": _id,
-  "length": length,
-  "chunkSize": chunkSize,
-  "uploadDate": uploadDate,
-  "filename": filename,
-  "md5": md5,
-  "contentType": contentType,
-  "metadata": "sp_thesis_id
-}
-********************************************************/
-router.get("/download2", async (req, res) => {
-    const { sp_thesis_id } = req.body;
-
-    gfs.files.findOne({ metadata: sp_thesis_id }, (err, file) => {
-        if (err) {
-            res.send(err);
-        } else {
-            return res.json(file);
-        }
-    });
-});
 
 // browse all entries, default sort: alphabetical by title
-/**************************************************** 
-Request Object:
-req object: JSON
-body: {
- type,
-}
-Response Object: Array
-[
-    {
-    "_id": _id,
-    "length": length,
-    "chunkSize": chunkSize,
-    "uploadDate": uploadDate,
-    "filename": filename,
-    "md5": md5,
-    "contentType": contentType,
-    "metadata": "sp_thesis_id
-    },
-    ...
-]
-********************************************************/
 router.post("/browse", async (req, res) => {
     const { type } = req.body;
     if (type === "book") {
@@ -553,48 +300,7 @@ router.post("/browse", async (req, res) => {
     }
 });
 
-// search and filter resources
-/**************************************************** 
-http://localhost:3001/thesis/search
-Request Object:
-query: {
-    type (any/book/sp/thesis),
-    search,
-    year,
-    publisher,
-    author,
-    adviser,
-    subject,
-    keyword (string array)
-}
-Response Object: Array of book/sp/thesis
-[
-    {
-        advisers: [],
-        authors: [],
-        keywords: [],
-        sp_thesis_id,
-        type,
-        title,
-        abstract,
-        year
-    },
-    ...
-    {
-        author: [],
-        subject: [],
-        bookId,
-        ISBN,
-        title,
-        physicalDesc,
-        publisher,
-        numberOfCopies,
-        datePublished,
-        dateAcquired
-    },
-    ...
-]
-********************************************************/
+// search data
 router.get("/search", async (req, res) => {
     // Search and Filter Resources
     // http://localhost:3001/thesis/search
@@ -602,6 +308,7 @@ router.get("/search", async (req, res) => {
     // - req.query: type, search [, title, year, publisher, author, adviser, subject, keyword]
     // RESPONSE:
     // - array of objects (book/sp/thesis)
+
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
@@ -611,9 +318,22 @@ router.get("/search", async (req, res) => {
 
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
+        // separate books and spthesis
+        let book_arr = final_arr.filter(item => "bookId" in item);
+        let spthesis_arr = final_arr.filter(item => "sp_thesis_id" in item);
+
         // get unique entries
         let final_arr = [...new Set(total)];
+
         // FILTER ENTRIES in final_arr
+
+        // Filter by title (case insensitive, checks for substring match)
+        if ("title" in req.query) {
+            let titleFilter = req.query.title.toLowerCase();
+            final_arr = final_arr.filter((item) => {
+                return item.title.toLowerCase().includes(titleFilter);
+            });
+        }
 
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
@@ -621,7 +341,7 @@ router.get("/search", async (req, res) => {
             final_arr = final_arr.filter((item) => {
                 if ("year" in item) {
                     return item.year == yearFilter;
-                } else if ("datePublished" in item) {
+                }else if ("datePublished" in item) {
                     return item.datePublished.getFullYear() == yearFilter;
                 }
             });
@@ -630,12 +350,10 @@ router.get("/search", async (req, res) => {
         // Filter by publisher (case insensitive, checks for substring match)
         if ("publisher" in req.query) {
             let publisherFitler = req.query.publisher.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                if ("publisher" in item) {
-                    return item.publisher
-                        .toLowerCase()
-                        .includes(publisherFitler);
-                }
+            book_arr = book_arr.filter((item) => {
+                return item.publisher
+                    .toLowerCase()
+                    .includes(publisherFitler);
             });
         }
 
@@ -643,35 +361,23 @@ router.get("/search", async (req, res) => {
         if ("author" in req.query) {
             let authorFilter = req.query.author.toLowerCase();
             final_arr = final_arr.filter((item) => {
-                if ("author" in item) {
-                    return item.author.some((auth) => {
-                        return auth.author_name
-                            .toLowerCase()
-                            .includes(authorFilter);
-                    });
-                } else {
-                    return item.authors.some((auth) => {
-                        return auth.author_name
-                            .toLowerCase()
-                            .includes(authorFilter);
-                    });
-                }
+                return item.author.some((auth) => {
+                    return auth.author_name
+                        .toLowerCase()
+                        .includes(authorFilter);
+                });
             });
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
-        // format of req.query.adviser = "Lastname, Firstname"
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
-            let fnameFilter, lnameFilter;
-            [lnameFilter, fnameFilter] = adviserFilter.split(", ");
             final_arr = final_arr.filter((item) => {
-                if ("advisers" in item) {
-                    return item.advisers.some((advi) => {
-                        return (
-                            advi.adviser_fname.toLowerCase() == fnameFilter &&
-                            advi.adviser_lname.toLowerCase() == lnameFilter
-                        );
+                if ("adviser" in item) {
+                    return item.adviser.some((advi) => {
+                        return advi.adviser_name
+                            .toLowerCase()
+                            .includes(adviserFilter);
                     });
                 }
             });
@@ -680,25 +386,22 @@ router.get("/search", async (req, res) => {
         // Filter by 1 subject (case insensitive, checks for substring match)
         if ("subject" in req.query) {
             let subjectFilter = req.query.subject.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                if ("subject" in item) {
-                    return item.subject.some((subj) => {
-                        return subj.subject
-                            .toLowerCase()
-                            .includes(subjectFilter);
-                    });
-                }
+            book_arr = book_arr.filter((item) => {
+                return item.subject.some((subj) => {
+                    return subj.subject
+                        .toLowerCase()
+                        .includes(subjectFilter);
+                });
             });
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
+        // req.query.keyword: array of keyword strings (use double quotes in request)
+        // sample: keyword=["keyw1","keyw2","keyw3"]
         if ("keyword" in req.query) {
-            try {
-                let keywordArrayFilter = req.query.keyword;
-                keywordArrayFilter = keywordArrayFilter.map((k) =>
-                    k.toLowerCase()
-                );
+            try{
+                let keywordArrayFilter = JSON.parse(req.query.keyword);
+                keywordArrayFilter = keywordArrayFilter.map(k => k.toLowerCase());
                 final_arr = final_arr.filter((item) => {
                     if ("keywords" in item) {
                         return item.keywords.some((keyw) => {
@@ -710,26 +413,32 @@ router.get("/search", async (req, res) => {
                         });
                     }
                 });
-            } catch (error) {
-                if (error instanceof SyntaxError) {
+            }
+            catch(error){
+                if(error instanceof SyntaxError){
                     console.log("SyntaxError: Invalid req.query.keyword");
-                } else {
+                }else{
                     console.log(error);
                 }
                 res.status(400).send(error);
             }
         }
 
-        if (!res.headersSent) {
+        if (!res.headersSent){
             res.send(final_arr); // filtered search results
         }
     }
-    // REFERENCES for search filter:
-    // Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
-    // String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
-    // Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
-    // JSON.parse() https://stackoverflow.com/questions/22080770/i-need-to-create-url-for-get-which-is-going-to-accept-array-how-in-node-js-expr
-    // Array.map() https://attacomsian.com/blog/javascript-array-lowercase-uppercase
+    /* References for search filter:
+        Array.filter() https://stackoverflow.com/questions/2722159/how-to-filter-object-array-based-on-attributes
+        String.includes() https://stackoverflow.com/questions/48145432/javascript-includes-case-insensitive/48145521
+        Array.some() https://stackoverflow.com/questions/22844560/check-if-object-value-exists-within-a-javascript-array-of-objects-and-if-not-add
+        JSON.parse() https://stackoverflow.com/questions/22080770/i-need-to-create-url-for-get-which-is-going-to-accept-array-how-in-node-js-expr
+        Array.map() https://attacomsian.com/blog/javascript-array-lowercase-uppercase
+        Array.sort() https://devdocs.io/javascript/global_objects/array/sort
+        Array.sort() https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+        Array.concat(Array) https://devdocs.io/javascript/global_objects/array/concat
+        getUniqueListBy() https://stackoverflow.com/questions/2218999/how-to-remove-all-duplicates-from-an-array-of-objects/56768137#56768137
+    */
 
     // ------- SEARCH SP FUNCTIONS
     function spMain(mode) {
@@ -818,7 +527,7 @@ router.get("/search", async (req, res) => {
             [
                 {
                     $match: {
-                        sp_thesis_keyword: {
+                        author_name: {
                             $regex: req.query.search,
                             $options: "i",
                         },
@@ -878,7 +587,6 @@ router.get("/search", async (req, res) => {
                                 },
                             },
                         ],
-
                         (error, results) => {
                             if (error) {
                                 res.send(error);
@@ -1029,7 +737,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "advisers",
+                                    as: "adviser",
                                 },
                             },
                             {
@@ -1371,7 +1079,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "advisers",
+                                    as: "adviser",
                                 },
                             },
                             {
@@ -1380,7 +1088,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "authors",
+                                    as: "author",
                                 },
                             },
                             {
@@ -1607,23 +1315,335 @@ router.get("/search", async (req, res) => {
         );
     }
 
-    // ---------------------------------------- SUB FUNCTIONS
-    if (req.query.type == "any") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
-        // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
-        // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
-        spMain(1);
-    } else if (req.query.type == "book") {
-        // bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
-        bookMain(0);
-    } else if (req.query.type == "sp") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
-        spMain(0);
-    } else if (req.query.type == "thesis") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
-        thesisMain(0);
+    // ------- SEARCH WITH EMPTY REQ.QUERY.SEARCH
+    function noBook(mode){
+        bookModel.aggregate(
+            [
+                {
+                    $lookup: {
+                        from: "book_authors",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "author",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "book_subjects",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "subject",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // mode 0 is browse by book, else it is browse by all 3 types
+                    if (mode == 0) {
+                        filterEntries();
+                    } else {
+                        noSP(mode);
+                    }
+                }
+            }
+        );
     }
+    function noSP(mode){
+        thesisModel.aggregate(
+            [
+                {$match: { type : "SP" }},
+                {
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // mode 0 is browse by SP, else it is browse by all 3 types
+                    if (mode == 0) {
+                        filterEntries();
+                    } else {
+                        noThesis();
+                    }
+                }
+            }
+        );
+    }
+    function noThesis(){
+        thesisModel.aggregate(
+            [
+                {$match: { type : "Thesis" }},
+                {
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // regardless if browse by Thesis or all, it is the last part.
+                    // hence continue to filterEntries()
+                    filterEntries();
+                }
+            }
+        );
+    }
+
+    // ---------------------------------------- MAIN
+    if (!req.query.search){ // if req.query.search is empty, it will return all values within a type
+        if (req.query.type == "any") {
+            // noBook() -> noSP() -> noThesis() -> filterEntries()
+            noBook(1);
+        } else if (req.query.type == "book") {
+            // noBook() -> filterEntries()
+            noBook(0);
+        } else if (req.query.type == "sp") {
+            // noSP() -> filterEntries()
+            noSP(0);
+        } else if (req.query.type == "thesis") {
+            // noThesis() -> filterEntries()
+            noThesis();
+        }
+    }else{ // else, continue with search
+        if (req.query.type == "any") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
+            // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
+            // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
+            spMain(1);
+        } else if (req.query.type == "book") {
+            // bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
+            bookMain(0);
+        } else if (req.query.type == "sp") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
+            spMain(0);
+        } else if (req.query.type == "thesis") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
+            thesisMain(0);
+        }
+    }
+
 });
+
+// search data by id
+/**************************************************** 
+Request Query:
+    id :
+    type
+Response:
+    * 1 object
+********************************************************/
+// REFERENCE:
+// https://stackoverflow.com/questions/37582331/how-to-return-only-the-first-occurrence-of-an-id-with-mongoose
+
+router.get("/search-id", async (req, res) => {
+
+    // ---------------------------------------- SUB FUNCTIONS
+ 
+    function spMain() {
+        thesisModel.aggregate(
+            [
+                { 
+                    $match: {
+                        sp_thesis_id : req.query.id,
+                        type : "SP", 
+                    }
+                },
+                {
+                    // populate advisers field
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    // populate authors field
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    // populate keywords field
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+                { $limit:1 }
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    }
+
+    function thesisMain() {
+        thesisModel.aggregate(
+            [
+                { 
+                    $match: {
+                        sp_thesis_id : req.query.id,
+                        type : "Thesis", 
+                    }
+                },
+                {
+                    // populate advisers field
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    // populate authors field
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    // populate keywords field
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+                { $limit:1 }
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    }
+
+    function bookMain() {
+        // get book matches on bookModel based from req.query.id
+        bookModel.aggregate(
+            [
+                {$match: { bookID : req.query.id }},
+                {
+                    $lookup: {
+                        // populate authors field
+                        from: "book_authors",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "author",
+                    },
+                },
+                {
+                    // populate subject field
+                    $lookup: {
+                        from: "book_subjects",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "subject",
+                    },
+                },
+                { $limit:1 }
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    }
+   
+    // ---------------------------------------- MAIN
+
+    if (req.query.type == "SP"){
+        spMain();
+    }else if (type == "Book"){
+        bookMain();
+    }else if (type =="Thesis"){
+        thesisMain();
+    }   
+});
+
+
+
+
 
 // RESOURCES:
 // https://stackoverflow.com/questions/40931821/how-to-combine-two-collection-based-on-idtransectionid-using-node-js
@@ -1655,18 +1675,13 @@ body:
 file: pdf
 file: jpeg
 file: pdf
+
 Response String:
 "Entry Updated"
 ********************************************************/
 router.put(
     "/update",
     authAdmin,
-    upload.fields([
-        { name: "manuscript", maxCount: 1 },
-        { name: "poster", maxCount: 1 },
-        { name: "journal", maxCount: 1 },
-        { name: "source code", maxCount: 1 },
-    ]),
     async (req, res) => {
         const {
             old_sp_thesis_id,
@@ -1863,22 +1878,6 @@ router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
                 // .files
                 gfs.files.deleteOne({
                     metadata: [sp_thesis_id_holder, "manuscript"],
-                });
-            }
-        }
-    );
-
-    gfs.files.findOne(
-        { metadata: [sp_thesis_id_holder, "source code"] },
-        (err, updatedSPT) => {
-            if (updatedSPT) {
-                // .chunks
-                mongoose.connection.db
-                    .collection("sp_files.chunks")
-                    .deleteMany({ files_id: updatedSPT._id });
-                // .files
-                gfs.files.deleteOne({
-                    metadata: [sp_thesis_id_holder, "source code"],
                 });
             }
         }

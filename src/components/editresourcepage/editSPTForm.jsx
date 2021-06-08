@@ -385,6 +385,7 @@ export default function EditSPTFormContainer(props) {
                         <Select
                             id="advsel"
                             options={adviserchoices}
+                            defaultValue = {adviser}
                             // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
                             // onChange={handleAdviserChange}
                             isMulti
@@ -413,6 +414,7 @@ export default function EditSPTFormContainer(props) {
                                 type = "url"
                                 className="resourcefiles"
                                 id="spt-sourcecode"
+                                // defaultValue = {}
                                 placeholder ={"https://www.example.com/"}
                                 onClick={(e) => (e.target.value = null)}
                                 // onChange={(e) => {
@@ -479,6 +481,7 @@ export default function EditSPTFormContainer(props) {
                             <label htmlFor="keywords-field">Keywords: &nbsp; </label>
                             <ChipInput
                                 id="keywords-field"
+                                defaultValue = {keywords}
                                 onChange={(chips) => handleChips(chips)}
                             />
                         </div>

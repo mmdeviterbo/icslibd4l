@@ -3,27 +3,20 @@ import CardBook from "./cardBook";
 import latestAcqBg from "../../assets/searchBg_4.png";
 import { useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
-import Parser from "html-react-parser";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 export default function LatestAcquisitions({ latestAcqRef }) {
     const history = useHistory();
     const [hoverText, setHoverText] = useState("");
     const [acquisitions, setacquisitions] = useState([]);
-    const [covers, setCovers] = useState("");
+    const [loader, setLoader] = useState(true);
+    
+    const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
-    const imgNotAvailable =
-        "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
-
-    useEffect(() => {
-        async function getLatestAcquisition() {
-            // get title and year (of 12 books, sorted array)
-            const booksInfo = await ResourceService.getBooks();
-            setacquisitions(booksInfo.data);
-
-            // const bookCovers = await ResourceService.getBookCovers();
-            // setCovers(bookCovers.data);
-        }
-        getLatestAcquisition();
+    useEffect(async() => {
+        const booksInfo = await ResourceService.getLatestBooks();
+        setacquisitions(booksInfo.data);
+        setLoader(false); //hide loader animation 
     }, []);
 
     const handleViewAllBooks = () => {
@@ -42,16 +35,18 @@ export default function LatestAcquisitions({ latestAcqRef }) {
             style={latestAcquisitionsContainer}
             ref={latestAcqRef}
         >
-            {/* <div>{covers && Parser(covers)}</div> */}
             <img src={latestAcqBg} style={latestAcqBgStyle} alt="#" />
             <div style={colorsParent} className="latestAcqcolorsParent">
                 <div style={whiteBg}>
                     <span style={hoverTextStyleWhite}>{hoverText}</span>
                     <div
-                        style={acquisitionsInnerContainer}
+                        style={loader? displayLoader : acquisitionsInnerContainer}
                         className="acquisitionsInnerContainer"
                     >
-                        {acquisitions.map((book) => (
+                        {loader? 
+                         <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />
+                        :
+                        (acquisitions.map((book) => (
                             <CardBook
                                 className="cardContainer"
                                 imageSrc={imgNotAvailable}
@@ -66,7 +61,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                                 setHoverText={setHoverText}
                                 book={book}
                             />
-                        ))}
+                        )))}
                     </div>
                 </div>
                 <div style={blueBg}>
@@ -131,6 +126,13 @@ const acquisitionsInnerContainer = {
     overflow: "auto auto",
     transition: "0.8s",
 };
+const displayLoader = {
+    display:"grid",
+    placeItems: "center",
+    height:"100%"
+}
+
+
 const latestAcqBgStyle = {
     position: "absolute",
     height: "100%",
@@ -140,8 +142,8 @@ const latestAcqBgStyle = {
 
 const colorsParent = {
     position: "relative",
-    height: "80%",
-    width: "80%",
+    height: "85%",
+    width: "95%",
     zIndex: 0,
     display: "flex",
     borderRadius: "0px 4px 4px 0px",
@@ -162,8 +164,7 @@ const blueBg = {
     width: "40%",
     zIndex: 1,
     overflow: "hidden",
-    boxShadow:
-        "2px 5px 10px 0 rgba(0, 0, 0, 0.8), -6px -6px 6px 0 rgba(255, 255, 255, 0.8)",
+    boxShadow: "2px 4px 6px 0 rgba(0, 0, 0, 0.8), -6px -6px 4px 0 rgba(255, 255, 255, 0.8)",
     display: "flex",
     flexDirection: "column",
 };
@@ -186,6 +187,7 @@ const textBg = {
     fontWeight: 900,
     width: "100%",
     textAlign: "center",
+    padding:"15px"
 };
 
 const hoverTextStyle = {

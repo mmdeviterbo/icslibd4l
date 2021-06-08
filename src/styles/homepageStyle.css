@@ -6,7 +6,7 @@
     overflow: visible !important;
 
     position: relative;
-    min-height: 65px;
+    min-height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,11 +42,20 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    transition: 0.1s;
+    transition: 0.5s;
     text-align: end;
-    padding-right: 1.5vw;
     overflow-y: visible !important;
+    padding-right: 0.5vw;
+    color:white;
+    font-size: medium;
+    transform: translateX(0);
 }
+.left-half:hover{
+    color:white;
+    transform: translateX(-7px) !important;
+}
+
+
 .ics-uplb-caption {
     color: white;
     display: flex;
@@ -54,23 +63,12 @@
     flex-direction: column;
 }
 
-.ics-caption {
-    font-size: calc(10px + 0.5vw);
-    font-weight: 800;
-    transition: 0.5s;
-}
-.uplb-caption {
-    font-size: 15px;
-    line-height: 2;
-    transition: 0.5s;
-}
-
 .right-half {
     height: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    flex-grow: 2;
+    flex-grow: 1;
     transition: 1s;
     overflow-y: visible !important;
 }
@@ -120,7 +118,23 @@
     font-weight: 900 !important;
     color: black !important;
     background: rgb(207, 207, 207) !important;
+    text-align: center !important;
+    
 }
+
+.loginModal{
+    width:70%;
+    background: rgb(26, 26, 26) !important;
+    padding: 2% !important;
+    display: flex;
+    justify-content: center;
+    box-shadow: 1px 1px 3px rgb(105, 105, 105) !important;
+    font-size: 1vw !important;
+    border-radius: 5px !important;
+    color:white !important;
+    z-index: 10;
+}
+
 
 .homeBtn:hover{
     transform: scale(1.01);
@@ -139,9 +153,6 @@
     transform: scale(1.02) !important;
 }
 
-.formSearchHomepage > .removeOutline:focus {
-    box-shadow: none !important;
-}
 .browseBox {
     z-index: 1;
     transform: scale(1);
@@ -196,17 +207,6 @@
     }
     .right-half {
         width: 100vw;
-    }
-
-    .ics-uplb-caption {
-        padding-left: 5px;
-    }
-    .ics-caption {
-        font-size: 12px;
-    }
-
-    .uplb-caption {
-        display: none;
     }
 
     .latestAcquisitionsCaption {
@@ -268,16 +268,6 @@
 
     /* footer  */
     .icslogo-img {
-        display: none;
-    }
-
-    .ics-caption {
-        font-size: 18px;
-        font-weight: 750;
-        line-height: 1;
-    }
-
-    .uplb-caption {
         display: none;
     }
 

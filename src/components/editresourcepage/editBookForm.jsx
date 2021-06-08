@@ -33,7 +33,6 @@ const courseList = [
   { value: "CMSC 191", label: "CMSC 191" },
 ];   
 
-// !!! Should receive an sp/thesis object
 export default function EditBookFormContainer(props) {
         // functionalities:
     const [title, setTitle] = useState("");
@@ -454,7 +453,7 @@ export default function EditBookFormContainer(props) {
                         <input
                             type="number"
                             id="availBookCopies"
-                            defaultValue={0}
+                            defaultValue={numberOfCopies} //bakit di lumalabas what the fuck???
                             onChange={(event) => {
                             if (event.target.value < 0 || !event.target.value) {
                                 event.target.value = event.target.defaultValue;

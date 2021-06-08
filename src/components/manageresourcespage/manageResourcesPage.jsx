@@ -1,16 +1,15 @@
 import React from "react";
-import FilterMenu from "./filterMenu";
-import { useHistory } from "react-router";
-import UserTable from "./userTable";
 import ManagementHeader from "../managementHeader";
-import PropagateLoader from "react-spinners/PropagateLoader";
+import FieldsContainerRes from "./filterFieldsResources";
+import ResourceTableContainer from "./resourceTableContainer";
 import PersonService from "../../services/personService";
-import { jwtPrivateKey } from "../../config.json";
+import { jwtPrivateKey } from "./../../config.json";
+import { useHistory } from "react-router-dom";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import background from "../../assets/searchBg_4.png";
+import "../../styles/manageresources/manageResourcesStyle.css";
 
-import "../../styles/manageUserStyle.css";
-
-export default function ManageUserPage({ user }) {
+const ManageResourcesPage = ({ user }) => {
     const history = useHistory();
 
     const accessPrivilege = () => {
@@ -30,13 +29,13 @@ export default function ManageUserPage({ user }) {
     return (
         <>
             {user && user.userType === 1 ? (
-                <div className="manage-user-container">
+                <div className="manage-resources-page-container">
                     <img src={background} style={backgroundStyle} alt="#" />
-                    <ManagementHeader type={"user"} />
-                    {/* <FilterMenu /> */}
-                    <div className="usertable-container">
-                        <UserTable user={user} />
-                    </div>
+
+                    <ManagementHeader type={"resource"} />
+                    {/* <FieldsContainerRes /> */}
+                    {/* <ResTableContainer resourceList={resourceList} /> */}
+                    <ResourceTableContainer />
                 </div>
             ) : (
                 <div
@@ -56,8 +55,12 @@ export default function ManageUserPage({ user }) {
             )}
         </>
     );
-}
+};
+
+export default ManageResourcesPage;
+
 const backgroundStyle = {
+    paddingLeft: "-6%",
     position: "absolute",
     height: "100%",
     width: "100%",
