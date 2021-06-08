@@ -136,7 +136,7 @@ function getBookCover(resourceId) {
 
 // read summary report data
 const generateReport = (resourceType) => {
-    return http.get(`${apiEndpoint}/admin/report?type=${resourceType}`);
+    return http.get(`${apiEndpoint}/reports/report?type=${resourceType}`);
 };
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
