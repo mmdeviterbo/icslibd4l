@@ -22,7 +22,7 @@ Request Object:
 req object: Multipart form
 body: {
     REQUIRED:
-        type: "Thesis" or "SP"
+        type: "Thesis" or "Special Problem"
         title: title,
         abstract abstract,
         year: year,
@@ -103,7 +103,7 @@ router.post(
             if (!existingThesis) { 
                 var unique_ID = " ";
 
-                if(type == "SP"){
+                if(type == "Special Problem"){
                     var unique_ID = uniqid('SP_'); //generate a unique id for the book
                 }else if (type == "Thesis"){
                     var unique_ID = uniqid('Thesis_'); //generate a unique id for the book
@@ -1488,7 +1488,7 @@ router.get("/search", async (req, res) => {
 /**************************************************** 
 Request Query:
     id :
-    type
+    type: ["Special Problem", "Book", "Thesis"]
 Response:
     * 1 object
 ********************************************************/
@@ -1505,7 +1505,7 @@ router.get("/search-id", async (req, res) => {
                 { 
                     $match: {
                         sp_thesis_id : req.query.id,
-                        type : "SP", 
+                        type : "Special Problem", 
                     }
                 },
                 {
@@ -1632,7 +1632,7 @@ router.get("/search-id", async (req, res) => {
    
     // ---------------------------------------- MAIN
 
-    if (req.query.type == "SP"){
+    if (req.query.type == "Special Problem"){
         spMain();
     }else if (type == "Book"){
         bookMain();
