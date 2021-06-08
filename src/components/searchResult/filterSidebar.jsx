@@ -13,8 +13,6 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Multiselect } from "multiselect-react-dropdown";
 import ClearIcon from "@material-ui/icons/Clear";
 import  {IconButton} from "@material-ui/core";
-
-
 import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSubMenu from "./filterSubMenu";
 
@@ -31,7 +29,6 @@ export default function FilterSidebar({
     setSearchFilterPublisher,
     course,
     setCourse,
-    filterArray,
     keywords,
     setKeywords,
 }) {
@@ -73,6 +70,14 @@ export default function FilterSidebar({
                 <div style={wrapper}>
                     <p style={sidebarTitle}>Filters</p>
                     {FilterSidebarData.map((item, index) => {
+                        if(item.label === "Adviser" 
+                            && (resourceType === "books"||resourceType === "book")){
+                            return null
+                        }
+                        if(item.label === "Publisher" 
+                            && (resourceType === "sp"||resourceType === "thesis")){
+                            return null
+                        }
                         return (
                             <FilterSubMenu
                                 item={item}
@@ -82,10 +87,7 @@ export default function FilterSidebar({
                                 searchFilterAdviser={searchFilterAdviser}
                                 setSearchFilterAdviser={setSearchFilterAdviser}
                                 searchFilterPublisher={searchFilterPublisher}
-                                setSearchFilterPublisher={
-                                    setSearchFilterPublisher
-                                }
-                                course={course}
+                                setSearchFilterPublisher={setSearchFilterPublisher}
                                 setCourse={setCourse}
                             />
                         );
@@ -178,8 +180,9 @@ export default function FilterSidebar({
                                         setSearchFilterYear(date)
                                     }
                                     animateYearScrolling
-                                    isClearable
+                                    isclearable="true"
                                     placeholder={"Year"}
+                                    style={{width: '50px'}}
                                 />
                                 <IconButton
                                     edge="end"
