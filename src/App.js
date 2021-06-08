@@ -25,9 +25,11 @@ import BrowseResources from "./components/browseresources/browseResources";
 import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
 // import GetResources from "./components/manageresourcespage/getResources";
-import ManageResourcesPage from "./components/manageresourcespage/manageresourcespage";
+import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
+import activityLogsContainer from "./components/activitylogs/activityLogsContainer";
 
 import "./App.css";
+import ActivityLogsContainer from "./components/activitylogs/activityLogsContainer";
 
 function App() {
     const [user, setUser] = useState(null); //fullName, email, userType (integer)
@@ -59,14 +61,14 @@ function App() {
             } catch (err) {}
         };
         getCurrentToken();
-    },[]);
+    }, []);
 
     // login/register a user
     const loginRegisterUser = async (userInfo) => {
         try {
             const { data } = await PersonService.loginRegisterUser(userInfo);
             localStorage.setItem(jwtPrivateKey, data); //set token
-            
+
             // get current param, it must stay on where the user's current path
             window.location = window.location.pathname;
         } catch (err) {}
@@ -81,41 +83,115 @@ function App() {
                 appRef={appRef}
             />
             <Switch location={background || location}>
-                <Route path="/home" render={() =><Homepage browseRef={browseRef} appRef={appRef}
-                    latestAcqRef={latestAcqRef} newsRef={newsRef}/>}
+                <Route
+                    path="/home"
+                    render={() => (
+                        <Homepage
+                            browseRef={browseRef}
+                            appRef={appRef}
+                            latestAcqRef={latestAcqRef}
+                            newsRef={newsRef}
+                        />
+                    )}
                 />
                 {/* <Route path="/view-user/:googleId" component={ViewUser}></Route> */}
-                <Route path="/account-setting/" render={()=><ViewUserPage user={user}/>}/>
-                <Route exact path="/not-found" component={Notfound}/>
-                <Route path="/search" render={() => <Search appRef={appRef} />}/>
+                <Route
+                    path="/account-setting/"
+                    render={() => <ViewUserPage user={user} />}
+                />
+                <Route exact path="/not-found" component={Notfound} />
+                <Route
+                    path="/search"
+                    render={() => <Search appRef={appRef} />}
+                />
                 {/* <Route path="/update-sp-thesis" component={UpdateResourceData}></Route> */}
                 {/* <Route path="/manage-resources" component={ManageResPage}></Route> */}
-                <Route path="/browse-books" render={() => <BrowseResources type={"book"} />}/>
-                <Route path="/browse-special-problems" render={() => <BrowseResources type={"Special Problem"} />}/>
-                <Route path="/browse-theses" render={() => <BrowseResources type={"Thesis"} />}/>
-                <Route path="/sp-thesis/:id" render={(props) => <ReadingSPTContainer user={user} {...props} />}/>
-                <Route path="/book/:id" render={(props) => <ReadingBookContainer appRef={appRef} {...props} />}/>
+                <Route
+                    path="/browse-books"
+                    render={() => <BrowseResources type={"book"} />}
+                />
+                <Route
+                    path="/browse-special-problems"
+                    render={() => <BrowseResources type={"Special Problem"} />}
+                />
+                <Route
+                    path="/browse-theses"
+                    render={() => <BrowseResources type={"Thesis"} />}
+                />
+                <Route
+                    path="/sp-thesis/:id"
+                    render={(props) => (
+                        <ReadingSPTContainer user={user} {...props} />
+                    )}
+                />
+                <Route
+                    path="/book/:id"
+                    render={(props) => (
+                        <ReadingBookContainer appRef={appRef} {...props} />
+                    )}
+                />
                 {/* <Route path="/manage-resources" render={() => <GetResources resourceType={"Book"} />}/>*/}
                 {/* <Route path ="/manage-resources" render={()=><ManageResourcesPage/>}></Route> */}
-                <Route path="/manage-resources" render={()=><ManageResourcesPage user={user}/>}/>
-                <Route path="/manage-users" render={() => <ManageUserPage user={user} />}/>
-                
-                <Route path="/add-new-spt" component={AddSPThesisPage}/>
+                <Route
+                    path="/manage-resources"
+                    render={() => <ManageResourcesPage user={user} />}
+                />
+                <Route
+                    path="/manage-users"
+                    render={() => <ManageUserPage user={user} />}
+                />
+
+                <Route path="/add-new-spt" component={AddSPThesisPage} />
                 <Route path="/add-new-book" component={AddBookPage}></Route>
-                <Route path="/edit-spt/:id" component={EditSPTFormContainer}/>
-                <Route path="/edit-book/:id" component={EditBookFormContainer}/>
+                <Route path="/edit-spt/:id" component={EditSPTFormContainer} />
+                <Route
+                    path="/edit-book/:id"
+                    component={EditBookFormContainer}
+                />
+                <Route
+                    path="/view-activitylogs"
+                    render={() => (
+                        <ActivityLogsContainer user={user} />
+                    )}></Route>
                 <Route path="/about" render={() => <About appRef={appRef} />} />
 
                 <Route exact path="/not-found" component={Notfound}></Route>
-                <Route exact path="/unauthorized" component={Unauthorized}/>
+                <Route exact path="/unauthorized" component={Unauthorized} />
                 <Redirect exact from="/" to="/home" />
                 <Redirect to="/not-found" />
             </Switch>
 
-            {background && (<Route path="/manage-resources/delete-sp-thesis" children={<DeleteModalContainer />}/>)}
-            {background && (<Route path="/manage-users/delete-user" children={<DeleteModalContainer user={user} />}/>)}
-            {background && (<Route path="/account-setting/remove-account" children={<DeleteModalContainer user={user} />}/>)}
-            {background && (<Route path="/manage-users/save-changes" children={<ConfirmChangeModal user={user} />}/>)}
+            {background && (
+                <Route
+                    path="/manage-resources/delete-sp-thesis"
+                    children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/delete-user"
+                    children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/account-setting/remove-account"
+                    children={<DeleteModalContainer user={user} />}
+                />
+            )}
+            {background && (
+                <Route
+                    path="/manage-users/save-changes"
+                    children={<ConfirmChangeModal user={user} />}
+                />
+            )}
+
+            {background && (
+                <Route
+                    path="/view-activitylogs/clear-activitylogs"
+                    children={<DeleteModalContainer />}
+                />
+            )}
 
             <Footer />
         </div>

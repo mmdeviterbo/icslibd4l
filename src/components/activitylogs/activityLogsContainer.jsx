@@ -1,16 +1,16 @@
-import React from "react";
-import FilterMenu from "./filterMenu";
-import { useHistory } from "react-router";
-import UserTable from "./userTable";
-import ManagementHeader from "../managementHeader";
-import PropagateLoader from "react-spinners/PropagateLoader";
+import React, { useEffect } from "react";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
-import background from "../../assets/searchBg_4.png";
+import { useHistory } from "react-router-dom";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
-import "../../styles/manageUserStyle.css";
+import ManagementHeader from "../managementHeader";
+import ActivityTable from "./activityTable";
+import searchBg from "../../assets/searchBg_4.png";
 
-export default function ManageUserPage({ user }) {
+import "../../styles/activityLogsStyle.css";
+
+export default function ActivityLogsContainer({ user }) {
     const history = useHistory();
 
     const accessPrivilege = () => {
@@ -30,13 +30,13 @@ export default function ManageUserPage({ user }) {
     return (
         <>
             {user && user.userType === 1 ? (
-                <div className="manage-user-container">
-                    <img src={background} style={backgroundStyle} alt="#" />
-
-                    <ManagementHeader type={"user"} />
-                    <FilterMenu />
-                    <div className="usertable-container">
-                        <UserTable user={user} />
+                <div className="activity-logs-container">
+                    <img src={searchBg} style={searchBgStyle} alt="#" />
+                    <ManagementHeader type={"logs"} />
+                    <br />
+                    {/* <ActivityFilterContainer /> */}
+                    <div className="activitytable-container">
+                        <ActivityTable />
                     </div>
                 </div>
             ) : (
@@ -58,11 +58,11 @@ export default function ManageUserPage({ user }) {
         </>
     );
 }
-const backgroundStyle = {
-    paddingLeft: "-6%",
+
+const searchBgStyle = {
     position: "absolute",
     height: "100%",
     width: "100%",
     zIndex: "-1",
-    transform: "scaleY(-1)",
+    transform: "scaleY(-1.5)",
 };

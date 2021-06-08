@@ -8,7 +8,12 @@ import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
 
 // the entire navigation bar
-export default function NavigationBar({ loginRegisterUser, browseRef, user, appRef }) {
+export default function NavigationBar({
+    loginRegisterUser,
+    browseRef,
+    user,
+    appRef,
+}) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
     const history = useHistory();
 
@@ -50,14 +55,19 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
                     behavior: "smooth",
                     block: "start",
                 });
-        else if (["/browse-books","/browse-special-problems","/browse-theses"].includes(window.location.pathname)){
+        else if (
+            [
+                "/browse-books",
+                "/browse-special-problems",
+                "/browse-theses",
+            ].includes(window.location.pathname)
+        ) {
             appRef.current &&
-            appRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }
-        else history.push("/browse-special-problems");
+                appRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+        } else history.push("/browse-special-problems");
     };
     const logInButton = () => {
         return (
@@ -70,8 +80,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
                 cookiePolicy={"single_host_origin"}
                 className="login-link"
                 hostedDomain={"up.edu.ph"}
-                icon={false}
-            >
+                icon={false}>
                 <i className="fa fa-lg fa-sign-in mr-2" />
                 <span className="login-link-label">Login</span>
             </GoogleLogin>
@@ -99,8 +108,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
                     <div
                         className="navItem"
                         onClick={scrollToBrowse}
-                        style={{ cursor: "pointer" }}
-                    >
+                        style={{ cursor: "pointer" }}>
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
@@ -235,7 +243,7 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[options.length-1])
+                    : optionsNotAdmin.concat(options[options.length - 1])
             }
         />
     );
