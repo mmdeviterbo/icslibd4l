@@ -203,298 +203,305 @@ export default function EditSPTFormContainer(props) {
     };
 
     return (
-
-        <div className = "add-res-form-cont">
+        <div className="add-res-form-cont">
             <EditResourceHeader/>
-            {/* main form */}
-            <form id = "addSPTForm" onSubmit = {handleSubmit} autoComplete="off"> 
-                            
-                <div className = "form-container">              {/* both parts of the form are inside this div for display:flex purposes */}
-                    <div className="res-primary-info">          {/* left side of the form */}
-                        <h2>
-                            <b>Primary Info</b>
-                        </h2>
-                        <hr/> 
 
-                        {/* ID Field */}
-                        {/* Will delete this, just using if i can get access the data */}
-                        {/* <div className="primaryfields">
-                            <label htmlFor="resId">ID: &nbsp; </label>
-                            <input
-                            required
-                            type="text"
-                            id="resId"
-                            defaultValue = {id}
-                            disabled
-                            // onchange = {(event => {
-                            //     setId(event.target.value);
-                            // })}
-                            />
-                        </div> */}
+            <form className = "main-form" id="addSPTForm" onSubmit={handleSubmit} autoComplete="off">
+                
+                <div className = "form-columns">
 
-                        {/* Title Field */}
+                    <div className = "form-left-column">
+
+                        {/* Title */}
                         <div className="primaryfields">
                             <label htmlFor="resTitle">Title: &nbsp; </label>
-                            <input
-                            type="text"
-                            id="resTitle"
-                            defaultValue = {title}
-                            required
-                            onChange={(event) => {
+                              <input
+                                type="text"
+                                id="resTitle"
+                                defaultValue = {title}
+                                required
+                                onChange={(event) => {
                                 setTitle(event.target.value);
                             }}
                             />
                         </div>
 
-                        {/* Year Field */}
+                        {/* Date Published */}
                         <div className="primaryfields">
-                            <label htmlFor="sptYear">Year: &nbsp; </label>
+                            <label htmlFor="sptYear">Year Published: &nbsp; </label>
                             <input
-                            type="number"
-                            id="sptYear"
-                            defaultValue = {year}
-                            min={1800}
-                            max={9999}
-                            // TO-DO: VALIDATE INPUT !!!
-                            required
-                            onChange={(event) => {
+                                type="number"
+                                id="sptYear"
+                                required
+                                min={1908}
+                                max={9999}
+                                defaultValue={year}
+                                onChange={(event) => {
+                                if (event.target.value < 0) {
+                                    event.target.value = event.target.defaultValue;
+                                }
                                 setYear(event.target.value);
-                            }}
+                                }}
                             />
                         </div>
-                        
-                       
+
                         {/* Author fields */}
-                        <div className= "authors-group">
-                            <h5>Author(s):</h5>
+                        <div className="authors-group">
+                            <h4 style = {{fontWeight:"normal"}}
+                            >Author(s):</h4>
+
                             {/* button adds fields for author */}
-                            <button 
+                            <button
                                 id="addAuthor"
-                                onClick = {() =>{
-                                setAuthorList(currentAuthors => [...currentAuthors, {
+                                onClick={() => {
+                                setAuthorList((currentAuthors) => [
+                                    ...currentAuthors,
+                                    {
                                     // author needs to generate ID para di madelete lahat ng fields in one button click
-                                    authorid:nanoid(5),
+                                    authorid: nanoid(5),
                                     fname: "",
-                                    lname:"",
-                                    }])
+                                    lname: "",
+                                    },
+                                ]);
                                 }}
-                            >
+                                >
                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    fill="currentColor"
-                                    className="bi bi-plus"
-                                    viewBox="0 0 16 16"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-plus"
+                                viewBox="0 0 16 16"
                                 >
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                 </svg>
                                 Add Author
                             </button>
 
-                            <br/><br/><br/>
                             {authorList.map((p, index) => {
-                                return(
-                                    <div key = {p.authorid}>
-                                        
+                                return (
+                                <div className = "authorfields" key={p.authorid}>
                                         {/* AUTHOR FIRST NAME FIELD */}
-                                        <div className="primaryfields">
-                                            <label htmlFor="resAuthorFN">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
-                                            </label>
+                                        <div className = "authorname-cont">
 
-                                            <input
-                                                type="text"
-                                                id="resAuthorFN"
-                                                // name="fname"
-                                                required
-                                                value={p.fname}
-                                                onChange={e => {
+                                            <div className="author-name">
+                                                <label htmlFor="resAuthorFN">
+                                                    First Name:
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    id="resAuthorFN"
+                                                    // name="fname"
+                                                    required
+                                                    value={p.fname}
+                                                    onChange={(e) => {
                                                     const fname = e.target.value;
-                                                    setAuthorList(currentAuthors => 
+                                                    setAuthorList((currentAuthors) =>
                                                         produce(currentAuthors, (v) => {
-                                                            v[index].fname = fname;
+                                                        v[index].fname = fname;
                                                         })
-                                                    )
+                                                    );
                                                     // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                                                }}
-                                                
-                                            />
-                                        </div>
+                                                    }}
+                                                />
+                                            </div>
 
-                                        {/* AUTHOR LAST NAME FIELD */}
-                                        <div className="primaryfields">
-                                            <label htmlFor="resAuthorLN">
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
-                                            </label>
-                                            <input
-                                            type="text"
-                                            id="resAuthorLN"
-                                            required
-                                            // name="lname"
-                                            value={p.lname}
-                                            onChange={e => {
+                                            {/* AUTHOR LAST NAME FIELD */}
+                                            <div className="author-name">
+                                                <label htmlFor="resAuthorLN">
+                                                    Last Name: 
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="resAuthorLN"
+                                                    required
+                                                    // name="lname"
+                                                    value={p.lname}
+                                                    onChange={(e) => {
                                                     const lname = e.target.value;
-                                                    setAuthorList(currentAuthors => 
+                                                    setAuthorList((currentAuthors) =>
                                                         produce(currentAuthors, (v) => {
-                                                            v[index].lname = lname;
+                                                        v[index].lname = lname;
                                                         })
-                                                    )
+                                                    );
                                                     // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                                                }}
-                                            />
-                                        </div>
+                                                    }}
+                                                />
+                                            </div>
+                                            
+                                        </div> {/* closing div for authorname-cont */}
 
                                         {/* button deletes author fields */}
                                         <button
-                                        id = "deleteAuthor"
-                                        onClick = { () => {
-                                            setAuthorList(currentAuthors =>
-                                                currentAuthors.filter(x => (x.authorid)!== (p.authorid) ))
-                                                // function checks if Author-To-Be-Deleted exists. 
-                                                // function deletes ALL instances of same author to be deleted
-                                                // we generate a random id so no 2 author fields are the same
-                                                // hence no faulty deleting
-                                                // wag nalang istore si author id sa db
-                                        }}
-                                        >
-                                        Delete Author
+                                            id="deleteAuthor"
+                                            onClick={() => {
+                                            setAuthorList((currentAuthors) =>
+                                            currentAuthors.filter(
+                                                (x) => x.authorid !== p.authorid
+                                            )
+                                            );
+                                            // function checks if Author-To-Be-Deleted exists.
+                                            // function deletes ALL instances of same author to be deleted
+                                            // we generate a random id so no 2 author fields are the same
+                                            // hence no faulty deleting
+                                            // wag nalang istore si author id sa db
+                                            }}
+                                            >
+                                            Delete Author
                                         </button>
-                                        <br/><br/><br/>
-                                    </div>
-                                )
+                                    
+                                    
+                                </div> //closing for authorfields
+                                );
                             })}
+                                    {/* for testing only: */}
+                                    {/* <div className = "testdiv">
+                                                    {JSON.stringify(authorList, null, 2)}
+                                                </div> */}    
+                        </div> {/* authors-group close */}
+                    
+                    </div>  {/*closing for left column  */}
 
-                            {/* for testing only: */}
-                            <div className = "testdiv">
-                                {JSON.stringify(type, null, 2)}
-                            </div>
+                    <div className = "form-mid-column">
 
-                        </div> {/* closing tag for authors group */}
-                        
-                    </div> {/* closing tag for left side of form */}
-
-
-                    {/* Right side of the Form */}
-                    <div className = "spthesisform">
-                        <h2><b>SP / Thesis</b></h2>     {/* Header */}
-                        <hr/>
-
-                        {/* Dropdown for classification: either sp or thesis */}
-                        <div className = "classifSelect">
-                                <br/>
-                                Type:
-                                <Select id="resClassification"
-                                        defaultValue={type}
-                                        options={classificationOptions}
-                                        onChange={handleChange}>
-                                </Select>
+                        {/* Classification */}
+                        <div className="classifSelect">
+                            Classification:
+                            <Select
+                                id="resClassification"
+                                // defaultValue={"Select..."}
+                                options={classificationOptions}
+                                value={classificationOptions.find((obj) => obj.value === type)}
+                                // onChange={handleTypeChange}
+                            ></Select>
                         </div>
 
                         {/* Adviser Dropdown Multi */}
-                        <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>
-                        Adviser(s):</h5>
-                        
-                        <div className="selectadvisers">
-                            <Select id ="advsel"
-                                    options={adviserchoices}
-                                    // placeholder={adviser.adviser_fname}
-                                    // value={adviserchoices.find((obj)=>obj.value===adviser)}
-                                    onChange={handleChange}
-                                    isMulti>
-                            </Select>
+                        <div className="select-advisers">
+                        <label 
+                            htmlFor= "advsel"
+                            >Advisers:</label>
+                        <Select
+                            id="advsel"
+                            options={adviserchoices}
+                            // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
+                            // onChange={handleAdviserChange}
+                            isMulti
+                        ></Select>
                         </div>
-
-                        <br/>
 
                         {/* Abstract TextArea */}
-                        <div>
-                            <h5 style = {{fontWeight:'normal', fontFamily:'Montserrat'}}>Enter Abstract here:</h5>
+                        <div className = "abstract-div">
+                            <label htmlFor= "abstractText">Abstract:</label>
                             <textarea
-                                id = "abstractText"
-                                value={abstract}
-                                onChange = {
-                                    (event) => {
-                                        setAbstract(event.target.value);
-                                    }
-                                }
-                            />
-
-                        </div>
-                        
-                        {/* File uploads here */}
-                        <div className="spthesisfiles">
-                            <h5>Upload Source Code</h5>
-                            <input
-                            type="file"
-                            className="resourcefiles"
-                            id="spthesisJournal"
-                            // onChange={(e) => {
-                            //     // handleSourceCode(e);
-                            // }}
+                                id="abstractText"
+                                defaultValue = {abstract}
+                                onChange={(event) => {
+                                setAbstract(event.target.value);
+                                }}
                             />
                         </div>
 
-                        <div className="spthesisfiles">
-                            <h5>Upload Manuscript</h5>
+                    </div> {/* mid column close */}
+
+                    <div className ="form-right-column">
+
+                        <div className = "primaryfields">
+                            <label htmlFor="">Source Code Link:</label>
                             <input
-                            type="file"
-                            className="resourcefiles"
-                            id="spthesisManuscript"
-                            // onChange={(e) => {
-                            //     handleManuscript(e);
-                            // }}
+                                type = "url"
+                                className="resourcefiles"
+                                id="spt-sourcecode"
+                                placeholder ={"https://www.example.com/"}
+                                onClick={(e) => (e.target.value = null)}
+                                // onChange={(e) => {
+                                // const file = handleFile(e);
+                                // setSourceCode(file);
+                                // console.log(handleFile(e));
+                                // handleSourceCode(e);
+                                // }}
                             />
                         </div>
 
-                        
-                        <div className="spthesisfiles">
-                            <h5>Upload Journal</h5>
+                        <div className = "primaryfields">
+                            <label htmlFor="">Manuscript Link:</label>
                             <input
-                            type="file"
-                            className="resourcefiles"
-                            id="spthesisJournal"
-                            // onChange={(e) => {
-                            //     handleJournal(e);
-                            // }}
+                                type = "url"
+                                className="resourcefiles"
+                                id="spt-manuscript"
+                                placeholder ={"https://www.example.com/"}
+                                onClick={(e) => (e.target.value = null)}
+                                // onChange={(e) => {
+                                // const file = handleFile(e);
+                                // setSourceCode(file);
+                                // console.log(handleFile(e));
+                                // handleSourceCode(e);
+                                // }}
                             />
                         </div>
 
-                        <div className="spthesisfiles">
-                            <h5>Upload Poster</h5>
+                        <div className = "primaryfields">
+                            <label htmlFor="">Journal Link:</label>
                             <input
-                            type="file"
-                            className="resourcefiles"
-                            id="spthesisPoster"
-                            // onChange={(e) => {
-                            //     handlePoster(e);
-                            // }}
+                                type = "url"
+                                className="resourcefiles"
+                                id="spt-journal"
+                                placeholder ={"https://www.example.com/"}
+                                onClick={(e) => (e.target.value = null)}
+                                // onChange={(e) => {
+                                // const file = handleFile(e);
+                                // setSourceCode(file);
+                                // console.log(handleFile(e));
+                                // handleSourceCode(e);
+                                // }}
                             />
                         </div>
-                        
+
+                        <div className = "primaryfields">
+                            <label htmlFor="">Poster Link:</label>
+                            <input
+                                type = "url"
+                                className="resourcefiles"
+                                id="spt-poster"
+                                placeholder ={"https://www.example.com/"}
+                                onClick={(e) => (e.target.value = null)}
+                                // onChange={(e) => {
+                                // const file = handleFile(e);
+                                // setSourceCode(file);
+                                // console.log(handleFile(e));
+                                // handleSourceCode(e);
+                                // }}
+                            />
+                        </div>
 
                         <div className="primaryfields">
                             <label htmlFor="keywords-field">Keywords: &nbsp; </label>
                             <ChipInput
-                                id = "keywords-field"
-                                value={keywords}
+                                id="keywords-field"
                                 onChange={(chips) => handleChips(chips)}
-                                InputProps={{ borderbottom: "none" }}
                             />
                         </div>
 
-                        <br/>
-
                         <button type="submit" id="saveResource">
-                        Save
+                            Save
                         </button>
-                    </div>
 
-                    
-                </div>
+                    </div> {/* right form close */}
+                
+                </div> {/* form-columns close */}
             
-            </form>
-        </div>
+            </form> {/* main form close */}
+
+        {/* <StatusModal
+            message={success}
+            name={"Sp/Thesis"}
+            show={show}
+            setShow={setShow}
+            operation={"add"}
+            pathAfter={"/add-new-spt/"}
+        /> */}
+    </div> //add-res-form-cont close
         
     );
 }

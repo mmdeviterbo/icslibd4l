@@ -8,7 +8,7 @@ const InfoSidebar = ({ user, resourceData }) => {
   let link = "https://www.youtube.com/watch?v=m4gnMWua4xo";
   const handleRedirect = (redirectHere) => {
     // window.location.href = redirectHere;
-    if (redirectHere == "") {
+    if (redirectHere == "" || redirectHere == null) {
       toast.info("Unavailable", {
         position: "bottom-right",
         autoClose: 5000,

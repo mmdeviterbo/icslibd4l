@@ -16,7 +16,7 @@ const ManagementHeader = ({ type }) => {
                     <SearchUsers type={type} />
                 )}
             </div>
-            {type == "resource" ? (
+            {type === "resource" ? (
                 <h1>Manage Resources</h1>
             ) : (
                 <h1>Manage Users</h1>

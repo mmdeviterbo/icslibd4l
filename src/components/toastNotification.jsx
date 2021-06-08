@@ -9,7 +9,7 @@ export default function ToastNotification({ content }) {
   console.log(content);
   const showToast = (content) => {
     toast.warn(content, {
-      position: "top-center",
+      position: "bottom-left",
       hideProgressBar: true,
     });
   };

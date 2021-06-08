@@ -171,7 +171,7 @@ router.post(
                 // recheck if correctly sent by sending entry : thesisModel
                 res.json(savedThesis);
             } else {
-                res.status(400).send({ errorMessage: "It already exists!" });
+                res.status(400).send({ errorMessage: "Resource already exists!" });
             }
         } catch (err) {
             console.log(err);

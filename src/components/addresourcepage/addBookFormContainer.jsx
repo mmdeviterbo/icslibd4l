@@ -81,10 +81,10 @@ const AddBookFormContainer = () => {
       // window.location = "/add-new-book";
     } catch (err) {
       if (err.response && err.response.data) {
-        ToastNotification({ content: "hellohehe" });
+        // ToastNotification({ content: err.response.data.message });
         // setSuccess("fail");
         // setShow(true);
-        // alert(err.response.data.errorMessage); // some reason error message
+        alert(err.response.data.errorMessage); // some reason error message
       }
     }
   };
@@ -104,16 +104,23 @@ const AddBookFormContainer = () => {
 
   return (
     <div className="add-res-form-cont">
-      <form id="addBookForm" autoComplete="off">
-        <div className="form-container">
-          <div className="res-primary-info">
-            <h2>
-              <b>Primary Info</b>
-            </h2>
-            <hr />
+      <form
+        className="main-form"
+        id="addBookForm"
+        onSubmit={handleSubmit}
+        autoComplete="off"
+      >
+        {/* 
+        <h2>Book</h2>
+        <hr/> */}
+
+        <div className="form-columns">
+          <div className="form-left-column">
+            {/* Title Field */}
             <div className="primaryfields">
               <label htmlFor="resTitle">Title: &nbsp; </label>
               <input
+                required
                 type="text"
                 id="resTitle"
                 onChange={(event) => {
@@ -121,9 +128,11 @@ const AddBookFormContainer = () => {
                 }}
               />
             </div>
+            {/* Publisher Field */}
             <div className="primaryfields">
               <label htmlFor="publisher">Publisher: &nbsp; </label>
               <input
+                required
                 type="text"
                 id="publisher"
                 onChange={(event) => {
@@ -131,32 +140,35 @@ const AddBookFormContainer = () => {
                 }}
               />
             </div>
-            <div className="primaryfields">
-              <label htmlFor="datePublished">Date Published: &nbsp; </label>
-              <input
-                type="date"
-                id="datePublished"
-                required
-                onChange={(event) => {
-                  setDatePublished(handleDate(event.target.value));
-                }}
-              />
-            </div>
-            <div className="primaryfields">
-              <label htmlFor="dateAcquired">Date Acquired: &nbsp; </label>
-              <input
-                type="date"
-                id="dateAcquired"
-                required
-                onChange={(event) => {
-                  setDateAcquired(handleDate(event.target.value));
-                }}
-              />
+            <div className="dates-group">
+              {/* Date Published */}
+              <div className="primaryfields-date">
+                <label htmlFor="datePublished">Date Published: &nbsp; </label>
+                <input
+                  type="date"
+                  id="datePublished"
+                  onChange={(event) => {
+                    setDatePublished(handleDate(event.target.value));
+                  }}
+                />
+              </div>
+
+              {/* Date Acquired */}
+              <div className="primaryfields-date">
+                <label htmlFor="dateAcquired">Date Acquired: &nbsp; </label>
+                <input
+                  type="date"
+                  id="dateAcquired"
+                  onChange={(event) => {
+                    setDateAcquired(handleDate(event.target.value));
+                  }}
+                />
+              </div>
             </div>
             {/* Author fields */}
             <div className="authors-group">
-              <h5>Author(s):</h5>
-              {/* button adds fields for author */}
+              <h4 style={{ fontWeight: "normal" }}>Author(s):</h4>
+
               <button
                 id="addAuthor"
                 onClick={() => {
@@ -184,57 +196,53 @@ const AddBookFormContainer = () => {
                 Add Author
               </button>
 
-              <br />
-              <br />
-              <br />
               {authorList.map((p, index) => {
                 return (
-                  <div key={p.authorid}>
+                  <div className="authorfields" key={p.authorid}>
                     {/* AUTHOR FIRST NAME FIELD */}
-                    <div className="primaryfields">
-                      <label htmlFor="resAuthorFN">
-                        &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
-                      </label>
 
-                      <input
-                        type="text"
-                        id="resAuthorFN"
-                        // name="fname"
-                        required
-                        value={p.fname}
-                        onChange={(e) => {
-                          const fname = e.target.value;
-                          setAuthorList((currentAuthors) =>
-                            produce(currentAuthors, (v) => {
-                              v[index].fname = fname;
-                            })
-                          );
-                          // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                        }}
-                      />
-                    </div>
+                    <div className="authorname-cont">
+                      <div className="author-name">
+                        <label htmlFor="resAuthorFN">First Name:</label>
 
-                    {/* AUTHOR LAST NAME FIELD */}
-                    <div className="primaryfields">
-                      <label htmlFor="resAuthorLN">
-                        &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
-                      </label>
-                      <input
-                        type="text"
-                        id="resAuthorLN"
-                        required
-                        // name="lname"
-                        value={p.lname}
-                        onChange={(e) => {
-                          const lname = e.target.value;
-                          setAuthorList((currentAuthors) =>
-                            produce(currentAuthors, (v) => {
-                              v[index].lname = lname;
-                            })
-                          );
-                          // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                        }}
-                      />
+                        <input
+                          type="text"
+                          id="resAuthorFN"
+                          // name="fname"
+                          required
+                          value={p.fname}
+                          onChange={(e) => {
+                            const fname = e.target.value;
+                            setAuthorList((currentAuthors) =>
+                              produce(currentAuthors, (v) => {
+                                v[index].fname = fname;
+                              })
+                            );
+                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                          }}
+                        />
+                      </div>
+
+                      {/* AUTHOR LAST NAME FIELD */}
+                      <div className="author-name">
+                        <label htmlFor="resAuthorLN">Last Name:</label>
+                        <input
+                          type="text"
+                          id="resAuthorLN"
+                          required
+                          // name="lname"
+                          value={p.lname}
+                          onChange={(e) => {
+                            const lname = e.target.value;
+                            setAuthorList((currentAuthors) =>
+                              produce(currentAuthors, (v) => {
+                                v[index].lname = lname;
+                              })
+                            );
+                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                          }}
+                        />
+                      </div>
                     </div>
 
                     {/* button deletes author fields */}
@@ -255,54 +263,55 @@ const AddBookFormContainer = () => {
                     >
                       Delete Author
                     </button>
-                    <br />
-                    <br />
-                    <br />
                   </div>
                 );
               })}
 
               {/* for testing only: */}
               {/* <div className = "testdiv">
-                                {JSON.stringify(authorList, null, 2)}
-                            </div> */}
+                  {JSON.stringify(authorList, null, 2)}
+              </div> */}
+
+              {/* closing tag for authors group */}
             </div>{" "}
-            {/* closing tag for authors group */}
-          </div>{" "}
-          {/* Primary Info closing tag */}
-          <div className="res-primary-info">
-            <h2>
-              {" "}
-              <b>Book</b>{" "}
-            </h2>
-            <hr />
+            {/* left column div close: */}
+          </div>
+
+          <div className="form-mid-column">
             <div className="primaryfields">
               <label htmlFor="bookISBN">ISBN: &nbsp; </label>
               <input
                 type="text"
                 id="bookISBN"
+                placeholder={"XXX-X-XXXXXXXXX"}
                 onChange={(event) => {
                   setISBN(event.target.value);
                 }}
               />
             </div>
+
             <div className="primaryfields">
               <label htmlFor="physDescription">
                 Physical Description: &nbsp;{" "}
               </label>
               <textarea
                 id="physDescription"
+                required
                 onChange={(event) => {
                   setDescription(event.target.value);
                 }}
               />
             </div>
+
+            {/* middle container close */}
+          </div>
+
+          <div className="form-right-column">
             <div className="primaryfields">
-              <label htmlFor="availBookCopies">
-                No. of copies available: &nbsp;{" "}
-              </label>
+              <label htmlFor="availBookCopies">No. of copies available:</label>
               <input
                 type="number"
+                required
                 id="availBookCopies"
                 defaultValue={0}
                 onChange={(event) => {
@@ -313,37 +322,46 @@ const AddBookFormContainer = () => {
                 }}
               />
             </div>
+
             <div className="bookRelatedCourses">
-              <br />
               Related Courses:
               <Select
                 id="relatedCourses"
                 isMulti
+                required
                 placeholder={"Courses..."}
                 options={courseList}
                 value={courseList.find((obj) => obj.value === courses)}
                 onChange={(courses) => handleCourses(courses)}
               ></Select>
             </div>
-            <br />
+
             <div className="primaryfields">
-              <label htmlFor="bookCover"> Book Cover: &nbsp; </label>
+              Book cover link:
               <input
-                type="text"
+                type="url"
+                placeholder={"https://www.example.com/"}
+                className="resourcefiles"
+                id="bookcover"
                 onChange={(event) => {
                   setBookCover(event.target.value);
                 }}
               />
             </div>
-            <br />
-            <br />
-            <br />
-            <button type="submit" id="saveResource" onClick={handleSubmit}>
+
+            <button type="submit" id="saveResource">
               Save
             </button>
+
+            {/* right container close */}
           </div>
+
+          {/* columns container close */}
         </div>
+
+        {/* main form close: */}
       </form>
+
       <StatusModal
         message={success}
         name={"Book"}
