@@ -35,8 +35,8 @@ function DocumentViewer({ pdfFile }) {
         setNumPages(numPages);
         console.log(pdfFile);
         const str = String(pdfFile).split("/");
-        console.log(str[str.length() - 1]);
-        setFileName(str[str.length() - 1]);
+        console.log(str[str.length - 1]);
+        setFileName(str[str.length - 1]);
     };
 
     // Handler function for previous page click
