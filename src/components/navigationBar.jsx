@@ -131,7 +131,8 @@ const SearchFilter = ({ user }) => {
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            if(["/manage-users","/manage-resources"].includes(window.location.pathname)) window.location = "/home";
+            if(["/manage-users","/manage-resources","/view-activitylogs", "/view-summaryreport"].includes(window.location.pathname)) 
+                window.location = "/home";
             else window.location = window.location.pathname;
         } catch (err) {}
     };
