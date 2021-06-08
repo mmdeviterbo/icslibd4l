@@ -35,8 +35,8 @@ function DocumentViewer({ pdfFile }) {
         setNumPages(numPages);
         console.log(pdfFile);
         const str = String(pdfFile).split("/");
-        console.log(str[3]);
-        setFileName(str[3]);
+        console.log(str[str.length() - 1]);
+        setFileName(str[str.length() - 1]);
     };
 
     // Handler function for previous page click
@@ -81,16 +81,11 @@ function DocumentViewer({ pdfFile }) {
     };
 
     const handleZoomIn = () => {
-        // console.log(scaleIndex);
         setScaleIndex(scaleIndex < 16 ? scaleIndex + 1 : scaleIndex);
-        // setScale(scaleValue[scaleIndex].value);
     };
 
     const handleZoomOut = () => {
-        // console.log(scaleIndex);
         setScaleIndex(scaleIndex > 0 ? scaleIndex - 1 : scaleIndex);
-
-        // setScale(scaleValue[scaleIndex].value);
     };
 
     const MyDoc = () => {
