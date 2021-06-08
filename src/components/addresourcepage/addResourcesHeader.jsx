@@ -1,9 +1,13 @@
 import React from "react";
 
-const AddResourcesHeader = () => {
+const AddResourcesHeader = ( { type }) => {
     return (
         <div className="add-res-header">
-            <h1>Add a new Book</h1>
+            {type == "book" ? 
+                (<h1>Add a New Book</h1>)
+                :
+                (<h1>Add a New Special Problem or Thesis</h1>)
+            }
         </div>
     );
 };
