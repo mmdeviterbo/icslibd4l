@@ -27,32 +27,34 @@ const InfoSidebar = ({ user, resourceData }) => {
   return (
     <div className="info-sidebar">
       <table id="spttableinfo">
-        <tr>
-          <th className="spt-thtr">Type</th>
-          <th className="spt-thtr">{resourceData && resourceData.type}</th>
-        </tr>
+        <tbody>
+          <tr>
+            <th className="spt-thtr">Type</th>
+            <th className="spt-thtr">{resourceData && resourceData.type}</th>
+          </tr>
 
-        <tr>
-          <th className="spt-thtr">Adviser</th>
-          {resourceData &&
-            resourceData.advisers.map((item, key) => (
-              <div className="spt-thtr-multi" key={key}>
-                {item.adviser_name}
-              </div>
-            ))}
-        </tr>
-
-        <tr>
-          <th className="spt-thtr">Keywords</th>
-          <th className="keyword-container">
+          <tr>
+            <th className="spt-thtr">Adviser</th>
             {resourceData &&
-              resourceData.keywords.map((item, key) => (
+              resourceData.advisers.map((item, key) => (
                 <div className="spt-thtr-multi" key={key}>
-                  {item.sp_thesis_keyword}
+                  {item.adviser_name}
                 </div>
               ))}
-          </th>
-        </tr>
+          </tr>
+
+          <tr>
+            <th className="spt-thtr">Keywords</th>
+            <th className="keyword-container">
+              {resourceData &&
+                resourceData.keywords.map((item, key) => (
+                  <div className="spt-thtr-multi" key={key}>
+                    {item.sp_thesis_keyword}
+                  </div>
+                ))}
+            </th>
+          </tr>
+        </tbody>
       </table>
 
       {user && (
@@ -85,7 +87,7 @@ const InfoSidebar = ({ user, resourceData }) => {
               </button>
               <br />
               <br />
-              <a target="_blank" href={resourceData && resourceData.journal}>
+              <a target="_blank" href={resourceData && resourceData.manuscript}>
                 {/* <i class = "fas fa-book-open"></i> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
