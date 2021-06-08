@@ -6,7 +6,6 @@
 .add-res-form-cont{
     /* height: 100vh; */
     background-color:#F4F4F4;
-    padding:2rem;
 }
 
 .add-resource-page-container {
@@ -93,6 +92,10 @@
 #availBookCopies{
     width: 4rem;
     margin-bottom: 0.5rem;
+}
+
+#sptYear{
+    width:25%
 }
 
 .dates-group{
@@ -307,11 +310,15 @@
     color:white;
     background-color: #0067A1;
     width: 100%;
+    box-shadow: 0.3rem 0.3rem 0.7rem #cfcfcf;
+
 }
 
 #saveResource:hover{
-    color:#0067A1;
-    background-color:white;
+    color:white;
+    /* background-color:#0066a1bb; */
+    -moz-box-shadow:    inset 0 0 1rem #00000036;
+    -webkit-box-shadow: inset 0 0 1rem #00000036;
 }
 
 .main-form{
