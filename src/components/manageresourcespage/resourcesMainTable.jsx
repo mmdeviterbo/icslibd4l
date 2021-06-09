@@ -95,13 +95,11 @@ function EnhancedTableHead(props) {
                         key={headCell.id}
                         align={"left"}
                         padding={headCell.disablePadding ? "none" : "default"}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
+                        sortDirection={orderBy === headCell.id ? order : false}>
                         <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : "asc"}
-                            onClick={createSortHandler(headCell.id)}
-                        >
+                            onClick={createSortHandler(headCell.id)}>
                             {headCell.label}
                             {orderBy === headCell.id ? (
                                 <span className={classes.visuallyHidden}>
@@ -130,26 +128,17 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        // fontSize: '2rem',
         width: "100%",
     },
-    //   tblheaders:{
-    //       fontSize:'1.5rem'
-    //   },
     paper: {
         width: "100%",
-        // fontSize: '2rem',
         marginBottom: theme.spacing(2),
     },
-    table: {
-        // fontSize: '2rem',
-        // minWidth: 750,
-    },
+    table: {},
     tablecell: {
         padding: "16px",
         fontSize: "1.4rem",
         fontWeight: "bold",
-        // color: "#FFFFFF",
     },
     visuallyHidden: {
         border: 0,
@@ -168,12 +157,12 @@ const useStyles = makeStyles((theme) => ({
 const MainResourceTable = () => {
     const location = useLocation();
     const classes = useStyles();
-    const [order, setOrder] = React.useState("asc");
-    const [orderBy, setOrderBy] = React.useState("resid");
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    // const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [order, setOrder] = useState("asc");
+    const [orderBy, setOrderBy] = useState("resid");
+    const [selected, setSelected] = useState([]);
+    const [page, setPage] = useState(0);
+    // const [dense, setDense] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selectedEdit, setSelectedEdit] = useState();
     const [resourceList, setResourceList] = useState([]);
 
@@ -231,15 +220,13 @@ const MainResourceTable = () => {
                         id: id,
                         item: "resource",
                     },
-                }}
-            >
+                }}>
                 <i
                     className="table-icons fa fa-trash-o"
                     style={{
                         margin: "10px",
                         color: "red",
-                    }}
-                ></i>
+                    }}></i>
             </Link>
         );
     };
@@ -262,15 +249,13 @@ const MainResourceTable = () => {
                 to={{
                     pathname: `/edit-spt/${id.id}`,
                     state: { sourceInfo: selectedEdit, id },
-                }}
-            >
+                }}>
                 <i
                     className="table-icons fa fa-pencil"
                     style={{
                         margin: "10px",
                         color: "gray",
-                    }}
-                ></i>
+                    }}></i>
             </Link>
         );
     };
@@ -281,15 +266,13 @@ const MainResourceTable = () => {
                 to={{
                     pathname: `/edit-book/${id.id}`,
                     state: { sourceInfo: selectedEdit, id },
-                }}
-            >
+                }}>
                 <i
                     className="table-icons fa fa-pencil"
                     style={{
                         margin: "10px",
                         color: "gray",
-                    }}
-                ></i>
+                    }}></i>
             </Link>
         );
     };
@@ -356,8 +339,7 @@ const MainResourceTable = () => {
                         className={classes.table}
                         aria-labelledby="tableTitle"
                         size={"medium"}
-                        aria-label="enhanced table"
-                    >
+                        aria-label="enhanced table">
                         <EnhancedTableHead
                             classes={classes}
                             numSelected={selected.length}
@@ -385,9 +367,12 @@ const MainResourceTable = () => {
                                             className={classes.tablecell}
                                             hover
                                             tabIndex={-1}
-                                            key={row.name}
-                                            selected={isItemSelected}
-                                        >
+                                            key={
+                                                row.bookId
+                                                    ? row.bookId
+                                                    : row.sp_thesis_id
+                                            }
+                                            selected={isItemSelected}>
                                             {/* {row} */}
 
                                             <TableCell
@@ -398,15 +383,13 @@ const MainResourceTable = () => {
                                                 id={labelId}
                                                 scope="row"
                                                 padding="none"
-                                                className={classes.tablecell}
-                                            >
+                                                className={classes.tablecell}>
                                                 {/* unique id */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}
-                                                >
+                                                    }}>
                                                     {row && row.bookId
                                                         ? row && row.bookId
                                                         : row &&
@@ -416,35 +399,31 @@ const MainResourceTable = () => {
                                             </TableCell>
                                             <TableCell
                                                 style={{
-                                                    width: "20%",
+                                                    width: "30%",
                                                 }}
                                                 className={classes.tablecell}
-                                                align="left"
-                                            >
+                                                align="left">
                                                 {/* title of resources */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}
-                                                >
+                                                    }}>
                                                     {row && row.title}
                                                 </div>
                                             </TableCell>
                                             <TableCell
                                                 style={{
-                                                    width: "15%",
+                                                    width: "20%",
                                                 }}
                                                 className={classes.tablecell}
-                                                align="left"
-                                            >
+                                                align="left">
                                                 {/* author */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}
-                                                >
+                                                    }}>
                                                     {row.author &&
                                                         row.author.map(
                                                             (item, key) => (
@@ -462,15 +441,13 @@ const MainResourceTable = () => {
                                                     width: "12%",
                                                 }}
                                                 className={classes.tablecell}
-                                                align="left"
-                                            >
+                                                align="left">
                                                 {/* classifcation */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}
-                                                >
+                                                    }}>
                                                     {/* Checks if a resource is a book by using the bookId attribute as checker */}
                                                     {row && row.bookId
                                                         ? "Book"
@@ -483,15 +460,13 @@ const MainResourceTable = () => {
                                                     width: "13%",
                                                 }}
                                                 className={classes.tablecell}
-                                                align="left"
-                                            >
+                                                align="left">
                                                 {/* publishing year */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}
-                                                >
+                                                    }}>
                                                     {row && row.bookId
                                                         ? dateFormat(
                                                               row.dateAcquired,
@@ -505,8 +480,7 @@ const MainResourceTable = () => {
                                                     width: "10%",
                                                     textAlign: "center",
                                                     fontSize: "1.5rem",
-                                                }}
-                                            >
+                                                }}>
                                                 {row.bookId ? (
                                                     <EditBookBtn
                                                         id={row.bookId}
@@ -525,8 +499,7 @@ const MainResourceTable = () => {
                                 <TableRow
                                     style={{
                                         height: 53 * emptyRows,
-                                    }}
-                                >
+                                    }}>
                                     <TableCell colSpan={6} />
                                 </TableRow>
                             )}

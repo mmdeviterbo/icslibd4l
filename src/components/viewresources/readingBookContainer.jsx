@@ -5,10 +5,10 @@ import BookCoverandInfo from "./bookCoverInfoSide";
 import "../../styles/viewspt/viewSPTStyle.css";
 
 const ReadingBookContainer = (props) => {
-    const resourceData =
-        (props.location && props.location.state.resourceData) || {};
+    const resourceData = (props.location && props.location.state?.resourceData) || {};
 
     useEffect(() => {
+        console.log(props.location.state);
         const {appRef} = props;
         appRef.current &&
         appRef.current.scrollIntoView({

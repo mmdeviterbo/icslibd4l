@@ -9,7 +9,6 @@ const authAdmin = require("../middleware/authAdmin");
 var uniqid = require("uniqid");
 
 router.post("/get-news", async (req, res) => {
-    // console.log('hello')
     let options = {
         url: "https://uplb.edu.ph/news-and-updates-2/",
         headers: {

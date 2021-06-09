@@ -1,9 +1,9 @@
-body{
-    font-family: 'Montserrat', sans-serif;
+/* Filter fields container */
+.manage-resources-page-container{
+    min-height: 90vh;
+    position: relative;
 }
 
-
-/* Filter fields container */
 .res-filter-container {
     display: flex;
     flex-direction: row;
@@ -51,7 +51,7 @@ body{
 /* Table Container */
 .res-table-cont {
     width: 100%;
-    background-color: #f5f5f5;
+    /* background-color: #f5f5f5; */
     padding-top: 1.5rem;
     padding-left: 4rem;
     padding-right: 4rem;

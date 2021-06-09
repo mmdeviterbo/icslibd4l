@@ -349,8 +349,9 @@ router.get("/search", async (req, res) => {
 
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
-        let final_arr = total;
-
+        // get unique entries
+        let final_arr = [...new Set(total)];
+        
         // separate books and spthesis
         let book_arr = final_arr.filter((item) => "bookId" in item);
         let spthesis_arr = final_arr.filter((item) => "sp_thesis_id" in item);
@@ -456,7 +457,7 @@ router.get("/search", async (req, res) => {
                                 .toLowerCase()
                                 .includes(keyFilter);
                         });
-                    });
+                    })
                 });
             } catch (error) {
                 if (error instanceof SyntaxError) {
