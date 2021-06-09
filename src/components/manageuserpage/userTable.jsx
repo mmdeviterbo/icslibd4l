@@ -98,9 +98,6 @@ export default function UserTable({ user, selectedFilter }) {
 
     // Filters the array if the filter is changed
     useEffect(() => {
-        console.log("use effect from user Table hello");
-        console.log(selectedFilter);
-
         if (selectedFilter === -1) {
             readUsers();
         } else if (selectedFilter === 1) {

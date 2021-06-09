@@ -12,10 +12,6 @@ export default function ManageUserPage({ user }) {
     const history = useHistory();
     const [selection, setSelection] = useState(-1);
 
-    useEffect(() => {
-        console.log(selection);
-    }, [selection]);
-
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
