@@ -46,6 +46,10 @@ export default function ResultContainer({ title, authors, id, publishDate }) {
 const resultMainContainer = {
   borderBottom: "1px solid gray",
   marginBottom: "5vh",
+  transition:"0.3s",
+  padding:"1vw",
+  borderRadius:"4px"
+  
 };
 
 const resultLinkContainer = {
