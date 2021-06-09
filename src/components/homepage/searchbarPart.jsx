@@ -2,17 +2,11 @@ import React, {useState, useEffect} from 'react'
 import { useHistory } from 'react-router-dom';
 import { Dropdown } from 'semantic-ui-react'
 import searchBg from '../../assets/searchBg_4.png';
-import homepageBg from '../../assets/homepage/homepage-bg.png';
-import homeItem1 from '../../assets/homepage/homeItem-1.png';
-import homeItem2 from '../../assets/homepage/homeItem-2.png';
-import homeItem3 from '../../assets/homepage/homeItem-3.png';
-import homeItem4 from '../../assets/homepage/homeItem-4.png';
-
-import {gsap, Power3} from 'gsap';
+import { gsap, Power3 } from 'gsap';
 
 export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
     const [localSearch, setLocalSearch] = useState("");
-    const [filterTag, setFilterTag] = useState("");
+    const [filterTag, setFilterTag] = useState("any");
     const history = useHistory();
 
     useEffect(()=>{
@@ -21,48 +15,34 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 
     const handleForm=(e)=>{
         e.preventDefault();
-        const tempStr = localSearch.replace(/\s/g,'_'); 
-        if(tempStr.length!==0 && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
-            if(filterTag.length!==0) history.push(`/search/${filterTag}/${tempStr}`);
-            else history.push(`/search/any/${tempStr}`);
+        let tempStr = localSearch.trim();
+    
+        if(tempStr.length!==0  && (localSearch.replace(/^\s+/, '').replace(/\s+$/, '')!=='')){
+            history.push(`/search?type=${filterTag}&search=${tempStr}`);
         }
     }
 
-    const scrollIntoBrowse=()=> browseRef.current && browseRef.current.scrollIntoView({behavior:"smooth",block:"start"});
+    const scrollIntoBrowse=()=> history.push('/browse-special-problems');
     const scrollIntoLatestAcq=()=> latestAcqRef.current && latestAcqRef.current.scrollIntoView({behavior:"smooth",block:"start"});
     const scrollIntoNews=()=> newsRef.current && newsRef.current.scrollIntoView({behavior:"smooth",block:"start"});
 
     return (
         <form onSubmit={handleForm} style={advanceSearch} className="searchMainContainer">
             <img draggable="false" src={searchBg} style={mainBgSearchStyle} alt="#"/>
-            <div style={titleSearchContainer} className="titleSearchContainer">
-                <div style={textStylesContainer}>
-                    <div style={uplbContainerStyle} className="searchUPanimation">
-                        <p style={uplbStyle}>UNIVERSITY</p>
-                        <p style={uplbStyle}>OF</p>
-                        <p style={uplbStyle}>THE</p>
-                        <p style={uplbStyle}>PHILIPPINES</p>
-                        <p style={{...uplbStyle,fontWeight:0,fontSize:"30px"}}>Los Baños</p>
-                    </div>
-                    <div style={icsStyle}><p className="searchAnimationICS">Institute of Computer Science Online Library</p></div>
-                </div>
-                <div style={buttonsContainer} className="buttonsSearchContainer">
-                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoBrowse}>
-                        <i className="fa fa-lg fa-list-ul mr-2"/>
-                        BROWSE
-                    </button>
-                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoLatestAcq}>
-                        <i className="fa fa-lg fa-file mr-2"/>
-                        LATEST ACQUISITIONS</button>
-                    <button type="button" style={buttonSelect} className="btn btn-warning" onClick={scrollIntoNews}>
-                        <i className="fa fa-lg fa-globe mr-2"/>
-                        NEWS
-                    </button>
-                </div>
-            </div>
-
             <div style={searchBoxContainer}  className="searchBoxContainer">
+                <div style={barStyle} className="barStyle"></div>
+                <div style={barStyleOne} className="barStyle1"></div>
+                <div style={barStyleTwo} className="barStyle"></div>
+                <div style={barStyleThree} className="barStyle1"></div>
+                <div style={barStyleFour} className="barStyle"></div>
+                <div style={barStyleFive} className="barStyle1"></div>
+                <div style={barStyleSix} className="barStyle"></div>
 
+                <div style={blueBox}>
+                    <div style={logoContainer}>
+                        <p>ourProjectName and/or logo</p>
+                    </div>
+                </div>
                 <div style={inputCaptionContainer} className="hoverForImagesVector">
                     <div style={alignSearchIcon} className="formSearchHomepage">
                         <input style={inputSearch} type="text" className="form-control removeOutline" 
@@ -70,18 +50,10 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
                             value={localSearch} onChange={e=>setLocalSearch(e.currentTarget.value)}/>
                         <div style={dropDownFilter}><DropdownFilter setFilterTag={setFilterTag} filterTag={filterTag}/></div>
                     </div>
-                    <p style={{color:"white", fontSize:"calc(11px + 0.2vw)", zIndex:1, textAlign:"center"}} className="searchCaption">
+                </div>
+                <p style={{color:"white", position:"absolute", fontSize:"calc(18px + 0.5vw)", zIndex:1000, textAlign:"center", bottom:"15%"}} className="searchCaption">
                         Search a collection of books, thesis, or SP using keywords
-                    </p>
-                </div>
-                
-                <div style={homepageBgParent} className="homepageBgParent">
-                    <img draggable="false" className="homeItem homeItem1" src={homeItem1} style={homeItems} alt="#"/> 
-                    <img draggable="false" className="homeItem homeItem2" src={homeItem2} style={homeItems} alt="#"/> 
-                    <img draggable="false" className="homeItem homeItem3" src={homeItem3} style={homeItems} alt="#"/> 
-                    <img draggable="false" className="homeItem homeItem4" src={homeItem4} style={homeItems} alt="#"/> 
-                    <img draggable="false" src={homepageBg} style={homepageBgStyle} alt="#"/> 
-                </div>
+                </p>
             </div>
         </form>
     )
@@ -90,14 +62,14 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
 const DropdownFilter = ({setFilterTag, filterTag}) =>{ 
     const options = [
         { key: 1, text: 'Any', value: 'any'},
-        { key: 2, text: 'Title', value: 'title' },
-        { key: 3, text: 'Author', value: 'author' },
-        { key: 4, text: 'Adviser', value: 'adviser' },
-        { key: 5, text: 'Subject', value: 'subject' },
+        { key: 2, text: 'Books', value: 'books' },
+        // TOUCHED: value changed from special problem to sp for uniform URL manipulation
+        { key: 3, text: 'Special Problem', value: 'sp' },
+        { key: 4, text: 'Thesis', value: 'thesis' },
     ]
     const handleChange=(e, data)=>setFilterTag(data.value);
     return(
-        <Dropdown text='' button style={{"whiteSpace": "nowrap", padding:"19px", borderRadius:"0px", backgroundColor:"white"}}
+        <Dropdown text='' button style={{"whiteSpace": "nowrap", padding:"19px", borderRadius:"0 10px 10px 0", backgroundColor:"white"}}
         onChange={handleChange} options={options} value={filterTag}/>
     )
 }
@@ -106,15 +78,16 @@ const dropDownFilter = {
     width:"calc(100px + 1vw)",
     margin:0,
     padding:0,
-    zIndex:1000
+    zIndex:1000,
+    borderRadius:"10px",
 }
 const alignSearchIcon = {
     zIndex:100,
-    width:"80%",
+    width:"85%",
     display:"flex",
     justifyContent:"center",
     alignItems:"center",
-    padding:"5px"
+    padding:"15px",
 }
 
 const advanceSearch = {
@@ -123,7 +96,6 @@ const advanceSearch = {
     display:"flex",
     justifyContent:"center",
     alignItems:"center",
-    padding:"0px 2vw",
     overflow:"hidden",
     transition:"1s",
     "WebkitTouchCallout": "none",  
@@ -133,64 +105,20 @@ const advanceSearch = {
 	"MsUserSelect": "none",  
 	"userSelect": "none", 
 }
-const titleSearchContainer ={
-    borderLeft:"10px solid white",
-    position:"relative",
-    width:"40%",
-    height:"75%",
-    background: "linear-gradient(90deg, rgba(0,103,161,1) 0%, rgba(0,101,158,1) 43%, rgba(0,74,116,1) 100%)",
-    boxShadow:"4px 4px 7px 0 rgba(0, 0, 0, 0.55),-1px -2px 4px 0 rgba(255, 255, 255, 0.3)",
-    borderRadius: "4px  0px  0px  4px",    
-    transition:"1s",
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"space-around",
-    alignItems:"center",
-}
-const textStylesContainer = {
-    width:"100%",
-    flexGrow:1,
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"space-around"
-
-}
-const uplbContainerStyle={
-    textAlign:"center",
-}
-const uplbStyle={
-    position:"relative",
-    fontSize:"calc(37px + 1vw)",
-    color:"white",
-    fontWeight:"900",
-    lineHeight:0.9,
-    margin:0,
-    padding:0,
-}
-const icsStyle={
-    width:"100%",
-    overflowX:"hidden",
-    padding:"10px",
-    color:"black",
-    textAlign:"center",
-    fontSize:"calc(10px + 0.5vw)",
-    fontWeight:300,
-    background:"white",
-    boxShadow:" 2px 2px 5px 0 rgba(0, 0, 0, 0.3),-1px -1px 3px 0 rgba(255, 255, 255, 0.1)",
-
-}
 
 const searchBoxContainer = {
+    overflow:"hidden",
     position:"relative",
-    width:"40%",
+    width:"95%",
     height:"90%",
     display:"flex",
     flexDirection:"column",
-    justifyContent:"flex-start",
+    justifyContent:"center",
     alignItems:"center",
     background:"rgba(0,0,0,0.90)",          
     transition:"1s",
-    borderRadius: "15px",    
+    borderRadius: "10px",
+    boxShadow:"1px 1px 4px black",
 }
 
 const inputCaptionContainer = {
@@ -204,11 +132,13 @@ const inputCaptionContainer = {
 }
 
 const inputSearch={
+    height:"100%",
+    fontSize:"150%",
     width:"100%",
-    padding:"25px 25px",
+    padding:"26px 25px",    
     margin:0,
-    borderRadius:"5px 0 0 5px",
-    backgroundColor:"rgba(255,255,255,0.98)",
+    borderRadius:"10px 0 0 10px",
+    backgroundColor:"rgba(255,255,255)",
     zIndex:10,
     border:0,
 }
@@ -218,56 +148,79 @@ const mainBgSearchStyle = {
     width:"100%",
     zIndex:"-1",
 }
-const homepageBgParent = {
+
+const blueBox = {
     position:"absolute",
-    height:"100%",
+    height:"50%",
+    width:"100%",
+    margin:0,
+    top:0,
+    background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(231,231,231,1) 100%)",
+}
+const logoContainer = {
+    height:"50%",
     width:"100%",
     display:"flex",
-    justifyContent:"center", 
-    alignItems:"flex-end",
-    overflow:"hidden"
-}
-
-const homepageBgStyle = {
-    maxHeight:"70%",
-    maxWidth:"70%",
-}
-
-const homeItems = {
-    position:"absolute",
-    maxHeight:"70%",
-    maxWidth:"70%", 
-    opacity:0.5, 
-    zIndex:1,
-    transition:"0.4s",
-    transform:"scale(1)"
-};
-
-const buttonsContainer ={
-    gap:"10px",
-    flexGrow:1,
-    display:"flex",
-    justifyContent:"space-evenly",
+    justifyContent:"center",
     alignItems:"center",
 }
-const buttonSelect = {
-    background:"none",
-    border:"2px solid white",
-    color:"white",
-    fontSize:"15px",
-    padding:"8px",
-    transition:"0.1s",
-    zIndex:1000
+const barStyle = {
+    left:0,
+    top:"40%",
+    height:"10%",
+    width:"70%",
+    borderRadius:"0 100px 100px 0",
+    position:"absolute",
+    backgroundColor:"rgb(0, 103, 161, 1)",
+    zIndex:10
+}
+const barStyleOne = {
+    ...barStyle,
+    top:"30%",
+    width:"60%",
+    backgroundColor:"rgb(0, 103, 161,0.85)",
+    boxShadow:"1px 1px 3px black"
+}
+const barStyleTwo = {
+    ...barStyle,
+    top:"50%",
+    width:"60%",
+    backgroundColor:"rgb(0, 103, 161,0.8)",
+    boxShadow:"1px 1px 3px black"
+    
+}
+const barStyleThree = {
+    ...barStyle,
+    top:"60%",
+    width:"20%",
+    backgroundColor:"rgb(0, 103, 135)",
+    boxShadow:"1px 1px 3px black"
+}
+const barStyleFour = {
+    ...barStyle,
+    top:"20%",
+    width:"30%",
+    backgroundColor:"rgb(0, 103, 161,0.6)",
+    boxShadow:"1px 1px 3px black"
+}
+const barStyleFive = {
+    ...barStyle,
+    boxShadow:"1px 1px 3px black",
+    backgroundColor:"rgb(0, 103, 161,0.8)",
+    width:"10%",
+    top:"69.5%",
+}
+const barStyleSix = {
+    ...barStyle,
+    boxShadow:"1px 1px 3px black",
+    backgroundColor:"rgb(0, 103, 161,0.8)",
+    width:"45%",
+    top:"35%",  
 }
 
+
 const animateSearchBox=()=>{
-    gsap.from('.formSearchHomepage',{opacity:0,yPercent:200, duration:0.6,scale:0.1});
-    gsap.from('.homepageBgParent',{duration:0.8,scale:0.85});
-    gsap.from('.homeItem1',{duration:0.6,scale:4, opacity:0.8});
-    gsap.from('.homeItem2',{duration:0.6,scale:4, opacity:0.8});
-    gsap.from('.homeItem3',{duration:0.6,scale:3, opacity:0.8});
-    gsap.from('.homeItem4',{duration:0.6,scale:3, opacity:0.8});
-    gsap.from('.searchAnimationICS',{duration:0.7,x:100, ease: Power3});
-    gsap.from('.searchUPanimation',{duration:0.9,x:-70, ease: Power3});
-    
+    gsap.from('.formSearchHomepage',{opacity:0,yPercent:10, duration:0.5,scale:0.8, ease:Power3});
+    gsap.from('.barStyle',{xPercent:-50, duration:0.8});
+    gsap.from('.barStyle1',{xPercent:-30, duration:1});
 }

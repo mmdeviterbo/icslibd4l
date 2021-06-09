@@ -1,0 +1,66 @@
+.removeOutline:focus{ 
+    box-shadow: none !important;
+}
+
+.topContainer:focus-within{
+    border-bottom: 2px solid rgb(0, 103, 161) !important;
+}
+
+.textStyle{
+    -webkit-touch-callout: none;  
+    -webkit-user-select: none; 
+    -khtml-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;  
+    -user-select: none;
+}
+
+.sidebarLink:hover{
+    background: #d3d3d3;
+    cursor:pointer;
+}
+
+.dropdownNav > span:hover{
+    color: black;
+    cursor: pointer;
+}
+
+/*.sidebarLabel:hover{
+    color: pink;
+}*/
+
+.resultMainContainer:hover{
+    background: gainsboro;
+}
+
+.paginationBttns {
+    width: 80%;
+    height: 40px;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.paginationBttns a {
+    padding: 10px;
+    margin: 8px;
+    border-radius: 5px;
+    border: 1px solid rgb(0, 103, 161);
+    color: rgb(0, 103, 161);
+    cursor: pointer;
+}
+
+.paginationBttns a:hover {
+    color:white;
+    background-color: rgb(0, 103, 161);
+}
+
+.paginationActive a {
+    color: white;
+    background-color: rgb(0, 103, 161);
+    cursor: default;
+}
+
+.paginationDisabled a {
+    visibility: hidden;
+}

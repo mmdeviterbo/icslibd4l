@@ -1,24 +1,39 @@
-import React, { useState, useContext, useEffect } from "react";
-// import { GlobalContext } from "../manageuserpage/userTable";
-import { useHistory } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import { useHistory } from 'react-router-dom';
 import ProfileContainer from "./profileContainer";
+import { jwtPrivateKey } from "./../../config.json";
+import PropagateLoader from "react-spinners/PropagateLoader";
+import PersonService from '../../services/personService';
+import LoginModal from '../modal/loginModal';
 
-export default function ViewUserPage({ user }) {
-  useEffect(() => {
-    console.log(user);
-  }, []);
+export default function ViewUserPage({user}) {
+    const history = useHistory();
+    const [isLogin, setIsLogin] = useState(false);
 
-  // from manage users (to be fixed for sprint3)
-  // const { users } = useContext(GlobalContext);
+    useEffect(()=>{
+        setTimeout(()=>{
+            try{
+                const user = PersonService.decryptToken(localStorage.getItem(jwtPrivateKey));
+            }catch(err){
+                setIsLogin(true);
+            }
+        },300);
+    },[])
 
-  // const history = useHistory();
-
-  // const googleId = user.googleId;
-  return (
-    <>
-      <div className="view-user-info-container">
-        <ProfileContainer user={user} />
-      </div>
-    </>
-  );
+    return (
+        <>
+            {user?
+                (<div
+                    className="view-user-info-container"
+                    style={{ minHeight: "90vh" }}>
+                    <ProfileContainer />
+                </div>)
+                :
+                (<div style={{minHeight:"80vh",display:"grid", placeItems:"center"}}>
+                    <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={true} size={20} />
+                    {isLogin && <LoginModal/>}
+                </div>)
+            }
+        </>
+    );
 }

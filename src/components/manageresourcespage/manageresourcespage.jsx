@@ -1,25 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom'
-import ReactDOM from 'react-dom';
-import './manage-resources-style.css';
-// import TempNavbar from './temporary-navbar';
-import ManageItemsHeader from './manage-items-header';
-import FieldsContainerRes from './filter-fields-res';
-import ResTableContainer from './resource-table-cont';
+import React from "react";
+import ManagementHeader from "../managementHeader";
+import FieldsContainerRes from "./filterFieldsResources";
+import ResourceTableContainer from "./resourceTableContainer";
+import PersonService from '../../services/personService'
+import { jwtPrivateKey } from "./../../config.json";
+import { useHistory } from 'react-router-dom';
+import PropagateLoader from "react-spinners/PropagateLoader";
+import "../../styles/manageresources/manageResourcesStyle.css";
 
 
-const ManageResPage = () => {
-    return(
-        <div className = "manage-resources-page-container">
-            {/* <TempNavbar/> */}
-            {/* <Link to='/view-sp-thesis' className="btn btn-warning">View SP/Thesis</Link> */}
-            <ManageItemsHeader/>
-            <FieldsContainerRes/>
-            <ResTableContainer/>
-            
-        </div>
-    )
-}
+const ManageResourcesPage = ({user}) => {
+    const history = useHistory();
 
-export default ManageResPage
+    const accessPrivilege=()=>{
+        setTimeout(()=>{
+            try{
+                const user = PersonService.decryptToken(localStorage.getItem(jwtPrivateKey));
+                if(!user || (user && user.userType!==1)) return history.push("/unauthorized");
+            }catch(err){
+                return history.push("/unauthorized");
+            }
+        },700);
+    }
 
+
+    return (
+        <>
+        {user && user.userType===1?
+            (<div className="manage-resources-page-container">
+                <ManagementHeader type={"resource"} />
+                <FieldsContainerRes />
+                {/* <ResTableContainer resourceList={resourceList} /> */}
+                <ResourceTableContainer />
+            </div>)
+            :
+            (<div style={{minHeight:"80vh",display:"grid", placeItems:"center"}}>
+            <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={true} size={20} />
+            {accessPrivilege()}
+        </div>)
+        }
+        </>
+    );
+};
+
+export default ManageResourcesPage;

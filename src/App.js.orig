@@ -1,4 +1,10 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e840bfdb9a0777a82473288859fc4913c9e15635
+>>>>>>> sprint4-resoles
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import Footer from "./components/footer";
@@ -9,6 +15,9 @@ import Notfound from "./components/notfound";
 import personService from "./services/personService";
 import jwtDecode from "jwt-decode";
 import "./App.css";
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 =======
 import {Route, Switch, Redirect } from 'react-router-dom';
 import {useState, useEffect, useRef} from 'react';
@@ -21,6 +30,9 @@ import ViewUser from './components/viewuserpage/viewUserPage';
 
 import './App.css';
 >>>>>>> origin/sprint2-ramos
+=======
+>>>>>>> e840bfdb9a0777a82473288859fc4913c9e15635
+>>>>>>> sprint4-resoles
 
 function App() {
   const [user, setUser] = useState(); //fullname, email, surname, googleId
@@ -34,7 +46,6 @@ function App() {
   // refresh when full reload happens
   function topWhenRefresh() {
     window.onbeforeunload = function () {
-      window.scrollTo(0, 0);
     };
   }
 
@@ -66,6 +77,9 @@ function App() {
   return (
     <div className="App">
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
       {/* navigationBar is always visible no matter on what route */}
       <NavigationBar loginRegisterUser={loginRegisterUser} />
 
@@ -83,6 +97,9 @@ function App() {
       {/* footer is always visible no matter on what route */}
       <Footer />
 =======
+=======
+>>>>>>> e840bfdb9a0777a82473288859fc4913c9e15635
+>>>>>>> sprint4-resoles
         {/* navigationBar is always visible no matter on what route */}
         <NavigationBar/>
 
@@ -98,7 +115,13 @@ function App() {
 
         {/* footer is always visible no matter on what route */}
         <Footer/>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 >>>>>>> origin/sprint2-ramos
+=======
+>>>>>>> e840bfdb9a0777a82473288859fc4913c9e15635
+>>>>>>> sprint4-resoles
     </div>
   );
 }

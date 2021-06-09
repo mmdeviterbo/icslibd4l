@@ -6,8 +6,20 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
+var uniqid = require("uniqid");
+const config = require("config");
+const path = require("path");
+const crypto = require("crypto");
+const mongoose = require("mongoose");
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+var uniqid = require("uniqid");
+
+const database = process.env.db;
 
 router.post("/get-news", async (req, res) => {
+    // console.log('hello')
     let options = {
         url: "https://uplb.edu.ph/news-and-updates-2/",
         headers: {
@@ -62,21 +74,57 @@ router.post("/get-news", async (req, res) => {
     }
 });
 
+//creates a book and uploads its book cover
+/**************************************************** 
+Request Object:
+req object:
+json
+book: {
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    bookCoverLink,
+    datePublished,
+    dateAcquired,
+}
+
+res object:
+{
+    bookId,
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    bookCoverLink,
+    datePublished,
+    dateAcquired,
+}
+********************************************************/
 router.post("/create", authFaculty, async (req, res) => {
+    console.log(req.body);
     try {
         const {
-            bookId,
             title,
+            ISBN,
             authors,
             subjects,
             physicalDesc,
             publisher,
             numberOfCopies,
+            bookCoverLink,
+            datePublished,
+            dateAcquired,
         } = req.body;
 
         // sample verification: incomplete fields
         if (
-            !bookId ||
             !title ||
             !authors ||
             !subjects ||
@@ -84,24 +132,28 @@ router.post("/create", authFaculty, async (req, res) => {
             !publisher ||
             !numberOfCopies
         ) {
-            return res
-                .status(400)
-                .json({ errorMessage: "Please enter all required fields." });
+            return res.status(400).send("Please enter all required fields.");
         }
 
         //search if book exists
-        const existingBook = await bookModel.findOne({ bookId });
+        const existingBook = await bookModel.findOne({ ISBN });
 
         if (!existingBook) {
             //if book does not exist, add the book
+
+            const bookId = uniqid("BOOK_"); //generate a unique id for the book
 
             const newBook = new bookModel({
                 //add the non-array fields to the books collection
                 bookId,
                 title,
+                ISBN,
                 physicalDesc,
                 publisher,
                 numberOfCopies,
+                bookCoverLink,
+                datePublished,
+                dateAcquired,
             });
             const savedBook = await newBook.save();
 
@@ -142,157 +194,51 @@ router.post("/create", authFaculty, async (req, res) => {
     }
 });
 
-// search data
-router.get("/search", async (req, res) => {
-    let final_array = [];
-
-    if (req.query.type == "Book") {
-        // RESOURCE: Book
-        if (req.query.field == "title") {
-            // search by TITLE
-            bookModel.aggregate(
-                [
-                    { $match: { title: { $regex: req.query.search } } },
-                    {
-                        $lookup: {
-                            from: "book_authors",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "author",
-                        },
-                    },
-                    {
-                        $lookup: {
-                            from: "book_subjects",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "subject",
-                        },
-                    },
-                ],
-
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        res.send(result);
-                    }
-                }
-            );
-        } else if (req.query.field == "subject") {
-            // search by SUBJECT
-            bookSubjectModel.aggregate(
-                // get matches based from queries
-                [{ $match: { subject: { $regex: req.query.search } } }],
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        // extract all IDs from matches
-                        result.forEach((item, index) => {
-                            final_array.push(item.bookId);
-                        });
-
-                        // get unique IDs
-                        let unique_ID = [...new Set(final_array)];
-
-                        // extract equivalent entries from bookModel
-                        bookModel.aggregate(
-                            [
-                                { $match: { bookId: { $in: unique_ID } } },
-                                {
-                                    $lookup: {
-                                        from: "book_authors",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "author",
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: "book_subjects",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "subject",
-                                    },
-                                },
-                            ],
-
-                            (error, results) => {
-                                if (error) {
-                                    res.send(error);
-                                } else {
-                                    res.send(results);
-                                }
-                            }
-                        );
-                    }
-                }
-            );
-        } else if (req.query.field == "author") {
-            // search by AUTHOR
-            bookAuthorModel.aggregate(
-                // get matches based from queries
-                [{ $match: { author_name: { $regex: req.query.search } } }],
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        // extract all IDs from matches
-                        result.forEach((item, index) => {
-                            final_array.push(item.bookId);
-                        });
-
-                        // get unique IDs
-                        let unique_ID = [...new Set(final_array)];
-
-                        // extract equivalent entries from bookModel
-                        bookModel.aggregate(
-                            [
-                                { $match: { bookId: { $in: unique_ID } } },
-                                {
-                                    $lookup: {
-                                        from: "book_authors",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "author",
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: "book_subjects",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "subject",
-                                    },
-                                },
-                            ],
-
-                            (error, results) => {
-                                if (error) {
-                                    res.send(error);
-                                } else {
-                                    res.send(results);
-                                }
-                            }
-                        );
-                    }
-                }
-            );
+//display the latest 12 book infos on the homepage
+router.get("/display_latest", async (req, res) => {
+    bookModel.aggregate(
+        [{ $sort: { dateAcquired: -1 } }, { $limit: 12 }],
+        (err, result) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(result);
+            }
         }
-    }
+    );
 });
 
-router.put("/update-book", authAdmin, async (req, res) => {
+/**************************************************** 
+Request Object:
+req object:JSON
+book: {
+    oldBookId,
+    bookId,
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+}
+file: jpeg/png
+res String: 
+"Entry Updated"
+********************************************************/
+router.put("/update", authAdmin, async (req, res) => {
     const {
         oldBookId,
         bookId,
         title,
+        ISBN,
         authors,
         subjects,
         physicalDesc,
         publisher,
         numberOfCopies,
+        datePublished,
+        dateAcquired,
     } = req.body;
 
     // verification: incomplete fields
@@ -311,6 +257,17 @@ router.put("/update-book", authAdmin, async (req, res) => {
             .json({ errorMessage: "Please enter all required fields." });
     }
 
+    // if user wants to update bookId, check first if the given bookId (new) already exists
+    if (oldBookId != bookId) {
+        await bookModel.findOne({ bookId: bookId }, (err, exists) => {
+            if (exists) {
+                return res
+                    .status(400)
+                    .json({ errorMessage: "New bookId already exists." });
+            }
+        });
+    }
+
     try {
         //search if book exists
         const existingBook = await bookModel.findOne({ bookId: oldBookId });
@@ -323,9 +280,12 @@ router.put("/update-book", authAdmin, async (req, res) => {
                 (err, updatedBook) => {
                     updatedBook.bookId = bookId;
                     updatedBook.title = title;
+                    updatedBook.ISBN = ISBN;
                     updatedBook.physicalDesc = physicalDesc;
                     updatedBook.publisher = publisher;
                     updatedBook.numberOfCopies = numberOfCopies;
+                    updatedBook.datePublished = datePublished;
+                    updatedBook.dateAcquired = dateAcquired;
 
                     updatedBook.save();
                 }
@@ -376,18 +336,43 @@ router.put("/update-book", authAdmin, async (req, res) => {
     }
 });
 
-router.delete("/delete-book", authAdmin, async (req, res) => {
+/**************************************************** 
+Request Object:
+req object:JSON
+book: {
+    bookId
+}
+res String: 
+"Entry Deleted"
+********************************************************/
+router.delete("/delete", authAdmin, async (req, res) => {
     try {
-        const bookId = req.body.bookId;
+        const { bookId } = req.body;
 
-        // search if book exists
+        // search if book exists in book collection
         const existingBook = await bookModel.findOne({ bookId });
 
-        // if book exists, delete its entries from book, book_author, and book_subject
+        // if book exists, delete its entries from book, book_author, book_subject, and book_cover
         if (existingBook) {
             await bookModel.findOneAndDelete({ bookId });
             await bookAuthorModel.deleteMany({ bookId });
             await bookSubjectModel.deleteMany({ bookId });
+
+            // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
+            // check first if the book has a saved book cover
+            gfs.files.findOne(
+                { "metadata.bookId": bookId },
+                (err, existingBookCover) => {
+                    if (existingBookCover) {
+                        // .chunks
+                        // mongoose.connection.db
+                        //     .collection("book_covers.chunks")
+                        //     .deleteOne({ files_id: existingBookCover._id });
+                        // // .files
+                        // gfs.files.deleteOne({ "metadata.bookId": bookId });
+                    }
+                }
+            );
             res.send("Entry Deleted");
         } else {
             res.status(400).send("This book does not exist! Cannot delete.");
@@ -397,5 +382,4 @@ router.delete("/delete-book", authAdmin, async (req, res) => {
         res.status(500).send();
     }
 });
-
 module.exports = router;
