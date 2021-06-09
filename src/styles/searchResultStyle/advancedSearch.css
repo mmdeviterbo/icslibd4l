@@ -61,6 +61,10 @@
     cursor: default;
 }
 
+.paginationActiveText {
+    color: white;
+}
+
 .paginationDisabled a {
     visibility: hidden;
 }

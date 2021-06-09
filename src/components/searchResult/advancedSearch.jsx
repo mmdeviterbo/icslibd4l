@@ -247,6 +247,7 @@ export default function AdvancedSearch({ appRef }) {
                                         nextLinkClassName={"nextBttn"}
                                         disabledClassName={"paginationDisabled"}
                                         activeClassName={"paginationActive"}
+                                        activeLinkClassName={"paginationActiveText"}
                                     />
                                 ) : (
                                     <div></div>
