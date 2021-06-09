@@ -14,6 +14,7 @@ import Select from "react-select";
 import { jwtPrivateKey } from "./../../config.json";
 
 import "../../styles/manageUserStyle.css";
+// import { MongoServerSelectionError } from "mongodb";
 
 const tableHeader = [
     "User ID",
@@ -24,7 +25,10 @@ const tableHeader = [
     " ",
 ];
 
-export default function UserTable({ user }) {
+let tableEntry = [];
+
+
+export default function UserTable({ user, selectedFilter, searchInput }) {
     // Array for user data retreived from database.
     const [userList, setUserList] = useState([]);
     const [page, setPage] = useState(0);
@@ -35,8 +39,8 @@ export default function UserTable({ user }) {
 
     const location = useLocation();
     const history = useHistory();
-
-    let tableEntry = userList;
+    
+    tableEntry = userList;
 
     const classificationString = ["Admin", "Faculty", "Staff", "Student"];
     const classificationObj = [
@@ -67,14 +71,14 @@ export default function UserTable({ user }) {
                 fontWeight: "bold",
                 fontSize: "1.4rem",
                 zIndex: "0",
-            }}>
+            }}
+        >
             <span>{header_text}</span>
         </TableCell>
     ));
 
     // executes if the location is changed. (Opening modals)
     useEffect(() => {
-        //if no user is logged in, redirect it to homepage
         try {
             const jwt = localStorage.getItem(jwtPrivateKey);
             var userInfo = PersonService.decryptToken(jwt);
@@ -83,7 +87,7 @@ export default function UserTable({ user }) {
             history.push("/home");
         }
         readUsers();
-    }, [location]);
+    }, [history]);
 
     // Set the current page of table to the first page if the previous page becomes empty.
     useEffect(() => {
@@ -92,10 +96,78 @@ export default function UserTable({ user }) {
         }
     }, [userList.length, rowsPerPage, page]);
 
+    // Filters the array if the filter is changed
+    useEffect(() => {
+        if (selectedFilter === -1) {
+            readUsers();
+        } else if (selectedFilter === 1) {
+            readAdmins();
+        } else if (selectedFilter === 2) {
+            readFaculty();
+        } else if (selectedFilter === 3) {
+            readStaff();
+        } else {
+            readStudents();
+        }
+    }, [selectedFilter]);
+
+    // Filters the array according to search input
+    useEffect(() => {
+        if (searchInput) {
+            searchUser(searchInput);
+        } else {
+            readUsers();
+        }
+    }, [searchInput]);
+
     // Get users from database
     const readUsers = async () => {
         try {
             await PersonService.readAllUsers().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter admins from database
+    const readAdmins = async () => {
+        try {
+            await PersonService.readAdmins().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter Faculty from database
+    const readFaculty = async () => {
+        try {
+            await PersonService.readFaculty().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter Staff from database
+    const readStaff = async () => {
+        try {
+            await PersonService.readStaff().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter Students from database
+    const readStudents = async () => {
+        try {
+            await PersonService.readStudents().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    const searchUser = async (searchInput) => {
+        try {
+            await PersonService.searchUser(searchInput).then((response) => {
                 setUserList(Array.from(response.data));
             });
         } catch (err) {}
@@ -110,15 +182,6 @@ export default function UserTable({ user }) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
-    // Table style
-    // const useStyles = makeStyles({
-    //   root: {
-    //     borderRadius: "10px",
-    //   },
-    // });
-
-    // const tableContainer = useStyles();
 
     // window.addEventListener("contextmenu", (event) => {
     //     event.preventDefault();
@@ -202,7 +265,8 @@ export default function UserTable({ user }) {
                     style={{
                         fontSize: "16px",
                         width: "15%",
-                    }}>
+                    }}
+                >
                     <span>{entry.googleId}</span>
                 </TableCell>
                 <TableCell
@@ -211,7 +275,8 @@ export default function UserTable({ user }) {
                         width: "20%",
                         align: "left",
                         color: "black",
-                    }}>
+                    }}
+                >
                     <span>{entry.fullName}</span>
                 </TableCell>
                 <TableCell
@@ -220,7 +285,8 @@ export default function UserTable({ user }) {
                         width: "20%",
                         align: "left",
                         color: "black",
-                    }}>
+                    }}
+                >
                     <span>{entry.nickname}</span>
                 </TableCell>
                 <TableCell style={{ fontSize: "16px", width: "20%" }}>
@@ -231,7 +297,8 @@ export default function UserTable({ user }) {
                         fontSize: "16px",
                         width: "15%",
                         textAlign: "left",
-                    }}>
+                    }}
+                >
                     {entry.isEditable ? (
                         <EditClassification entry={entry} index={index} />
                     ) : (
@@ -244,7 +311,8 @@ export default function UserTable({ user }) {
                             width: " 10%",
                             textAlign: "center",
                             fontSize: "1.5rem",
-                        }}>
+                        }}
+                    >
                         {entry.isEditable ? (
                             <>
                                 <Link
@@ -260,7 +328,8 @@ export default function UserTable({ user }) {
                                                 fullName: entry.fullName,
                                             },
                                         },
-                                    }}>
+                                    }}
+                                >
                                     <i
                                         className={"table-icons fa fa-floppy-o"}
                                         onContextMenu={(e) => {
@@ -270,15 +339,14 @@ export default function UserTable({ user }) {
                                         style={{
                                             margin: "10px",
                                             color: "gray",
-                                        }}></i>
+                                        }}
+                                    ></i>
                                 </Link>
                                 <i
                                     className="table-icons fa fa-times"
                                     onClick={(e) => discardChange(index)}
-                                    style={{
-                                        margin: "10px",
-                                        color: "red",
-                                    }}></i>
+                                    style={{ margin: "10px", color: "red" }}
+                                ></i>
                             </>
                         ) : (
                             <>
@@ -290,10 +358,8 @@ export default function UserTable({ user }) {
                                     onClick={(e) => {
                                         toggleEdit(index);
                                     }}
-                                    style={{
-                                        margin: "10px",
-                                        color: "gray",
-                                    }}></i>
+                                    style={{ margin: "10px", color: "gray" }}
+                                ></i>
                                 <Link
                                     to={{
                                         pathname: "/manage-users/delete-user",
@@ -309,7 +375,8 @@ export default function UserTable({ user }) {
                                                 userType: entry.userType,
                                             },
                                         },
-                                    }}>
+                                    }}
+                                >
                                     <i
                                         className="table-icons fa fa-trash-o"
                                         onContextMenu={(e) => {
@@ -318,7 +385,8 @@ export default function UserTable({ user }) {
                                         style={{
                                             margin: "10px",
                                             color: "red",
-                                        }}></i>
+                                        }}
+                                    ></i>
                                 </Link>
                             </>
                         )}

@@ -10,6 +10,21 @@ const pdfMerge = require("pdf-merger-js");
 const BookModel = require("../models/bookModel");
 const ThesisModel = require("../models/spThesisModel");
 
+const monthList = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
+
 //compile function for pdf format
 /****************************************************
  parameters: 
@@ -23,6 +38,25 @@ const compile = async function (templateName, data) {
         `./server/reportTemplate/${templateName}.hbs`
     );
     const html = await fs.readFile(filePath, "utf-8");
+    // Handlebars Helper that formats the date to FullMonth DD YYYY HH:MM AM
+    hbs.registerHelper("dateFormatter", function (dateString) {
+        var newDate = new Date(dateString);
+        var month = monthList[newDate.getMonth()];
+        var year = newDate.getFullYear();
+        var day = newDate.getDay();
+        var hours = newDate.getHours();
+        var minutes = newDate.getMinutes();
+        var meridiem = "";
+
+        if (hours > 12) {
+            hours = hours - 12;
+            meridiem = "PM";
+        } else {
+            meridiem = "AM";
+        }
+
+        return `${month} ${day > 9 ? day : `0${day}`} ${year} ${hours}:${minutes > 9 ? minutes : `0${minutes}`} ${meridiem}`;
+    });
     return hbs.compile(html)(data);
 };
 //summary report function

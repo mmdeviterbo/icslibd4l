@@ -4,10 +4,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
+        <style>
+            .header-div { text-align: center; } .resource-label-div {
+            text-align: center;} table, td, th { border: 1px solid black; } td {
+            padding: 5px; } table { border-collapse: collapse ; border-color:
+            black; font-size: 11px; } .resource-type-cell { text-align: center;
+            } .author-name-text .adviser-name-text { padding: 0; margin: 2px}
+            .title-cell { width : 211px;}
+        </style>
     </head>
     <body>
-        <h1>Summary Report</h1>
-        <h3 style="margin: auto">Special Problem and Thesis</h3>
+        <div class="header-div">
+            <h1>Summary Report</h1>
+        </div>
+        <div class="resource-label-div">
+            <h3 style="margin: auto">Special Problem and Thesis</h3>
+        </div>
 
         <table style="margin: auto">
             <tr>
@@ -22,20 +34,22 @@
                     <td>
                         {{this._id}}
                     </td>
-                    <td>
+                    <td class="resource-type-cell">
                         {{this.type}}
                     </td>
-                    <td>
+                    <td class="title-cell">
                         {{this.title}}
                     </td>
                     <td>
                         {{#each this.author}}
-                            <p>{{this.author_name}}</p>
+                            <p class="author-name-text">{{this.author_name}}</p>
                         {{/each}}
                     </td>
                     <td>
                         {{#each this.adviser}}
-                            <p>{{this.adviser_name}}</p>
+                            <p
+                                class="adviser-name-text"
+                            >{{this.adviser_name}}</p>
                         {{/each}}
                     </td>
                 </tr>
