@@ -27,7 +27,7 @@ const tableHeader = [
 
 let tableEntry = [];
 
-export default function UserTable({ user, selectedFilter }) {
+export default function UserTable({ user, selectedFilter, searchInput }) {
     // Array for user data retreived from database.
     const [userList, setUserList] = useState([]);
     const [page, setPage] = useState(0);
@@ -111,6 +111,15 @@ export default function UserTable({ user, selectedFilter }) {
         }
     }, [selectedFilter]);
 
+    // Filters the array according to search input
+    useEffect(() => {
+        if (searchInput) {
+            searchUser(searchInput);
+        } else {
+            readUsers();
+        }
+    }, [searchInput]);
+
     // Get users from database
     const readUsers = async () => {
         try {
@@ -151,6 +160,14 @@ export default function UserTable({ user, selectedFilter }) {
     const readStudents = async () => {
         try {
             await PersonService.readStudents().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    const searchUser = async (searchInput) => {
+        try {
+            await PersonService.searchUser(searchInput).then((response) => {
                 setUserList(Array.from(response.data));
             });
         } catch (err) {}
