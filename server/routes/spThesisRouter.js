@@ -318,12 +318,13 @@ router.get("/search", async (req, res) => {
 
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
+        // get unique entries
+        let final_arr = [...new Set(total)];
+        
         // separate books and spthesis
         let book_arr = final_arr.filter(item => "bookId" in item);
         let spthesis_arr = final_arr.filter(item => "sp_thesis_id" in item);
 
-        // get unique entries
-        let final_arr = [...new Set(total)];
 
         // FILTER ENTRIES in final_arr
 
