@@ -24,7 +24,7 @@ const ManagementHeader = ({ type }) => {
                         type === "user" ? (
                             <h1 style={{ textAlign: "right" }}>Manage Users</h1>
                         ) : (
-                            <h1 style={{ textAlign: "left" }}>Activity Logs</h1>
+                            <h1 style={{ textAlign: "right"}}>Activity Logs</h1>
                         ),
                     ]
                 )}

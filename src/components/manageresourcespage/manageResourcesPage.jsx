@@ -30,6 +30,7 @@ const ManageResourcesPage = ({ user }) => {
             {user && user.userType === 1 ? (
                 <div className="manage-resources-page-container">
                     <ManagementHeader type={"resource"} />
+                    <br/>
                     {/* <FieldsContainerRes /> */}
                     {/* <ResTableContainer resourceList={resourceList} /> */}
                     <ResourceTableContainer />

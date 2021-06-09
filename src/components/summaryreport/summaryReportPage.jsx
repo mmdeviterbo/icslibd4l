@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
 import Select from "react-select";
-import ResourceService from "../../services/resourceService";
+// import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import DocumentViewer from "./documentViewer";
 import { jwtPrivateKey } from "../../config.json";
@@ -71,7 +71,7 @@ export default function SummaryReportPage({ user }) {
                         onChange={handleChange}
                     />
                 </div>
-                <h1>Summary Report</h1>
+                <h1 style={{"whiteSpace": "nowrap", color:"#0067A1"}}>Summary Report</h1>
             </div>
         );
     };
