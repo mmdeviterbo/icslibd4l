@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // THIS IS A TEMPORARY SEARCH BAR
 // THIS WILL BE DELETED ONCE A SEPARATE SEARCH FUNCTIONALITY HAS BEEN CREATED
 
-const SearchResources = () => {
+const TemporarySearchBar = () => {
   const [title, setTitle] = useState();
   // title, type, year
   // useEffect(() => {
@@ -37,4 +37,4 @@ const SearchResources = () => {
   );
 };
 
-export default SearchResources;
+export default TemporarySearchBar;

@@ -129,7 +129,7 @@ table {
 .bookcover-and-desc {
   display: flex;
   justify-content: space-between;
-
+  flex-direction: row;
   margin: 2rem 6%;
 }
 
@@ -152,11 +152,11 @@ table {
   padding: 0.5rem;
 }
 
-.bookcover-and-desc {
+/* .bookcover-and-desc {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
+} */
 
 .physical-description {
   font-size: 1.2rem;

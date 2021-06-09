@@ -15,14 +15,18 @@ const viewFile = (fileName) => {
 }
 // read data of a resource
 const browseResources = (resourceType) => {
-    console.log(resourceType)
-    return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {withCredentials: true})
-}
+    return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {
+        withCredentials: true,
+    });
+};
 
 const searchSpThesis = (filter, query) => {
-    return http.get(`${apiEndpoint}/thesis${query}`, {params:filter}, {withCredentials: true})
-}
-
+    return http.get(
+        `${apiEndpoint}/thesis${query}`,
+        { params: filter },
+        { withCredentials: true }
+    );
+};
 
 const searchBook = (filter) => {
     return http.get(`${apiEndpoint}/book/search`, {body:filter}, {withCredentials: true})
@@ -54,7 +58,7 @@ const editBook = (resourceData) => {
     return http.put(`${apiEndpoint}/book/update-book`, resourceData, {
         withCredentials: true,
     });
-}
+};
 
 //delete resource
 const deleteSpThesis = (deleteId) => {
@@ -78,15 +82,11 @@ function getAllBooks() {
     // return http.get(`${apiEndpoint}/thesis/search?type=book&search=all`);
 }
 
-function getSPTFiles({ title, fileType }){
-    return http.post(`${apiEndpoint}/thesis/download`, { title, fileType }, {withCredentials: true}, {
-        responseType: 'stream'
+function getBookCover(resourceId) {
+    console.log(resourceId);
+    return http.post(`${apiEndpoint}/books/download1`, resourceId, {
+        withCredentials: true,
     });
-}
-
-function getBookCover(resourceId){
-    console.log(resourceId)
-    return http.post(`${apiEndpoint}/books/download1`, resourceId, {withCredentials: true});
 }
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
@@ -102,7 +102,6 @@ const exportFunctions = {
     searchBook,
     getAllBooks,
     getLatestBooks,
-    getSPTFiles,
     getBookCover,
     downloadFile,
     deleteBook,

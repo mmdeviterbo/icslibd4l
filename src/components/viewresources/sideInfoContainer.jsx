@@ -1,14 +1,14 @@
 import React from "react";
 // import ToastNotification from "../toastNotification";
 // import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 // TO-DO: Change the links according to the appropriate SPT attributes
 const InfoSidebar = ({ user, resourceData }) => {
   let link = "https://www.youtube.com/watch?v=m4gnMWua4xo";
   const handleRedirect = (redirectHere) => {
     // window.location.href = redirectHere;
-    if (redirectHere == "" || redirectHere == null) {
+    if (redirectHere === "" || redirectHere === null) {
       toast.info("Unavailable", {
         position: "bottom-right",
         autoClose: 5000,

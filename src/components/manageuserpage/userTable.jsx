@@ -25,7 +25,6 @@ const tableHeader = [
 ];
 
 export default function UserTable({ user }) {
-
     // Array for user data retreived from database.
     const [userList, setUserList] = useState([]);
     const [page, setPage] = useState(0);
@@ -73,15 +72,14 @@ export default function UserTable({ user }) {
         </TableCell>
     ));
 
-
     // executes if the location is changed. (Opening modals)
     useEffect(() => {
-        //if no user is logged in, redirect it to homepage  
-        try{
+        //if no user is logged in, redirect it to homepage
+        try {
             const jwt = localStorage.getItem(jwtPrivateKey);
             var userInfo = PersonService.decryptToken(jwt);
-            if(userInfo?.userType!==1) history.push("/home");
-        }catch(err){
+            if (userInfo?.userType !== 1) history.push("/home");
+        } catch (err) {
             history.push("/home");
         }
         readUsers();
@@ -189,7 +187,6 @@ export default function UserTable({ user }) {
     const discardChange = (rowIndex) => {
         // TODO: If the admin selected a new classification, there should be a prompt that ask if the user will discard the current changes.
         // Else, if there are no changes, then the edit mode should quit immediately.
-        console.log(selectedUser);
         toggleEdit(rowIndex);
     };
 
@@ -241,84 +238,94 @@ export default function UserTable({ user }) {
                         <span>{classificationString[entry.userType - 1]}</span>
                     )}
                 </TableCell>
-                {user?.fullName!==entry?.fullName? <TableCell
-                    style={{
-                        width: " 10%",
-                        textAlign: "center",
-                        fontSize: "1.5rem",
-                    }}>
-                    {entry.isEditable ? (
-                        <>
-                            <Link
-                                to={{
-                                    pathname: "/manage-users/save-changes",
-                                    state: {
-                                        background: location,
-                                        id: entry.googleId,
-                                        item: "user",
-                                        user: {
-                                            googleId: entry.googleId,
-                                            userType: newClassification,
-                                            fullName: entry.fullName,
+                {user?.fullName !== entry?.fullName ? (
+                    <TableCell
+                        style={{
+                            width: " 10%",
+                            textAlign: "center",
+                            fontSize: "1.5rem",
+                        }}>
+                        {entry.isEditable ? (
+                            <>
+                                <Link
+                                    to={{
+                                        pathname: "/manage-users/save-changes",
+                                        state: {
+                                            background: location,
+                                            id: entry.googleId,
+                                            item: "user",
+                                            user: {
+                                                googleId: entry.googleId,
+                                                userType: newClassification,
+                                                fullName: entry.fullName,
+                                            },
                                         },
-                                    },
-                                }}>
+                                    }}>
+                                    <i
+                                        className={"table-icons fa fa-floppy-o"}
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        onClick={(e) => toggleEdit(index)}
+                                        style={{
+                                            margin: "10px",
+                                            color: "gray",
+                                        }}></i>
+                                </Link>
                                 <i
-                                    className={"table-icons fa fa-floppy-o"}
-                                    onContextMenu={(e) => {
-                                        e.preventDefault();
-                                    }}
-                                    onClick={(e) => toggleEdit(index)}
-                                    style={{
-                                        margin: "10px",
-                                        color: "gray",
-                                    }}></i>
-                            </Link>
-                            <i
-                                className="table-icons fa fa-times"
-                                onClick={(e) => discardChange(index)}
-                                style={{ margin: "10px", color: "red" }}></i>
-                        </>
-                    ) : (
-                        <>
-                            <i
-                                className="table-icons fa fa-pencil"
-                                onContextMenu={(e) => {
-                                    e.preventDefault();
-                                }}
-                                onClick={(e) => {
-                                    toggleEdit(index);
-                                }}
-                                style={{ margin: "10px", color: "gray" }}></i>
-                            <Link
-                                to={{
-                                    pathname: "/manage-users/delete-user",
-                                    state: {
-                                        background: location,
-                                        id: entry.googleId,
-                                        item: "user",
-                                        user: {
-                                            googleId: entry.googleId,
-                                            email: entry.email,
-                                            fullName: entry.fullName,
-                                            nickName: entry.nickname,
-                                            userType: entry.userType,
-                                        },
-                                    },
-                                }}>
-                                <i
-                                    className="table-icons fa fa-trash-o"
-                                    onContextMenu={(e) => {
-                                        e.preventDefault();
-                                    }}
+                                    className="table-icons fa fa-times"
+                                    onClick={(e) => discardChange(index)}
                                     style={{
                                         margin: "10px",
                                         color: "red",
                                     }}></i>
-                            </Link>
-                        </>
-                    )}
-                </TableCell> : <TableCell></TableCell>}
+                            </>
+                        ) : (
+                            <>
+                                <i
+                                    className="table-icons fa fa-pencil"
+                                    onContextMenu={(e) => {
+                                        e.preventDefault();
+                                    }}
+                                    onClick={(e) => {
+                                        toggleEdit(index);
+                                    }}
+                                    style={{
+                                        margin: "10px",
+                                        color: "gray",
+                                    }}></i>
+                                <Link
+                                    to={{
+                                        pathname: "/manage-users/delete-user",
+                                        state: {
+                                            background: location,
+                                            id: entry.googleId,
+                                            item: "user",
+                                            user: {
+                                                googleId: entry.googleId,
+                                                email: entry.email,
+                                                fullName: entry.fullName,
+                                                nickName: entry.nickname,
+                                                userType: entry.userType,
+                                            },
+                                        },
+                                    }}>
+                                    <i
+                                        className="table-icons fa fa-trash-o"
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        style={{
+                                            margin: "10px",
+                                            color: "red",
+                                        }}></i>
+                                </Link>
+                            </>
+                        )}
+                    </TableCell>
+                ) : (
+                    <TableCell></TableCell>
+                )}
             </TableRow>
         );
     });
@@ -327,21 +334,20 @@ export default function UserTable({ user }) {
         <>
             <TableContainer component={Paper} className="main-table-container">
                 <Table stickyHeader>
-                    <TableHead>{header}</TableHead>
+                    <TableHead>
+                        <TableRow>{header}</TableRow>
+                    </TableHead>
                     <TableBody>
                         {entries.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                         )}
-
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
+                        {emptyRows > 0 &&
+                            (<TableRow style={{ height: 40 * emptyRows}}>
+                            </TableRow>)
+                        }
                     </TableBody>
                 </Table>
-
                 <TablePagination
                     rowsPerPage={rowsPerPage}
                     rowsPerPageOptions={[5]}

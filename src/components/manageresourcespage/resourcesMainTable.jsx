@@ -128,26 +128,17 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // fontSize: '2rem',
     width: "100%",
   },
-  //   tblheaders:{
-  //       fontSize:'1.5rem'
-  //   },
   paper: {
     width: "100%",
-    // fontSize: '2rem',
     marginBottom: theme.spacing(2),
   },
-  table: {
-    // fontSize: '2rem',
-    // minWidth: 750,
-  },
+  table: {},
   tablecell: {
     padding: "16px",
     fontSize: "1.4rem",
     fontWeight: "bold",
-    // color: "#FFFFFF",
   },
   visuallyHidden: {
     border: 0,
@@ -362,7 +353,7 @@ const MainResourceTable = () => {
                       </TableCell>
                       <TableCell
                         style={{
-                          width: "20%",
+                          width: "30%",
                         }}
                         className={classes.tablecell}
                         align="left"
@@ -379,7 +370,7 @@ const MainResourceTable = () => {
                       </TableCell>
                       <TableCell
                         style={{
-                          width: "15%",
+                          width: "20%",
                         }}
                         className={classes.tablecell}
                         align="left"

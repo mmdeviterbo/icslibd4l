@@ -121,7 +121,7 @@ const AddNewSPThesisForm = () => {
     console.log("meow");
     event.preventDefault();
 
-    if (authorList.length == 0) {
+    if (authorList.length === 0) {
       return ToastNotification({ content: "Please enter all required fields" });
     }
 

@@ -10,10 +10,17 @@ const ReadingBookContainer = (props) => {
   //   (props.location && props.location.state.resourceData) || {};
 
   let [loading, setLoading] = useState(true);
+  let [imgLoading, setImgLoading] = useState(true);
   const [resourceData, setResourceData] = useState({});
   const resourceID = props.match.params.id;
   // console.log(props.match.params);
 
+  // const handleLoading = () => {
+  //   console.log(resourceData.bookCoverLink);
+  //   if (resourceData && resourceData.bookCoverLink) {
+  //     return setLoading(true);
+  //   }
+  // };
   useEffect(() => {
     async function fetchData() {
       try {
@@ -22,11 +29,13 @@ const ReadingBookContainer = (props) => {
         setResourceData(data && data[0]);
         console.log(data);
         setLoading(false);
+        // handleLoading();
       } catch (err) {
         console.log(err);
       }
     }
     fetchData();
+
     window.scrollTo(0, 0);
     // const { appRef } = props;
     // appRef.current &&
@@ -54,15 +63,24 @@ const ReadingBookContainer = (props) => {
           />
 
           <div className="bookcover-and-desc">
-            {resourceData && resourceData.bookCoverLink ? (
+            {loading ? (
+              <PropagateLoader
+                color={"#0067a1"}
+                speedMultiplier={2}
+                loading={true}
+                size={20}
+              />
+            ) : resourceData && resourceData.bookCoverLink ? (
               <img
                 style={{ height: "auto", margin: "0% 6%" }}
                 src={resourceData.bookCoverLink}
+                // alt="bookCover"
               />
             ) : (
               <img
                 style={{ height: "400px", width: "300px", margin: "0% 6%" }}
                 src="https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg"
+                // alt="bookCover"
               />
             )}
 

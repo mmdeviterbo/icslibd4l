@@ -211,28 +211,7 @@ router.get("/download", async (req, res) => {
 });
 
 
-/// browse all entries, default sort: alphabetical by title
-/**************************************************** 
-Request Object:
-req object: JSON
-body: {
- type,
-}
-Response Object: Array
-[
-    {
-    "_id": _id,
-    "length": length,
-    "chunkSize": chunkSize,
-    "uploadDate": uploadDate,
-    "filename": filename,
-    "md5": md5,
-    "contentType": contentType,
-    "metadata": "sp_thesis_id
-    },
-    ...
-]
-********************************************************/
+// browse all entries, default sort: alphabetical by title
 router.post("/browse", async (req, res) => {
     const { type } = req.body;
     if (type === "book") {
@@ -287,7 +266,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_advisers",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "advisers",
+                        as: "adviser",
                     },
                 },
                 {
@@ -295,7 +274,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_authors",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "authors",
+                        as: "author",
                     },
                 },
                 {
@@ -319,49 +298,7 @@ router.post("/browse", async (req, res) => {
     }
 });
 
-// search and filter resources
-/**************************************************** 
-http://localhost:3001/thesis/search
-Request Object:
-query: {
-    type (any/book/sp/thesis),
-    search,
-    year,
-    publisher,
-    author,
-    adviser,
-    subject,
-    keyword (string array)
-}
-Response Object: Array of book/sp/thesis
-    (sp/thesis sorted by title + books sorted by title)
-[
-    {
-        advisers: [],
-        authors: [],
-        keywords: [],
-        sp_thesis_id,
-        type,
-        title,
-        abstract,
-        year
-    },
-    ...
-    {
-        author: [],
-        subject: [],
-        bookId,
-        ISBN,
-        title,
-        physicalDesc,
-        publisher,
-        numberOfCopies,
-        datePublished,
-        dateAcquired
-    },
-    ...
-]
-********************************************************/
+// search data
 router.get("/search", async (req, res) => {
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
@@ -1417,6 +1354,163 @@ router.get("/search", async (req, res) => {
 /**************************************************** 
 Request Query:
     id :
+    type
+Response:
+    * 1 object
+********************************************************/
+// REFERENCE:
+// https://stackoverflow.com/questions/37582331/how-to-return-only-the-first-occurrence-of-an-id-with-mongoose
+
+router.get("/search-id", async (req, res) => {
+
+    // ---------------------------------------- SUB FUNCTIONS
+ 
+    function spMain() {
+        thesisModel.aggregate(
+            [
+                { 
+                    $match: {
+                        sp_thesis_id : req.query.id,
+                        type : "Special Problem", 
+                    }
+                },
+                {
+                    // populate advisers field
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    // populate authors field
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    // populate keywords field
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+                { $limit:1 }
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    }
+
+    function thesisMain() {
+        thesisModel.aggregate(
+            [
+                { 
+                    $match: {
+                        sp_thesis_id : req.query.id,
+                        type : "Thesis", 
+                    }
+                },
+                {
+                    // populate advisers field
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    // populate authors field
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    // populate keywords field
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+                { $limit:1 }
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    }
+
+    function bookMain() {
+        // get book matches on bookModel based from req.query.id
+        bookModel.aggregate(
+            [
+                {$match: { bookId : req.query.id }},
+                {
+                    $lookup: {
+                        // populate authors field
+                        from: "book_authors",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "author",
+                    },
+                },
+                {
+                    // populate subject field
+                    $lookup: {
+                        from: "book_subjects",
+                        localField: "bookId",
+                        foreignField: "bookId",
+                        as: "subject",
+                    },
+                },
+                { $limit:1 }
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    }
+   
+    // ---------------------------------------- MAIN
+
+    if (req.query.type == "Special Problem"){
+        spMain();
+    }else if (req.query.type == "Book"){
+        bookMain();
+    }else if (req.query.type =="Thesis"){
+        thesisMain();
+    }   
+});
+
+// search data by id
+/**************************************************** 
+Request Query:
+    id :
     type: ["Special Problem", "Book", "Thesis"]
 Response:
     * 1 object
@@ -1604,6 +1698,7 @@ body:
 file: pdf
 file: jpeg
 file: pdf
+
 Response String:
 "Entry Updated"
 ********************************************************/

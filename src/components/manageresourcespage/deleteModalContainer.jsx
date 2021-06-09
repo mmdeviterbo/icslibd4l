@@ -54,6 +54,11 @@ const DeletePopUpCont = ({ user }) => {
         // setVisible(true);
         // window.location = "/manage-resources";
         setPathAfter("/manage-resources");
+      } else if (item === "logs") {
+        await PersonService.clearUserLogs();
+        setMessage("success");
+        handleClose();
+        setPathAfter("/view-activitylogs");
       } else if (item === "account") {
         setItemName(user.fullName);
         console.log("error here");
@@ -116,7 +121,7 @@ const DeletePopUpCont = ({ user }) => {
       >
         {/* Renders according to item.
           If resource, else if user, else account */}
-        <Modal.Header>
+        <Modal.Header closeButton>
           {item === "resource" ? (
             <Modal.Title style={{ fontWeight: "bold" }}>
               Delete Resource?
@@ -125,12 +130,20 @@ const DeletePopUpCont = ({ user }) => {
             [
               item === "user" ? (
                 <Modal.Title style={{ fontWeight: "bold" }}>
-                  Delete User?
+                  Delete User
                 </Modal.Title>
               ) : (
-                <Modal.Title style={{ fontWeight: "bold" }}>
-                  Remove Account
-                </Modal.Title>
+                [
+                  item === "logs" ? (
+                    <Modal.Title style={{ fontWeight: "bold" }}>
+                      Clear Activity Logs
+                    </Modal.Title>
+                  ) : (
+                    <Modal.Title style={{ fontWeight: "bold" }}>
+                      Remove Account
+                    </Modal.Title>
+                  ),
+                ]
               ),
             ]
           )}
@@ -144,10 +157,18 @@ const DeletePopUpCont = ({ user }) => {
               Are you sure you want to remove your account?
             </Modal.Body>
           ) : (
-            <Modal.Body>
-              Are you sure you want to delete{" "}
-              {item === "resource" ? id : toDelete.fullName}?
-            </Modal.Body>
+            [
+              item === "logs" ? (
+                <Modal.Body>
+                  Are you sure you want to clear Activity Logs?
+                </Modal.Body>
+              ) : (
+                <Modal.Body>
+                  Are you sure you want to delete{" "}
+                  {item === "resource" ? id : toDelete.fullName}?
+                </Modal.Body>
+              ),
+            ]
           )}
           {/* read resource title and author here */}
         </Modal.Body>
@@ -157,7 +178,9 @@ const DeletePopUpCont = ({ user }) => {
             Close
           </Button>
           <Button variant="danger" onClick={handleSubmit}>
-            {item === "account" ? "Remove" : "Delete"}
+            {item === "account"
+              ? "Remove"
+              : [item === "logs" ? "Clear" : "Delete"]}
           </Button>
         </Modal.Footer>
       </Modal>
