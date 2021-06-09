@@ -16,8 +16,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
     useEffect(async() => {
         const booksInfo = await ResourceService.getLatestBooks();
         for(var book of booksInfo.data){
-            book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${
-                book.bookCoverLink.replace("https://drive.google.com/file/d/","").replace("/view","")}`;
+            book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${book.bookCoverLink.replace("https://drive.google.com/uc?id=","").replace("/view", "")}`;
         }
         setacquisitions(booksInfo.data);
         setLoader(false); //hide loader animation 
