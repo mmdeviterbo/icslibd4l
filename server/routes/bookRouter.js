@@ -294,7 +294,6 @@ res String:
 "Entry Updated"
 ********************************************************/
 router.put("/update", async (req, res) => {
-    console.log("req.body")
     const {
         bookId,
         title,
