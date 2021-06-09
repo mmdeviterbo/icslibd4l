@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Select from "react-select";
 
 import "../../styles/manageUserStyle.css";
 
 export default function FilterMenu({ selection, setSelection }) {
+    useEffect(() => {
+        setSelection(-1);
+    }, []);
+
     const classificationList = [
         { value: 1, label: "Admin" },
         { value: 2, label: "Faculty" },
