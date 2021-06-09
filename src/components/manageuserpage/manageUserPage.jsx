@@ -6,10 +6,8 @@ import UserTable from "./userTable";
 // import UserSearch from "./userSearch";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PersonService from "../../services/personService";
-import ManagementHeader from './../managementHeader';
-
+// import ManagementHeader from './../managementHeader';
 import { jwtPrivateKey } from "../../config.json";
-import background from "../../assets/searchBg_4.png";
 import "../../styles/manageUserStyle.css";
 
 export default function ManageUserPage({ user }) {
@@ -34,13 +32,13 @@ export default function ManageUserPage({ user }) {
 
     const handleSearchEnter = (e) => {
         if (e.key === "Enter") {
-            setSelection(-1);
+            // setSelection(-1);
             setSearchField(searchInput);
         }
     };
 
     const handleSearchClick = (e) => {
-        setSelection(-1);
+        // setSelection(-1);
         setSearchField(searchInput);
     };
 
@@ -48,36 +46,31 @@ export default function ManageUserPage({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="manage-user-container">
+                    <h1 id="manageUserId">Manage User</h1>
                     <div className="manage-header-container">
-                        <div className="search-bar-container">
-                            <div className="staff-search-bar-container">
-                                <input
-                                    className="search-bar-temp"
-                                    placeholder={"Search for users search"}
-                                    value={searchInput}
-                                    onKeyDown={handleSearchEnter}
-                                    onChange={(e) =>
-                                        setSearchInput(e.target.value)
-                                    }
-                                />
-                                <div className="input-group-append">
-                                    <button
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        onClick={handleSearchClick}
-                                    >
-                                        <i className="fa fa-search"></i>
-                                    </button>
-                                </div>
+                        <div className="staff-search-bar-container">
+                            <input
+                                className="search-bar-temp"
+                                placeholder={"Search for users search"}
+                                value={searchInput}
+                                onKeyDown={handleSearchEnter}
+                                onChange={(e) =>
+                                    setSearchInput(e.target.value)
+                                }
+                            />
+                            <div className="input-group-append">
+                                <button
+                                    className="btn btn-secondary mybtnUserPage"
+                                    type="button"
+                                    onClick={handleSearchClick}
+                                >
+                                    <i className="fa fa-search"></i>
+                                </button>
                             </div>
                         </div>
-                        <h1>Manage User</h1>
+                        <FilterMenu selection={selection} setSelection={setSelection}/>
                     </div>
 
-                    <FilterMenu
-                        selection={selection}
-                        setSelection={setSelection}
-                    />
                     <div className="usertable-container">
                         <UserTable
                             user={user}

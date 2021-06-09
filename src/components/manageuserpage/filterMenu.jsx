@@ -16,28 +16,14 @@ export default function FilterMenu({ selection, setSelection }) {
     ];
 
     const filterContainer = {
+        width:"100%",
+        position:"relative",
         display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        padding: "1rem 6%",
+        justifyContent: "space-evenly",
         zIndex: "1",
-
-        // margin: "30px 50px 30px 50px",
+        margin:0,
+        padding:0,
     };
-
-    const filterButtonContainer = {
-        width: "100px",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "start",
-    };
-
-    // const clearFilterContainer = {
-    //     marginLeft: "auto",
-    //     display: "flex",
-    //     flexDirection: "column",
-    //     justifyContent: "center",
-    // };
 
     const handleFilterSelect = (e) => {
         setSelection(e.value);
@@ -46,10 +32,9 @@ export default function FilterMenu({ selection, setSelection }) {
     return (
         <div className="filtermenu-container" style={filterContainer}>
             <Select
-                style={filterButtonContainer}
                 className="user-filter"
                 id="user-category"
-                placeholder={"Users Classification"}
+                placeholder={"Classification"}
                 options={classificationList}
                 value={selection !== -1 ? selection.value : null}
                 onChange={handleFilterSelect}
