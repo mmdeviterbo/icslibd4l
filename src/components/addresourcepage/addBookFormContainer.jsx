@@ -5,6 +5,9 @@ import ResourceServices from "../../services/resourceService";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
+// import { toast } from "react-toastify";
+import ToastNotification from "../toastNotification";
+import "react-toastify/dist/ReactToastify.css";
 
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
@@ -34,9 +37,9 @@ const courseList = [
 const AddBookFormContainer = () => {
   // functionalities:
   const [title, setTitle] = useState("");
+  const [isbn, setISBN] = useState("");
   const [datePublished, setDatePublished] = useState();
   const [dateAcquired, setDateAcquired] = useState();
-  const [isbn, setISBN] = useState("");
   // multiple authors should be possible
   const [authorList, setAuthorList] = useState([
     {
@@ -45,15 +48,12 @@ const AddBookFormContainer = () => {
       lname: "",
     },
   ]);
-  const [courses, setCourses] = useState(null); // why null??
+  const [courses, setCourses] = useState(null);
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
   const [bookCoverLink, setBookCoverLink] = useState("");
-  // const [image, setImage] = useState(null);
 
-  const FormData = require("form-data");
-  const formData = new FormData();
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
@@ -62,33 +62,29 @@ const AddBookFormContainer = () => {
     event.preventDefault();
     try {
       const userInput = {
-        bookId: isbn,
         title,
-        datePublished,
-        dateAcquired,
+        ISBN: isbn,
         authors: authorList,
         subjects: courses,
         physicalDesc: description,
         publisher,
         numberOfCopies: numOfCopies,
-        bookCoverLink
+        bookCoverLink,
+        datePublished,
+        dateAcquired,
       };
       console.log(userInput);
-      console.log(courses);
-      // console.log(image);
-      formData.append("body", JSON.stringify(userInput));
-      // formData.append("file", image);
-      await ResourceServices.addBook(formData);
+      await ResourceServices.addBook(userInput);
 
       setSuccess("success");
       setShow(true);
-      event.target.reset();
-      // alert("New book has been successfully added to the library");
-      // window.location = "/add-new-resource";
+      // event.target.reset();
+      // window.location = "/add-new-book";
     } catch (err) {
       if (err.response && err.response.data) {
-        setSuccess("fail");
-        setShow(true);
+        ToastNotification({ content: err.response.data.errorMessage });
+        // setSuccess("fail");
+        // setShow(true);
         // alert(err.response.data.errorMessage); // some reason error message
       }
     }
@@ -104,37 +100,35 @@ const AddBookFormContainer = () => {
     var newDate = new Date(date).toJSON();
     // var date = new Date(date);
     return newDate;
-    // console.log(date);
     // setDateAcquired(date);
   };
 
   return (
     <div className="add-res-form-cont">
-
-      <form className= "main-form" id="addBookForm" onSubmit={handleSubmit} autoComplete="off">
+      <form
+        className="main-form"
+        id="addBookForm"
+        onSubmit={handleSubmit}
+        autoComplete="off"
+      >
         {/* 
         <h2>Book</h2>
         <hr/> */}
 
-        <div className = "form-columns">
-
-          <div className = "form-left-column">
-
+        <div className="form-columns">
+          <div className="form-left-column">
             {/* Title Field */}
             <div className="primaryfields">
-                  <label htmlFor="resTitle">Title: &nbsp; </label>
-                  <input
-                    required
-                    type="text"
-                    id="resTitle"
-                    onChange={(event) => 
-                      {
-                      setTitle(event.target.value);
-                      }
-                    }
-                  />
+              <label htmlFor="resTitle">Title: &nbsp; </label>
+              <input
+                required
+                type="text"
+                id="resTitle"
+                onChange={(event) => {
+                  setTitle(event.target.value);
+                }}
+              />
             </div>
-
             {/* Publisher Field */}
             <div className="primaryfields">
               <label htmlFor="publisher">Publisher: &nbsp; </label>
@@ -147,8 +141,7 @@ const AddBookFormContainer = () => {
                 }}
               />
             </div>
-
-            <div className = "dates-group">
+            <div className="dates-group">
               {/* Date Published */}
               <div className="primaryfields-date">
                 <label htmlFor="datePublished">Date Published: &nbsp; </label>
@@ -171,13 +164,11 @@ const AddBookFormContainer = () => {
                     setDateAcquired(handleDate(event.target.value));
                   }}
                 />
-              </div> 
+              </div>
             </div>
-            
             {/* Author fields */}
             <div className="authors-group">
-              <h4 style={{fontWeight:"normal", }}
-              >Author(s):</h4>
+              <h4 style={{ fontWeight: "normal" }}>Author(s):</h4>
 
               <button
                 id="addAuthor"
@@ -192,7 +183,7 @@ const AddBookFormContainer = () => {
                     },
                   ]);
                 }}
-                >
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -208,10 +199,10 @@ const AddBookFormContainer = () => {
 
               {authorList.map((p, index) => {
                 return (
-                  <div className = "authorfields" key={p.authorid}>
+                  <div className="authorfields" key={p.authorid}>
                     {/* AUTHOR FIRST NAME FIELD */}
-                    
-                    <div className= "authorname-cont">
+
+                    <div className="authorname-cont">
                       <div className="author-name">
                         <label htmlFor="resAuthorFN">First Name:</label>
 
@@ -273,7 +264,6 @@ const AddBookFormContainer = () => {
                     >
                       Delete Author
                     </button>
-                  
                   </div>
                 );
               })}
@@ -283,15 +273,12 @@ const AddBookFormContainer = () => {
                   {JSON.stringify(authorList, null, 2)}
               </div> */}
 
-            {/* closing tag for authors group */} 
+              {/* closing tag for authors group */}
             </div>{" "}
-            
+            {/* left column div close: */}
+          </div>
 
-          {/* left column div close: */}
-          </div> 
-
-          <div className = "form-mid-column">
-
+          <div className="form-mid-column">
             <div className="primaryfields">
               <label htmlFor="bookISBN">ISBN: &nbsp; </label>
               <input
@@ -316,16 +303,13 @@ const AddBookFormContainer = () => {
                 }}
               />
             </div>
-          
-          {/* middle container close */}
+
+            {/* middle container close */}
           </div>
 
-          <div className ="form-right-column">
-
-             <div className="primaryfields">
-              <label htmlFor="availBookCopies">
-                No. of copies available:
-              </label>
+          <div className="form-right-column">
+            <div className="primaryfields">
+              <label htmlFor="availBookCopies">No. of copies available:</label>
               <input
                 type="number"
                 required
@@ -353,12 +337,12 @@ const AddBookFormContainer = () => {
               ></Select>
             </div>
 
-            <div className = "primaryfields">
-              Book cover link: 
+            <div className="primaryfields">
+              Book cover link:
               <input
-                type = "url"
-                placeholder ={"https://www.example.com/"}
-                className= "resourcefiles"
+                type="url"
+                placeholder={"https://www.example.com/"}
+                className="resourcefiles"
                 id="bookcover"
                 onChange={(event) => 
                       {
@@ -372,13 +356,13 @@ const AddBookFormContainer = () => {
               Save
             </button>
 
-          {/* right container close */}
+            {/* right container close */}
           </div>
 
-        {/* columns container close */}
-        </div> 
+          {/* columns container close */}
+        </div>
 
-      {/* main form close: */}
+        {/* main form close: */}
       </form>
 
       <StatusModal
@@ -387,9 +371,8 @@ const AddBookFormContainer = () => {
         show={show}
         setShow={setShow}
         operation={"add"}
-        pathAfter={"/add-new-spt/"}
+        pathAfter={"/add-new-book/"}
       />
-
     </div>
   );
 };

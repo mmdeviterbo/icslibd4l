@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -14,6 +14,7 @@ import Select from "react-select";
 import { jwtPrivateKey } from "./../../config.json";
 
 import "../../styles/manageUserStyle.css";
+// import { isElementAccessExpression } from "typescript";
 // import { MongoServerSelectionError } from "mongodb";
 
 const tableHeader = [
@@ -34,7 +35,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [isEditing, setIsEditing] = useState(false);
     const [newClassification, setNewClassification] = useState(0);
-    const [selectedUser, setSelectedUser] = useState({});
+    // const [selectedUser, setSelectedUser] = useState({});
 
     const location = useLocation();
     const history = useHistory();
@@ -76,6 +77,44 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
         </TableCell>
     ));
 
+    // Get users from database
+    const readUsers = useCallback(async () => {
+        try {
+            await PersonService.readAllUsers().then((response) => {
+                if (selectedFilter !== -1) {
+                    setUserList(
+                        Array.from(response.data).filter(
+                            (userItem) => userItem.userType === selectedFilter
+                        )
+                    );
+                } else {
+                    setUserList(Array.from(response.data));
+                }
+            });
+        } catch (err) {}
+    }, [selectedFilter]);
+
+    // Search user from database
+    const searchUser = useCallback(
+        async (searchInput) => {
+            try {
+                await PersonService.searchUser(searchInput).then((response) => {
+                    if (selectedFilter !== -1) {
+                        setUserList(
+                            Array.from(response.data).filter(
+                                (userItem) =>
+                                    userItem.userType === selectedFilter
+                            )
+                        );
+                    } else {
+                        setUserList(Array.from(response.data));
+                    }
+                });
+            } catch (err) {}
+        },
+        [selectedFilter]
+    );
+
     // executes if the location is changed. (Opening modals)
     useEffect(() => {
         try {
@@ -86,7 +125,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
             history.push("/home");
         }
         readUsers();
-    }, [history]);
+    }, [location, history, readUsers]);
 
     // Set the current page of table to the first page if the previous page becomes empty.
     useEffect(() => {
@@ -95,21 +134,6 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
         }
     }, [userList.length, rowsPerPage, page]);
 
-    // Filters the array if the filter is changed
-    useEffect(() => {
-        if (selectedFilter === -1) {
-            readUsers();
-        } else if (selectedFilter === 1) {
-            readAdmins();
-        } else if (selectedFilter === 2) {
-            readFaculty();
-        } else if (selectedFilter === 3) {
-            readStaff();
-        } else {
-            readStudents();
-        }
-    }, [selectedFilter]);
-
     // Filters the array according to search input
     useEffect(() => {
         if (searchInput) {
@@ -117,60 +141,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
         } else {
             readUsers();
         }
-    }, [searchInput]);
-
-    // Get users from database
-    const readUsers = async () => {
-        try {
-            await PersonService.readAllUsers().then((response) => {
-                setUserList(Array.from(response.data));
-            });
-        } catch (err) {}
-    };
-
-    // Filter admins from database
-    const readAdmins = async () => {
-        try {
-            await PersonService.readAdmins().then((response) => {
-                setUserList(Array.from(response.data));
-            });
-        } catch (err) {}
-    };
-
-    // Filter Faculty from database
-    const readFaculty = async () => {
-        try {
-            await PersonService.readFaculty().then((response) => {
-                setUserList(Array.from(response.data));
-            });
-        } catch (err) {}
-    };
-
-    // Filter Staff from database
-    const readStaff = async () => {
-        try {
-            await PersonService.readStaff().then((response) => {
-                setUserList(Array.from(response.data));
-            });
-        } catch (err) {}
-    };
-
-    // Filter Students from database
-    const readStudents = async () => {
-        try {
-            await PersonService.readStudents().then((response) => {
-                setUserList(Array.from(response.data));
-            });
-        } catch (err) {}
-    };
-
-    const searchUser = async (searchInput) => {
-        try {
-            await PersonService.searchUser(searchInput).then((response) => {
-                setUserList(Array.from(response.data));
-            });
-        } catch (err) {}
-    };
+    }, [searchInput, selectedFilter, readUsers, searchUser]);
 
     // Handler event for page change in user table
     const handlePageChange = (event, newPage) => {
@@ -221,7 +192,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     // The selected user is being edited currently
                     if (isEditing && isEditing === user.isEditable) {
                         setNewClassification(user.userType);
-                        setSelectedUser({});
+                        // setSelectedUser({});
                         setIsEditing(false);
                         return { ...user, isEditable: !user.isEditable };
                         // There is an ongoing edit but the selected user is not the one being edited
@@ -230,7 +201,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                         // No ongoing edits
                     } else {
                         setNewClassification(user.userType);
-                        setSelectedUser(user);
+                        // setSelectedUser(user);
                         setIsEditing(true);
                         return { ...user, isEditable: !user.isEditable };
                     }
@@ -239,11 +210,6 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
             });
         });
     };
-
-    // Handler function for saving the changes is user classification
-    // const handleSave = async (rowIndex) => {
-    //   toggleEdit(rowIndex);
-    // };
 
     // Handler function for discarding the changes in user classification
     const discardChange = (rowIndex) => {
@@ -454,3 +420,42 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
         </>
     );
 }
+
+// Filter admins from database
+// const readAdmins = async () => {
+//     // try {
+//     //     await PersonService.readAdmins().then((response) => {
+//     //         setUserList(Array.from(response.data));
+//     //     });
+//     // } catch (err) {}
+//     setUserList(
+//         userList.filter((userItem) => userItem.userType === selectedFilter)
+//     );
+// };
+
+// // Filter Faculty from database
+// const readFaculty = async () => {
+//     try {
+//         await PersonService.readFaculty().then((response) => {
+//             setUserList(Array.from(response.data));
+//         });
+//     } catch (err) {}
+// };
+
+// // Filter Staff from database
+// const readStaff = async () => {
+//     try {
+//         await PersonService.readStaff().then((response) => {
+//             setUserList(Array.from(response.data));
+//         });
+//     } catch (err) {}
+// };
+
+// // Filter Students from database
+// const readStudents = async () => {
+//     try {
+//         await PersonService.readStudents().then((response) => {
+//             setUserList(Array.from(response.data));
+//         });
+//     } catch (err) {}
+// };

@@ -24,7 +24,6 @@ import DeleteModalContainer from "./components/manageresourcespage/deleteModalCo
 import BrowseResources from "./components/browseresources/browseResources";
 import ConfirmChangeModal from "./components/modal/confirmChangesModal";
 import Search from "./components/searchResult/advancedSearch.jsx";
-// import GetResources from "./components/manageresourcespage/getResources";
 import ManageResourcesPage from "./components/manageresourcespage/manageResourcesPage";
 import SummaryReportPage from "./components/summaryreport/summaryReportPage";
 // import activityLogsContainer from "./components/activitylogs/activityLogsContainer";
@@ -109,6 +108,7 @@ function App() {
                 <Route exact path="/not-found" component={Notfound}></Route>
                 <Route exact path="/unauthorized" component={Unauthorized} />
                 <Redirect exact from="/" to="/home" />
+                <Route exact path="/not-found" component={Notfound}></Route>
                 <Redirect to="/not-found" />
             </Switch>
 

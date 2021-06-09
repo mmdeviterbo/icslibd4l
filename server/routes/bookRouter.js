@@ -81,7 +81,6 @@ book: {
     datePublished,
     dateAcquired,
 }
-
 res object:
 {
     bookId,
@@ -97,7 +96,7 @@ res object:
     dateAcquired,
 }
 ********************************************************/
-router.post("/create", authFaculty, async (req, res) => {
+router.post("/create", async (req, res) => {
     console.log(req.body);
     try {
         const {
@@ -122,7 +121,7 @@ router.post("/create", authFaculty, async (req, res) => {
             !publisher ||
             !numberOfCopies
         ) {
-            return res.status(400).send("Please enter all required fields.");
+            return res.status(400).send({errorMessage:"Please enter all required fields."});
         }
 
         //search if book exists
@@ -176,7 +175,7 @@ router.post("/create", authFaculty, async (req, res) => {
             res.json(savedBook);
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send("Book already exists!");
+            res.status(400).send({errorMessage:"Book already exists!"});
         }
     } catch (err) {
         console.log(err);
@@ -416,14 +415,12 @@ router.delete("/delete/:bookId", authAdmin, async (req, res) => {
         // if book exists, delete its entries from book, book_author, book_subject, and book_cover
         if (existingBook) {
             await bookModel.findOneAndDelete({ bookId: bookIdHolder });
-            await bookAuthorModel.deleteMany({ bookId: bookIdHolder });
-            await bookSubjectModel.deleteMany({ bookId: bookIdHolder });
+            await bookAuthorModel.deleteMany({ bookId: bookIdHolder});
+            await bookSubjectModel.deleteMany({ bookId: bookIdHolder});
 
             res.send("Entry Deleted");
         } else {
-            res.status(400).json({
-                errorMessage: "This book does not exist! Cannot delete.",
-            });
+            res.status(400).json({errorMessage:"This book does not exist! Cannot delete."});
         }
     } catch (err) {
         console.log(err);
