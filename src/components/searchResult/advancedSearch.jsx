@@ -85,6 +85,7 @@ export default function AdvancedSearch({ appRef }) {
     // http request
     async function fetchData() {
         setLoader(true);
+        setPageNumber(0);
         try {
             //  objFilter store filters in an object <field>:<value>
             //  urlRequest string that contains the search query -> example: search?type=title
@@ -272,7 +273,7 @@ const searchMainContainer = {
 
 const topContainer = {
     position: "sticky",
-    top: "10vh",
+    top: "9.2vh",
     width: "96vw",
     justifyContent: "center",
     alignItems: "center",
@@ -308,7 +309,7 @@ const filtersContainer = {
     background: "white",
     position: "sticky",
     overflowY: "overlay",
-    top: "28vh",
+    top: "27.1vh",
     width: "20vw",
     height: "73vh",
 };
@@ -319,7 +320,7 @@ const resultsOuterContainer = {
 
 const resultTop = {
     position: "sticky",
-    top: "28vh",
+    top: "27.1vh",
     padding: "2.5vh 1vw",
     background: "white",
 };
