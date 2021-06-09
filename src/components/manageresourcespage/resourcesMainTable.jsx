@@ -72,48 +72,48 @@ const resHeadCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const {
-    classes,
-    // onSelectAllClick,
-    order,
-    orderBy,
-    // numSelected,
-    // rowCount,
-    onRequestSort,
-  } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
+    const {
+        classes,
+        // onSelectAllClick,
+        order,
+        orderBy,
+        // numSelected,
+        // rowCount,
+        onRequestSort,
+    } = props;
+    const createSortHandler = (property) => (event) => {
+        onRequestSort(event, property);
+    };
 
-  return (
-    <TableHead>
-      <TableRow>
-        {resHeadCells.map((headCell, index) => (
-          <TableCell
-            style={{ backgroundColor: "#FAFAFA" }}
-            className={classes.tablecell}
-            key={index}
-            align={"left"}
-            padding={headCell.disablePadding ? "none" : "default"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
+    return (
+        <TableHead>
+            <TableRow>
+                {resHeadCells.map((headCell, index) => (
+                    <TableCell
+                        style={{ backgroundColor: "#FAFAFA" }}
+                        className={classes.tablecell}
+                        key={index}
+                        align={"left"}
+                        padding={headCell.disablePadding ? "none" : "default"}
+                        sortDirection={orderBy === headCell.id ? order : false}>
+                        <TableSortLabel
+                            active={orderBy === headCell.id}
+                            direction={orderBy === headCell.id ? order : "asc"}
+                            onClick={createSortHandler(headCell.id)}>
+                            {headCell.label}
+                            {orderBy === headCell.id ? (
+                                <span className={classes.visuallyHidden}>
+                                    {order === "desc"
+                                        ? "sorted descending"
+                                        : "sorted ascending"}
+                                </span>
+                            ) : null}
+                        </TableSortLabel>
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    );
 }
 
 EnhancedTableHead.propTypes = {
@@ -180,20 +180,15 @@ const MainResourceTable = () => {
           books.data && books.data.concat(spThesis.data && spThesis.data);
         // arr.push(books.data);
         // arr.push(spThesis.data);
-        console.log(arr);
         setResourceList(arr);
         setSelectedEdit(arr);
         // setSpThesisList(spThesis_arr)
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
     fetchBooks();
   }, []);
 
   const DeleteBtn = ({ id, type }) => {
-    // console.log(id);
-    // console.log(type);
     return (
       <Link
         to={{
@@ -218,9 +213,6 @@ const MainResourceTable = () => {
   };
 
   const EditSPTBtn = (id) => {
-    // console.log("30888 res-main-t-2");
-    // console.log(id);
-
     return (
       <Link
         to={{

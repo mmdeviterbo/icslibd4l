@@ -52,10 +52,11 @@ const AddBookFormContainer = () => {
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
-  const [bookCover, setBookCover] = useState(null);
+  const [bookCoverLink, setBookCoverLink] = useState("");
 
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -68,7 +69,7 @@ const AddBookFormContainer = () => {
         physicalDesc: description,
         publisher,
         numberOfCopies: numOfCopies,
-        bookCoverLink: bookCover,
+        bookCoverLink,
         datePublished,
         dateAcquired,
       };
@@ -343,10 +344,12 @@ const AddBookFormContainer = () => {
                 placeholder={"https://www.example.com/"}
                 className="resourcefiles"
                 id="bookcover"
-                onChange={(event) => {
-                  setBookCover(event.target.value);
-                }}
-              />
+                onChange={(event) => 
+                      {
+                      setBookCoverLink(event.target.value);
+                      }
+                    }
+                />
             </div>
 
             <button type="submit" id="saveResource">

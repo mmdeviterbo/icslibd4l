@@ -184,6 +184,14 @@
     width: 100%;
 }
 
+#sptYear {
+    width:25%
+}
+
+#keywords-field{
+    width: 100%
+}
+
 #abstractText{
     height: 15rem;
     border-radius: 0.3rem;

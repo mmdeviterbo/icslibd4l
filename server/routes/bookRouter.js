@@ -32,6 +32,7 @@ router.post("/get-news", async (req, res) => {
                         let finalTagImg =
                             ".jet-smart-listing__post-thumbnail  > a > img"; // get the news date
                         let lenNewsLinks = $(finalTagLink, html).length; // length of array
+                        let i = 0;
 
                         for (i = 0; i < lenNewsLinks; i++)
                             newsLinks.push(
@@ -292,7 +293,8 @@ book: {
 res String: 
 "Entry Updated"
 ********************************************************/
-router.put("/update", authAdmin, async (req, res) => {
+router.put("/update", async (req, res) => {
+    console.log("req.body")
     const {
         bookId,
         title,

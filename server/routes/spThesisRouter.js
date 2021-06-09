@@ -13,7 +13,7 @@ const bookModel = require("../models/bookModel");
 const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 // unique ID generator
-const uniqid = require('uniqid');
+const uniqid = require("uniqid");
 
 // ---------------------------------------- HTTP REQUESTS
 // create new sp entry
@@ -22,7 +22,7 @@ Request Object:
 req object: Multipart form
 body: {
     REQUIRED:
-        type: "Thesis" or "SP"
+        type: "Thesis" or "Special Problem"
         title: title,
         abstract abstract,
         year: year,
@@ -38,6 +38,7 @@ body: {
         journal,
         poster,
 }
+
 Response Object:
 {
   "advisers": [ {fname, lname}, ... ],
@@ -54,137 +55,131 @@ Response Object:
 ********************************************************/
 // AUTHENTICATION REMOVED FROM THE PARAMETERS
 // authFaculty
-router.post(
-    "/create", async (req, res) => {
-        try {
-            const {
-                // REQUIRED
+router.post("/create", async (req, res) => {
+    try {
+        const {
+            // REQUIRED
+            type,
+            title,
+            abstract,
+            year,
+            advisers, // thesisAdviserModel
+            authors, // thesisAuthorModel
+            keywords, // thesisKeyModel
+
+            // NOT REQUIRED
+            source_code,
+            manuscript,
+            journal,
+            poster, // thesisModel
+        } = req.body;
+
+        // sample verification: incomplete fields
+        if (
+            !type ||
+            !title ||
+            !abstract ||
+            !year ||
+            !advisers ||
+            !authors ||
+            !keywords
+        ) {
+            return res.status(400).json({
+                errorMessage: "Please enter all required fields.",
+            });
+        }
+
+        // search if thesis exists
+        const existingThesis = await thesisModel.findOne({
+            title: title,
+            type: type,
+            year: year,
+        });
+
+        // if does not exist, proceed in creating entry
+        if (!existingThesis) {
+            var unique_ID = " ";
+
+            if (type == "Special Problem") {
+                var unique_ID = uniqid("SP_"); //generate a unique id for the book
+            } else if (type == "Thesis") {
+                var unique_ID = uniqid("Thesis_"); //generate a unique id for the book
+            }
+
+            // save thesisModel
+            const newThesis = new thesisModel({
+                sp_thesis_id: unique_ID,
                 type,
                 title,
                 abstract,
                 year,
-                advisers, // thesisAdviserModel
-                authors, // thesisAuthorModel
-                keywords, // thesisKeyModel
-
-                // NOT REQUIRED
                 source_code,
                 manuscript,
                 journal,
-                poster, // thesisModel
-            } = req.body;
+                poster,
+            });
+            const savedThesis = await newThesis.save();
 
-            // sample verification: incomplete fields
-            if (
-                !type ||
-                !title ||
-                !abstract ||
-                !year ||
-                !advisers ||
-                !authors ||
-                !keywords
-            ) {
-                return res
-                    .status(400)
-                    .json({
-                        errorMessage: "Please enter all required fields.",
-                    });
-            }
+            // save thesisAdviserModel
+            advisers.forEach(async function (entry) {
+                const adviser_fname = entry.fname;
+                const adviser_lname = entry.lname;
+                const adviser_name = adviser_fname.concat(" ", adviser_lname);
 
-            // search if thesis exists
-            const existingThesis = await thesisModel.findOne({ 
-                title: title, 
-                type: type, 
-                year:year,  
+                const newThesisAdv = new thesisAdviserModel({
+                    sp_thesis_id: unique_ID,
+                    adviser_fname,
+                    adviser_lname,
+                    adviser_name,
+                });
+
+                const savedThesisAdv = await newThesisAdv.save();
             });
 
-            // if does not exist, proceed in creating entry
-            if (!existingThesis) { 
-                var unique_ID = " ";
+            // save thesisAuthorModel
+            authors.forEach(async function (entry) {
+                const author_fname = entry.fname;
+                const author_lname = entry.lname;
+                const author_name = author_fname.concat(" ", author_lname);
 
-                if(type == "Special Problem"){
-                    var unique_ID = uniqid('SP_'); //generate a unique id for the book
-                }else if (type == "Thesis"){
-                    var unique_ID = uniqid('Thesis_'); //generate a unique id for the book
-                }
-
-                // save thesisModel
-                const newThesis = new thesisModel({
-                    sp_thesis_id : unique_ID,
-                    type,
-                    title,
-                    abstract,
-                    year,
-                    source_code,
-                    manuscript,
-                    journal,
-                    poster,
+                const newThesisAu = new thesisAuthorModel({
+                    sp_thesis_id: unique_ID,
+                    author_fname,
+                    author_lname,
+                    author_name,
                 });
-                const savedThesis = await newThesis.save();
+                const savedThesisAu = await newThesisAu.save();
+            });
 
-                // save thesisAdviserModel
-                advisers.forEach(async function (entry) {
-                    const adviser_fname = entry.fname;
-                    const adviser_lname = entry.lname;
-                    const adviser_name = adviser_fname.concat(
-                        " ",
-                        adviser_lname
-                    );
+            // save thesisKeyModel
+            keywords.forEach(async function (entry) {
+                const sp_thesis_keyword = entry;
 
-                    const newThesisAdv = new thesisAdviserModel({
-                        sp_thesis_id : unique_ID,
-                        adviser_fname,
-                        adviser_lname,
-                        adviser_name,
-                    });
-
-                    const savedThesisAdv = await newThesisAdv.save();
+                const newThesisKey = new thesisKeyModel({
+                    sp_thesis_id: unique_ID,
+                    sp_thesis_keyword,
                 });
 
-                // save thesisAuthorModel
-                authors.forEach(async function (entry) {
-                    const author_fname = entry.fname;
-                    const author_lname = entry.lname;
-                    const author_name = author_fname.concat(" ", author_lname);
+                const savedThesisKey = await newThesisKey.save();
+            });
 
-                    const newThesisAu = new thesisAuthorModel({
-                        sp_thesis_id : unique_ID,
-                        author_fname,
-                        author_lname,
-                        author_name,
-                    });
-                    const savedThesisAu = await newThesisAu.save();
-                });
-
-                // save thesisKeyModel
-                keywords.forEach(async function (entry) {
-                    const sp_thesis_keyword = entry;
-
-                    const newThesisKey = new thesisKeyModel({
-                        sp_thesis_id : unique_ID,
-                        sp_thesis_keyword,
-                    });
-
-                    const savedThesisKey = await newThesisKey.save();
-                });
-
-                // recheck if correctly sent by sending entry : thesisModel
-                res.json(savedThesis);
-            } else {
-                res.status(400).send({ errorMessage: "Resource already exists!" });
-            }
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ errorMessage: "Cannot create resource." });
+            // recheck if correctly sent by sending entry : thesisModel
+            res.json(savedThesis);
+        } else {
+            res.status(400).send({ errorMessage: "It already exists!" });
         }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ errorMessage: "Cannot create resource." });
     }
-);
+});
 
 // get the manuscript, journal, or source code of a particular sp/thesis
 /**************************************************** 
 Request Query:
     title: 
     type: ["manuscript", "journal", "source code", "poster"]
+
 Response:
     * String (link of the entry) 
 ********************************************************/
@@ -195,21 +190,19 @@ router.get("/download", async (req, res) => {
             if (err) {
                 res.send(err);
             } else {
-                if (req.query.type == "manuscript"){
+                if (req.query.type == "manuscript") {
                     res.send(result.manuscript);
-                }else if (req.query.type == "journal"){
+                } else if (req.query.type == "journal") {
                     res.send(result.journal);
-                }else if(req.query.type == "source code"){
+                } else if (req.query.type == "source code") {
                     res.send(result.source_code);
-                }else if(req.query.type =="poster"){
+                } else if (req.query.type == "poster") {
                     res.send(result.poster);
                 }
-                
             }
         }
     );
 });
-
 
 // browse all entries, default sort: alphabetical by title
 router.post("/browse", async (req, res) => {
@@ -266,7 +259,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_advisers",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "adviser",
+                        as: "advisers",
                     },
                 },
                 {
@@ -274,7 +267,7 @@ router.post("/browse", async (req, res) => {
                         from: "sp_thesis_authors",
                         localField: "sp_thesis_id",
                         foreignField: "sp_thesis_id",
-                        as: "author",
+                        as: "authors",
                     },
                 },
                 {
@@ -298,7 +291,54 @@ router.post("/browse", async (req, res) => {
     }
 });
 
-// search data
+// search and filter resources
+/**************************************************** 
+http://localhost:3001/thesis/search
+Request Object:
+query: {
+    type (any/book/sp/thesis),
+    search,
+    year,
+    publisher,
+    author,
+    adviser,
+    subject,
+    keyword (string array)
+}
+Response Object: Array of book/sp/thesis
+    (sp/thesis sorted by title + books sorted by title)
+[
+    {
+        advisers: [],
+        authors: [],
+        keywords: [],
+        sp_thesis_id,
+        type,
+        title,
+        abstract,
+        year,
+        source_code,
+        manuscript,
+        journal,
+        poster
+    },
+    ...
+    {
+        author: [],
+        subject: [],
+        bookId,
+        ISBN,
+        title,
+        physicalDesc,
+        publisher,
+        numberOfCopies,
+        bookCoverLink,
+        datePublished,
+        dateAcquired
+    },
+    ...
+]
+********************************************************/
 router.get("/search", async (req, res) => {
     var idArr_book = []; // array for BookIDs
     var idArr_thesis = []; // array for ThesisIDs
@@ -309,41 +349,34 @@ router.get("/search", async (req, res) => {
 
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
-        let final_arr = total;
-
+        // get unique entries
+        let final_arr = [...new Set(total)];
+        
         // separate books and spthesis
-        let book_arr = final_arr.filter(item => "bookId" in item);
-        let spthesis_arr = final_arr.filter(item => "sp_thesis_id" in item);
+        let book_arr = final_arr.filter((item) => "bookId" in item);
+        let spthesis_arr = final_arr.filter((item) => "sp_thesis_id" in item);
 
         // get unique entries
         function getUniqueListBy(arr, key) {
-            return [...new Map(arr.map(item => [item[key], item])).values()]
+            return [...new Map(arr.map((item) => [item[key], item])).values()];
         }
-        book_arr = getUniqueListBy(book_arr, 'bookId');
-        spthesis_arr = getUniqueListBy(spthesis_arr, 'sp_thesis_id');
+        book_arr = getUniqueListBy(book_arr, "bookId");
+        spthesis_arr = getUniqueListBy(spthesis_arr, "sp_thesis_id");
 
         // sort by title
-        function compareByTitle( a, b ) {
+        function compareByTitle(a, b) {
             let titleA = a.title.toLowerCase();
             let titleB = b.title.toLowerCase();
-            if (titleA < titleB){
+            if (titleA < titleB) {
                 return -1;
             }
-            if (titleA > titleB){
+            if (titleA > titleB) {
                 return 1;
             }
             return 0;
         }
         book_arr.sort(compareByTitle);
         spthesis_arr.sort(compareByTitle);
-
-        // Filter by title (case insensitive, checks for substring match)
-        if ("title" in req.query) {
-            let titleFilter = req.query.title.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                return item.title.toLowerCase().includes(titleFilter);
-            });
-        }
 
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
@@ -360,9 +393,7 @@ router.get("/search", async (req, res) => {
         if ("publisher" in req.query) {
             let publisherFitler = req.query.publisher.toLowerCase();
             book_arr = book_arr.filter((item) => {
-                return item.publisher
-                    .toLowerCase()
-                    .includes(publisherFitler);
+                return item.publisher.toLowerCase().includes(publisherFitler);
             });
         }
 
@@ -386,6 +417,7 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
+        // format of req.query.adviser = "Lastname, Firstname"
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
             let fnameFilter, lnameFilter;
@@ -405,16 +437,13 @@ router.get("/search", async (req, res) => {
             let subjectFilter = req.query.subject.toLowerCase();
             book_arr = book_arr.filter((item) => {
                 return item.subject.some((subj) => {
-                    return subj.subject
-                        .toLowerCase()
-                        .includes(subjectFilter);
+                    return subj.subject.toLowerCase().includes(subjectFilter);
                 });
             });
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // req.query.keyword: array of keyword strings (use double quotes in request)
-        // sample: keyword=["keyw1","keyw2","keyw3"]
+        // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
         if ("keyword" in req.query) {
             try {
                 let keywordArrayFilter = req.query.keyword;
@@ -428,12 +457,12 @@ router.get("/search", async (req, res) => {
                                 .toLowerCase()
                                 .includes(keyFilter);
                         });
-                    });
+                    })
                 });
-            }catch(error){
-                if(error instanceof SyntaxError){
+            } catch (error) {
+                if (error instanceof SyntaxError) {
                     console.log("SyntaxError: Invalid req.query.keyword");
-                }else{
+                } else {
                     console.log(error);
                 }
                 res.status(400).send(error);
@@ -442,7 +471,7 @@ router.get("/search", async (req, res) => {
 
         // Send filtered search results
         if (!res.headersSent) {
-            res.send(spthesis_arr.concat(book_arr));  //concat arrays
+            res.send(spthesis_arr.concat(book_arr)); //concat arrays
         }
     }
     /* References for search filter:
@@ -754,7 +783,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1096,7 +1125,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_advisers",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "adviser",
+                                    as: "advisers",
                                 },
                             },
                             {
@@ -1105,7 +1134,7 @@ router.get("/search", async (req, res) => {
                                     from: "sp_thesis_authors",
                                     localField: "sp_thesis_id",
                                     foreignField: "sp_thesis_id",
-                                    as: "author",
+                                    as: "authors",
                                 },
                             },
                             {
@@ -1332,143 +1361,12 @@ router.get("/search", async (req, res) => {
         );
     }
 
-    // ---------------------------------------- SUB FUNCTIONS
-    if (req.query.type == "any") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
-        // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
-        // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
-        spMain(1);
-    } else if (req.query.type == "book") {
-        // bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
-        bookMain(0);
-    } else if (req.query.type == "sp") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
-        spMain(0);
-    } else if (req.query.type == "thesis") {
-        // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
-        thesisMain(0);
-    }
-});
-
-// search data by id
-/**************************************************** 
-Request Query:
-    id :
-    type
-Response:
-    * 1 object
-********************************************************/
-// REFERENCE:
-// https://stackoverflow.com/questions/37582331/how-to-return-only-the-first-occurrence-of-an-id-with-mongoose
-
-router.get("/search-id", async (req, res) => {
-
-    // ---------------------------------------- SUB FUNCTIONS
- 
-    function spMain() {
-        thesisModel.aggregate(
-            [
-                { 
-                    $match: {
-                        sp_thesis_id : req.query.id,
-                        type : "Special Problem", 
-                    }
-                },
-                {
-                    // populate advisers field
-                    $lookup: {
-                        from: "sp_thesis_advisers",
-                        localField: "sp_thesis_id",
-                        foreignField: "sp_thesis_id",
-                        as: "advisers",
-                    },
-                },
-                {
-                    // populate authors field
-                    $lookup: {
-                        from: "sp_thesis_authors",
-                        localField: "sp_thesis_id",
-                        foreignField: "sp_thesis_id",
-                        as: "authors",
-                    },
-                },
-                {
-                    // populate keywords field
-                    $lookup: {
-                        from: "sp_thesis_keywords",
-                        localField: "sp_thesis_id",
-                        foreignField: "sp_thesis_id",
-                        as: "keywords",
-                    },
-                },
-                { $limit:1 }
-            ],
-            (err, result) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.send(result);
-                }
-            }
-        );
-    }
-
-    function thesisMain() {
-        thesisModel.aggregate(
-            [
-                { 
-                    $match: {
-                        sp_thesis_id : req.query.id,
-                        type : "Thesis", 
-                    }
-                },
-                {
-                    // populate advisers field
-                    $lookup: {
-                        from: "sp_thesis_advisers",
-                        localField: "sp_thesis_id",
-                        foreignField: "sp_thesis_id",
-                        as: "advisers",
-                    },
-                },
-                {
-                    // populate authors field
-                    $lookup: {
-                        from: "sp_thesis_authors",
-                        localField: "sp_thesis_id",
-                        foreignField: "sp_thesis_id",
-                        as: "authors",
-                    },
-                },
-                {
-                    // populate keywords field
-                    $lookup: {
-                        from: "sp_thesis_keywords",
-                        localField: "sp_thesis_id",
-                        foreignField: "sp_thesis_id",
-                        as: "keywords",
-                    },
-                },
-                { $limit:1 }
-            ],
-            (err, result) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.send(result);
-                }
-            }
-        );
-    }
-
-    function bookMain() {
-        // get book matches on bookModel based from req.query.id
+    // ------- SEARCH WITH EMPTY REQ.QUERY.SEARCH
+    function noBook(mode) {
         bookModel.aggregate(
             [
-                {$match: { bookId : req.query.id }},
                 {
                     $lookup: {
-                        // populate authors field
                         from: "book_authors",
                         localField: "bookId",
                         foreignField: "bookId",
@@ -1476,7 +1374,6 @@ router.get("/search-id", async (req, res) => {
                     },
                 },
                 {
-                    // populate subject field
                     $lookup: {
                         from: "book_subjects",
                         localField: "bookId",
@@ -1484,27 +1381,154 @@ router.get("/search-id", async (req, res) => {
                         as: "subject",
                     },
                 },
-                { $limit:1 }
             ],
             (err, result) => {
                 if (err) {
                     res.send(err);
                 } else {
-                    res.send(result);
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // mode 0 is browse by book, else it is browse by all 3 types
+                    if (mode == 0) {
+                        filterEntries();
+                    } else {
+                        noSP(mode);
+                    }
                 }
             }
         );
     }
-   
-    // ---------------------------------------- MAIN
+    function noSP(mode) {
+        thesisModel.aggregate(
+            [
+                { $match: { type: "SP" } },
+                {
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
 
-    if (req.query.type == "Special Problem"){
-        spMain();
-    }else if (req.query.type == "Book"){
-        bookMain();
-    }else if (req.query.type =="Thesis"){
-        thesisMain();
-    }   
+                    // mode 0 is browse by SP, else it is browse by all 3 types
+                    if (mode == 0) {
+                        filterEntries();
+                    } else {
+                        noThesis();
+                    }
+                }
+            }
+        );
+    }
+    function noThesis() {
+        thesisModel.aggregate(
+            [
+                { $match: { type: "Thesis" } },
+                {
+                    $lookup: {
+                        from: "sp_thesis_advisers",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "advisers",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_authors",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "authors",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "sp_thesis_keywords",
+                        localField: "sp_thesis_id",
+                        foreignField: "sp_thesis_id",
+                        as: "keywords",
+                    },
+                },
+            ],
+            (err, result) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    // iterate each element and push to total array
+                    result.forEach((item) => {
+                        total.push(item);
+                    });
+
+                    // regardless if browse by Thesis or all, it is the last part.
+                    // hence continue to filterEntries()
+                    filterEntries();
+                }
+            }
+        );
+    }
+
+    // ---------------------------------------- MAIN
+    if (!req.query.search) {
+        // if req.query.search is empty, it will return all values within a type
+        if (req.query.type == "any") {
+            // noBook() -> noSP() -> noThesis() -> filterEntries()
+            noBook(1);
+        } else if (req.query.type == "book") {
+            // noBook() -> filterEntries()
+            noBook(0);
+        } else if (req.query.type == "sp") {
+            // noSP() -> filterEntries()
+            noSP(0);
+        } else if (req.query.type == "thesis") {
+            // noThesis() -> filterEntries()
+            noThesis();
+        }
+    } else {
+        // else, continue with search
+        if (req.query.type == "any") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
+            // ...spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> ...
+            // ...bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
+            spMain(1);
+        } else if (req.query.type == "book") {
+            // bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
+            bookMain(0);
+        } else if (req.query.type == "sp") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
+            spMain(0);
+        } else if (req.query.type == "thesis") {
+            // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
+            thesisMain(0);
+        }
+    }
 });
 
 // search data by id
@@ -1519,19 +1543,16 @@ Response:
 // https://stackoverflow.com/questions/37582331/how-to-return-only-the-first-occurrence-of-an-id-with-mongoose
 
 router.get("/search-id", async (req, res) => {
-
     // ---------------------------------------- SUB FUNCTIONS
-    console.log(req.query)
-    // console.log(req.params.type)
 
     function spMain() {
         thesisModel.aggregate(
             [
-                { 
+                {
                     $match: {
-                        sp_thesis_id : req.query.id,
-                        type : "Special Problem", 
-                    }
+                        sp_thesis_id: req.query.id,
+                        type: "Special Problem",
+                    },
                 },
                 {
                     // populate advisers field
@@ -1560,7 +1581,7 @@ router.get("/search-id", async (req, res) => {
                         as: "keywords",
                     },
                 },
-                { $limit:1 }
+                { $limit: 1 },
             ],
             (err, result) => {
                 if (err) {
@@ -1575,11 +1596,11 @@ router.get("/search-id", async (req, res) => {
     function thesisMain() {
         thesisModel.aggregate(
             [
-                { 
+                {
                     $match: {
-                        sp_thesis_id : req.query.id,
-                        type : "Thesis", 
-                    }
+                        sp_thesis_id: req.query.id,
+                        type: "Thesis",
+                    },
                 },
                 {
                     // populate advisers field
@@ -1608,7 +1629,7 @@ router.get("/search-id", async (req, res) => {
                         as: "keywords",
                     },
                 },
-                { $limit:1 }
+                { $limit: 1 },
             ],
             (err, result) => {
                 if (err) {
@@ -1624,7 +1645,7 @@ router.get("/search-id", async (req, res) => {
         // get book matches on bookModel based from req.query.id
         bookModel.aggregate(
             [
-                {$match: { bookId : req.query.id }},
+                { $match: { bookId: req.query.id } },
                 {
                     $lookup: {
                         // populate authors field
@@ -1643,30 +1664,28 @@ router.get("/search-id", async (req, res) => {
                         as: "subject",
                     },
                 },
-                { $limit:1 }
+                { $limit: 1 },
             ],
             (err, result) => {
                 if (err) {
                     res.send(err);
                 } else {
-                    console.log(result)
                     res.send(result);
                 }
             }
         );
     }
-   
+
     // ---------------------------------------- MAIN
 
-    if (req.query.type == "Special Problem"){
+    if (req.query.type == "Special Problem") {
         spMain();
-    }else if (req.query.type == "Book"){
+    } else if (req.query.type == "Book") {
         bookMain();
-    }else if (req.query.type =="Thesis"){
+    } else if (req.query.type == "Thesis") {
         thesisMain();
-    }   
+    }
 });
-
 
 // RESOURCES:
 // https://stackoverflow.com/questions/40931821/how-to-combine-two-collection-based-on-idtransectionid-using-node-js
@@ -1677,12 +1696,82 @@ router.get("/search-id", async (req, res) => {
 // https://stackoverflow.com/questions/46122557/how-can-i-make-a-assign-mongoose-result-in-global-variable-in-node-js
 // https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
 
+// get spt entry based on parameter
+/********************************************************
+Request Object:
+req object: address parameter
+{
+    sp_thesis_id
+}
+Response String:
+Array containing SP / Thesis object, Authors, Advisers, Keywords
+[
+    {
+        sp_thesis_id: sp_thesis_id,
+        type: type,
+        title: title,
+        abstract: abstract,
+        year: year,
+        source_code: source_code,
+        manuscript: manuscript,
+        poster: poster,
+        journal: journal,
+    },
+    [
+        NOTE: can be multiple
+        {
+            sp_thesis_id: sp_thesis_id,
+            author_fname: author_fname,
+            author_lname: author_lname,
+            author_name: author_name
+        } 
+    ],
+    [
+        NOTE: can be multiple
+        {
+            sp_thesis_id: sp_thesis_id,
+            adviser_fname: adviser_fname,
+            adviser_lname: adviser_lname,
+            adviser_name: adviser_name
+        } 
+    ],
+    [
+        NOTE: can be multiple
+        {
+            sp_thesis_id: sp_thesis_id,
+            sp_thesis_keyword: sp_thesis_keyword
+        } 
+    ]
+]
+********************************************************/
+router.get("/search-spthesis/:sp_thesis_id", async (req, res) => {
+    var returnObject = [];
+    const sp_thesis_id = req.params.sp_thesis_id;
+
+    try {
+        const SPTEntry = await thesisModel.findOne({ sp_thesis_id });
+        const SPTAuthors = await thesisAuthorModel.find({ sp_thesis_id });
+        const SPTAdvisers = await thesisAdviserModel.find({ sp_thesis_id });
+        const SPTKeywords = await thesisKeyModel.find({ sp_thesis_id });
+        if (!SPTEntry) {
+            return res.status(404).json({ errorMessage: "Entry not found." });
+        }
+        returnObject.push(SPTEntry);
+        returnObject.push(SPTAuthors);
+        returnObject.push(SPTAdvisers);
+        returnObject.push(SPTKeywords);
+        res.send(returnObject);
+    } catch {
+        return res.status(404).json({ errorMessage: "Not found." });
+    }
+});
+
 // update thesis data
 // AUTHENTICATION REMOVED
 
 /**************************************************** 
 Request Object:
-req object: Multipart Form
+req object: JSON Object
 body: 
 {
     old_sp_thesis_id: old_sp_thesis_id,
@@ -1691,127 +1780,142 @@ body:
     title: title,
     abstract: abstract,
     year: year,
+    source_code: source_code,
+    manuscript: manuscript,
+    poster: poster,
+    journal: journal,
     authors : [ {fname, lname}, ... ],
     advisers: [ {fname, lname}, ... ],
     keywords : ["keywords1",...]
 }
-file: pdf
-file: jpeg
-file: pdf
 
 Response String:
 "Entry Updated"
 ********************************************************/
-router.put(
-    "/update",
-    authAdmin,
-    async (req, res) => {
-        const {
-            old_sp_thesis_id,
-            sp_thesis_id,
-            type,
-            title,
-            abstract,
-            year,
-            authors,
-            advisers,
-            keywords,
-        } = JSON.parse(req.body.body);
-        try {
-            // looks for the sp/thesis based on the json object passed, then updates it
-            await thesisModel.findOne(
-                { sp_thesis_id: old_sp_thesis_id },
-                (err, updatedThesisSp) => {
-                    if (
-                        !sp_thesis_id ||
-                        !type ||
-                        !title ||
-                        !abstract ||
-                        !year ||
-                        !advisers ||
-                        !authors ||
-                        !keywords
-                    ) {
-                        return res.status(400).json({
-                            errorMessage: "Please enter all required fields.",
-                        });
-                    }
-                    console.log("====START UPDATE HERE=====");
-                    console.log(req.body);
-                    // changing values
-                    updatedThesisSp.sp_thesis_id = old_sp_thesis_id;
-                    updatedThesisSp.type = type;
-                    updatedThesisSp.title = title;
-                    updatedThesisSp.abstract = abstract;
-                    updatedThesisSp.year = year;
-
-                    console.log(updatedThesisSp);
-                    // updates
-                    updatedThesisSp.save();
+router.put("/update", async (req, res) => {
+    console.log(req.body)
+    const {
+        old_sp_thesis_id,
+        sp_thesis_id,
+        type,
+        title,
+        abstract,
+        year,
+        source_code,
+        manuscript,
+        poster,
+        journal,
+        authors,
+        advisers,
+        keywords,
+    } = req.body;
+    try {
+        // looks for the sp/thesis based on the json object passed, then updates it
+        await thesisModel.findOne(
+            { sp_thesis_id: old_sp_thesis_id },
+            (err, updatedThesisSp) => {
+                if (
+                    !sp_thesis_id ||
+                    !type ||
+                    !title ||
+                    !abstract ||
+                    !year ||
+                    !source_code ||
+                    !manuscript ||
+                    !poster ||
+                    !journal ||
+                    !advisers ||
+                    !authors ||
+                    !keywords
+                ) {
+                    return res.status(400).json({
+                        errorMessage: "Please enter all required fields.",
+                    });
                 }
-            );
+                console.log("====START UPDATE HERE=====");
+                console.log(req.body);
+                // changing values
+                updatedThesisSp.sp_thesis_id = old_sp_thesis_id;
+                updatedThesisSp.type = type;
+                updatedThesisSp.title = title;
+                updatedThesisSp.abstract = abstract;
+                updatedThesisSp.year = year;
+                updatedThesisSp.source_code = source_code;
+                updatedThesisSp.manuscript = manuscript;
+                updatedThesisSp.poster = poster;
+                updatedThesisSp.journal = journal;
 
-            // deletes author entries with corresponding id, then adds new values
-            await thesisAuthorModel.deleteMany({
-                sp_thesis_id: old_sp_thesis_id,
+                console.log(updatedThesisSp);
+                // updates
+                updatedThesisSp.save();
+            }
+        );
+
+        // deletes author entries with corresponding id, then adds new values
+        await thesisAuthorModel.deleteMany({
+            sp_thesis_id: old_sp_thesis_id,
+        });
+        
+        // console.log("!!!! TINGIN KA DITO !!!!")
+        console.log(authors)
+
+        authors.forEach(async function (updatedEntry) {
+            const author_fname = updatedEntry.fname;
+            const author_lname = updatedEntry.lname;
+            const author_name = author_fname.concat(" ", author_lname);
+
+            // await console.log("!!!!! GOT HERE !!!!!")
+            await console.log(author_fname);
+            await console.log(author_lname);
+
+            const newAuthor = new thesisAuthorModel({
+                sp_thesis_id,
+                author_fname,
+                author_lname,
+                author_name,
             });
-            authors.forEach(async function (updatedEntry) {
-                const author_fname = updatedEntry.fname;
-                const author_lname = updatedEntry.lname;
-                const author_name = author_fname.concat(" ", author_lname);
+            await newAuthor.save();
+        });
 
-                console.log(author_fname);
-                console.log(author_lname);
+        // deletes adviser entries with corresponding id, then adds new values
+        await thesisAdviserModel.deleteMany({
+            sp_thesis_id: old_sp_thesis_id,
+        });
+        advisers.forEach(async function (updatedEntry) {
+            const adviser_fname = updatedEntry.fname;
+            const adviser_lname = updatedEntry.lname;
+            const adviser_name = adviser_fname.concat(" ", adviser_lname);
 
-                const newAuthor = new thesisAuthorModel({
-                    sp_thesis_id,
-                    author_fname,
-                    author_lname,
-                    author_name,
-                });
-                await newAuthor.save();
+            console.log(adviser_fname);
+            console.log(adviser_lname);
+
+            const newAdviser = new thesisAdviserModel({
+                sp_thesis_id,
+                adviser_fname,
+                adviser_lname,
+                adviser_name,
             });
+            await newAdviser.save();
+        });
 
-            // deletes adviser entries with corresponding id, then adds new values
-            await thesisAdviserModel.deleteMany({
-                sp_thesis_id: old_sp_thesis_id,
+        // deletes keyword entries with corresponding id, then adds new values
+        await thesisKeyModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
+        keywords.forEach(async function (updatedEntry) {
+            const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
+
+            console.log(sp_thesis_keyword);
+            const newKey = new thesisKeyModel({
+                sp_thesis_id,
+                sp_thesis_keyword,
             });
-            advisers.forEach(async function (updatedEntry) {
-                const adviser_fname = updatedEntry.fname;
-                const adviser_lname = updatedEntry.lname;
-                const adviser_name = adviser_fname.concat(" ", adviser_lname);
+            await newKey.save();
+        });
 
-                console.log(adviser_fname);
-                console.log(adviser_lname);
-
-                const newAdviser = new thesisAdviserModel({
-                    sp_thesis_id,
-                    adviser_fname,
-                    adviser_lname,
-                    adviser_name,
-                });
-                await newAdviser.save();
-            });
-
-            // deletes keyword entries with corresponding id, then adds new values
-            await thesisKeyModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
-            keywords.forEach(async function (updatedEntry) {
-                const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
-
-                console.log(sp_thesis_keyword);
-                const newKey = new thesisKeyModel({
-                    sp_thesis_id,
-                    sp_thesis_keyword,
-                });
-                await newKey.save();
-            });
-
-            res.send("Entry Updated");
-        } catch {
-            res.send(500).json({ errorMessage: "Cannot Update." });
-        }
+        return res.send("Entry Updated");
+    } catch {
+        return res.send(500).json({ errorMessage: "Cannot Update." });
     }
-);
+});
 
 // delete entire sp/thesis entry
 /**************************************************** 
@@ -1831,10 +1935,10 @@ router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
         return res.status(404).json({ errorMessage: "Not found." });
     }
 
-    const SPTFile = await thesisModel.findOne({
+    const SPTEntry = await thesisModel.findOne({
         sp_thesis_id: sp_thesis_id_holder,
     });
-    if (!SPTFile) {
+    if (!SPTEntry) {
         return res
             .status(404)
             .json({ errorMessage: "Entry to be deleted not found." });
@@ -1854,57 +1958,8 @@ router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
         await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
         res.send("Entry Deleted");
     } catch {
-        res.send(404).json({ errorMessage: "Cannot Delete." });
+        res.status(404).json({ errorMessage: "Cannot Delete." });
     }
-
-    // deletes associated files
-    gfs.files.findOne(
-        { metadata: [sp_thesis_id_holder, "journal"] },
-        (err, updatedSPT) => {
-            if (updatedSPT) {
-                // .chunks
-                mongoose.connection.db
-                    .collection("sp_files.chunks")
-                    .deleteMany({ files_id: updatedSPT._id });
-                // .files
-                gfs.files.deleteOne({
-                    metadata: [sp_thesis_id_holder, "journal"],
-                });
-            }
-        }
-    );
-
-    gfs.files.findOne(
-        { metadata: [sp_thesis_id_holder, "poster"] },
-        (err, updatedSPT) => {
-            if (updatedSPT) {
-                // .chunks
-                mongoose.connection.db
-                    .collection("sp_files.chunks")
-                    .deleteMany({ files_id: updatedSPT._id });
-                // .files
-                gfs.files.deleteOne({
-                    metadata: [sp_thesis_id_holder, "poster"],
-                });
-            }
-        }
-    );
-
-    gfs.files.findOne(
-        { metadata: [sp_thesis_id_holder, "manuscript"] },
-        (err, updatedSPT) => {
-            if (updatedSPT) {
-                // .chunks
-                mongoose.connection.db
-                    .collection("sp_files.chunks")
-                    .deleteMany({ files_id: updatedSPT._id });
-                // .files
-                gfs.files.deleteOne({
-                    metadata: [sp_thesis_id_holder, "manuscript"],
-                });
-            }
-        }
-    );
 });
 
 module.exports = router;

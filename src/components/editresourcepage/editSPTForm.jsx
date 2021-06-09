@@ -54,11 +54,11 @@ export default function EditSPTFormContainer(props) {
     const [abstract, setAbstract] = useState("");
     const [keywords, setKeyword] = useState();
     // multiple authors should be possible
-    const [author, setAuthor] = useState({
+    const [authors, setAuthor] = useState({
         fname: "",
         lname: "",
     });
-    const [adviser, setAdviser] = useState({
+    const [advisers, setAdviser] = useState({
         fname: "",
         lname: "",
     });
@@ -74,7 +74,7 @@ export default function EditSPTFormContainer(props) {
             setIdSource(props.location?.state.id);
             setSpThInfoArr(props.location?.state.sourceInfo);  //all objects from table
         } catch (err) {
-            // window.location = "/not-found";
+            window.location = "/not-found";
         }
     }, []);
 
@@ -95,8 +95,8 @@ export default function EditSPTFormContainer(props) {
                         poster,
                         source_code,
                         abstract,
-                        author,
-                        adviser,
+                        authors,
+                        advisers,
                         keywords,
                     } = sourceItem;
                     setType(type);
@@ -110,14 +110,14 @@ export default function EditSPTFormContainer(props) {
                     setSourceCode(source_code);
                     setAbstract(abstract);
 
-                    // setAdviser({
-                    //     fname: adviser[0]?.adviser_fname,
-                    //     lname: adviser[0]?.adviser_lname,
-                    // });
-                    // setAuthor({
-                    //     fname: author[0]?.author_fname,
-                    //     lname: author[0]?.author_lname,
-                    // });
+                    setAdviser({
+                        fname: advisers[0]?.adviser_fname,
+                        lname: advisers[0]?.adviser_lname,
+                    });
+                    setAuthor({
+                        fname: authors[0]?.author_fname,
+                        lname: authors[0]?.author_lname,
+                    });
 
                     // console.log("fsdfsdfd");
                     console.log(sourceItem);
@@ -135,23 +135,6 @@ export default function EditSPTFormContainer(props) {
         }
     }, [idSource, resourceData]);
 
-    useEffect(() => {
-        function updateList() {
-            if (adviser.fname && adviser.lname) {
-                if (adviserList.indexOf(adviser) !== -1) {
-                    // console.log("here2");
-                    setAdviserList([...adviserList, adviser]);
-                }
-            } else if (author.fname && author.lname) {
-                if (authorList.indexOf(author) !== -1) {
-                    console.log("here1");
-                    setAuthorList([...authorList, author]);
-                }
-            }
-        }
-        updateList();
-    }, [author, adviser]);
-
     // const addAuthor = (e) => {
     //     const { name, value } = e.target;
     //     setAuthor({ ...author, [name]: value });
@@ -161,6 +144,8 @@ export default function EditSPTFormContainer(props) {
     //     const { name, value } = e.target;
     //     setAdviser({ ...adviser, [name]: value });
     // };
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -176,12 +161,11 @@ export default function EditSPTFormContainer(props) {
                 manuscript,
                 journal,
                 poster,
-                // advisers: adviserList,
-                // authors: authorList,
-                advisers: [adviser],
-                authors: [author],
+                authors:authorList,
+                advisers:adviserList,
                 keywords,
             };
+            console.log(userInput)
             await ResourceServices.editSpThesis(userInput);
             alert(`${id} has been successfully updated.`);
             window.location = "/manage-resources";
@@ -192,15 +176,43 @@ export default function EditSPTFormContainer(props) {
         }
     };
 
+    // const handleAdviserChange = (adviser) => {
+    //     const vals = [...advisers].map((opt) => opt.value);
+    //     setAdviser(vals);
+    // }
+
+    const handleAdviserChange = (adviserList) => {
+        const adviser = [...adviserList].map((obj) => obj.value);
+        // setCourses(values);
+        setAdviserList(adviser);
+  };
+
     // get input from type selection
-    const handleChange = (e) => {
-        setType(e.value);
-    };
+    // const handleChange = (e) => {
+    //     setType(e.value);
+    // };
 
     // creates an array of keywords from theh user input
     const handleChips = (chip) => {
         setKeyword([...keywords, chip[chip.length - 1]]);
     };
+
+    const renderAuthorFields  = () =>   {
+        setAuthorList((currentAuthors) => [
+            ...currentAuthors,
+            {
+            // author needs to generate ID para di madelete lahat ng fields in one button click
+            authorid: nanoid(5),
+            fname: "",
+            lname: "",
+            },
+        ]);
+    }
+
+
+
+    // console.log(authors)
+    // console.log(authors.fname)
 
     return (
         <div className="add-res-form-cont">
@@ -222,7 +234,7 @@ export default function EditSPTFormContainer(props) {
                                 required
                                 onChange={(event) => {
                                 setTitle(event.target.value);
-                            }}
+                                }}
                             />
                         </div>
 
@@ -233,6 +245,7 @@ export default function EditSPTFormContainer(props) {
                                 type="number"
                                 id="sptYear"
                                 required
+                                key={`${Math.floor((Math.random() * 1000))}-min`} 
                                 min={1908}
                                 max={9999}
                                 defaultValue={year}
@@ -253,17 +266,7 @@ export default function EditSPTFormContainer(props) {
                             {/* button adds fields for author */}
                             <button
                                 id="addAuthor"
-                                onClick={() => {
-                                setAuthorList((currentAuthors) => [
-                                    ...currentAuthors,
-                                    {
-                                    // author needs to generate ID para di madelete lahat ng fields in one button click
-                                    authorid: nanoid(5),
-                                    fname: "",
-                                    lname: "",
-                                    },
-                                ]);
-                                }}
+                                onClick={renderAuthorFields}
                                 >
                                 <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -295,6 +298,7 @@ export default function EditSPTFormContainer(props) {
                                                     // name="fname"
                                                     required
                                                     value={p.fname}
+                                                    defaultValue={authors.fname}
                                                     onChange={(e) => {
                                                     const fname = e.target.value;
                                                     setAuthorList((currentAuthors) =>
@@ -317,6 +321,7 @@ export default function EditSPTFormContainer(props) {
                                                     id="resAuthorLN"
                                                     required
                                                     // name="lname"
+                                                    defaultValue={authors.lname}
                                                     value={p.lname}
                                                     onChange={(e) => {
                                                     const lname = e.target.value;
@@ -385,8 +390,9 @@ export default function EditSPTFormContainer(props) {
                         <Select
                             id="advsel"
                             options={adviserchoices}
+                            defaultValue = {advisers}
                             // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
-                            // onChange={handleAdviserChange}
+                            onChange={handleAdviserChange}
                             isMulti
                         ></Select>
                         </div>
@@ -413,14 +419,13 @@ export default function EditSPTFormContainer(props) {
                                 type = "url"
                                 className="resourcefiles"
                                 id="spt-sourcecode"
+                                defaultValue={source_code}
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                                onChange={(event) => 
+                                    {
+                                    setSourceCode(event.target.value);
+                                    }
+                                }
                             />
                         </div>
 
@@ -431,13 +436,13 @@ export default function EditSPTFormContainer(props) {
                                 className="resourcefiles"
                                 id="spt-manuscript"
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                                // onClick={(e) => (e.target.value = null)}
+                                defaultValue = {manuscript}
+                                onChange={(event) => 
+                                    {
+                                    setManuscript(event.target.value);
+                                    }
+                                }
                             />
                         </div>
 
@@ -447,14 +452,13 @@ export default function EditSPTFormContainer(props) {
                                 type = "url"
                                 className="resourcefiles"
                                 id="spt-journal"
+                                defaultValue = {journal}
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                                onChange={(event) => 
+                                    {
+                                    setJournal(event.target.value);
+                                    }
+                                }
                             />
                         </div>
 
@@ -464,14 +468,13 @@ export default function EditSPTFormContainer(props) {
                                 type = "url"
                                 className="resourcefiles"
                                 id="spt-poster"
+                                defaultValue={poster}
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                                onChange={(event) => 
+                                    {
+                                    setPoster(event.target.value);
+                                    }
+                                }
                             />
                         </div>
 
@@ -479,6 +482,7 @@ export default function EditSPTFormContainer(props) {
                             <label htmlFor="keywords-field">Keywords: &nbsp; </label>
                             <ChipInput
                                 id="keywords-field"
+                                defaultValue = {keywords}
                                 onChange={(chips) => handleChips(chips)}
                             />
                         </div>
