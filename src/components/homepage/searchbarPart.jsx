@@ -3,6 +3,9 @@ import { useHistory } from "react-router-dom";
 import { Dropdown } from "semantic-ui-react";
 import searchBg from "../../assets/searchBg_4.png";
 import { gsap, Power3 } from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
 
 export default function SearchbarPart({ newsRef, latestAcqRef, browseRef }) {
   const [localSearch, setLocalSearch] = useState("");
@@ -264,6 +267,21 @@ const animateSearchBox = () => {
     scale: 0.8,
     ease: Power3,
   });
-  gsap.from(".barStyle", { xPercent: -50, duration: 0.8 });
-  gsap.from(".barStyle1", { xPercent: -30, duration: 1 });
+
+  let tl = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".searchBoxContainer",
+      scrub:0.5,
+      start:"center center",
+    } 
+  })
+  let t2 = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".searchBoxContainer",
+      scrub:1,
+      start:"center center",
+    } 
+  })
+  tl.to(".barStyle", { xPercent: -110, duration: 1 });
+  t2.to(".barStyle1", { xPercent: -100, duration: 1 });
 };
