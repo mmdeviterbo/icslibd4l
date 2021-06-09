@@ -32,7 +32,6 @@ const addBook = (formData) => {
 
 // read data of a resource
 const browseResources = (resourceType) => {
-    console.log(resourceType);
     return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {
         withCredentials: true,
     });
@@ -110,7 +109,20 @@ function getNews() {
 }
 
 // get all books (object of information only, not images), sorted by date (latest acquisition feature)
-function getLatestBooks(){
+function getBooks() {
+    return http.get(`${apiEndpoint}/books/display_infos`);
+}
+
+// get all books (object of images), sorted by date (latest acquisition feature)
+function getBookCovers() {
+    return http.get(`${apiEndpoint}/books/display_covers`);
+}
+
+function getAllResources() {
+    return http.get(`${apiEndpoint}/thesis/search`);
+}
+
+function getLatestBooks() {
     return http.get(`${apiEndpoint}/books/display_latest`);
 }
 
@@ -130,11 +142,15 @@ function getSPTFiles({ title, fileType }) {
 }
 
 function getBookCover(resourceId) {
-    console.log(resourceId);
     return http.post(`${apiEndpoint}/books/download1`, resourceId, {
         withCredentials: true,
     });
 }
+
+// read summary report data
+const generateReport = (resourceType) => {
+    return http.get(`${apiEndpoint}/reports/report?type=${resourceType}`);
+};
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
@@ -153,6 +169,8 @@ const exportFunctions = {
     getSPTFiles,
     getBookCover,
     downloadFile,
+    getBookCovers,
+    generateReport,
 };
 
 export default exportFunctions;

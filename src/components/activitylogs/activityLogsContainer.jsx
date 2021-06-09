@@ -32,7 +32,6 @@ export default function ActivityLogsContainer({ user }) {
             {user && user.userType === 1 ? (
                 <div className="activity-logs-container">
                     <ManagementHeader type={"logs"} />
-                    <br />
                     {/* <ActivityFilterContainer /> */}
                     <div className="activitytable-container">
                         <ActivityTable />

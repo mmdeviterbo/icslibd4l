@@ -135,23 +135,6 @@ export default function EditSPTFormContainer(props) {
         }
     }, [idSource, resourceData]);
 
-    useEffect(() => {
-        function updateList() {
-            if (advisers.fname && advisers.lname) {
-                if (adviserList.indexOf(advisers) !== -1) {
-                    // console.log("here2");
-                    setAdviserList([...adviserList, advisers]);
-                }
-            } else if (authors.fname && authors.lname) {
-                if (authorList.indexOf(authors) !== -1) {
-                    console.log("here1");
-                    setAuthorList([...authorList, authors]);
-                }
-            }
-        }
-        updateList();
-    }, [authors, advisers]);
-
     // const addAuthor = (e) => {
     //     const { name, value } = e.target;
     //     setAuthor({ ...author, [name]: value });
@@ -161,6 +144,8 @@ export default function EditSPTFormContainer(props) {
     //     const { name, value } = e.target;
     //     setAdviser({ ...adviser, [name]: value });
     // };
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -176,10 +161,11 @@ export default function EditSPTFormContainer(props) {
                 manuscript,
                 journal,
                 poster,
-                authors,
-                advisers,
+                authors:authorList,
+                advisers:adviserList,
                 keywords,
             };
+            console.log(userInput)
             await ResourceServices.editSpThesis(userInput);
             alert(`${id} has been successfully updated.`);
             window.location = "/manage-resources";
@@ -189,6 +175,17 @@ export default function EditSPTFormContainer(props) {
             }
         }
     };
+
+    // const handleAdviserChange = (adviser) => {
+    //     const vals = [...advisers].map((opt) => opt.value);
+    //     setAdviser(vals);
+    // }
+
+    const handleAdviserChange = (adviserList) => {
+        const adviser = [...adviserList].map((obj) => obj.value);
+        // setCourses(values);
+        setAdviserList(adviser);
+  };
 
     // get input from type selection
     // const handleChange = (e) => {
@@ -237,7 +234,7 @@ export default function EditSPTFormContainer(props) {
                                 required
                                 onChange={(event) => {
                                 setTitle(event.target.value);
-                            }}
+                                }}
                             />
                         </div>
 
@@ -300,7 +297,7 @@ export default function EditSPTFormContainer(props) {
                                                     id="resAuthorFN"
                                                     // name="fname"
                                                     required
-                                                    // value={p.fname}
+                                                    value={p.fname}
                                                     defaultValue={authors.fname}
                                                     onChange={(e) => {
                                                     const fname = e.target.value;
@@ -325,7 +322,7 @@ export default function EditSPTFormContainer(props) {
                                                     required
                                                     // name="lname"
                                                     defaultValue={authors.lname}
-                                                    // value={p.lname}
+                                                    value={p.lname}
                                                     onChange={(e) => {
                                                     const lname = e.target.value;
                                                     setAuthorList((currentAuthors) =>
@@ -395,7 +392,7 @@ export default function EditSPTFormContainer(props) {
                             options={adviserchoices}
                             defaultValue = {advisers}
                             // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
-                            // onChange={handleAdviserChange}
+                            onChange={handleAdviserChange}
                             isMulti
                         ></Select>
                         </div>
@@ -424,11 +421,11 @@ export default function EditSPTFormContainer(props) {
                                 id="spt-sourcecode"
                                 defaultValue={source_code}
                                 placeholder ={"https://www.example.com/"}
-                               onChange={(event) => 
+                                onChange={(event) => 
                                     {
                                     setSourceCode(event.target.value);
                                     }
-                                    }
+                                }
                             />
                         </div>
 

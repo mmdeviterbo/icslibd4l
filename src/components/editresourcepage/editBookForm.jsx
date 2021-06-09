@@ -50,7 +50,7 @@ export default function EditBookFormContainer(props) {
         lname: "",
         },
     ]);
-    const [subject, setSubject] = useState([]);
+    const [subjects, setSubject] = useState([]);
     const [publisher, setPublisher] = useState("");
     const [numberOfCopies, setNumOfCopies] = useState(0);
     const [physicalDesc, setDescription] = useState("");
@@ -90,7 +90,7 @@ export default function EditBookFormContainer(props) {
                         ISBN,
                         physicalDesc,
                         numberOfCopies,
-                        subject,
+                        subjects,
                         bookCoverLink
 
                     } = sourceItem;
@@ -105,7 +105,7 @@ export default function EditBookFormContainer(props) {
                     setISBN(ISBN);
                     setDescription(physicalDesc);
                     setNumOfCopies(numberOfCopies);
-                    setSubject(subject);
+                    setSubject(subjects);
                     setBookCoverLink(bookCoverLink)
 
                     console.log(sourceItem)
@@ -141,8 +141,8 @@ export default function EditBookFormContainer(props) {
             title,
             datePublished,
             dateAcquired,
-            author: authorList,
-            subject,
+            authors: authorList,
+            subjects,
             physicalDesc,
             publisher,
             numberOfCopies,
@@ -434,8 +434,8 @@ export default function EditBookFormContainer(props) {
                             isMulti
                             placeholder={"Courses..."}
                             options={courseList}
-                            defaultValue={"CMSC 12"}
-                            onChange={(subject) => handleSubject(subject)}
+                            defaultValue={subjects}
+                            onChange={(subjects) => handleSubject(subjects)}
                         ></Select>
                     </div>
 

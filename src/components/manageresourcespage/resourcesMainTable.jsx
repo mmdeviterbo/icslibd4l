@@ -88,11 +88,11 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                {resHeadCells.map((headCell) => (
+                {resHeadCells.map((headCell, index) => (
                     <TableCell
                         style={{ backgroundColor: "#FAFAFA" }}
                         className={classes.tablecell}
-                        key={headCell.id}
+                        key={index}
                         align={"left"}
                         padding={headCell.disablePadding ? "none" : "default"}
                         sortDirection={orderBy === headCell.id ? order : false}>

@@ -9,7 +9,6 @@ import background from "../assets/searchBg_4.png";
 const ManagementHeader = ({ type }) => {
     return (
         <div>
-            <img src={background} style={backgroundStyle} alt="#" />
             <div className="manage-header-container">
                 {type === "logs" ? (
                     <></>
@@ -25,7 +24,7 @@ const ManagementHeader = ({ type }) => {
                         type === "user" ? (
                             <h1 style={{ textAlign: "right" }}>Manage Users</h1>
                         ) : (
-                            <h1 style={{ textAlign: "left" }}>Activity Logs</h1>
+                            <h1 style={{ textAlign: "right"}}>Activity Logs</h1>
                         ),
                     ]
                 )}
@@ -35,12 +34,3 @@ const ManagementHeader = ({ type }) => {
 };
 
 export default ManagementHeader;
-
-const backgroundStyle = {
-    paddingLeft: "-6%",
-    position: "absolute",
-    height: "100%",
-    width: "100%",
-    zIndex: "-1",
-    transform: "scaleY(-1)",
-};

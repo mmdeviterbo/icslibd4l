@@ -316,7 +316,11 @@ Response Object: Array of book/sp/thesis
         type,
         title,
         abstract,
-        year
+        year,
+        source_code,
+        manuscript,
+        journal,
+        poster
     },
     ...
     {
@@ -328,6 +332,7 @@ Response Object: Array of book/sp/thesis
         physicalDesc,
         publisher,
         numberOfCopies,
+        bookCoverLink,
         datePublished,
         dateAcquired
     },
@@ -344,7 +349,9 @@ router.get("/search", async (req, res) => {
 
     // ---------------------------------------- SUB FUNCTIONS
     function filterEntries() {
-        let final_arr = total;
+        // get unique entries
+        let final_arr = [...new Set(total)];
+        
         // separate books and spthesis
         let book_arr = final_arr.filter((item) => "bookId" in item);
         let spthesis_arr = final_arr.filter((item) => "sp_thesis_id" in item);
@@ -370,14 +377,6 @@ router.get("/search", async (req, res) => {
         }
         book_arr.sort(compareByTitle);
         spthesis_arr.sort(compareByTitle);
-
-        // Filter by title (case insensitive, checks for substring match)
-        if ("title" in req.query) {
-            let titleFilter = req.query.title.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                return item.title.toLowerCase().includes(titleFilter);
-            });
-        }
 
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
@@ -418,6 +417,7 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
+        // format of req.query.adviser = "Lastname, Firstname"
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
             let fnameFilter, lnameFilter;
@@ -443,8 +443,7 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // req.query.keyword: array of keyword strings (use double quotes in request)
-        // sample: keyword=["keyw1","keyw2","keyw3"]
+        // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
         if ("keyword" in req.query) {
             try {
                 let keywordArrayFilter = req.query.keyword;
@@ -1793,7 +1792,8 @@ body:
 Response String:
 "Entry Updated"
 ********************************************************/
-router.put("/update", authAdmin, async (req, res) => {
+router.put("/update", async (req, res) => {
+    console.log(req.body)
     const {
         old_sp_thesis_id,
         sp_thesis_id,
@@ -1855,13 +1855,18 @@ router.put("/update", authAdmin, async (req, res) => {
         await thesisAuthorModel.deleteMany({
             sp_thesis_id: old_sp_thesis_id,
         });
+        
+        // console.log("!!!! TINGIN KA DITO !!!!")
+        console.log(authors)
+
         authors.forEach(async function (updatedEntry) {
             const author_fname = updatedEntry.fname;
             const author_lname = updatedEntry.lname;
             const author_name = author_fname.concat(" ", author_lname);
 
-            console.log(author_fname);
-            console.log(author_lname);
+            // await console.log("!!!!! GOT HERE !!!!!")
+            await console.log(author_fname);
+            await console.log(author_lname);
 
             const newAuthor = new thesisAuthorModel({
                 sp_thesis_id,
@@ -1906,9 +1911,9 @@ router.put("/update", authAdmin, async (req, res) => {
             await newKey.save();
         });
 
-        res.send("Entry Updated");
+        return res.send("Entry Updated");
     } catch {
-        res.send(500).json({ errorMessage: "Cannot Update." });
+        return res.send(500).json({ errorMessage: "Cannot Update." });
     }
 });
 
