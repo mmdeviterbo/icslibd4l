@@ -7,6 +7,8 @@ import ChipInput from "material-ui-chip-input";
 import { nanoid } from 'nanoid'
 import { produce } from 'immer'
 import EditResourceHeader from "./editResourceSideHeader"
+import ToastNotification from "../toastNotification";
+import StatusModal from "../modal/operationStatusModal";
 
 const classificationOptions = [
     { value: "Special Problem", label: "Special Problem" },
@@ -64,6 +66,9 @@ export default function EditSPTFormContainer(props) {
     });
     const [authorList, setAuthorList] = useState([]);
     const [adviserList, setAdviserList] = useState([]);
+
+    const [show, setShow] = useState(false);
+    const [success, setSuccess] = useState("");
 
     // return ALL resources (dahil walang search na gumagamit ng id)
     const [spThInfoArr, setSpThInfoArr] = useState([]); //all sp/thesis array
@@ -167,11 +172,12 @@ export default function EditSPTFormContainer(props) {
             };
             console.log(userInput)
             await ResourceServices.editSpThesis(userInput);
-            alert(`${id} has been successfully updated.`);
-            window.location = "/manage-resources";
+            setSuccess("success");
+            setShow(true);
+
         } catch (err) {
             if (err.response && err.response.data) {
-                alert(err.response.data.errorMessage); // some reason error message
+                ToastNotification({ content: err.response.data.errorMessage });
             }
         }
     };
@@ -242,7 +248,9 @@ export default function EditSPTFormContainer(props) {
                         <div className="primaryfields">
                             <label htmlFor="sptYear">Year Published: &nbsp; </label>
                             <input
-                                type="number"
+                                type="text"
+                                pattern="[0-9]*"
+                                inputMode = "numeric"
                                 id="sptYear"
                                 required
                                 key={`${Math.floor((Math.random() * 1000))}-min`} 
@@ -255,6 +263,7 @@ export default function EditSPTFormContainer(props) {
                                 }
                                 setYear(event.target.value);
                                 }}
+                                onMouseEnter={e=>e.target.focus()}
                             />
                         </div>
 
@@ -497,14 +506,14 @@ export default function EditSPTFormContainer(props) {
             
             </form> {/* main form close */}
 
-        {/* <StatusModal
+        <StatusModal
             message={success}
             name={"Sp/Thesis"}
             show={show}
             setShow={setShow}
-            operation={"add"}
-            pathAfter={"/add-new-spt/"}
-        /> */}
+            operation={"edit"}
+            pathAfter={"/manage-resources"}
+        />
     </div> //add-res-form-cont close
         
     );
