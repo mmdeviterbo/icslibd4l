@@ -200,6 +200,12 @@
     color: rgb(26, 26, 26, 1) !important;
 }
 
+.myCardNews:hover{
+    transform: scale(1.015);
+    box-shadow: 1px 1px 6px black !important;
+}
+
+
 /* apply mobile responsivess */
 @media screen and (max-width: 426px) {
     .loginIconContainer {

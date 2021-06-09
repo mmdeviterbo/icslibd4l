@@ -2,105 +2,112 @@
 
 /* ------ Add Resources Form container ------ */
 
-.add-res-sidebar h1{
-    font-family: 'Montserrat', sans-serif;
-    font-weight: normal;
-    font-size: 2.7rem;
-    color:#0067A1;
-    background-color:white;
-    padding-top: 5rem;
-    padding-left: 4rem;
-    padding-right: 2.5rem;
-    padding-bottom: 5rem;
-    width: 25rem;
-}
 
 .add-res-form-cont{
+    /* height: 100vh; */
     background-color:#F4F4F4;
-    width: 100%;
-    display:flex;
-    flex-direction: row;
-    justify-content: flex-start;
 }
 
 .add-resource-page-container {
     display:flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
 }
 
 .add-res-header{
     background-color:white;
-    width: 20%;
+    /* margin:0; */
 }
 
 .add-res-header h1 {
     color: #0067a1;
-    padding: 3rem;
+    padding: 1rem;
     font-weight: normal;
     font-size: 3rem;
     font-family: 'Montserrat', sans-serif;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    margin: 4rem;
 }
 
 .form-container{
+    margin:5rem;
+    padding: 3rem;
+    background-color: white;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-columns{
     display:flex;
     flex-direction: row;
-    justify-content: center;
-    padding-left: 8rem;
+    /* justify-content: space-around; */
 }
 
-.res-primary-info{
-    background-color: white;
-    padding: 2.5rem;
-    border-width: 0.5rem;
-    border-radius: 0.3rem;
-    margin: 2rem;
-    width: 28rem;
-    height: 100%;
-}
-
-.primaryfields {
-    margin-bottom: 0.5rem;
+.primaryfields, .primaryfields-date{
+    margin-bottom: 0.8rem;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     border-radius:0.3rem;
     font-weight: normal;
-    text-align: center;
 }
 
-.primaryfields label{
-    margin:0;
+.primaryfields label, .primaryfields-date{
+    margin-bottom:0.5em;
     font-weight: normal;
 }
 
-.primaryfields input{
-    height: 2rem;
+.primaryfields input, .primaryfields-date input{
+    height: 2.5rem;
     border-radius: 0.3rem;
     border-color:#cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
     padding: 0.5rem;
-    width: 50%;
+    width: 90%;
+}
+.primaryfields-date input{
+    width: 100%;   
+}
+
+.primaryfields-date{
+    margin-right: 2rem;
 }
 
 .primaryfields textarea{
     height: 20rem;
-    width: 21.3rem;
+    width: 90%;
     border-radius: 0.3rem;
     border-color:#cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
     padding: 0.5rem;
+}
+
+.bookRelatedCourses{
+    margin-bottom: 1rem;
+}
+
+#availBookCopies{
+    width: 4rem;
+    margin-bottom: 0.5rem;
+}
+
+#sptYear{
+    width:25%
+}
+
+.dates-group{
+    display:flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
 }
 
 #addAuthor{
     font-family: 'Montserrat', sans-serif;
     padding:0.5rem;
     padding-right: 1rem;
-    float:right;
-    margin:0.2rem;
     display: flex;
     align-items: center;
     background-color: white;
@@ -108,6 +115,7 @@
     border-radius: 0.5rem;
     border-color:#dadada;
     border-width:0.2rem;
+    margin-bottom: 1rem;
 }
 
 #addAuthor:hover{
@@ -118,24 +126,70 @@
 
 #deleteAuthor{
     font-family: 'Montserrat', sans-serif;
-    padding:0.5rem;
-    padding-right: 1rem;
-    float:right;
-    margin:0.2rem;
-    display: flex;
+    color:#d31c1ca9;
+    vertical-align: center;
     align-items: center;
     background-color: white;
     border-style: solid;
     border-radius: 0.5rem;
-    border-color:#dadada;
+    border-color:#d31c1ca9;
     border-width:0.2rem;
-
+    height: 2rem;
+    margin-top:0.5rem;
+    width: 10rem;
 }
 
 #deleteAuthor:hover{
     background-color:#d31c1ca9;
     color:white;
     border-color:white;
+}
+
+.authorfields{
+    /* encloses inputs + delete button */
+    margin-bottom: 1rem;
+    
+}
+
+.authorname-cont{
+    /* encloses author-fname and author-lname */
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    width:100%;
+}
+
+.authorname-cont input{
+    width: 85%;
+    height: 2.5rem;
+    border-radius: 0.3rem;
+    border-color:#cfcfcf solid;
+    border-style: solid;
+    border-width: 0.2rem;
+    padding: 0.5rem;
+    /* margin-right:1rem; */
+}
+
+.author-name{
+    display: flex;
+    flex-direction: column;
+    width:100%
+}
+
+.author-name input{
+    width: 90%
+}
+
+#physDescription{
+    width: 100%;
+}
+
+#sptYear {
+    width:25%
+}
+
+#keywords-field{
+    width: 100%
 }
 
 #abstractText{
@@ -148,14 +202,30 @@
     width: 100%
 }
 
-.resClassification-container{
+.form-left-column, .form-mid-column, .form-right-column {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    width:33%
 }
 
-.resClassification-container p {
-    padding-top: 0.8rem;
+
+
+/* .form-mid-column{
+    display: flex;
+    flex-direction: column;
+    padding-right:1rem;
+    width:33%
+}
+
+.form-right-column{
+    padding-right: 1rem;
+    width: 33%;
+} */
+
+#relatedCourses{
+    width: 100%;
 }
 
 .popupForm {
@@ -240,24 +310,40 @@
 }
 
 #saveResource{
-    height: 3rem;
+    margin-top:1rem;
+    height: 2.5rem;
     border-radius:0.5rem;
     border-style: solid;
     border-color:#0067A1;
     color:white;
     background-color: #0067A1;
     width: 100%;
+    box-shadow: 0.3rem 0.3rem 0.7rem #cfcfcf;
+
 }
 
 #saveResource:hover{
-    color:#0067A1;
-    background-color:white;
+    color:white;
+    /* background-color:#0066a1bb; */
+    -moz-box-shadow:    inset 0 0 1rem #00000036;
+    -webkit-box-shadow: inset 0 0 1rem #00000036;
 }
 
-#mainAddBookForm{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.main-form{
+    background-color: white;
+    margin: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0.5rem 0.5rem 1rem #cfcfcf;
+    padding: 2.5rem;
+}
+
+#bookISBN {
+    width: 50%;
+}
+
+.classifSelect, .abstract-div{
+    margin-top:1rem;
+    margin-bottom:1rem
 }
 
 .add-spt-page-container{
@@ -265,6 +351,19 @@
     flex-direction: row;
 }
 
+.resourcefiles{
+    color:#0067A1;
+    text-decoration: underline;
+}
+
+.resourcefiles::placeholder{
+    color:#c5c5c5
+}
+
 #keywords-field{
-    border-color:#cfcfcf
+    border-color:#c5c5c5
+}
+
+#resClassification{
+    width: 50%
 }

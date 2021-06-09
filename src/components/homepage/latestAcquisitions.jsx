@@ -5,6 +5,11 @@ import { useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
 import PropagateLoader from "react-spinners/PropagateLoader";
 
+import { gsap } from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
+
 export default function LatestAcquisitions({ latestAcqRef }) {
     const history = useHistory();
     const [hoverText, setHoverText] = useState("");
@@ -14,6 +19,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
     const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
     useEffect(async() => {
+        animateScrollTriggger();
         const booksInfo = await ResourceService.getLatestBooks();
         for(var book of booksInfo.data){
             book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${book.bookCoverLink.replace("https://drive.google.com/uc?id=","").replace("/view", "")}`;
@@ -185,10 +191,10 @@ const textBgContainer = {
 };
 const textBg = {
     margin: 0,
-    fontSize: "calc(20px + 1.8vw)",
+    fontSize: "calc(24px + 2vw)",
     background: "black",
     color: "white",
-    fontWeight: 900,
+    fontWeight: 500,
     width: "100%",
     textAlign: "center",
     padding:"15px"
@@ -222,11 +228,25 @@ const buttonStyle = {
     background: "#e0e0e0",
     border:"none",
     color:"black",
-    borderRadius:"7px",
+    borderRadius:"4px",
     padding: "3% 10%",
-    boxShadow: "3px 3px 7px black",
+    boxShadow: "2px 2px 4px black",
     fontSize: "calc(12px + 0.5vw)",
-    transition:"0.2s"
+    transition:"0.3s"
 };
+
+const animateScrollTriggger=()=>{
+    gsap.from('.latestAcqhoverTextStyle',{
+        scrollTrigger: { 
+          trigger: ".latestAcqcolorsParent",
+          scrub:1,
+          start:"top center",
+          end:"bottom bottom"
+        },
+        yPercent:-180,
+        duration:1.5,
+        scale:1.5
+    })
+}
 
 // mobile responsiveness is in homepagestyle.css
