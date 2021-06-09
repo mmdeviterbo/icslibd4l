@@ -186,7 +186,6 @@ function DocumentViewer({ pdfFile }) {
                     </a>
                 </div>
             </div>
-
             <div className="main-document-container">
                 <MyDoc />
             </div>

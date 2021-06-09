@@ -71,7 +71,7 @@ export default function SummaryReportPage({ user }) {
                         onChange={handleChange}
                     />
                 </div>
-                <h1 style={{"whiteSpace": "nowrap", color:"#0067A1"}}>Summary Report</h1>
+                <h1 style={{"whiteSpace": "nowrap"}}>Summary Report</h1>
             </div>
         );
     };
