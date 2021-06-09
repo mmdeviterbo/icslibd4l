@@ -101,6 +101,7 @@ export default function AdvancedSearch({ appRef }) {
 
     // get filtered results to backend
     useEffect(() => {
+        window.scrollTo(0,0);
         fetchData();
     }, [objFilter]);
 

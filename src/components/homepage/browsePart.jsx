@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { gsap } from "gsap";
@@ -10,6 +10,11 @@ gsap.registerPlugin(ScrollTrigger);
 export default function BrowsePart({ browseRef }) {
   const [isHoverTitle, setIsHoverTitle] = useState("BROWSE");
 
+
+  useEffect(()=>{
+    animateScrollTrigger();
+  },[])
+
   return (
     <div
       className="browsePartContainer"
@@ -18,7 +23,7 @@ export default function BrowsePart({ browseRef }) {
     >
       <img src={searchBg} style={searchBgStyle} alt="#" />
       <div style={colorBrowseContainer} className="colorBrowseContainer">
-        <h1 style={titleOrientation}>{isHoverTitle}</h1>
+        <h1 style={titleOrientation}><p className="isHoverTitle">{isHoverTitle}</p></h1>
       </div>
       <div style={designBoxContainer} className="designBoxContainer">
         <ParallaxEffect />
@@ -148,6 +153,7 @@ const colorBrowseContainer = {
 };
 
 const titleOrientation = {
+  overflow:"hidden",
   writingMode: "vertical-rl",
   textOrientation: "upright",
   color: "white",
@@ -212,3 +218,27 @@ const titleSource = {
   padding: 0,
   margin: 0,
 };
+
+const animateScrollTrigger=()=>{
+  let tl = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".colorBrowseContainer",
+      scrub:0.5,
+      start:"top center",
+      end:"bottom bottom",
+    } 
+  })
+  tl.from('.browseboxBooks',{ xPercent:-80  });
+  tl.from('.browseboxTheses',{ xPercent:80  });
+  tl.from('.browseboxSP',{ xPercent:-80  });
+  
+  let t2 = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".colorBrowseContainer",
+      scrub:2,
+      start:"top center",
+      end:"bottom bottom",
+    } 
+  })
+  t2.from('.isHoverTitle',{ yPercent:-80 });
+}

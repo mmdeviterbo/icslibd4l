@@ -3,6 +3,9 @@ import recentNewsBg from "../../assets/searchBg_4.png";
 import NewsService from "../../services/resourceService";
 import PropagateLoader from "react-spinners/PropagateLoader";
 
+import { gsap } from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 export default function RecentNews({ appRef, newsRef }) {
   const [titleNews, setTitleNews] = useState([]);
@@ -26,6 +29,7 @@ export default function RecentNews({ appRef, newsRef }) {
   };
 
   useEffect(() => {
+    animateScrollTriggger();
     getNewsData();
     return () => {
       setTitleNews([]);
@@ -42,7 +46,7 @@ export default function RecentNews({ appRef, newsRef }) {
       ref={newsRef}>
       <img src={recentNewsBg} style={recentNewsBgStyle} alt="#" />
       <div style={titleContentContainer}>
-        <p style={newsStyle}>UPLB NEWS</p>
+        <p style={newsStyle}><span className="UPLBNewsClass" style={{overflow:"hidden"}}>UPLB NEWS</span></p>
         <div
           className="ui three stackable cards"
           style={loader? displayLoader : recentNewsInnerContainer}>
@@ -77,8 +81,8 @@ const ArticleContainer = ({ title, link, imgSrc, date }) => {
   };
   return (
     <div
-      className="ui fluid card"
-      style={{ cursor: "pointer" }}
+      className="ui fluid card myCardNews"
+      style={{ cursor: "pointer", transition:"0.3s" }}
       onClick={() => openInNewTab(link)}>
       <div className="image" style={{}}>
         <img src={imgSrc} alt="#" />
@@ -172,4 +176,17 @@ const displayLoader = {
   display:"grid",
   placeItems: "center",
   height:"100%"
+}
+
+const animateScrollTriggger=()=>{
+  gsap.from('.UPLBNewsClass',{
+      scrollTrigger: { 
+        trigger: ".recentNewsContainer",
+        scrub:0.2,
+      },
+      xPercent:90,
+      duration:1.5,
+      scale:1.4,
+      opacity:0.7
+  })
 }
