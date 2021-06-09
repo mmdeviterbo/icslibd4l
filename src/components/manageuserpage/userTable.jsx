@@ -27,7 +27,6 @@ const tableHeader = [
 
 let tableEntry = [];
 
-
 export default function UserTable({ user, selectedFilter, searchInput }) {
     // Array for user data retreived from database.
     const [userList, setUserList] = useState([]);
@@ -39,7 +38,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
 
     const location = useLocation();
     const history = useHistory();
-    
+
     tableEntry = userList;
 
     const classificationString = ["Admin", "Faculty", "Staff", "Student"];
@@ -405,16 +404,42 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     <TableHead>
                         <TableRow>{header}</TableRow>
                     </TableHead>
-                    <TableBody>
-                        {entries.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                        )}
-                        {emptyRows > 0 &&
-                            (<TableRow style={{ height: 40 * emptyRows}}>
-                            </TableRow>)
-                        }
-                    </TableBody>
+                    {(searchInput || selectedFilter) &&
+                    userList.length === 0 ? (
+                        <TableBody>
+                            <TableRow
+                                style={{ width: "100%", textAlign: "center" }}
+                            >
+                                <TableCell colspan="5">
+                                    <div
+                                        style={{
+                                            padding: "5rem",
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        <h1>
+                                            Your search/filter returned no
+                                            results. Please check your spelling
+                                            and try again, or remove applied
+                                            filter.
+                                        </h1>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    ) : (
+                        <TableBody>
+                            {entries.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                            )}
+                            {emptyRows > 0 && (
+                                <TableRow
+                                    style={{ height: 40 * emptyRows }}
+                                ></TableRow>
+                            )}
+                        </TableBody>
+                    )}
                 </Table>
                 <TablePagination
                     rowsPerPage={rowsPerPage}
