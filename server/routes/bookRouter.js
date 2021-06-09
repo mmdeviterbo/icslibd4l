@@ -290,25 +290,14 @@ router.get("/display_latest", async (req, res) => {
 
 /**************************************************** 
 Request Object:
-req object:JSON
-book: {
-    oldBookId,
-    bookId,
-    title,
-    ISBN,
-    authors,
-    subjects,
-    physicalDesc,
-    publisher,
-    numberOfCopies,
+req object: address parameter
+{
+    bookId
 }
-file: jpeg/png
-res String: 
-"Entry Updated"
-********************************************************/
-router.put("/update", authAdmin, async (req, res) => {
-    const {
-        oldBookId,
+
+res object: array containing book, book_authors, and book_subjects
+[
+    {
         bookId,
         title,
         ISBN,
@@ -317,13 +306,95 @@ router.put("/update", authAdmin, async (req, res) => {
         physicalDesc,
         publisher,
         numberOfCopies,
+        bookCoverLink,
         datePublished,
-        dateAcquired,
+        dateAcquired
+    },
+    [
+        NOTE: can be multiple
+        {
+            bookId,
+            author_fname,
+            author_lname,
+            author_name
+        } 
+    ],
+    [
+        NOTE: can be multiple
+        {
+            bookId,
+            subject
+        } 
+    ]
+]
+
+res String: 
+"Entry Updated"
+********************************************************/
+
+router.get("/search-book/:bookId", async (req, res)=>{
+    var returnObject = [];
+    const bookIdHolder = req.params.bookId;
+   
+    if(!bookIdHolder){
+        return res.status(404).json({ errorMessage: "Not found. No bookID in parameters." });
+    }
+
+    try{
+        const BookEntry = await bookModel.findOne({bookId:bookIdHolder});
+        if(!BookEntry){
+            return res.status(404).json({errorMessage: "Entry not found."});
+        }
+
+        const BookAuthors = await bookAuthorModel.find({bookId:bookIdHolder});
+        const BookSubjects = await bookSubjectModel.find({bookId:bookIdHolder});
+    
+        returnObject.push(BookEntry);
+        returnObject.push(BookAuthors);
+        returnObject.push(BookSubjects);
+        res.send(returnObject);
+    }catch{
+        return res.status(404).json({errorMessage: "Not found."});
+    }
+});
+
+/**************************************************** 
+Request Object:
+req object:JSON
+book: {
+    bookId,
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    bookCoverLink,
+    datePublished,
+    dateAcquired
+}
+
+res String: 
+"Entry Updated"
+********************************************************/
+router.put("/update", authAdmin, async (req, res) => {
+    const {
+        bookId,
+        title,
+        ISBN,
+        authors,
+        subjects,
+        physicalDesc,
+        publisher,
+        numberOfCopies,
+        bookCoverLink,
+        datePublished,
+        dateAcquired
     } = req.body;
 
     // verification: incomplete fields
     if (
-        !oldBookId ||
         !bookId ||
         !title ||
         !authors ||
@@ -337,33 +408,22 @@ router.put("/update", authAdmin, async (req, res) => {
             .json({ errorMessage: "Please enter all required fields." });
     }
 
-    // if user wants to update bookId, check first if the given bookId (new) already exists
-    if (oldBookId != bookId) {
-        await bookModel.findOne({ bookId: bookId }, (err, exists) => {
-            if (exists) {
-                return res
-                    .status(400)
-                    .json({ errorMessage: "New bookId already exists." });
-            }
-        });
-    }
-
     try {
         //search if book exists
-        const existingBook = await bookModel.findOne({ bookId: oldBookId });
+        const existingBook = await bookModel.findOne({ bookId: bookId });
 
         if (existingBook) {
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
             await bookModel.findOne(
-                { bookId: oldBookId },
+                { bookId: bookId },
                 (err, updatedBook) => {
-                    updatedBook.bookId = bookId;
                     updatedBook.title = title;
                     updatedBook.ISBN = ISBN;
                     updatedBook.physicalDesc = physicalDesc;
                     updatedBook.publisher = publisher;
                     updatedBook.numberOfCopies = numberOfCopies;
+                    updatedBook.bookCoverLink = bookCoverLink;
                     updatedBook.datePublished = datePublished;
                     updatedBook.dateAcquired = dateAcquired;
 
@@ -373,7 +433,7 @@ router.put("/update", authAdmin, async (req, res) => {
 
             // edit fields in the book_author collection
             // delete the current entries of authors
-            await bookAuthorModel.deleteMany({ bookId: oldBookId });
+            await bookAuthorModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
             authors.forEach(async function (entry) {
@@ -392,7 +452,7 @@ router.put("/update", authAdmin, async (req, res) => {
 
             // edit fields in the book_subject collection
             // delete the current entries of subject
-            await bookSubjectModel.deleteMany({ bookId: oldBookId });
+            await bookSubjectModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
             subjects.forEach(async function (entry) {
@@ -418,44 +478,34 @@ router.put("/update", authAdmin, async (req, res) => {
 
 /**************************************************** 
 Request Object:
-req object:JSON
-book: {
+req object: address parameter
+{
     bookId
 }
 res String: 
 "Entry Deleted"
 ********************************************************/
-router.delete("/delete", authAdmin, async (req, res) => {
-    try {
-        const { bookId } = req.body;
 
+router.delete("/delete/:bookId", authAdmin, async (req, res) => {
+    const bookIdHolder = req.params.bookId;
+
+    if(!bookIdHolder){
+        return res.status(404).json({ errorMessage: "Not found. No bookID in parameters." });
+    }
+
+    try {      
         // search if book exists in book collection
-        const existingBook = await bookModel.findOne({ bookId });
+        const existingBook = await bookModel.findOne({ bookId: bookIdHolder });
 
         // if book exists, delete its entries from book, book_author, book_subject, and book_cover
         if (existingBook) {
-            await bookModel.findOneAndDelete({ bookId });
-            await bookAuthorModel.deleteMany({ bookId });
-            await bookSubjectModel.deleteMany({ bookId });
+            await bookModel.findOneAndDelete({ bookId: bookIdHolder });
+            await bookAuthorModel.deleteMany({ bookId: bookIdHolder});
+            await bookSubjectModel.deleteMany({ bookId: bookIdHolder});
 
-            // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
-            // check first if the book has a saved book cover
-            gfs.files.findOne(
-                { "metadata.bookId": bookId },
-                (err, existingBookCover) => {
-                    if (existingBookCover) {
-                        // .chunks
-                        // mongoose.connection.db
-                        //     .collection("book_covers.chunks")
-                        //     .deleteOne({ files_id: existingBookCover._id });
-                        // // .files
-                        // gfs.files.deleteOne({ "metadata.bookId": bookId });
-                    }
-                }
-            );
             res.send("Entry Deleted");
         } else {
-            res.status(400).send("This book does not exist! Cannot delete.");
+            res.status(400).json({errorMessage:"This book does not exist! Cannot delete."});
         }
     } catch (err) {
         console.log(err);
