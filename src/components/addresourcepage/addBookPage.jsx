@@ -8,7 +8,7 @@ const AddBookPage = () => {
     return (
         <div className="add-resource-page-container">
              {/* header at the side */}
-            <AddResourcesHeader/>
+            <AddResourcesHeader type = {"book"}/>
             <AddBookFormContainer/>
         </div>
     );
