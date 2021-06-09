@@ -242,7 +242,9 @@ export default function EditSPTFormContainer(props) {
                         <div className="primaryfields">
                             <label htmlFor="sptYear">Year Published: &nbsp; </label>
                             <input
-                                type="number"
+                                type="text"
+                                pattern="[1-9]*"
+                                inputmode = "numeric"
                                 id="sptYear"
                                 required
                                 key={`${Math.floor((Math.random() * 1000))}-min`} 
@@ -255,6 +257,7 @@ export default function EditSPTFormContainer(props) {
                                 }
                                 setYear(event.target.value);
                                 }}
+                                onMouseEnter={e=>e.target.focus()}
                             />
                         </div>
 

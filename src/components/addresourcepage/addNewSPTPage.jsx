@@ -273,19 +273,22 @@ const AddNewSPThesisForm = () => {
                     <div className="primaryfields">
                         <label htmlFor="datePublished">Year Published: &nbsp; </label>
                         <input
-                            type="number"
-                            id="datePublished"
-                            required
-                            min={1908}
-                            max={9999}
-                            defaultValue={0}
-                            onChange={(event) => {
-                            if (event.target.value < 0) {
-                                event.target.value = event.target.defaultValue;
-                            }
-                            setYear(event.target.value);
-                            }}
-                        />
+                                type="text"
+                                pattern="[1-9]*"
+                                inputmode = "numeric"
+                                id="sptYear"
+                                required
+                                min={1908}
+                                max={9999}
+                                // defaultValue={year}
+                                onChange={(event) => {
+                                if (event.target.value < 0) {
+                                    event.target.value = event.target.defaultValue;
+                                }
+                                setYear(event.target.value);
+                                }}
+                                onMouseEnter={e=>e.target.focus()}
+                            />
                     </div>
 
                     {/* Author fields */}
