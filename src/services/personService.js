@@ -40,6 +40,10 @@ const deleteUser = (userInfo) => {
     return http.delete(`${apiEndpoint}/users/delete`, {
         data: {
             googleId: userInfo.googleId,
+            email: userInfo.email,
+            fullName: userInfo.fullName,
+            userType: userInfo.userType,
+            nickname: userInfo.nickname,
         },
         withCredentials: true,
     });
@@ -59,12 +63,47 @@ const readAllUsers = () => {
     });
 };
 
-const updateClassification = (userInfo) => {
-    return http.put(`${apiEndpoint}/admin/updateOtherUser`, userInfo, {
+// user filters, read data of admins only
+const readAdmins = () => {
+    return http.get(`${apiEndpoint}/admin/readAdmins`,{withCredentials: true});
+}
+
+// read data of faculty only
+const readFaculty = () => {
+    return http.get(`${apiEndpoint}/facultystaff/readFaculty`, {
         withCredentials: true,
     });
 };
 
+// read data of Staff only
+const readStaff = () => {
+    return http.get(`${apiEndpoint}/facultystaff/readStaff`, {
+        withCredentials: true,
+    });
+};
+
+// read data of Student only
+const readStudents = () => {
+    return http.get(`${apiEndpoint}/users/readStudents`, {
+        withCredentials: true,
+    });
+};
+
+// Function for user Search
+const searchUser = (searchField) => {
+    return http.get(
+        `${apiEndpoint}/admin/search`,
+        { params: { search: searchField } },
+        {
+            //req.params.googleID object req.body
+            withCredentials: true,
+        }
+    );
+};
+
+const updateClassification = (userInfo) => {
+    return http.put(`${apiEndpoint}/admin/updateOtherUser`, userInfo, {withCredentials:true})
+}
 //decrypt data
 const decryptToken = (jwt) => {
     const encryption = {
@@ -96,6 +135,11 @@ const exportFunctions = {
     updateNickname,
     deleteUser,
     readAllUsers,
+    readAdmins,
+    readFaculty,
+    readStaff,
+    readStudents,
+    searchUser,
     getSpecificPerson,
     updateClassification,
     decryptToken,

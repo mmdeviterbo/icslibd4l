@@ -39,8 +39,6 @@ const searchByID = (urlRequest, type) => {
 }
 
 const downloadFile = (fileType, query) => {
-    console.log(fileType)
-    console.log(query)
     return http.get(`${apiEndpoint}/thesis${query}`, {params:fileType}, {
         withCredentials: true,
     });
@@ -74,7 +72,20 @@ function getNews() {
 }
 
 // get all books (object of information only, not images), sorted by date (latest acquisition feature)
-function getLatestBooks(){
+function getBooks() {
+    return http.get(`${apiEndpoint}/books/display_infos`);
+}
+
+// get all books (object of images), sorted by date (latest acquisition feature)
+function getBookCovers() {
+    return http.get(`${apiEndpoint}/books/display_covers`);
+}
+
+function getAllResources() {
+    return http.get(`${apiEndpoint}/thesis/search`);
+}
+
+function getLatestBooks() {
     return http.get(`${apiEndpoint}/books/display_latest`);
 }
 
@@ -83,11 +94,15 @@ function getAllBooks() {
 }
 
 function getBookCover(resourceId) {
-    console.log(resourceId);
     return http.post(`${apiEndpoint}/books/download1`, resourceId, {
         withCredentials: true,
     });
 }
+
+// read summary report data
+const generateReport = (resourceType) => {
+    return http.get(`${apiEndpoint}/reports/report?type=${resourceType}`);
+};
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
@@ -106,7 +121,9 @@ const exportFunctions = {
     downloadFile,
     deleteBook,
     viewFile,
-    searchByID
-}
+    searchByID,
+    getBookCovers,
+    generateReport,
+};
 
 export default exportFunctions;

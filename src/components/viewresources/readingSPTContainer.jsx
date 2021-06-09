@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import TitleContainer from "./titleContainer";
-import "../../styles/viewspt/viewSPTStyle.css";
 import AbstractContainer from "./abstractContainer";
 import ResourceService from "../../services/resourceService";
 import InfoSidebar from "./sideInfoContainer";
 import PropagateLoader from "react-spinners/PropagateLoader";
+import "../../styles/viewspt/viewSPTStyle.css";
 
 const ReadingSPTContainer = (props) => {
   let [loading, setLoading] = useState(true);
@@ -42,12 +42,9 @@ const ReadingSPTContainer = (props) => {
   return (
     <div>
       {loading ? (
-        <PropagateLoader
-          color={"#0067a1"}
-          speedMultiplier={2}
-          loading={true}
-          size={20}
+        <div style={{height:"100vh", display:"grid", placeItems:"center"}}><PropagateLoader color={"#0067a1"} speedMultiplier={2} loading={true} size={20}
         />
+        </div>
       ) : (
         <div className="spt-page-container">
           <TitleContainer

@@ -10,8 +10,7 @@ table {
 }
 
 .spt-page-container {
-  min-height: 90vh;
-
+  min-height: 90vh !important;
   display: flex;
   flex-direction: column;
   margin: 2rem 10%;
@@ -132,6 +131,19 @@ table {
   flex-direction: row;
   margin: 2rem 6%;
 }
+.imgContainerBook{
+  position:relative;
+  height:55vh;
+  width:50%;
+  display: flex;
+  justify-content: center;
+}
+.imgBook{
+  height: 100%;
+  width:60%;
+  position:absolute;
+}
+
 
 .book-cover-info-side {
   align-items: center;
@@ -171,5 +183,5 @@ table {
 }
 
 img {
-  max-width: 300px;
+  /* max-width: 300px; */
 }

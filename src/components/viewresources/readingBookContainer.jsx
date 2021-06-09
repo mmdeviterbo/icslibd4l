@@ -24,35 +24,29 @@ const ReadingBookContainer = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true);
         const urlRequest = `/search-id?id=${resourceID}`;
         const { data } = await ResourceService.searchByID(urlRequest, "Book");
         setResourceData(data && data[0]);
-        console.log(data);
         setLoading(false);
         // handleLoading();
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     }
     fetchData();
-
-    window.scrollTo(0, 0);
-    // const { appRef } = props;
-    // appRef.current &&
-    //   appRef.current.scrollIntoView({
-    //     behavior: "smooth",
-    //     block: "start",
-    //   });
   }, []);
+
+
   return (
     <div>
       {loading ? (
-        <PropagateLoader
-          color={"#0067a1"}
-          speedMultiplier={2}
-          loading={true}
-          size={20}
-        />
+        <div style={{height:"100vh", display:"grid", placeItems:"center"}}>
+          <PropagateLoader
+            color={"#0067a1"}
+            speedMultiplier={2}
+            loading={true}
+            size={20}
+          />
+        </div>
       ) : (
         <div className="book-page-container">
           <TitleContainer
@@ -63,26 +57,26 @@ const ReadingBookContainer = (props) => {
           />
 
           <div className="bookcover-and-desc">
-            {loading ? (
-              <PropagateLoader
-                color={"#0067a1"}
-                speedMultiplier={2}
-                loading={true}
-                size={20}
-              />
-            ) : resourceData && resourceData.bookCoverLink ? (
-              <img
-                style={{ height: "auto", margin: "0% 6%" }}
-                src={resourceData.bookCoverLink}
-                // alt="bookCover"
-              />
-            ) : (
-              <img
-                style={{ height: "400px", width: "300px", margin: "0% 6%" }}
+            <div className="imgContainerBook">
+
+            {resourceData && resourceData.bookCoverLink ? 
+            <>
+              {imgLoading && 
+                <div style={{height:"100%", display:"grid", placeItems:"center"}}>
+                  <PropagateLoader color={"#0067a1"} speedMultiplier={2} loading={true} size={20}/>
+                </div>
+                }
+              <img draggable={false} className="imgBook" src={resourceData.bookCoverLink} alt="bookCover" onLoad={()=>setImgLoading(false)}/>
+            </>
+              : 
+              (<img
+                draggable={false}
+                className="imgBook"
                 src="https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg"
-                // alt="bookCover"
-              />
-            )}
+                alt="bookCover"
+              />)
+            }
+            </div>
 
             <BookCoverandInfo
               isbn={resourceData && resourceData.bookId}

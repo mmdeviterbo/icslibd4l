@@ -6,6 +6,7 @@ import { Dropdown, Icon } from "semantic-ui-react";
 import { gsap } from "gsap";
 import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
+import ResourceService from "../services/resourceService";
 
 // the entire navigation bar
 export default function NavigationBar({
@@ -137,7 +138,14 @@ const SearchFilter = ({ user }) => {
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            if(["/manage-users","/manage-resources","/view-activitylogs", "/view-summaryreport"].includes(window.location.pathname)) 
+            if (
+                [
+                    "/manage-users",
+                    "/manage-resources",
+                    "/view-activitylogs",
+                    "/view-summaryreport",
+                ].includes(window.location.pathname)
+            )
                 window.location = "/home";
             else window.location = window.location.pathname;
         } catch (err) {}
@@ -221,7 +229,16 @@ const SearchFilter = ({ user }) => {
                 </span>
             ),
             value: "View Summary Report",
-            onClick: () => history.push("/view-summaryreport"),
+            onClick: () => {
+                const generateSummary = async () => {
+                    try {
+                        await ResourceService.generateReport("all");
+                        console.log("Generating");
+                    } catch (error) {}
+                };
+                generateSummary();
+                history.push("/view-summaryreport");
+            },
         },
         {
             key: "sign-out",
