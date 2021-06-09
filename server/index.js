@@ -1,18 +1,19 @@
 //starting file of the backend
-const express = require("express");
+const express = require('express');
+const config = require("config")
 const dotenv = require("dotenv");
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT_SERVER;
+const PORT = config.get('port');
+
+dotenv.config();
 
 //database USER:
 //username: sampleuser
 //password: password1234
 //implements code in startup/db.js
-require("./startup/db")();
-require("./startup/routes")(app);
+require('./startup/db')();
+require('./startup/routes')(app);
 
 app.use(express.json());
 
@@ -20,3 +21,5 @@ app.use(express.json());
 app.listen(PORT, () => {
     console.log(`Listening to Port ${PORT}`);
 });
+
+

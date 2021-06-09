@@ -7,13 +7,13 @@ export default function Footer() {
     const history = useHistory(); 
     useEffect(() => {
       return history.listen((location) => {
-          if(["/not-found", "/unauthorized"].includes(location.pathname)) setClassNavBar("footer-container-none");
+          if(location.pathname==="/not-found") setClassNavBar("footer-container-none");
           else setClassNavBar("footer-container");
        }) 
     },[history]) 
 
     useEffect(()=>{
-        if(["/not-found", "/unauthorized"].includes(window.location.pathname)) setClassNavBar("footer-container-none");
+        if(window.location.pathname==="/not-found") setClassNavBar("footer-container-none");
         else setClassNavBar("footer-container");
     },[])
 

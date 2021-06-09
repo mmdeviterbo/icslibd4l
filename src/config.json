@@ -1,5 +1,4 @@
 {
     "apiEndpoint":"http://localhost:3001",  
-    "jwtPrivateKey": "icslib-privateKey",
-    "jwtEncryptionKey":"EUTY8L,Gf9T5kkQ5"
+    "jwtPrivateKey": "icslib-privateKey"  
 }

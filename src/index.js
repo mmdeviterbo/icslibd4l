@@ -6,13 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'semantic-ui-css/semantic.min.css'
+import 'antd/dist/antd.css';
 import "@fontsource/montserrat";
+import 'semantic-ui-css/semantic.min.css'
+
 
 
 ReactDOM.render(
   <BrowserRouter>
-      <App />
+    <App />
   </BrowserRouter>,
   document.getElementById('root')
 );

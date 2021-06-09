@@ -1,27 +1,26 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
-        required: true,
-        unique: true,
+        required: true
     },
     email: {
         type: String,
-        required: true,
+        required: true
     },
     fullName: {
         type: String,
-        required: true,
+        required: true
     },
     userType: {
         type: Number,
-        default: 4,
+        required: true
     },
     nickname: {
         type: String,
-        required: true,
-    },
+        required: true
+    }
 });
 //creates a database in mongoose using User Model Structure
 const UserModel = mongoose.model("alluser", userSchema);
