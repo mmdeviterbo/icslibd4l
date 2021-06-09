@@ -63,13 +63,10 @@ const readAllUsers = () => {
     });
 };
 
-// Functions used in user filters
-// read data of admins only
+// user filters, read data of admins only
 const readAdmins = () => {
-    return http.get(`${apiEndpoint}/admin/readAdmins`, {
-        withCredentials: true,
-    });
-};
+    return http.get(`${apiEndpoint}/admin/readAdmins`,{withCredentials: true});
+}
 
 // read data of faculty only
 const readFaculty = () => {
@@ -105,11 +102,8 @@ const searchUser = (searchField) => {
 };
 
 const updateClassification = (userInfo) => {
-    return http.put(`${apiEndpoint}/admin/updateOtherUser`, userInfo, {
-        withCredentials: true,
-    });
-};
-
+    return http.put(`${apiEndpoint}/admin/updateOtherUser`, userInfo, {withCredentials:true})
+}
 //decrypt data
 const decryptToken = (jwt) => {
     const encryption = {
@@ -117,6 +111,20 @@ const decryptToken = (jwt) => {
         algorithm: "aes-256-cbc",
     };
     return jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary").data;
+};
+
+//read all user logs
+const readUserLogs = () => {
+    return http.get(`${apiEndpoint}/userlogs/readUserLogs`, {
+        withCredentials: true,
+    });
+};
+
+//clear user logs
+const clearUserLogs = () => {
+    return http.delete(`${apiEndpoint}/userlogs/deleteAllUserLogs`, {
+        withCredentials: true,
+    });
 };
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
@@ -135,6 +143,8 @@ const exportFunctions = {
     getSpecificPerson,
     updateClassification,
     decryptToken,
+    readUserLogs,
+    clearUserLogs,
 };
 
 export default exportFunctions;

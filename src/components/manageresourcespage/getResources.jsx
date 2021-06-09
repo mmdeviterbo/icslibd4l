@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import { useLocation } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
-import ManageResourcesPage from "./manageResourcesPage";
+import ManageResourcesPage from "./manageresourcespage";
 
 // TODO: add documentation
 export default function GetResources({ resourceType }) {

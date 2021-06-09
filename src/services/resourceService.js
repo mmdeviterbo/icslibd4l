@@ -32,7 +32,6 @@ const addBook = (formData) => {
 
 // read data of a resource
 const browseResources = (resourceType) => {
-    console.log(resourceType);
     return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {
         withCredentials: true,
     });
@@ -55,8 +54,6 @@ const searchBook = (filter) => {
 };
 
 const downloadFile = (fileType, query) => {
-    console.log(fileType);
-    console.log(query);
     return http.get(
         `${apiEndpoint}/thesis${query}`,
         { params: fileType },
@@ -136,7 +133,6 @@ function getSPTFiles({ title, fileType }) {
 }
 
 function getBookCover(resourceId) {
-    console.log(resourceId);
     return http.post(`${apiEndpoint}/books/download1`, resourceId, {
         withCredentials: true,
     });

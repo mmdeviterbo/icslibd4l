@@ -1,26 +1,34 @@
 import React from "react";
-import SearchResources from "./temporarySearchBar";
-import SearchUsers from "./temporarySearchBar";
+import TemporarySearchBar from "./temporarySearchBar";
 import "../styles/managementHeaderStyle.css";
+import background from "../assets/searchBg_4.png";
 
 // <summary>
 // A component that renders the general header for manage resources and manage users
 // </summary>
 const ManagementHeader = ({ type }) => {
     return (
-        <div className="manage-header-container">
-            <div className="search-bar-container">
-                {type === "resource" ? (
-                    <SearchResources type={type} />
+        <div>
+            <div className="manage-header-container">
+                {type === "logs" ? (
+                    <></>
                 ) : (
-                    <SearchUsers type={type} />
+                    <div className="search-bar-container">
+                        {/* <TemporarySearchBar /> */}
+                    </div>
+                )}
+                {type == "resource" ? (
+                    <h1 style={{ textAlign: "right" }}>Manage Resources</h1>
+                ) : (
+                    [
+                        type === "user" ? (
+                            <h1 style={{ textAlign: "right" }}>Manage Users</h1>
+                        ) : (
+                            <h1 style={{ textAlign: "left" }}>Activity Logs</h1>
+                        ),
+                    ]
                 )}
             </div>
-            {type == "resource" ? (
-                <h1>Manage Resources</h1>
-            ) : (
-                <h1>Manage Users</h1>
-            )}
         </div>
     );
 };

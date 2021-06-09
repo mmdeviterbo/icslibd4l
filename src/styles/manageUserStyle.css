@@ -1,5 +1,6 @@
 .manage-user-container{
     min-height: 85vh;
+    position:relative;
 }
 .user-search-container {
     display: flex;
@@ -45,7 +46,7 @@
     padding-left: 4rem;
     padding-right: 4rem;
     padding-bottom: 4rem;
-    background-color: #f5f5f5;
+    /* background-color: #f5f5f5; */
     z-index: -2;
 }
 

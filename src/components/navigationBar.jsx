@@ -81,8 +81,7 @@ export default function NavigationBar({
                 cookiePolicy={"single_host_origin"}
                 className="login-link"
                 hostedDomain={"up.edu.ph"}
-                icon={false}
-            >
+                icon={false}>
                 <i className="fa fa-lg fa-sign-in mr-2" />
                 <span className="login-link-label">Login</span>
             </GoogleLogin>
@@ -107,17 +106,14 @@ export default function NavigationBar({
                         />
                         Home
                     </Link>
-                    <div
-                        className="navItem"
-                        onClick={scrollToBrowse}
-                        style={{ cursor: "pointer" }}
-                    >
+                    <Link to="/browse-special-problems"
+                        className="navItem">
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
                         />
                         Browse
-                    </div>
+                    </Link>
                     <Link to="/about" className="navItem">
                         <i
                             className="fa fa-lg fa-info-circle mr-2"

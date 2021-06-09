@@ -27,6 +27,7 @@ const tableHeader = [
 
 let tableEntry = [];
 
+
 export default function UserTable({ user, selectedFilter, searchInput }) {
     // Array for user data retreived from database.
     const [userList, setUserList] = useState([]);
@@ -38,7 +39,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
 
     const location = useLocation();
     const history = useHistory();
-
+    
     tableEntry = userList;
 
     const classificationString = ["Admin", "Faculty", "Staff", "Student"];
@@ -78,7 +79,6 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
 
     // executes if the location is changed. (Opening modals)
     useEffect(() => {
-        //if no user is logged in, redirect it to homepage
         try {
             const jwt = localStorage.getItem(jwtPrivateKey);
             var userInfo = PersonService.decryptToken(jwt);
@@ -250,7 +250,6 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
     const discardChange = (rowIndex) => {
         // TODO: If the admin selected a new classification, there should be a prompt that ask if the user will discard the current changes.
         // Else, if there are no changes, then the edit mode should quit immediately.
-        console.log(selectedUser);
         toggleEdit(rowIndex);
     };
 
@@ -403,21 +402,20 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
         <>
             <TableContainer component={Paper} className="main-table-container">
                 <Table stickyHeader>
-                    <TableHead>{header}</TableHead>
+                    <TableHead>
+                        <TableRow>{header}</TableRow>
+                    </TableHead>
                     <TableBody>
                         {entries.slice(
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage
                         )}
-
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
+                        {emptyRows > 0 &&
+                            (<TableRow style={{ height: 40 * emptyRows}}>
+                            </TableRow>)
+                        }
                     </TableBody>
                 </Table>
-
                 <TablePagination
                     rowsPerPage={rowsPerPage}
                     rowsPerPageOptions={[5]}

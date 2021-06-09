@@ -46,7 +46,7 @@ export default function SearchbarPart({newsRef, latestAcqRef, browseRef}){
                 <div style={inputCaptionContainer} className="hoverForImagesVector">
                     <div style={alignSearchIcon} className="formSearchHomepage">
                         <input style={inputSearch} type="text" className="form-control removeOutline" 
-                            placeholder="Search for Books, Theses, and Special Problems" autoFocus
+                            placeholder={"Search for Books, Theses, and Special Problems"} autoFocus
                             value={localSearch} onChange={e=>setLocalSearch(e.currentTarget.value)}/>
                         <div style={dropDownFilter}><DropdownFilter setFilterTag={setFilterTag} filterTag={filterTag}/></div>
                     </div>
@@ -115,7 +115,7 @@ const searchBoxContainer = {
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
-    background:"rgba(0,0,0,0.90)",          
+    background:"rgba(0,0,0,0.95)",          
     transition:"1s",
     borderRadius: "10px",
     boxShadow:"1px 1px 4px black",
@@ -155,7 +155,7 @@ const blueBox = {
     width:"100%",
     margin:0,
     top:0,
-    background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(231,231,231,1) 100%)",
+    background: "radial-gradient(circle, rgba(231,231,231,1) 0%, rgba(232,232,232,1) 44%, rgba(245,234,234,1) 100%)",
 }
 const logoContainer = {
     height:"50%",
@@ -179,14 +179,12 @@ const barStyleOne = {
     top:"30%",
     width:"60%",
     backgroundColor:"rgb(0, 103, 161,0.85)",
-    boxShadow:"1px 1px 3px black"
 }
 const barStyleTwo = {
     ...barStyle,
     top:"50%",
     width:"60%",
     backgroundColor:"rgb(0, 103, 161,0.8)",
-    boxShadow:"1px 1px 3px black"
     
 }
 const barStyleThree = {
@@ -194,18 +192,15 @@ const barStyleThree = {
     top:"60%",
     width:"20%",
     backgroundColor:"rgb(0, 103, 135)",
-    boxShadow:"1px 1px 3px black"
 }
 const barStyleFour = {
     ...barStyle,
     top:"20%",
     width:"30%",
     backgroundColor:"rgb(0, 103, 161,0.6)",
-    boxShadow:"1px 1px 3px black"
 }
 const barStyleFive = {
     ...barStyle,
-    boxShadow:"1px 1px 3px black",
     backgroundColor:"rgb(0, 103, 161,0.8)",
     width:"10%",
     top:"69.5%",

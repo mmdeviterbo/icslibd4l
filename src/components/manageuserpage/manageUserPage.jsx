@@ -6,7 +6,10 @@ import UserTable from "./userTable";
 // import UserSearch from "./userSearch";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PersonService from "../../services/personService";
+import ManagementHeader from './../managementHeader';
+
 import { jwtPrivateKey } from "../../config.json";
+import background from "../../assets/searchBg_4.png";
 import "../../styles/manageUserStyle.css";
 
 export default function ManageUserPage({ user }) {
@@ -89,8 +92,7 @@ export default function ManageUserPage({ user }) {
                         minHeight: "80vh",
                         display: "grid",
                         placeItems: "center",
-                    }}
-                >
+                    }}>
                     <PropagateLoader
                         color={"#0067a1"}
                         speedMultiplier={2}
