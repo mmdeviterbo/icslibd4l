@@ -6,6 +6,7 @@ import FilterSidebar from "./filterSidebar";
 import ResultContainer from "./resultContainer";
 import ResourceService from "../../services/resourceService";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 export default function AdvancedSearch({ appRef }) {
     var queryStore = `${useLocation().search}`.substring(
@@ -32,7 +33,6 @@ export default function AdvancedSearch({ appRef }) {
             `${useLocation().search}`.indexOf("&")
         )
     );
-
     const [keywords, setKeywords] = useState([]);
 
     // get results from db
@@ -47,6 +47,8 @@ export default function AdvancedSearch({ appRef }) {
     const resultsPerPage = 10;
     const pagesVisited = pageNumber * resultsPerPage;
     const pageCount = Math.ceil(resultsFilterArr.length / resultsPerPage);
+
+    const [loader, setLoader] = useState(true);
 
     const displayresults = resultsFilterArr
         .slice(pagesVisited, pagesVisited + resultsPerPage)
@@ -82,6 +84,7 @@ export default function AdvancedSearch({ appRef }) {
 
     // http request
     async function fetchData() {
+        setLoader(true);
         try {
             //  objFilter store filters in an object <field>:<value>
             //  urlRequest string that contains the search query -> example: search?type=title
@@ -90,6 +93,7 @@ export default function AdvancedSearch({ appRef }) {
                 urlRequest
             );
             setResultsFilterArr(data);
+            setLoader(false);
         } catch (err) {
             console.log(err);
         }
@@ -202,45 +206,49 @@ export default function AdvancedSearch({ appRef }) {
                     </button>
                 </div>
 
-                <div style={resultsOuterContainer}>
-                    <div style={resultTop}>
-                        {resultsFilterArr.length > 0 ? (
-                            <p className="textStyle">
-                                Showing results{" "}
-                                {(pageNumber + 1) * resultsPerPage -
-                                    (resultsPerPage - 1)}
-                                -
-                                {resultsFilterArr &&
-                                (pageNumber + 1) * resultsPerPage <
-                                    resultsFilterArr.length
-                                    ? (pageNumber + 1) * resultsPerPage
-                                    : resultsFilterArr.length}{" "}
-                                out of{" "}
-                                {resultsFilterArr && resultsFilterArr.length}
-                            </p>
-                        ) : (
-                            <p className="textStyle">No results</p>
-                        )}
-                    </div>
+                <div style={loader? displayLoader : resultsOuterContainer}>
+                    {loader? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
+                        <div>
+                        <div style={resultTop}>
+                            {resultsFilterArr.length > 0 ? (
+                                <p className="textStyle">
+                                    Showing results{" "}
+                                    {(pageNumber + 1) * resultsPerPage -
+                                        (resultsPerPage - 1)}
+                                    -
+                                    {resultsFilterArr &&
+                                    (pageNumber + 1) * resultsPerPage <
+                                        resultsFilterArr.length
+                                        ? (pageNumber + 1) * resultsPerPage
+                                        : resultsFilterArr.length}{" "}
+                                    out of{" "}
+                                    {resultsFilterArr && resultsFilterArr.length}
+                                </p>
+                            ) : (
+                                <p className="textStyle">No results</p>
+                            )}
+                        </div>
 
-                    <div style={resultBottom}>
-                        {resultsFilterArr && displayresults}
-                        {resultsFilterArr.length > 0 ? (
-                            <ReactPaginate
-                                previousLabel={"Previous"}
-                                nextLabel={"Next"}
-                                pageCount={pageCount}
-                                onPageChange={changePage}
-                                containerClassName={"paginationBttns"}
-                                previousLinkClassName={"previousBttn"}
-                                nextLinkClassName={"nextBttn"}
-                                disabledClassName={"paginationDisabled"}
-                                activeClassName={"paginationActive"}
-                            />
-                        ) : (
-                            <div></div>
-                        )}
-                    </div>
+                        <div style={resultBottom}>
+                            {resultsFilterArr && displayresults}
+                            {resultsFilterArr.length > 0 ? (
+                                <ReactPaginate
+                                    previousLabel={"Previous"}
+                                    nextLabel={"Next"}
+                                    pageCount={pageCount}
+                                    onPageChange={changePage}
+                                    containerClassName={"paginationBttns"}
+                                    previousLinkClassName={"previousBttn"}
+                                    nextLinkClassName={"nextBttn"}
+                                    disabledClassName={"paginationDisabled"}
+                                    activeClassName={"paginationActive"}
+                                />
+                            ) : (
+                                <div></div>
+                            )}
+                        </div>
+                        </div>
+                    }
                 </div>
             </div>
         </form>
@@ -331,3 +339,9 @@ const filterButton = {
     fontFamily: "Montserrat",
     textTransform: "capitalize",
 };
+
+const displayLoader = {
+  display:"grid",
+  placeItems: "center",
+  height:"100%"
+}
