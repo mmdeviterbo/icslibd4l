@@ -59,6 +59,7 @@ const sidebarLink = {
   fontWeight: "600",
   position: "relative",
   left: "-1.5vw",
+  transition:"0.3s"
 };
 
 const sidebarLabel = {

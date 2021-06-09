@@ -104,16 +104,18 @@ export default function FilterSubMenu({
                                                 marginBottom: "2vw",
                                             }}
                                             renderInput={(params) => (
-                                                <TextField {...params} label="Adviser" />
-                                            )}
+                                                <TextField {...params} label="Adviser"/>
+                                        )}
                                         />
                                     </div>
                                 ) : null}
                                 {item2.searchbarPublisher ? (
+                                    <>
                                     <SearchBar
                                         searchFilter={searchFilterPublisher}
                                         setSearchFilter={setSearchFilterPublisher}
                                     />
+                                    </>
                                 ) : null}
                             </span>
                         </span>
@@ -137,6 +139,7 @@ const sidebarLink = {
     fontWeight: "600",
     position: "relative",
     left: "-1.5vw",
+    transition:"0.3s"
 };
 
 const sidebarLabel = {

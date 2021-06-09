@@ -160,7 +160,7 @@ export default function AdvancedSearch({ appRef }) {
                 <h4 className="textStyle">Search results for:</h4>
                 <div style={searchBarContainer} className="resultsSearchbar">
                     <i
-                        className="fa fa-search fa-2x"
+                        className="fa fa-search fa-2x iconMagnifyingGlass"
                         style={searchIcon}
                         onClick={handleForm}
                     ></i>
@@ -195,7 +195,7 @@ export default function AdvancedSearch({ appRef }) {
                     />
 
                     {/* Apply filters button */}
-                    <button style={filterButton} onClick={handleForm}>
+                    <button style={filterButton} className="btnApplyFilter" onClick={handleForm}>
                         Apply Filters
                     </button>
                 </div>
@@ -203,7 +203,7 @@ export default function AdvancedSearch({ appRef }) {
                 <div style={resultsOuterContainer}>
                     {loader?
                         <div style={resultTop}>
-                            <p className="textStyle">Getting result/s...</p>
+                            <p className="textStyle">Getting results...</p>
                         </div>:
                         <div style={resultTop}>
                             {resultsFilterArr.length > 0 ? (
@@ -268,8 +268,9 @@ const searchMainContainer = {
 
 const topContainer = {
     position: "sticky",
-    top: "9.2vh",
+    top: "60px",
     width: "96vw",
+    height:"17vh",
     justifyContent: "center",
     alignItems: "center",
     padding: "5vh 5vw 1vh",
@@ -285,6 +286,8 @@ const searchBarContainer = {
 const searchIcon = {
     paddingLeft: "1vw",
     marginTop: "1vh",
+    cursor:"pointer",
+    transition:"0.2s",
 };
 
 const inputSearch = {
@@ -304,6 +307,7 @@ const filtersContainer = {
     background: "white",
     position: "sticky",
     overflowY: "overlay",
+    overflowX:"hidden",
     top: "27.1vh",
     width: "20vw",
     height: "73vh",
@@ -315,9 +319,10 @@ const resultsOuterContainer = {
 
 const resultTop = {
     position: "sticky",
-    top: "27.1vh",
+    top: "calc(60px + 17vh)",
     padding: "2.5vh 1vw",
     background: "white",
+    zIndex: 1000
 };
 
 const resultBottom = {
@@ -326,22 +331,24 @@ const resultBottom = {
 
 const filterButton = {
     position: "relative",
-    height: "2em",
-    width: "10em",
+    height: "3em",
+    width: "11em",
     top: "-2.5vh",
     left: "20%",
-    border: "0.08em solid",
-    borderRadius: "3px",
+    borderRadius: "4px",
     backgroundColor: "#0067A1",
     color: "white",
     alignItems: "center",
     justifyContent: "center",
     fontFamily: "Montserrat",
     textTransform: "capitalize",
+    boxShadow:"1px 1px 3px black",
+    transform:"scale(1)",
+    transition:"0.2s"
 };
 
 const displayLoader = {
   display:"grid",
   placeItems: "center",
-  height:"100%"
+  height:"80vh"
 }
