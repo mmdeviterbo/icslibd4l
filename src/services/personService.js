@@ -92,6 +92,18 @@ const readStudents = () => {
     });
 };
 
+// Function for user Search
+const searchUser = (searchField) => {
+    return http.get(
+        `${apiEndpoint}/admin/search`,
+        { params: { search: searchField } },
+        {
+            //req.params.googleID object req.body
+            withCredentials: true,
+        }
+    );
+};
+
 const updateClassification = (userInfo) => {
     return http.put(`${apiEndpoint}/admin/updateOtherUser`, userInfo, {
         withCredentials: true,
@@ -119,6 +131,7 @@ const exportFunctions = {
     readFaculty,
     readStaff,
     readStudents,
+    searchUser,
     getSpecificPerson,
     updateClassification,
     decryptToken,
