@@ -14,7 +14,7 @@ import Select from "react-select";
 import { jwtPrivateKey } from "./../../config.json";
 
 import "../../styles/manageUserStyle.css";
-import { MongoServerSelectionError } from "mongodb";
+// import { MongoServerSelectionError } from "mongodb";
 
 const tableHeader = [
     "User ID",
@@ -98,17 +98,62 @@ export default function UserTable({ user, selectedFilter }) {
 
     // Filters the array if the filter is changed
     useEffect(() => {
+        console.log("use effect from user Table hello");
+        console.log(selectedFilter);
+
         if (selectedFilter === -1) {
-            tableEntry = userList;
+            readUsers();
+        } else if (selectedFilter === 1) {
+            readAdmins();
+        } else if (selectedFilter === 2) {
+            readFaculty();
+        } else if (selectedFilter === 3) {
+            readStaff();
         } else {
-            tableEntry.filter((userE) => userE.userType === selectedFilter);
+            readStudents();
         }
-    }, [selectedFilter, userList]);
+    }, [selectedFilter]);
 
     // Get users from database
     const readUsers = async () => {
         try {
             await PersonService.readAllUsers().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter admins from database
+    const readAdmins = async () => {
+        try {
+            await PersonService.readAdmins().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter Faculty from database
+    const readFaculty = async () => {
+        try {
+            await PersonService.readFaculty().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter Staff from database
+    const readStaff = async () => {
+        try {
+            await PersonService.readStaff().then((response) => {
+                setUserList(Array.from(response.data));
+            });
+        } catch (err) {}
+    };
+
+    // Filter Students from database
+    const readStudents = async () => {
+        try {
+            await PersonService.readStudents().then((response) => {
                 setUserList(Array.from(response.data));
             });
         } catch (err) {}

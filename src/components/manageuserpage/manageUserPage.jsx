@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FilterMenu from "./filterMenu";
 import { useHistory } from "react-router";
 import UserTable from "./userTable";
@@ -11,6 +11,10 @@ import "../../styles/manageUserStyle.css";
 export default function ManageUserPage({ user }) {
     const history = useHistory();
     const [selection, setSelection] = useState(-1);
+
+    useEffect(() => {
+        console.log(selection);
+    }, [selection]);
 
     const accessPrivilege = () => {
         setTimeout(() => {

@@ -4,7 +4,7 @@ import Select from "react-select";
 import FilterButton from "./filterButton";
 import "../../styles/manageUserStyle.css";
 
-export default function FilterMenu(selection, setSelection) {
+export default function FilterMenu({ selection, setSelection }) {
     const classificationList = [
         { value: 1, label: "Admin" },
         { value: 2, label: "Faculty" },
@@ -48,11 +48,16 @@ export default function FilterMenu(selection, setSelection) {
                 id="user-category"
                 placeholder={"Users Classification"}
                 options={classificationList}
+                value={selection !== -1 ? selection.value : null}
                 onChange={handleFilterSelect}
             />
 
             <div className="user-clrbtn">
-                <a id="user-filters-clear" href="#">
+                <button
+                    id="user-filters-clear"
+                    onClick={(e) => setSelection(-1)}
+                    style={{ border: 0, backgroundColor: "white" }}
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -65,7 +70,7 @@ export default function FilterMenu(selection, setSelection) {
                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                     </svg>
                     Clear all filters
-                </a>
+                </button>
             </div>
         </div>
     );
