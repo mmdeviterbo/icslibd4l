@@ -1,7 +1,6 @@
 import React from "react";
 import Select from "react-select";
 
-import FilterButton from "./filterButton";
 import "../../styles/manageUserStyle.css";
 
 export default function FilterMenu({ selection, setSelection }) {
@@ -29,12 +28,12 @@ export default function FilterMenu({ selection, setSelection }) {
         justifyContent: "start",
     };
 
-    const clearFilterContainer = {
-        marginLeft: "auto",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-    };
+    // const clearFilterContainer = {
+    //     marginLeft: "auto",
+    //     display: "flex",
+    //     flexDirection: "column",
+    //     justifyContent: "center",
+    // };
 
     const handleFilterSelect = (e) => {
         setSelection(e.value);

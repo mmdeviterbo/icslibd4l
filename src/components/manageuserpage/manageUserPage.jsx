@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FilterMenu from "./filterMenu";
 import { useHistory } from "react-router";
 import UserTable from "./userTable";
