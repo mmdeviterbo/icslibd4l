@@ -58,9 +58,8 @@ export default function AdvancedSearch({ appRef }) {
                     key={index}
                     title={result.title}
                     authors={result.authors || result.author}
-                    // adviser={result.adviser}
-                    id={result.bookId || result.sp_thesis_id} //linkTo yung
-                    publishDate={result.year || result.datePublished} //publishDate
+                    id={result.bookId || result.sp_thesis_id} 
+                    publishDate={result.year || result.datePublished} 
                 />
             );
         });
@@ -116,12 +115,6 @@ export default function AdvancedSearch({ appRef }) {
             history.push(`/search?type=${resourceType}&search=${tempStr}`);
         }
         setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
-        // if (!resourceType || resourceType === "") {
-        //     setUrlRequest(`/search?type=any&search=${tempStr}`);
-        //     history.push(`/search?type=any&search=${tempStr}`);
-        // } else {
-        //     setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
-        // }
 
         // call convert filter to object
         filterParser();
