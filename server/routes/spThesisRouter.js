@@ -1698,12 +1698,82 @@ router.get("/search-id", async (req, res) => {
 // https://stackoverflow.com/questions/46122557/how-can-i-make-a-assign-mongoose-result-in-global-variable-in-node-js
 // https://stackoverflow.com/questions/30636547/how-to-set-retrieve-callback-in-mongoose-in-a-global-variable/30636635
 
+// get spt entry based on parameter
+/********************************************************
+Request Object:
+req object: address parameter
+{
+    sp_thesis_id
+}
+Response String:
+Array containing SP / Thesis object, Authors, Advisers, Keywords
+[
+    {
+        sp_thesis_id: sp_thesis_id,
+        type: type,
+        title: title,
+        abstract: abstract,
+        year: year,
+        source_code: source_code,
+        manuscript: manuscript,
+        poster: poster,
+        journal: journal,
+    },
+    [
+        NOTE: can be multiple
+        {
+            sp_thesis_id: sp_thesis_id,
+            author_fname: author_fname,
+            author_lname: author_lname,
+            author_name: author_name
+        } 
+    ],
+    [
+        NOTE: can be multiple
+        {
+            sp_thesis_id: sp_thesis_id,
+            adviser_fname: adviser_fname,
+            adviser_lname: adviser_lname,
+            adviser_name: adviser_name
+        } 
+    ],
+    [
+        NOTE: can be multiple
+        {
+            sp_thesis_id: sp_thesis_id,
+            sp_thesis_keyword: sp_thesis_keyword
+        } 
+    ]
+]
+********************************************************/
+router.get("/search-spthesis/:sp_thesis_id", async (req, res) => {
+    var returnObject = [];
+    const sp_thesis_id = req.params.sp_thesis_id;
+
+    try {
+        const SPTEntry = await thesisModel.findOne({ sp_thesis_id });
+        const SPTAuthors = await thesisAuthorModel.find({ sp_thesis_id });
+        const SPTAdvisers = await thesisAdviserModel.find({ sp_thesis_id });
+        const SPTKeywords = await thesisKeyModel.find({ sp_thesis_id });
+        if (!SPTEntry) {
+            return res.status(404).json({ errorMessage: "Entry not found." });
+        }
+        returnObject.push(SPTEntry);
+        returnObject.push(SPTAuthors);
+        returnObject.push(SPTAdvisers);
+        returnObject.push(SPTKeywords);
+        res.send(returnObject);
+    } catch {
+        return res.status(404).json({ errorMessage: "Not found." });
+    }
+});
+
 // update thesis data
 // AUTHENTICATION REMOVED
 
 /**************************************************** 
 Request Object:
-req object: Multipart Form
+req object: JSON Object
 body: 
 {
     old_sp_thesis_id: old_sp_thesis_id,
@@ -1712,13 +1782,14 @@ body:
     title: title,
     abstract: abstract,
     year: year,
+    source_code: source_code,
+    manuscript: manuscript,
+    poster: poster,
+    journal: journal,
     authors : [ {fname, lname}, ... ],
     advisers: [ {fname, lname}, ... ],
     keywords : ["keywords1",...]
 }
-file: pdf
-file: jpeg
-file: pdf
 
 Response String:
 "Entry Updated"
@@ -1731,10 +1802,14 @@ router.put("/update", authAdmin, async (req, res) => {
         title,
         abstract,
         year,
+        source_code,
+        manuscript,
+        poster,
+        journal,
         authors,
         advisers,
         keywords,
-    } = JSON.parse(req.body.body);
+    } = req.body;
     try {
         // looks for the sp/thesis based on the json object passed, then updates it
         await thesisModel.findOne(
@@ -1746,6 +1821,10 @@ router.put("/update", authAdmin, async (req, res) => {
                     !title ||
                     !abstract ||
                     !year ||
+                    !source_code ||
+                    !manuscript ||
+                    !poster ||
+                    !journal ||
                     !advisers ||
                     !authors ||
                     !keywords
@@ -1762,6 +1841,10 @@ router.put("/update", authAdmin, async (req, res) => {
                 updatedThesisSp.title = title;
                 updatedThesisSp.abstract = abstract;
                 updatedThesisSp.year = year;
+                updatedThesisSp.source_code = source_code;
+                updatedThesisSp.manuscript = manuscript;
+                updatedThesisSp.poster = poster;
+                updatedThesisSp.journal = journal;
 
                 console.log(updatedThesisSp);
                 // updates
@@ -1848,10 +1931,10 @@ router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
         return res.status(404).json({ errorMessage: "Not found." });
     }
 
-    const SPTFile = await thesisModel.findOne({
+    const SPTEntry = await thesisModel.findOne({
         sp_thesis_id: sp_thesis_id_holder,
     });
-    if (!SPTFile) {
+    if (!SPTEntry) {
         return res
             .status(404)
             .json({ errorMessage: "Entry to be deleted not found." });
@@ -1871,57 +1954,8 @@ router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
         await thesisKeyModel.deleteMany({ sp_thesis_id: sp_thesis_id_holder });
         res.send("Entry Deleted");
     } catch {
-        res.send(404).json({ errorMessage: "Cannot Delete." });
+        res.status(404).json({ errorMessage: "Cannot Delete." });
     }
-
-    // deletes associated files
-    gfs.files.findOne(
-        { metadata: [sp_thesis_id_holder, "journal"] },
-        (err, updatedSPT) => {
-            if (updatedSPT) {
-                // .chunks
-                mongoose.connection.db
-                    .collection("sp_files.chunks")
-                    .deleteMany({ files_id: updatedSPT._id });
-                // .files
-                gfs.files.deleteOne({
-                    metadata: [sp_thesis_id_holder, "journal"],
-                });
-            }
-        }
-    );
-
-    gfs.files.findOne(
-        { metadata: [sp_thesis_id_holder, "poster"] },
-        (err, updatedSPT) => {
-            if (updatedSPT) {
-                // .chunks
-                mongoose.connection.db
-                    .collection("sp_files.chunks")
-                    .deleteMany({ files_id: updatedSPT._id });
-                // .files
-                gfs.files.deleteOne({
-                    metadata: [sp_thesis_id_holder, "poster"],
-                });
-            }
-        }
-    );
-
-    gfs.files.findOne(
-        { metadata: [sp_thesis_id_holder, "manuscript"] },
-        (err, updatedSPT) => {
-            if (updatedSPT) {
-                // .chunks
-                mongoose.connection.db
-                    .collection("sp_files.chunks")
-                    .deleteMany({ files_id: updatedSPT._id });
-                // .files
-                gfs.files.deleteOne({
-                    metadata: [sp_thesis_id_holder, "manuscript"],
-                });
-            }
-        }
-    );
 });
 
 module.exports = router;
