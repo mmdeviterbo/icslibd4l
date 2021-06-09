@@ -25,7 +25,7 @@
             <tr>
                 <th style="width: 150px;">ID</th>
                 <th style="width: 50px;">Type</th>
-                <th style="width: 150px;">Title</th>
+                <th style="width: 450px;">Title</th>
                 <th style="width: 150px;">Author(s)</th>
                 <th style="width: 150px;">Adviser(s)</th>
             </tr>
@@ -42,14 +42,14 @@
                     </td>
                     <td>
                         {{#each this.author}}
-                            <p class="author-name-text">{{this.author_name}}</p>
+                            <div class="author-name-text">{{this.author_name}}</div>
                         {{/each}}
                     </td>
                     <td>
                         {{#each this.adviser}}
-                            <p
+                            <div
                                 class="adviser-name-text"
-                            >{{this.adviser_name}}</p>
+                            >{{this.adviser_name}}</div>
                         {{/each}}
                     </td>
                 </tr>

@@ -194,6 +194,8 @@ router.get("/report", async (req, res) => {
             path: "./src/download/Books.pdf",
             format: "A4",
             printBackground: true,
+            margin: {top: 40, bottom: 40, left: 40, right: 40},
+            landscape: true
         });
 
         const spThesisContent = await compile("spThesis", spThesis);
@@ -203,6 +205,8 @@ router.get("/report", async (req, res) => {
             path: "./src/download/spThesis.pdf",
             format: "A4",
             printBackground: true,
+            margin: {top: 40, bottom: 40, left: 40, right: 40},
+            landscape: true
         });
 
         const merger = new pdfMerge();
