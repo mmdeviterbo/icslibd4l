@@ -316,7 +316,11 @@ Response Object: Array of book/sp/thesis
         type,
         title,
         abstract,
-        year
+        year,
+        source_code,
+        manuscript,
+        journal,
+        poster
     },
     ...
     {
@@ -328,6 +332,7 @@ Response Object: Array of book/sp/thesis
         physicalDesc,
         publisher,
         numberOfCopies,
+        bookCoverLink,
         datePublished,
         dateAcquired
     },
@@ -372,14 +377,6 @@ router.get("/search", async (req, res) => {
         book_arr.sort(compareByTitle);
         spthesis_arr.sort(compareByTitle);
 
-        // Filter by title (case insensitive, checks for substring match)
-        if ("title" in req.query) {
-            let titleFilter = req.query.title.toLowerCase();
-            final_arr = final_arr.filter((item) => {
-                return item.title.toLowerCase().includes(titleFilter);
-            });
-        }
-
         // Filter by year (year in request can be string or number)
         if ("year" in req.query) {
             let yearFilter = req.query.year;
@@ -419,6 +416,7 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by 1 adviser (case insensitive, checks for substring match)
+        // format of req.query.adviser = "Lastname, Firstname"
         if ("adviser" in req.query) {
             let adviserFilter = req.query.adviser.toLowerCase();
             let fnameFilter, lnameFilter;
@@ -444,8 +442,7 @@ router.get("/search", async (req, res) => {
         }
 
         // Filter by keywords (case insensitive, checks for substring match)
-        // req.query.keyword: array of keyword strings (use double quotes in request)
-        // sample: keyword=["keyw1","keyw2","keyw3"]
+        // format of req.query.keyword: ?...&keyword[]=keyw1&keyword[]=keyw2...
         if ("keyword" in req.query) {
             try {
                 let keywordArrayFilter = req.query.keyword;
