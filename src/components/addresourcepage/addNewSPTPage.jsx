@@ -8,6 +8,8 @@ import ChipInput from "material-ui-chip-input";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
+import ToastNotification from "../toastNotification";
+
 
 const classificationOptions = [
   { value: "Special Problem", label: "Special Problem" },
@@ -88,14 +90,13 @@ const adviserchoices = [
 
 const AddNewSPThesisForm = () => {
   // functionalities:
-  const [id, setId] = useState("");
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(0);
-  const [journal, setJournal] = useState("");
-  const [manuscript, setManuscript] = useState("");
-  const [poster, setPoster] = useState("");
-  const [source_code, setSourceCode] = useState("");
+  const [journal, setJournal] = useState(null);
+  const [manuscript, setManuscript] = useState(null);
+  const [poster, setPoster] = useState(null);
+  const [source_code, setSourceCode] = useState(null);
   const [abstract, setAbstract] = useState("");
   const [keywords, setKeyword] = useState();
   // multiple authors should be possible
@@ -112,35 +113,25 @@ const AddNewSPThesisForm = () => {
     },
   ]);
   const [adviserList, setAdviserList] = useState([]);
-  const FormData = require("form-data");
-  const formData = new FormData();
+
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
   const handleSubmit = async (event) => {
     console.log("meow");
     event.preventDefault();
-    if (
-      // !source_code ||
-      !manuscript ||
-      !journal ||
-      !poster
-    ) {
-      return alert("Please upload the required files");
+
+    if (authorList.length === 0) {
+      return ToastNotification({ content: "Please enter all required fields" });
     }
-    // console.log(source_code);
-    // console.log(poster);
-    // console.log(journal);
-    // console.log(manuscript);
 
     try {
       const userInput = {
-        sp_thesis_id: id,
         type,
         title,
         abstract,
         year,
-        // source_code,
+        source_code,
         manuscript,
         journal,
         poster,
@@ -150,25 +141,20 @@ const AddNewSPThesisForm = () => {
       };
 
       console.log(userInput);
-      formData.append("body", JSON.stringify(userInput)); // NEED MAUNA TO WTF
-      // formData.append("file", source_code);  // Leave it out for now since need ng clarification about this
-      formData.append("journal", journal);
-      formData.append("manuscript", manuscript);
-      formData.append("poster", poster);
-      // formData.append("body", userInput);
-      const { data } = await ResourceServices.addSpThesis(formData);
+      const { data } = await ResourceServices.addSpThesis(userInput);
       console.log(data);
 
       setSuccess("success");
       setShow(true);
-      //   alert(`New Sp/Thesis has been successfully added to the library`);
       event.target.reset();
       // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
-        setSuccess("fail");
-        setShow(true);
-        // alert(err.response.data.errorMessage); // some reason error message
+        ToastNotification({ content: err.response.data.errorMessage });
+        // <ToastNotification
+        //   content={err.response.data.errorMessage}
+        //   style={{ width: "2000px" }}
+        // />;
       }
     }
   };
@@ -189,63 +175,6 @@ const AddNewSPThesisForm = () => {
     // setCourses(values);
     setAdviserList(adviser);
   };
-
-  // not working qwq
-  // const handleFile = (e) => {
-  //   let file = e.target.files[0];
-  //   let reader = new FileReader();
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //     reader.onload = (e) => {
-  //       return file;
-  //     };
-  //   }
-  // };
-
-  // Redundant handlefunctions. Find a way to make it reusable
-//   const handleSourceCode = (e) => {
-//     let file = e.target.files[0];
-//     let reader = new FileReader();
-//     if (file) {
-//       reader.readAsDataURL(file);
-//       reader.onload = (e) => {
-//         setSourceCode(file);
-//       };
-//     }
-//   };
-
-//   const handleManuscript = (e) => {
-//     let file = e.target.files[0];
-//     let reader = new FileReader();
-//     if (file) {
-//       reader.readAsDataURL(file);
-//       reader.onload = (e) => {
-//         setManuscript(file);
-//       };
-//     }
-//   };
-
-//   const handleJournal = (e) => {
-//     let file = e.target.files[0];
-//     let reader = new FileReader();
-//     if (file) {
-//       reader.readAsDataURL(file);
-//       reader.onload = (e) => {
-//         setJournal(file);
-//       };
-//     }
-//   };
-
-//   const handlePoster = (e) => {
-//     let file = e.target.files[0];
-//     let reader = new FileReader();
-//     if (file) {
-//       reader.readAsDataURL(file);
-//       reader.onload = (e) => {
-//         setPoster(file);
-//       };
-//     }
-//   };
 
   return (
     <div className="add-res-form-cont">
@@ -274,8 +203,8 @@ const AddNewSPThesisForm = () => {
                         <label htmlFor="datePublished">Year Published: &nbsp; </label>
                         <input
                                 type="text"
-                                pattern="[1-9]*"
-                                inputmode = "numeric"
+                                pattern="[0-9]*"
+                                inputMode = "numeric"
                                 id="sptYear"
                                 required
                                 min={1908}

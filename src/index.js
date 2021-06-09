@@ -8,6 +8,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import "@fontsource/montserrat";
 import 'semantic-ui-css/semantic.min.css'
+import "react-toastify/dist/ReactToastify.css";
 
 
 

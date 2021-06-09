@@ -7,7 +7,7 @@ import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
 // import { toast } from "react-toastify";
 import ToastNotification from "../toastNotification";
-import "react-toastify/dist/ReactToastify.css";
+
 
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
@@ -315,7 +315,7 @@ const AddBookFormContainer = () => {
                         <input
                             type="text"
                             pattern="[1-9]*"
-                            inputmode = "numeric"
+                            inputMode = "numeric"
                             min = {1}
                             placeholder="1-999"
                             required
