@@ -74,7 +74,7 @@ export default function EditSPTFormContainer(props) {
             setIdSource(props.location?.state.id);
             setSpThInfoArr(props.location?.state.sourceInfo);  //all objects from table
         } catch (err) {
-            // window.location = "/not-found";
+            window.location = "/not-found";
         }
     }, []);
 
@@ -191,9 +191,9 @@ export default function EditSPTFormContainer(props) {
     };
 
     // get input from type selection
-    const handleChange = (e) => {
-        setType(e.value);
-    };
+    // const handleChange = (e) => {
+    //     setType(e.value);
+    // };
 
     // creates an array of keywords from theh user input
     const handleChips = (chip) => {
@@ -211,6 +211,8 @@ export default function EditSPTFormContainer(props) {
             },
         ]);
     }
+
+
 
     // console.log(authors)
     // console.log(authors.fname)
@@ -420,15 +422,13 @@ export default function EditSPTFormContainer(props) {
                                 type = "url"
                                 className="resourcefiles"
                                 id="spt-sourcecode"
-                                // defaultValue = {}
+                                defaultValue={source_code}
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                               onChange={(event) => 
+                                    {
+                                    setSourceCode(event.target.value);
+                                    }
+                                    }
                             />
                         </div>
 
@@ -439,14 +439,13 @@ export default function EditSPTFormContainer(props) {
                                 className="resourcefiles"
                                 id="spt-manuscript"
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
+                                // onClick={(e) => (e.target.value = null)}
                                 defaultValue = {manuscript}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                                onChange={(event) => 
+                                    {
+                                    setManuscript(event.target.value);
+                                    }
+                                }
                             />
                         </div>
 
@@ -456,14 +455,13 @@ export default function EditSPTFormContainer(props) {
                                 type = "url"
                                 className="resourcefiles"
                                 id="spt-journal"
+                                defaultValue = {journal}
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                                onChange={(event) => 
+                                    {
+                                    setJournal(event.target.value);
+                                    }
+                                }
                             />
                         </div>
 
@@ -473,14 +471,13 @@ export default function EditSPTFormContainer(props) {
                                 type = "url"
                                 className="resourcefiles"
                                 id="spt-poster"
+                                defaultValue={poster}
                                 placeholder ={"https://www.example.com/"}
-                                onClick={(e) => (e.target.value = null)}
-                                // onChange={(e) => {
-                                // const file = handleFile(e);
-                                // setSourceCode(file);
-                                // console.log(handleFile(e));
-                                // handleSourceCode(e);
-                                // }}
+                                onChange={(event) => 
+                                    {
+                                    setPoster(event.target.value);
+                                    }
+                                }
                             />
                         </div>
 

@@ -54,12 +54,11 @@ const searchBook = (filter) => {
     );
 };
 
-const searchById = (id) => {
-    return http.get(
-        `${apiEndpoint}/thesis/search-id`,
-        { params: id },
-        { withCredentials: true }
-    )
+const searchByID = (urlRequest, type) => {
+    return http.get(`${apiEndpoint}/thesis${urlRequest}`, 
+    {params:{type:type}}, 
+    {withCredentials: true}
+    );
 }
 
 const downloadFile = (fileType, query) => {
@@ -79,14 +78,14 @@ const downloadFile = (fileType, query) => {
 
 // edit data of a resource
 const editSpThesis = (resourceData) => {
-    return http.put(`${apiEndpoint}/thesis/update-sp-thesis`, resourceData, {
+    return http.put(`${apiEndpoint}/thesis/update`, resourceData, {
         withCredentials: true,
     });
 };
 
 // edit book
 const editBook = (resourceData) => {
-    return http.put(`${apiEndpoint}/book/update-book`, resourceData, {
+    return http.put(`${apiEndpoint}/books/update`, resourceData, {
         withCredentials: true,
     });
 };
@@ -148,7 +147,7 @@ const exportFunctions = {
     editSpThesis,
     editBook,
     searchBook,
-    searchById,
+    searchByID,
     getAllBooks,
     getLatestBooks,
     getSPTFiles,

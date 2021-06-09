@@ -92,10 +92,10 @@ const AddNewSPThesisForm = () => {
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(0);
-  const [journal, setJournal] = useState(null);
-  const [manuscript, setManuscript] = useState(null);
-  const [poster, setPoster] = useState(null);
-  const [source_code, setSourceCode] = useState(null);
+  const [journal, setJournal] = useState("");
+  const [manuscript, setManuscript] = useState("");
+  const [poster, setPoster] = useState("");
+  const [source_code, setSourceCode] = useState("");
   const [abstract, setAbstract] = useState("");
   const [keywords, setKeyword] = useState();
   // multiple authors should be possible
@@ -459,13 +459,11 @@ const AddNewSPThesisForm = () => {
                             className="resourcefiles"
                             id="spt-sourcecode"
                             placeholder ={"https://www.example.com/"}
-                            onClick={(e) => (e.target.value = null)}
-                            // onChange={(e) => {
-                            // const file = handleFile(e);
-                            // setSourceCode(file);
-                            // console.log(handleFile(e));
-                            // handleSourceCode(e);
-                            // }}
+                            onChange={(event) => 
+                                {
+                                setSourceCode(event.target.value)
+                                }
+                            }
                         />
                     </div>
 
@@ -476,13 +474,11 @@ const AddNewSPThesisForm = () => {
                             className="resourcefiles"
                             id="spt-manuscript"
                             placeholder ={"https://www.example.com/"}
-                            onClick={(e) => (e.target.value = null)}
-                            // onChange={(e) => {
-                            // const file = handleFile(e);
-                            // setSourceCode(file);
-                            // console.log(handleFile(e));
-                            // handleSourceCode(e);
-                            // }}
+                            onChange={(event) => 
+                                {
+                                setManuscript(event.target.value);
+                                }
+                            }
                         />
                     </div>
 
@@ -493,13 +489,11 @@ const AddNewSPThesisForm = () => {
                             className="resourcefiles"
                             id="spt-journal"
                             placeholder ={"https://www.example.com/"}
-                            onClick={(e) => (e.target.value = null)}
-                            // onChange={(e) => {
-                            // const file = handleFile(e);
-                            // setSourceCode(file);
-                            // console.log(handleFile(e));
-                            // handleSourceCode(e);
-                            // }}
+                            onChange={(event) => 
+                                {
+                                setJournal(event.target.value);
+                                }
+                            }
                         />
                     </div>
 
@@ -510,13 +504,11 @@ const AddNewSPThesisForm = () => {
                             className="resourcefiles"
                             id="spt-poster"
                             placeholder ={"https://www.example.com/"}
-                            onClick={(e) => (e.target.value = null)}
-                            // onChange={(e) => {
-                            // const file = handleFile(e);
-                            // setSourceCode(file);
-                            // console.log(handleFile(e));
-                            // handleSourceCode(e);
-                            // }}
+                            onChange={(event) => 
+                                {
+                                setPoster(event.target.value);
+                                }
+                            }
                         />
                     </div>
 

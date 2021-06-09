@@ -41,7 +41,7 @@ export default function EditBookFormContainer(props) {
     const [dateAcquired, setDateAcquired] = useState();
     const [ISBN, setISBN] = useState("");
     const [bookId, setBookId] = useState("");
-    const [author, setAuthor] = useState("");
+    const [author, setAuthor] = useState([]);
     // multiple authors should be possible
     const [authorList, setAuthorList] = useState([
         {
@@ -108,6 +108,7 @@ export default function EditBookFormContainer(props) {
                     setSubject(subject);
                     setBookCoverLink(bookCoverLink)
 
+                    console.log(sourceItem)
                     break;
                 }
             }
@@ -135,28 +136,31 @@ export default function EditBookFormContainer(props) {
         try {
         const userInput = {
             // oldBookId,
-            // bookId, 
+            bookId, 
             ISBN,
             title,
             datePublished,
             dateAcquired,
-            authors: authorList,
+            author: authorList,
             subject,
             physicalDesc,
             publisher,
             numberOfCopies,
+            bookCoverLink
         };
-        console.log(userInput);
-        console.log(subject);
+        console.log(userInput);     //successfully stored object
+        // console.log(subject);
 
-        formData.append("body", JSON.stringify(userInput));
+        formData.append("body", JSON.stringify(userInput)); // y r we appending?
 
-        const { data } = await ResourceServices.editBook(formData);
+        console.log(formData)
+
+        const { data } = await ResourceServices.editBook(userInput);     
         alert("Successfully updated book.");
-        // window.location = "/add-new-resource";
+        window.location = "/manage-resources";
         } catch (err) {
         if (err.response && err.response.data) {
-            // alert("unsuccessful")
+            alert("unsuccessful")
             alert(err.response.data.errorMessage); // some reason error message
         }
         }
@@ -166,7 +170,7 @@ export default function EditBookFormContainer(props) {
     const handleSubject = (subject) => {
         const values = [...subject].map((opt) => opt.value);
         setSubject(values);
-    };
+    }; 
 
     const handleDate = (date) => {
         var newDate = new Date(date).toJSON();

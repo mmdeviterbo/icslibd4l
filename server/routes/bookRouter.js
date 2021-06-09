@@ -6,17 +6,7 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
-var uniqid = require('uniqid');
-const config = require("config");
-const path = require("path");
-const crypto = require("crypto");
-const mongoose = require("mongoose");
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
-const Grid = require("gridfs-stream");
 var uniqid = require("uniqid");
-
-const database = process.env.db;
 
 router.post("/get-news", async (req, res) => {
     let options = {
@@ -42,6 +32,7 @@ router.post("/get-news", async (req, res) => {
                         let finalTagImg =
                             ".jet-smart-listing__post-thumbnail  > a > img"; // get the news date
                         let lenNewsLinks = $(finalTagLink, html).length; // length of array
+                        let i = 0;
 
                         for (i = 0; i < lenNewsLinks; i++)
                             newsLinks.push(
@@ -72,87 +63,6 @@ router.post("/get-news", async (req, res) => {
         res.status(404).send("404 Not Found");
     }
 });
-
-// Create mongo connection
-let gfs;
-let conn;
-mongoose.connection.on("connected", () => {
-    conn = mongoose.createConnection(
-        database,
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            socketTimeoutMS: 10000,
-        },
-        (err) => {
-            if (err) return console.error(err);
-        }
-    );
-
-    // Init gfs
-
-    conn.once("open", () => {
-        // Init stream
-        console.log("Book database Connected!");
-        gfs = Grid(conn.db, mongoose.mongo);
-        gfs.collection("book_covers");
-    });
-});
-
-// Create storage engine
-const storage = new GridFsStorage({
-    url: database,
-    file: (req, file) => {
-        return new Promise(async (resolve, reject) => {
-            const bookId = JSON.parse(req.body.body).bookId; //parse the book id from the multipart form
-            const dateAcquired = JSON.parse(req.body.body).dateAcquired; //parse the date acquired from the multipart form
-            const existingBook = await bookModel.findOne({ bookId }); //check if the book already exists
-            if (existingBook) {
-                // for book create (no oldBookId in input)
-                if (JSON.parse(req.body.body).oldBookId == undefined) {
-                    return reject("Book already exists!");
-                } else {
-                    //for book update
-                    // delete the book cover's entry from .files and .chunks (book_id == metadata.bookId in book_covers.files)
-                    // check first if the book has a saved book cover
-                    gfs.files.findOne(
-                        { "metadata.bookId": bookId },
-                        (err, existingBookCover) => {
-                            if (existingBookCover) {
-                                // .chunks
-                                mongoose.connection.db
-                                    .collection("book_covers.chunks")
-                                    .deleteOne({
-                                        files_id: existingBookCover._id,
-                                    });
-                                // .files
-                                gfs.files.deleteOne({
-                                    "metadata.bookId": bookId,
-                                });
-                            }
-                        }
-                    );
-                }
-            }
-
-            crypto.randomBytes(16, (err, buf) => {
-                //gives the file a different name
-                if (err) {
-                    return reject(err);
-                }
-                const filename =
-                    buf.toString("hex") + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    metadata: { bookId, dateAcquired }, //store the book id in the metadata
-                    bucketName: "book_covers",
-                };
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const upload = multer({ storage });
 
 //creates a book and uploads its book cover
 /**************************************************** 
@@ -332,29 +242,35 @@ res String:
 "Entry Updated"
 ********************************************************/
 
-router.get("/search-book/:bookId", async (req, res)=>{
+router.get("/search-book/:bookId", async (req, res) => {
     var returnObject = [];
     const bookIdHolder = req.params.bookId;
-   
-    if(!bookIdHolder){
-        return res.status(404).json({ errorMessage: "Not found. No bookID in parameters." });
+
+    if (!bookIdHolder) {
+        return res
+            .status(404)
+            .json({ errorMessage: "Not found. No bookID in parameters." });
     }
 
-    try{
-        const BookEntry = await bookModel.findOne({bookId:bookIdHolder});
-        if(!BookEntry){
-            return res.status(404).json({errorMessage: "Entry not found."});
+    try {
+        const BookEntry = await bookModel.findOne({ bookId: bookIdHolder });
+        if (!BookEntry) {
+            return res.status(404).json({ errorMessage: "Entry not found." });
         }
 
-        const BookAuthors = await bookAuthorModel.find({bookId:bookIdHolder});
-        const BookSubjects = await bookSubjectModel.find({bookId:bookIdHolder});
-    
+        const BookAuthors = await bookAuthorModel.find({
+            bookId: bookIdHolder,
+        });
+        const BookSubjects = await bookSubjectModel.find({
+            bookId: bookIdHolder,
+        });
+
         returnObject.push(BookEntry);
         returnObject.push(BookAuthors);
         returnObject.push(BookSubjects);
         res.send(returnObject);
-    }catch{
-        return res.status(404).json({errorMessage: "Not found."});
+    } catch {
+        return res.status(404).json({ errorMessage: "Not found." });
     }
 });
 
@@ -390,7 +306,7 @@ router.put("/update", authAdmin, async (req, res) => {
         numberOfCopies,
         bookCoverLink,
         datePublished,
-        dateAcquired
+        dateAcquired,
     } = req.body;
 
     // verification: incomplete fields
@@ -415,21 +331,18 @@ router.put("/update", authAdmin, async (req, res) => {
         if (existingBook) {
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
-            await bookModel.findOne(
-                { bookId: bookId },
-                (err, updatedBook) => {
-                    updatedBook.title = title;
-                    updatedBook.ISBN = ISBN;
-                    updatedBook.physicalDesc = physicalDesc;
-                    updatedBook.publisher = publisher;
-                    updatedBook.numberOfCopies = numberOfCopies;
-                    updatedBook.bookCoverLink = bookCoverLink;
-                    updatedBook.datePublished = datePublished;
-                    updatedBook.dateAcquired = dateAcquired;
+            await bookModel.findOne({ bookId: bookId }, (err, updatedBook) => {
+                updatedBook.title = title;
+                updatedBook.ISBN = ISBN;
+                updatedBook.physicalDesc = physicalDesc;
+                updatedBook.publisher = publisher;
+                updatedBook.numberOfCopies = numberOfCopies;
+                updatedBook.bookCoverLink = bookCoverLink;
+                updatedBook.datePublished = datePublished;
+                updatedBook.dateAcquired = dateAcquired;
 
-                    updatedBook.save();
-                }
-            );
+                updatedBook.save();
+            });
 
             // edit fields in the book_author collection
             // delete the current entries of authors
@@ -489,23 +402,27 @@ res String:
 router.delete("/delete/:bookId", authAdmin, async (req, res) => {
     const bookIdHolder = req.params.bookId;
 
-    if(!bookIdHolder){
-        return res.status(404).json({ errorMessage: "Not found. No bookID in parameters." });
+    if (!bookIdHolder) {
+        return res
+            .status(404)
+            .json({ errorMessage: "Not found. No bookID in parameters." });
     }
 
-    try {      
+    try {
         // search if book exists in book collection
         const existingBook = await bookModel.findOne({ bookId: bookIdHolder });
 
         // if book exists, delete its entries from book, book_author, book_subject, and book_cover
         if (existingBook) {
             await bookModel.findOneAndDelete({ bookId: bookIdHolder });
-            await bookAuthorModel.deleteMany({ bookId: bookIdHolder});
-            await bookSubjectModel.deleteMany({ bookId: bookIdHolder});
+            await bookAuthorModel.deleteMany({ bookId: bookIdHolder });
+            await bookSubjectModel.deleteMany({ bookId: bookIdHolder });
 
             res.send("Entry Deleted");
         } else {
-            res.status(400).json({errorMessage:"This book does not exist! Cannot delete."});
+            res.status(400).json({
+                errorMessage: "This book does not exist! Cannot delete.",
+            });
         }
     } catch (err) {
         console.log(err);

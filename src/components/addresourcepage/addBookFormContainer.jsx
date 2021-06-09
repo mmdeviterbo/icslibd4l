@@ -49,6 +49,7 @@ const AddBookFormContainer = () => {
   const [publisher, setPublisher] = useState("");
   const [numOfCopies, setNumOfCopies] = useState(0);
   const [description, setDescription] = useState("");
+  const [bookCoverLink, setBookCoverLink] = useState("");
   // const [image, setImage] = useState(null);
 
   const FormData = require("form-data");
@@ -56,16 +57,6 @@ const AddBookFormContainer = () => {
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
-  // const handleImage = (e) => {
-  //   let file = e.target.files[0];
-  //   let reader = new FileReader();
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //     reader.onload = (e) => {
-  //       setImage(file);
-  //     };
-  //   }
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -80,6 +71,7 @@ const AddBookFormContainer = () => {
         physicalDesc: description,
         publisher,
         numberOfCopies: numOfCopies,
+        bookCoverLink
       };
       console.log(userInput);
       console.log(courses);
@@ -368,6 +360,11 @@ const AddBookFormContainer = () => {
                 placeholder ={"https://www.example.com/"}
                 className= "resourcefiles"
                 id="bookcover"
+                onChange={(event) => 
+                      {
+                      setBookCoverLink(event.target.value);
+                      }
+                    }
                 />
             </div>
 
