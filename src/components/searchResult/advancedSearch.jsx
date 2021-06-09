@@ -110,13 +110,13 @@ export default function AdvancedSearch({ appRef }) {
         ) {
             history.push(`/search?type=${resourceType}&search=${tempStr}`);
         }
-
-        if (!resourceType || resourceType === "") {
-            setUrlRequest(`/search?type=any&search=${tempStr}`);
-            history.push(`/search?type=any&search=${tempStr}`);
-        } else {
-            setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
-        }
+        setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+        // if (!resourceType || resourceType === "") {
+        //     setUrlRequest(`/search?type=any&search=${tempStr}`);
+        //     history.push(`/search?type=any&search=${tempStr}`);
+        // } else {
+        //     setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+        // }
 
         // call convert filter to object
         filterParser();
