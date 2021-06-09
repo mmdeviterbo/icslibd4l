@@ -8,6 +8,8 @@ import ChipInput from "material-ui-chip-input";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
+import ToastNotification from "../toastNotification";
+import "react-toastify/dist/ReactToastify.css";
 
 const classificationOptions = [
   { value: "Special Problem", label: "Special Problem" },
@@ -88,7 +90,6 @@ const adviserchoices = [
 
 const AddNewSPThesisForm = () => {
   // functionalities:
-  const [id, setId] = useState("");
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(0);
@@ -112,35 +113,25 @@ const AddNewSPThesisForm = () => {
     },
   ]);
   const [adviserList, setAdviserList] = useState([]);
-  const FormData = require("form-data");
-  const formData = new FormData();
+
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
   const handleSubmit = async (event) => {
     console.log("meow");
     event.preventDefault();
-    if (
-      // !source_code ||
-      !manuscript ||
-      !journal ||
-      !poster
-    ) {
-      return alert("Please upload the required files");
+
+    if (authorList.length === 0) {
+      return ToastNotification({ content: "Please enter all required fields" });
     }
-    // console.log(source_code);
-    // console.log(poster);
-    // console.log(journal);
-    // console.log(manuscript);
 
     try {
       const userInput = {
-        sp_thesis_id: id,
         type,
         title,
         abstract,
         year,
-        // source_code,
+        source_code,
         manuscript,
         journal,
         poster,
@@ -150,25 +141,20 @@ const AddNewSPThesisForm = () => {
       };
 
       console.log(userInput);
-      formData.append("body", JSON.stringify(userInput)); // NEED MAUNA TO WTF
-      // formData.append("file", source_code);  // Leave it out for now since need ng clarification about this
-      formData.append("journal", journal);
-      formData.append("manuscript", manuscript);
-      formData.append("poster", poster);
-      // formData.append("body", userInput);
-      const { data } = await ResourceServices.addSpThesis(formData);
+      const { data } = await ResourceServices.addSpThesis(userInput);
       console.log(data);
 
       setSuccess("success");
       setShow(true);
-      //   alert(`New Sp/Thesis has been successfully added to the library`);
       event.target.reset();
       // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
-        setSuccess("fail");
-        setShow(true);
-        // alert(err.response.data.errorMessage); // some reason error message
+        ToastNotification({ content: err.response.data.errorMessage });
+        // <ToastNotification
+        //   content={err.response.data.errorMessage}
+        //   style={{ width: "2000px" }}
+        // />;
       }
     }
   };
@@ -190,95 +176,17 @@ const AddNewSPThesisForm = () => {
     setAdviserList(adviser);
   };
 
-  // not working qwq
-  // const handleFile = (e) => {
-  //   let file = e.target.files[0];
-  //   let reader = new FileReader();
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //     reader.onload = (e) => {
-  //       return file;
-  //     };
-  //   }
-  // };
-
-  // Redundant handlefunctions. Find a way to make it reusable
-  const handleSourceCode = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setSourceCode(file);
-      };
-    }
-  };
-
-  const handleManuscript = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setManuscript(file);
-      };
-    }
-  };
-
-  const handleJournal = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setJournal(file);
-      };
-    }
-  };
-
-  const handlePoster = (e) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        setPoster(file);
-      };
-    }
-  };
-
   return (
     <div className="add-res-form-cont">
-      {/* main form */}
-      <form id="addSPTForm" onSubmit={handleSubmit} autoComplete="off">
-        <div className="form-container">
-          {" "}
-          {/* both parts of the form are inside this div for display:flex purposes */}
-          <div className="res-primary-info">
-            {" "}
-            {/* left side of the form */}
-            <h2>
-              <b>Primary Info</b>
-            </h2>
-            <hr />
-            {/* ID Field */}
-            {/* Disabled, uneditable */}
-            {/* how to get generated ID? */}
-            <div className="primaryfields">
-                <label htmlFor="resId">ID: &nbsp; </label>
-                <input
-                required
-                type="text"
-                id="resId"
-                // value = 
-                // disabled
-                onChange={(event) => {
-                    setId(event.target.value);
-                }}
-                />
-            </div>
-            
-            {/* Title Field */}
+      <form
+        className="main-form"
+        id="addSPTForm"
+        onSubmit={handleSubmit}
+        autoComplete="off"
+      >
+        <div className="form-columns">
+          <div className="form-left-column">
+            {/* Title */}
             <div className="primaryfields">
               <label htmlFor="resTitle">Title: &nbsp; </label>
               <input
@@ -290,7 +198,7 @@ const AddNewSPThesisForm = () => {
                 }}
               />
             </div>
-            {/* Date Published Field */}
+            {/* Date Published */}
             <div className="primaryfields">
               <label htmlFor="datePublished">Year Published: &nbsp; </label>
               <input
@@ -310,7 +218,8 @@ const AddNewSPThesisForm = () => {
             </div>
             {/* Author fields */}
             <div className="authors-group">
-              <h5>Author(s):</h5>
+              <h4 style={{ fontWeight: "normal" }}>Author(s):</h4>
+
               {/* button adds fields for author */}
               <button
                 id="addAuthor"
@@ -339,59 +248,54 @@ const AddNewSPThesisForm = () => {
                 Add Author
               </button>
 
-              <br />
-              <br />
-              <br />
               {authorList.map((p, index) => {
                 return (
-                  <div key={p.authorid}>
+                  <div className="authorfields" key={p.authorid}>
                     {/* AUTHOR FIRST NAME FIELD */}
-                    <div className="primaryfields">
-                      <label htmlFor="resAuthorFN">
-                        &nbsp;&nbsp;&nbsp;&nbsp;First Name: &nbsp;{" "}
-                      </label>
+                    <div className="authorname-cont">
+                      <div className="author-name">
+                        <label htmlFor="resAuthorFN">First Name:</label>
 
-                      <input
-                        type="text"
-                        id="resAuthorFN"
-                        // name="fname"
-                        required
-                        value={p.fname}
-                        onChange={(e) => {
-                          const fname = e.target.value;
-                          setAuthorList((currentAuthors) =>
-                            produce(currentAuthors, (v) => {
-                              v[index].fname = fname;
-                            })
-                          );
-                          // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                        }}
-                      />
-                    </div>
+                        <input
+                          type="text"
+                          id="resAuthorFN"
+                          // name="fname"
+                          required
+                          value={p.fname}
+                          onChange={(e) => {
+                            const fname = e.target.value;
+                            setAuthorList((currentAuthors) =>
+                              produce(currentAuthors, (v) => {
+                                v[index].fname = fname;
+                              })
+                            );
+                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                          }}
+                        />
+                      </div>
 
-                    {/* AUTHOR LAST NAME FIELD */}
-                    <div className="primaryfields">
-                      <label htmlFor="resAuthorLN">
-                        &nbsp;&nbsp;&nbsp;&nbsp;Last Name: &nbsp;{" "}
-                      </label>
-                      <input
-                        type="text"
-                        id="resAuthorLN"
-                        required
-                        // name="lname"
-                        value={p.lname}
-                        onChange={(e) => {
-                          const lname = e.target.value;
-                          setAuthorList((currentAuthors) =>
-                            produce(currentAuthors, (v) => {
-                              v[index].lname = lname;
-                            })
-                          );
-                          // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                        }}
-                      />
-                    </div>
-
+                      {/* AUTHOR LAST NAME FIELD */}
+                      <div className="author-name">
+                        <label htmlFor="resAuthorLN">Last Name:</label>
+                        <input
+                          type="text"
+                          id="resAuthorLN"
+                          required
+                          // name="lname"
+                          value={p.lname}
+                          onChange={(e) => {
+                            const lname = e.target.value;
+                            setAuthorList((currentAuthors) =>
+                              produce(currentAuthors, (v) => {
+                                v[index].lname = lname;
+                              })
+                            );
+                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                          }}
+                        />
+                      </div>
+                    </div>{" "}
+                    {/* closing div for authorname-cont */}
                     {/* button deletes author fields */}
                     <button
                       id="deleteAuthor"
@@ -410,118 +314,114 @@ const AddNewSPThesisForm = () => {
                     >
                       Delete Author
                     </button>
-                    <br />
-                    <br />
-                    <br />
-                  </div>
+                  </div> //closing for authorfields
                 );
               })}
-
               {/* for testing only: */}
               {/* <div className = "testdiv">
-                            {JSON.stringify(authorList, null, 2)}
-                        </div> */}
+                                                {JSON.stringify(authorList, null, 2)}
+                                            </div> */}
             </div>{" "}
-            {/* closing tag for authors group */}
+            {/* authors-group close */}
           </div>{" "}
-          {/* closing tag for left side of form */}
-          {/* Right side of the Form */}
-          <div className="spthesisform">
-            <h2>
-              <b>SP / Thesis</b>
-            </h2>{" "}
-            {/* Header */}
-            <hr />
-            {/* Dropdown for classification: either sp or thesis */}
+          {/*closing for left column  */}
+          <div className="form-mid-column">
+            {/* Classification */}
             <div className="classifSelect">
-              <br />
               Classification:
               <Select
                 id="resClassification"
+                required
                 // defaultValue={"Select..."}
                 options={classificationOptions}
                 value={classificationOptions.find((obj) => obj.value === type)}
                 onChange={handleTypeChange}
               ></Select>
             </div>
+
             {/* Adviser Dropdown Multi */}
-            <h5 style={{ fontWeight: "normal", fontFamily: "Montserrat" }}>
-              Adviser(s):
-            </h5>
-            <div className="selectadvisers">
+            <div className="select-advisers">
+              <label htmlFor="advsel">Advisers:</label>
               <Select
                 id="advsel"
+                required
                 options={adviserchoices}
                 value={adviserchoices.find((obj) => obj.value === adviser)}
                 onChange={handleAdviserChange}
                 isMulti
               ></Select>
             </div>
-            <br />
+
             {/* Abstract TextArea */}
-            <div>
-              <h5 style={{ fontWeight: "normal", fontFamily: "Montserrat" }}>
-                Enter Abstract here:
-              </h5>
+            <div className="abstract-div">
+              <label htmlFor="abstractText">Abstract:</label>
               <textarea
+                required
                 id="abstractText"
                 onChange={(event) => {
                   setAbstract(event.target.value);
                 }}
               />
             </div>
-            {/* File uploads here */}
-            <div className="spthesisfiles">
-              <h5>Upload Source Code</h5>
+          </div>{" "}
+          {/* mid column close */}
+          <div className="form-right-column">
+            <div className="primaryfields">
+              <label htmlFor="">Source Code Link:</label>
               <input
-                type="file"
+                type="url"
                 className="resourcefiles"
-                id="spthesisJournal"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  // const file = handleFile(e);
-                  // setSourceCode(file);
-                  // console.log(handleFile(e));
-                  handleSourceCode(e);
+                id="spt-sourcecode"
+                placeholder={"https://www.example.com/"}
+                // onClick={(e) => (e.target.value = null)}
+                onChange={(event) => {
+                  setSourceCode(event.target.value);
                 }}
               />
             </div>
-            <div className="spthesisfiles">
-              <h5>Upload Manuscript</h5>
+
+            <div className="primaryfields">
+              <label htmlFor="">Manuscript Link:</label>
               <input
-                type="file"
+                type="url"
                 className="resourcefiles"
-                id="spthesisManuscript"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  handleManuscript(e);
+                id="spt-manuscript"
+                placeholder={"https://www.example.com/"}
+                // onClick={(e) => (e.target.value = null)}
+                onChange={(event) => {
+                  setManuscript(event.target.value);
                 }}
               />
             </div>
-            <div className="spthesisfiles">
-              <h5>Upload Journal</h5>
+
+            <div className="primaryfields">
+              <label htmlFor="">Journal Link:</label>
               <input
-                type="file"
+                type="url"
                 className="resourcefiles"
-                id="spthesisJournal"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  handleJournal(e);
+                id="spt-journal"
+                placeholder={"https://www.example.com/"}
+                // onClick={(e) => (e.target.value = null)}
+                onChange={(event) => {
+                  setJournal(event.target.value);
                 }}
               />
             </div>
-            <div className="spthesisfiles">
-              <h5>Upload Poster</h5>
+
+            <div className="primaryfields">
+              <label htmlFor="">Poster Link:</label>
               <input
-                type="file"
+                type="url"
                 className="resourcefiles"
-                id="spthesisPoster"
-                onClick={(e) => (e.target.value = null)}
-                onChange={(e) => {
-                  handlePoster(e);
+                id="spt-poster"
+                placeholder={"https://www.example.com/"}
+                // onClick={(e) => (e.target.value = null)}
+                onChange={(event) => {
+                  setPoster(event.target.value);
                 }}
               />
             </div>
+
             <div className="primaryfields">
               <label htmlFor="keywords-field">Keywords: &nbsp; </label>
               <ChipInput
@@ -529,13 +429,16 @@ const AddNewSPThesisForm = () => {
                 onChange={(chips) => handleChips(chips)}
               />
             </div>
-            <br />
+
             <button type="submit" id="saveResource">
               Save
             </button>
-          </div>
-        </div>
-      </form>
+          </div>{" "}
+          {/* right form close */}
+        </div>{" "}
+        {/* form-columns close */}
+      </form>{" "}
+      {/* main form close */}
       <StatusModal
         message={success}
         name={"Sp/Thesis"}
@@ -544,7 +447,7 @@ const AddNewSPThesisForm = () => {
         operation={"add"}
         pathAfter={"/add-new-spt/"}
       />
-    </div>
+    </div> //add-res-form-cont close
   );
 };
 

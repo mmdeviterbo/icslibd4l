@@ -11,7 +11,7 @@ const StatusModal = ({
   setShow,
   operation,
   pathAfter,
-  item,
+  // item,
   isSelf,
 }) => {
   const history = useHistory();
