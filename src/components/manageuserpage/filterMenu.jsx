@@ -6,7 +6,7 @@ import "../../styles/manageUserStyle.css";
 export default function FilterMenu({ selection, setSelection }) {
     useEffect(() => {
         setSelection(-1);
-    }, []);
+    }, [setSelection]);
 
     const classificationList = [
         { value: 1, label: "Admin" },
