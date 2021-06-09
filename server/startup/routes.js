@@ -52,6 +52,7 @@ module.exports = function (app) {
 
     // set up routes
     app.use("/admin", require("../routes/adminRouter"));
+    app.use("/facultystaff", require("../routes/icsFacultyStaffRouter"));
     app.use("/users", require("../routes/userRouter"));
     app.use("/userlogs", require("../routes/userLogRouter"));
     app.use("/books", require("../routes/bookRouter"));

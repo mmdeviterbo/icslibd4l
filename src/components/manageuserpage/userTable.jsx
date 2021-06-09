@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -14,6 +14,8 @@ import Select from "react-select";
 import { jwtPrivateKey } from "./../../config.json";
 
 import "../../styles/manageUserStyle.css";
+// import { isElementAccessExpression } from "typescript";
+// import { MongoServerSelectionError } from "mongodb";
 
 const tableHeader = [
     "User ID",
@@ -24,19 +26,21 @@ const tableHeader = [
     " ",
 ];
 
-export default function UserTable({ user }) {
+let tableEntry = [];
+
+export default function UserTable({ user, selectedFilter, searchInput }) {
     // Array for user data retreived from database.
     const [userList, setUserList] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [isEditing, setIsEditing] = useState(false);
     const [newClassification, setNewClassification] = useState(0);
-    const [selectedUser, setSelectedUser] = useState({});
+    // const [selectedUser, setSelectedUser] = useState({});
 
     const location = useLocation();
     const history = useHistory();
 
-    let tableEntry = userList;
+    tableEntry = userList;
 
     const classificationString = ["Admin", "Faculty", "Staff", "Student"];
     const classificationObj = [
@@ -67,14 +71,52 @@ export default function UserTable({ user }) {
                 fontWeight: "bold",
                 fontSize: "1.4rem",
                 zIndex: "0",
-            }}>
+            }}
+        >
             <span>{header_text}</span>
         </TableCell>
     ));
 
+    // Get users from database
+    const readUsers = useCallback(async () => {
+        try {
+            await PersonService.readAllUsers().then((response) => {
+                if (selectedFilter !== -1) {
+                    setUserList(
+                        Array.from(response.data).filter(
+                            (userItem) => userItem.userType === selectedFilter
+                        )
+                    );
+                } else {
+                    setUserList(Array.from(response.data));
+                }
+            });
+        } catch (err) {}
+    }, [selectedFilter]);
+
+    // Search user from database
+    const searchUser = useCallback(
+        async (searchInput) => {
+            try {
+                await PersonService.searchUser(searchInput).then((response) => {
+                    if (selectedFilter !== -1) {
+                        setUserList(
+                            Array.from(response.data).filter(
+                                (userItem) =>
+                                    userItem.userType === selectedFilter
+                            )
+                        );
+                    } else {
+                        setUserList(Array.from(response.data));
+                    }
+                });
+            } catch (err) {}
+        },
+        [selectedFilter]
+    );
+
     // executes if the location is changed. (Opening modals)
     useEffect(() => {
-        //if no user is logged in, redirect it to homepage
         try {
             const jwt = localStorage.getItem(jwtPrivateKey);
             var userInfo = PersonService.decryptToken(jwt);
@@ -83,7 +125,7 @@ export default function UserTable({ user }) {
             history.push("/home");
         }
         readUsers();
-    }, [location]);
+    }, [location, history, readUsers]);
 
     // Set the current page of table to the first page if the previous page becomes empty.
     useEffect(() => {
@@ -92,14 +134,14 @@ export default function UserTable({ user }) {
         }
     }, [userList.length, rowsPerPage, page]);
 
-    // Get users from database
-    const readUsers = async () => {
-        try {
-            await PersonService.readAllUsers().then((response) => {
-                setUserList(Array.from(response.data));
-            });
-        } catch (err) {}
-    };
+    // Filters the array according to search input
+    useEffect(() => {
+        if (searchInput) {
+            searchUser(searchInput);
+        } else {
+            readUsers();
+        }
+    }, [searchInput, selectedFilter, readUsers, searchUser]);
 
     // Handler event for page change in user table
     const handlePageChange = (event, newPage) => {
@@ -110,15 +152,6 @@ export default function UserTable({ user }) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
-    // Table style
-    // const useStyles = makeStyles({
-    //   root: {
-    //     borderRadius: "10px",
-    //   },
-    // });
-
-    // const tableContainer = useStyles();
 
     // window.addEventListener("contextmenu", (event) => {
     //     event.preventDefault();
@@ -159,7 +192,7 @@ export default function UserTable({ user }) {
                     // The selected user is being edited currently
                     if (isEditing && isEditing === user.isEditable) {
                         setNewClassification(user.userType);
-                        setSelectedUser({});
+                        // setSelectedUser({});
                         setIsEditing(false);
                         return { ...user, isEditable: !user.isEditable };
                         // There is an ongoing edit but the selected user is not the one being edited
@@ -168,7 +201,7 @@ export default function UserTable({ user }) {
                         // No ongoing edits
                     } else {
                         setNewClassification(user.userType);
-                        setSelectedUser(user);
+                        // setSelectedUser(user);
                         setIsEditing(true);
                         return { ...user, isEditable: !user.isEditable };
                     }
@@ -177,11 +210,6 @@ export default function UserTable({ user }) {
             });
         });
     };
-
-    // Handler function for saving the changes is user classification
-    // const handleSave = async (rowIndex) => {
-    //   toggleEdit(rowIndex);
-    // };
 
     // Handler function for discarding the changes in user classification
     const discardChange = (rowIndex) => {
@@ -202,7 +230,8 @@ export default function UserTable({ user }) {
                     style={{
                         fontSize: "16px",
                         width: "15%",
-                    }}>
+                    }}
+                >
                     <span>{entry.googleId}</span>
                 </TableCell>
                 <TableCell
@@ -211,7 +240,8 @@ export default function UserTable({ user }) {
                         width: "20%",
                         align: "left",
                         color: "black",
-                    }}>
+                    }}
+                >
                     <span>{entry.fullName}</span>
                 </TableCell>
                 <TableCell
@@ -220,7 +250,8 @@ export default function UserTable({ user }) {
                         width: "20%",
                         align: "left",
                         color: "black",
-                    }}>
+                    }}
+                >
                     <span>{entry.nickname}</span>
                 </TableCell>
                 <TableCell style={{ fontSize: "16px", width: "20%" }}>
@@ -231,7 +262,8 @@ export default function UserTable({ user }) {
                         fontSize: "16px",
                         width: "15%",
                         textAlign: "left",
-                    }}>
+                    }}
+                >
                     {entry.isEditable ? (
                         <EditClassification entry={entry} index={index} />
                     ) : (
@@ -244,7 +276,8 @@ export default function UserTable({ user }) {
                             width: " 10%",
                             textAlign: "center",
                             fontSize: "1.5rem",
-                        }}>
+                        }}
+                    >
                         {entry.isEditable ? (
                             <>
                                 <Link
@@ -260,7 +293,8 @@ export default function UserTable({ user }) {
                                                 fullName: entry.fullName,
                                             },
                                         },
-                                    }}>
+                                    }}
+                                >
                                     <i
                                         className={"table-icons fa fa-floppy-o"}
                                         onContextMenu={(e) => {
@@ -270,15 +304,14 @@ export default function UserTable({ user }) {
                                         style={{
                                             margin: "10px",
                                             color: "gray",
-                                        }}></i>
+                                        }}
+                                    ></i>
                                 </Link>
                                 <i
                                     className="table-icons fa fa-times"
                                     onClick={(e) => discardChange(index)}
-                                    style={{
-                                        margin: "10px",
-                                        color: "red",
-                                    }}></i>
+                                    style={{ margin: "10px", color: "red" }}
+                                ></i>
                             </>
                         ) : (
                             <>
@@ -290,10 +323,8 @@ export default function UserTable({ user }) {
                                     onClick={(e) => {
                                         toggleEdit(index);
                                     }}
-                                    style={{
-                                        margin: "10px",
-                                        color: "gray",
-                                    }}></i>
+                                    style={{ margin: "10px", color: "gray" }}
+                                ></i>
                                 <Link
                                     to={{
                                         pathname: "/manage-users/delete-user",
@@ -309,7 +340,8 @@ export default function UserTable({ user }) {
                                                 userType: entry.userType,
                                             },
                                         },
-                                    }}>
+                                    }}
+                                >
                                     <i
                                         className="table-icons fa fa-trash-o"
                                         onContextMenu={(e) => {
@@ -318,7 +350,8 @@ export default function UserTable({ user }) {
                                         style={{
                                             margin: "10px",
                                             color: "red",
-                                        }}></i>
+                                        }}
+                                    ></i>
                                 </Link>
                             </>
                         )}
@@ -337,16 +370,42 @@ export default function UserTable({ user }) {
                     <TableHead>
                         <TableRow>{header}</TableRow>
                     </TableHead>
-                    <TableBody>
-                        {entries.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                        )}
-                        {emptyRows > 0 &&
-                            (<TableRow style={{ height: 40 * emptyRows}}>
-                            </TableRow>)
-                        }
-                    </TableBody>
+                    {(searchInput || selectedFilter) &&
+                    userList.length === 0 ? (
+                        <TableBody>
+                            <TableRow
+                                style={{ width: "100%", textAlign: "center" }}
+                            >
+                                <TableCell colspan="5">
+                                    <div
+                                        style={{
+                                            padding: "5rem",
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        <h1>
+                                            Your search/filter returned no
+                                            results. Please check your spelling
+                                            and try again, or remove applied
+                                            filter.
+                                        </h1>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    ) : (
+                        <TableBody>
+                            {entries.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                            )}
+                            {emptyRows > 0 && (
+                                <TableRow
+                                    style={{ height: 40 * emptyRows }}
+                                ></TableRow>
+                            )}
+                        </TableBody>
+                    )}
                 </Table>
                 <TablePagination
                     rowsPerPage={rowsPerPage}
@@ -361,3 +420,42 @@ export default function UserTable({ user }) {
         </>
     );
 }
+
+// Filter admins from database
+// const readAdmins = async () => {
+//     // try {
+//     //     await PersonService.readAdmins().then((response) => {
+//     //         setUserList(Array.from(response.data));
+//     //     });
+//     // } catch (err) {}
+//     setUserList(
+//         userList.filter((userItem) => userItem.userType === selectedFilter)
+//     );
+// };
+
+// // Filter Faculty from database
+// const readFaculty = async () => {
+//     try {
+//         await PersonService.readFaculty().then((response) => {
+//             setUserList(Array.from(response.data));
+//         });
+//     } catch (err) {}
+// };
+
+// // Filter Staff from database
+// const readStaff = async () => {
+//     try {
+//         await PersonService.readStaff().then((response) => {
+//             setUserList(Array.from(response.data));
+//         });
+//     } catch (err) {}
+// };
+
+// // Filter Students from database
+// const readStudents = async () => {
+//     try {
+//         await PersonService.readStudents().then((response) => {
+//             setUserList(Array.from(response.data));
+//         });
+//     } catch (err) {}
+// };

@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import FilterMenu from "./filterMenu";
 import { useHistory } from "react-router";
 import UserTable from "./userTable";
-import ManagementHeader from "../managementHeader";
+// import ManagementHeader from "../managementHeader";
+// import UserSearch from "./userSearch";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PersonService from "../../services/personService";
-import { jwtPrivateKey } from "../../config.json";
-import background from "../../assets/searchBg_4.png";
+import ManagementHeader from "./../managementHeader";
 
+import { jwtPrivateKey } from "../../config.json";
 import "../../styles/manageUserStyle.css";
 
 export default function ManageUserPage({ user }) {
     const history = useHistory();
+    const [selection, setSelection] = useState(-1);
+    const [searchField, setSearchField] = useState("");
+    const [searchInput, setSearchInput] = useState(searchField);
 
     const accessPrivilege = () => {
         setTimeout(() => {
@@ -27,15 +31,51 @@ export default function ManageUserPage({ user }) {
         }, 700);
     };
 
+    const handleSearchEnter = (e) => {
+        if (e.key === "Enter") {
+            setSearchField(searchInput);
+        }
+    };
+
+    const handleSearchClick = (e) => {
+        setSearchField(searchInput);
+    };
+
     return (
         <>
             {user && user.userType === 1 ? (
                 <div className="manage-user-container">
-                    <img src={background} style={backgroundStyle} alt="#" />
-                    <ManagementHeader type={"user"} />
-                    {/* <FilterMenu /> */}
+                    <h1 id="manageUserId">Manage User</h1>
+                    <div className="manage-header-container">
+                        <div className="staff-search-bar-container">
+                            <input
+                                className="search-bar-temp"
+                                placeholder={"Search for users search"}
+                                value={searchInput}
+                                onKeyDown={handleSearchEnter}
+                                onChange={(e) =>
+                                    setSearchInput(e.target.value)
+                                }
+                            />
+                            <div className="input-group-append">
+                                <button
+                                    className="btn btn-secondary mybtnUserPage"
+                                    type="button"
+                                    onClick={handleSearchClick}
+                                >
+                                    <i className="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <FilterMenu selection={selection} setSelection={setSelection}/>
+                    </div>
+
                     <div className="usertable-container">
-                        <UserTable user={user} />
+                        <UserTable
+                            user={user}
+                            selectedFilter={selection}
+                            searchInput={searchField}
+                        />
                     </div>
                 </div>
             ) : (
@@ -44,7 +84,8 @@ export default function ManageUserPage({ user }) {
                         minHeight: "80vh",
                         display: "grid",
                         placeItems: "center",
-                    }}>
+                    }}
+                >
                     <PropagateLoader
                         color={"#0067a1"}
                         speedMultiplier={2}
@@ -57,10 +98,3 @@ export default function ManageUserPage({ user }) {
         </>
     );
 }
-const backgroundStyle = {
-    position: "absolute",
-    height: "100%",
-    width: "100%",
-    zIndex: "-1",
-    transform: "scaleY(-1)",
-};
