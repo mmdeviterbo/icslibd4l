@@ -206,9 +206,11 @@ export default function AdvancedSearch({ appRef }) {
                     </button>
                 </div>
 
-                <div style={loader? displayLoader : resultsOuterContainer}>
-                    {loader? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
-                        <div>
+                <div style={resultsOuterContainer}>
+                    {loader?
+                        <div style={resultTop}>
+                            <p className="textStyle">Getting result/s...</p>
+                        </div>:
                         <div style={resultTop}>
                             {resultsFilterArr.length > 0 ? (
                                 <p className="textStyle">
@@ -228,27 +230,29 @@ export default function AdvancedSearch({ appRef }) {
                                 <p className="textStyle">No results</p>
                             )}
                         </div>
-
-                        <div style={resultBottom}>
-                            {resultsFilterArr && displayresults}
-                            {resultsFilterArr.length > 0 ? (
-                                <ReactPaginate
-                                    previousLabel={"Previous"}
-                                    nextLabel={"Next"}
-                                    pageCount={pageCount}
-                                    onPageChange={changePage}
-                                    containerClassName={"paginationBttns"}
-                                    previousLinkClassName={"previousBttn"}
-                                    nextLinkClassName={"nextBttn"}
-                                    disabledClassName={"paginationDisabled"}
-                                    activeClassName={"paginationActive"}
-                                />
-                            ) : (
-                                <div></div>
-                            )}
-                        </div>
-                        </div>
                     }
+                        <div style={loader? displayLoader : resultBottom}>
+                            {loader? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
+                            <div>
+                                {resultsFilterArr && displayresults}
+                                {resultsFilterArr.length > 0 ? (
+                                    <ReactPaginate
+                                        previousLabel={"Previous"}
+                                        nextLabel={"Next"}
+                                        pageCount={pageCount}
+                                        onPageChange={changePage}
+                                        containerClassName={"paginationBttns"}
+                                        previousLinkClassName={"previousBttn"}
+                                        nextLinkClassName={"nextBttn"}
+                                        disabledClassName={"paginationDisabled"}
+                                        activeClassName={"paginationActive"}
+                                    />
+                                ) : (
+                                    <div></div>
+                                )}
+                            </div>
+                            }
+                        </div>
                 </div>
             </div>
         </form>
