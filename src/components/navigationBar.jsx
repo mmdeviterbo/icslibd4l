@@ -101,7 +101,7 @@ export default function NavigationBar({
                     <div style={logoContainer}>
                         <img src={logo} alt="#" style={logoStyle}/>
                     </div>
-                    <p style={{letterSpacing:"2px"}}>Analytica</p>
+                    <p style={{letterSpacing:"2px", textShadow:"2px 1.5px #ff0000", fontWeight:600}}>Analytica</p>
                 </Link>
                 <div className="right-half">
                     <Link to="/home" className="navItem">
@@ -271,11 +271,14 @@ const SearchFilter = ({ user }) => {
 
 const logoContainer = {
     height:"80%",
-    marginRight:"1%"
+    marginRight:"1%",
+    display:"flex",
+    alignItems:"center",
+    dropShadow:"2px 10px"
 }
 
 const logoStyle = {
-    height:"90%",
+    height:"60%",
 }
 
 const mainBgStyleContainer = {

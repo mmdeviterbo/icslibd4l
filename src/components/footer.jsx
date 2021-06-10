@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import icsLogo from '../assets/icslogo.png'
+import logo from '../assets/mainlogo/icslibd4l.png';
 import {Link, useHistory} from 'react-router-dom';
 
 export default function Footer() {
@@ -27,7 +27,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className="right-footer-container" style={rightFooterContainer}>
-                <img draggable="false" src={icsLogo} style={icslogo} alt="#"/>
+                <img draggable="false" src={logo} style={icslogo} alt="#"/>
                 <p>FOLLOW US</p>
                 <div>
                     <i style={icons} className="fa fa-lg fa-facebook"
@@ -82,7 +82,7 @@ const textFooter={
     "fontSize":"14px",
 }
 const icslogo={
-    "height":"100px",
+    "height":"90px",
     "width":"100px",
     "margin":"8px"
 }
