@@ -5,10 +5,13 @@ const authAdmin = require("../middleware/authAdmin");
 const puppeteer = require("puppeteer");
 const fs = require("fs-extra");
 const hbs = require("handlebars");
+const pdflib = require("pdf-lib");
 const path = require("path");
 const pdfMerge = require("pdf-merger-js");
 const BookModel = require("../models/bookModel");
 const ThesisModel = require("../models/spThesisModel");
+const { PDFDocument } = require("pdf-lib");
+const { pdfDocEncodingDecode } = require("pdf-lib/cjs/utils");
 
 const monthList = [
     "January",
@@ -85,6 +88,7 @@ router.get("/report", async (req, res) => {
         });
         const page = await browser.newPage();
         let books, spThesis;
+        let pdfBuffer = [], bookStart = 0, spThesisStart = 0;
         //books
         if (type === "all" || type === "books") {
             //query for all book information
@@ -187,34 +191,117 @@ router.get("/report", async (req, res) => {
             ]);
         }
 
-        const bookContent = await compile("book", books);
-        const bookPage = await browser.newPage();
-        await bookPage.setContent(bookContent);
-        await bookPage.pdf({
-            path: "./src/download/Books.pdf",
-            format: "A4",
-            printBackground: true,
-            margin: {top: 40, bottom: 40, left: 40, right: 40},
-            landscape: true
+        //create pdf buffers with 10 items per page for books
+        do {
+            if(bookStart + 10 > books.length){
+                const bookContent = await compile("book", books.slice(bookStart,(books.length-1)));
+                const bookPage = await browser.newPage();
+                await bookPage.setContent(bookContent);
+                await bookPage.pdf({
+                    path: "./src/download/Books.pdf",
+                    format: "A4",
+                    printBackground: true,
+                    margin: {top: 40, bottom: 40, left: 40, right: 40},
+                    landscape: true
+                });
+                pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
+            }
+            else {
+                const bookContent = await compile("book", books.slice(bookStart,bookStart+10));
+                const bookPage = await browser.newPage();
+                await bookPage.setContent(bookContent);
+                await bookPage.pdf({
+                    path: "./src/download/Books.pdf",
+                    format: "A4",
+                    printBackground: true,
+                    margin: {top: 40, bottom: 40, left: 40, right: 40},
+                    landscape: true
+                });
+                pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
+            }
+            bookStart += 10;
+        } while(bookStart < books.length);
+
+        //create pdf buffers with 10 items per page for spThesis
+        do {
+            if(spThesisStart + 20 > spThesis.length){
+                const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,(spThesis.length-1)));
+                const bookPage = await browser.newPage();
+                await bookPage.setContent(bookContent);
+                await bookPage.pdf({
+                    path: "./src/download/spThesis.pdf",
+                    format: "A4",
+                    printBackground: true,
+                    margin: {top: 40, bottom: 40, left: 40, right: 40},
+                    landscape: true
+                });
+                pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
+            }
+            else {
+                const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,spThesisStart+20));
+                const bookPage = await browser.newPage();
+                await bookPage.setContent(bookContent);
+                await bookPage.pdf({
+                    path: "./src/download/spThesis.pdf",
+                    format: "A4",
+                    printBackground: true,
+                    margin: {top: 40, bottom: 40, left: 40, right: 40},
+                    landscape: true
+                });
+                pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
+            }
+            spThesisStart += 20;
+        } while(spThesisStart < spThesis.length);
+        
+        //merge pdf buffers and save file
+        const mergedPdf = await PDFDocument.create();
+        for (const pdfBytes of pdfBuffer){
+            const pdf = await PDFDocument.load(pdfBytes);
+            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+            copiedPages.forEach((page) => {
+                mergedPdf.addPage(page);
+            });
+        }
+
+        const buf = await mergedPdf.save();
+
+        let path = './src/download/Merged.pdf';
+        fs.open(path, 'w', function(err, fd) {
+            fs.write(fd, buf, 0, buf.length, null, function (err){
+                fs.close(fd, function () {
+                    console.log('file saved');
+                });
+            });
         });
 
-        const spThesisContent = await compile("spThesis", spThesis);
-        const spThesisPage = await browser.newPage();
-        await spThesisPage.setContent(spThesisContent);
-        await spThesisPage.pdf({
-            path: "./src/download/spThesis.pdf",
-            format: "A4",
-            printBackground: true,
-            margin: {top: 40, bottom: 40, left: 40, right: 40},
-            landscape: true
-        });
+        // const bookContent = await compile("book", books);
+        // const bookPage = await browser.newPage();
+        // await bookPage.setContent(bookContent);
+        // await bookPage.pdf({
+        //     path: "./src/download/Books.pdf",
+        //     format: "A4",
+        //     printBackground: true,
+        //     margin: {top: 40, bottom: 40, left: 40, right: 40},
+        //     landscape: true
+        // });
 
-        const merger = new pdfMerge();
+        // const spThesisContent = await compile("spThesis", spThesis);
+        // const spThesisPage = await browser.newPage();
+        // await spThesisPage.setContent(spThesisContent);
+        // await spThesisPage.pdf({
+        //     path: "./src/download/spThesis.pdf",
+        //     format: "A4",
+        //     printBackground: true,
+        //     margin: {top: 40, bottom: 40, left: 40, right: 40},
+        //     landscape: true
+        // });
 
-        merger.add("./src/download/Books.pdf");
-        merger.add("./src/download/spThesis.pdf");
+        // const merger = new pdfMerge();
 
-        await merger.save("./src/download/Merged.pdf");
+        // merger.add("./src/download/Books.pdf");
+        // merger.add("./src/download/spThesis.pdf");
+
+        // await merger.save("./src/download/Merged.pdf");
 
         await browser.close();
 
