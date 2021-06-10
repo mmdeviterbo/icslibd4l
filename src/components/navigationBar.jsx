@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import GoogleLogin from "react-google-login";
 import { Link, useHistory } from "react-router-dom";
-import "../styles/homepageStyle.css";
 import { Dropdown, Icon } from "semantic-ui-react";
 import { gsap } from "gsap";
 import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
 import ResourceService from "../services/resourceService";
+import logo from '../assets/mainlogo/icslibd4l.png';
+import "../styles/homepageStyle.css";
+
 
 // the entire navigation bar
 export default function NavigationBar({
@@ -96,7 +98,10 @@ export default function NavigationBar({
             <div style={mainBgStyleContainer} />
             <ul className="navbar-elements">
                 <Link className="left-half" to="/home">
-                    ourProjectName
+                    <div style={logoContainer}>
+                        <img src={logo} alt="#" style={logoStyle}/>
+                    </div>
+                    <p style={{letterSpacing:"2px", textShadow:"2px 1.5px #ff0000", fontWeight:600}}>Analytica</p>
                 </Link>
                 <div className="right-half">
                     <Link to="/home" className="navItem">
@@ -263,6 +268,18 @@ const SearchFilter = ({ user }) => {
         />
     );
 };
+
+const logoContainer = {
+    height:"80%",
+    marginRight:"1%",
+    display:"flex",
+    alignItems:"center",
+    dropShadow:"2px 10px"
+}
+
+const logoStyle = {
+    height:"60%",
+}
 
 const mainBgStyleContainer = {
     position: "absolute",

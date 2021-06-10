@@ -247,18 +247,17 @@ Response String:
 "User Logged Out"
 ********************************************************/
 router.post("/logout", async (req, res) => {
-    const token = req.cookies.token;
-    // Encryption settings
-    const encryption = {
-        key: jwtPrivateKey,
-        algorithm: "aes-256-cbc",
-    };
-
-    // decrypt token and verifies jwt payload
-    const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
-    const loggedUser = decrypted.data;
-
     try {
+        const token = req.cookies.token;
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: "aes-256-cbc",
+        };
+
+        // decrypt token and verifies jwt payload
+        const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
+        const loggedUser = decrypted.data;
         //logs user login to collection
         const newUserLog = new UserLogModel({
             googleId: loggedUser.googleId,
@@ -275,7 +274,7 @@ router.post("/logout", async (req, res) => {
         }).send("User Logged Out");
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        res.status(500).send(err);
     }
 });
 

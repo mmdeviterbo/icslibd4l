@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Dropdown } from "semantic-ui-react";
 import searchBg from "../../assets/searchBg_4.png";
-import { gsap, Power3 } from "gsap";
+import { gsap, Power2, Power3, Power4 } from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import logo from '../../assets/mainlogo/icslibd4l.png'
+gsap.registerPlugin(ScrollTrigger);
+
 
 export default function SearchbarPart({ newsRef, latestAcqRef, browseRef }) {
   const [localSearch, setLocalSearch] = useState("");
@@ -50,9 +54,13 @@ export default function SearchbarPart({ newsRef, latestAcqRef, browseRef }) {
         <div style={barStyleSix} className="barStyle"></div>
 
         <div style={blueBox}>
-          <div style={logoContainer}>
-            <p>ourProjectName and/or logo</p>
-          </div>
+            <div style={imgTitleContainer}>
+                <div style={{display:"flex",  flexDirection:"column"}} className="titleCaption">
+                  <h1 style={titleStyle}>Analytica</h1>
+                  <p style={{fontWeight:400, fontSize:"calc(12px + 0.5vw)", textAlign:"right"}}>ICS Digital Library</p>
+                </div>
+                <img src={logo} style={logoStyle} alt="#" className="logoClass"/>
+            </div>
         </div>
         <div style={inputCaptionContainer} className="hoverForImagesVector">
           <div style={alignSearchIcon} className="formSearchHomepage">
@@ -201,13 +209,6 @@ const blueBox = {
   background:
     "radial-gradient(circle, rgba(231,231,231,1) 0%, rgba(232,232,232,1) 44%, rgba(245,234,234,1) 100%)",
 };
-const logoContainer = {
-  height: "50%",
-  width: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
 const barStyle = {
   left: 0,
   top: "40%",
@@ -221,7 +222,7 @@ const barStyle = {
 const barStyleOne = {
   ...barStyle,
   top: "30%",
-  width: "60%",
+  width: "55%",
   backgroundColor: "rgb(0, 103, 161,0.85)",
 };
 const barStyleTwo = {
@@ -256,7 +257,30 @@ const barStyleSix = {
   top: "35%",
 };
 
+const logoStyle = {
+  height:"90%",
+  width:"22%",
+  objectFit:"cover",
+  marginLeft:"2%"
+}
+
+const imgTitleContainer = {
+  display:"flex",
+  justifyContent:"flex-end",
+  alignItems:"center",
+  height:"90%", 
+  width:"98%", 
+}
+const titleStyle = {
+  fontSize:"calc(30px + 1.5vw)",
+  letterSpacing:"3px",
+  fontWeight:900,
+}
+
 const animateSearchBox = () => {
+  gsap.from(".logoClass",{ scale: 0.5, rotation: 90, duration: 0.7, ease:Power3 });
+  gsap.from(".titleCaption",{ scale: 0.8, opacity: 0.6, duration: 0.5, ease:Power3 });
+
   gsap.from(".formSearchHomepage", {
     opacity: 0,
     yPercent: 10,
@@ -264,6 +288,40 @@ const animateSearchBox = () => {
     scale: 0.8,
     ease: Power3,
   });
-  gsap.from(".barStyle", { xPercent: -50, duration: 0.8 });
-  gsap.from(".barStyle1", { xPercent: -30, duration: 1 });
+
+  let tl = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".searchBoxContainer",
+      scrub:0.5,
+      start:"center center",
+    } 
+  })
+  let t2 = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".searchBoxContainer",
+      scrub:1,
+      start:"center center",
+    } 
+  })
+  let t3 = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".searchBoxContainer",
+      scrub:1,
+      start:"center center",
+    } 
+  })
+  let t4 = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".searchBoxContainer",
+      scrub:1,
+      start:"center center",
+    } 
+  })
+
+  tl.to(".barStyle", { xPercent: -110 });
+  t2.to(".barStyle1", { xPercent: -100 });
+  t3.to(".logoClass", { scale: 0, rotation: 180 });
+  t4.to(".titleCaption", { scale: 0.8, opacity: 0.1 });
 };
+
+

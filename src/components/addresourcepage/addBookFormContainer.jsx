@@ -7,7 +7,7 @@ import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
 // import { toast } from "react-toastify";
 import ToastNotification from "../toastNotification";
-import "react-toastify/dist/ReactToastify.css";
+
 
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
@@ -79,7 +79,7 @@ const AddBookFormContainer = () => {
       setSuccess("success");
       setShow(true);
       // event.target.reset();
-      // window.location = "/add-new-book";
+      window.location = "/manage-resources";
     } catch (err) {
       if (err.response && err.response.data) {
         ToastNotification({ content: err.response.data.errorMessage });
@@ -308,21 +308,26 @@ const AddBookFormContainer = () => {
           </div>
 
           <div className="form-right-column">
-            <div className="primaryfields">
-              <label htmlFor="availBookCopies">No. of copies available:</label>
-              <input
-                type="number"
-                required
-                id="availBookCopies"
-                defaultValue={0}
-                onChange={(event) => {
-                  if (event.target.value < 0 || !event.target.value) {
-                    event.target.value = event.target.defaultValue;
-                  }
-                  setNumOfCopies(event.target.value);
-                }}
-              />
-            </div>
+             <div className="primaryfields">
+                        <label htmlFor="availBookCopies">
+                            No. of copies available:
+                        </label>
+                        <input
+                            type="text"
+                            pattern="[1-9]*"
+                            inputMode = "numeric"
+                            min = {1}
+                            placeholder="1-999"
+                            required
+                            // key={`${Math.floor((Math.random() * 1000))}-min`} 
+                            //need random key para lumabas yung defaultValue, sa initial render lang kasi lumalabas nang maayos yung numberOfCopies
+                            id="availBookCopies"
+                            onChange={(event) => {
+                                setNumOfCopies(event.target.value);
+                            }}
+                            onMouseEnter={e=>e.target.focus()}
+                        />
+                    </div>
 
             <div className="bookRelatedCourses">
               Related Courses:

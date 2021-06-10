@@ -3,6 +3,7 @@ import '../../styles/aboutStyle/aboutStyle.css';
 import {gsap} from 'gsap';
 import uplogo from '../../assets/uplogo.png';
 import icslogo from '../../assets/icslogo.png';
+import logo from '../../assets/mainlogo/icslibd4l.png';
 
 
 export default function About({appRef}) {
@@ -16,11 +17,12 @@ export default function About({appRef}) {
     <div style={aboutMainContainer} className="aboutContainer">
         <div style={containersImg}>
           <div style={logoContainer}><img src={uplogo} style={imgStyle} alt="#" draggable={false}/></div>
+          <div style={logoContainer}><img src={logo} style={imgStyle} alt="#" draggable={false}/></div>
           <div style={logoContainer}><img src={icslogo} style={imgStyle} alt="#" draggable={false}/></div>
         </div>
         <div style={paragraphContainer} className="paragraphContainer">
           <p style={paragraphStyle} className="aboutCaption">
-            The <strong>UPLB ICS Online Library</strong> is made for educational purposes only. Unoticed duplication or reproduction of materials is probihited without any permission from the UPLB ICS faculty.   
+            The <strong>Analytica Digital Library</strong> is made for educational purposes only. Unoticed duplication or reproduction of materials is probihited without any permission from the UPLB ICS faculty.   
           </p>
           <p style={namesStyle}>
             &#169; CMSC 128. Introduction to Software Engineering. Section D-4L 2021
@@ -61,7 +63,7 @@ const paragraphContainer = {
 }
 const paragraphStyle = {
   color:"white",
-  fontSize:"calc(15px + 0.5vw)",
+  fontSize:"calc(10px + 0.5vw)",
   textAlign:"justify",
   margin:"100px 40px 0px 40px",
 }

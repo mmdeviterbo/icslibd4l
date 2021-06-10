@@ -7,6 +7,8 @@ import ResourceServices from "../../services/resourceService";
 import { nanoid } from 'nanoid'
 import { produce } from 'immer'
 import EditResourceHeader from "./editResourceSideHeader"
+import ToastNotification from "../toastNotification";
+import StatusModal from "../modal/operationStatusModal";
 
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
@@ -55,6 +57,9 @@ export default function EditBookFormContainer(props) {
     const [numberOfCopies, setNumOfCopies] = useState(0);
     const [physicalDesc, setDescription] = useState("");
     const [bookCoverLink, setBookCoverLink] = useState("");
+
+    const [show, setShow] = useState(false);
+    const [success, setSuccess] = useState("");
 
     const FormData = require("form-data");
     const formData = new FormData();
@@ -156,12 +161,13 @@ export default function EditBookFormContainer(props) {
         console.log(formData)
 
         const { data } = await ResourceServices.editBook(userInput);     
-        alert("Successfully updated book.");
-        window.location = "/manage-resources";
+        setSuccess("success");
+        setShow(true);
+
+        // window.location = "/manage-resources";
         } catch (err) {
         if (err.response && err.response.data) {
-            alert("unsuccessful")
-            alert(err.response.data.errorMessage); // some reason error message
+            ToastNotification({ content: err.response.data.errorMessage });
         }
         }
     };
@@ -413,17 +419,24 @@ export default function EditBookFormContainer(props) {
                             No. of copies available:
                         </label>
                         <input
-                            type="number"
-                            key={`${Math.floor((Math.random() * 1000))}-min`} 
+                            type="text"
+                            pattern="[1-9]*"
+                            inputMode = "numeric"
+                            min = {1}
+                            placeholder="1-999"
+                            required
+                            name="foravailcopies"
+                            key={`${Math.floor((Math.random() * 1000))}-min`}
                             //need random key para lumabas yung defaultValue, sa initial render lang kasi lumalabas nang maayos yung numberOfCopies
                             id="availBookCopies"
                             defaultValue={numberOfCopies} //bakit di lumalabas what the fuck???
                             onChange={(event) => {
-                            if (event.target.value < 0 || !event.target.value) {
-                                event.target.value = event.target.defaultValue;
-                            }
-                            setNumOfCopies(event.target.value);
-                            }}
+                                if (event.target.value < 0) {
+                                    event.target.value = event.target.defaultValue;
+                                }
+                                setNumOfCopies(event.target.value);
+                                }}
+                            onMouseEnter={e=>e.target.focus()}
                         />
                     </div>
 
@@ -463,14 +476,14 @@ export default function EditBookFormContainer(props) {
             {/* main form close: */}
             </form>
 
-        {/* <StatusModal
+        <StatusModal
             message={success}
             name={"Book"}
             show={show}
             setShow={setShow}
-            operation={"add"}
-            pathAfter={"/add-new-spt/"}
-        /> */}
+            operation={"edit"}
+            pathAfter={"/manage-resources"}
+        />
 
     </div>
     );
