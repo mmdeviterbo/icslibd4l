@@ -351,7 +351,7 @@ router.get("/search", async (req, res) => {
     function filterEntries() {
         // get unique entries
         let final_arr = [...new Set(total)];
-        
+
         // separate books and spthesis
         let book_arr = final_arr.filter((item) => "bookId" in item);
         let spthesis_arr = final_arr.filter((item) => "sp_thesis_id" in item);
@@ -457,7 +457,7 @@ router.get("/search", async (req, res) => {
                                 .toLowerCase()
                                 .includes(keyFilter);
                         });
-                    })
+                    });
                 });
             } catch (error) {
                 if (error instanceof SyntaxError) {
@@ -1793,7 +1793,7 @@ Response String:
 "Entry Updated"
 ********************************************************/
 router.put("/update", async (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
     const {
         old_sp_thesis_id,
         sp_thesis_id,
@@ -1855,9 +1855,9 @@ router.put("/update", async (req, res) => {
         await thesisAuthorModel.deleteMany({
             sp_thesis_id: old_sp_thesis_id,
         });
-        
+
         // console.log("!!!! TINGIN KA DITO !!!!")
-        console.log(authors)
+        console.log(authors);
 
         authors.forEach(async function (updatedEntry) {
             const author_fname = updatedEntry.fname;

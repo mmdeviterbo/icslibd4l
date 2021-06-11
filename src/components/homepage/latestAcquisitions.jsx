@@ -9,23 +9,25 @@ import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-
 export default function LatestAcquisitions({ latestAcqRef }) {
     const history = useHistory();
     const [hoverText, setHoverText] = useState("");
     const [acquisitions, setacquisitions] = useState([]);
     const [loader, setLoader] = useState(true);
-    
-    const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
-    useEffect(async() => {
+    const imgNotAvailable =
+        "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
+
+    useEffect(async () => {
         animateScrollTriggger();
         const booksInfo = await ResourceService.getLatestBooks();
-        for(var book of booksInfo.data){
-            book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${book.bookCoverLink.replace("https://drive.google.com/uc?id=","").replace("/view", "")}`;
+        for (var book of booksInfo.data) {
+            book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${book.bookCoverLink
+                .replace("https://drive.google.com/uc?id=", "")
+                .replace("/view", "")}`;
         }
         setacquisitions(booksInfo.data);
-        setLoader(false); //hide loader animation 
+        setLoader(false); //hide loader animation
     }, []);
 
     const handleViewAllBooks = () => {
@@ -49,28 +51,38 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                 <div style={whiteBg}>
                     <span style={hoverTextStyleWhite}>{hoverText}</span>
                     <div
-                        style={loader? displayLoader : acquisitionsInnerContainer}
+                        style={
+                            loader ? displayLoader : acquisitionsInnerContainer
+                        }
                         className="acquisitionsInnerContainer"
                     >
-                        {loader? 
-                         <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />
-                        :
-                        (acquisitions.map((book) => (
-                            <CardBook
-                                className="cardContainer"
-                                imageSrc={book.bookCoverLink || imgNotAvailable}
-                                title={book.title || "No title"}
-                                key={book.title}
-                                linkTo={`/book/${book.bookId}`}
-                                year={
-                                    book.dateAcquired ||
-                                    book.Published ||
-                                    "No date"
-                                }
-                                setHoverText={setHoverText}
-                                book={book}
+                        {loader ? (
+                            <PropagateLoader
+                                color={"#0067a1"}
+                                speedMultiplier={2}
+                                loading={loader}
+                                size={20}
                             />
-                        )))}
+                        ) : (
+                            acquisitions.map((book) => (
+                                <CardBook
+                                    className="cardContainer"
+                                    imageSrc={
+                                        book.bookCoverLink || imgNotAvailable
+                                    }
+                                    title={book.title || "No title"}
+                                    key={book.title}
+                                    linkTo={`/book/${book.bookId}`}
+                                    year={
+                                        book.dateAcquired ||
+                                        book.Published ||
+                                        "No date"
+                                    }
+                                    setHoverText={setHoverText}
+                                    book={book}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
                 <div style={blueBg}>
@@ -136,11 +148,10 @@ const acquisitionsInnerContainer = {
     transition: "0.8s",
 };
 const displayLoader = {
-    display:"grid",
+    display: "grid",
     placeItems: "center",
-    height:"100%"
-}
-
+    height: "100%",
+};
 
 const latestAcqBgStyle = {
     position: "absolute",
@@ -165,7 +176,7 @@ const whiteBg = {
     width: "60%",
     background: "rgba(255,255,255,0.8)",
     zIndex: 1,
-    padding:"0.5% 0"
+    padding: "0.5% 0",
 };
 const blueBg = {
     position: "relative",
@@ -174,7 +185,8 @@ const blueBg = {
     width: "40%",
     zIndex: 1,
     overflow: "hidden",
-    boxShadow: "2px 4px 6px 0 rgba(0, 0, 0, 0.8), -6px -6px 4px 0 rgba(255, 255, 255, 0.8)",
+    boxShadow:
+        "2px 4px 6px 0 rgba(0, 0, 0, 0.8), -6px -6px 4px 0 rgba(255, 255, 255, 0.8)",
     display: "flex",
     flexDirection: "column",
 };
@@ -197,7 +209,7 @@ const textBg = {
     fontWeight: 500,
     width: "100%",
     textAlign: "center",
-    padding:"15px"
+    padding: "15px",
 };
 
 const hoverTextStyle = {
@@ -226,27 +238,27 @@ const buttonViewAllBooks = {
 };
 const buttonStyle = {
     background: "#e0e0e0",
-    border:"none",
-    color:"black",
-    borderRadius:"4px",
+    border: "none",
+    color: "black",
+    borderRadius: "4px",
     padding: "3% 10%",
     boxShadow: "2px 2px 4px black",
     fontSize: "calc(12px + 0.5vw)",
-    transition:"0.3s"
+    transition: "0.3s",
 };
 
-const animateScrollTriggger=()=>{
-    gsap.from('.latestAcqhoverTextStyle',{
-        scrollTrigger: { 
-          trigger: ".latestAcqcolorsParent",
-          scrub:1,
-          start:"top center",
-          end:"bottom bottom"
+const animateScrollTriggger = () => {
+    gsap.from(".latestAcqhoverTextStyle", {
+        scrollTrigger: {
+            trigger: ".latestAcqcolorsParent",
+            scrub: 1,
+            start: "top center",
+            end: "bottom bottom",
         },
-        yPercent:-180,
-        duration:1.5,
-        scale:1.5
-    })
-}
+        yPercent: -180,
+        duration: 1.5,
+        scale: 1.5,
+    });
+};
 
 // mobile responsiveness is in homepagestyle.css
