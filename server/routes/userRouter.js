@@ -102,8 +102,10 @@ router.post("/create", async (req, res) => {
             "ICSlibrary"
         );
 
+        //cookie set for 1 year until expiration
         res.cookie("token", token, {
             httpOnly: false,
+            maxAge: 365 * 24 * 60 * 60 * 1000,
         }).send(token);
     } catch (err) {
         console.error(err);
@@ -167,7 +169,7 @@ router.put("/update", authStudent, async (req, res) => {
             );
         }
 
-        UserModel.find({ googleId: googleId }, async (err, result) => {
+        await UserModel.find({ googleId: googleId }, async (err, result) => {
             //send the edited user as response
             if (err) {
                 res.send(err);
@@ -232,11 +234,6 @@ router.delete("/delete", authStudent, async (req, res) => {
     res.send("Entry Deleted");
 });
 
-router.get("/", async (req, res) => {
-    console.log("here");
-    console.log(req.cookies);
-    res.send("done");
-});
 //logout current signed in user. deletes cookie for user
 /**************************************************** 
 Request Object:
