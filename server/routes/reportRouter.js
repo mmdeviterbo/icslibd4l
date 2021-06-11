@@ -195,7 +195,7 @@ router.get("/report", async (req, res) => {
                 },
             ]);
 
-            //create pdf buffers with 10 items per page for spThesis
+            //create pdf buffers with 20 items per page for spThesis
             do {
                 if(spThesisStart + 20 > spThesis.length){
                     const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,(spThesis.length-1)));
@@ -265,7 +265,16 @@ router.get("/report", async (req, res) => {
 
         const buf = await mergedPdf.save();
 
-        let path = './src/download/Merged.pdf';
+        let path;
+        if(type === "books"){
+            path = './src/download/Books.pdf';
+        }
+        else if(type === "spThesis"){
+            path = './src/download/spThesis.pdf';
+        }
+        else{
+            path = './src/download/Merged.pdf';
+        }
         fs.open(path, 'w', function(err, fd) {
             fs.write(fd, buf, 0, buf.length, null, function (err){
                 fs.close(fd, function () {
