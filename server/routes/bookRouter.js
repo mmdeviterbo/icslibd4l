@@ -116,6 +116,7 @@ router.post("/create", authFaculty, async (req, res) => {
         // sample verification: incomplete fields
         if (
             !title ||
+            !ISBN ||
             !authors ||
             !subjects ||
             !physicalDesc ||
@@ -123,6 +124,14 @@ router.post("/create", authFaculty, async (req, res) => {
             !numberOfCopies
         ) {
             return res.status(400).send("Please enter all required fields.");
+        }
+
+        const isbnLen = ISBN.replace(/\D/g, "").length;
+
+        console.log(isbnLen);
+
+        if (isbnLen != 10 && isbnLen != 13){
+            return res.status(400).send("ISBN must contain 10 or 13 digits.");
         }
 
         //search if book exists
@@ -176,7 +185,7 @@ router.post("/create", authFaculty, async (req, res) => {
             res.json(savedBook);
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send("Book already exists!");
+            res.status(400).send("ISBN already exists!");
         }
     } catch (err) {
         console.log(err);
