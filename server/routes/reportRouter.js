@@ -112,6 +112,37 @@ router.get("/report", async (req, res) => {
                     },
                 },
             ]);
+
+            //create pdf buffers with 10 items per page for books
+            do {
+                if(bookStart + 10 > books.length){
+                    const bookContent = await compile("book", books.slice(bookStart,(books.length-1)));
+                    const bookPage = await browser.newPage();
+                    await bookPage.setContent(bookContent);
+                    await bookPage.pdf({
+                        path: "./src/download/Books.pdf",
+                        format: "A4",
+                        printBackground: true,
+                        margin: {top: 40, bottom: 40, left: 40, right: 40},
+                        landscape: true
+                    });
+                    pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
+                }
+                else {
+                    const bookContent = await compile("book", books.slice(bookStart,bookStart+10));
+                    const bookPage = await browser.newPage();
+                    await bookPage.setContent(bookContent);
+                    await bookPage.pdf({
+                        path: "./src/download/Books.pdf",
+                        format: "A4",
+                        printBackground: true,
+                        margin: {top: 40, bottom: 40, left: 40, right: 40},
+                        landscape: true
+                    });
+                    pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
+                }
+                bookStart += 10;
+            } while(bookStart < books.length);
         }
 
         //sp and thesis
@@ -163,6 +194,37 @@ router.get("/report", async (req, res) => {
                     },
                 },
             ]);
+
+            //create pdf buffers with 10 items per page for spThesis
+            do {
+                if(spThesisStart + 20 > spThesis.length){
+                    const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,(spThesis.length-1)));
+                    const bookPage = await browser.newPage();
+                    await bookPage.setContent(bookContent);
+                    await bookPage.pdf({
+                        path: "./src/download/spThesis.pdf",
+                        format: "A4",
+                        printBackground: true,
+                        margin: {top: 40, bottom: 40, left: 40, right: 40},
+                        landscape: true
+                    });
+                    pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
+                }
+                else {
+                    const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,spThesisStart+20));
+                    const bookPage = await browser.newPage();
+                    await bookPage.setContent(bookContent);
+                    await bookPage.pdf({
+                        path: "./src/download/spThesis.pdf",
+                        format: "A4",
+                        printBackground: true,
+                        margin: {top: 40, bottom: 40, left: 40, right: 40},
+                        landscape: true
+                    });
+                    pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
+                }
+                spThesisStart += 20;
+            } while(spThesisStart < spThesis.length);
         }
 
         //users, not a priority
@@ -190,68 +252,6 @@ router.get("/report", async (req, res) => {
                 },
             ]);
         }
-
-        //create pdf buffers with 10 items per page for books
-        do {
-            if(bookStart + 10 > books.length){
-                const bookContent = await compile("book", books.slice(bookStart,(books.length-1)));
-                const bookPage = await browser.newPage();
-                await bookPage.setContent(bookContent);
-                await bookPage.pdf({
-                    path: "./src/download/Books.pdf",
-                    format: "A4",
-                    printBackground: true,
-                    margin: {top: 40, bottom: 40, left: 40, right: 40},
-                    landscape: true
-                });
-                pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
-            }
-            else {
-                const bookContent = await compile("book", books.slice(bookStart,bookStart+10));
-                const bookPage = await browser.newPage();
-                await bookPage.setContent(bookContent);
-                await bookPage.pdf({
-                    path: "./src/download/Books.pdf",
-                    format: "A4",
-                    printBackground: true,
-                    margin: {top: 40, bottom: 40, left: 40, right: 40},
-                    landscape: true
-                });
-                pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
-            }
-            bookStart += 10;
-        } while(bookStart < books.length);
-
-        //create pdf buffers with 10 items per page for spThesis
-        do {
-            if(spThesisStart + 20 > spThesis.length){
-                const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,(spThesis.length-1)));
-                const bookPage = await browser.newPage();
-                await bookPage.setContent(bookContent);
-                await bookPage.pdf({
-                    path: "./src/download/spThesis.pdf",
-                    format: "A4",
-                    printBackground: true,
-                    margin: {top: 40, bottom: 40, left: 40, right: 40},
-                    landscape: true
-                });
-                pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
-            }
-            else {
-                const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,spThesisStart+20));
-                const bookPage = await browser.newPage();
-                await bookPage.setContent(bookContent);
-                await bookPage.pdf({
-                    path: "./src/download/spThesis.pdf",
-                    format: "A4",
-                    printBackground: true,
-                    margin: {top: 40, bottom: 40, left: 40, right: 40},
-                    landscape: true
-                });
-                pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
-            }
-            spThesisStart += 20;
-        } while(spThesisStart < spThesis.length);
         
         //merge pdf buffers and save file
         const mergedPdf = await PDFDocument.create();
