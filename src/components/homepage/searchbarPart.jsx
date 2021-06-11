@@ -278,7 +278,6 @@ const titleStyle = {
 }
 
 const animateSearchBox = () => {
-  gsap.from(".logoClass",{ scale: 0.5, rotation: 90, duration: 0.7, ease:Power3 });
   gsap.from(".titleCaption",{ scale: 0.8, opacity: 0.6, duration: 0.5, ease:Power3 });
 
   gsap.from(".formSearchHomepage", {
