@@ -18,11 +18,16 @@ export default function NavigationBar({
     appRef,
 }) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
+    const [currentNav, setCurrentNav] = useState(window.location.pathname);
     const history = useHistory();
 
     useEffect(() => {
         animationTitle(classNavBar);
     }, [classNavBar]);
+
+    const getCurrentNav=(navClass)=>{
+        return currentNav===navClass? white : black;
+    }
 
     // if not found (404), hide the navbar component
     useEffect(() => {
@@ -30,6 +35,7 @@ export default function NavigationBar({
             if (["/not-found", "/unauthorized"].includes(location.pathname))
                 setClassNavBar("navbar-container-none");
             else setClassNavBar("navbar-container");
+            setCurrentNav(location.pathname);
         });
     }, [history, classNavBar]);
 
@@ -86,22 +92,22 @@ export default function NavigationBar({
                     </div>
                 </Link>
                 <div className="right-half">
-                    <Link to="/home" className="navItem" onClick={()=>scrollToBrowse()}>
+                    <Link to="/home" className="navItem" onClick={()=>scrollToBrowse()} style={getCurrentNav("/home")}>
                         <i
                             className="fa fa-lg fa-home mr-2"
                             aria-hidden="true"
                         />
                         Home
                     </Link>
-                    <Link to="/browse-special-problems"
-                        className="navItem">
+                    <Link to="/search?type=any&search="
+                        className="navItem" style={getCurrentNav("/search")}>
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
                         />
                         Browse
                     </Link>
-                    <Link to="/about" className="navItem">
+                    <Link to="/about" className="navItem" style={getCurrentNav("/about")}>
                         <i
                             className="fa fa-lg fa-info-circle mr-2"
                             aria-hidden="true"
@@ -122,6 +128,7 @@ const SearchFilter = ({ user }) => {
     const history = useHistory();
 
     const logout = async () => {
+        console.log(window.location.pathname);
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
@@ -137,6 +144,7 @@ const SearchFilter = ({ user }) => {
             )
                 window.location = "/home";
             else if(window.location.pathname.match(/^\/edit-book.*$/g)) window.location = "/home";
+            else if(window.location.pathname.match(/^\/search.*$/g)) window.location = window.location.href;
             else window.location = window.location.pathname;
         } catch (err) {}
     };
@@ -144,7 +152,7 @@ const SearchFilter = ({ user }) => {
     const trigger = (
         <span>
             <Icon className="user" />
-            {user && user.fullName && user.fullName.split(" ")[0]}
+            {user && user.fullName && user.fullName.split(" ")[0].substring(0,7)}
         </span>
     );
 
@@ -230,6 +238,15 @@ const SearchFilter = ({ user }) => {
             },
         },
         {
+            key: "hrline",
+            text: (
+                <span>
+                    <hr style={{margin:0, padding:0}}/>
+                </span>
+            ),
+            disabled: true,
+        },
+        {
             key: "sign-out",
             text: (
                 <span>
@@ -286,6 +303,29 @@ const mainBgStyleContainer = {
     overflowX: "hidden",
     overflowY: "visible",
 };
+const white = {
+    fontWeight: 900,
+    color: "black",
+    background: "rgb(207, 207, 207)",
+    flexGrow:1,
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    "justifyContent": "center",
+    transition:"0.3s"
+}
+const black = {
+    fontSize: "calc(10px + 0.3vw) !important",
+    background: "rgb(26, 26, 26)",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    "justifyContent": "center",
+    "flexGrow": 1,
+    color: "white",
+    fontWeight: "900 !important",
+    transition: "0.3s"
+}
 
 const animationTitle = (classNavBar) => {
     let tempClassName = "." + classNavBar;

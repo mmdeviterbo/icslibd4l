@@ -6,7 +6,6 @@ import ResultContainer from "./resultContainer";
 import ResourceService from "../../services/resourceService";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import PropagateLoader from "react-spinners/PropagateLoader";
-import {gsap} from 'gsap';
 import "../../styles/searchResultStyle/advancedSearch.css";
 
 
@@ -23,7 +22,7 @@ export default function AdvancedSearch() {
     );
 
     const history = useHistory();
-    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=\w+$/g;
+    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=\w*$/g;
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
@@ -126,11 +125,8 @@ export default function AdvancedSearch() {
     // get filtered results to backend
     useEffect(() => {
         window.scrollTo(0,0);
-        animateInvalidSearch();
         fetchData();
     }, [objFilter]);
-    animateInvalidSearch();
-    
 
     const handleForm = (e) => {
         e.preventDefault();
@@ -390,13 +386,4 @@ const displayLoader = {
   display:"grid",
   placeItems: "center",
   height:"80vh"
-}
-
-const animateInvalidSearch=()=>{
-    gsap.from(".invalidSearchClass",{
-        duration:1.5,
-        repeat:-1,
-        scale:0.90,
-        opacity:0.5,   
-    })
 }

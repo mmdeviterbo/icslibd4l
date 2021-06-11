@@ -376,7 +376,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                             <TableRow
                                 style={{ width: "100%", textAlign: "center" }}
                             >
-                                <TableCell colspan="5">
+                                <TableCell colSpan="5">
                                     <div
                                         style={{
                                             padding: "5rem",
