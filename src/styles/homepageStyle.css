@@ -45,10 +45,12 @@
     transition: 0.5s;
     text-align: end;
     overflow-y: visible !important;
-    padding-right: 0.5vw;
     color:white;
-    font-size: medium;
     transform: translateX(0);
+    margin:0 !important;
+    padding-right: 0.5vw;
+
+
 }
 .left-half:hover{
     color:white;
