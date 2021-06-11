@@ -1,5 +1,6 @@
 // import { SignalCellularNoSimOutlined } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import Select from "react-select";
 // import { ItemGroup } from "semantic-ui-react";
 import ResourceServices from "../../services/resourceService";
@@ -9,6 +10,9 @@ import { produce } from 'immer'
 import EditResourceHeader from "./editResourceSideHeader"
 import ToastNotification from "../toastNotification";
 import StatusModal from "../modal/operationStatusModal";
+import PersonService from '../../services/personService';
+import { jwtPrivateKey } from '../../config.json';
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 const classificationOptions = [
     { value: "Special Problem", label: "Special Problem" },
@@ -42,8 +46,8 @@ const adviserchoices = [
 
 // !!! Should receive an sp/thesis object
 export default function EditSPTFormContainer(props) {
+    const history = useHistory();
     const [resourceData, setResourceData] = useState({});
-
     const [old_sp_thesis_id, setOld_sp_thesis_id] = useState();
     const [type, setType] = useState("");
     const [title, setTitle] = useState("");
@@ -83,8 +87,22 @@ export default function EditSPTFormContainer(props) {
         }
     }, []);
 
-    // console.log(idSource)
-    // console.log(spThInfoArr);
+    const accessPrivilege = () => {
+        setTimeout(() => {
+            try {
+                const user = PersonService.decryptToken(
+                    localStorage.getItem(jwtPrivateKey)
+                );
+                if (!user || (user && user.userType !== 1))
+                    return history.push("/unauthorized");
+            } catch (err) {
+                return history.push("/unauthorized");
+            }
+        }, 700);
+    };    
+    
+
+
 
     useEffect(() => {
         try {
@@ -215,15 +233,11 @@ export default function EditSPTFormContainer(props) {
         ]);
     }
 
-
-
-    // console.log(authors)
-    // console.log(authors.fname)
-
     return (
+        <>
+        {props.user && props.user.userType === 1 ? 
         <div className="add-res-form-cont">
             <EditResourceHeader/>
-
             <form className = "main-form" id="addSPTForm" onSubmit={handleSubmit} autoComplete="off">
                 
                 <div className = "form-columns">
@@ -514,7 +528,13 @@ export default function EditSPTFormContainer(props) {
             operation={"edit"}
             pathAfter={"/manage-resources"}
         />
-    </div> //add-res-form-cont close
-        
+    </div>
+    :
+    <div style={{ minHeight: "80vh", display: "grid", placeItems: "center"}}>
+        <PropagateLoader color={"#0067a1"} speedMultiplier={2} loading={true} size={20}/>
+        {accessPrivilege()}
+    </div>
+    }
+    </>
     );
 }

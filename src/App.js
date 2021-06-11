@@ -132,9 +132,9 @@ function App() {
                     path="/manage-users"
                     render={() => <ManageUserPage user={user} />}
                 />
-                <Route path="/add-new-spt" component={AddSPThesisPage} />
-                <Route path="/add-new-book" component={AddBookPage}></Route>
-                <Route path="/edit-spt/:id" component={EditSPTFormContainer} />
+                <Route path="/add-new-spt" render={()=><AddSPThesisPage user={user}/>} />
+                <Route path="/add-new-book" render={()=><AddBookPage user={user}/>} />
+                <Route path="/edit-spt/:id" render={()=><EditSPTFormContainer user={user}/>} />
                 <Route
                     path="/edit-book/:id"
                     component={EditBookFormContainer}

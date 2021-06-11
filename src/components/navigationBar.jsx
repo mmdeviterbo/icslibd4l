@@ -131,9 +131,12 @@ const SearchFilter = ({ user }) => {
                     "/manage-resources",
                     "/view-activitylogs",
                     "/view-summaryreport",
+                    "/add-new-book",
+                    "/add-new-spt",
                 ].includes(window.location.pathname)
             )
                 window.location = "/home";
+            else if(window.location.pathname.match(/^\/edit-book.*$/g)) window.location = "/home";
             else window.location = window.location.pathname;
         } catch (err) {}
     };
@@ -142,7 +145,6 @@ const SearchFilter = ({ user }) => {
         <span>
             <Icon className="user" />
             {user && user.fullName && user.fullName.split(" ")[0]}
-            {/* {user && user.nickname} */}
         </span>
     );
 
