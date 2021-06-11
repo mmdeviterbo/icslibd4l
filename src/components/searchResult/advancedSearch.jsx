@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSidebar from "./filterSidebar";
 import ResultContainer from "./resultContainer";
 import ResourceService from "../../services/resourceService";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import PropagateLoader from "react-spinners/PropagateLoader";
+import {gsap} from 'gsap';
+import "../../styles/searchResultStyle/advancedSearch.css";
 
-export default function AdvancedSearch({ appRef }) {
+
+
+export default function AdvancedSearch() {
     var queryStore = `${useLocation().search}`.substring(
         `${useLocation().search}`.indexOf("search=") + 7
     );
     const [query, setQuery] = useState(queryStore);
+    const [isValidQuery, setIsValidQuery] = useState(true);
     const [objFilter, setObjFilter] = useState({});
     const [urlRequest, setUrlRequest] = useState(
         `${useLocation().pathname}${useLocation().search}`
     );
+
     const history = useHistory();
+    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=\w+$/g;
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
@@ -47,8 +53,29 @@ export default function AdvancedSearch({ appRef }) {
     const resultsPerPage = 10;
     const pagesVisited = pageNumber * resultsPerPage;
     const pageCount = Math.ceil(resultsFilterArr.length / resultsPerPage);
-
     const [loader, setLoader] = useState(true);
+
+    //url manipulation
+    let url = window.location.href;
+    let urlFilter = "";
+    let urlQuery = "";
+
+    url = url.replace("http://localhost:3000/search", "");
+
+    function returnCloserResourceType(){
+        if(url.includes("sp")) return "sp";
+        else if(url.includes("thesis")) return "thesis";
+        else if(url.includes("book")) return "book";
+        else return "any"; 
+    }
+    
+    function onMountResourceType(){
+        if(!url.match(urlValidator)) return returnCloserResourceType();
+        return `${url}`.substring(`${url}`.indexOf("=") + 1,`${url}`.indexOf("&"));
+    }
+    useEffect(()=>{
+        setResourceType(onMountResourceType());
+    },[])
 
     const displayresults = resultsFilterArr
         .slice(pagesVisited, pagesVisited + resultsPerPage)
@@ -68,57 +95,62 @@ export default function AdvancedSearch({ appRef }) {
         setPageNumber(selected);
     };
 
-    //url manipulation
-    let url = window.location.href;
-    let urlFilter = "";
-    let urlQuery = "";
-
-    url = url.replace("http://localhost:3000/search", "");
-    //edit before prod; or should i use split and have ? as a delimeter tho the search string can also contain '?'
-    if (url.length > 0) {
-        url = url.slice(1, url.length);
-        urlQuery = decodeURIComponent(url.split("&")[1].replace("search=", ""));
-        urlFilter = url.split("&")[0].replace("type=", "");
-    }
-
     // http request
     async function fetchData() {
         setLoader(true);
-        setPageNumber(0);
-        try {
-            //  objFilter store filters in an object <field>:<value>
-            //  urlRequest string that contains the search query -> example: search?type=title
-            const { data } = await ResourceService.searchSpThesis(
-                objFilter,
-                urlRequest
-            );
-            setResultsFilterArr(data);
-            setLoader(false);
-        } catch (err) {
-            console.log(err);
+        if(!url.match(urlValidator)) setIsValidQuery(false);
+        else{
+            //edit before prod; or should i use split and have ? as a delimeter tho the search string can also contain '?'
+            if (url.length > 0) {
+                url = url.slice(1, url.length);
+                urlQuery = decodeURIComponent(url.split("&")[1].replace("search=", ""));
+                urlFilter = url.split("&")[0].replace("type=", "");
+            }
+            if(isValidQuery){
+                setPageNumber(0);
+                try {
+                    //  objFilter store filters in an object <field>:<value>
+                    //  urlRequest string that contains the search query -> example: search?type=title
+                    const { data } = await ResourceService.searchSpThesis(
+                        objFilter,
+                        urlRequest
+                        );
+                        setResultsFilterArr(data);
+                        setLoader(false);
+                    } catch (err) {
+                        console.log(err);
+                }
+            }
         }
     }
-
     // get filtered results to backend
     useEffect(() => {
         window.scrollTo(0,0);
+        animateInvalidSearch();
         fetchData();
     }, [objFilter]);
+    animateInvalidSearch();
+    
 
     const handleForm = (e) => {
         e.preventDefault();
         let tempStr = query.trim();
-        // NEED TO CLEAN resourcetype specialproblem
-        if (
-            tempStr.length !== 0 &&
-            query.replace(/^\s+/, "").replace(/\s+$/, "") !== ""
-        ) {
-            history.push(`/search?type=${resourceType}&search=${tempStr}`);
-        }
-        setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
 
-        // call convert filter to object
-        filterParser();
+        // NEED TO CLEAN resourcetype specialproblem
+        if(isValidQuery){
+            if (
+                tempStr.length !== 0 &&
+                query.replace(/^\s+/, "").replace(/\s+$/, "") !== ""
+                ) {
+                    history.push(`/search?type=${resourceType}&search=${tempStr}`);
+                }
+                setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+                
+                // call convert filter to object
+                filterParser();
+        }else{
+            return window.location = `/search?type=${onMountResourceType()}&search=${tempStr}`;
+        }
     };
 
     // parse Filter array into object
@@ -202,10 +234,11 @@ export default function AdvancedSearch({ appRef }) {
                 </div>
 
                 <div style={resultsOuterContainer}>
-                    {loader?
+                    {loader && isValidQuery?
                         <div style={resultTop}>
                             <p className="textStyle">Getting results...</p>
-                        </div>:
+                        </div>
+                        :
                         <div style={resultTop}>
                             {resultsFilterArr.length > 0 ? (
                                 <p className="textStyle">
@@ -222,12 +255,17 @@ export default function AdvancedSearch({ appRef }) {
                                     {resultsFilterArr && resultsFilterArr.length}
                                 </p>
                             ) : (
-                                <p className="textStyle">No results</p>
+                                <>{isValidQuery && <p className="textStyle">No results</p>}</>
                             )}
                         </div>
                     }
                         <div style={loader? displayLoader : resultBottom}>
-                            {loader? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
+                            {(!isValidQuery && loader) && 
+                            <div className="invalidSearchClass" style={{display:"flex", alignItems:"center"}}>
+                                <i className="fa mr-3 fa-4x fa-times"/>
+                                <p style={{fontSize:"calc(20px + 0.5vh)"}}>Invalid search</p>
+                            </div>}
+                            {(isValidQuery && loader)? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
                             <div>
                                 {resultsFilterArr && displayresults}
                                 {resultsFilterArr.length > 0 ? (
@@ -352,4 +390,13 @@ const displayLoader = {
   display:"grid",
   placeItems: "center",
   height:"80vh"
+}
+
+const animateInvalidSearch=()=>{
+    gsap.from(".invalidSearchClass",{
+        duration:1.5,
+        repeat:-1,
+        scale:0.90,
+        opacity:0.5,   
+    })
 }
