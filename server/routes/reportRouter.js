@@ -266,14 +266,19 @@ router.get("/report", async (req, res) => {
         const buf = await mergedPdf.save();
 
         let path;
+        let sendObjects = [];
         if(type === "books"){
             path = './src/download/Books.pdf';
+            sendObjects.push(books);
         }
         else if(type === "spThesis"){
             path = './src/download/spThesis.pdf';
+            sendObjects.push(spThesis);
         }
         else{
             path = './src/download/Merged.pdf';
+            sendObjects.push(books);
+            sendObjects.push(spThesis);
         }
         fs.open(path, 'w', function(err, fd) {
             fs.write(fd, buf, 0, buf.length, null, function (err){
@@ -314,7 +319,7 @@ router.get("/report", async (req, res) => {
 
         await browser.close();
 
-        res.send();
+        res.send(sendObjects);
     } catch (err) {
         console.error(err);
         res.status(500).send(err);
