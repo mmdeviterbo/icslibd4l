@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Dropdown } from "semantic-ui-react";
 import searchBg from "../../assets/searchBg_4.png";
-import { gsap, Power2, Power3, Power4 } from "gsap";
+import { gsap, Power3 } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import logo from '../../assets/mainlogo/icslibd4l.png'
 gsap.registerPlugin(ScrollTrigger);
 
 
-export default function SearchbarPart({ newsRef, latestAcqRef, browseRef }) {
+export default function SearchbarPart() {
   const [localSearch, setLocalSearch] = useState("");
   const [filterTag, setFilterTag] = useState("any");
   const history = useHistory();
@@ -28,14 +28,6 @@ export default function SearchbarPart({ newsRef, latestAcqRef, browseRef }) {
       history.push(`/search?type=${filterTag}&search=${tempStr}`);
     }
   };
-
-  const scrollIntoBrowse = () => history.push("/browse-special-problems");
-  const scrollIntoLatestAcq = () =>
-    latestAcqRef.current &&
-    latestAcqRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  const scrollIntoNews = () =>
-    newsRef.current &&
-    newsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
     <form

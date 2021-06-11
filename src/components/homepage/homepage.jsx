@@ -7,7 +7,7 @@ import SearchbarPart from './searchbarPart'
 export default function Homepage({ browseRef, appRef, newsRef, latestAcqRef }) {
     return (
         <div className="homepage-container">
-            <SearchbarPart newsRef={newsRef} latestAcqRef={latestAcqRef} browseRef={browseRef}/>
+            <SearchbarPart/>
             <BrowsePart browseRef={browseRef}/>
             <LatestAcquisitions latestAcqRef={latestAcqRef}/>
             <RecentNews appRef={appRef} newsRef={newsRef}/>

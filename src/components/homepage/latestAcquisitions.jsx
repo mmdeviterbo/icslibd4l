@@ -18,16 +18,19 @@ export default function LatestAcquisitions({ latestAcqRef }) {
     const imgNotAvailable =
         "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
 
-    useEffect(async () => {
+    useEffect(()=>{
         animateScrollTriggger();
-        const booksInfo = await ResourceService.getLatestBooks();
-        for (var book of booksInfo.data) {
-            book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${book.bookCoverLink
-                .replace("https://drive.google.com/uc?id=", "")
-                .replace("/view", "")}`;
+        async function fetchData(){
+            const booksInfo = await ResourceService.getLatestBooks();
+            for (var book of booksInfo.data) {
+                book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${book.bookCoverLink
+                    .replace("https://drive.google.com/uc?id=", "")
+                    .replace("/view", "")}`;
+            }
+            setacquisitions(booksInfo.data);
+            setLoader(false); //hide loader animation
         }
-        setacquisitions(booksInfo.data);
-        setLoader(false); //hide loader animation
+        fetchData();
     }, []);
 
     const handleViewAllBooks = () => {
