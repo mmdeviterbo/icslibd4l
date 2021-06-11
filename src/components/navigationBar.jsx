@@ -31,13 +31,7 @@ export default function NavigationBar({
                 setClassNavBar("navbar-container-none");
             else setClassNavBar("navbar-container");
         });
-    }, [history]);
-
-    useEffect(() => {
-        if (["/not-found", "/unauthorized"].includes(window.location.pathname))
-            setClassNavBar("navbar-container-none");
-        else setClassNavBar("navbar-container");
-    }, [classNavBar]);
+    }, [history, classNavBar]);
 
     const responseGoogleSuccess = (response) => {
         const { googleId, email, name, familyName } = response.profileObj;
@@ -53,25 +47,13 @@ export default function NavigationBar({
 
     const scrollToBrowse = () => {
         if (window.location.pathname === "/home")
-            browseRef.current &&
-                browseRef.current.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                });
-        else if (
-            [
-                "/browse-books",
-                "/browse-special-problems",
-                "/browse-theses",
-            ].includes(window.location.pathname)
-        ) {
             appRef.current &&
                 appRef.current.scrollIntoView({
                     behavior: "smooth",
                     block: "start",
                 });
-        } else history.push("/browse-special-problems");
     };
+
     const logInButton = () => {
         return (
             <GoogleLogin
@@ -98,13 +80,13 @@ export default function NavigationBar({
             <div style={mainBgStyleContainer} />
             <ul className="navbar-elements">
                 <Link className="left-half" to="/home">
+                    <p style={titleStyle}>Analytica</p>
                     <div style={logoContainer}>
                         <img src={logo} alt="#" style={logoStyle}/>
                     </div>
-                    <p style={{letterSpacing:"2px", textShadow:"2px 1.5px #ff0000", fontWeight:600}}>Analytica</p>
                 </Link>
                 <div className="right-half">
-                    <Link to="/home" className="navItem">
+                    <Link to="/home" className="navItem" onClick={()=>scrollToBrowse()}>
                         <i
                             className="fa fa-lg fa-home mr-2"
                             aria-hidden="true"
@@ -269,16 +251,29 @@ const SearchFilter = ({ user }) => {
     );
 };
 
+const titleStyle = {
+    letterSpacing:"2px", 
+    textShadow:"1px 1px 3px #000000", 
+    fontWeight:600, 
+    height:"100%",
+    display:"grid",
+    fontSize:"calc(25px + 0.5vh)",
+    placeItems:"center",
+    margin:0,
+    marginRight:"0.5%"
+}
+
 const logoContainer = {
-    height:"80%",
+    height:"100%",
     marginRight:"1%",
     display:"flex",
     alignItems:"center",
+    justifyContent:"center",
     dropShadow:"2px 10px"
 }
 
 const logoStyle = {
-    height:"60%",
+    height:"90%",
 }
 
 const mainBgStyleContainer = {
