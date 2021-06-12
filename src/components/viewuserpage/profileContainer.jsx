@@ -86,7 +86,6 @@ export default function ProfileContainer() {
 
     // handles clear changes
     const clearChanges = () => {
-        console.log("clearChanges");
         setNick(currNick);
         setIcon("false", true, isEditing);
     };
@@ -134,7 +133,6 @@ export default function ProfileContainer() {
 
     // convert userType to its corresponding string representation
     useEffect(() => {
-        // console.log(userinfos);
         if (user) {
             if (user.userType === 1) setType("Admin");
             else if (user.userType === 2) setType("Faculty");

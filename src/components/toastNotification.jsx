@@ -3,13 +3,14 @@ import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 // minified version is also included
 import "react-toastify/dist/ReactToastify.min.css";
+import "../styles/toastStyle.css";
 
 toast.configure();
 export default function ToastNotification({ content }) {
     console.log(content);
     const showToast = (content) => {
         toast.error(content, {
-            position: "bottom-right",
+            position: "top-right",
             hideProgressBar: true,
         });
     };
