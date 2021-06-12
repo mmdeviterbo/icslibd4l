@@ -9,7 +9,7 @@ import logo from '../../assets/mainlogo/icslibd4l.png';
 export default function About({appRef}) {
   useEffect(()=>{
     appRef.current && appRef.current.scrollIntoView({behavior:"smooth",block:"start"});
-    gsap.from('.paragraphContainer', {y:160,duration:4});
+    gsap.from('.paragraphContainer', {y:20,duration:1, opacity:0.5});
   },[appRef]);
 
 

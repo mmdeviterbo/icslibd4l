@@ -70,7 +70,7 @@ function App() {
             localStorage.setItem(jwtPrivateKey, data); //set token
 
             // get current param, it must stay on where the user's current path
-            window.location = window.location.pathname;
+            window.location = window.location.search || window.location.pathname;
         } catch (err) {}
     };
 
