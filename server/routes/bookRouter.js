@@ -96,7 +96,7 @@ res object:
     dateAcquired,
 }
 ********************************************************/
-router.post("/create", authFaculty, async (req, res) => {
+router.post("/create", async (req, res) => {
     console.log(req.body);
     try {
         const {
@@ -122,13 +122,15 @@ router.post("/create", authFaculty, async (req, res) => {
             !publisher ||
             !numberOfCopies
         ) {
-            return res.status(400).send("Please enter all required fields.");
+            return res
+                .status(400)
+                .send({ errorMessage: "Please enter all required fields." });
         }
 
         const isbnLen = ISBN.replace(/\D/g, "").length;
 
         if (isbnLen != 10 && isbnLen != 13){
-            return res.status(400).send("ISBN must contain 10 or 13 digits.");
+            return res.status(400).send({ errorMessage: "ISBN must contain 10 or 13 digits." });
         }
 
         //search if book exists
@@ -137,7 +139,7 @@ router.post("/create", authFaculty, async (req, res) => {
         if (!existingBook) {
             //if book does not exist, add the book
 
-            const bookId = uniqid('BOOK_'); //generate a unique id for the book
+            const bookId = uniqid("BOOK_"); //generate a unique id for the book
 
             const newBook = new bookModel({
                 //add the non-array fields to the books collection
@@ -182,7 +184,7 @@ router.post("/create", authFaculty, async (req, res) => {
             res.json(savedBook);
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send("ISBN already exists!");
+            res.status(400).send({ errorMessage: "ISBN already exists!" });
         }
     } catch (err) {
         console.log(err);
@@ -210,6 +212,7 @@ req object: address parameter
 {
     bookId
 }
+
 res object: array containing book, book_authors, and book_subjects
 [
     {
@@ -242,6 +245,7 @@ res object: array containing book, book_authors, and book_subjects
         } 
     ]
 ]
+
 res String: 
 "Entry Updated"
 ********************************************************/
@@ -294,6 +298,7 @@ book: {
     datePublished,
     dateAcquired
 }
+
 res String: 
 "Entry Updated"
 ********************************************************/
