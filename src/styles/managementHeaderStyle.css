@@ -12,20 +12,10 @@
 }
 
 .manage-header-container h1 {
-    font-family: "Montserrat", sans-serif;
-    /* color: #0067a1; */
     font-weight: bold;
     font-size: 2.75rem;
     margin: 0;
     width: 100%;
-}
-
-.header-label {
-    display: flex;
-
-    color: black;
-    height: 40%;
-    align-items: flex-start;
 }
 
 .search-bar-container {

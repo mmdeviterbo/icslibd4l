@@ -2,20 +2,19 @@
 
 /* ------ Add Resources Form container ------ */
 
-
-.add-res-form-cont{
+.add-res-form-cont {
     /* height: 100vh; */
-    background-color:#F4F4F4;
+    background-color: #f4f4f4;
 }
 
 .add-resource-page-container {
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
-.add-res-header{
-    background-color:white;
+.add-res-header {
+    background-color: white;
     /* margin:0; */
 }
 
@@ -24,193 +23,195 @@
     padding: 1rem;
     font-weight: normal;
     font-size: 3rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     padding-top: 2rem;
     padding-bottom: 2rem;
     margin: 4rem;
 }
 
-.form-container{
-    margin:5rem;
+.form-container {
+    margin: 5rem;
     padding: 3rem;
     background-color: white;
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.form-columns{
-    display:flex;
+.form-columns {
+    display: flex;
     flex-direction: row;
     /* justify-content: space-around; */
 }
 
-.primaryfields, .primaryfields-date{
+.primaryfields,
+.primaryfields-date {
     margin-bottom: 0.8rem;
     display: flex;
     flex-direction: column;
-    border-radius:0.3rem;
+    border-radius: 0.3rem;
     font-weight: normal;
 }
 
-.primaryfields label, .primaryfields-date{
-    margin-bottom:0.5em;
+.primaryfields label,
+.primaryfields-date {
+    margin-bottom: 0.5em;
     font-weight: normal;
 }
 
-.primaryfields input, .primaryfields-date input{
+.primaryfields input,
+.primaryfields-date input {
     height: 2.5rem;
     border-radius: 0.3rem;
-    border-color:#cfcfcf solid;
+    border-color: #cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
     padding: 0.5rem;
     width: 90%;
 }
-.primaryfields-date input{
-    width: 100%;   
+.primaryfields-date input {
+    width: 100%;
 }
 
-.primaryfields-date{
+.primaryfields-date {
     margin-right: 2rem;
 }
 
-.primaryfields textarea{
+.primaryfields textarea {
     height: 20rem;
     width: 90%;
     border-radius: 0.3rem;
-    border-color:#cfcfcf solid;
+    border-color: #cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
     padding: 0.5rem;
 }
 
-.bookRelatedCourses{
+.bookRelatedCourses {
     margin-bottom: 1rem;
 }
 
-#availBookCopies{
+#availBookCopies {
     width: 4rem;
     margin-bottom: 0.5rem;
 }
 
-#sptYear{
-    width:25%
+#sptYear {
+    width: 25%;
 }
 
-.dates-group{
-    display:flex;
+.dates-group {
+    display: flex;
     flex-direction: row;
     margin-bottom: 1rem;
 }
 
-#addAuthor{
-    font-family: 'Montserrat', sans-serif;
-    padding:0.5rem;
+#addAuthor {
+    font-family: "Montserrat", sans-serif;
+    padding: 0.5rem;
     padding-right: 1rem;
     display: flex;
     align-items: center;
     background-color: white;
     border-style: solid;
     border-radius: 0.5rem;
-    border-color:#dadada;
-    border-width:0.2rem;
+    border-color: #dadada;
+    border-width: 0.2rem;
     margin-bottom: 1rem;
 }
 
-#addAuthor:hover{
-    background-color:#0067A1;
-    color:white;
-    border-color:white;
+#addAuthor:hover {
+    background-color: #0067a1;
+    color: white;
+    border-color: white;
 }
 
-#deleteAuthor{
-    font-family: 'Montserrat', sans-serif;
-    color:#d31c1ca9;
+#deleteAuthor {
+    font-family: "Montserrat", sans-serif;
+    color: #d31c1ca9;
     vertical-align: center;
     align-items: center;
     background-color: white;
     border-style: solid;
     border-radius: 0.5rem;
-    border-color:#d31c1ca9;
-    border-width:0.2rem;
+    border-color: #d31c1ca9;
+    border-width: 0.2rem;
     height: 2rem;
-    margin-top:0.5rem;
+    margin-top: 0.5rem;
     width: 10rem;
 }
 
-#deleteAuthor:hover{
-    background-color:#d31c1ca9;
-    color:white;
-    border-color:white;
+#deleteAuthor:hover {
+    background-color: #d31c1ca9;
+    color: white;
+    border-color: white;
 }
 
-.authorfields{
+.authorfields {
     /* encloses inputs + delete button */
     margin-bottom: 1rem;
-    
 }
 
-.authorname-cont{
+.authorname-cont {
     /* encloses author-fname and author-lname */
-    display:flex;
-    flex-direction:row;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    width:100%;
+    width: 100%;
 }
 
-.authorname-cont input{
+.authorname-cont input {
     width: 85%;
     height: 2.5rem;
     border-radius: 0.3rem;
-    border-color:#cfcfcf solid;
+    border-color: #cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
     padding: 0.5rem;
     /* margin-right:1rem; */
 }
 
-.author-name{
+.author-name {
     display: flex;
     flex-direction: column;
-    width:100%
+    width: 100%;
 }
 
-.author-name input{
-    width: 90%
+.author-name input {
+    width: 90%;
 }
 
-#physDescription{
+#physDescription {
     width: 100%;
 }
 
 #sptYear {
-    width:25%
+    width: 25%;
 }
 
-#keywords-field{
-    width: 100%
+#keywords-field {
+    width: 100%;
 }
 
-#abstractText{
+#abstractText {
     height: 15rem;
     border-radius: 0.3rem;
-    border-color:#cfcfcf solid;
+    border-color: #cfcfcf solid;
     border-style: solid;
     border-width: 0.2rem;
     padding: 0.5rem;
-    width: 100%
+    width: 100%;
 }
 
-.form-left-column, .form-mid-column, .form-right-column {
+.form-left-column,
+.form-mid-column,
+.form-right-column {
     display: flex;
     flex-direction: column;
     padding-right: 1.5rem;
     padding-left: 1.5rem;
-    width:33%
+    width: 33%;
 }
-
-
 
 /* .form-mid-column{
     display: flex;
@@ -224,7 +225,7 @@
     width: 33%;
 } */
 
-#relatedCourses{
+#relatedCourses {
     width: 100%;
 }
 
@@ -241,15 +242,15 @@
     width: 100%;
 }
 
-.resourcefiles{
+.resourcefiles {
     padding: 1rem;
     width: 100%;
     color: #dadada;
-    background-color:white;
+    background-color: white;
     border-width: 0.1rem;
     border-radius: 0.5rem;
     border-style: solid;
-    float:right;
+    float: right;
 }
 
 .spthesisform {
@@ -262,38 +263,38 @@
     height: 100%;
 }
 
-#sptform h5{
+#sptform h5 {
     font-weight: normal;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
 }
 
-.spthesisfiles{
-    font-weight:normal;
-    font-family: 'Montserrat', sans-serif;
-    display:flex;
+.spthesisfiles {
+    font-weight: normal;
+    font-family: "Montserrat", sans-serif;
+    display: flex;
     flex: row;
     justify-content: space-between;
-    margin-top:1rem;
-    align-items:center;
+    margin-top: 1rem;
+    align-items: center;
     margin-bottom: 2rem;
 }
 
-.spthesisfiles h5{
-    font-weight:normal;
-    font-family: 'Montserrat', sans-serif;
+.spthesisfiles h5 {
+    font-weight: normal;
+    font-family: "Montserrat", sans-serif;
     width: 12rem;
     margin-right: 1rem;
-    margin-bottom:0;
+    margin-bottom: 0;
 }
 /* 
 .spthesisfiles input{
     width: 35rem;
 } */
 
-#addAdviser{
-    font-weight:normal;
-    font-family: 'Montserrat', sans-serif;
-    float:right;
+#addAdviser {
+    font-weight: normal;
+    font-family: "Montserrat", sans-serif;
+    float: right;
     display: flex;
     align-items: center;
     padding: 0.8rem;
@@ -303,33 +304,32 @@
     border-style: solid;
 }
 
-#addAdviser:hover{
-    background-color:#0067A1;
-    color:white;
-    border-color:white;
+#addAdviser:hover {
+    background-color: #0067a1;
+    color: white;
+    border-color: white;
 }
 
-#saveResource{
-    margin-top:1rem;
+#saveResource {
+    margin-top: 1rem;
     height: 2.5rem;
-    border-radius:0.5rem;
+    border-radius: 0.5rem;
     border-style: solid;
-    border-color:#0067A1;
-    color:white;
-    background-color: #0067A1;
+    border-color: #0067a1;
+    color: white;
+    background-color: #0067a1;
     width: 100%;
     box-shadow: 0.3rem 0.3rem 0.7rem #cfcfcf;
-
 }
 
-#saveResource:hover{
-    color:white;
+#saveResource:hover {
+    color: white;
     /* background-color:#0066a1bb; */
-    -moz-box-shadow:    inset 0 0 1rem #00000036;
+    -moz-box-shadow: inset 0 0 1rem #00000036;
     -webkit-box-shadow: inset 0 0 1rem #00000036;
 }
 
-.main-form{
+.main-form {
     background-color: white;
     margin: 2rem;
     border-radius: 1rem;
@@ -341,29 +341,30 @@
     width: 50%;
 }
 
-.classifSelect, .abstract-div{
-    margin-top:1rem;
-    margin-bottom:1rem
+.classifSelect,
+.abstract-div {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
-.add-spt-page-container{
+.add-spt-page-container {
     display: flex;
     flex-direction: row;
 }
 
-.resourcefiles{
-    color:#0067A1;
+.resourcefiles {
+    color: #0067a1;
     text-decoration: underline;
 }
 
-.resourcefiles::placeholder{
-    color:#c5c5c5
+.resourcefiles::placeholder {
+    color: #c5c5c5;
 }
 
-#keywords-field{
-    border-color:#c5c5c5
+#keywords-field {
+    border-color: #c5c5c5;
 }
 
-#resClassification{
-    width: 50%
+#resClassification {
+    width: 50%;
 }

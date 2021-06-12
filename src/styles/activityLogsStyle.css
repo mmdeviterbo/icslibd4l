@@ -1,5 +1,5 @@
 .activity-logs-container {
-    position:relative !important;
+    position: relative !important;
     min-height: 80vh;
     display: flex;
     flex-direction: column;
@@ -12,9 +12,10 @@
     margin-top: 0.4rem;
 }
 
-.activity-clrbtn:hover, .activity-clrbtn svg:hover{
+.activity-clrbtn:hover,
+.activity-clrbtn svg:hover {
     text-decoration: underline;
-    color:black;
+    color: black;
 }
 
 /* icon */
@@ -56,35 +57,24 @@
 }
 
 .clear-logs-button-container {
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
-
 
 .clear-logs-btn {
     display: inline-block;
     align-items: center;
     background-color: white;
-    color:#d31c1ca9;
+    color: #c82333;
     border-style: solid;
-    border-color: #d31c1ca9;
+    border-color: #c82333;
     border-width: 1px;
-    padding:0.7rem;
+    padding: 0.7rem;
     border-radius: 0.7rem;
- 
 }
 .clear-logs-btn:hover {
-    background-color: #d31c1ca9;
-    border-color:white;
-    color:white;
-    
+    background-color: #c82333;
+    border-color: white;
+    color: white;
 }
-
-.clear-logs-btn svg {
-    display: inline-block;
-    vertical-align: middle;
-    padding-bottom: 0.15rem;
-}
-
-
