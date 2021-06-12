@@ -5,8 +5,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 6rem;
-    padding-bottom: 2rem;
+    padding-top: 2rem;
+    /* padding-bottom: 2rem; */
     padding-left: 15%;
     padding-right: 15%;
     background-color: #f4f4f4;
@@ -25,7 +25,7 @@
     display: flex;
     justify-content: space-between;
     height: 50vh;
-    margin: 2rem 10%;
+    margin: 2rem 12%;
     padding: 3rem;
     border-radius: 1rem;
     box-shadow: 0.5rem 0.5rem 1rem #cfcfcf;

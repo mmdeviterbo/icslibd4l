@@ -3,6 +3,7 @@
     min-height: 80vh;
     display: flex;
     flex-direction: column;
+    background-color: #f4f4f4;
 }
 
 /* filter */

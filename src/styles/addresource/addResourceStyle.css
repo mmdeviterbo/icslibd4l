@@ -14,16 +14,17 @@
 }
 
 .add-res-header {
-    background-color: white;
+    background-color: #f4f4f4;
+
     /* margin:0; */
 }
 
 .add-res-header h1 {
-    color: #0067a1;
+    color: black;
     padding: 1rem;
-    font-weight: normal;
+    font-weight: 900;
     font-size: 3rem;
-    font-family: "Montserrat", sans-serif;
+    font-family: inherit;
     padding-top: 2rem;
     padding-bottom: 2rem;
     margin: 4rem;
