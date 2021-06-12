@@ -316,15 +316,3 @@ export default function ProfileContainer() {
         </div>
     );
 }
-
-const headerText = {
-    fontWeight: "900",
-    fontSize: "35px",
-};
-
-const labelText = {
-    verticalAlign: "center",
-    paddingTop: "12px",
-    fontWeight: "900",
-    fontSize: "25px",
-};

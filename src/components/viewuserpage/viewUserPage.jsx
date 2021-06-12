@@ -50,10 +50,3 @@ export default function ViewUserPage({ user }) {
         </>
     );
 }
-
-const labelText = {
-    verticalAlign: "center",
-    paddingTop: "12px",
-    fontWeight: "900",
-    fontSize: "25px",
-};
