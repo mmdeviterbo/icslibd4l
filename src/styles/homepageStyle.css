@@ -84,7 +84,7 @@
 .navItem:hover {
     font-weight: 900 !important;
     color: black !important;
-    background: rgb(207, 207, 207) !important;
+    background: rgb(255,255,255) !important;
 }
 
 /* google auth button */
@@ -97,8 +97,8 @@
     flex-grow: 1 !important;
     background: rgb(26, 26, 26) !important;
     color: white !important;
-    transition: 0.5s;
-    cursor: pointer;
+    transition: 0.3s !important;
+    cursor: pointer !important;
     overflow-y: visible !important;
     box-shadow: none !important;
     padding: 0 !important;
@@ -108,7 +108,7 @@
 .login-link:hover {
     font-weight: 900 !important;
     color: black !important;
-    background: rgb(207, 207, 207) !important;
+    background: rgb(255, 255, 255) !important;
     text-align: center !important;
     
 }

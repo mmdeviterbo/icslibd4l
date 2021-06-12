@@ -26,8 +26,15 @@ export default function NavigationBar({
     }, [classNavBar]);
 
     const getCurrentNav=(navClass)=>{
-        return currentNav===navClass? white : black;
+        return currentNav.includes(navClass)? white : black;
     }
+
+    const isProfileClicked=()=>{
+        const regexAdminAccess = /(?:^\/manage-users$|^\/manage-resources$|^\/view-activitylogs$|^\/view-summaryreport$|^\/account-setting$|^\/edit-book.*$|^\/add-new-book$|^\/add-new-spt$)/;
+
+        return window.location.pathname.match(regexAdminAccess)? white : black;
+    }
+
 
     // if not found (404), hide the navbar component
     useEffect(() => {
@@ -114,7 +121,7 @@ export default function NavigationBar({
                         />
                         About
                     </Link>
-                    <div className="login-link">
+                    <div className={!user && "login-link"} style={isProfileClicked()}>
                         {(user && profileDisplay()) || logInButton()}
                     </div>
                 </div>
@@ -128,7 +135,6 @@ const SearchFilter = ({ user }) => {
     const history = useHistory();
 
     const logout = async () => {
-        console.log(window.location.pathname);
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
@@ -305,8 +311,9 @@ const mainBgStyleContainer = {
 };
 const white = {
     fontWeight: 900,
+    fontSize: "calc(12px + 0.2vw)",
     color: "black",
-    background: "rgb(207, 207, 207)",
+    background: "rgb(255, 255, 255)",
     flexGrow:1,
     height: "100%",
     display: "flex",
@@ -315,7 +322,7 @@ const white = {
     transition:"0.3s"
 }
 const black = {
-    fontSize: "calc(10px + 0.3vw) !important",
+    fontSize: "calc(12px + 0.2vw)",
     background: "rgb(26, 26, 26)",
     height: "100%",
     display: "flex",
@@ -323,7 +330,7 @@ const black = {
     "justifyContent": "center",
     "flexGrow": 1,
     color: "white",
-    fontWeight: "900 !important",
+    fontWeight: 900,
     transition: "0.3s"
 }
 
