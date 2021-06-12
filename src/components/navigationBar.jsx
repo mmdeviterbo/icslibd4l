@@ -34,12 +34,20 @@ export default function NavigationBar({
         return window.location.pathname.match(regexAdminAccess)? white : black;
     }
 
+    // listen to routes (on mounting)
+    useEffect(()=>{
+        const {pathname} = window.location;
+        if (["/not-found", "/unauthorized"].includes(pathname) || ["/not-found", "/unauthorized"].includes(pathname))
+        setClassNavBar("navbar-container-none");
+        else setClassNavBar("navbar-container");
+        setCurrentNav(pathname);
+    },[])
 
-    // if not found (404), hide the navbar component
+    // listen to changing routes (after mounting)
     useEffect(() => {
         return history.listen((location) => {
-            if (["/not-found", "/unauthorized"].includes(location.pathname))
-                setClassNavBar("navbar-container-none");
+            if (["/not-found", "/unauthorized"].includes(location.pathname) || ["/not-found", "/unauthorized"].includes(window.location.pathname))
+            setClassNavBar("navbar-container-none");
             else setClassNavBar("navbar-container");
             setCurrentNav(location.pathname);
         });
