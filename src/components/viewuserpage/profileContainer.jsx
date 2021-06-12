@@ -62,7 +62,7 @@ export default function ProfileContainer() {
             const { data } = await PersonService.loginRegisterUser(user); //get and store new token
             localStorage.setItem(jwtPrivateKey, data); //set token
 
-            // window.location = "/account-setting";
+            window.location = "/account-setting";
         } catch (err) {}
     };
 
