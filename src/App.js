@@ -135,10 +135,7 @@ function App() {
                 <Route path="/add-new-spt" render={()=><AddSPThesisPage user={user}/>} />
                 <Route path="/add-new-book" render={()=><AddBookPage user={user}/>} />
                 <Route path="/edit-spt/:id" render={()=><EditSPTFormContainer user={user}/>} />
-                <Route
-                    path="/edit-book/:id"
-                    component={EditBookFormContainer}
-                />
+                <Route path="/edit-book/:id" render={()=><EditBookFormContainer user={user}/>}/>
                 <Route
                     path="/view-activitylogs"
                     render={() => <ActivityLogsContainer user={user} />}

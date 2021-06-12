@@ -3,12 +3,16 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 // import { ItemGroup } from "semantic-ui-react";
+import { useHistory } from "react-router";
 import ResourceServices from "../../services/resourceService";
 import { nanoid } from 'nanoid'
 import { produce } from 'immer'
 import EditResourceHeader from "./editResourceSideHeader"
 import ToastNotification from "../toastNotification";
 import StatusModal from "../modal/operationStatusModal";
+import PropagateLoader from "react-spinners/PropagateLoader";
+import PersonService from '../../services/personService';
+import { jwtPrivateKey } from "../../config.json";
 
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
@@ -36,6 +40,8 @@ const courseList = [
 ];   
 
 export default function EditBookFormContainer(props) {
+    const [loader, setLoader] = useState(true);
+    const history = useHistory();
 
     const [title, setTitle] = useState("");
     // const [type, setType] = useState("");
@@ -77,8 +83,19 @@ export default function EditBookFormContainer(props) {
         }
     }, []);
 
-    console.log(idSource)           //object id is received
-    // console.log(bookInfoArr);       //info of all res is received
+    const accessPrivilege = () => {
+        setTimeout(() => {
+            try {
+                const user = PersonService.decryptToken(
+                    localStorage.getItem(jwtPrivateKey)
+                );
+                if (!user || (user && user.userType !== 1))
+                    return history.push("/unauthorized");
+            } catch (err) {
+                return history.push("/unauthorized");
+            }
+        }, 700);
+    };   
 
     // iterate through array to match id
     useEffect(() => {
@@ -198,12 +215,10 @@ export default function EditBookFormContainer(props) {
         ]);
     }
 
-    // console.log(author[0].author_fname)
-    console.log(author)
-    // console.log(subject)
-
     return (
-        <div className="add-res-form-cont">
+        <>
+        {props.user && props.user.userType === 1 ?
+            <div className="add-res-form-cont">
             <EditResourceHeader/>
             <form 
                 className= "main-form" 
@@ -486,5 +501,14 @@ export default function EditBookFormContainer(props) {
         />
 
     </div>
+    
+            :
+
+            <div style={{ minHeight: "80vh", display: "grid", placeItems: "center"}}>
+                <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />
+                {accessPrivilege()}
+            </div>
+        }
+        </>
     );
 }

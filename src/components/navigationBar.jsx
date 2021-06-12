@@ -30,8 +30,7 @@ export default function NavigationBar({
     }
 
     const isProfileClicked=()=>{
-        const regexAdminAccess = /(?:^\/manage-users$|^\/manage-resources$|^\/view-activitylogs$|^\/view-summaryreport$|^\/account-setting$|^\/edit-book.*$|^\/add-new-book$|^\/add-new-spt$)/;
-
+        const regexAdminAccess = /(?:^\/manage-users$|^\/manage-resources$|^\/view-activitylogs$|^\/view-summaryreport$|^\/account-setting$|^\/edit-book.*$|^\/edit-spt.*$|^\/add-new-book$|^\/add-new-spt$)/;
         return window.location.pathname.match(regexAdminAccess)? white : black;
     }
 
@@ -150,6 +149,7 @@ const SearchFilter = ({ user }) => {
             )
                 window.location = "/home";
             else if(window.location.pathname.match(/^\/edit-book.*$/g)) window.location = "/home";
+            else if(window.location.pathname.match(/^\/edit-spt.*$/g)) window.location = "/home";
             else if(window.location.pathname.match(/^\/search.*$/g)) window.location = window.location.href;
             else window.location = window.location.pathname;
         } catch (err) {}
@@ -270,7 +270,7 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[options.length - 1])
+                    : optionsNotAdmin.concat(options[options.length-2]).concat(options[options.length-1])
             }
         />
     );
