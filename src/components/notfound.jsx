@@ -1,9 +1,9 @@
 import React,{useEffect} from 'react';
-import notFound from '../assets/notFound_1.png'
-import {gsap} from 'gsap';
-import '../styles/notFoundStyle.css'; 
-import notFoundHover from '../assets/notFound_1_hover.png';
 import {Link} from 'react-router-dom';
+import {gsap} from 'gsap';
+import notFoundHover from '../assets/notFound_1_hover.png';
+import notFound from '../assets/notFound_1.webp'
+import '../styles/notFoundStyle.css'; 
 
 
 export default function Notfound() {
