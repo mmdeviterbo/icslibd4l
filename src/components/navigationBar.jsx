@@ -188,8 +188,9 @@ const SearchFilter = ({ user }) => {
     const trigger = (
         <span>
             <Icon className="user" />
-            {/* {user && user.fullName && user.fullName.split(" ")[0].substring(0,7)} */}
-            {user && user.nickname}
+            {user && user.fullName === user.nickname
+                ? user.fullName.split(" ")[0].substring(0, 7)
+                : user && user.nickname}
         </span>
     );
 
