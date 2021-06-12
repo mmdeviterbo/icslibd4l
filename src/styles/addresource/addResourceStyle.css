@@ -108,7 +108,7 @@
 }
 
 #addAuthor {
-    font-family: "Montserrat", sans-serif;
+    font-family: inherit;
     padding: 0.5rem;
     padding-right: 1rem;
     display: flex;
@@ -128,24 +128,25 @@
 }
 
 #deleteAuthor {
-    font-family: "Montserrat", sans-serif;
-    color: #d31c1ca9;
-    vertical-align: center;
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+    color: #c82333;
     align-items: center;
     background-color: white;
     border-style: solid;
     border-radius: 0.5rem;
-    border-color: #d31c1ca9;
+    border-color: #c82333;
     border-width: 0.2rem;
     height: 2rem;
     margin-top: 0.5rem;
-    width: 10rem;
+    padding: 1rem 1.5rem;
 }
 
 #deleteAuthor:hover {
-    background-color: #d31c1ca9;
+    background-color: #c82333;
     color: white;
-    border-color: white;
+    border-color: #c82333;
 }
 
 .authorfields {
@@ -324,10 +325,12 @@
 }
 
 #saveResource:hover {
-    color: white;
+    /* color: white; */
     /* background-color:#0066a1bb; */
-    -moz-box-shadow: inset 0 0 1rem #00000036;
-    -webkit-box-shadow: inset 0 0 1rem #00000036;
+    /* -moz-box-shadow: inset 0 0 1rem #00000036;
+    -webkit-box-shadow: inset 0 0 1rem #00000036; */
+    transition: transform 100ms ease, box-shadow 125ms ease;
+    transform: scale(1.025);
 }
 
 .main-form {

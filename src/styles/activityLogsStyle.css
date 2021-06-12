@@ -10,7 +10,7 @@
 
 .activity-clrbtn {
     display: flex;
-    margin-top: 0.4rem;
+    /* margin-top: 0.4rem; */
 }
 
 .activity-clrbtn:hover,
@@ -20,11 +20,6 @@
 }
 
 /* icon */
-.activity-clrbtn svg {
-    vertical-align: -0.3rem;
-    padding-bottom: 0.2rem;
-    padding-right: 0.3rem;
-}
 
 .activity-filter {
     width: 17%;
@@ -71,8 +66,8 @@
     border-style: solid;
     border-color: #c82333;
     border-width: 1px;
-    padding: 0.7rem;
-    border-radius: 0.7rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
 }
 .clear-logs-btn:hover {
     background-color: #c82333;
