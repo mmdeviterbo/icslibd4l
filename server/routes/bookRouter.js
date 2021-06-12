@@ -64,7 +64,7 @@ router.post("/get-news", async (req, res) => {
     }
 });
 
-//creates a book 
+//creates a book and uploads its book cover
 /**************************************************** 
 Request Object:
 req object:
@@ -81,7 +81,6 @@ book: {
     datePublished,
     dateAcquired,
 }
-
 res object:
 {
     bookId,
