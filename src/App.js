@@ -132,10 +132,10 @@ function App() {
                     path="/manage-users"
                     render={() => <ManageUserPage user={user} />}
                 />
-                <Route path="/add-new-spt" render={()=><AddSPThesisPage user={user}/>} />
-                <Route path="/add-new-book" render={()=><AddBookPage user={user}/>} />
-                <Route path="/edit-spt/:id" render={()=><EditSPTFormContainer user={user}/>} />
-                <Route path="/edit-book/:id" render={()=><EditBookFormContainer user={user}/>}/>
+                <Route path="/add-new-spt" render={(props)=><AddSPThesisPage {...props} user={user}/>} />
+                <Route path="/add-new-book" render={(props)=><AddBookPage {...props} user={user}/>} />
+                <Route path="/edit-spt/:id" render={(props)=><EditSPTFormContainer {...props} user={user}/>} />
+                <Route path="/edit-book/:id" render={(props)=><EditBookFormContainer {...props} user={user}/>}/>
                 <Route
                     path="/view-activitylogs"
                     render={() => <ActivityLogsContainer user={user} />}
