@@ -149,6 +149,7 @@ const AddBookFormContainer = () => {
                   onChange={(event) => {
                     setDatePublished(handleDate(event.target.value));
                   }}
+                  style={{ marginRight: "5%" }}
                 />
               </div>
 
@@ -201,7 +202,10 @@ const AddBookFormContainer = () => {
                     {/* AUTHOR FIRST NAME FIELD */}
 
                     <div className="authorname-cont">
-                      <div className="author-name">
+                      <div
+                        className="author-name"
+                        style={{ marginRight: "3%" }}
+                      >
                         <label htmlFor="resAuthorFN">First Name:</label>
 
                         <input
@@ -219,6 +223,7 @@ const AddBookFormContainer = () => {
                             );
                             // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
                           }}
+                          style={{ marginRight: "5%" }}
                         />
                       </div>
 

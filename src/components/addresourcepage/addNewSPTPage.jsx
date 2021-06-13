@@ -257,7 +257,10 @@ const AddNewSPThesisForm = () => {
                   <div className="authorfields" key={p.authorid}>
                     {/* AUTHOR FIRST NAME FIELD */}
                     <div className="authorname-cont">
-                      <div className="author-name">
+                      <div
+                        className="author-name"
+                        style={{ marginRight: "3%" }}
+                      >
                         <label htmlFor="resAuthorFN">First Name:</label>
 
                         <input
@@ -315,6 +318,7 @@ const AddNewSPThesisForm = () => {
                         // hence no faulty deleting
                         // wag nalang istore si author id sa db
                       }}
+                      style={{ marginTop: "3%" }}
                     >
                       Delete Author
                     </button>
@@ -346,6 +350,7 @@ const AddNewSPThesisForm = () => {
                     "&:hover": { borderColor: "#778899" }, // border style on hover
                     border: "2px solid #afbcc9", // default border color
                     boxShadow: "none", // no box-shadow
+                    marginTop: "0.4rem",
                   }),
                 }}
               ></Select>
@@ -371,7 +376,7 @@ const AddNewSPThesisForm = () => {
                 }}
               ></Select>
             </div>
-
+            <br></br>
             {/* Abstract TextArea */}
             <div className="abstract-div">
               <label htmlFor="abstractText">Abstract:</label>
@@ -381,6 +386,12 @@ const AddNewSPThesisForm = () => {
                 onChange={(event) => {
                   setAbstract(event.target.value);
                 }}
+                // styles={{
+                //   maxHeight: "75px",
+                //   minHeight: "38px",
+                //   resize: "none",
+                //   height: "unset",
+                // }}
               />
             </div>
           </div>{" "}
@@ -444,7 +455,20 @@ const AddNewSPThesisForm = () => {
                 id="keywords-field"
                 onChange={(chips) => handleChips(chips)}
                 color="primary"
-                style={{ borderColor: "green" }}
+                // style={{ border: "0.15rem solid #afbcc9", padding: "0.5rem" }}
+                style={{
+                  //   "&:hover, &:focus": { borderBottom: "2px solid #778899" }, // border style on hover
+                  border: "2px solid #afbcc9", // default border color
+                  padding: "0.5rem",
+                  paddingBottom: "0rem",
+                  borderRadius: "0.3rem",
+                  "&:before": {
+                    borderColor: "red",
+                  },
+                  "&:after": {
+                    borderColor: "green",
+                  },
+                }}
               />
             </div>
 
