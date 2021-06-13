@@ -1,5 +1,7 @@
 /* Filter fields container */
-.manage-resources-page-container{
+.manage-resources-page-container {
+    background-color: #f4f4f4;
+
     min-height: 90vh;
     position: relative;
 }
@@ -9,43 +11,44 @@
     flex-direction: row;
     justify-content: space-evenly;
     padding-top: 1rem;
-    padding-bottom: 1rem;    
+    padding-bottom: 1rem;
     padding-left: 2.5rem;
     padding-right: 2.5rem;
 }
 
 /* Each filter select field */
 .res-filters {
-    width : 17%;
+    width: 17%;
     font-size: 14px;
 }
 
 /* ------ clear button ------*/
 
 /* icon + text container*/
-.res-clrbtn{    
-    display:flex; 
+.res-clrbtn {
+    display: flex;
     margin-top: 0.4rem;
 }
 /* icon */
-.res-clrbtn svg{
+.res-clrbtn svg {
     vertical-align: -0.3rem;
     padding-bottom: 0.2rem;
     padding-right: 0.3rem;
 }
 
 /* text */
-#res-filters-clear{
-    vertical-align:middle;
+#res-filters-clear {
+    vertical-align: middle;
     /* text-decoration: underline; */
     color: #828282;
 }
 
 /* hover */
 
-.res-clrbtn:hover, .res-clrbtn svg:hover{
+.res-clrbtn:hover,
+.res-clrbtn svg:hover {
     text-decoration: underline;
-    color:black;
+    color: black;
 }
 
 /* Table Container */
@@ -62,20 +65,17 @@
 .new-res-button {
     display: inline-block;
     background-color: white;
-    color:#0067A1;
+    color: #0067a1;
     border-style: solid;
-    border-color: #0067A1;
+    border-color: #0067a1;
     border-width: 1px;
-    padding:0.7rem;
-    padding-left: 0.4rem;
-    border-radius: 0.7rem;
-    padding-right: 1.4rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
     margin-right: 1rem;
- 
 }
 
 .new-res-button a {
-    color:#0067A1
+    color: #0067a1;
 }
 
 .new-res-button svg {
@@ -84,28 +84,28 @@
     padding-bottom: 0.15rem;
 }
 
-.new-res-button:hover{
-    background-color: #0067A1;
-    border-color:white;
-    color:white;
-    
+.new-res-button:hover {
+    background-color: #0067a1;
+    border-color: white;
+    color: white;
 }
 
-.editResourceBtn, .delResBtn {
-    color:#828282;
+.editResourceBtn,
+.delResBtn {
+    color: #828282;
     /* height: 2rem; */
 }
 
 .addBtns {
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.table-icons{
-    -webkit-user-select: none !important;  /* Chrome all / Safari all */
-    -moz-user-select: none !important;     /* Firefox all */
-    -ms-user-select: none !important;      /* IE 10+ */
+.table-icons {
+    -webkit-user-select: none !important; /* Chrome all / Safari all */
+    -moz-user-select: none !important; /* Firefox all */
+    -ms-user-select: none !important; /* IE 10+ */
     -o-user-select: none !important;
     user-select: none !important;
-  }
+}

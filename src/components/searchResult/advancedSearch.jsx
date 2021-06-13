@@ -8,8 +8,6 @@ import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/searchResultStyle/advancedSearch.css";
 
-
-
 export default function AdvancedSearch() {
     var queryStore = `${useLocation().search}`.substring(
         `${useLocation().search}`.indexOf("search=") + 7
@@ -61,20 +59,23 @@ export default function AdvancedSearch() {
 
     url = url.replace("http://localhost:3000/search", "");
 
-    function returnCloserResourceType(){
-        if(url.includes("sp")) return "sp";
-        else if(url.includes("thesis")) return "thesis";
-        else if(url.includes("book")) return "book";
-        else return "any"; 
+    function returnCloserResourceType() {
+        if (url.includes("sp")) return "sp";
+        else if (url.includes("thesis")) return "thesis";
+        else if (url.includes("book")) return "book";
+        else return "any";
     }
-    
-    function onMountResourceType(){
-        if(!url.match(urlValidator)) return returnCloserResourceType();
-        return `${url}`.substring(`${url}`.indexOf("=") + 1,`${url}`.indexOf("&"));
+
+    function onMountResourceType() {
+        if (!url.match(urlValidator)) return returnCloserResourceType();
+        return `${url}`.substring(
+            `${url}`.indexOf("=") + 1,
+            `${url}`.indexOf("&")
+        );
     }
-    useEffect(()=>{
+    useEffect(() => {
         setResourceType(onMountResourceType());
-    },[])
+    }, []);
 
     const displayresults = resultsFilterArr
         .slice(pagesVisited, pagesVisited + resultsPerPage)
@@ -84,8 +85,8 @@ export default function AdvancedSearch() {
                     key={index}
                     title={result.title}
                     authors={result.authors || result.author}
-                    id={result.bookId || result.sp_thesis_id} 
-                    publishDate={result.year || result.datePublished} 
+                    id={result.bookId || result.sp_thesis_id}
+                    publishDate={result.year || result.datePublished}
                 />
             );
         });
@@ -97,15 +98,17 @@ export default function AdvancedSearch() {
     // http request
     async function fetchData() {
         setLoader(true);
-        if(!url.match(urlValidator)) setIsValidQuery(false);
-        else{
+        if (!url.match(urlValidator)) setIsValidQuery(false);
+        else {
             //edit before prod; or should i use split and have ? as a delimeter tho the search string can also contain '?'
             if (url.length > 0) {
                 url = url.slice(1, url.length);
-                urlQuery = decodeURIComponent(url.split("&")[1].replace("search=", ""));
+                urlQuery = decodeURIComponent(
+                    url.split("&")[1].replace("search=", "")
+                );
                 urlFilter = url.split("&")[0].replace("type=", "");
             }
-            if(isValidQuery){
+            if (isValidQuery) {
                 setPageNumber(0);
                 try {
                     //  objFilter store filters in an object <field>:<value>
@@ -113,18 +116,18 @@ export default function AdvancedSearch() {
                     const { data } = await ResourceService.searchSpThesis(
                         objFilter,
                         urlRequest
-                        );
-                        setResultsFilterArr(data);
-                        setLoader(false);
-                    } catch (err) {
-                        console.log(err);
+                    );
+                    setResultsFilterArr(data);
+                    setLoader(false);
+                } catch (err) {
+                    console.log(err);
                 }
             }
         }
     }
     // get filtered results to backend
     useEffect(() => {
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
         fetchData();
     }, [objFilter]);
 
@@ -133,19 +136,19 @@ export default function AdvancedSearch() {
         let tempStr = query.trim();
 
         // NEED TO CLEAN resourcetype specialproblem
-        if(isValidQuery){
+        if (isValidQuery) {
             if (
                 tempStr.length !== 0 &&
                 query.replace(/^\s+/, "").replace(/\s+$/, "") !== ""
-                ) {
-                    history.push(`/search?type=${resourceType}&search=${tempStr}`);
-                }
-                setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
-                
-                // call convert filter to object
-                filterParser();
-        }else{
-            return window.location = `/search?type=${onMountResourceType()}&search=${tempStr}`;
+            ) {
+                history.push(`/search?type=${resourceType}&search=${tempStr}`);
+            }
+            setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+
+            // call convert filter to object
+            filterParser();
+        } else {
+            return (window.location = `/search?type=${onMountResourceType()}&search=${tempStr}`);
         }
     };
 
@@ -183,16 +186,14 @@ export default function AdvancedSearch() {
         <form
             style={searchMainContainer}
             onSubmit={handleForm}
-            className="searchMainContainer"
-        >
+            className="searchMainContainer">
             <div style={topContainer} className="topContainer">
                 <h4 className="textStyle">Search results for:</h4>
                 <div style={searchBarContainer} className="resultsSearchbar">
                     <i
                         className="fa fa-search fa-2x iconMagnifyingGlass"
                         style={searchIcon}
-                        onClick={handleForm}
-                    ></i>
+                        onClick={handleForm}></i>
                     <input
                         style={inputSearch}
                         type="text"
@@ -224,17 +225,20 @@ export default function AdvancedSearch() {
                     />
 
                     {/* Apply filters button */}
-                    <button style={filterButton} className="btnApplyFilter" onClick={handleForm}>
+                    <button
+                        style={filterButton}
+                        className="btnApplyFilter"
+                        onClick={handleForm}>
                         Apply Filters
                     </button>
                 </div>
 
                 <div style={resultsOuterContainer}>
-                    {loader && isValidQuery?
+                    {loader && isValidQuery ? (
                         <div style={resultTop}>
                             <p className="textStyle">Getting results...</p>
                         </div>
-                        :
+                    ) : (
                         <div style={resultTop}>
                             {resultsFilterArr.length > 0 ? (
                                 <p className="textStyle">
@@ -248,20 +252,40 @@ export default function AdvancedSearch() {
                                         ? (pageNumber + 1) * resultsPerPage
                                         : resultsFilterArr.length}{" "}
                                     out of{" "}
-                                    {resultsFilterArr && resultsFilterArr.length}
+                                    {resultsFilterArr &&
+                                        resultsFilterArr.length}
                                 </p>
                             ) : (
-                                <>{isValidQuery && <p className="textStyle">No results</p>}</>
+                                <>
+                                    {isValidQuery && (
+                                        <p className="textStyle">No results</p>
+                                    )}
+                                </>
                             )}
                         </div>
-                    }
-                        <div style={loader? displayLoader : resultBottom}>
-                            {(!isValidQuery && loader) && 
-                            <div className="invalidSearchClass" style={{display:"flex", alignItems:"center"}}>
-                                <i className="fa mr-3 fa-4x fa-times"/>
-                                <p style={{fontSize:"calc(20px + 0.5vh)"}}>Invalid search</p>
-                            </div>}
-                            {(isValidQuery && loader)? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
+                    )}
+                    <div style={loader ? displayLoader : resultBottom}>
+                        {!isValidQuery && loader && (
+                            <div
+                                className="invalidSearchClass"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}>
+                                <i className="fa mr-3 fa-4x fa-times" />
+                                <p style={{ fontSize: "calc(20px + 0.5vh)" }}>
+                                    Invalid search
+                                </p>
+                            </div>
+                        )}
+                        {isValidQuery && loader ? (
+                            <PropagateLoader
+                                color={"#0067a1"}
+                                speedMultiplier={2}
+                                loading={loader}
+                                size={20}
+                            />
+                        ) : (
                             <div>
                                 {resultsFilterArr && displayresults}
                                 {resultsFilterArr.length > 0 ? (
@@ -275,15 +299,17 @@ export default function AdvancedSearch() {
                                         nextLinkClassName={"nextBttn"}
                                         disabledClassName={"paginationDisabled"}
                                         activeClassName={"paginationActive"}
-                                        activeLinkClassName={"paginationActiveText"}
+                                        activeLinkClassName={
+                                            "paginationActiveText"
+                                        }
                                         pageLinkClassName={"paginationText"}
                                     />
                                 ) : (
                                     <div></div>
                                 )}
                             </div>
-                            }
-                        </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </form>
@@ -305,7 +331,7 @@ const topContainer = {
     position: "sticky",
     top: "60px",
     width: "96vw",
-    height:"17vh",
+    height: "17vh",
     justifyContent: "center",
     alignItems: "center",
     padding: "5vh 5vw 1vh",
@@ -321,8 +347,8 @@ const searchBarContainer = {
 const searchIcon = {
     paddingLeft: "1vw",
     marginTop: "1vh",
-    cursor:"pointer",
-    transition:"0.2s",
+    cursor: "pointer",
+    transition: "0.2s",
 };
 
 const inputSearch = {
@@ -342,7 +368,7 @@ const filtersContainer = {
     background: "white",
     position: "sticky",
     overflowY: "overlay",
-    overflowX:"hidden",
+    overflowX: "hidden",
     top: "27.1vh",
     width: "20vw",
     height: "73vh",
@@ -357,7 +383,7 @@ const resultTop = {
     top: "calc(60px + 17vh)",
     padding: "2.5vh 1vw",
     background: "white",
-    zIndex: 1000
+    zIndex: 1000,
 };
 
 const resultBottom = {
@@ -370,20 +396,21 @@ const filterButton = {
     width: "11em",
     top: "-2.5vh",
     left: "20%",
-    borderRadius: "4px",
+    borderRadius: "0.5rem",
+    border: "1px solid #0067A1",
     backgroundColor: "#0067A1",
     color: "white",
     alignItems: "center",
     justifyContent: "center",
     fontFamily: "Montserrat",
     textTransform: "capitalize",
-    boxShadow:"1px 1px 3px black",
-    transform:"scale(1)",
-    transition:"0.2s"
+    boxShadow: "0.3rem 0.3rem 0.7rem #cfcfcf",
+    transform: "scale(1)",
+    transition: "0.2s",
 };
 
 const displayLoader = {
-  display:"grid",
-  placeItems: "center",
-  height:"80vh"
-}
+    display: "grid",
+    placeItems: "center",
+    height: "80vh",
+};

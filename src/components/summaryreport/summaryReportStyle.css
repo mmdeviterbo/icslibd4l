@@ -1,6 +1,8 @@
 /*  Stylings for summaryReportPage.jsx */
 .summary-header-container {
-    background-color: white;
+    background-color: #f4f4f4;
+
+    /* background-color: white; */
     width: 100%;
     height: rem;
     display: flex;
@@ -44,6 +46,8 @@
 
 /* Stylings for documentViewer.jsx */
 .pdf-view-container {
+    background-color: #f4f4f4;
+
     min-height: 90vh;
     background-color: "#CFCFCF";
     overflow-y: auto;
