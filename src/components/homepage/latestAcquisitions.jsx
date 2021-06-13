@@ -4,7 +4,7 @@ import latestAcqBg from "../../assets/searchBg_4.png";
 import { useHistory } from "react-router-dom";
 import ResourceService from "../../services/resourceService";
 import PropagateLoader from "react-spinners/PropagateLoader";
-
+import logo from '../../assets/mainlogo/icslibd4l.webp';
 import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
@@ -89,6 +89,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                     </div>
                 </div>
                 <div style={blueBg}>
+                    <img src={logo} style={logoStyle} alt="#"/>
                     <span style={hoverTextStyle}>{hoverText}</span>
                     <div style={textBgContainer}>
                         <h3 style={textBg} className="latestAcqhoverTextStyle">
@@ -110,8 +111,7 @@ export default function LatestAcquisitions({ latestAcqRef }) {
                     <div style={buttonViewAllBooks}>
                         <button
                             type="button"
-                            className="btn btn-success btnViewAll"
-                            style={buttonStyle}
+                            className="btnViewAll"
                             onClick={handleViewAllBooks}
                         >
                             View All
@@ -192,6 +192,14 @@ const blueBg = {
     display: "flex",
     flexDirection: "column",
 };
+
+const logoStyle = {
+    position:"absolute",
+    height:"200%",
+    filter:"grayscale(0.8)",
+    opacity:0.4
+}
+
 const textBgContainer = {
     flexGrow: 1,
     width: "100%",
@@ -237,16 +245,6 @@ const buttonViewAllBooks = {
     flexDirection: "column",
     alignItems: "center",
     zIndex: 10000,
-};
-const buttonStyle = {
-    background: "#e0e0e0",
-    border: "none",
-    color: "black",
-    borderRadius: "4px",
-    padding: "3% 10%",
-    boxShadow: "2px 2px 4px black",
-    fontSize: "calc(12px + 0.5vw)",
-    transition: "0.3s",
 };
 
 const animateScrollTriggger = () => {

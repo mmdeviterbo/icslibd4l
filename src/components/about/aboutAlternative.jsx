@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import logo from '../../assets/mainlogo/icslibd4l.png'
+import logo from '../../assets/mainlogo/icslibd4l.webp'
 import {gsap} from 'gsap';
 import '../../styles/aboutStyle/aboutStyle.css';
 
