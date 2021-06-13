@@ -133,7 +133,6 @@ const latestAcquisitionsContainer = {
     alignItems: "center",
     filter: "brightness(1)",
     transition: "0.8s",
-
     // protect from copy paste
     WebkitUserSelect: "none",
     WebkitTouchCallout: "none",
@@ -169,7 +168,7 @@ const colorsParent = {
     width: "95%",
     zIndex: 0,
     display: "flex",
-    borderRadius: "0px 4px 4px 0px",
+    borderRadius: "7px",
     overflow: "hidden",
     boxShadow: "4px 4px 20px black",
 };
@@ -177,7 +176,7 @@ const colorsParent = {
 const whiteBg = {
     height: "100%",
     width: "60%",
-    background: "rgba(255,255,255,0.8)",
+    background: "rgba(255,255,255)",
     zIndex: 1,
     padding: "0.5% 0",
 };

@@ -1,33 +1,35 @@
-.removeOutline:focus{ 
+.removeOutline:focus {
     box-shadow: none !important;
 }
 
-.topContainer:focus-within{
+.topContainer:focus-within {
     border-bottom: 2px solid rgb(0, 103, 161) !important;
 }
 
-.textStyle{
-    -webkit-touch-callout: none !important;  
-    -webkit-user-select: none !important; 
-    -khtml-user-select: none !important;  
+.textStyle {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
     -moz-user-select: none !important;
-    -ms-user-select: none !important;  
+    -ms-user-select: none !important;
     -user-select: none !important;
 }
-.btnApplyFilter:hover{
-    transform:scale(1.03) !important;
+.btnApplyFilter:hover {
+    transition: transform 100ms ease, box-shadow 125ms ease;
+
+    transform: scale(1.025) !important;
 }
 
-.sidebarLink:hover{
-    background: rgb(211, 211, 211,0.2);
-    cursor:pointer;
+.sidebarLink:hover {
+    background: rgb(211, 211, 211, 0.2);
+    cursor: pointer;
     transform: scale(1.03);
 }
-.iconMagnifyingGlass:hover{
+.iconMagnifyingGlass:hover {
     transform: scale(1.08) !important;
 }
 
-.dropdownNav > span:hover{
+.dropdownNav > span:hover {
     color: black;
     cursor: pointer;
 }
@@ -36,8 +38,8 @@
     color: pink;
 }*/
 
-.resultMainContainer:hover{
-    background: rgb(220, 220, 220,0.3);
+.resultMainContainer:hover {
+    background: rgb(220, 220, 220, 0.3);
     transform: scale(1.015);
 }
 
@@ -74,7 +76,7 @@
 }
 
 .paginationText:hover {
-    color:white;
+    color: white;
 }
 
 .paginationDisabled a {

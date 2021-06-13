@@ -186,6 +186,15 @@
     display: none !important;
 }
 
+.fa-facebook:hover, .fa-twitter-square:hover{
+    transform:scale(1.3);
+}
+.logoFooter:hover{
+    transform:scale(1.1);
+}
+
+
+
 .fa-angle-double-up:hover {
     transform: scale(1.4) !important;
     color: rgb(26, 26, 26, 1) !important;

@@ -45,31 +45,31 @@ export default function ManageUserPage({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="manage-user-container">
-                    <h1 id="manageUserId">Manage User</h1>
-                    <div className="manage-header-container">
+                    <ManagementHeader type={"user"} />
+                    {/* <h1 id="manageUserId">Manage User</h1> */}
+                    <div className="manage-user-header-container">
                         <div className="staff-search-bar-container">
                             <input
                                 className="search-bar-temp"
                                 placeholder={"Search for users search"}
                                 value={searchInput}
                                 onKeyDown={handleSearchEnter}
-                                onChange={(e) =>
-                                    setSearchInput(e.target.value)
-                                }
+                                onChange={(e) => setSearchInput(e.target.value)}
                             />
                             <div className="input-group-append">
                                 <button
                                     className="btn btn-secondary mybtnUserPage"
                                     type="button"
-                                    onClick={handleSearchClick}
-                                >
+                                    onClick={handleSearchClick}>
                                     <i className="fa fa-search"></i>
                                 </button>
                             </div>
                         </div>
-                        <FilterMenu selection={selection} setSelection={setSelection}/>
+                        <FilterMenu
+                            selection={selection}
+                            setSelection={setSelection}
+                        />
                     </div>
-
                     <div className="usertable-container">
                         <UserTable
                             user={user}
@@ -84,8 +84,7 @@ export default function ManageUserPage({ user }) {
                         minHeight: "80vh",
                         display: "grid",
                         placeItems: "center",
-                    }}
-                >
+                    }}>
                     <PropagateLoader
                         color={"#0067a1"}
                         speedMultiplier={2}
