@@ -110,7 +110,7 @@ export default function ProfileContainer() {
     const renderToast = () => {
         return ToastNotification({
             content:
-                "Nickname length must be greater than two (2) and less than ten (10) ",
+                "Nickname must either be your full name or a string with a length greater than two (2) and less than ten (10)",
         });
     };
 
