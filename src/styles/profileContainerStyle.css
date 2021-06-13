@@ -1,5 +1,4 @@
 /* profile header */
-
 .profile-header-container {
     background-color: none;
     width: 100%;
@@ -56,7 +55,7 @@
     vertical-align: middle;
     padding-top: 0.8rem;
     font-weight: bold;
-    font-size: 1.5vh;
+    font-size: calc(0.1vw + 1em);
 }
 
 .field-container {
@@ -68,7 +67,7 @@
 .field-container input {
     flex-shrink: 1;
     font-style: normal;
-    font-size: 3vh;
+    font-size: calc(0.7vw + 1em);
     width: 80%;
     align-items: center;
     justify-content: center;
@@ -91,20 +90,19 @@
     display: flex;
     justify-content: flex-start;
     width: 20%;
-    padding-bottom: 0.8rem;
-
-    /* padding-top: 21px; */
     align-items: center;
 }
 
 .nick-icon {
-    margin: 0.8rem !important;
-    font-size: 2.5vh !important;
+    margin: 0.8rem 0.8rem 0.8rem 0;
+
+    /* margin: 0.8rem !important; */
+    font-size: calc(0.8vw + 1em) !important;
 }
 
 .nick-icon:hover {
     transition: transform 100ms ease, box-shadow 125ms ease;
-    transform: scale(1.25);
+    transform: scale(1.125);
     cursor: pointer;
 }
 
@@ -121,7 +119,7 @@
 
 .remove-account-container span {
     padding: 0.8rem;
-    font-size: 3.5vh;
+    font-size: calc(0.8vw + 1em);
     font-weight: bold;
 }
 
@@ -129,7 +127,7 @@
     text-align: justify;
     margin: 0;
     padding: 0.8rem;
-    font-size: 2vh;
+    font-size: calc(0.3vw + 1em);
 }
 
 .remove-account-button-container {
