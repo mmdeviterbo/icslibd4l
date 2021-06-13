@@ -146,7 +146,7 @@ export default function NavigationBar({
                         About
                     </Link>
                     <div
-                        className={!user && "login-link"}
+                        className={(!user && "login-link") || ""}
                         style={isProfileClicked()}>
                         {(user && profileDisplay()) || logInButton()}
                     </div>

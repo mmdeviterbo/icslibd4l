@@ -214,7 +214,7 @@ const textBgContainer = {
 const textBg = {
     margin: 0,
     fontSize: "calc(24px + 2vw)",
-    background: "black",
+    background: "rgba(0,0,0,0.85)",
     color: "white",
     fontWeight: 500,
     width: "100%",
