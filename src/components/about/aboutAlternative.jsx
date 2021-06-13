@@ -10,6 +10,7 @@ export default function AboutAlternative() {
             duration:0.8,
             scale:0.9,
         })
+        window.scrollTo(0,0);
     },[])
 
     return (
