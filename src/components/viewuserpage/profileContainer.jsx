@@ -1,136 +1,316 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap/";
-import { Button } from "@material-ui/core/";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import jwtDecode from "jwt-decode";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { jwtPrivateKey } from "../../config.json";
+import { jwtEncryptionKey } from "../../config.json";
+import * as jwtEncrypt from "jwt-token-encrypt";
 import PersonService from "../../services/personService";
+import ToastNotification from "../toastNotification";
 
-// import { GlobalContext } from "../manageuserpage/userTable";
-import { useHistory } from "react-router-dom";
-import LabelContainer from "./labelContainer";
-
-import "../../styles/userPageStyle.css";
-
-export default function ProfileContainer({ user }) {
-  useEffect(() => {
-    console.log(user);
-  }, []);
-  // removes JWT token from the browser
-  const logout = async () => {
+import "../../styles/profileContainerStyle.css";
+//<summary>
+// gets the jwt token from the localStorage and decrypts it to get the infor of
+// the logged in user
+//</summary>
+//<output>
+// an object containing the information of the logged in user
+//</output>
+const getCurrentToken = () => {
     try {
-      localStorage.removeItem(jwtPrivateKey);
-      await PersonService.logoutUser(user);
-      window.location = "/";
+        const jwt = localStorage.getItem("icslib-privateKey");
+        const encryption = {
+            key: jwtEncryptionKey,
+            algorithm: "aes-256-cbc",
+        };
+        const decrypted = jwtEncrypt.readJWT(jwt, encryption, "ICSlibrary");
+        const userInfo = decrypted.data;
+        return userInfo;
     } catch (err) {}
-  };
+};
 
-  return (
-    // column for the title bar "Profile Display"
-    <Container fixed className="profile-container">
-      <Row className="title-bar">
-        <Col xs={2}></Col>
-        <Col xs={8}>
-          <div className="headerText" style={headerText}>
-            Profile Display
-          </div>
-        </Col>
-        <Col xs={1} className="columns-temp"></Col>
-      </Row>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={8} className="columns-temp">
-          <LabelContainer
-            msg={"Nickname: "}
-            userinfos={user.nickname}
-            iseditable={true}
-          />
-        </Col>
-        <Col xs={1} className="columns-temp"></Col>
-      </Row>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={8} className="columns-temp">
-          <LabelContainer msg={"Name: "} userinfos={user.fullName} />
-        </Col>
-        <Col xs={1} className="columns-temp"></Col>
-      </Row>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={8} className="columns-temp">
-          <LabelContainer
-            msg={"Classification: "}
-            userinfos={user.userType}
-            isType={true}
-          />
-        </Col>
-        <Col xs={1} className="columns-temp"></Col>
-      </Row>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={8} className="columns-temp">
-          <LabelContainer msg={"Email: "} userinfos={user.email} />
-        </Col>
-        <Col xs={1} className="columns-temp"></Col>
-      </Row>
-      {/* part for account removal */}
-      <Row className="removal-bar">
-        <Col xs={2}></Col>
-        <Col xs={8}>
-          <div
-            className="header-text"
-            style={{ fontWeight: "900", fontSize: "30px" }}>
-            Account Removal
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={8} className="columns-temp">
-          <div style={{ padding: "12px", fontSize: "15px" }}>
-            Removing your accounts means dissociating your account from the app.
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={2}></Col>
-        <Col xs={8}>
-          {/* BACKLOG: 
-        - MODAL OR POP-UP TO WARN USER ABOUT DISSOCIATION
-        - ACCOUNT DISSOCIATION (FROM BACKEND(?)) */}
-          <Button
-            onClick={logout}
-            variant="contained"
-            color="secondary"
-            className="delete-button"
-            style={{ paddingLeft: "10px" }}
-            startIcon={<DeleteIcon />}
-            fontWeight="900">
-            Remove Account
-          </Button>
-        </Col>
-      </Row>
-    </Container>
-  );
+//<summary>
+// create a container that contains user information.
+// user information includes their nickname, full name, classification, and email
+//</summary>
+//<output>
+// A component that contains the information regarding the current user
+//</output>
+export default function ProfileContainer() {
+    const [user, setUser] = useState(getCurrentToken()); // lazy initializer to immediately get the user state
+    const [type, setType] = useState();
+    const [isEditing, setEditing] = useState(false);
+    const [nick, setNick] = useState(user && user.nickname);
+    const [currNick, setCurrNick] = useState(user && user.nickname);
+    const [click, setClick] = useState("false");
+    const [disable, setDisable] = useState(true);
+
+    const location = useLocation();
+    const inputRef = useRef();
+
+    // handles appearance changing of the edit button
+    const setIcon = (click, isEditing, disable) => {
+        setClick(click);
+        setDisable(disable);
+        setEditing(!isEditing);
+    };
+
+    // updates the token stored in the local storage after making changes to the nickname
+    const updateToken = async (user) => {
+        try {
+            localStorage.removeItem(jwtPrivateKey); //remove token from localStorage
+            await PersonService.logoutUser(user);
+
+            const { data } = await PersonService.loginRegisterUser(user); //get and store new token
+            localStorage.setItem(jwtPrivateKey, data); //set token
+
+            window.location = "/account-setting";
+        } catch (err) {}
+    };
+
+    // updates the user's nickname in the database
+    const updateNick = async (userInfo) => {
+        try {
+            await PersonService.updateNickname(userInfo);
+        } catch (err) {}
+    };
+
+    // function that handles nickname changing
+    const editNickname = (nicknameToken, userInfo) => {
+        if (click === "false") {
+            setIcon("true", false, isEditing);
+        } else if (click === "true") {
+            setIcon("false", true, isEditing);
+            updateNick(nicknameToken);
+            updateToken(userInfo);
+        }
+    };
+
+    // handles clear changes
+    const clearChanges = () => {
+        setNick(currNick);
+        setIcon("false", true, isEditing);
+    };
+
+    // function that renders the toast notification for improper nickname length
+    const renderToast = () => {
+        return ToastNotification({
+            content:
+                "Nickname length must be greater than two (2) and less than ten (10) ",
+        });
+    };
+
+    // focus nickname field on click
+    useEffect(() => {
+        if (isEditing) inputRef.current.focus();
+    }, [isEditing]);
+
+    // functional component that renders a remove account button and redirects to a modal
+    const RemoveAccount = (id) => {
+        return (
+            <Link
+                to={{
+                    pathname: "/account-setting/remove-account",
+                    state: {
+                        background: location,
+                        id: id,
+                        item: "account",
+                    },
+                }}>
+                <div className="remove-account-button-container">
+                    <button
+                        className="remove-account-button"
+                        onContextMenu={(e) => {
+                            e.preventDefault();
+                        }}
+                        onAuxClick={(e) => {
+                            e.preventDefault();
+                        }}>
+                        Remove Account
+                    </button>
+                </div>
+            </Link>
+        );
+    };
+
+    // convert userType to its corresponding string representation
+    useEffect(() => {
+        if (user) {
+            if (user.userType === 1) setType("Admin");
+            else if (user.userType === 2) setType("Faculty");
+            else if (user.userType === 3) setType("Staff");
+            else setType("Student");
+        }
+    }, [user]);
+
+    // updates user state nickname when nick state changes
+    useEffect(() => {
+        setUser({
+            ...user,
+            nickname: nick,
+        });
+    }, [nick]);
+
+    useEffect(() => {
+        setCurrNick(nick);
+    }, [click]);
+
+    return (
+        // column for the title bar "Profile Display"
+        <div className="profile-container">
+            <div className="info-container">
+                {/* nickname section */}
+                <div className="grid-row">
+                    <div className="label-container">DISPLAY NAME</div>
+                    <div className="field-container">
+                        <input
+                            onChange={(e) => {
+                                setNick(e.target.value);
+                            }}
+                            disabled={disable}
+                            ref={inputRef}
+                            type="text"
+                            size="60"
+                            className="text-field field-nickname"
+                            value={user ? nick : ""}
+                        />
+                        <div className="button-container">
+                            {click === "true" ? (
+                                <>
+                                    <i
+                                        className="nick-icon fa fa-save"
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        onClick={() => {
+                                            if (nick === currNick) {
+                                                clearChanges();
+                                            } else {
+                                                if (
+                                                    nick.length > 2 &&
+                                                    nick.length < 10
+                                                ) {
+                                                    editNickname(
+                                                        {
+                                                            googleId:
+                                                                user.googleId,
+                                                            newNickname:
+                                                                user.nickname,
+                                                        },
+                                                        user
+                                                    );
+                                                } else {
+                                                    renderToast();
+                                                }
+                                            }
+                                        }}
+                                        aria-label="edit"
+                                        style={{
+                                            color: "gray",
+                                        }}></i>
+                                    <i
+                                        className="nick-icon fa fa-times"
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        onClick={() => {
+                                            clearChanges();
+                                        }}
+                                        style={{
+                                            color: "red",
+                                        }}></i>
+                                </>
+                            ) : (
+                                <>
+                                    <i
+                                        className="nick-icon fa fa-pencil"
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        onClick={() => {
+                                            editNickname(
+                                                {
+                                                    googleId: user.googleId,
+                                                    newNickname: user.nickname,
+                                                },
+                                                user
+                                            );
+                                        }}
+                                        aria-label="edit"
+                                        style={{
+                                            color: "gray",
+                                        }}></i>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* full name section */}
+                <div className="grid-row">
+                    <div className="label-container">NAME</div>
+                    <div className="field-container">
+                        <input
+                            disabled={true}
+                            type="text"
+                            className="text-field"
+                            defaultValue={user ? user.fullName : ""}
+                        />
+                        <div className="button-container"></div>
+                    </div>
+                </div>
+
+                {/* user classification section */}
+                <div className="grid-row">
+                    <div className="label-container">USER TYPE</div>
+
+                    <div className="field-container">
+                        <input
+                            type="text"
+                            disabled={true}
+                            className="text-field"
+                            defaultValue={user ? type : ""}
+                        />
+                        <div className="button-container"></div>
+                    </div>
+                </div>
+
+                {/* user email section */}
+                <div className="grid-row">
+                    <div className="label-container">EMAIL</div>
+
+                    <div className="field-container">
+                        <input
+                            disabled={true}
+                            type="text"
+                            className="text-field"
+                            defaultValue={user ? user.email : ""}
+                        />
+                        <div className="button-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div
+                className="divider"
+                style={{
+                    borderLeft: "1px solid gray",
+                    height: "100%",
+                    left: "50%",
+                }}></div>
+            {/* part for account removal */}
+
+            <div className="remove-account-container">
+                <span>Account Removal</span>
+                <p>
+                    Removing your accounts means dissociating your account from
+                    the app.
+                </p>
+                <p>
+                    You can still login using your UP mail but all changes made
+                    to your account will be set to default.
+                </p>
+                <div>
+                    <RemoveAccount id={user ? user.googleId : ""} user={user} />
+                </div>
+            </div>
+        </div>
+    );
 }
-
-const headerText = {
-  fontWeight: "900",
-  fontSize: "35px",
-};
-
-const editButtonDefault = {
-  color: "gray",
-  margin: "24px 0 0px -30px",
-  width: "20px",
-  height: "20px",
-};
-
-const editButtonConfirm = {
-  color: "#90ee90",
-  margin: "24px 0 0px -30px",
-  width: "20px",
-  height: "20px",
-};

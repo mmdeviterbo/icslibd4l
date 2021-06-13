@@ -1,0 +1,76 @@
+.activity-logs-container {
+    position: relative !important;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4;
+}
+
+/* filter */
+
+.activity-clrbtn {
+    display: flex;
+    /* margin-top: 0.4rem; */
+}
+
+.activity-clrbtn:hover,
+.activity-clrbtn svg:hover {
+    text-decoration: underline;
+    color: black;
+}
+
+/* icon */
+
+.activity-filter {
+    width: 17%;
+    font-size: 14px;
+}
+
+#activity-filters-clear {
+    vertical-align: middle;
+    /* text-decoration: underline; */
+    color: #828282;
+}
+
+/* Table */
+.activitytable-container {
+    width: 100%;
+    padding-top: 2.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 4rem;
+    /* background-color: #f5f5f5; */
+    z-index: 0;
+}
+
+.table-header-text {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.activity-table-cell {
+    align-items: left;
+}
+
+.clear-logs-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.clear-logs-btn {
+    display: inline-block;
+    align-items: center;
+    background-color: white;
+    color: #c82333;
+    border-style: solid;
+    border-color: #c82333;
+    border-width: 1px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+.clear-logs-btn:hover {
+    background-color: #c82333;
+    border-color: white;
+    color: white;
+}

@@ -1,27 +1,37 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default function CardBook({imageSrc, title, linkTo, setHoverText}) {
+export default function CardBook({imageSrc, title, linkTo, setHoverText, year, book}) {
     return (
-            <Link to={linkTo} className="cardContainer" style={cardContainer}
+            <Link 
+                to={{pathname: linkTo, state: {resourceData: book}}}  
+                className="cardContainer" style={cardContainer}
                 onMouseEnter={()=>setHoverText(title)} onMouseLeave={()=>setHoverText("LATEST ACQUISITIONS")}>
+                
                 <div className="imgContainer" src={imageSrc} style={imgContainer}>
                     <img src={imageSrc} style={imgSrcStyle} alt="#" draggable={false}/>
+                    <p style={{
+                                fontSize:"14px", margin:"0", textAlign:"center", 
+                                zIndex:100, position:"absolute", 
+                                bottom:0, background:"rgba(0,0,0,0.9)",
+                                color:"white", width:"100%"}} className="bookTitleCard">{title}<br/>{year.toString().split("-")[0] || " "}</p>
                 </div>
-                <p style={{fontSize:"15px",padding:"7px"}} className="bookTitleCard">{title}</p>
+            
             </Link>
     )
 }
 
 const cardContainer = {
-    width:"150px",   
-    color:"black",
-    margin:"8px",
-    transition:"0.3s",
-    transform:"scale(1)",
-}
+    width: "200px",
+    color: "black",
+    margin: "12px",
+    transition: "0.3s",
+    transform: "scale(1)",
+};
 const imgContainer = {
-    height:"82%",
+    height:"100%",
+    position:"relative",
+    padding:"2px"
 }
 const imgSrcStyle={
     height:"100%",

@@ -1,50 +1,135 @@
-import http from './httpService';
-import {apiEndpoint} from '../config.json';
+import http from "./httpService";
+import { apiEndpoint } from "../config.json";
 
 // add a resource details (sp/thesis, book)
-const addSpThesis = (resourceData) => {
-    console.log(resourceData)
-    console.log("hello sp/thesis")
-    return http.post(apiEndpoint+'/thesis/create', resourceData)
+const addSpThesis = (sptData) => {
+    return http.post(`${apiEndpoint}/thesis/create`, sptData, {withCredentials: true})
 }
 
-const addBook = (resourceData) => {
-    console.log(resourceData)
-    return http.post(apiEndpoint+'/books/create', resourceData)
+const addBook = (bookData) => {
+    return http.post(`${apiEndpoint}/books/create`, bookData, {withCredentials: true})
 }
 
+const viewFile = (fileName) => {
+    return http.post(`${apiEndpoint}/thesis/download`, fileName, {withCredentials: true})
+}
 // read data of a resource
-const viewResource = () => {
-    return http.get(apiEndpoint+'/thesis/view')
+const browseResources = (resourceType) => {
+    return http.post(`${apiEndpoint}/thesis/browse`, resourceType, {
+        withCredentials: true,
+    });
+};
+
+const searchSpThesis = (filter, query) => {
+    return http.get(
+        `${apiEndpoint}/thesis${query}`,
+        { params: filter },
+        { withCredentials: true }
+    );
+};
+
+const searchBook = (filter) => {
+    return http.get(`${apiEndpoint}/book/search`, {body:filter}, {withCredentials: true})
 }
 
+const searchByID = (urlRequest, type) => {
+    return http.get(`${apiEndpoint}/thesis${urlRequest}`, {params:{type:type}}, {withCredentials: true});
+}
+
+const downloadFile = (fileType, query) => {
+    return http.get(
+        `${apiEndpoint}/thesis${query}`,
+        { params: fileType },
+        {
+            withCredentials: true,
+        },
+        {
+            responseType: "blob",
+        }
+    );
+};
 
 // edit data of a resource
+const editSpThesis = (resourceData) => {
+    return http.put(`${apiEndpoint}/thesis/update`, resourceData, {
+        withCredentials: true,
+    });
+};
 
-
+// edit book
+const editBook = (resourceData) => {
+    return http.put(`${apiEndpoint}/books/update`, resourceData, {
+        withCredentials: true,
+    });
+};
 
 //delete resource
-const deleteResource = (resourceId) => {
-    return http.delete(apiEndpoint+`/thesis/delete/${resourceId}`)
+const deleteSpThesis = (deleteId) => {
+    return http.delete(`${apiEndpoint}/thesis/delete/${deleteId}`, {withCredentials: true})
 }
-
+const deleteBook = (deleteId) => {
+    return http.delete(`${apiEndpoint}/books/delete/${deleteId}`, {withCredentials: true})
+}
 
 // get news from uplb news website
-function getNews(){
-    return http.post(`${apiEndpoint}/books/get-news`)
+function getNews() {
+    return http.post(`${apiEndpoint}/books/get-news`);
 }
 
+// get all books (object of information only, not images), sorted by date (latest acquisition feature)
+function getBooks() {
+    return http.get(`${apiEndpoint}/books/display_infos`);
+}
 
+// get all books (object of images), sorted by date (latest acquisition feature)
+function getBookCovers() {
+    return http.get(`${apiEndpoint}/books/display_covers`);
+}
 
+function getAllResources() {
+    return http.get(`${apiEndpoint}/thesis/search`);
+}
 
+function getLatestBooks() {
+    return http.get(`${apiEndpoint}/books/display_latest`);
+}
+
+function getAllBooks() {
+    // return http.get(`${apiEndpoint}/thesis/search?type=book&search=all`);
+}
+
+function getBookCover(resourceId) {
+    return http.post(`${apiEndpoint}/books/download1`, resourceId, {
+        withCredentials: true,
+    });
+}
+
+// read summary report data
+const generateReport = (resourceType) => {
+    return http.get(`${apiEndpoint}/reports/report?type=${resourceType}`);
+};
 
 // put here your newly made functions to export, then "exportFunctions" itself will be the one to be exported
 const exportFunctions = {
     getNews,
     addSpThesis,
     addBook,
-    viewResource,
-    deleteResource
-}
+    browseResources,
+    searchSpThesis,
+    deleteSpThesis,
+    editSpThesis,
+    editBook,
+    searchBook,
+    searchByID,
+    getAllBooks,
+    getLatestBooks,
+    getBookCover,
+    downloadFile,
+    deleteBook,
+    viewFile,
+    searchByID,
+    getBookCovers,
+    generateReport,
+};
 
 export default exportFunctions;

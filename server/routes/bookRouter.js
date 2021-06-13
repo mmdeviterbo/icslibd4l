@@ -6,6 +6,7 @@ const bookAuthorModel = require("../models/bookAuthorModel");
 const bookSubjectModel = require("../models/bookSubjectModel");
 const authFaculty = require("../middleware/authFaculty");
 const authAdmin = require("../middleware/authAdmin");
+var uniqid = require("uniqid");
 
 router.post("/get-news", async (req, res) => {
     let options = {
@@ -31,6 +32,7 @@ router.post("/get-news", async (req, res) => {
                         let finalTagImg =
                             ".jet-smart-listing__post-thumbnail  > a > img"; // get the news date
                         let lenNewsLinks = $(finalTagLink, html).length; // length of array
+                        let i = 0;
 
                         for (i = 0; i < lenNewsLinks; i++)
                             newsLinks.push(
@@ -62,22 +64,58 @@ router.post("/get-news", async (req, res) => {
     }
 });
 
-router.post("/create", authFaculty, async (req, res) => {
+//creates a book and uploads its book cover
+/**************************************************** 
+Request Object:
+req object:
+json
+book: {
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    bookCoverLink,
+    datePublished,
+    dateAcquired,
+}
+res object:
+{
+    bookId,
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    bookCoverLink,
+    datePublished,
+    dateAcquired,
+}
+********************************************************/
+router.post("/create", async (req, res) => {
+    console.log(req.body);
     try {
         const {
-            bookId,
             title,
+            ISBN,
             authors,
             subjects,
             physicalDesc,
             publisher,
             numberOfCopies,
+            bookCoverLink,
+            datePublished,
+            dateAcquired,
         } = req.body;
 
         // sample verification: incomplete fields
         if (
-            !bookId ||
             !title ||
+            !ISBN ||
             !authors ||
             !subjects ||
             !physicalDesc ||
@@ -86,22 +124,34 @@ router.post("/create", authFaculty, async (req, res) => {
         ) {
             return res
                 .status(400)
-                .json({ errorMessage: "Please enter all required fields." });
+                .send({ errorMessage: "Please enter all required fields." });
+        }
+
+        const isbnLen = ISBN.replace(/\D/g, "").length;
+
+        if (isbnLen != 10 && isbnLen != 13){
+            return res.status(400).send({ errorMessage: "ISBN must contain 10 or 13 digits." });
         }
 
         //search if book exists
-        const existingBook = await bookModel.findOne({ bookId });
+        const existingBook = await bookModel.findOne({ ISBN });
 
         if (!existingBook) {
             //if book does not exist, add the book
+
+            const bookId = uniqid("BOOK_"); //generate a unique id for the book
 
             const newBook = new bookModel({
                 //add the non-array fields to the books collection
                 bookId,
                 title,
+                ISBN,
                 physicalDesc,
                 publisher,
                 numberOfCopies,
+                bookCoverLink,
+                datePublished,
+                dateAcquired,
             });
             const savedBook = await newBook.save();
 
@@ -134,7 +184,7 @@ router.post("/create", authFaculty, async (req, res) => {
             res.json(savedBook);
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send("Book already exists!");
+            res.status(400).send({ errorMessage: "ISBN already exists!" });
         }
     } catch (err) {
         console.log(err);
@@ -142,162 +192,133 @@ router.post("/create", authFaculty, async (req, res) => {
     }
 });
 
-// search data
-router.get("/search", async (req, res) => {
-    let final_array = [];
-
-    if (req.query.type == "Book") {
-        // RESOURCE: Book
-        if (req.query.field == "title") {
-            // search by TITLE
-            bookModel.aggregate(
-                [
-                    { $match: { title: { $regex: req.query.search } } },
-                    {
-                        $lookup: {
-                            from: "book_authors",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "author",
-                        },
-                    },
-                    {
-                        $lookup: {
-                            from: "book_subjects",
-                            localField: "bookId",
-                            foreignField: "bookId",
-                            as: "subject",
-                        },
-                    },
-                ],
-
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        res.send(result);
-                    }
-                }
-            );
-        } else if (req.query.field == "subject") {
-            // search by SUBJECT
-            bookSubjectModel.aggregate(
-                // get matches based from queries
-                [{ $match: { subject: { $regex: req.query.search } } }],
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        // extract all IDs from matches
-                        result.forEach((item, index) => {
-                            final_array.push(item.bookId);
-                        });
-
-                        // get unique IDs
-                        let unique_ID = [...new Set(final_array)];
-
-                        // extract equivalent entries from bookModel
-                        bookModel.aggregate(
-                            [
-                                { $match: { bookId: { $in: unique_ID } } },
-                                {
-                                    $lookup: {
-                                        from: "book_authors",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "author",
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: "book_subjects",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "subject",
-                                    },
-                                },
-                            ],
-
-                            (error, results) => {
-                                if (error) {
-                                    res.send(error);
-                                } else {
-                                    res.send(results);
-                                }
-                            }
-                        );
-                    }
-                }
-            );
-        } else if (req.query.field == "author") {
-            // search by AUTHOR
-            bookAuthorModel.aggregate(
-                // get matches based from queries
-                [{ $match: { author_name: { $regex: req.query.search } } }],
-                (err, result) => {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        // extract all IDs from matches
-                        result.forEach((item, index) => {
-                            final_array.push(item.bookId);
-                        });
-
-                        // get unique IDs
-                        let unique_ID = [...new Set(final_array)];
-
-                        // extract equivalent entries from bookModel
-                        bookModel.aggregate(
-                            [
-                                { $match: { bookId: { $in: unique_ID } } },
-                                {
-                                    $lookup: {
-                                        from: "book_authors",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "author",
-                                    },
-                                },
-                                {
-                                    $lookup: {
-                                        from: "book_subjects",
-                                        localField: "bookId",
-                                        foreignField: "bookId",
-                                        as: "subject",
-                                    },
-                                },
-                            ],
-
-                            (error, results) => {
-                                if (error) {
-                                    res.send(error);
-                                } else {
-                                    res.send(results);
-                                }
-                            }
-                        );
-                    }
-                }
-            );
+//display the latest 12 book infos on the homepage
+router.get("/display_latest", async (req, res) => {
+    bookModel.aggregate(
+        [{ $sort: { dateAcquired: -1 } }, { $limit: 12 }],
+        (err, result) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(result);
+            }
         }
-    }
+    );
 });
 
-router.put("/update-book", authAdmin, async (req, res) => {
-    const {
-        oldBookId,
+/**************************************************** 
+Request Object:
+req object: address parameter
+{
+    bookId
+}
+
+res object: array containing book, book_authors, and book_subjects
+[
+    {
         bookId,
         title,
+        ISBN,
         authors,
         subjects,
         physicalDesc,
         publisher,
         numberOfCopies,
+        bookCoverLink,
+        datePublished,
+        dateAcquired
+    },
+    [
+        NOTE: can be multiple
+        {
+            bookId,
+            author_fname,
+            author_lname,
+            author_name
+        } 
+    ],
+    [
+        NOTE: can be multiple
+        {
+            bookId,
+            subject
+        } 
+    ]
+]
+
+res String: 
+"Entry Updated"
+********************************************************/
+
+router.get("/search-book/:bookId", async (req, res) => {
+    var returnObject = [];
+    const bookIdHolder = req.params.bookId;
+
+    if (!bookIdHolder) {
+        return res
+            .status(404)
+            .json({ errorMessage: "Not found. No bookID in parameters." });
+    }
+
+    try {
+        const BookEntry = await bookModel.findOne({ bookId: bookIdHolder });
+        if (!BookEntry) {
+            return res.status(404).json({ errorMessage: "Entry not found." });
+        }
+
+        const BookAuthors = await bookAuthorModel.find({
+            bookId: bookIdHolder,
+        });
+        const BookSubjects = await bookSubjectModel.find({
+            bookId: bookIdHolder,
+        });
+
+        returnObject.push(BookEntry);
+        returnObject.push(BookAuthors);
+        returnObject.push(BookSubjects);
+        res.send(returnObject);
+    } catch {
+        return res.status(404).json({ errorMessage: "Not found." });
+    }
+});
+
+/**************************************************** 
+Request Object:
+req object:JSON
+book: {
+    bookId,
+    title,
+    ISBN,
+    authors,
+    subjects,
+    physicalDesc,
+    publisher,
+    numberOfCopies,
+    bookCoverLink,
+    datePublished,
+    dateAcquired
+}
+
+res String: 
+"Entry Updated"
+********************************************************/
+router.put("/update", async (req, res) => {
+    const {
+        bookId,
+        title,
+        ISBN,
+        authors,
+        subjects,
+        physicalDesc,
+        publisher,
+        numberOfCopies,
+        bookCoverLink,
+        datePublished,
+        dateAcquired,
     } = req.body;
 
     // verification: incomplete fields
     if (
-        !oldBookId ||
         !bookId ||
         !title ||
         !authors ||
@@ -313,27 +334,27 @@ router.put("/update-book", authAdmin, async (req, res) => {
 
     try {
         //search if book exists
-        const existingBook = await bookModel.findOne({ bookId: oldBookId });
+        const existingBook = await bookModel.findOne({ bookId: bookId });
 
         if (existingBook) {
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
-            await bookModel.findOne(
-                { bookId: oldBookId },
-                (err, updatedBook) => {
-                    updatedBook.bookId = bookId;
-                    updatedBook.title = title;
-                    updatedBook.physicalDesc = physicalDesc;
-                    updatedBook.publisher = publisher;
-                    updatedBook.numberOfCopies = numberOfCopies;
+            await bookModel.findOne({ bookId: bookId }, (err, updatedBook) => {
+                updatedBook.title = title;
+                updatedBook.ISBN = ISBN;
+                updatedBook.physicalDesc = physicalDesc;
+                updatedBook.publisher = publisher;
+                updatedBook.numberOfCopies = numberOfCopies;
+                updatedBook.bookCoverLink = bookCoverLink;
+                updatedBook.datePublished = datePublished;
+                updatedBook.dateAcquired = dateAcquired;
 
-                    updatedBook.save();
-                }
-            );
+                updatedBook.save();
+            });
 
             // edit fields in the book_author collection
             // delete the current entries of authors
-            await bookAuthorModel.deleteMany({ bookId: oldBookId });
+            await bookAuthorModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
             authors.forEach(async function (entry) {
@@ -352,7 +373,7 @@ router.put("/update-book", authAdmin, async (req, res) => {
 
             // edit fields in the book_subject collection
             // delete the current entries of subject
-            await bookSubjectModel.deleteMany({ bookId: oldBookId });
+            await bookSubjectModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
             subjects.forEach(async function (entry) {
@@ -376,26 +397,44 @@ router.put("/update-book", authAdmin, async (req, res) => {
     }
 });
 
-router.delete("/delete-book", authAdmin, async (req, res) => {
+/**************************************************** 
+Request Object:
+req object: address parameter
+{
+    bookId
+}
+res String: 
+"Entry Deleted"
+********************************************************/
+
+router.delete("/delete/:bookId", authAdmin, async (req, res) => {
+    const bookIdHolder = req.params.bookId;
+
+    if (!bookIdHolder) {
+        return res
+            .status(404)
+            .json({ errorMessage: "Not found. No bookID in parameters." });
+    }
+
     try {
-        const bookId = req.body.bookId;
+        // search if book exists in book collection
+        const existingBook = await bookModel.findOne({ bookId: bookIdHolder });
 
-        // search if book exists
-        const existingBook = await bookModel.findOne({ bookId });
-
-        // if book exists, delete its entries from book, book_author, and book_subject
+        // if book exists, delete its entries from book, book_author, book_subject, and book_cover
         if (existingBook) {
-            await bookModel.findOneAndDelete({ bookId });
-            await bookAuthorModel.deleteMany({ bookId });
-            await bookSubjectModel.deleteMany({ bookId });
+            await bookModel.findOneAndDelete({ bookId: bookIdHolder });
+            await bookAuthorModel.deleteMany({ bookId: bookIdHolder });
+            await bookSubjectModel.deleteMany({ bookId: bookIdHolder });
+
             res.send("Entry Deleted");
         } else {
-            res.status(400).send("This book does not exist! Cannot delete.");
+            res.status(400).json({
+                errorMessage: "This book does not exist! Cannot delete.",
+            });
         }
     } catch (err) {
         console.log(err);
         res.status(500).send();
     }
 });
-
 module.exports = router;

@@ -1,0 +1,61 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .header-div { text-align: center; } .resource-label-div {
+            text-align: center;} table, td, th { border: 1px solid black; } td {
+            padding: 5px; } table { border-collapse: collapse ; border-color:
+            black; font-size: 11px; } .copies-cell { text-align: center; }
+            .author-name-text { padding: 0; margin: 2px}
+        </style>
+    </head>
+    <body>
+        <div class="header-div">
+            <h1>Summary Report</h1>
+        </div>
+        <div class="resource-label-div">
+            <h3 style="margin: auto">Books</h3>
+        </div>
+
+        <table style="margin: auto">
+            <tr>
+                <th style="width: 150px;">BookID</th>
+                <th style="width: 450px;">Title</th>
+                <th style="width: 150px;">Author(s)</th>
+                <th style="width: 100px;">Subject</th>
+                <th style="width: 50px;">Copies</th>
+                <th style="width: 150px;">Date Acquired</th>
+            </tr>
+            {{#each this}}
+                <tr>
+                    <td>
+                        {{this._id}}
+                    </td>
+                    <td>
+                        {{this.title}}
+                    </td>
+                    <td>
+                        {{#each this.author}}
+                            <div class="author-name-text">{{this.author_name}}</div>
+                        {{/each}}
+                    </td>
+                    <td>
+                        {{#each this.subject}}
+                            <div class="subject-name-text">{{this.subject}}</div>
+                        {{/each}}
+                    </td>
+                    <td class="copies-cell">
+                        {{this.numberOfCopies}}
+                    </td>
+                    <td>
+                        {{dateFormatter this.dateAcquired}}
+                    </td>
+                </tr>
+            {{/each}}
+        </table>
+
+    </body>
+</html>

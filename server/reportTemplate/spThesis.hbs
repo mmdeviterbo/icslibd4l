@@ -1,0 +1,60 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .header-div { text-align: center; } .resource-label-div {
+            text-align: center;} table, td, th { border: 1px solid black; } td {
+            padding: 5px; } table { border-collapse: collapse ; border-color:
+            black; font-size: 11px; } .resource-type-cell { text-align: center;
+            } .author-name-text .adviser-name-text { padding: 0; margin: 2px}
+            .title-cell { width : 211px;}
+        </style>
+    </head>
+    <body>
+        <div class="header-div">
+            <h1>Summary Report</h1>
+        </div>
+        <div class="resource-label-div">
+            <h3 style="margin: auto">Special Problem and Thesis</h3>
+        </div>
+
+        <table style="margin: auto">
+            <tr>
+                <th style="width: 150px;">ID</th>
+                <th style="width: 50px;">Type</th>
+                <th style="width: 450px;">Title</th>
+                <th style="width: 150px;">Author(s)</th>
+                <th style="width: 150px;">Adviser(s)</th>
+            </tr>
+            {{#each this}}
+                <tr>
+                    <td>
+                        {{this._id}}
+                    </td>
+                    <td class="resource-type-cell">
+                        {{this.type}}
+                    </td>
+                    <td class="title-cell">
+                        {{this.title}}
+                    </td>
+                    <td>
+                        {{#each this.author}}
+                            <div class="author-name-text">{{this.author_name}}</div>
+                        {{/each}}
+                    </td>
+                    <td>
+                        {{#each this.adviser}}
+                            <div
+                                class="adviser-name-text"
+                            >{{this.adviser_name}}</div>
+                        {{/each}}
+                    </td>
+                </tr>
+            {{/each}}
+        </table>
+
+    </body>
+</html>
