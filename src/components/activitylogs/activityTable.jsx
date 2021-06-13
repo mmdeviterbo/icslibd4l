@@ -11,9 +11,15 @@ import dateFormat from "dateformat";
 import PersonService from "../../services/personService";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { jwtPrivateKey } from "./../../config.json";
-
 import "../../styles/activityLogsStyle.css";
 
+/****************************************************
+ * Type: Global Variable
+ *
+ * Summary:
+ * An array that contains the table headers of the activity logs table
+ *
+ ******************************************************/
 const tableHeader = [
     "User ID",
     "Full Name",
@@ -23,6 +29,14 @@ const tableHeader = [
     "Timestamp",
 ];
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * A component that renders the userlogs fetched from the database to the activity logs table
+ * The user can clear the activity logs which is reflected to the database
+ *
+ ******************************************************/
 export default function ActivityTable() {
     const [activityLogs, setActivityLogs] = useState([]);
     const [page, setPage] = useState(0);
@@ -69,6 +83,7 @@ export default function ActivityTable() {
         } catch (err) {}
     };
 
+    // functional component that renders a button that redirects to a delete modal when clicked
     const ClearLogs = () => {
         return (
             <Link

@@ -1,3 +1,5 @@
+/* profile header */
+
 .profile-header-container {
     background-color: none;
     width: 100%;
@@ -6,7 +8,6 @@
     align-items: center;
     justify-content: space-between;
     padding-top: 2rem;
-    /* padding-bottom: 2rem; */
     padding-left: 15%;
     padding-right: 15%;
     background-color: #f4f4f4;
@@ -19,8 +20,7 @@
     width: 100%;
 }
 
-/* profileContainer */
-
+/* profile container */
 .profile-container {
     display: flex;
     justify-content: space-between;
@@ -63,7 +63,6 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    /* align-items: center; */
 }
 
 .field-container input {
@@ -73,19 +72,19 @@
     width: 80%;
     align-items: center;
     justify-content: center;
-    /* padding-bottom: 0.8rem; */
+    margin: 0.8rem 0.8rem 0.8rem 0;
     border: none;
     background-color: transparent;
     outline: none;
+    height: fit-content;
 }
 
 .field-container input:focus {
-    width: 40%;
+    width: 50%;
     outline: none;
     border-bottom: 1px solid black;
+    height: fit-content;
 }
-
-/* remove account container */
 
 /* edit button cell */
 .button-container {
@@ -109,6 +108,7 @@
     cursor: pointer;
 }
 
+/* remove account container */
 .remove-account-container {
     display: flex;
     flex-direction: column;
@@ -117,7 +117,6 @@
     margin: 0.8rem;
     align-items: flex-start;
     justify-content: flex-start;
-    /* border: 1px solid blue; */
 }
 
 .remove-account-container span {
