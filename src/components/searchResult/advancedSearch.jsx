@@ -127,8 +127,6 @@ export default function AdvancedSearch() {
     }
     // get filtered results to backend
     useEffect(() => {
-        console.log("130000:");
-        console.log(objFilter);
         window.scrollTo(0, 0);
         fetchData();
     },[objFilter]);
