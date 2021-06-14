@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
 import StatusModal from "../modal/operationStatusModal";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 //  TODO: add documentation
 const DeletePopUpCont = ({ user }) => {
   const history = useHistory();
   const location = useLocation();
-  const { id } = location.state.id;
+  const id = location.state.resid;
+  const type = location.state.type;
   const item = location.state.item;
   const toDelete = location.state.user; // Object containing user information to be deleted
   // const userState = user;
@@ -35,19 +36,29 @@ const DeletePopUpCont = ({ user }) => {
   };
 
   const handleSubmit = async (event) => {
-    console.log(user);
+    console.log(id);
+    console.log(type);
+    // console.log(id);
     event.preventDefault();
     // handleClose();
     try {
       if (item === "resource") {
-        await ResourceService.deleteSpThesis(id);
-        console.log(id);
+        if (type === "book") {
+          await ResourceService.deleteBook(id);
+        } else {
+          await ResourceService.deleteSpThesis(id);
+        }
         setItemName(id);
         setMessage("success");
         handleClose();
         // setVisible(true);
         // window.location = "/manage-resources";
         setPathAfter("/manage-resources");
+      } else if (item === "logs") {
+        await PersonService.clearUserLogs();
+        setMessage("success");
+        handleClose();
+        setPathAfter("/view-activitylogs");
       } else if (item === "account") {
         setItemName(user.fullName);
         console.log("error here");
@@ -119,12 +130,20 @@ const DeletePopUpCont = ({ user }) => {
             [
               item === "user" ? (
                 <Modal.Title style={{ fontWeight: "bold" }}>
-                  Delete User?
+                  Delete User
                 </Modal.Title>
               ) : (
-                <Modal.Title style={{ fontWeight: "bold" }}>
-                  Remove Account
-                </Modal.Title>
+                [
+                  item === "logs" ? (
+                    <Modal.Title style={{ fontWeight: "bold" }}>
+                      Clear Activity Logs
+                    </Modal.Title>
+                  ) : (
+                    <Modal.Title style={{ fontWeight: "bold" }}>
+                      Remove Account
+                    </Modal.Title>
+                  ),
+                ]
               ),
             ]
           )}
@@ -138,10 +157,18 @@ const DeletePopUpCont = ({ user }) => {
               Are you sure you want to remove your account?
             </Modal.Body>
           ) : (
-            <Modal.Body>
-              Are you sure you want to delete{" "}
-              {item === "resource" ? id : toDelete.fullName}?
-            </Modal.Body>
+            [
+              item === "logs" ? (
+                <Modal.Body>
+                  Are you sure you want to clear Activity Logs?
+                </Modal.Body>
+              ) : (
+                <Modal.Body>
+                  Are you sure you want to delete{" "}
+                  {item === "resource" ? id : toDelete.fullName}?
+                </Modal.Body>
+              ),
+            ]
           )}
           {/* read resource title and author here */}
         </Modal.Body>
@@ -151,7 +178,9 @@ const DeletePopUpCont = ({ user }) => {
             Close
           </Button>
           <Button variant="danger" onClick={handleSubmit}>
-            {item === "account" ? "Remove" : "Delete"}
+            {item === "account"
+              ? "Remove"
+              : [item === "logs" ? "Clear" : "Delete"]}
           </Button>
         </Modal.Footer>
       </Modal>

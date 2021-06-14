@@ -1,35 +1,43 @@
 import React, { useEffect, useState } from "react";
 import GoogleLogin from "react-google-login";
 import { Link, useHistory } from "react-router-dom";
-import "../styles/homepageStyle.css";
 import { Dropdown, Icon } from "semantic-ui-react";
 import { gsap } from "gsap";
 import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
+import ResourceService from "../services/resourceService";
+import logo from '../assets/mainlogo/icslibd4l.png';
+import "../styles/homepageStyle.css";
+
 
 // the entire navigation bar
-export default function NavigationBar({ loginRegisterUser, browseRef, user, appRef }) {
+export default function NavigationBar({
+    loginRegisterUser,
+    browseRef,
+    user,
+    appRef,
+}) {
     const [classNavBar, setClassNavBar] = useState("navbar-container");
+    const [currentNav, setCurrentNav] = useState(window.location.pathname);
     const history = useHistory();
 
     useEffect(() => {
         animationTitle(classNavBar);
     }, [classNavBar]);
 
+    const getCurrentNav=(navClass)=>{
+        return currentNav===navClass? white : black;
+    }
+
     // if not found (404), hide the navbar component
     useEffect(() => {
         return history.listen((location) => {
-            if (location.pathname === "/not-found")
+            if (["/not-found", "/unauthorized"].includes(location.pathname))
                 setClassNavBar("navbar-container-none");
             else setClassNavBar("navbar-container");
+            setCurrentNav(location.pathname);
         });
-    }, [history]);
-
-    useEffect(() => {
-        if (window.location.pathname === "/not-found")
-            setClassNavBar("navbar-container-none");
-        else setClassNavBar("navbar-container");
-    }, [classNavBar]);
+    }, [history, classNavBar]);
 
     const responseGoogleSuccess = (response) => {
         const { googleId, email, name, familyName } = response.profileObj;
@@ -39,27 +47,19 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
             fullName: name,
             surname: familyName,
         };
-        console.log(response.profileObj);
         loginRegisterUser(userInfo);
     };
     const responseGoogleFail = (response) => {};
 
     const scrollToBrowse = () => {
         if (window.location.pathname === "/home")
-            browseRef.current &&
-                browseRef.current.scrollIntoView({
+            appRef.current &&
+                appRef.current.scrollIntoView({
                     behavior: "smooth",
                     block: "start",
                 });
-        else if (["/browse-books","/browse-special-problems","/browse-theses"].includes(window.location.pathname)){
-            appRef.current &&
-            appRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }
-        else history.push("/browse-special-problems");
     };
+
     const logInButton = () => {
         return (
             <GoogleLogin
@@ -71,8 +71,7 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
                 cookiePolicy={"single_host_origin"}
                 className="login-link"
                 hostedDomain={"up.edu.ph"}
-                icon={false}
-            >
+                icon={false}>
                 <i className="fa fa-lg fa-sign-in mr-2" />
                 <span className="login-link-label">Login</span>
             </GoogleLogin>
@@ -87,39 +86,28 @@ export default function NavigationBar({ loginRegisterUser, browseRef, user, appR
             <div style={mainBgStyleContainer} />
             <ul className="navbar-elements">
                 <Link className="left-half" to="/home">
-                    <div
-                        draggable="false"
-                        className="ics-uplb-caption"
-                        to="/home"
-                    >
-                        <span className="ics-caption">
-                            Institute of Computer Science Online Library
-                        </span>
-                        <span className="uplb-caption">
-                            University of the Philippines Los Baños
-                        </span>
+                    <p style={titleStyle}>Analytica</p>
+                    <div style={logoContainer}>
+                        <img src={logo} alt="#" style={logoStyle}/>
                     </div>
                 </Link>
                 <div className="right-half">
-                    <Link to="/home" className="navItem">
+                    <Link to="/home" className="navItem" onClick={()=>scrollToBrowse()} style={getCurrentNav("/home")}>
                         <i
                             className="fa fa-lg fa-home mr-2"
                             aria-hidden="true"
                         />
                         Home
                     </Link>
-                    <div
-                        className="navItem"
-                        onClick={scrollToBrowse}
-                        style={{ cursor: "pointer" }}
-                    >
+                    <Link to="/search?type=any&search="
+                        className="navItem" style={getCurrentNav("/search")}>
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
                         />
                         Browse
-                    </div>
-                    <Link to="/about" className="navItem">
+                    </Link>
+                    <Link to="/about" className="navItem" style={getCurrentNav("/about")}>
                         <i
                             className="fa fa-lg fa-info-circle mr-2"
                             aria-hidden="true"
@@ -140,18 +128,31 @@ const SearchFilter = ({ user }) => {
     const history = useHistory();
 
     const logout = async () => {
+        console.log(window.location.pathname);
         try {
             await PersonService.logoutUser(user);
             localStorage.removeItem(jwtPrivateKey);
-            window.location = window.location.pathname;
+            if (
+                [
+                    "/manage-users",
+                    "/manage-resources",
+                    "/view-activitylogs",
+                    "/view-summaryreport",
+                    "/add-new-book",
+                    "/add-new-spt",
+                ].includes(window.location.pathname)
+            )
+                window.location = "/home";
+            else if(window.location.pathname.match(/^\/edit-book.*$/g)) window.location = "/home";
+            else if(window.location.pathname.match(/^\/search.*$/g)) window.location = window.location.href;
+            else window.location = window.location.pathname;
         } catch (err) {}
     };
 
     const trigger = (
         <span>
             <Icon className="user" />
-            {user && user.fullName && user.fullName.split(" ")[0]}
-            {/* {user && user.nickname} */}
+            {user && user.fullName && user.fullName.split(" ")[0].substring(0,7)}
         </span>
     );
 
@@ -225,7 +226,25 @@ const SearchFilter = ({ user }) => {
                 </span>
             ),
             value: "View Summary Report",
-            onClick: () => history.push("/view-summaryreport"),
+            onClick: () => {
+                const generateSummary = async () => {
+                    try {
+                        await ResourceService.generateReport("all");
+                        console.log("Generating");
+                    } catch (error) {}
+                };
+                generateSummary();
+                history.push("/view-summaryreport");
+            },
+        },
+        {
+            key: "hrline",
+            text: (
+                <span>
+                    <hr style={{margin:0, padding:0}}/>
+                </span>
+            ),
+            disabled: true,
         },
         {
             key: "sign-out",
@@ -245,11 +264,36 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[options.length-1])
+                    : optionsNotAdmin.concat(options[options.length - 1])
             }
         />
     );
 };
+
+const titleStyle = {
+    letterSpacing:"2px", 
+    textShadow:"1px 1px 3px #000000", 
+    fontWeight:600, 
+    height:"100%",
+    display:"grid",
+    fontSize:"calc(25px + 0.5vh)",
+    placeItems:"center",
+    margin:0,
+    marginRight:"0.5%"
+}
+
+const logoContainer = {
+    height:"100%",
+    marginRight:"1%",
+    display:"flex",
+    alignItems:"center",
+    justifyContent:"center",
+    dropShadow:"2px 10px"
+}
+
+const logoStyle = {
+    height:"90%",
+}
 
 const mainBgStyleContainer = {
     position: "absolute",
@@ -259,11 +303,31 @@ const mainBgStyleContainer = {
     overflowX: "hidden",
     overflowY: "visible",
 };
+const white = {
+    fontWeight: 900,
+    color: "black",
+    background: "rgb(207, 207, 207)",
+    flexGrow:1,
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    "justifyContent": "center",
+    transition:"0.3s"
+}
+const black = {
+    fontSize: "calc(10px + 0.3vw) !important",
+    background: "rgb(26, 26, 26)",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    "justifyContent": "center",
+    "flexGrow": 1,
+    color: "white",
+    fontWeight: "900 !important",
+    transition: "0.3s"
+}
 
 const animationTitle = (classNavBar) => {
-    gsap.from(".ics-caption", { xPercent: -20, duration: 1 });
-    gsap.from(".uplb-caption", { xPercent: -20, duration: 1.5 });
-
     let tempClassName = "." + classNavBar;
     gsap.from(tempClassName, { yPercent: -50, duration: 0.8 });
 };

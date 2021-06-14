@@ -48,7 +48,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
-                userType: 4,
+                userType: 1,
                 nickname,
             });
 
@@ -102,8 +102,10 @@ router.post("/create", async (req, res) => {
             "ICSlibrary"
         );
 
+        //cookie set for 1 year until expiration
         res.cookie("token", token, {
             httpOnly: false,
+            maxAge: 365 * 24 * 60 * 60 * 1000,
         }).send(token);
     } catch (err) {
         console.error(err);
@@ -167,7 +169,7 @@ router.put("/update", authStudent, async (req, res) => {
             );
         }
 
-        UserModel.find({ googleId: googleId }, async (err, result) => {
+        await UserModel.find({ googleId: googleId }, async (err, result) => {
             //send the edited user as response
             if (err) {
                 res.send(err);
@@ -232,11 +234,6 @@ router.delete("/delete", authStudent, async (req, res) => {
     res.send("Entry Deleted");
 });
 
-router.get("/", async (req, res) => {
-    console.log("here");
-    console.log(req.cookies);
-    res.send("done");
-});
 //logout current signed in user. deletes cookie for user
 /**************************************************** 
 Request Object:
@@ -247,18 +244,17 @@ Response String:
 "User Logged Out"
 ********************************************************/
 router.post("/logout", async (req, res) => {
-    const token = req.cookies.token;
-    // Encryption settings
-    const encryption = {
-        key: jwtPrivateKey,
-        algorithm: "aes-256-cbc",
-    };
-
-    // decrypt token and verifies jwt payload
-    const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
-    const loggedUser = decrypted.data;
-
     try {
+        const token = req.cookies.token;
+        // Encryption settings
+        const encryption = {
+            key: jwtPrivateKey,
+            algorithm: "aes-256-cbc",
+        };
+
+        // decrypt token and verifies jwt payload
+        const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
+        const loggedUser = decrypted.data;
         //logs user login to collection
         const newUserLog = new UserLogModel({
             googleId: loggedUser.googleId,
@@ -275,7 +271,7 @@ router.post("/logout", async (req, res) => {
         }).send("User Logged Out");
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        res.status(500).send(err);
     }
 });
 

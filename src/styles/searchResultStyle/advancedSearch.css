@@ -7,17 +7,24 @@
 }
 
 .textStyle{
-    -webkit-touch-callout: none;  
-    -webkit-user-select: none; 
-    -khtml-user-select: none; 
-    -moz-user-select: none;
-    -ms-user-select: none;  
-    -user-select: none;
+    -webkit-touch-callout: none !important;  
+    -webkit-user-select: none !important; 
+    -khtml-user-select: none !important;  
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;  
+    -user-select: none !important;
+}
+.btnApplyFilter:hover{
+    transform:scale(1.03) !important;
 }
 
 .sidebarLink:hover{
-    background: #d3d3d3;
+    background: rgb(211, 211, 211,0.2);
     cursor:pointer;
+    transform: scale(1.03);
+}
+.iconMagnifyingGlass:hover{
+    transform: scale(1.08) !important;
 }
 
 .dropdownNav > span:hover{
@@ -30,7 +37,8 @@
 }*/
 
 .resultMainContainer:hover{
-    background: gainsboro;
+    background: rgb(220, 220, 220,0.3);
+    transform: scale(1.015);
 }
 
 .paginationBttns {
@@ -51,7 +59,7 @@
 }
 
 .paginationBttns a:hover {
-    color:white;
+    color: white;
     background-color: rgb(0, 103, 161);
 }
 
@@ -59,6 +67,14 @@
     color: white;
     background-color: rgb(0, 103, 161);
     cursor: default;
+}
+
+.paginationActiveText {
+    color: white;
+}
+
+.paginationText:hover {
+    color:white;
 }
 
 .paginationDisabled a {

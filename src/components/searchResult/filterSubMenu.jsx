@@ -12,7 +12,6 @@ export default function FilterSubMenu({
     setSearchFilterAdviser,
     searchFilterPublisher,
     setSearchFilterPublisher,
-    course,
     setCourse,
 }) {
     const [subnav, setSubnav] = useState(false);
@@ -20,15 +19,6 @@ export default function FilterSubMenu({
 
     // functions for opening and closing submenus
     const showSubnav = () => setSubnav(!subnav);
-    const showMoreSubnav = () => {
-        setmoreSubnav(!moreSubnav);
-        let col_arr = document.getElementsByClassName("more");
-        for (let i = 0; i < col_arr.length; i++) {
-            if (col_arr[i].innerHTML === "MORE") {
-                col_arr[i].style.backgroundColor = "white";
-            }
-        }
-    };
 
     // fixed warning for handlesearch filter
     const handleFilter = (data, parent) => {
@@ -44,7 +34,6 @@ export default function FilterSubMenu({
             // setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
         }
     };
-
     return (
         <div>
             {/*displays the submenu*/}
@@ -55,15 +44,17 @@ export default function FilterSubMenu({
             >
                 <div className="row">
                     <span style={sidebarLabel} className="column">
-                        {" "}
-                        {item.label}{" "}
+                        {item.label}
+
                     </span>
+                    
                     <div style={sidebarLabel} className="column">
                         {item.subNav && subnav
                             ? item.iconOpened
                             : item.subNav
                             ? item.iconClosed
-                            : null}
+                            : null
+                        }
                     </div>
                 </div>
             </span>
@@ -79,9 +70,6 @@ export default function FilterSubMenu({
                             onClick={() => handleFilter(item2, item)}
                         >
                             <span style={sidebarLabel}>
-                                {/* SHOW MORE FILTERS */}
-
-                                {/* END OF SHOW MORE FILTERS */}
 
                                 {/* searchbar for authors and advisers */}
                                 {item2.searchbarAuthor ? (
@@ -90,7 +78,8 @@ export default function FilterSubMenu({
                                         setSearchFilter={setSearchFilterAuthor}
                                     />
                                 ) : null}
-                                {item2.searchbarAdviser ? (
+                                {item2.searchbarAdviser 
+                                ? (
                                     <div
                                         style={{
                                             position: "relative",
@@ -115,16 +104,18 @@ export default function FilterSubMenu({
                                                 marginBottom: "2vw",
                                             }}
                                             renderInput={(params) => (
-                                                <TextField {...params} label="Adviser" />
-                                            )}
+                                                <TextField {...params} label="Adviser"/>
+                                        )}
                                         />
                                     </div>
                                 ) : null}
                                 {item2.searchbarPublisher ? (
+                                    <>
                                     <SearchBar
                                         searchFilter={searchFilterPublisher}
                                         setSearchFilter={setSearchFilterPublisher}
                                     />
+                                    </>
                                 ) : null}
                             </span>
                         </span>
@@ -148,6 +139,7 @@ const sidebarLink = {
     fontWeight: "600",
     position: "relative",
     left: "-1.5vw",
+    transition:"0.3s"
 };
 
 const sidebarLabel = {
@@ -167,27 +159,4 @@ const dropdownNav = {
     marginBottom: "0.25em",
     textDecoration: "none",
     height: "2.25vw",
-};
-
-// style for more sub nav
-const moreOptions = {
-    alignItems: "center",
-    display: "flex",
-    color: "rgb(0, 103, 161)",
-    fontSize: "0.75em",
-    left: "-20px",
-    position: "relative",
-    zIndex: "1",
-};
-
-const optionRowStyle = {
-    backgroundColor: "white",
-    overflowWrap: "break-word",
-    width: "15vw",
-    zIndex: "1",
-};
-
-const moreStyle = {
-    backgroundColor: "white",
-    width: "100px",
 };

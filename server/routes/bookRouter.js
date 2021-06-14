@@ -9,7 +9,6 @@ const authAdmin = require("../middleware/authAdmin");
 var uniqid = require("uniqid");
 
 router.post("/get-news", async (req, res) => {
-    // console.log('hello')
     let options = {
         url: "https://uplb.edu.ph/news-and-updates-2/",
         headers: {
@@ -33,6 +32,7 @@ router.post("/get-news", async (req, res) => {
                         let finalTagImg =
                             ".jet-smart-listing__post-thumbnail  > a > img"; // get the news date
                         let lenNewsLinks = $(finalTagLink, html).length; // length of array
+                        let i = 0;
 
                         for (i = 0; i < lenNewsLinks; i++)
                             newsLinks.push(
@@ -81,7 +81,6 @@ book: {
     datePublished,
     dateAcquired,
 }
-
 res object:
 {
     bookId,
@@ -97,7 +96,7 @@ res object:
     dateAcquired,
 }
 ********************************************************/
-router.post("/create", authFaculty, async (req, res) => {
+router.post("/create", async (req, res) => {
     console.log(req.body);
     try {
         const {
@@ -116,13 +115,22 @@ router.post("/create", authFaculty, async (req, res) => {
         // sample verification: incomplete fields
         if (
             !title ||
+            !ISBN ||
             !authors ||
             !subjects ||
             !physicalDesc ||
             !publisher ||
             !numberOfCopies
         ) {
-            return res.status(400).send("Please enter all required fields.");
+            return res
+                .status(400)
+                .send({ errorMessage: "Please enter all required fields." });
+        }
+
+        const isbnLen = ISBN.replace(/\D/g, "").length;
+
+        if (isbnLen != 10 && isbnLen != 13){
+            return res.status(400).send({ errorMessage: "ISBN must contain 10 or 13 digits." });
         }
 
         //search if book exists
@@ -176,7 +184,7 @@ router.post("/create", authFaculty, async (req, res) => {
             res.json(savedBook);
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send("Book already exists!");
+            res.status(400).send({ errorMessage: "ISBN already exists!" });
         }
     } catch (err) {
         console.log(err);
@@ -294,7 +302,7 @@ book: {
 res String: 
 "Entry Updated"
 ********************************************************/
-router.put("/update", authAdmin, async (req, res) => {
+router.put("/update", async (req, res) => {
     const {
         bookId,
         title,

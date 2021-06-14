@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSidebar from "./filterSidebar";
 import ResultContainer from "./resultContainer";
 import ResourceService from "../../services/resourceService";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import PropagateLoader from "react-spinners/PropagateLoader";
+import "../../styles/searchResultStyle/advancedSearch.css";
 
-export default function AdvancedSearch({ appRef }) {
+
+
+export default function AdvancedSearch() {
     var queryStore = `${useLocation().search}`.substring(
         `${useLocation().search}`.indexOf("search=") + 7
     );
     const [query, setQuery] = useState(queryStore);
+    const [isValidQuery, setIsValidQuery] = useState(true);
     const [objFilter, setObjFilter] = useState({});
     const [urlRequest, setUrlRequest] = useState(
         `${useLocation().pathname}${useLocation().search}`
     );
+
     const history = useHistory();
+    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=\w*$/g;
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
@@ -32,7 +38,6 @@ export default function AdvancedSearch({ appRef }) {
             `${useLocation().search}`.indexOf("&")
         )
     );
-
     const [keywords, setKeywords] = useState([]);
 
     // get results from db
@@ -47,6 +52,29 @@ export default function AdvancedSearch({ appRef }) {
     const resultsPerPage = 10;
     const pagesVisited = pageNumber * resultsPerPage;
     const pageCount = Math.ceil(resultsFilterArr.length / resultsPerPage);
+    const [loader, setLoader] = useState(true);
+
+    //url manipulation
+    let url = window.location.href;
+    let urlFilter = "";
+    let urlQuery = "";
+
+    url = url.replace("http://localhost:3000/search", "");
+
+    function returnCloserResourceType(){
+        if(url.includes("sp")) return "sp";
+        else if(url.includes("thesis")) return "thesis";
+        else if(url.includes("book")) return "book";
+        else return "any"; 
+    }
+    
+    function onMountResourceType(){
+        if(!url.match(urlValidator)) return returnCloserResourceType();
+        return `${url}`.substring(`${url}`.indexOf("=") + 1,`${url}`.indexOf("&"));
+    }
+    useEffect(()=>{
+        setResourceType(onMountResourceType());
+    },[])
 
     const displayresults = resultsFilterArr
         .slice(pagesVisited, pagesVisited + resultsPerPage)
@@ -56,9 +84,8 @@ export default function AdvancedSearch({ appRef }) {
                     key={index}
                     title={result.title}
                     authors={result.authors || result.author}
-                    // adviser={result.adviser}
-                    id={result.bookId || result.sp_thesis_id} //linkTo yung
-                    publishDate={result.year || result.datePublished} //publishDate
+                    id={result.bookId || result.sp_thesis_id} 
+                    publishDate={result.year || result.datePublished} 
                 />
             );
         });
@@ -67,59 +94,59 @@ export default function AdvancedSearch({ appRef }) {
         setPageNumber(selected);
     };
 
-    //url manipulation
-    let url = window.location.href;
-    let urlFilter = "";
-    let urlQuery = "";
-
-    url = url.replace("http://localhost:3000/search", "");
-    //edit before prod; or should i use split and have ? as a delimeter tho the search string can also contain '?'
-    if (url.length > 0) {
-        url = url.slice(1, url.length);
-        urlQuery = decodeURIComponent(url.split("&")[1].replace("search=", ""));
-        urlFilter = url.split("&")[0].replace("type=", "");
-    }
-
     // http request
     async function fetchData() {
-        try {
-            //  objFilter store filters in an object <field>:<value>
-            //  urlRequest string that contains the search query -> example: search?type=title
-            const { data } = await ResourceService.searchSpThesis(
-                objFilter,
-                urlRequest
-            );
-            setResultsFilterArr(data);
-        } catch (err) {
-            console.log(err);
+        setLoader(true);
+        if(!url.match(urlValidator)) setIsValidQuery(false);
+        else{
+            //edit before prod; or should i use split and have ? as a delimeter tho the search string can also contain '?'
+            if (url.length > 0) {
+                url = url.slice(1, url.length);
+                urlQuery = decodeURIComponent(url.split("&")[1].replace("search=", ""));
+                urlFilter = url.split("&")[0].replace("type=", "");
+            }
+            if(isValidQuery){
+                setPageNumber(0);
+                try {
+                    //  objFilter store filters in an object <field>:<value>
+                    //  urlRequest string that contains the search query -> example: search?type=title
+                    const { data } = await ResourceService.searchSpThesis(
+                        objFilter,
+                        urlRequest
+                        );
+                        setResultsFilterArr(data);
+                        setLoader(false);
+                    } catch (err) {
+                        console.log(err);
+                }
+            }
         }
     }
-
     // get filtered results to backend
     useEffect(() => {
+        window.scrollTo(0,0);
         fetchData();
     }, [objFilter]);
 
     const handleForm = (e) => {
         e.preventDefault();
         let tempStr = query.trim();
+
         // NEED TO CLEAN resourcetype specialproblem
-        if (
-            tempStr.length !== 0 &&
-            query.replace(/^\s+/, "").replace(/\s+$/, "") !== ""
-        ) {
-            history.push(`/search?type=${resourceType}&search=${tempStr}`);
+        if(isValidQuery){
+            if (
+                tempStr.length !== 0 &&
+                query.replace(/^\s+/, "").replace(/\s+$/, "") !== ""
+                ) {
+                    history.push(`/search?type=${resourceType}&search=${tempStr}`);
+                }
+                setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
+                
+                // call convert filter to object
+                filterParser();
+        }else{
+            return window.location = `/search?type=${onMountResourceType()}&search=${tempStr}`;
         }
-
-        if (!resourceType || resourceType === "") {
-            setUrlRequest(`/search?type=any&search=${tempStr}`);
-            history.push(`/search?type=any&search=${tempStr}`);
-        } else {
-            setUrlRequest(`/search?type=${resourceType}&search=${tempStr}`);
-        }
-
-        // call convert filter to object
-        filterParser();
     };
 
     // parse Filter array into object
@@ -162,7 +189,7 @@ export default function AdvancedSearch({ appRef }) {
                 <h4 className="textStyle">Search results for:</h4>
                 <div style={searchBarContainer} className="resultsSearchbar">
                     <i
-                        className="fa fa-search fa-2x"
+                        className="fa fa-search fa-2x iconMagnifyingGlass"
                         style={searchIcon}
                         onClick={handleForm}
                     ></i>
@@ -197,50 +224,66 @@ export default function AdvancedSearch({ appRef }) {
                     />
 
                     {/* Apply filters button */}
-                    <button style={filterButton} onClick={handleForm}>
+                    <button style={filterButton} className="btnApplyFilter" onClick={handleForm}>
                         Apply Filters
                     </button>
                 </div>
 
                 <div style={resultsOuterContainer}>
-                    <div style={resultTop}>
-                        {resultsFilterArr.length > 0 ? (
-                            <p className="textStyle">
-                                Showing results{" "}
-                                {(pageNumber + 1) * resultsPerPage -
-                                    (resultsPerPage - 1)}
-                                -
-                                {resultsFilterArr &&
-                                (pageNumber + 1) * resultsPerPage <
-                                    resultsFilterArr.length
-                                    ? (pageNumber + 1) * resultsPerPage
-                                    : resultsFilterArr.length}{" "}
-                                out of{" "}
-                                {resultsFilterArr && resultsFilterArr.length}
-                            </p>
-                        ) : (
-                            <p className="textStyle">No results</p>
-                        )}
-                    </div>
-
-                    <div style={resultBottom}>
-                        {resultsFilterArr && displayresults}
-                        {resultsFilterArr.length > 0 ? (
-                            <ReactPaginate
-                                previousLabel={"Previous"}
-                                nextLabel={"Next"}
-                                pageCount={pageCount}
-                                onPageChange={changePage}
-                                containerClassName={"paginationBttns"}
-                                previousLinkClassName={"previousBttn"}
-                                nextLinkClassName={"nextBttn"}
-                                disabledClassName={"paginationDisabled"}
-                                activeClassName={"paginationActive"}
-                            />
-                        ) : (
-                            <div></div>
-                        )}
-                    </div>
+                    {loader && isValidQuery?
+                        <div style={resultTop}>
+                            <p className="textStyle">Getting results...</p>
+                        </div>
+                        :
+                        <div style={resultTop}>
+                            {resultsFilterArr.length > 0 ? (
+                                <p className="textStyle">
+                                    Showing results{" "}
+                                    {(pageNumber + 1) * resultsPerPage -
+                                        (resultsPerPage - 1)}
+                                    -
+                                    {resultsFilterArr &&
+                                    (pageNumber + 1) * resultsPerPage <
+                                        resultsFilterArr.length
+                                        ? (pageNumber + 1) * resultsPerPage
+                                        : resultsFilterArr.length}{" "}
+                                    out of{" "}
+                                    {resultsFilterArr && resultsFilterArr.length}
+                                </p>
+                            ) : (
+                                <>{isValidQuery && <p className="textStyle">No results</p>}</>
+                            )}
+                        </div>
+                    }
+                        <div style={loader? displayLoader : resultBottom}>
+                            {(!isValidQuery && loader) && 
+                            <div className="invalidSearchClass" style={{display:"flex", alignItems:"center"}}>
+                                <i className="fa mr-3 fa-4x fa-times"/>
+                                <p style={{fontSize:"calc(20px + 0.5vh)"}}>Invalid search</p>
+                            </div>}
+                            {(isValidQuery && loader)? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
+                            <div>
+                                {resultsFilterArr && displayresults}
+                                {resultsFilterArr.length > 0 ? (
+                                    <ReactPaginate
+                                        previousLabel={"Previous"}
+                                        nextLabel={"Next"}
+                                        pageCount={pageCount}
+                                        onPageChange={changePage}
+                                        containerClassName={"paginationBttns"}
+                                        previousLinkClassName={"previousBttn"}
+                                        nextLinkClassName={"nextBttn"}
+                                        disabledClassName={"paginationDisabled"}
+                                        activeClassName={"paginationActive"}
+                                        activeLinkClassName={"paginationActiveText"}
+                                        pageLinkClassName={"paginationText"}
+                                    />
+                                ) : (
+                                    <div></div>
+                                )}
+                            </div>
+                            }
+                        </div>
                 </div>
             </div>
         </form>
@@ -260,8 +303,9 @@ const searchMainContainer = {
 
 const topContainer = {
     position: "sticky",
-    top: "10vh",
+    top: "60px",
     width: "96vw",
+    height:"17vh",
     justifyContent: "center",
     alignItems: "center",
     padding: "5vh 5vw 1vh",
@@ -277,6 +321,8 @@ const searchBarContainer = {
 const searchIcon = {
     paddingLeft: "1vw",
     marginTop: "1vh",
+    cursor:"pointer",
+    transition:"0.2s",
 };
 
 const inputSearch = {
@@ -296,7 +342,8 @@ const filtersContainer = {
     background: "white",
     position: "sticky",
     overflowY: "overlay",
-    top: "28vh",
+    overflowX:"hidden",
+    top: "27.1vh",
     width: "20vw",
     height: "73vh",
 };
@@ -307,9 +354,10 @@ const resultsOuterContainer = {
 
 const resultTop = {
     position: "sticky",
-    top: "28vh",
+    top: "calc(60px + 17vh)",
     padding: "2.5vh 1vw",
     background: "white",
+    zIndex: 1000
 };
 
 const resultBottom = {
@@ -318,16 +366,24 @@ const resultBottom = {
 
 const filterButton = {
     position: "relative",
-    height: "2em",
-    width: "10em",
+    height: "3em",
+    width: "11em",
     top: "-2.5vh",
     left: "20%",
-    border: "0.08em solid",
-    borderRadius: "3px",
+    borderRadius: "4px",
     backgroundColor: "#0067A1",
     color: "white",
     alignItems: "center",
     justifyContent: "center",
     fontFamily: "Montserrat",
     textTransform: "capitalize",
+    boxShadow:"1px 1px 3px black",
+    transform:"scale(1)",
+    transition:"0.2s"
 };
+
+const displayLoader = {
+  display:"grid",
+  placeItems: "center",
+  height:"80vh"
+}

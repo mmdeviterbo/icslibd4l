@@ -4,15 +4,26 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
+        <style>
+            .header-div { text-align: center; } .resource-label-div {
+            text-align: center;} table, td, th { border: 1px solid black; } td {
+            padding: 5px; } table { border-collapse: collapse ; border-color:
+            black; font-size: 11px; } .copies-cell { text-align: center; }
+            .author-name-text { padding: 0; margin: 2px}
+        </style>
     </head>
     <body>
-        <h1>Summary Report</h1>
-        <h3 style="margin: auto">Books</h3>
+        <div class="header-div">
+            <h1>Summary Report</h1>
+        </div>
+        <div class="resource-label-div">
+            <h3 style="margin: auto">Books</h3>
+        </div>
 
         <table style="margin: auto">
             <tr>
                 <th style="width: 150px;">BookID</th>
-                <th style="width: 150px;">Title</th>
+                <th style="width: 450px;">Title</th>
                 <th style="width: 150px;">Author(s)</th>
                 <th style="width: 100px;">Subject</th>
                 <th style="width: 50px;">Copies</th>
@@ -28,19 +39,19 @@
                     </td>
                     <td>
                         {{#each this.author}}
-                            <p>{{this.author_name}}</p>
+                            <div class="author-name-text">{{this.author_name}}</div>
                         {{/each}}
                     </td>
                     <td>
                         {{#each this.subject}}
-                            <p>{{this.subject}}</p>
+                            <div class="subject-name-text">{{this.subject}}</div>
                         {{/each}}
                     </td>
-                    <td>
+                    <td class="copies-cell">
                         {{this.numberOfCopies}}
                     </td>
                     <td>
-                        {{this.dateAcquired}}
+                        {{dateFormatter this.dateAcquired}}
                     </td>
                 </tr>
             {{/each}}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { gsap } from "gsap";
@@ -10,6 +10,11 @@ gsap.registerPlugin(ScrollTrigger);
 export default function BrowsePart({ browseRef }) {
   const [isHoverTitle, setIsHoverTitle] = useState("BROWSE");
 
+
+  useEffect(()=>{
+    animateScrollTrigger();
+  },[])
+
   return (
     <div
       className="browsePartContainer"
@@ -18,7 +23,7 @@ export default function BrowsePart({ browseRef }) {
     >
       <img src={searchBg} style={searchBgStyle} alt="#" />
       <div style={colorBrowseContainer} className="colorBrowseContainer">
-        <h1 style={titleOrientation}>{isHoverTitle}</h1>
+        <h1 style={titleOrientation}><p className="isHoverTitle">{isHoverTitle}</p></h1>
       </div>
       <div style={designBoxContainer} className="designBoxContainer">
         <ParallaxEffect />
@@ -28,7 +33,9 @@ export default function BrowsePart({ browseRef }) {
         <Link
           className="browseBox browseboxBooks"
           style={browseBox}
-          to="/browse-books"
+          // TOUCHED: search filter redirect to search page type=books search=all books
+          // to="/browse-books"
+          to="/search?type=book&search="
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("BOOK")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}
@@ -54,7 +61,9 @@ export default function BrowsePart({ browseRef }) {
         <Link
           className="browseBox browseboxTheses"
           style={browseBox}
-          to="/browse-theses"
+          // to="/browse-theses"
+          // TOUCHED: search filter redirect to search page type=books search=all books
+          to="/search?type=thesis&search="
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("THESIS")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}
@@ -80,7 +89,9 @@ export default function BrowsePart({ browseRef }) {
         <Link
           className="browseBox browseboxSP"
           style={browseBox}
-          to="/browse-special-problems"
+          // to="/browse-special-problems"
+          // TOUCHED: search filter redirect to search page type=books search=all books
+          to="/search?type=sp&search="
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("SP")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}
@@ -123,7 +134,7 @@ const browsePartContainer = {
   UserSelect: "none",
 };
 const browseBoxContainer = {
-  width: "40%",
+  width: "45%",
   overflow: "hidden",
   display: "flex",
   flexDirection: "column",
@@ -133,17 +144,16 @@ const browseBoxContainer = {
 const colorBrowseContainer = {
   position: "absolute",
   height: "75%",
-  width: "70%",
-  right: "5%",
+  width: "95%",
   background: "#0067A1",
   borderRadius: "7px",
-  boxShadow:
-    "2px 5px 30px 0 rgba(0, 0, 0, 0.8), -6px -6px 22px 0 rgba(255, 255, 255, 0.8)",
+  boxShadow: "2px 5px 8px 0 rgba(0, 0, 0, 0.8), -6px -6px 8px 0 rgba(255, 255, 255, 0.8)",
   display: "flex",
   justifyContent: "center",
 };
 
 const titleOrientation = {
+  overflow:"hidden",
   writingMode: "vertical-rl",
   textOrientation: "upright",
   color: "white",
@@ -153,10 +163,12 @@ const titleOrientation = {
   background: "rgba(0,0,0,1)",
   textAlign: "center",
   margin: 0,
+  padding:"0 3%",
+  marginLeft:"10%"
 };
 
 const designBoxContainer = {
-  width: "60%",
+  width: "50%",
 };
 
 const searchBgStyle = {
@@ -169,8 +181,8 @@ const searchBgStyle = {
 
 const browseBox = {
   borderRadius: "200px",
-  height: "28vh",
-  width: "28vh",
+  height: "30vh",
+  width: "30vh",
   cursor: "pointer",
   background: "#e0e0e0",
   boxShadow:"3px 3px 5px 0 rgba(0, 0, 0, 0.5), -3px -3px 5px 0 rgba(255, 255, 255, 0.3)",
@@ -206,3 +218,27 @@ const titleSource = {
   padding: 0,
   margin: 0,
 };
+
+const animateScrollTrigger=()=>{
+  let tl = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".colorBrowseContainer",
+      scrub:0.5,
+      start:"top center",
+      end:"bottom bottom",
+    } 
+  })
+  tl.from('.browseboxBooks',{ xPercent:-80  });
+  tl.from('.browseboxTheses',{ xPercent:80  });
+  tl.from('.browseboxSP',{ xPercent:-80  });
+  
+  let t2 = gsap.timeline({
+    scrollTrigger: { 
+      trigger: ".colorBrowseContainer",
+      scrub:2,
+      start:"top center",
+      end:"bottom bottom",
+    } 
+  })
+  t2.from('.isHoverTitle',{ yPercent:-80 });
+}
