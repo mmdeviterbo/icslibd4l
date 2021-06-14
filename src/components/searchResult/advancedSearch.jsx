@@ -9,18 +9,24 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/searchResultStyle/advancedSearch.css";
 
 export default function AdvancedSearch() {
+    const parseSymbols=(str)=>{
+        str = str.replace(/%20/g, " ");
+        str = str.replace(/%22/g, "\"");
+        return str.replace(/%27/g, "'");
+    }
+
     var queryStore = `${useLocation().search}`.substring(
         `${useLocation().search}`.indexOf("search=") + 7
     );
-    const [query, setQuery] = useState(queryStore.replace(/%20/g, " "));
+
+    const [query, setQuery] = useState(parseSymbols(queryStore));
     const [isValidQuery, setIsValidQuery] = useState(true);
     const [objFilter, setObjFilter] = useState({});
     const [urlRequest, setUrlRequest] = useState(
         `${useLocation().pathname}${useLocation().search}`
     );
-
     const history = useHistory();
-    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=[\w\s:]*$/g;
+    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=[\w\s:'"]*$/g;
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
@@ -57,7 +63,7 @@ export default function AdvancedSearch() {
     let urlFilter = "";
     let urlQuery = "";
 
-    url = url.replace("http://localhost:3000/search", "").replace(/%20/g, " ");
+    url = parseSymbols(url.replace("http://localhost:3000/search", ""));
 
     function returnCloserResourceType() {
         if (url.includes("sp")) return "sp";
@@ -104,7 +110,7 @@ export default function AdvancedSearch() {
             if (url.length > 0) {
                 url = url.slice(1, url.length);
                 urlQuery = decodeURIComponent(
-                    url.split("&")[1].replace("search=", "").replace(/%20/g, " ")
+                    parseSymbols(url.split("&")[1].replace("search=", ""))
                 );
                 urlFilter = url.split("&")[0].replace("type=", "");
             }
