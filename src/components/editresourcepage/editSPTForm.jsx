@@ -307,26 +307,15 @@ export default function EditSPTFormContainer(props) {
                                     <label htmlFor="sptYear">
                                         Year Published: &nbsp;{" "}
                                     </label>
-                                    <input
-                                        type="text"
-                                        pattern="[0-9]*"
-                                        inputMode="numeric"
+                                    <input 
                                         id="sptYear"
-                                        required
+                                        type = "number"
+                                        defaultValue = {year}
+                                        min = {1908}
+                                        max = {9999}
                                         key={`${Math.floor(
-                                            Math.random() * 1000
+                                        Math.random() * 1000
                                         )}-min`}
-                                        min={1908}
-                                        max={9999}
-                                        defaultValue={year}
-                                        onChange={(event) => {
-                                            if (event.target.value < 0) {
-                                                event.target.value =
-                                                    event.target.defaultValue;
-                                            }
-                                            setYear(event.target.value);
-                                        }}
-                                        onMouseEnter={(e) => e.target.focus()}
                                     />
                                 </div>
                                 {/* Author fields */}

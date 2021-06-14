@@ -204,7 +204,7 @@ const AddNewSPThesisForm = () => {
                                 Year Published: &nbsp;{" "}
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 pattern="[0-9]*"
                                 inputMode="numeric"
                                 id="sptYear"
