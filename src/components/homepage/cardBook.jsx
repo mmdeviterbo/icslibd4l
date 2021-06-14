@@ -1,7 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 
 export default function CardBook({imageSrc, title, linkTo, setHoverText, year, book}) {
+    
+    const [isLoadingImg, setIsLoadingImg]=useState(true);
+    const imgNotAvailable = "https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg";
+
+
+
     return (
             <Link 
                 to={{pathname: linkTo, state: {resourceData: book}}}  
@@ -9,7 +15,7 @@ export default function CardBook({imageSrc, title, linkTo, setHoverText, year, b
                 onMouseEnter={()=>setHoverText(title)} onMouseLeave={()=>setHoverText("LATEST ACQUISITIONS")}>
                 
                 <div className="imgContainer" src={imageSrc} style={imgContainer}>
-                    <img src={imageSrc} style={imgSrcStyle} alt="#" draggable={false}/>
+                    <img src={(isLoadingImg && imgNotAvailable) || imageSrc} style={imgSrcStyle} alt="#" draggable={false} onLoad={()=>setIsLoadingImg(false)}/>
                     <p style={{
                                 fontSize:"14px", margin:"0", textAlign:"center", 
                                 zIndex:100, position:"absolute", 
