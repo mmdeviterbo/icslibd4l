@@ -129,12 +129,12 @@ export default function EditBookFormContainer(props) {
                     setSubject(subjects);
                     setBookCoverLink(bookCoverLink);
 
-                    console.log(sourceItem);
+                    // console.log(sourceItem);
                     break;
                 }
             }
         } catch (err) {
-            console.log("Error 85: edit-res-page-form");
+            // console.log("Error 85: edit-res-page-form");
         }
     }, [idSource]);
 
@@ -167,12 +167,12 @@ export default function EditBookFormContainer(props) {
                 numberOfCopies,
                 bookCoverLink,
             };
-            console.log(userInput); //successfully stored object
+            // console.log(userInput); //successfully stored object
             // console.log(subject);
 
             formData.append("body", JSON.stringify(userInput)); // y r we appending?
 
-            console.log(formData);
+            // console.log(formData);
 
             const { data } = await ResourceServices.editBook(userInput);
             setSuccess("success");
@@ -437,15 +437,12 @@ export default function EditBookFormContainer(props) {
                             <div className="form-mid-column">
                                 <div className="primaryfields">
                                     <label htmlFor="bookISBN">
-                                        ISBN: &nbsp;{" "}
+                                        ISBN:
                                     </label>
                                     <input
                                         type="text"
                                         id="bookISBN"
-                                        key={`${Math.floor(
-                                            Math.random() * 1000
-                                        )}-min`}
-                                        defaultValue={ISBN}
+                                        value={ISBN}
                                         placeholder={"XXX-X-XXXXXXXXX"}
                                         onChange={(event) => {
                                             setISBN(event.target.value);
@@ -475,11 +472,11 @@ export default function EditBookFormContainer(props) {
                                     <input
                                         id = "availBookCopies"
                                         type = "number"
-                                        defaultValue = {numberOfCopies}
-                                        key={`${Math.floor(
-                                            Math.random() * 1000
-                                        )}-min`}
+                                        value = {numberOfCopies}
                                         min = {1}
+                                        onChange = {(e) => {
+                                            setNumOfCopies(e.target.value);
+                                        }}
                                     />
                                 </div>
 

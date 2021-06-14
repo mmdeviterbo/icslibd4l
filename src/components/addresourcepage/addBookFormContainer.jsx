@@ -73,7 +73,7 @@ const AddBookFormContainer = () => {
         datePublished,
         dateAcquired,
       };
-      console.log(userInput);
+    //   console.log(userInput);
       await ResourceServices.addBook(userInput);
 
       setSuccess("success");

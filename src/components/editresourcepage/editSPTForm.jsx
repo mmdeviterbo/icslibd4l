@@ -188,7 +188,7 @@ export default function EditSPTFormContainer(props) {
                     });
 
                     // console.log("fsdfsdfd");
-                    console.log(sourceItem);
+                    // console.log(sourceItem);
 
                     const tempKeyword = [];
                     keywords.map((keyword) =>
@@ -199,7 +199,7 @@ export default function EditSPTFormContainer(props) {
                 }
             }
         } catch (err) {
-            console.log("Error 85: edit-res-page-form");
+            // console.log("Error 85: edit-res-page-form");
         }
     }, [idSource, resourceData]);
 
@@ -231,7 +231,7 @@ export default function EditSPTFormContainer(props) {
                 advisers: adviserList,
                 keywords,
             };
-            console.log(userInput);
+            // console.log(userInput);
             await ResourceServices.editSpThesis(userInput);
             setSuccess("success");
             setShow(true);
@@ -310,12 +310,18 @@ export default function EditSPTFormContainer(props) {
                                     <input 
                                         id="sptYear"
                                         type = "number"
-                                        defaultValue = {year}
+                                        value = {year}
                                         min = {1908}
                                         max = {9999}
-                                        key={`${Math.floor(
-                                        Math.random() * 1000
-                                        )}-min`}
+                                        // key={`${Math.floor(
+                                        // Math.random() * 1000
+                                        // )}-min`}
+                                        // key is supposed to show defaultValue
+                                        // but key makes onChange re-render the whole form
+                                        onChange = {(event) =>{
+                                            setYear(event.target.value);
+                                            }
+                                        }
                                     />
                                 </div>
                                 {/* Author fields */}

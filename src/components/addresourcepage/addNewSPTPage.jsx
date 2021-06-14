@@ -117,7 +117,7 @@ const AddNewSPThesisForm = () => {
     const [success, setSuccess] = useState("");
 
     const handleSubmit = async (event) => {
-        console.log("meow");
+        // console.log("meow");
         event.preventDefault();
 
         if (authorList.length === 0) {
@@ -141,9 +141,9 @@ const AddNewSPThesisForm = () => {
                 keywords,
             };
 
-            console.log(userInput);
+            // console.log(userInput);
             const { data } = await ResourceServices.addSpThesis(userInput);
-            console.log(data);
+            // console.log(data);
 
             setSuccess("success");
             setShow(true);
