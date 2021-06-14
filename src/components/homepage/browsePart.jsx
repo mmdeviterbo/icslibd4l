@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import searchBg from "../../assets/searchBg_4.png";
 import ParallaxEffect from "./parallaxEffect";
+import logo from '../../assets/mainlogo/icslibd4l.webp';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function BrowsePart({ browseRef }) {
@@ -23,6 +24,7 @@ export default function BrowsePart({ browseRef }) {
     >
       <img src={searchBg} style={searchBgStyle} alt="#" />
       <div style={colorBrowseContainer} className="colorBrowseContainer">
+        <img src={logo} style={logoImgBg} alt="#"/>
         <h1 style={titleOrientation}><p className="isHoverTitle">{isHoverTitle}</p></h1>
       </div>
       <div style={designBoxContainer} className="designBoxContainer">
@@ -150,7 +152,18 @@ const colorBrowseContainer = {
   boxShadow: "2px 5px 8px 0 rgba(0, 0, 0, 0.8), -6px -6px 8px 0 rgba(255, 255, 255, 0.8)",
   display: "flex",
   justifyContent: "center",
+  overflow:"hidden"
 };
+
+const logoImgBg = {
+  position:"absolute",
+  height:"200%",
+  width:"120%",
+  objecFit:"cover",
+  filter:"grayscale(0.8)",
+  opacity:0.4,
+  zIndex:0  
+}
 
 const titleOrientation = {
   overflow:"hidden",
@@ -160,11 +173,12 @@ const titleOrientation = {
   fontSize: "70px",
   fontWeight: 900,
   height: "100%",
-  background: "rgba(0,0,0,1)",
+  background: "rgba(0,0,0,0.9)",
   textAlign: "center",
   margin: 0,
   padding:"0 3%",
-  marginLeft:"10%"
+  marginLeft:"10%",
+  zIndex:1
 };
 
 const designBoxContainer = {

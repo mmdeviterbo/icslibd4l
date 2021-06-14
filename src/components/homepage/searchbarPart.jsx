@@ -4,7 +4,7 @@ import { Dropdown } from "semantic-ui-react";
 import searchBg from "../../assets/searchBg_4.png";
 import { gsap, Power3 } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import logo from '../../assets/mainlogo/icslibd4l.png'
+import logo from '../../assets/mainlogo/icslibd4l.webp'
 gsap.registerPlugin(ScrollTrigger);
 
 

@@ -143,13 +143,14 @@ const recentNewsInnerContainer = {
   margin: 0,
   background: "rgb(0, 103, 161)",
   padding: "1% 2%",
+  borderRadius:"0 0 7px 7px",
 };
 const newsStyle = {
   padding: "12px",
   width: "100%",
   color: "white",
   background: "rgb(0, 0, 0)",
-  borderRadius: "5px 5px 0 0",
+  borderRadius: "7px 7px 0 0",
   display: "flex",
   fontSize: "calc(26px + 2vw)",
   fontWeight: 900,

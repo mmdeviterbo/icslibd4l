@@ -453,14 +453,25 @@
     }
 }
 
-.buttonsSearchContainer > button:focus,
-.btnViewAll:focus {
+.buttonsSearchContainer > button:focus{
     box-shadow: none !important;
 }
 .buttonsSearchContainer > button:hover {
     filter: invert(1) !important;
 }
+
+.btnViewAll{
+    display: inline-block;
+    background-color: white;
+    color: #0067a1;
+    border: 1px solid #0067a1; 
+    padding: 3% 8%;
+    border-radius: 0.5rem;
+    font-size: large;
+}
+
 .btnViewAll:hover {
-    background: white !important;
-    transform: scale(1.02);
+    background-color: #0067a1;
+    border-color: white;
+    color: white;
 }
