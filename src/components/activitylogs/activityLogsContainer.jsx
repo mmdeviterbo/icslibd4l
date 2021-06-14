@@ -48,7 +48,7 @@ export default function ActivityLogsContainer({ user }) {
             ) : (
                 <div
                     style={{
-                        minHeight: "80vh",
+                        minHeight: "90vh",
                         display: "grid",
                         placeItems: "center",
                     }}>

@@ -107,10 +107,9 @@ export default function ProfileContainer() {
     };
 
     // function that renders the toast notification for improper nickname length
-    const renderToast = () => {
+    const renderToast = (message) => {
         return ToastNotification({
-            content:
-                "Nickname must either be your full name or a string with a length greater than two (2) and less than ten (10)",
+            content: message,
         });
     };
 
@@ -212,7 +211,21 @@ export default function ProfileContainer() {
                                                         user
                                                     );
                                                 } else {
-                                                    renderToast();
+                                                    if (
+                                                        nick !== user.fullName
+                                                    ) {
+                                                        if (nick.length < 3) {
+                                                            renderToast(
+                                                                "Nickname length must be greater than two (2). "
+                                                            );
+                                                        } else if (
+                                                            nick.length > 9
+                                                        ) {
+                                                            renderToast(
+                                                                "Nickname length must be less than ten (10). "
+                                                            );
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }}
