@@ -129,7 +129,7 @@ export default function AdvancedSearch() {
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchData();
-    }, [objFilter]);
+    },[objFilter]);
 
     const handleForm = (e) => {
         e.preventDefault();
@@ -200,7 +200,7 @@ export default function AdvancedSearch() {
                         className="form-control removeOutline"
                         defaultValue={urlQuery}
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Search for Books, Theses, and Special Problems"
+                        placeholder={query || "Search for Books, Theses, and Special Problems"}
                     />
                 </div>
             </div>
