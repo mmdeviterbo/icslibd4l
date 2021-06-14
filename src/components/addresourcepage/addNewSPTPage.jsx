@@ -10,6 +10,17 @@ import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
 import ToastNotification from "../toastNotification";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  A single-page form to be filled up by the user with
+ *  relevant SP/Thesis attributes
+ *
+ * props: none
+ *
+ ******************************************************/
+
 const classificationOptions = [
   { value: "Special Problem", label: "Special Problem" },
   { value: "Thesis", label: "Thesis" },
@@ -116,8 +127,15 @@ const AddNewSPThesisForm = () => {
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
+  /****************************************************
+   * Type: Function
+   *
+   * Summary:
+   *  Stores all user inputs to an object containing SP/
+   *  Thesis attributes and make a POST request
+   *
+   ******************************************************/
   const handleSubmit = async (event) => {
-    console.log("meow");
     event.preventDefault();
 
     if (authorList.length === 0) {
@@ -142,20 +160,14 @@ const AddNewSPThesisForm = () => {
       };
 
       console.log(userInput);
-      const { data } = await ResourceServices.addSpThesis(userInput);
-      console.log(data);
+      await ResourceServices.addSpThesis(userInput);
 
       setSuccess("success");
       setShow(true);
       event.target.reset();
-      // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
         ToastNotification({ content: err.response.data.errorMessage });
-        // <ToastNotification
-        //   content={err.response.data.errorMessage}
-        //   style={{ width: "2000px" }}
-        // />;
       }
     }
   };
@@ -170,7 +182,7 @@ const AddNewSPThesisForm = () => {
     setKeyword(chip);
   };
 
-  // FIX THIS
+  // creates an array of adviser names from the user input
   const handleAdviserChange = (adviserList) => {
     const adviser = [...adviserList].map((obj) => obj.value);
     // setCourses(values);
@@ -458,7 +470,7 @@ const AddNewSPThesisForm = () => {
                 // style={{ border: "0.15rem solid #afbcc9", padding: "0.5rem" }}
                 style={{
                   //   "&:hover, &:focus": { borderBottom: "2px solid #778899" }, // border style on hover
-                  border: "2px solid #afbcc9", // default border color
+                  border: "2px solid #afbcc9",
                   padding: "0.5rem",
                   paddingBottom: "0rem",
                   borderRadius: "0.3rem",
@@ -481,6 +493,7 @@ const AddNewSPThesisForm = () => {
         {/* form-columns close */}
       </form>{" "}
       {/* main form close */}
+      {/* modal that shows confirmation upon form submission */}
       <StatusModal
         message={success}
         name={"Sp/Thesis"}

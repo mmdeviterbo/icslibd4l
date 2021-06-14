@@ -5,12 +5,11 @@ import { toast } from "react-toastify";
 
 // TO-DO: Change the links according to the appropriate SPT attributes
 const InfoSidebar = ({ user, resourceData }) => {
-  let link = "https://www.youtube.com/watch?v=m4gnMWua4xo";
   const handleRedirect = (redirectHere) => {
     // window.location.href = redirectHere;
     if (redirectHere === "" || redirectHere === null) {
       toast.info("Unavailable", {
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 5000,
         hideProgressBar: true,
         closeOnClick: true,
@@ -80,7 +79,7 @@ const InfoSidebar = ({ user, resourceData }) => {
             <>
               <button
                 id="downloadsourcecode"
-                value={link}
+                value={resourceData && resourceData.source_code}
                 onClick={(e) => handleRedirect(e.target.value)}
               >
                 View Source Code

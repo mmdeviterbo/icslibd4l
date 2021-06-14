@@ -340,6 +340,15 @@ const AddBookFormContainer = () => {
                 options={courseList}
                 value={courseList.find((obj) => obj.value === courses)}
                 onChange={(courses) => handleCourses(courses)}
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    "&:hover": { borderColor: "#778899" }, // border style on hover
+                    border: "2px solid #afbcc9", // default border color
+                    boxShadow: "none", // no box-shadow
+                    marginTop: "0.4rem",
+                  }),
+                }}
               ></Select>
             </div>
 
