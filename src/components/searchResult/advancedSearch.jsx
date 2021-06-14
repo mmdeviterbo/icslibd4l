@@ -12,7 +12,7 @@ export default function AdvancedSearch() {
     var queryStore = `${useLocation().search}`.substring(
         `${useLocation().search}`.indexOf("search=") + 7
     );
-    const [query, setQuery] = useState(queryStore.replaceAll("%20", " "));
+    const [query, setQuery] = useState(queryStore.replace(/%20/g, " "));
     const [isValidQuery, setIsValidQuery] = useState(true);
     const [objFilter, setObjFilter] = useState({});
     const [urlRequest, setUrlRequest] = useState(
@@ -20,7 +20,7 @@ export default function AdvancedSearch() {
     );
 
     const history = useHistory();
-    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=[\w\s]*$/g;
+    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=[\w\s:]*$/g;
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
@@ -57,7 +57,7 @@ export default function AdvancedSearch() {
     let urlFilter = "";
     let urlQuery = "";
 
-    url = url.replace("http://localhost:3000/search", "").replaceAll("%20", " ");
+    url = url.replace("http://localhost:3000/search", "").replace(/%20/g, " ");
 
     function returnCloserResourceType() {
         if (url.includes("sp")) return "sp";
@@ -104,7 +104,7 @@ export default function AdvancedSearch() {
             if (url.length > 0) {
                 url = url.slice(1, url.length);
                 urlQuery = decodeURIComponent(
-                    url.split("&")[1].replace("search=", "").replaceAll("%20", " ")
+                    url.split("&")[1].replace("search=", "").replace(/%20/g, " ")
                 );
                 urlFilter = url.split("&")[0].replace("type=", "");
             }
