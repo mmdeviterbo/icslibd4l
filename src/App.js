@@ -6,7 +6,7 @@ import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
 import Unauthorized from "./components/unauthorized";
-import About from "./components/about/about";
+import About from "./components/about/aboutAlternative";
 
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";
@@ -70,7 +70,7 @@ function App() {
             localStorage.setItem(jwtPrivateKey, data); //set token
 
             // get current param, it must stay on where the user's current path
-            window.location = window.location.pathname;
+            window.location = window.location.search || window.location.pathname;
         } catch (err) {}
     };
 
@@ -132,13 +132,10 @@ function App() {
                     path="/manage-users"
                     render={() => <ManageUserPage user={user} />}
                 />
-                <Route path="/add-new-spt" render={()=><AddSPThesisPage user={user}/>} />
-                <Route path="/add-new-book" render={()=><AddBookPage user={user}/>} />
-                <Route path="/edit-spt/:id" render={()=><EditSPTFormContainer user={user}/>} />
-                <Route
-                    path="/edit-book/:id"
-                    component={EditBookFormContainer}
-                />
+                <Route path="/add-new-spt" render={(props)=><AddSPThesisPage {...props} user={user}/>} />
+                <Route path="/add-new-book" render={(props)=><AddBookPage {...props} user={user}/>} />
+                <Route path="/edit-spt/:id" render={(props)=><EditSPTFormContainer {...props} user={user}/>} />
+                <Route path="/edit-book/:id" render={(props)=><EditBookFormContainer {...props} user={user}/>}/>
                 <Route
                     path="/view-activitylogs"
                     render={() => <ActivityLogsContainer user={user} />}

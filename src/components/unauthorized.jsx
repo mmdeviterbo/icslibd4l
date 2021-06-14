@@ -3,7 +3,7 @@ import {gsap} from 'gsap';
 import {Link} from 'react-router-dom';
 import notFoundHover from '../assets/notFound_1_hover.png';
 import '../styles/notFoundStyle.css'; 
-import notFound from '../assets/notFound_1.png'
+import notFound from '../assets/notFound_1.webp'
 
 
 export default function Unauthorized() {

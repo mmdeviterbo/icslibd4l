@@ -177,9 +177,6 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     // Fixes the overlapping problem of the component
                     menu: (provided) => ({ ...provided, zIndex: 9999 }),
                 }}
-                menuPortalTarget={document.querySelector(
-                    ".main-table-container"
-                )}
             />
         );
     };
