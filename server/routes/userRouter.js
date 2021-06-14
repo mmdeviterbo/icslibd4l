@@ -106,7 +106,9 @@ router.post("/create", async (req, res) => {
         res.cookie("token", token, {
             httpOnly: false,
             maxAge: 365 * 24 * 60 * 60 * 1000,
-        }).send(token);
+        })
+            .status(200)
+            .send(token);
     } catch (err) {
         console.error(err);
         res.status(500).send();
@@ -126,9 +128,8 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.get("/readStudents", authFaculty, async (req, res) => {
-    console.log("here");
-    UserModel.find({ userType: 4 }, (err, result) => {
+router.get("/readStudents", async (req, res) => {
+    await UserModel.find({ userType: 4 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
             res.send(err);
@@ -154,7 +155,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.put("/update", authStudent, async (req, res) => {
+router.put("/update", async (req, res) => {
     try {
         const { googleId, newNickname } = req.body; //get googleId and newNickname from body
 
@@ -172,7 +173,7 @@ router.put("/update", authStudent, async (req, res) => {
         await UserModel.find({ googleId: googleId }, async (err, result) => {
             //send the edited user as response
             if (err) {
-                res.send(err);
+                return res.send(err);
             } else {
                 //create new cookie for updated token
                 const publicData = null;
@@ -208,14 +209,16 @@ router.put("/update", authStudent, async (req, res) => {
                     "ICSlibrary"
                 );
 
-                res.cookie("token", token, {
-                    httpOnly: false,
-                }).send(result);
+                return res
+                    .cookie("token", token, {
+                        httpOnly: false,
+                    })
+                    .send(result);
             }
         });
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 
@@ -228,10 +231,10 @@ Request Object:
 Response String: 
 "Entry Deleted"
 ********************************************************/
-router.delete("/delete", authStudent, async (req, res) => {
+router.delete("/delete", async (req, res) => {
     const googleId = req.body.googleId;
     await UserModel.findOneAndDelete({ googleId });
-    res.send("Entry Deleted");
+    res.status(200).send("Entry Deleted");
 });
 
 //logout current signed in user. deletes cookie for user
@@ -264,7 +267,6 @@ router.post("/logout", async (req, res) => {
             activity: "User logout",
         });
         await newUserLog.save();
-        // res.send();
         res.cookie("token", "", {
             httpOnly: false,
             expires: new Date(0),
