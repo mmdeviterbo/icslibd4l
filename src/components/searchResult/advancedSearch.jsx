@@ -198,7 +198,7 @@ export default function AdvancedSearch() {
                         style={inputSearch}
                         type="text"
                         className="form-control removeOutline"
-                        defaultValue={urlQuery}
+                        defaultValue={query || urlQuery}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={query || "Search for Books, Theses, and Special Problems"}
                     />
