@@ -9,7 +9,8 @@ var agent;
 //Assertion style
 chai.use(chaiHttp);
 let token;
-describe("Admin Router API", () => {
+
+describe("ICS Staff and Faculty Router API", () => {
     /**********************
      Read Faculty route
      ***********************/
@@ -19,7 +20,7 @@ describe("Admin Router API", () => {
                 .get(icsFacultyStaffRoute + "/readFaculty")
                 .then((res) => {
                     expect(res.data).to.be.an("array");
-                    if (res.data) {
+                    if (res.data.length) {
                         expect(res.data[0].userType).to.equal(2);
                     }
                     expect(res.status).to.equal(200);

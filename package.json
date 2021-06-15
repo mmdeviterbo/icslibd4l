@@ -114,7 +114,7 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "mocha --timeout 10000",
+        "test": "mocha --timeout 300000",
         "eject": "react-scripts eject",
         "dev": "nodemon ./server/index.js",
         "server": "node ./server/index.js"
