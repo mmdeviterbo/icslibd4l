@@ -206,6 +206,9 @@ router.get("/download", async (req, res) => {
 
 // browse all entries, default sort: alphabetical by title
 router.post("/browse", async (req, res) => {
+    var spName = ["Special Problem", "sp", "SP"];
+    var thesisName = ["Thesis", "thesis"];
+
     const { type } = req.body;
     if (type === "book") {
         // type value: SP or Thesis
@@ -243,15 +246,13 @@ router.post("/browse", async (req, res) => {
             [
                 {
                     $match: {
-                        type: {
-                            $in: [
-                                "Thesis",
-                                "Special Problem",
-                                "thesis",
-                                "sp",
-                                "SP",
-                            ],
-                        },
+                        $or: [
+                            { 
+                                type: { $in: spName }, 
+                            },{ 
+                                type: { $in: thesisName },
+                            },
+                        ],
                     },
                 },
                 {
@@ -503,12 +504,6 @@ router.get("/search", async (req, res) => {
                                 $or: [
                                     {
                                         title: {
-                                            $regex: req.query.search,
-                                            $options: "i",
-                                        },
-                                    },
-                                    {
-                                        abstract: {
                                             $regex: req.query.search,
                                             $options: "i",
                                         },
@@ -1404,7 +1399,7 @@ router.get("/search", async (req, res) => {
     function noSP(mode) {
         thesisModel.aggregate(
             [
-                { $match: { type: "SP" } },
+                { $match: { type: { $in: spName }, } },
                 {
                     $lookup: {
                         from: "sp_thesis_advisers",
@@ -1452,7 +1447,7 @@ router.get("/search", async (req, res) => {
     function noThesis() {
         thesisModel.aggregate(
             [
-                { $match: { type: "Thesis" } },
+                { $match: { type: { $in: thesisName }, } },
                 {
                     $lookup: {
                         from: "sp_thesis_advisers",
@@ -1543,6 +1538,8 @@ Response:
 // https://stackoverflow.com/questions/37582331/how-to-return-only-the-first-occurrence-of-an-id-with-mongoose
 
 router.get("/search-id", async (req, res) => {
+    var spName = ["Special Problem", "sp", "SP"];
+    var thesisName = ["Thesis", "thesis"];
     // ---------------------------------------- SUB FUNCTIONS
 
     function spMain() {
@@ -1551,7 +1548,7 @@ router.get("/search-id", async (req, res) => {
                 {
                     $match: {
                         sp_thesis_id: req.query.id,
-                        type: "Special Problem",
+                        type: { $in: spName },
                     },
                 },
                 {
@@ -1599,7 +1596,7 @@ router.get("/search-id", async (req, res) => {
                 {
                     $match: {
                         sp_thesis_id: req.query.id,
-                        type: "Thesis",
+                        type: { $in: thesisName },
                     },
                 },
                 {
