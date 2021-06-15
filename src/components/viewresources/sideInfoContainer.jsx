@@ -1,9 +1,21 @@
 import React from "react";
-// import ToastNotification from "../toastNotification";
-// import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
-// TO-DO: Change the links according to the appropriate SPT attributes
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Shows the SP/Thesis details. Poster, journal, source
+ *  code and manuscript can only be viewed if a user is
+ *  and admin or faculty/staff. The buttons for redirecting
+ *  to the resources is not visible to guests and students.
+ *
+ *  props:
+ *    user = checks the user type for user privileges
+ *    resourceData = object that will be rendered into
+ *           the component
+ ******************************************************/
+
 const InfoSidebar = ({ user, resourceData }) => {
   const handleRedirect = (redirectHere) => {
     // window.location.href = redirectHere;

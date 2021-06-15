@@ -8,6 +8,15 @@ import StatusModal from "../modal/operationStatusModal";
 // import { toast } from "react-toastify";
 import ToastNotification from "../toastNotification";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  A single-page form to be filled up by the user with
+ *  relevant book attributes
+ *
+ ******************************************************/
+
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
   { value: "CMSC 21", label: "CMSC 21" },
@@ -56,8 +65,30 @@ const AddBookFormContainer = () => {
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
+  /****************************************************
+   * Type: Function
+   *
+   * Summary:
+   *  Stores all user inputs to an object containing book
+   *  attributes and make a POST request.
+   *  Shows a modal to confirm if request is successful or
+   *  not.
+   *  Adds the book in the database if successful.
+   *
+   ******************************************************/
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (
+      authorList === null ||
+      authorList.length === 0 ||
+      courses === null ||
+      courses.length === 0
+    ) {
+      return ToastNotification({
+        content: "Please enter all required fields",
+      });
+    }
     try {
       const userInput = {
         title,
@@ -81,9 +112,6 @@ const AddBookFormContainer = () => {
     } catch (err) {
       if (err.response && err.response.data) {
         ToastNotification({ content: err.response.data.errorMessage });
-        // setSuccess("fail");
-        // setShow(true);
-        // alert(err.response.data.errorMessage); // some reason error message
       }
     }
   };

@@ -1,7 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// TODO: add documentation
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Renders the button for adding book and redirects
+ *  to the page for adding book.
+ *
+ ******************************************************/
+
 const AddNewResource = () => {
   return (
     <div className="new-res-container">

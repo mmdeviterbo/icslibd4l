@@ -5,22 +5,23 @@ import ResourceService from "../../services/resourceService";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/viewspt/viewSPTStyle.css";
 
-const ReadingBookContainer = (props) => {
-  // const resourceData =
-  //   (props.location && props.location.state.resourceData) || {};
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Makes a GET request using bookId and resource type as
+ *  params.
+ *  Returned object will be rendered in the components
+ *  accordingly.
+ *
+ ******************************************************/
 
+const ReadingBookContainer = (props) => {
   let [loading, setLoading] = useState(true);
   let [imgLoading, setImgLoading] = useState(true);
   const [resourceData, setResourceData] = useState({});
   const resourceID = props.match.params.id;
-  // console.log(props.match.params);
 
-  // const handleLoading = () => {
-  //   console.log(resourceData.bookCoverLink);
-  //   if (resourceData && resourceData.bookCoverLink) {
-  //     return setLoading(true);
-  //   }
-  // };
   useEffect(() => {
     async function fetchData() {
       try {

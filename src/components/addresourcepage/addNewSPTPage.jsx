@@ -17,8 +17,6 @@ import ToastNotification from "../toastNotification";
  *  A single-page form to be filled up by the user with
  *  relevant SP/Thesis attributes
  *
- * props: none
- *
  ******************************************************/
 
 const classificationOptions = [
@@ -133,6 +131,8 @@ const AddNewSPThesisForm = () => {
    * Summary:
    *  Stores all user inputs to an object containing SP/
    *  Thesis attributes and make a POST request.
+   *  Shows a modal to confirm if request is successful or
+   *  not.
    *  Adds the SP/Thesis in the database if successful.
    *
    ******************************************************/
@@ -141,11 +141,11 @@ const AddNewSPThesisForm = () => {
 
     if (
       authorList.length === 0 ||
-      authorList.length === null ||
+      authorList === null ||
       adviserList.length === 0 ||
-      adviserList.length === null ||
+      adviserList === null ||
       keywords.length === 0 ||
-      keywords.length === null
+      keywords === null
     ) {
       return ToastNotification({
         content: "Please enter all required fields",
