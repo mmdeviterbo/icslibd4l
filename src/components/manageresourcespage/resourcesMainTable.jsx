@@ -197,7 +197,7 @@ const MainResourceTable = () => {
     fetchBooks();
   }, []);
 
-  const DeleteBtn = ({ id, type }) => {
+  const DeleteBtn = ({ id, type, title }) => {
     return (
       <Link
         to={{
@@ -207,6 +207,7 @@ const MainResourceTable = () => {
             resid: id,
             item: "resource",
             type: type,
+            title: title,
           },
         }}
       >
@@ -445,9 +446,17 @@ const MainResourceTable = () => {
                           <EditSPTBtn id={row.sp_thesis_id} />
                         )}
                         {row && row.bookId ? (
-                          <DeleteBtn id={row.bookId} type={"book"} />
+                          <DeleteBtn
+                            id={row.bookId}
+                            type={"book"}
+                            title={row.title}
+                          />
                         ) : (
-                          <DeleteBtn id={row.sp_thesis_id} type={row.type} />
+                          <DeleteBtn
+                            id={row.sp_thesis_id}
+                            type={row.type}
+                            title={row.title}
+                          />
                         )}
                       </TableCell>
                     </TableRow>

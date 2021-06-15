@@ -385,6 +385,7 @@ router.get("/search", async (req, res) => {
                 return item.year == yearFilter;
             });
             book_arr = book_arr.filter((item) => {
+                console.log(item)
                 return item.datePublished.getFullYear() == yearFilter;
             });
         }

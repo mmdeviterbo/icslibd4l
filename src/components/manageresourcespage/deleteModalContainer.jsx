@@ -24,8 +24,9 @@ const DeletePopUpCont = ({ user }) => {
   const history = useHistory();
   const location = useLocation();
   const id = location.state.resid;
-  const type = location.state.type;
   const item = location.state.item;
+  const type = location.state.type;
+  const title = location.state.title;
   const toDelete = location.state.user; // Object containing user information to be deleted
   // const userState = user;
   const [message, setMessage] = useState("");
@@ -182,7 +183,7 @@ const DeletePopUpCont = ({ user }) => {
               ) : (
                 <Modal.Body>
                   Are you sure you want to delete{" "}
-                  {item === "resource" ? id : toDelete.fullName}?
+                  {item === "resource" ? title : toDelete.fullName}?
                 </Modal.Body>
               ),
             ]
