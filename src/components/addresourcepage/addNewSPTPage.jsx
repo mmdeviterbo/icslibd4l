@@ -132,13 +132,21 @@ const AddNewSPThesisForm = () => {
    *
    * Summary:
    *  Stores all user inputs to an object containing SP/
-   *  Thesis attributes and make a POST request
+   *  Thesis attributes and make a POST request.
+   *  Adds the SP/Thesis in the database if successful.
    *
    ******************************************************/
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (authorList.length === 0) {
+    if (
+      authorList.length === 0 ||
+      authorList.length === null ||
+      adviserList.length === 0 ||
+      adviserList.length === null ||
+      keywords.length === 0 ||
+      keywords.length === null
+    ) {
       return ToastNotification({
         content: "Please enter all required fields",
       });
@@ -159,7 +167,6 @@ const AddNewSPThesisForm = () => {
         keywords,
       };
 
-      console.log(userInput);
       await ResourceServices.addSpThesis(userInput);
 
       setSuccess("success");
@@ -379,11 +386,11 @@ const AddNewSPThesisForm = () => {
                 onChange={handleAdviserChange}
                 isMulti
                 styles={{
-                  control: (base, state) => ({
+                  control: (base) => ({
                     ...base,
                     "&:hover": { borderColor: "#778899" }, // border style on hover
-                    border: "2px solid #afbcc9", // default border color
-                    boxShadow: "none", // no box-shadow
+                    border: "2px solid #afbcc9",
+                    boxShadow: "none",
                   }),
                 }}
               ></Select>
@@ -398,12 +405,6 @@ const AddNewSPThesisForm = () => {
                 onChange={(event) => {
                   setAbstract(event.target.value);
                 }}
-                // styles={{
-                //   maxHeight: "75px",
-                //   minHeight: "38px",
-                //   resize: "none",
-                //   height: "unset",
-                // }}
               />
             </div>
           </div>{" "}
@@ -467,19 +468,11 @@ const AddNewSPThesisForm = () => {
                 id="keywords-field"
                 onChange={(chips) => handleChips(chips)}
                 color="primary"
-                // style={{ border: "0.15rem solid #afbcc9", padding: "0.5rem" }}
                 style={{
-                  //   "&:hover, &:focus": { borderBottom: "2px solid #778899" }, // border style on hover
                   border: "2px solid #afbcc9",
                   padding: "0.5rem",
                   paddingBottom: "0rem",
                   borderRadius: "0.3rem",
-                  "&:before": {
-                    borderColor: "red",
-                  },
-                  "&:after": {
-                    borderColor: "green",
-                  },
                 }}
               />
             </div>
