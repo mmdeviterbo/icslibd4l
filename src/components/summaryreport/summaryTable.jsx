@@ -163,9 +163,11 @@ function SummaryTable({ resourceFilter }) {
                                     fontWeight: "bold",
                                     fontSize: "1.4rem",
                                     zIndex: "0",
+                                    backgroundColor: "#0067a1",
+                                    color:"white"
                                 }}
                             >
-                                <span>{book.label}</span>
+                                <p>{book.label}</p>
                             </TableCell>
                         ))}
                     </TableRow>

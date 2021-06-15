@@ -318,19 +318,6 @@ const titleStyle = {
     marginRight: "0.5%",
 };
 
-const logoContainer = {
-    border:"1px solid black",
-    overflow:"hidden",
-    height: "100%",
-    margin:0,
-    width:"auto",
-    marginRight: "1%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    dropShadow: "2px 10px",
-};
-
 const logoStyle = {
     height: "90%",
 };

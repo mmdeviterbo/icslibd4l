@@ -56,11 +56,13 @@ export default function ActivityTable() {
         <TableCell
             key={index}
             style={{
+                backgroundColor: "#0067a1",
                 align: "left",
                 fontWeight: "bold",
                 fontSize: "1.4rem",
+                color:"white",
             }}>
-            <span>{headerTxt}</span>
+            <p>{headerTxt}</p>
         </TableCell>
     ));
 
