@@ -1,5 +1,6 @@
 /*  Stylings for summaryReportPage.jsx */
 .summary-report-container {
+    border:10px solid transparent;
     background-color: #f4f4f4;
 }
 
@@ -9,8 +10,6 @@
 
 .summary-header-container {
     background-color: #f4f4f4;
-
-    /* background-color: white; */
     width: 100%;
     height: rem;
     display: flex;

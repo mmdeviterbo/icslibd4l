@@ -6,7 +6,6 @@ import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
 import StatusModal from "../modal/operationStatusModal";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 //  TODO: add documentation
 const DeletePopUpCont = ({ user }) => {

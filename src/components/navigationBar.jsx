@@ -110,9 +110,7 @@ export default function NavigationBar({
             <ul className="navbar-elements">
                 <Link className="left-half" to="/home">
                     <p style={titleStyle}>Analytica</p>
-                    <div style={logoContainer}>
                         <img src={logo} alt="#" style={logoStyle} />
-                    </div>
                 </Link>
                 <div className="right-half">
                     <Link
@@ -321,7 +319,11 @@ const titleStyle = {
 };
 
 const logoContainer = {
+    border:"1px solid black",
+    overflow:"hidden",
     height: "100%",
+    margin:0,
+    width:"auto",
     marginRight: "1%",
     display: "flex",
     alignItems: "center",

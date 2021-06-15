@@ -70,8 +70,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                 fontWeight: "bold",
                 fontSize: "1.4rem",
                 zIndex: "0",
-            }}
-        >
+            }}>
             <span>{header_text}</span>
         </TableCell>
     ));
@@ -228,8 +227,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     style={{
                         fontSize: "16px",
                         width: "15%",
-                    }}
-                >
+                    }}>
                     <span>{entry.googleId}</span>
                 </TableCell>
                 <TableCell
@@ -238,8 +236,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                         width: "20%",
                         align: "left",
                         color: "black",
-                    }}
-                >
+                    }}>
                     <span>{entry.fullName}</span>
                 </TableCell>
                 <TableCell
@@ -248,8 +245,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                         width: "20%",
                         align: "left",
                         color: "black",
-                    }}
-                >
+                    }}>
                     <span>{entry.nickname}</span>
                 </TableCell>
                 <TableCell style={{ fontSize: "16px", width: "20%" }}>
@@ -260,8 +256,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                         fontSize: "16px",
                         width: "15%",
                         textAlign: "left",
-                    }}
-                >
+                    }}>
                     {entry.isEditable ? (
                         <EditClassification entry={entry} index={index} />
                     ) : (
@@ -274,8 +269,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                             width: " 10%",
                             textAlign: "center",
                             fontSize: "1.5rem",
-                        }}
-                    >
+                        }}>
                         {entry.isEditable ? (
                             <>
                                 <Link
@@ -291,8 +285,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                                                 fullName: entry.fullName,
                                             },
                                         },
-                                    }}
-                                >
+                                    }}>
                                     <i
                                         className={"table-icons fa fa-floppy-o"}
                                         onContextMenu={(e) => {
@@ -302,14 +295,15 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                                         style={{
                                             margin: "10px",
                                             color: "gray",
-                                        }}
-                                    ></i>
+                                        }}></i>
                                 </Link>
                                 <i
                                     className="table-icons fa fa-times"
                                     onClick={(e) => discardChange(index)}
-                                    style={{ margin: "10px", color: "red" }}
-                                ></i>
+                                    style={{
+                                        margin: "10px",
+                                        color: "red",
+                                    }}></i>
                             </>
                         ) : (
                             <>
@@ -321,8 +315,10 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                                     onClick={(e) => {
                                         toggleEdit(index);
                                     }}
-                                    style={{ margin: "10px", color: "gray" }}
-                                ></i>
+                                    style={{
+                                        margin: "10px",
+                                        color: "gray",
+                                    }}></i>
                                 <Link
                                     to={{
                                         pathname: "/manage-users/delete-user",
@@ -338,8 +334,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                                                 userType: entry.userType,
                                             },
                                         },
-                                    }}
-                                >
+                                    }}>
                                     <i
                                         className="table-icons fa fa-trash-o"
                                         onContextMenu={(e) => {
@@ -348,8 +343,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                                         style={{
                                             margin: "10px",
                                             color: "red",
-                                        }}
-                                    ></i>
+                                        }}></i>
                                 </Link>
                             </>
                         )}
@@ -373,8 +367,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     userList.length === 0 ? (
                         <TableBody>
                             <TableRow
-                                style={{ width: "100%", textAlign: "center" }}
-                            >
+                                style={{ width: "100%", textAlign: "center" }}>
                                 <TableCell colSpan="5">
                                     <div
                                         style={{
@@ -440,8 +433,9 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                             )}
                             {emptyRows > 0 && (
                                 <TableRow
-                                    style={{ height: 40 * emptyRows }}
-                                ></TableRow>
+                                    style={{
+                                        height: 40 * emptyRows,
+                                    }}></TableRow>
                             )}
                         </TableBody>
                     )}

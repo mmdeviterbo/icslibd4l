@@ -31,17 +31,15 @@ export default function SummaryReportPage({ user }) {
     useEffect(() => {
         const generateSummary = async (type) => {
             try {
-                await ResourceService.generateReport(type).then((response) => {
-                    console.log(response);
+                    await ResourceService.generateReport(type).then((response) => {
                 });
             } catch (error) {
-                console.log(error);
             }
         };
         generateSummary("all");
         generateSummary("books");
         generateSummary("spThesis");
-    });
+    },[]);
 
     const accessPrivilege = () => {
         setTimeout(() => {
