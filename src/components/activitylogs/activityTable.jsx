@@ -8,6 +8,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import dateFormat from "dateformat";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import PersonService from "../../services/personService";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { jwtPrivateKey } from "./../../config.json";
@@ -39,6 +40,7 @@ const tableHeader = [
  ******************************************************/
 export default function ActivityTable() {
     const [activityLogs, setActivityLogs] = useState([]);
+    const [isLoading, setLoading] = useState(0);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -80,6 +82,7 @@ export default function ActivityTable() {
         try {
             const { data } = await PersonService.readUserLogs();
             setActivityLogs(data);
+            setLoading(1);
         } catch (err) {}
     };
 
@@ -187,18 +190,64 @@ export default function ActivityTable() {
                     <TableHead>
                         <TableRow>{header}</TableRow>
                     </TableHead>
-                    <TableBody>
-                        {entries.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                        )}
-
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
+                    {isLoading === 0 ? (
+                        <TableBody>
+                            <TableRow
+                                style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    height: 54 * 10,
+                                }}>
+                                <TableCell colSpan="6" rowSpan="10">
+                                    <div
+                                        style={{
+                                            // minHeight: "100%",
+                                            display: "grid",
+                                            placeItems: "center",
+                                        }}>
+                                        <PropagateLoader
+                                            color={"#0067a1"}
+                                            speedMultiplier={2}
+                                            loading={true}
+                                            size={20}
+                                        />
+                                    </div>
+                                </TableCell>
                             </TableRow>
-                        )}
-                    </TableBody>
+                        </TableBody>
+                    ) : activityLogs.length === 0 ? (
+                        <TableBody>
+                            <TableRow
+                                style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    height: 54 * 10,
+                                }}>
+                                <TableCell colSpan="6">
+                                    <div
+                                        style={{
+                                            padding: "5rem",
+                                            textAlign: "center",
+                                        }}>
+                                        <h1>User Logs database is empty.</h1>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    ) : (
+                        <TableBody>
+                            {entries.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                            )}
+
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 53 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    )}
                 </Table>
 
                 <TablePagination
@@ -212,9 +261,13 @@ export default function ActivityTable() {
                 />
             </TableContainer>
             <br />
-            <div className="clear-logs-button-container">
-                <ClearLogs />
-            </div>
+            {activityLogs.length === 0 ? (
+                <></>
+            ) : (
+                <div className="clear-logs-button-container">
+                    <ClearLogs />
+                </div>
+            )}
         </>
     );
 }
