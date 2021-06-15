@@ -56,6 +56,7 @@ const DeletePopUpCont = ({ user }) => {
                 setPathAfter("/manage-resources");
             } else if (item === "logs") {
                 await PersonService.clearUserLogs();
+                setItemName("Logs");
                 setMessage("success");
                 handleClose();
                 setPathAfter("/view-activitylogs");
