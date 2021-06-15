@@ -140,12 +140,12 @@ const AddNewSPThesisForm = () => {
     event.preventDefault();
 
     if (
-      authorList.length === 0 ||
       authorList === null ||
-      adviserList.length === 0 ||
       adviserList === null ||
-      keywords.length === 0 ||
-      keywords === null
+      keywords === null ||
+      authorList.length === 0 ||
+      adviserList.length === 0 ||
+      keywords.length === 0
     ) {
       return ToastNotification({
         content: "Please enter all required fields",
