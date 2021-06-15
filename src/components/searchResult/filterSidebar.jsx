@@ -6,10 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
-// import { coursesData } from "./coursesData";
 import { topicData } from "./topicData";
-// import TextField from "@material-ui/core/TextField";
-// import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Multiselect } from "multiselect-react-dropdown";
 import ClearIcon from "@material-ui/icons/Clear";
 import { IconButton } from "@material-ui/core";
@@ -48,13 +45,6 @@ export default function FilterSidebar({
     const handleChange = (event) => {
         setResourceType(event.target.value);
     };
-
-    // const handleCourseChange = (newVal) => {
-    //     if (newVal !== undefined || newVal !== null) {
-    //         setCourse(newVal);
-    //         // setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
-    //     }
-    // };
 
     const getSelected = (data) => {
         setKeywords((keywords) => [...keywords, data[data.length - 1].label]);
@@ -216,7 +206,6 @@ const sidebarLink = {
     color: "black",
     justifyContent: "space-between",
     alignItems: "center",
-    // padding: "0 1vw 0 0",
     marginTop: "0.5vw",
     listStyle: "none",
     height: "3vw",
@@ -251,7 +240,6 @@ const multipleSearchStyle = {
     inputField: {
         padding: "0",
         marginBottom: "0"
-        // margin: "1px",
     },
     chips: {
         whiteSpace: "normal",
