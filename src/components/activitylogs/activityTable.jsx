@@ -229,7 +229,7 @@ export default function ActivityTable() {
                                             padding: "5rem",
                                             textAlign: "center",
                                         }}>
-                                        <h1>User Logs database is empty.</h1>
+                                        <h1>User activity logs is empty</h1>
                                     </div>
                                 </TableCell>
                             </TableRow>
