@@ -9,18 +9,24 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/searchResultStyle/advancedSearch.css";
 
 export default function AdvancedSearch() {
+    const parseSymbols=(str)=>{
+        str = str.replace(/%20/g, " ");
+        str = str.replace(/%22/g, "\"");
+        return str.replace(/%27/g, "'");
+    }
+
     var queryStore = `${useLocation().search}`.substring(
         `${useLocation().search}`.indexOf("search=") + 7
     );
-    const [query, setQuery] = useState(queryStore);
+
+    const [query, setQuery] = useState(parseSymbols(queryStore));
     const [isValidQuery, setIsValidQuery] = useState(true);
     const [objFilter, setObjFilter] = useState({});
     const [urlRequest, setUrlRequest] = useState(
         `${useLocation().pathname}${useLocation().search}`
     );
-
     const history = useHistory();
-    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=\w*$/g;
+    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=[\w\s:'"]*$/g;
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
@@ -57,7 +63,7 @@ export default function AdvancedSearch() {
     let urlFilter = "";
     let urlQuery = "";
 
-    url = url.replace("http://localhost:3000/search", "");
+    url = parseSymbols(url.replace("http://localhost:3000/search", ""));
 
     function returnCloserResourceType() {
         if (url.includes("sp")) return "sp";
@@ -104,7 +110,7 @@ export default function AdvancedSearch() {
             if (url.length > 0) {
                 url = url.slice(1, url.length);
                 urlQuery = decodeURIComponent(
-                    url.split("&")[1].replace("search=", "")
+                    parseSymbols(url.split("&")[1].replace("search=", ""))
                 );
                 urlFilter = url.split("&")[0].replace("type=", "");
             }
@@ -129,7 +135,7 @@ export default function AdvancedSearch() {
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchData();
-    }, [objFilter]);
+    },[objFilter]);
 
     const handleForm = (e) => {
         e.preventDefault();
@@ -198,9 +204,9 @@ export default function AdvancedSearch() {
                         style={inputSearch}
                         type="text"
                         className="form-control removeOutline"
-                        defaultValue={urlQuery}
+                        defaultValue={query || urlQuery}
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Search for Books, Theses, and Special Problems"
+                        placeholder={query || "Search for Books, Theses, and Special Problems"}
                     />
                 </div>
             </div>

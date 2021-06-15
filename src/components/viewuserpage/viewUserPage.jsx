@@ -4,9 +4,19 @@ import { jwtPrivateKey } from "./../../config.json";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PersonService from "../../services/personService";
 import LoginModal from "../modal/loginModal";
-
 import "../../styles/profileContainerStyle.css";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * A component that renders a container for the profileContainer
+ * The component shows a loading animation while waiting for data to be fetched
+ *
+ * props:
+ * - user - object containing the information of the logged in user.
+ *
+ ******************************************************/
 export default function ViewUserPage({ user }) {
     const [isLogin, setIsLogin] = useState(false);
 
