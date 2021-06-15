@@ -5,15 +5,26 @@ import { jwtEncryptionKey } from "../../config.json";
 import * as jwtEncrypt from "jwt-token-encrypt";
 import PersonService from "../../services/personService";
 import ToastNotification from "../toastNotification";
-
 import "../../styles/profileContainerStyle.css";
-//<summary>
-// gets the jwt token from the localStorage and decrypts it to get the infor of
-// the logged in user
-//</summary>
-//<output>
-// an object containing the information of the logged in user
-//</output>
+
+/****************************************************
+ * Type: Function
+ *
+ * Summary:
+ * a function gets the jwt token from the localStorage and decrypts it to get the information
+ * of the logged in user
+ *
+ * Return value:
+ * userInfo = {
+ *      userInfo.googleId,
+ *      userInfo.nickname,
+ *      userInfo.fullName,
+ *      userInfo.userType,
+ *      userInfo.email
+ * }
+ * - object that contains the information of the logged in user
+ *
+ ******************************************************/
 const getCurrentToken = () => {
     try {
         const jwt = localStorage.getItem("icslib-privateKey");
@@ -27,13 +38,16 @@ const getCurrentToken = () => {
     } catch (err) {}
 };
 
-//<summary>
-// create a container that contains user information.
-// user information includes their nickname, full name, classification, and email
-//</summary>
-//<output>
-// A component that contains the information regarding the current user
-//</output>
+/******************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * A component that displays the information of the logged in user.
+ * The user can:
+ *      - edit their display name which will be reflected to the states and the database
+ *      - remove their account from the database
+ *
+ ******************************************************/
 export default function ProfileContainer() {
     const [user, setUser] = useState(getCurrentToken()); // lazy initializer to immediately get the user state
     const [type, setType] = useState();
@@ -77,10 +91,12 @@ export default function ProfileContainer() {
     const editNickname = (nicknameToken, userInfo) => {
         if (click === "false") {
             setIcon("true", false, isEditing);
+            setCurrNick(nick);
         } else if (click === "true") {
             setIcon("false", true, isEditing);
             updateNick(nicknameToken);
             updateToken(userInfo);
+            setCurrNick(nick);
         }
     };
 
@@ -91,10 +107,9 @@ export default function ProfileContainer() {
     };
 
     // function that renders the toast notification for improper nickname length
-    const renderToast = () => {
+    const renderToast = (message) => {
         return ToastNotification({
-            content:
-                "Nickname length must be greater than two (2) and less than ten (10) ",
+            content: message,
         });
     };
 
@@ -149,10 +164,7 @@ export default function ProfileContainer() {
         });
     }, [nick]);
 
-    useEffect(() => {
-        setCurrNick(nick);
-    }, [click]);
-
+    // layout code
     return (
         // column for the title bar "Profile Display"
         <div className="profile-container">
@@ -185,8 +197,9 @@ export default function ProfileContainer() {
                                                 clearChanges();
                                             } else {
                                                 if (
-                                                    nick.length > 2 &&
-                                                    nick.length < 10
+                                                    nick === user.fullName ||
+                                                    (nick.length > 2 &&
+                                                        nick.length < 10)
                                                 ) {
                                                     editNickname(
                                                         {
@@ -198,7 +211,21 @@ export default function ProfileContainer() {
                                                         user
                                                     );
                                                 } else {
-                                                    renderToast();
+                                                    if (
+                                                        nick !== user.fullName
+                                                    ) {
+                                                        if (nick.length < 3) {
+                                                            renderToast(
+                                                                "Nickname length must be greater than two (2). "
+                                                            );
+                                                        } else if (
+                                                            nick.length > 9
+                                                        ) {
+                                                            renderToast(
+                                                                "Nickname length must be less than ten (10). "
+                                                            );
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }}
@@ -252,7 +279,7 @@ export default function ProfileContainer() {
                             disabled={true}
                             type="text"
                             className="text-field"
-                            defaultValue={user ? user.fullName : ""}
+                            defaultValue={user && user.fullName}
                         />
                         <div className="button-container"></div>
                     </div>
@@ -282,7 +309,7 @@ export default function ProfileContainer() {
                             disabled={true}
                             type="text"
                             className="text-field"
-                            defaultValue={user ? user.email : ""}
+                            defaultValue={user && user.email}
                         />
                         <div className="button-container"></div>
                     </div>
@@ -291,12 +318,12 @@ export default function ProfileContainer() {
             <div
                 className="divider"
                 style={{
-                    borderLeft: "1px solid gray",
+                    borderLeft: "2px solid #c5c5c5",
                     height: "100%",
-                    left: "50%",
+                    // left: "50%",
                 }}></div>
-            {/* part for account removal */}
 
+            {/* part for account removal */}
             <div className="remove-account-container">
                 <span>Account Removal</span>
                 <p>
@@ -308,7 +335,7 @@ export default function ProfileContainer() {
                     to your account will be set to default.
                 </p>
                 <div>
-                    <RemoveAccount id={user ? user.googleId : ""} user={user} />
+                    <RemoveAccount id={user && user.googleId} user={user} />
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ import Homepage from "./components/homepage/homepage";
 import NavigationBar from "./components/navigationBar";
 import Notfound from "./components/notfound";
 import Unauthorized from "./components/unauthorized";
-import About from "./components/about/about";
+import About from "./components/about/aboutAlternative";
 
 import AddSPThesisPage from "./components/addresourcepage/addSPTPageContainer";
 import ReadingSPTContainer from "./components/viewresources/readingSPTContainer";

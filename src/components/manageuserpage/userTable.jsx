@@ -11,6 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import PersonService from "../../services/personService";
 import Select from "react-select";
+import { makeStyles } from "@material-ui/core/styles";
 import { jwtPrivateKey } from "./../../config.json";
 
 import "../../styles/manageUserStyle.css";
@@ -71,6 +72,9 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
         fontWeight: "bold",
         fontSize: "1.4rem",
         zIndex: "0",
+        backgroundColor: "#0067a1",
+        color: "white",
+        padding: "1.5rem",
       }}
     >
       <span>{header_text}</span>
@@ -305,7 +309,10 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                 <i
                   className="table-icons fa fa-times"
                   onClick={(e) => discardChange(index)}
-                  style={{ margin: "10px", color: "red" }}
+                  style={{
+                    margin: "10px",
+                    color: "red",
+                  }}
                 ></i>
               </>
             ) : (
@@ -318,7 +325,10 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                   onClick={(e) => {
                     toggleEdit(index);
                   }}
-                  style={{ margin: "10px", color: "gray" }}
+                  style={{
+                    margin: "10px",
+                    color: "gray",
+                  }}
                 ></i>
                 <Link
                   to={{
@@ -360,7 +370,14 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
 
   return (
     <>
-      <TableContainer component={Paper} className="main-table-container">
+      <TableContainer
+        component={Paper}
+        className="main-table-container"
+        style={{
+          borderRadius: "10px",
+          boxShadow: "4px 4px 20px #cfcfcf",
+        }}
+      >
         <Table stickyHeader>
           <TableHead>
             <TableRow>{header}</TableRow>
@@ -390,7 +407,11 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                 page * rowsPerPage + rowsPerPage
               )}
               {emptyRows > 0 && (
-                <TableRow style={{ height: 40 * emptyRows }}></TableRow>
+                <TableRow
+                  style={{
+                    height: 40 * emptyRows,
+                  }}
+                ></TableRow>
               )}
             </TableBody>
           )}
