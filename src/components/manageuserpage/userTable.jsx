@@ -7,15 +7,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
-// import { makeStyles } from "@material-ui/core/styles";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import PersonService from "../../services/personService";
 import Select from "react-select";
 import { jwtPrivateKey } from "./../../config.json";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 import "../../styles/manageUserStyle.css";
-// import { isElementAccessExpression } from "typescript";
-// import { MongoServerSelectionError } from "mongodb";
 
 const tableHeader = [
     "User ID",
@@ -36,6 +34,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
     const [isEditing, setIsEditing] = useState(false);
     const [newClassification, setNewClassification] = useState(0);
     // const [selectedUser, setSelectedUser] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     const location = useLocation();
     const history = useHistory();
@@ -90,6 +89,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                 } else {
                     setUserList(Array.from(response.data));
                 }
+                setIsLoading(false);
             });
         } catch (err) {}
     }, [selectedFilter]);
@@ -117,6 +117,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
 
     // executes if the location is changed. (Opening modals)
     useEffect(() => {
+        setIsLoading(true);
         try {
             const jwt = localStorage.getItem(jwtPrivateKey);
             var userInfo = PersonService.decryptToken(jwt);
@@ -367,7 +368,8 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     <TableHead>
                         <TableRow>{header}</TableRow>
                     </TableHead>
-                    {(searchInput || selectedFilter) &&
+
+                    {(searchInput || selectedFilter !== -1) &&
                     userList.length === 0 ? (
                         <TableBody>
                             <TableRow
@@ -380,12 +382,52 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                                             textAlign: "center",
                                         }}
                                     >
-                                        <h1>
-                                            Your search/filter returned no
-                                            results. Please check your spelling
-                                            and try again, or remove applied
-                                            filter.
-                                        </h1>
+                                        {isLoading ? (
+                                            <PropagateLoader
+                                                color={"#0067a1"}
+                                                speedMultiplier={2}
+                                                loading={true}
+                                                size={20}
+                                            />
+                                        ) : (
+                                            <h1>
+                                                Your search/filter returned no
+                                                results. Please check your
+                                                spelling and try again, or
+                                                remove applied filter.
+                                            </h1>
+                                        )}
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    ) : userList.length === 0 ? (
+                        <TableBody>
+                            <TableRow
+                                style={{ width: "100%", textAlign: "center" }}
+                            >
+                                <TableCell colSpan="5">
+                                    <div
+                                        style={{
+                                            padding: "5rem",
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        {isLoading ? (
+                                            <PropagateLoader
+                                                color={"#0067a1"}
+                                                speedMultiplier={2}
+                                                loading={true}
+                                                size={20}
+                                            />
+                                        ) : (
+                                            <h1>
+                                                Failed to fetch data from
+                                                database. Please check if the
+                                                database is running or please
+                                                try again later.
+                                            </h1>
+                                        )}
                                     </div>
                                 </TableCell>
                             </TableRow>
