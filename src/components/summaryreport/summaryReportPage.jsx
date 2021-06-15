@@ -1,42 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import Select from "react-select";
-// import ResourceService from "../../services/resourceService";
+import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
-import DocumentViewer from "./documentViewer";
+// import DocumentViewer from "./documentViewer";
+import SummaryTable from "./summaryTable";
 import { jwtPrivateKey } from "../../config.json";
 import PropagateLoader from "react-spinners/PropagateLoader";
 
-import Merged from "../../download/Merged.pdf";
-import Books from "../../download/Books.pdf";
-import SpThesis from "../../download/spThesis.pdf";
+// import Merged from "../../download/Merged.pdf";
+// import Books from "../../download/Books.pdf";
+// import SpThesis from "../../download/spThesis.pdf";
 
-import "./summaryReportStyle.css";
+import "../../styles/summaryReport/summaryReportPage.css";
+
+// const Merged = "/pdf/Merged.pdf";
+// const Books = "/pdf/Books.pdf";
+// const SpThesis = "/pdf/spThesis.pdf";
 
 export default function SummaryReportPage({ user }) {
     const FilterOptions = [
-        { label: "All", value: Merged },
-        { label: "Books", value: Books },
-        { label: "SP/Thesis", value: SpThesis },
+        { label: "Books", value: "books" },
+        { label: "SP/Thesis", value: "spthesis" },
     ];
 
     const [selection, setSelection] = useState(FilterOptions[0].label);
-    const [pdfFile, setPdfFile] = useState(Merged);
+    // const [pdfFile, setPdfFile] = useState(Merged);
     const history = useHistory();
 
-    // UseEffect to get the summary report from the backend.
-    // useEffect(() => {
-    //     generateSummary();
-    // }, []);
-
-    // const generateSummary = async () => {
-    //     try {
-    //         await ResourceService.generateReport("all");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     return "";
-    // };
+    useEffect(() => {
+        const generateSummary = async (type) => {
+            try {
+                    await ResourceService.generateReport(type).then((response) => {
+                });
+            } catch (error) {
+            }
+        };
+        generateSummary("all");
+        generateSummary("books");
+        generateSummary("spThesis");
+    },[]);
 
     const accessPrivilege = () => {
         setTimeout(() => {
@@ -54,7 +57,7 @@ export default function SummaryReportPage({ user }) {
 
     const handleChange = (e) => {
         setSelection(e.label);
-        setPdfFile(e.value);
+        // setPdfFile(e.value);
     };
 
     const ResourceTypeSelect = () => {
@@ -71,7 +74,7 @@ export default function SummaryReportPage({ user }) {
                         onChange={handleChange}
                     />
                 </div>
-                <h1 style={{"whiteSpace": "nowrap"}}>Summary Report</h1>
+                <h1 style={{ whiteSpace: "nowrap" }}>Summary Report</h1>
             </div>
         );
     };
@@ -82,7 +85,8 @@ export default function SummaryReportPage({ user }) {
                 <div className="summary-report-container">
                     {/* {generateSummary()} */}
                     <ResourceTypeSelect className="summary-header" />
-                    <DocumentViewer pdfFile={pdfFile} />
+                    <SummaryTable resourceFilter={selection} />
+                    {/* <DocumentViewer pdfFile={pdfFile} /> */}
                 </div>
             ) : (
                 <div
