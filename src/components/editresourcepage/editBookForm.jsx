@@ -160,7 +160,7 @@ export default function EditBookFormContainer(props) {
                 title,
                 datePublished,
                 dateAcquired,
-                authors: authorList,
+                author,
                 subjects,
                 physicalDesc,
                 publisher,
@@ -201,13 +201,15 @@ export default function EditBookFormContainer(props) {
     };
 
     const renderAuthorFields = () => {
-        setAuthorList((currentAuthors) => [
-            ...currentAuthors,
+        setAuthor((author) => [
+            ...author,
             {
                 // author needs to generate ID para di madelete lahat ng fields in one button click
-                authorid: nanoid(5),
-                fname: "",
-                lname: "",
+                authorid:nanoid(5),
+                bookId: bookId,
+                author_fname: "",
+                author_lname: "",
+                // author_name:"chenes zathurna"
             },
         ]);
     };
@@ -255,6 +257,7 @@ export default function EditBookFormContainer(props) {
                                         }}
                                     />
                                 </div>
+
                                 {/* !!! TO-DO !!! Fix date magic in defaultValues */}
                                 <div className="dates-group">
                                     {/* Date Published */}
@@ -318,7 +321,7 @@ export default function EditBookFormContainer(props) {
                                         Add Author
                                     </button>
 
-                                    {authorList.map((p, index) => {
+                                    {author.map( (p,index) => {
                                         return (
                                             <div
                                                 className="authorfields"
@@ -335,34 +338,21 @@ export default function EditBookFormContainer(props) {
                                                             id="resAuthorFN"
                                                             // name="fname"
                                                             required
-                                                            value={p.fname}
+                                                            value={p.author_fname}
                                                             // defaultValue = {author[0].author_fname}  //cant access?????
                                                             onChange={(e) => {
-                                                                const fname =
-                                                                    e.target
-                                                                        .value;
-                                                                setAuthorList(
-                                                                    (
-                                                                        currentAuthors
-                                                                    ) =>
-                                                                        produce(
-                                                                            currentAuthors,
-                                                                            (
-                                                                                v
-                                                                            ) => {
-                                                                                v[
-                                                                                    index
-                                                                                ].fname =
-                                                                                    fname;
-                                                                            }
+                                                                const author_fname =e.target.value;
+                                                                setAuthor(
+                                                                    (author) =>
+                                                                        produce(author,
+                                                                            (v) => {v[index].author_fname=author_fname;}
                                                                         )
-                                                                );
+                                                                    );
                                                                 // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
                                                             }}
                                                         />
                                                     </div>
 
-                                                    {/* AUTHOR LAST NAME FIELD */}
                                                     <div className="author-name">
                                                         <label htmlFor="resAuthorLN">
                                                             Last Name:
@@ -372,44 +362,39 @@ export default function EditBookFormContainer(props) {
                                                             id="resAuthorLN"
                                                             required
                                                             // name="lname"
-                                                            value={p.lname}
+                                                            value={p.author_lname}
                                                             // defaultValue={author.author_lname}   //cant access?????
                                                             onChange={(e) => {
-                                                                const lname =
-                                                                    e.target
-                                                                        .value;
-                                                                setAuthorList(
-                                                                    (
-                                                                        currentAuthors
-                                                                    ) =>
-                                                                        produce(
-                                                                            currentAuthors,
-                                                                            (
-                                                                                v
-                                                                            ) => {
-                                                                                v[
-                                                                                    index
-                                                                                ].lname =
-                                                                                    lname;
-                                                                            }
+                                                                const author_lname =e.target.value;
+                                                                setAuthor(
+                                                                    (author) =>
+                                                                        produce(author,
+                                                                            (v) => {v[index].author_lname=author_lname;}
                                                                         )
-                                                                );
+                                                                    );
                                                                 // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
                                                             }}
                                                         />
-                                                    </div>
-                                                </div>{" "}
-                                                {/* authornames container end */}
+                                                        
+                                                    </div> {/* last name close */}
+                                                </div>{/* authorname-cont close */}
+
                                                 {/* button deletes author fields */}
                                                 <button
+                                                    type="button"
                                                     id="deleteAuthor"
                                                     onClick={() => {
-                                                        setAuthorList(
-                                                            (currentAuthors) =>
-                                                                currentAuthors.filter(
+                                                        setAuthor(
+                                                            (author) =>
+                                                                author.filter(
                                                                     (x) =>
-                                                                        x.authorid !==
-                                                                        p.authorid
+                                                                        x.authorid ? (
+                                                                            x.authorid !==
+                                                                            p.authorid
+                                                                        ) :(
+                                                                            x.author_name !== p.author_name
+                                                                        )
+                                                                        
                                                                 )
                                                         );
                                                         // function checks if Author-To-Be-Deleted exists.
@@ -423,16 +408,17 @@ export default function EditBookFormContainer(props) {
                                                     </span>
                                                 </button>
                                             </div> //authorfields end
-                                        );
-                                    })}
+                                        )
+                                        }
+                                    )}
+
+                                    
 
                                     {/* for testing only: */}
-                                    {/* <div className = "testdiv">
-                            {JSON.stringify(authorList, null, 2)}
-                        </div> */}
+                                    
                                 </div>{" "}
                                 {/* closing tag for authors group */}
-                            </div>{" "}
+                            </div>
                             {/* left column div close: */}
                             <div className="form-mid-column">
                                 <div className="primaryfields">
@@ -487,7 +473,7 @@ export default function EditBookFormContainer(props) {
                                         isMulti
                                         placeholder={"Courses..."}
                                         options={courseList}
-                                        defaultValue={subjects}
+                                        value={subjects}
                                         onChange={(subjects) =>
                                             handleSubject(subjects)
                                         }></Select>
@@ -528,6 +514,7 @@ export default function EditBookFormContainer(props) {
                         pathAfter={"/manage-resources"}
                     />
                 </div>
+
             ) : (
                 <div
                     style={{

@@ -36,7 +36,7 @@ const BookCoverandInfo = ({
             <h3 className= "info-head">Subject(s):</h3>
             {subjects.map((item, key) => (
               <h3 className="info-value" key={key}>
-                {item.subject}
+                {item.subject}<br/>
               </h3>
             ))}
             

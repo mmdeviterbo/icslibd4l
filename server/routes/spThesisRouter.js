@@ -1860,8 +1860,8 @@ router.put("/update", async (req, res) => {
         console.log(authors);
 
         authors.forEach(async function (updatedEntry) {
-            const author_fname = updatedEntry.fname;
-            const author_lname = updatedEntry.lname;
+            const author_fname = updatedEntry.author_fname;
+            const author_lname = updatedEntry.author_lname;
             const author_name = author_fname.concat(" ", author_lname);
 
             // await console.log("!!!!! GOT HERE !!!!!")

@@ -38,7 +38,7 @@ const InfoSidebar = ({ user, resourceData }) => {
             {resourceData &&
               resourceData.advisers.map((item, key) => (
                 <h3 className="info-value" key={key}>
-                  {item.adviser_name}
+                  {item.adviser_name} <br/>
                 </h3>
               ))}
             
@@ -50,10 +50,9 @@ const InfoSidebar = ({ user, resourceData }) => {
             {resourceData &&
                 resourceData.keywords.map((item, key) => (
                   <h3 className="info-value" key={key}>
-                    {item.sp_thesis_keyword}
+                    {item.sp_thesis_keyword} <br/>
                   </h3>
                 ))}
-           
         </div>
         <hr/>
 

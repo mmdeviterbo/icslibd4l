@@ -108,15 +108,19 @@ export default function EditSPTFormContainer(props) {
     const [abstract, setAbstract] = useState("");
     const [keywords, setKeyword] = useState();
     // multiple authors should be possible
-    const [authors, setAuthor] = useState({
-        fname: "",
-        lname: "",
-    });
+    
     const [advisers, setAdviser] = useState({
         fname: "",
         lname: "",
     });
-    const [authorList, setAuthorList] = useState([]);
+    const [authors, setAuthor] = useState([]);
+    const [authorList, setAuthorList] = useState([
+        {
+            authorid: nanoid(5),
+            author_fname: "",
+            author_lname: "",
+        },
+    ]);
     const [adviserList, setAdviserList] = useState([]);
 
     const [show, setShow] = useState(false);
@@ -182,11 +186,9 @@ export default function EditSPTFormContainer(props) {
                         fname: advisers[0]?.adviser_fname,
                         lname: advisers[0]?.adviser_lname,
                     });
-                    setAuthor({
-                        fname: authors[0]?.author_fname,
-                        lname: authors[0]?.author_lname,
-                    });
+                    setAuthor(authors);
 
+                    console.log(authors)
                     // console.log("fsdfsdfd");
                     // console.log(sourceItem);
 
@@ -227,7 +229,7 @@ export default function EditSPTFormContainer(props) {
                 manuscript,
                 journal,
                 poster,
-                authors: authorList,
+                authors,
                 advisers: adviserList,
                 keywords,
             };
@@ -264,13 +266,13 @@ export default function EditSPTFormContainer(props) {
     };
 
     const renderAuthorFields = () => {
-        setAuthorList((currentAuthors) => [
-            ...currentAuthors,
+        setAuthor((authors) => [
+            ...authors,
             {
                 // author needs to generate ID para di madelete lahat ng fields in one button click
                 authorid: nanoid(5),
-                fname: "",
-                lname: "",
+                author_fname: "",
+                author_lname: "",
             },
         ]);
     };
@@ -346,125 +348,103 @@ export default function EditSPTFormContainer(props) {
                                         Add Author
                                     </button>
 
-                                    {authorList.map((p, index) => {
-                                        return (
-                                            <div
-                                                className="authorfields"
-                                                key={p.authorid}>
-                                                {/* AUTHOR FIRST NAME FIELD */}
-                                                <div className="authorname-cont">
-                                                    <div className="author-name">
-                                                        <label htmlFor="resAuthorFN">
-                                                            First Name:
-                                                        </label>
-
-                                                        <input
-                                                            type="text"
-                                                            id="resAuthorFN"
-                                                            // name="fname"
-                                                            required
-                                                            value={p.fname}
-                                                            defaultValue={
-                                                                authors.fname
-                                                            }
-                                                            onChange={(e) => {
-                                                                const fname =
-                                                                    e.target
-                                                                        .value;
-                                                                setAuthorList(
-                                                                    (
-                                                                        currentAuthors
-                                                                    ) =>
-                                                                        produce(
-                                                                            currentAuthors,
-                                                                            (
-                                                                                v
-                                                                            ) => {
-                                                                                v[
-                                                                                    index
-                                                                                ].fname =
-                                                                                    fname;
-                                                                            }
-                                                                        )
-                                                                );
-                                                                // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                                                            }}
-                                                        />
-                                                    </div>
-
-                                                    {/* AUTHOR LAST NAME FIELD */}
-                                                    <div className="author-name">
-                                                        <label htmlFor="resAuthorLN">
-                                                            Last Name:
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            id="resAuthorLN"
-                                                            required
-                                                            // name="lname"
-                                                            defaultValue={
-                                                                authors.lname
-                                                            }
-                                                            value={p.lname}
-                                                            onChange={(e) => {
-                                                                const lname =
-                                                                    e.target
-                                                                        .value;
-                                                                setAuthorList(
-                                                                    (
-                                                                        currentAuthors
-                                                                    ) =>
-                                                                        produce(
-                                                                            currentAuthors,
-                                                                            (
-                                                                                v
-                                                                            ) => {
-                                                                                v[
-                                                                                    index
-                                                                                ].lname =
-                                                                                    lname;
-                                                                            }
-                                                                        )
-                                                                );
-                                                                // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </div>{" "}
-                                                {/* closing div for authorname-cont */}
-                                                {/* button deletes author fields */}
-                                                <div>
-                                                    <button
-                                                        id="deleteAuthor"
-                                                        onClick={() => {
-                                                            setAuthorList(
-                                                                (
-                                                                    currentAuthors
-                                                                ) =>
-                                                                    currentAuthors.filter(
-                                                                        (x) =>
-                                                                            x.authorid !==
-                                                                            p.authorid
-                                                                    )
-                                                            );
-                                                            // function checks if Author-To-Be-Deleted exists.
-                                                            // function deletes ALL instances of same author to be deleted
-                                                            // we generate a random id so no 2 author fields are the same
-                                                            // hence no faulty deleting
-                                                            // wag nalang istore si author id sa db
-                                                        }}>
-                                                        <span className="res-btn-txt">
-                                                            Delete Author
-                                                        </span>
-                                                    </button>
-                                                </div>
-                                            </div> //closing for authorfields
-                                        );
-                                    })}
                                     {/* for testing only: */}
                                     {/* <div className = "testdiv">
-                                                    {JSON.stringify(authorList, null, 2)}
-                                                </div> */}
+                                        {JSON.stringify(authors, null, 2)}
+                                    </div> */}
+
+                                    {authors.map( (p, index)=> {
+                                        return(
+                                        <div
+                                            className="authorfields"
+                                            key={p.authorid}>
+                                            <div className="authorname-cont">
+                                                {/* AUTHOR FIRST NAME FIELD */}
+                                                <div className="author-name">
+                                                    <label htmlFor="resAuthorFN">
+                                                        First Name:
+                                                    </label>
+
+                                                    <input
+                                                        type="text"
+                                                        id="resAuthorFN"
+                                                        // name="fname"
+                                                        required
+                                                        value={p.author_fname}
+                                                        // defaultValue = {author[0].author_fname}  //cant access?????
+                                                        onChange={(e) => {
+                                                            const author_fname =e.target.value;
+                                                            setAuthor(
+                                                                (authors) =>
+                                                                    produce(authors,
+                                                                        (v) => {v[index].author_fname=author_fname;}
+                                                                    )
+                                                                );
+                                                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="author-name">
+                                                    <label htmlFor="resAuthorLN">
+                                                        Last Name:
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        id="resAuthorLN"
+                                                        required
+                                                        // name="lname"
+                                                        value={p.author_lname}
+                                                        // defaultValue={author.author_lname}   //cant access?????
+                                                        onChange={(e) => {
+                                                            const author_lname =e.target.value;
+                                                            setAuthor(
+                                                                (authors) =>
+                                                                    produce(authors,
+                                                                        (v) => {v[index].author_lname=author_lname;}
+                                                                    )
+                                                                );
+                                                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                                                        }}
+                                                    />
+                                                    
+                                                </div> {/* last name close */}
+                                            </div>{/* authorname-cont close */}
+
+                                            {/* button deletes author fields */}
+                                            <button
+                                                type = "button"
+                                                id="deleteAuthor"
+                                                onClick={(e) => {
+                                                    setAuthor(
+                                                        (authors) =>
+                                                            authors.filter(
+                                                                (x) =>
+                                                                    x.authorid ? (
+                                                                        x.authorid !==
+                                                                        p.authorid
+                                                                    ) :(
+                                                                        x.author_name !== p.author_name
+                                                                    )
+                                                                    
+                                                            )
+                                                    );
+                                                    // function checks if Author-To-Be-Deleted exists.
+                                                    // function deletes ALL instances of same author to be deleted
+                                                    // we generate a random id so no 2 author fields are the same
+                                                    // hence no faulty deleting
+                                                    // wag nalang istore si author id sa db
+                                                }}>
+                                                <span className="res-btn-txt">
+                                                    Delete Author
+                                                </span>
+                                            </button>
+                                        </div> //authorfields end
+                                        );}
+                                    )}
+
+
+
                                 </div>{" "}
                                 {/* authors-group close */}
                             </div>{" "}
