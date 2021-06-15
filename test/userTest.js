@@ -37,6 +37,9 @@ describe("User Router API", () => {
                 .then((res) => {
                     expect(res.data).to.be.an("array");
                     expect(res.status).to.equal(200);
+                    if (res.data) {
+                        expect(res.data[0].userType).to.equal(4);
+                    }
                     done();
                 })
                 .catch((err) => {

@@ -3,22 +3,25 @@ let chaiHttp = require("chai-http");
 const axios = require("axios");
 const sinon = require("sinon");
 const expect = chai.expect;
-const userLogRoute = "http://localhost:3001/userLogs";
+const icsFacultyStaffRoute = "http://localhost:3001/facultystaff";
 var app;
 var agent;
 //Assertion style
 chai.use(chaiHttp);
 let token;
-describe("UserLogs Router API", () => {
+describe("Admin Router API", () => {
     /**********************
-     Read route
+     Read Faculty route
      ***********************/
-    describe("READ /readUserLogs ", () => {
-        it("READ all user logs", (done) => {
+    describe("READ /readFaculty ", () => {
+        it("Get all ICS faculty account information", (done) => {
             axios
-                .get(userLogRoute + "/readUserLogs")
+                .get(icsFacultyStaffRoute + "/readFaculty")
                 .then((res) => {
                     expect(res.data).to.be.an("array");
+                    if (res.data) {
+                        expect(res.data[0].userType).to.equal(2);
+                    }
                     expect(res.status).to.equal(200);
                     done();
                 })
@@ -28,15 +31,18 @@ describe("UserLogs Router API", () => {
         });
     });
     /**********************
-     Delete route
+     Read Staff route
      ***********************/
-    describe("DELETE /deleteAllUserLogs", () => {
-        it("Delete all user logs", (done) => {
+    describe("READ /readStaff ", () => {
+        it("Get all ICS Staff account information", (done) => {
             axios
-                .delete(userLogRoute + "/deleteAllUserLogs")
+                .get(icsFacultyStaffRoute + "/readStaff")
                 .then((res) => {
+                    expect(res.data).to.be.an("array");
+                    if (res.data) {
+                        expect(res.data[0].userType).to.equal(3);
+                    }
                     expect(res.status).to.equal(200);
-                    expect(res.data).to.have.string("All Entries Deleted");
                     done();
                 })
                 .catch((err) => {
