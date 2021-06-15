@@ -88,7 +88,7 @@ router.get("/report", async (req, res) => {
         });
         const page = await browser.newPage();
         let books, spThesis;
-        let pdfBuffer = [], bookStart = 0, spThesisStart = 0;
+        let pdfBuffer = [], pdfBufferBook = [], pdfBufferspThesis = [], bookStart = 0, spThesisStart = 0;
         //books
         if (type === "all" || type === "books") {
             //query for all book information
@@ -116,7 +116,7 @@ router.get("/report", async (req, res) => {
             //create pdf buffers with 10 items per page for books
             do {
                 if(bookStart + 10 > books.length){
-                    const bookContent = await compile("book", books.slice(bookStart,(books.length-1)));
+                    const bookContent = await compile("book", books.slice(bookStart,books.length));
                     const bookPage = await browser.newPage();
                     await bookPage.setContent(bookContent);
                     await bookPage.pdf({
@@ -127,6 +127,7 @@ router.get("/report", async (req, res) => {
                         landscape: true
                     });
                     pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
+                    pdfBufferBook.push(fs.readFileSync("./src/download/Books.pdf"));
                 }
                 else {
                     const bookContent = await compile("book", books.slice(bookStart,bookStart+10));
@@ -140,6 +141,7 @@ router.get("/report", async (req, res) => {
                         landscape: true
                     });
                     pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
+                    pdfBufferBook.push(fs.readFileSync("./src/download/Books.pdf"));
                 }
                 bookStart += 10;
             } while(bookStart < books.length);
@@ -198,7 +200,7 @@ router.get("/report", async (req, res) => {
             //create pdf buffers with 20 items per page for spThesis
             do {
                 if(spThesisStart + 20 > spThesis.length){
-                    const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,(spThesis.length-1)));
+                    const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,(spThesis.length)));
                     const bookPage = await browser.newPage();
                     await bookPage.setContent(bookContent);
                     await bookPage.pdf({
@@ -209,6 +211,7 @@ router.get("/report", async (req, res) => {
                         landscape: true
                     });
                     pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
+                    pdfBufferspThesis.push(fs.readFileSync("./src/download/spThesis.pdf"));
                 }
                 else {
                     const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,spThesisStart+20));
@@ -222,6 +225,7 @@ router.get("/report", async (req, res) => {
                         landscape: true
                     });
                     pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
+                    pdfBufferspThesis.push(fs.readFileSync("./src/download/spThesis.pdf"));
                 }
                 spThesisStart += 20;
             } while(spThesisStart < spThesis.length);
@@ -265,21 +269,7 @@ router.get("/report", async (req, res) => {
 
         const buf = await mergedPdf.save();
 
-        let path;
-        let sendObjects = [];
-        if(type === "books"){
-            path = './src/download/Books.pdf';
-            sendObjects.push(books);
-        }
-        else if(type === "spThesis"){
-            path = './src/download/spThesis.pdf';
-            sendObjects.push(spThesis);
-        }
-        else{
-            path = './src/download/Merged.pdf';
-            sendObjects.push(books);
-            sendObjects.push(spThesis);
-        }
+        let path = './src/download/Merged.pdf';;
         fs.open(path, 'w', function(err, fd) {
             fs.write(fd, buf, 0, buf.length, null, function (err){
                 fs.close(fd, function () {
@@ -287,6 +277,48 @@ router.get("/report", async (req, res) => {
                 });
             });
         });
+
+        const mergedPdfbook = await PDFDocument.create();
+        for (const pdfBytes of pdfBufferBook){
+            const pdf = await PDFDocument.load(pdfBytes);
+            const copiedPages = await mergedPdfbook.copyPages(pdf, pdf.getPageIndices());
+            copiedPages.forEach((page) => {
+                mergedPdfbook.addPage(page);
+            });
+        }
+
+        const bufbook = await mergedPdfbook.save();
+
+        path = './src/download/Books.pdf';;
+        fs.open(path, 'w', function(err, fd) {
+            fs.write(fd, bufbook, 0, bufbook.length, null, function (err){
+                fs.close(fd, function () {
+                    console.log('file saved');
+                });
+            });
+        });
+
+        const mergedPdfspthesis = await PDFDocument.create();
+        for (const pdfBytes of pdfBufferspThesis){
+            const pdf = await PDFDocument.load(pdfBytes);
+            const copiedPages = await mergedPdfspthesis.copyPages(pdf, pdf.getPageIndices());
+            copiedPages.forEach((page) => {
+                mergedPdfspthesis.addPage(page);
+            });
+        }
+
+        const bufspthesis = await mergedPdfspthesis.save();
+
+        path = './src/download/spThesis.pdf';;
+        fs.open(path, 'w', function(err, fd) {
+            fs.write(fd, bufspthesis, 0, bufspthesis.length, null, function (err){
+                fs.close(fd, function () {
+                    console.log('file saved');
+                });
+            });
+        });
+
+
 
         // const bookContent = await compile("book", books);
         // const bookPage = await browser.newPage();
@@ -319,7 +351,7 @@ router.get("/report", async (req, res) => {
 
         await browser.close();
 
-        res.send(sendObjects);
+        res.send();
     } catch (err) {
         console.error(err);
         res.status(500).send(err);
