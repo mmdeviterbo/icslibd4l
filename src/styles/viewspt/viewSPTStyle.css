@@ -11,6 +11,7 @@ table {
 }
 
 .book-page-container {
+    width:100%;
     min-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -169,8 +170,8 @@ table {
 .book-cover-info-side {
     align-items: center;
     justify-content: center;
-    margin: 0px 6%;
-    width: 40%;
+    margin: 0px 5%;
+    width: 45%;
 }
 
 .book-info-tr {
@@ -216,6 +217,11 @@ table {
 
 .info-value{
     font-weight: normal;
-    text-align: right;
+    text-align: justify;
+    padding-left: 2rem;
+    max-width:80%;
 }
 
+.info-head{
+    max-width: 30%;
+}
