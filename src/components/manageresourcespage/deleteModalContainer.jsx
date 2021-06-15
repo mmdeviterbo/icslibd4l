@@ -6,7 +6,6 @@ import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
 import StatusModal from "../modal/operationStatusModal";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 //  TODO: add documentation
 const DeletePopUpCont = ({ user }) => {
@@ -56,18 +55,22 @@ const DeletePopUpCont = ({ user }) => {
                 setPathAfter("/manage-resources");
             } else if (item === "logs") {
                 await PersonService.clearUserLogs();
+                setItemName("Logs");
                 setMessage("success");
                 handleClose();
                 setPathAfter("/view-activitylogs");
             } else if (item === "account") {
                 setItemName(user.fullName);
+                console.log("error here");
                 await PersonService.deleteUser(user); //deletes the user from the database
+
                 await PersonService.logoutUser(user); // logs the user out
                 localStorage.removeItem(jwtPrivateKey); // removes token from the browser
                 setIsSelf(true);
                 setMessage("success");
                 setPathAfter("/");
                 handleClose();
+                // window.location = "/";
             } else {
                 if (toDelete.googleId === user.googleId) {
                     await PersonService.deleteUser(toDelete);
@@ -111,10 +114,11 @@ const DeletePopUpCont = ({ user }) => {
             />
             <Modal
                 show={show}
-                onHide={handleClose}
+                onHide={handleCancel}
                 backdrop="static"
                 keyboard={false}
-                centered>
+                centered
+            >
                 {/* Renders according to item.
           If resource, else if user, else account */}
                 <Modal.Header closeButton>
@@ -132,12 +136,14 @@ const DeletePopUpCont = ({ user }) => {
                                 [
                                     item === "logs" ? (
                                         <Modal.Title
-                                            style={{ fontWeight: "bold" }}>
+                                            style={{ fontWeight: "bold" }}
+                                        >
                                             Clear Activity Logs
                                         </Modal.Title>
                                     ) : (
                                         <Modal.Title
-                                            style={{ fontWeight: "bold" }}>
+                                            style={{ fontWeight: "bold" }}
+                                        >
                                             Remove Account
                                         </Modal.Title>
                                     ),

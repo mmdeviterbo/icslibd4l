@@ -60,7 +60,8 @@ export default function ManageUserPage({ user }) {
                                 <button
                                     className="btn btn-secondary mybtnUserPage"
                                     type="button"
-                                    onClick={handleSearchClick}>
+                                    onClick={handleSearchClick}
+                                >
                                     <i className="fa fa-search"></i>
                                 </button>
                             </div>
@@ -68,6 +69,8 @@ export default function ManageUserPage({ user }) {
                         <FilterMenu
                             selection={selection}
                             setSelection={setSelection}
+                            setSearchField={setSearchField}
+                            setSearchInput={setSearchInput}
                         />
                     </div>
                     <div className="usertable-container">
@@ -75,6 +78,7 @@ export default function ManageUserPage({ user }) {
                             user={user}
                             selectedFilter={selection}
                             searchInput={searchField}
+                            setSearchInput={setSearchInput}
                         />
                     </div>
                 </div>
@@ -84,7 +88,8 @@ export default function ManageUserPage({ user }) {
                         minHeight: "80vh",
                         display: "grid",
                         placeItems: "center",
-                    }}>
+                    }}
+                >
                     <PropagateLoader
                         color={"#0067a1"}
                         speedMultiplier={2}

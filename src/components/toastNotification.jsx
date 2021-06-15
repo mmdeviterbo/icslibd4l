@@ -7,7 +7,6 @@ import "../styles/toastStyle.css";
 
 toast.configure();
 export default function ToastNotification({ content }) {
-    console.log(content);
     const showToast = (content) => {
         toast.error(content, {
             position: "top-right",
