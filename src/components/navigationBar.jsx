@@ -93,7 +93,8 @@ export default function NavigationBar({
                 cookiePolicy={"single_host_origin"}
                 className="login-link"
                 hostedDomain={"up.edu.ph"}
-                icon={false}>
+                icon={false}
+            >
                 <i className="fa fa-lg fa-sign-in mr-2" />
                 <span className="login-link-label">Login</span>
             </GoogleLogin>
@@ -118,7 +119,8 @@ export default function NavigationBar({
                         to="/home"
                         className="navItem"
                         onClick={() => scrollToBrowse()}
-                        style={getCurrentNav("/home")}>
+                        style={getCurrentNav("/home")}
+                    >
                         <i
                             className="fa fa-lg fa-home mr-2"
                             aria-hidden="true"
@@ -128,7 +130,8 @@ export default function NavigationBar({
                     <Link
                         to="/search?type=any&search="
                         className="navItem"
-                        style={getCurrentNav("/search")}>
+                        style={getCurrentNav("/search")}
+                    >
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
@@ -138,7 +141,8 @@ export default function NavigationBar({
                     <Link
                         to="/about"
                         className="navItem"
-                        style={getCurrentNav("/about")}>
+                        style={getCurrentNav("/about")}
+                    >
                         <i
                             className="fa fa-lg fa-info-circle mr-2"
                             aria-hidden="true"
@@ -147,7 +151,8 @@ export default function NavigationBar({
                     </Link>
                     <div
                         className={(!user && "login-link") || ""}
-                        style={isProfileClicked()}>
+                        style={isProfileClicked()}
+                    >
                         {(user && profileDisplay()) || logInButton()}
                     </div>
                 </div>
@@ -265,13 +270,6 @@ const SearchFilter = ({ user }) => {
             ),
             value: "View Summary Report",
             onClick: () => {
-                const generateSummary = async () => {
-                    try {
-                        await ResourceService.generateReport("all");
-                        console.log("Generating");
-                    } catch (error) {}
-                };
-                generateSummary();
                 history.push("/view-summaryreport");
             },
         },
