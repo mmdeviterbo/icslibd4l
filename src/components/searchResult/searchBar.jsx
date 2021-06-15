@@ -13,10 +13,12 @@ export default function SearchBar({searchFilter, setSearchFilter}){
 }
 
 const searchInput = {
-    border: "0",
-    borderRadius: "10px",
+    borderRadius: "0",
+    borderTop: "0",
+    borderRight: "0",
+    borderLeft: "0",
+    borderColor: "gray",
     padding: "0.38vw",
-    textIndent: "0.76vw",
     width: "95.3%",
     position:"relative",
     left:"-4vw"

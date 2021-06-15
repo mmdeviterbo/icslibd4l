@@ -194,12 +194,12 @@ const sidebarNav = {
 };
 
 const wrapper = {
-    margin: "1vw 0 0.5vw 1.5vw",
+    margin: "0.5vw 0 0.5vw 1.5vw",
     width: "100%",
 };
 
 const sidebarTitle = {
-    margin: "1vw 0 1vw -0.5vw",
+    margin: "0vw 0 0vw -0.5vw",
     fontSize: "1.5em",
     fontWeight: "800",
     fontFamily: "Trebuchet MS",
@@ -216,8 +216,8 @@ const sidebarLink = {
     color: "black",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "0 1vw 0 0",
-    marginTop: "1vw",
+    // padding: "0 1vw 0 0",
+    marginTop: "0.5vw",
     listStyle: "none",
     height: "3vw",
     fontSize: "1.1em",
@@ -235,8 +235,6 @@ const sidebarLabel = {
 const multipleSearchStyle = {
     display: "flex",
     searchBox: {
-        // To change search box element look
-        // border:"none",
         borderRadius: "0",
         borderTop: "0",
         borderRight: "0",
@@ -252,11 +250,10 @@ const multipleSearchStyle = {
     },
     inputField: {
         padding: "0",
-        margin: "1px",
+        marginBottom: "0"
+        // margin: "1px",
     },
     chips: {
         whiteSpace: "normal",
     },
 };
-
-// for classes of Select

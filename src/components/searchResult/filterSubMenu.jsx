@@ -83,7 +83,7 @@ export default function FilterSubMenu({
                                     <div
                                         style={{
                                             position: "relative",
-                                            left: "-3.5vw",
+                                            left: "-3.75vw",
                                         }}
                                     >
                                         <Autocomplete
@@ -99,7 +99,7 @@ export default function FilterSubMenu({
                                                 handleAdviserChange(newValue);
                                             }}
                                             style={{
-                                                width: 200,
+                                                width: "12vw",
                                                 marginTop: "2vw",
                                                 marginBottom: "2vw",
                                             }}
