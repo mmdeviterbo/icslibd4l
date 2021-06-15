@@ -14,6 +14,37 @@ import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSubMenu from "./filterSubMenu";
 import CourseComboBox from "./courseComboBox";
 
+/***************************************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * Sidebar for search filters containing author, adviser, 
+ * type, year, publisher, course and topics/keywords
+ * Has react components:
+ * | -combobox
+ * | -select
+ * | -multiselect
+ * | -datepicker
+ *
+ * props:
+ * - <prop> = <description>
+ * searchFilterAuthor = variable, contains the value of author filter
+ * setSearchFilterAuthor = function, sets the state of author filter
+ * searchFilterAdviser  = variable, contains the value of adviser filter
+ * setSearchFilterAdviser = function, sets the state of adviser filter
+ * resourceType  = variable, contains the value of resource type filter
+ * setResourceType = function, sets the state of resource filter
+ * searchFilterYear  = variable, contains the value of year filter
+ * setSearchFilterYear = function, sets the state of year filter
+ * searchFilterPublisher  = variable, contains the value of publisher filter
+ * setSearchFilterPublisher = function, sets the state of publisher filter
+ * course  = variable, contains the value of course filter
+ * setCourse = function, sets the state of course filter
+ * keywords  = variable, contains the value of keywords filter
+ * setKeywords = function, sets the state of keywords filter
+ * 
+ ***************************************************************************/
+
 export default function FilterSidebar({
     searchFilterAuthor,
     setSearchFilterAuthor,
