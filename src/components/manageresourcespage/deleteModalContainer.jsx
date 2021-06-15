@@ -36,8 +36,8 @@ const DeletePopUpCont = ({ user }) => {
   };
 
   const handleSubmit = async (event) => {
-    console.log(id);
-    console.log(type);
+    // console.log(id);
+    // console.log(type);
     // console.log(id);
     event.preventDefault();
     // handleClose();
@@ -61,7 +61,7 @@ const DeletePopUpCont = ({ user }) => {
         setPathAfter("/view-activitylogs");
       } else if (item === "account") {
         setItemName(user.fullName);
-        console.log("error here");
+        // console.log("error here");
         await PersonService.deleteUser(user); //deletes the user from the database
 
         await PersonService.logoutUser(user); // logs the user out

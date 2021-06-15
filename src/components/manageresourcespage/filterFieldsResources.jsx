@@ -45,8 +45,8 @@ const FiltersContainerRes = () => {
   const [year, setYear] = useState(0);
   const [type, setType] = useState("");
 
-  console.log(year);
-  console.log(type);
+//   console.log(year);
+//   console.log(type);
 
   const handleFilter = async (event) => {
     event.preventDefault();
@@ -56,9 +56,9 @@ const FiltersContainerRes = () => {
         year,
       };
 
-      console.log(filter);
+    //   console.log(filter);
       const { data } = await ResourceServices.addSpThesis(filter);
-      console.log(data);
+    //   console.log(data);
     } catch (err) {
       if (err.response && err.response.data) {
         console.log(err.response.data.errorMessage);
