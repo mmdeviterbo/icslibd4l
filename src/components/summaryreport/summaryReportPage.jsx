@@ -21,12 +21,10 @@ export default function SummaryReportPage({ user }) {
     useEffect(() => {
         const generateSummary = async (type) => {
             try {
-                await ResourceService.generateReport(type).then((response) => {
-                    console.log(response);
-                });
-            } catch (error) {
-                console.log(error);
-            }
+                await ResourceService.generateReport(type).then(
+                    (response) => {}
+                );
+            } catch (error) {}
         };
         generateSummary("all");
     });

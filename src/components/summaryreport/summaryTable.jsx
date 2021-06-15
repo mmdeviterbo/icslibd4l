@@ -18,7 +18,7 @@ import ResourceService from "../../services/resourceService";
 
 const booksHeader = [
     { id: "bookId", label: "Book ID" },
-    { id: "bookTitle", label: "Book ID" },
+    { id: "bookTitle", label: "Title" },
     { id: "bookAuthors", label: "Author(s)" },
     { id: "bookSubject", label: "Subject" },
     { id: "numOfCopies", label: "Copies" },
@@ -93,7 +93,7 @@ function SummaryTable({ resourceFilter }) {
     // const [booksPage, setBooksPage] = useState(0);
     // const [spThesisPage, setSpThesisPage] = useState(0);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(8);
     // const [fileUrl, setFileUrl] = useState("pdf/Merged.pdf");
     // const history = useHistory();
 
@@ -163,9 +163,11 @@ function SummaryTable({ resourceFilter }) {
                                     fontWeight: "bold",
                                     fontSize: "1.4rem",
                                     zIndex: "0",
+                                    backgroundColor: "#0067a1",
+                                    color:"white"
                                 }}
                             >
-                                <span>{book.label}</span>
+                                <p>{book.label}</p>
                             </TableCell>
                         ))}
                     </TableRow>
@@ -179,6 +181,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="book-id-cell"
                                             key={`${rsrc.bookId}-${index}`}
+                                            style={{ fontSize: "1rem"}}
                                         >
                                             {rsrc.bookId}
                                         </TableCell>
@@ -186,6 +189,8 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="book-title-cell"
                                             key={`${rsrc.bookId}-${rsrc.bookTitle}`}
+                                            style={{ fontSize: "1rem"}}
+
                                         >
                                             {rsrc.title}
                                         </TableCell>
@@ -195,6 +200,7 @@ function SummaryTable({ resourceFilter }) {
                                                 rsrc.author.map((name) => (
                                                     <div
                                                         key={`${rsrc.bookId}-${name.author_name}`}
+                                                        style={{ fontSize: "1rem"}}
                                                     >
                                                         {name.author_name}
                                                     </div>
@@ -206,6 +212,7 @@ function SummaryTable({ resourceFilter }) {
                                                 rsrc.subject.map((sub) => (
                                                     <div
                                                         key={`${rsrc.bookId}-${sub.subject}`}
+                                                        style={{ fontSize: "1rem"}}
                                                     >
                                                         {sub.subject}
                                                     </div>
@@ -215,6 +222,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="book-copies-cell"
                                             key={`${rsrc.bookId}${rsrc.numberOfCopies}-${index}`}
+                                            style={{ fontSize: "1rem"}}
                                         >
                                             {rsrc.numberOfCopies}
                                         </TableCell>
@@ -222,6 +230,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="date-acquired-cell"
                                             key={`${rsrc.bookId}-${rsrc.dateAcquired}-${index}`}
+                                            style={{ fontSize: "1rem"}}
                                         >
                                             {dateFormatter(rsrc.dateAcquired)}
                                         </TableCell>
@@ -280,6 +289,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-id-cell"
                                             key={`${rsrc.sp_thesis_id}-${index}`}
+                                            style={{ fontSize: "1rem"}}
                                         >
                                             {rsrc.sp_thesis_id}
                                         </TableCell>
@@ -287,6 +297,8 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-type-cell"
                                             key={`${rsrc.sp_thesis_id}-${rsrc.type}${index}`}
+                                            style={{ fontSize: "1rem"}}
+
                                         >
                                             {rsrc.type && rsrc.type}
                                         </TableCell>
@@ -294,6 +306,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-title-cell"
                                             key={`${rsrc.sp_thesis_id}-${rsrc.title}${index}`}
+                                            style={{ fontSize: "1rem"}}
                                         >
                                             {rsrc.title}
                                         </TableCell>
@@ -301,6 +314,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-author-cell"
                                             key={`${rsrc.sp_thesis_id}-authors-${index}`}
+                                            style={{ fontSize: "1rem"}}
                                         >
                                             {rsrc.authors &&
                                                 rsrc.authors.map(
@@ -317,6 +331,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-adviser-cell"
                                             key={`${rsrc.sp_thesis_id}-advisers-${index}`}
+                                            style={{ fontSize: "1rem"}}
                                         >
                                             {rsrc.advisers &&
                                                 rsrc.advisers.map(
@@ -370,7 +385,7 @@ function SummaryTable({ resourceFilter }) {
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
+        setRowsPerPage(parseInt(event.target.value,8));
         setPage(0);
     };
 
