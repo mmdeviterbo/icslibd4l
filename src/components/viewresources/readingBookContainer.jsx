@@ -20,7 +20,7 @@ const ReadingBookContainer = (props) => {
   let [loading, setLoading] = useState(true);
   let [imgLoading, setImgLoading] = useState(true);
   const [resourceData, setResourceData] = useState({});
-  const resourceID = props.match.params.id;
+  const resourceID = props.match?.params?.id;
 
   useEffect(() => {
     async function fetchData() {
@@ -28,6 +28,10 @@ const ReadingBookContainer = (props) => {
         setLoading(true);
         const urlRequest = `/search-id?id=${resourceID}`;
         const { data } = await ResourceService.searchByID(urlRequest, "Book");
+        data[0].bookCoverLink = `https://drive.google.com/uc?export=view&id=${data[0].bookCoverLink
+          .replace("https://drive.google.com/uc?id=", "")
+          .replace("https://drive.google.com/file/d/", "")
+          .replace("/view", "")}`;
         setResourceData(data && data[0]);
         setLoading(false);
         // handleLoading();
