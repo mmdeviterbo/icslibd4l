@@ -127,16 +127,23 @@ export default function FilterSidebar({
                     }
 
                     {/* Topics */}
-                    <span style={sidebarLink} className="sidebarLink">
-                        <span style={sidebarLabel}>Topic</span>
-                    </span>
-                    <Multiselect
-                        options={topicData}
-                        displayValue="label"
-                        style={multipleSearchStyle}
-                        onSelect={getSelected}
-                        onRemove={deselect}
-                    />
+
+                    {(resourceType === "sp" || resourceType === "thesis" || resourceType === "any")
+                        ?   <div>
+                            <span style={sidebarLink} className="sidebarLink">
+                                <span style={sidebarLabel}>Topic</span>
+                            </span>
+                            <Multiselect
+                                options={topicData}
+                                displayValue="label"
+                                style={multipleSearchStyle}
+                                onSelect={getSelected}
+                                onRemove={deselect}
+                            />
+                            </div>
+                        : null
+                    }
+                    
 
                     {/* TYPE filter */}
                     <span style={sidebarLink} className="sidebarLink">
