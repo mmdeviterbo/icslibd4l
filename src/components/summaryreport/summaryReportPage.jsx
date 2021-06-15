@@ -3,20 +3,11 @@ import { useHistory } from "react-router";
 import Select from "react-select";
 import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
-// import DocumentViewer from "./documentViewer";
 import SummaryTable from "./summaryTable";
 import { jwtPrivateKey } from "../../config.json";
 import PropagateLoader from "react-spinners/PropagateLoader";
 
-// import Merged from "../../download/Merged.pdf";
-// import Books from "../../download/Books.pdf";
-// import SpThesis from "../../download/spThesis.pdf";
-
 import "../../styles/summaryReport/summaryReportPage.css";
-
-// const Merged = "/pdf/Merged.pdf";
-// const Books = "/pdf/Books.pdf";
-// const SpThesis = "/pdf/spThesis.pdf";
 
 export default function SummaryReportPage({ user }) {
     const FilterOptions = [
@@ -25,7 +16,6 @@ export default function SummaryReportPage({ user }) {
     ];
 
     const [selection, setSelection] = useState(FilterOptions[0].label);
-    // const [pdfFile, setPdfFile] = useState(Merged);
     const history = useHistory();
 
     useEffect(() => {
@@ -39,8 +29,6 @@ export default function SummaryReportPage({ user }) {
             }
         };
         generateSummary("all");
-        generateSummary("books");
-        generateSummary("spThesis");
     });
 
     const accessPrivilege = () => {
@@ -59,7 +47,6 @@ export default function SummaryReportPage({ user }) {
 
     const handleChange = (e) => {
         setSelection(e.label);
-        // setPdfFile(e.value);
     };
 
     const ResourceTypeSelect = () => {
@@ -85,10 +72,8 @@ export default function SummaryReportPage({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="summary-report-container">
-                    {/* {generateSummary()} */}
                     <ResourceTypeSelect className="summary-header" />
                     <SummaryTable resourceFilter={selection} />
-                    {/* <DocumentViewer pdfFile={pdfFile} /> */}
                 </div>
             ) : (
                 <div

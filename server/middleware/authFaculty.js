@@ -38,7 +38,9 @@ function authenticationFaculty(req, res, next) {
             });
     } catch (err) {
         console.log(err);
-        res.sendStatus(401).json({ errorMessage: "Unauthorized Access" });
+        return res
+            .sendStatus(401)
+            .json({ errorMessage: "Unauthorized Access" });
     }
 }
 
