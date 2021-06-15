@@ -261,9 +261,13 @@ export default function ActivityTable() {
                 />
             </TableContainer>
             <br />
-            <div className="clear-logs-button-container">
-                <ClearLogs />
-            </div>
+            {activityLogs.length === 0 ? (
+                <></>
+            ) : (
+                <div className="clear-logs-button-container">
+                    <ClearLogs />
+                </div>
+            )}
         </>
     );
 }
