@@ -41,17 +41,19 @@ const InfoSidebar = ({ user, resourceData }) => {
         <tbody>
           <tr>
             <th className="spt-thtr">Type</th>
-            <th className="spt-thtr">{resourceData && resourceData.type}</th>
+            <th className="spt-thtr-type">{resourceData && resourceData.type}</th>
           </tr>
 
           <tr>
             <th className="spt-thtr">Adviser</th>
+            <th className="keyword-container">
             {resourceData &&
               resourceData.advisers.map((item, key) => (
                 <div className="spt-thtr-multi" key={key}>
                   {item.adviser_name}
                 </div>
               ))}
+            </th>
           </tr>
 
           <tr>
@@ -63,6 +65,11 @@ const InfoSidebar = ({ user, resourceData }) => {
                     {item.sp_thesis_keyword}
                   </div>
                 ))}
+              {(!resourceData || resourceData?.keywords?.length===0) && 
+                <div className="spt-thtr-multi">
+                {<br/>}
+              </div>
+              }
             </th>
           </tr>
         </tbody>
