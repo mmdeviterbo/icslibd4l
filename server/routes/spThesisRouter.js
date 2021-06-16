@@ -1499,10 +1499,10 @@ router.get("/search", async (req, res) => {
         } else if (req.query.type == "book") {
             // noBook() -> filterEntries()
             noBook(0);
-        } else if (req.query.type == "sp") {
+        } else if (["sp","SP","SpecialProblem"].includes(req.query.type)) {
             // noSP() -> filterEntries()
             noSP(0);
-        } else if (req.query.type == "thesis") {
+        } else if (["thesis","Thesis"].includes(req.query.type)) {
             // noThesis() -> filterEntries()
             noThesis();
         }
@@ -1516,10 +1516,10 @@ router.get("/search", async (req, res) => {
         } else if (req.query.type == "book") {
             // bookMain() -> bookAuthor() -> bookSubject() -> filterEntries()
             bookMain(0);
-        } else if (req.query.type == "sp") {
+        } else if (["sp","SP","SpecialProblem"].includes(req.query.type)) {
             // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
             spMain(0);
-        } else if (req.query.type == "thesis") {
+        } else if (["thesis","Thesis"].includes(req.query.type)) {
             // spMain() -> spAuthor() -> spAdviser() -> spKeyword() -> filterEntries()
             thesisMain(0);
         }
