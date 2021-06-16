@@ -301,9 +301,7 @@ router.get("/report", authAdmin, async (req, res) => {
         let path = "./src/download/Merged.pdf";
         fs.open(path, "w", function (err, fd) {
             fs.write(fd, buf, 0, buf.length, null, function (err) {
-                fs.close(fd, function () {
-                    console.log("file saved");
-                });
+                fs.close(fd, function () {});
             });
         });
 
@@ -324,9 +322,7 @@ router.get("/report", authAdmin, async (req, res) => {
         path = "./src/download/Books.pdf";
         fs.open(path, "w", function (err, fd) {
             fs.write(fd, bufbook, 0, bufbook.length, null, function (err) {
-                fs.close(fd, function () {
-                    console.log("file saved");
-                });
+                fs.close(fd, function () {});
             });
         });
 
@@ -353,9 +349,7 @@ router.get("/report", authAdmin, async (req, res) => {
                 bufspthesis.length,
                 null,
                 function (err) {
-                    fs.close(fd, function () {
-                        console.log("file saved");
-                    });
+                    fs.close(fd, function () {});
                 }
             );
         });
