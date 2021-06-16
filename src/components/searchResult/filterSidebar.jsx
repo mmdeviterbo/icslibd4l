@@ -61,6 +61,9 @@ export default function FilterSidebar({
     keywords,
     setKeywords,
 }) {
+
+    var maxYear = ((new Date()).getFullYear() + 1).toString();
+
     const useStyles = makeStyles((theme) => ({
         formControl: {
             margin: theme.spacing(1),
@@ -85,7 +88,6 @@ export default function FilterSidebar({
         const newArray = data.map((e) => e.label);
         setKeywords(newArray);
     };
-    console.log(resourceType);
 
     return (
         <div>
@@ -196,7 +198,7 @@ export default function FilterSidebar({
                                     animateYearScrolling
                                     isclearable="true"
                                     minDate={new Date("01-01-1950")}
-                                    maxDate={new Date("12-31-2022")}
+                                    maxDate={new Date(`12-31-${maxYear}`)}
                                     placeholder={"Year"}
                                     style={{ width: "50px" }}
                                 />
