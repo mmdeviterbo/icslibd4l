@@ -99,7 +99,7 @@ const InfoSidebar = ({ user, resourceData, type, resId }) => {
             value={resourceData && resourceData.poster}
             onClick={(e) => handleRedirect(e.target.value)}
           >
-            <i className="fas fa-file-image"></i>
+            <i className="fa fa-file-pdf-o mr-3" aria-hidden="true"/>
             View Poster
           </button>
           {/* if guest/book -> display: none */}
@@ -109,6 +109,7 @@ const InfoSidebar = ({ user, resourceData, type, resId }) => {
             value={resourceData && resourceData.journal}
             onClick={(e) => handleRedirect(e.target.value)}
           >
+            <i className="fa fa-file-pdf-o mr-3" aria-hidden="true"/>
             View Journal
           </button>
           {user && user.userType !== 4 && (
@@ -118,12 +119,21 @@ const InfoSidebar = ({ user, resourceData, type, resId }) => {
                 value={resourceData && resourceData.source_code}
                 onClick={(e) => handleRedirect(e.target.value)}
               >
+                <i className="fa fa-code mr-3" aria-hidden="true"/>
                 View Source Code
               </button>
+              <button
+                id="downloadmanuscript"
+                value={resourceData && resourceData.manuscript}
+                onClick={(e) => handleRedirect(e.target.value)}>
+                <i className="fa fa-file-pdf-o mr-3" aria-hidden="true"/>
+                View Manuscript
+            </button>
               <br />
               <br />
             </>
           )}
+
           {user && user.userType===1 &&
               <Link to={{
                   pathname: `/edit-spt/${resId}`,
