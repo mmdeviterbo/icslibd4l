@@ -313,8 +313,8 @@ export default function EditSPTFormContainer(props) {
                                         id="sptYear"
                                         type = "number"
                                         value = {year}
-                                        min = {1908}
-                                        max = {9999}
+                                        min = {1950}
+                                        max = {2022}
                                         // key={`${Math.floor(
                                         // Math.random() * 1000
                                         // )}-min`}
