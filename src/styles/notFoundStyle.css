@@ -6,6 +6,7 @@
     align-items: center;
     transition: 0.7s;
     overflow: hidden;
+    cursor: pointer;
 }
 .notFoundContainer:hover .notFoundhover1{
     opacity: 0.9;
