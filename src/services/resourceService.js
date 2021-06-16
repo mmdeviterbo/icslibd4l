@@ -76,18 +76,9 @@ function getNews() {
     return http.post(`${apiEndpoint}/books/get-news`);
 }
 
-// get all books (object of information only, not images), sorted by date (latest acquisition feature)
-function getBooks() {
-    return http.get(`${apiEndpoint}/books/display_infos`);
-}
-
 // get all books (object of images), sorted by date (latest acquisition feature)
 function getBookCovers() {
     return http.get(`${apiEndpoint}/books/display_covers`);
-}
-
-function getAllResources() {
-    return http.get(`${apiEndpoint}/thesis/search`);
 }
 
 function getLatestBooks() {
@@ -127,7 +118,6 @@ const exportFunctions = {
     downloadFile,
     deleteBook,
     viewFile,
-    searchByID,
     getBookCovers,
     generateReport,
 };

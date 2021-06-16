@@ -6,9 +6,8 @@ import { gsap } from "gsap";
 import { jwtPrivateKey } from "../config.json";
 import PersonService from "../services/personService";
 import ResourceService from "../services/resourceService";
-import logo from '../assets/mainlogo/icslibd4l.png';
+import logo from "../assets/mainlogo/icslibd4l.png";
 import "../styles/homepageStyle.css";
-
 
 // the entire navigation bar
 export default function NavigationBar({
@@ -25,29 +24,38 @@ export default function NavigationBar({
         animationTitle(classNavBar);
     }, [classNavBar]);
 
-    const getCurrentNav=(navClass)=>{
-        return currentNav.includes(navClass)? white : black;
-    }
+    const getCurrentNav = (navClass) => {
+        return currentNav.includes(navClass) ? white : black;
+    };
 
-    const isProfileClicked=()=>{
-        const regexAdminAccess = /(?:^\/manage-users$|^\/manage-resources$|^\/view-activitylogs$|^\/view-summaryreport$|^\/account-setting$|^\/edit-book.*$|^\/edit-spt.*$|^\/add-new-book$|^\/add-new-spt$)/;
-        return window.location.pathname.match(regexAdminAccess)? white : black;
-    }
+    const isProfileClicked = () => {
+        const regexAdminAccess =
+            /(?:^\/manage-users$|^\/manage-resources$|^\/view-activitylogs$|^\/view-summaryreport$|^\/account-setting$|^\/edit-book.*$|^\/edit-spt.*$|^\/add-new-book$|^\/add-new-spt$)/;
+        return window.location.pathname.match(regexAdminAccess) ? white : black;
+    };
 
     // listen to routes (on mounting)
-    useEffect(()=>{
-        const {pathname} = window.location;
-        if (["/not-found", "/unauthorized"].includes(pathname) || ["/not-found", "/unauthorized"].includes(pathname))
-        setClassNavBar("navbar-container-none");
+    useEffect(() => {
+        const { pathname } = window.location;
+        if (
+            ["/not-found", "/unauthorized"].includes(pathname) ||
+            ["/not-found", "/unauthorized"].includes(pathname)
+        )
+            setClassNavBar("navbar-container-none");
         else setClassNavBar("navbar-container");
         setCurrentNav(pathname);
-    },[])
+    }, []);
 
     // listen to changing routes (after mounting)
     useEffect(() => {
         return history.listen((location) => {
-            if (["/not-found", "/unauthorized"].includes(location.pathname) || ["/not-found", "/unauthorized"].includes(window.location.pathname))
-            setClassNavBar("navbar-container-none");
+            if (
+                ["/not-found", "/unauthorized"].includes(location.pathname) ||
+                ["/not-found", "/unauthorized"].includes(
+                    window.location.pathname
+                )
+            )
+                setClassNavBar("navbar-container-none");
             else setClassNavBar("navbar-container");
             setCurrentNav(location.pathname);
         });
@@ -85,7 +93,8 @@ export default function NavigationBar({
                 cookiePolicy={"single_host_origin"}
                 className="login-link"
                 hostedDomain={"up.edu.ph"}
-                icon={false}>
+                icon={false}
+            >
                 <i className="fa fa-lg fa-sign-in mr-2" />
                 <span className="login-link-label">Login</span>
             </GoogleLogin>
@@ -101,34 +110,47 @@ export default function NavigationBar({
             <ul className="navbar-elements">
                 <Link className="left-half" to="/home">
                     <p style={titleStyle}>Analytica</p>
-                    <div style={logoContainer}>
-                        <img src={logo} alt="#" style={logoStyle}/>
-                    </div>
+                        <img src={logo} alt="#" style={logoStyle} />
                 </Link>
                 <div className="right-half">
-                    <Link to="/home" className="navItem" onClick={()=>scrollToBrowse()} style={getCurrentNav("/home")}>
+                    <Link
+                        to="/home"
+                        className="navItem"
+                        onClick={() => scrollToBrowse()}
+                        style={getCurrentNav("/home")}
+                    >
                         <i
                             className="fa fa-lg fa-home mr-2"
                             aria-hidden="true"
                         />
                         Home
                     </Link>
-                    <Link to="/search?type=any&search="
-                        className="navItem" style={getCurrentNav("/search")}>
+                    <Link
+                        to="/search?type=any&search="
+                        className="navItem"
+                        style={getCurrentNav("/search")}
+                    >
                         <i
                             className="fa fa-lg fa-search mr-2"
                             aria-hidden="true"
                         />
                         Browse
                     </Link>
-                    <Link to="/about" className="navItem" style={getCurrentNav("/about")}>
+                    <Link
+                        to="/about"
+                        className="navItem"
+                        style={getCurrentNav("/about")}
+                    >
                         <i
                             className="fa fa-lg fa-info-circle mr-2"
                             aria-hidden="true"
                         />
                         About
                     </Link>
-                    <div className={!user && "login-link"} style={isProfileClicked()}>
+                    <div
+                        className={(!user && "login-link") || ""}
+                        style={isProfileClicked()}
+                    >
                         {(user && profileDisplay()) || logInButton()}
                     </div>
                 </div>
@@ -156,9 +178,12 @@ const SearchFilter = ({ user }) => {
                 ].includes(window.location.pathname)
             )
                 window.location = "/home";
-            else if(window.location.pathname.match(/^\/edit-book.*$/g)) window.location = "/home";
-            else if(window.location.pathname.match(/^\/edit-spt.*$/g)) window.location = "/home";
-            else if(window.location.pathname.match(/^\/search.*$/g)) window.location = window.location.href;
+            else if (window.location.pathname.match(/^\/edit-book.*$/g))
+                window.location = "/home";
+            else if (window.location.pathname.match(/^\/edit-spt.*$/g))
+                window.location = "/home";
+            else if (window.location.pathname.match(/^\/search.*$/g))
+                window.location = window.location.href;
             else window.location = window.location.pathname;
         } catch (err) {}
     };
@@ -166,7 +191,9 @@ const SearchFilter = ({ user }) => {
     const trigger = (
         <span>
             <Icon className="user" />
-            {user && user.fullName && user.fullName.split(" ")[0].substring(0,7)}
+            {user && user.fullName === user.nickname
+                ? user.fullName.split(" ")[0].substring(0, 7)
+                : user && user.nickname}
         </span>
     );
 
@@ -241,13 +268,6 @@ const SearchFilter = ({ user }) => {
             ),
             value: "View Summary Report",
             onClick: () => {
-                const generateSummary = async () => {
-                    try {
-                        await ResourceService.generateReport("all");
-                        console.log("Generating");
-                    } catch (error) {}
-                };
-                generateSummary();
                 history.push("/view-summaryreport");
             },
         },
@@ -255,7 +275,7 @@ const SearchFilter = ({ user }) => {
             key: "hrline",
             text: (
                 <span>
-                    <hr style={{margin:0, padding:0}}/>
+                    <hr style={{ margin: 0, padding: 0 }} />
                 </span>
             ),
             disabled: true,
@@ -278,36 +298,29 @@ const SearchFilter = ({ user }) => {
             options={
                 user.userType === 1
                     ? optionsNotAdmin.concat(options)
-                    : optionsNotAdmin.concat(options[options.length-2]).concat(options[options.length-1])
+                    : optionsNotAdmin
+                          .concat(options[options.length - 2])
+                          .concat(options[options.length - 1])
             }
         />
     );
 };
 
 const titleStyle = {
-    letterSpacing:"2px", 
-    textShadow:"1px 1px 3px #000000", 
-    fontWeight:600, 
-    height:"100%",
-    display:"grid",
-    fontSize:"calc(25px + 0.5vh)",
-    placeItems:"center",
-    margin:0,
-    marginRight:"0.5%"
-}
-
-const logoContainer = {
-    height:"100%",
-    marginRight:"1%",
-    display:"flex",
-    alignItems:"center",
-    justifyContent:"center",
-    dropShadow:"2px 10px"
-}
+    letterSpacing: "2px",
+    textShadow: "1px 1px 3px #000000",
+    fontWeight: 600,
+    height: "100%",
+    display: "grid",
+    fontSize: "calc(25px + 0.5vh)",
+    placeItems: "center",
+    margin: 0,
+    marginRight: "0.5%",
+};
 
 const logoStyle = {
-    height:"90%",
-}
+    height: "90%",
+};
 
 const mainBgStyleContainer = {
     position: "absolute",
@@ -322,25 +335,25 @@ const white = {
     fontSize: "calc(12px + 0.2vw)",
     color: "black",
     background: "rgb(255, 255, 255)",
-    flexGrow:1,
+    flexGrow: 1,
     height: "100%",
     display: "flex",
     alignItems: "center",
-    "justifyContent": "center",
-    transition:"0.3s"
-}
+    justifyContent: "center",
+    transition: "0.3s",
+};
 const black = {
     fontSize: "calc(12px + 0.2vw)",
     background: "rgb(26, 26, 26)",
     height: "100%",
     display: "flex",
     alignItems: "center",
-    "justifyContent": "center",
-    "flexGrow": 1,
+    justifyContent: "center",
+    flexGrow: 1,
     color: "white",
     fontWeight: 900,
-    transition: "0.3s"
-}
+    transition: "0.3s",
+};
 
 const animationTitle = (classNavBar) => {
     let tempClassName = "." + classNavBar;
