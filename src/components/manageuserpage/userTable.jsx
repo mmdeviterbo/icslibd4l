@@ -114,6 +114,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     setUserList(Array.from(response.data));
                 }
                 setIsLoading(false);
+                setPage(0);
             });
         } catch (err) {}
     }, [selectedFilter]);
@@ -141,6 +142,7 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
                     }
                     setIsLoading(false);
                 });
+                setPage(0);
             } catch (err) {}
         },
         [selectedFilter]
