@@ -6,10 +6,6 @@
     position: relative;
 }
 
-.resource-search-bar-container {
-    display: flex;
-    padding: 0;
-}
 
 /* .manage-resource-header-container {
     display: flex;
@@ -24,23 +20,18 @@
 
 .res-filter-container {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+    padding: 1rem 2.5rem;
+    margin: 0 2rem;
 }
 
 /* Search Bar + Button Container */
 .resource-search-bar-container {
     display: flex;
     align-items: center;
-    padding-left: 3.5rem;
     height: 3rem;
+    
 }
 
 /* Each filter select field */

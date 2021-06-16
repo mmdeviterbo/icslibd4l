@@ -18,7 +18,7 @@ const ManageResourcesPage = ({ user }) => {
 
     // States for filters
     const [year, setYear] = useState(0);
-    const [type, setType] = useState("");
+    const [type, setType] = useState(null);
 
     const accessPrivilege = () => {
         setTimeout(() => {
@@ -34,28 +34,16 @@ const ManageResourcesPage = ({ user }) => {
         }, 700);
     };
 
-    /****************************************************************************
-     * Type: Function
-     *
-     * Summary:
-     * On keypress enter, sets the value of searchField variable causing the
-     * filtering of data according to the search input
-     ****************************************************************************/
     const handleSearchEnter = (e) => {
         if (e.key === "Enter") {
             setSearchField(searchInput);
+            setType(type);
         }
     };
 
-    /****************************************************************************
-     * Type: Function
-     *
-     * Summary:
-     * On click of the search icon, sets the value of searchField variable causing the
-     * filtering of data according to the search input
-     ****************************************************************************/
     const handleSearchClick = (e) => {
         setSearchField(searchInput);
+        setType(type);
     };
 
     return (
@@ -64,30 +52,16 @@ const ManageResourcesPage = ({ user }) => {
                 <div className="manage-resources-page-container">
                     <ManagementHeader type={"resource"} />
                     <div className="manage-resource-header-container">
-                        <div className="resource-search-bar-container">
-                            <input
-                                className="search-bar-temp"
-                                placeholder={"Search for resource"}
-                                value={searchInput}
-                                onKeyDown={handleSearchEnter}
-                                onChange={(e) => setSearchInput(e.target.value)}
-                            />
-                            <div className="input-group-append">
-                                <button
-                                    className="btn btn-secondary res-search-btn"
-                                    type="button"
-                                    onClick={handleSearchClick}
-                                >
-                                    <i className="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
                         {/* <br /> */}
                         <FieldsContainerRes
                             setYear={setYear}
                             setType={setType}
                             setSearchField={setSearchField}
                             setSearchInput={setSearchInput}
+                            searchInput={searchInput}
+                            handleSearchEnter={handleSearchEnter}
+                            handleSearchClick={handleSearchClick}
+                            type={type}
                         />
                     </div>
                     {/* <ResTableContainer resourceList={resourceList} /> */}
