@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useHistory } from 'react-router';
 import PropTypes from "prop-types";
 // import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -179,6 +180,7 @@ const MainResourceTable = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selectedEdit, setSelectedEdit] = useState();
     const [resourceList, setResourceList] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         async function fetchBooks() {
@@ -331,14 +333,18 @@ const MainResourceTable = () => {
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    const sptClick = `/sp-thesis/${row.sp_thesis_id}`;
+                                    const bookClick = `/book/${row.bookId}`;
+                                    console.log(classes.tablecell);
 
                                     return (
                                         <TableRow
-                                            className={classes.tablecell}
+                                            className={`${classes.tablecell} tableRowStyle`}
                                             hover
                                             tabIndex={-1}
                                             key={index}
                                             selected={isItemSelected}
+                                            onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
                                         >
                                             {/* {row} */}
 
