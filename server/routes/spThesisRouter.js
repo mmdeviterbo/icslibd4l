@@ -344,7 +344,7 @@ router.get("/search", async (req, res) => {
     var idArr_thesis = []; // array for ThesisIDs
     var total = []; // array for resulting entries
 
-    var spName = ["Special Problem", "sp", "SP"];
+    var spName = ["Special Problem", "sp", "SP", "special problem"];
     var thesisName = ["Thesis", "thesis"];
 
     // ---------------------------------------- SUB FUNCTIONS

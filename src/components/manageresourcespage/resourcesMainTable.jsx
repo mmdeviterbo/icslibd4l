@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useHistory } from 'react-router';
 import PropTypes from "prop-types";
 // import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -84,37 +85,32 @@ function EnhancedTableHead(props) {
             <TableRow>
                 {resHeadCells.map((headCell, index) => (
                     <TableCell
-                        style={{ backgroundColor: "#FAFAFA" }}
+                        style={{
+                            backgroundColor: "#0067a1",
+                            color: "white",
+                        }}
                         className={classes.tablecell}
                         key={index}
                         align={"left"}
                         padding={headCell.disablePadding ? "none" : "default"}
-                        sortDirection={orderBy === headCell.id ? order : false}>
-                        
-                        {/* if title, sort, else dont */}
-                        {headCell.id === "title" ? 
-                            (<TableSortLabel
-                                active={orderBy === headCell.id}
-                                direction={orderBy === headCell.id ? order : "asc"}
-                                onClick={createSortHandler(headCell.id)}
-                                >
-                                {headCell.label}
-                                {orderBy === headCell.id ? (
-                                    <span className={classes.visuallyHidden}>
-                                        {order === "desc"
-                                            ? "sorted descending"
-                                            : "sorted ascending"}
-                                    </span>
-                                ) : null}
-                            </TableSortLabel>)
+                        sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                        {headCell.label==="Title"? <TableSortLabel
+                            active={orderBy === headCell.id}
+                            direction={orderBy === headCell.id ? order : "asc"}
+                            onClick={createSortHandler(headCell.id)}
+                        >
+                            {headCell.label}
+                            {orderBy === headCell.id ? (
+                                <span className={classes.visuallyHidden}>
+                                    {order === "desc"
+                                        ? "sorted descending"
+                                        : "sorted ascending"}
+                                </span>
+                            ) : null}
+                        </TableSortLabel>
                         :
-                            (
-                                <h3 
-                                style = {{fontWeight:"medium", fontFamily:"Montserrat, sans-serif"}}> 
-                                    {headCell.label} 
-                                </h3>
-                            )
-
+                        <span>{headCell.label}</span>
                         }
                     </TableCell>
                 ))}
@@ -140,12 +136,18 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         width: "100%",
         marginBottom: theme.spacing(2),
+        boxShadow: "4px 4px 20px #cfcfcf",
+        // boxShadow: "2px 5px 16px #cfcfcf",
+        borderRadius: "10px",
     },
-    table: {},
+    mainTable: {
+        borderRadius: "10px",
+    },
     tablecell: {
         padding: "16px",
         fontSize: "1.4rem",
         fontWeight: "bold",
+        // borderRadius: "10px",
     },
     visuallyHidden: {
         border: 0,
@@ -172,6 +174,7 @@ const MainResourceTable = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selectedEdit, setSelectedEdit] = useState();
     const [resourceList, setResourceList] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         async function fetchBooks() {
@@ -196,7 +199,7 @@ const MainResourceTable = () => {
         fetchBooks();
     }, []);
 
-    const DeleteBtn = ({ id, type }) => {
+    const DeleteBtn = ({ id, title, type }) => {
         return (
             <Link
                 to={{
@@ -205,15 +208,18 @@ const MainResourceTable = () => {
                         background: location,
                         resid: id,
                         item: "resource",
+                        restitle: title,
                         type: type,
                     },
-                }}>
+                }}
+            >
                 <i
                     className="table-icons fa fa-trash-o"
                     style={{
                         margin: "10px",
                         color: "red",
-                    }}></i>
+                    }}
+                ></i>
             </Link>
         );
     };
@@ -224,13 +230,15 @@ const MainResourceTable = () => {
                 to={{
                     pathname: `/edit-spt/${id.id}`,
                     state: { sourceInfo: selectedEdit, id },
-                }}>
+                }}
+            >
                 <i
                     className="table-icons fa fa-pencil"
                     style={{
                         margin: "10px",
                         color: "gray",
-                    }}></i>
+                    }}
+                ></i>
             </Link>
         );
     };
@@ -241,13 +249,15 @@ const MainResourceTable = () => {
                 to={{
                     pathname: `/edit-book/${id.id}`,
                     state: { sourceInfo: selectedEdit, id },
-                }}>
+                }}
+            >
                 <i
                     className="table-icons fa fa-pencil"
                     style={{
                         margin: "10px",
                         color: "gray",
-                    }}></i>
+                    }}
+                ></i>
             </Link>
         );
     };
@@ -289,12 +299,13 @@ const MainResourceTable = () => {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <TableContainer>
+                <TableContainer className={classes.mainTable}>
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
                         size={"medium"}
-                        aria-label="enhanced table">
+                        aria-label="enhanced table"
+                    >
                         <EnhancedTableHead
                             classes={classes}
                             numSelected={selected.length}
@@ -316,6 +327,12 @@ const MainResourceTable = () => {
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    const sptClick = `/sp-thesis/${row.sp_thesis_id}`;
+                                    const bookClick = `/book/${row.bookId}`;
+                                    const viewAllBook = `/search?type=book&search=`;
+                                    const viewAllSP = `/search?type=sp&search=`;
+                                    const viewAllThesis = `/search?type=thesis&search=`;
+                                    const viewAllPath = (row?.bookId && viewAllBook) || (row?.type==="Thesis"? viewAllThesis : viewAllSP) 
 
                                     return (
                                         <TableRow
@@ -323,7 +340,8 @@ const MainResourceTable = () => {
                                             hover
                                             tabIndex={-1}
                                             key={index}
-                                            selected={isItemSelected}>
+                                            selected={isItemSelected}
+                                            >
                                             {/* {row} */}
 
                                             <TableCell
@@ -334,13 +352,16 @@ const MainResourceTable = () => {
                                                 id={labelId}
                                                 scope="row"
                                                 padding="none"
-                                                className={classes.tablecell}>
+                                                className={`${classes.tablecell} tableRowStyle`}
+                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
+                                            >
                                                 {/* unique id */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}>
+                                                    }}
+                                                >
                                                     {row && row.bookId
                                                         ? row && row.ISBN
                                                         : row &&
@@ -352,14 +373,17 @@ const MainResourceTable = () => {
                                                 style={{
                                                     width: "30%",
                                                 }}
-                                                className={classes.tablecell}
-                                                align="left">
+                                                className={`${classes.tablecell} tableRowStyle`}
+                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
+                                                align="left"
+                                            >
                                                 {/* title of resources */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}>
+                                                    }}
+                                                >
                                                     {row && row.title}
                                                 </div>
                                             </TableCell>
@@ -367,20 +391,24 @@ const MainResourceTable = () => {
                                                 style={{
                                                     width: "20%",
                                                 }}
-                                                className={classes.tablecell}
-                                                align="left">
+                                                className={`${classes.tablecell} tableRowStyle`}
+                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
+                                                align="left"
+                                            >
                                                 {/* author */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}>
+                                                    }}
+                                                >
                                                     {row && row.bookId
                                                         ? row.author &&
                                                           row.author.map(
                                                               (item, key) => (
                                                                   <div
-                                                                      key={key}>
+                                                                      key={key}
+                                                                  >
                                                                       {
                                                                           item.author_name
                                                                       }
@@ -391,7 +419,8 @@ const MainResourceTable = () => {
                                                           row.authors.map(
                                                               (item, key) => (
                                                                   <div
-                                                                      key={key}>
+                                                                      key={key}
+                                                                  >
                                                                       {
                                                                           item.author_name
                                                                       }
@@ -404,14 +433,17 @@ const MainResourceTable = () => {
                                                 style={{
                                                     width: "12%",
                                                 }}
-                                                className={classes.tablecell}
-                                                align="left">
+                                                className={`${classes.tablecell} tableRowStyle`}
+                                                align="left"
+                                            >
                                                 {/* classifcation */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}>
+                                                    }}
+                                                    onClick={()=>history.push(viewAllPath)}
+                                                >
                                                     {/* Checks if a resource is a book by using the bookId attribute as checker */}
                                                     {row && row.bookId
                                                         ? "Book"
@@ -424,13 +456,15 @@ const MainResourceTable = () => {
                                                     width: "13%",
                                                 }}
                                                 className={classes.tablecell}
-                                                align="left">
+                                                align="left"
+                                            >
                                                 {/* publishing year */}
                                                 <div
                                                     style={{
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
-                                                    }}>
+                                                    }}
+                                                >
                                                     {row && row.bookId
                                                         ? dateFormat(
                                                               row.dateAcquired,
@@ -444,7 +478,8 @@ const MainResourceTable = () => {
                                                     width: "10%",
                                                     textAlign: "center",
                                                     fontSize: "1.5rem",
-                                                }}>
+                                                }}
+                                            >
                                                 {row.bookId ? (
                                                     <EditBookBtn
                                                         id={row.bookId}
@@ -457,11 +492,13 @@ const MainResourceTable = () => {
                                                 {row && row.bookId ? (
                                                     <DeleteBtn
                                                         id={row.bookId}
+                                                        title={row.title}
                                                         type={"book"}
                                                     />
                                                 ) : (
                                                     <DeleteBtn
                                                         id={row.sp_thesis_id}
+                                                        title={row.title}
                                                         type={row.type}
                                                     />
                                                 )}
@@ -473,7 +510,8 @@ const MainResourceTable = () => {
                                 <TableRow
                                     style={{
                                         height: 53 * emptyRows,
-                                    }}>
+                                    }}
+                                >
                                     <TableCell colSpan={6} />
                                 </TableRow>
                             )}

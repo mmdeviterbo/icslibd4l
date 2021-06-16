@@ -1,16 +1,27 @@
 import React from "react";
-// import ToastNotification from "../toastNotification";
-// import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
-// TO-DO: Change the links according to the appropriate SPT attributes
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Shows the SP/Thesis details. Poster, journal, source
+ *  code and manuscript can only be viewed if a user is
+ *  and admin or faculty/staff. The buttons for redirecting
+ *  to the resources is not visible to guests and students.
+ *
+ *  props:
+ *    user = checks the user type for user privileges
+ *    resourceData = object that will be rendered into
+ *           the component
+ ******************************************************/
+
 const InfoSidebar = ({ user, resourceData }) => {
-  let link = "https://www.youtube.com/watch?v=m4gnMWua4xo";
   const handleRedirect = (redirectHere) => {
     // window.location.href = redirectHere;
     if (redirectHere === "" || redirectHere === null) {
       toast.info("Unavailable", {
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 5000,
         hideProgressBar: true,
         closeOnClick: true,
@@ -29,7 +40,6 @@ const InfoSidebar = ({ user, resourceData }) => {
       <div className="info-group">
             <h3>Type:</h3>
             <h3 className = "info-value">{resourceData && resourceData.type}</h3>
-            
         </div>
         <hr/>
 
@@ -38,7 +48,7 @@ const InfoSidebar = ({ user, resourceData }) => {
             {resourceData &&
               resourceData.advisers.map((item, key) => (
                 <h3 className="info-value" key={key}>
-                  {item.adviser_name} <br/>
+                  {item.adviser_name}
                 </h3>
               ))}
             
@@ -47,12 +57,18 @@ const InfoSidebar = ({ user, resourceData }) => {
 
         <div className = "info-group">
             <h3>Keywords:</h3>
+            <div>
             {resourceData &&
                 resourceData.keywords.map((item, key) => (
                   <h3 className="info-value" key={key}>
-                    {item.sp_thesis_keyword} <br/>
+                    {item.sp_thesis_keyword}
                   </h3>
                 ))}
+            {(!resourceData || (resourceData && resourceData.keywords.length===0))
+            &&
+            <p style={{fontStyle:"italic"}}>No keyword</p>
+            }
+            </div>
         </div>
         <hr/>
 
@@ -79,7 +95,7 @@ const InfoSidebar = ({ user, resourceData }) => {
             <>
               <button
                 id="downloadsourcecode"
-                value={link}
+                value={resourceData && resourceData.source_code}
                 onClick={(e) => handleRedirect(e.target.value)}
               >
                 View Source Code

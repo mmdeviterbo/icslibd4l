@@ -1,5 +1,16 @@
 import React from "react";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Renders the book attributes.
+ *
+ *  props:
+ *    {isbn, publisher, numOfCopies, subjects,
+ *    physical Desc } = book attributes
+ ******************************************************/
+
 const BookCoverandInfo = ({
   isbn,
   publisher,
@@ -45,7 +56,7 @@ const BookCoverandInfo = ({
 
         <div className = "info-group">
             <h3 className= "info-head">Physical Description:</h3>
-            <p className = "info-value">{physicalDesc}</p>
+            <p className = "info-value-pd">{physicalDesc}</p>
            
         </div>
         <hr/>

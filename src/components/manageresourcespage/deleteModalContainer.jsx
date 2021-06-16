@@ -6,9 +6,19 @@ import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
 import StatusModal from "../modal/operationStatusModal";
-import "bootstrap/dist/css/bootstrap.min.css";
 
-//  TODO: add documentation
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  A modal that shows up to confirm deletion of resource
+ *  or removal of an account.
+ *
+ *  props
+ *    user = used to check for user privileges
+ *
+ ******************************************************/
+
 const DeletePopUpCont = ({ user }) => {
     const history = useHistory();
     const location = useLocation();
@@ -16,6 +26,7 @@ const DeletePopUpCont = ({ user }) => {
     const type = location.state.type;
     const item = location.state.item;
     const toDelete = location.state.user; // Object containing user information to be deleted
+    const resTitle = location.state.restitle;
     // const userState = user;
     const [message, setMessage] = useState("");
     const [show, setShow] = useState(true);
@@ -35,6 +46,19 @@ const DeletePopUpCont = ({ user }) => {
         history.goBack();
     };
 
+    /****************************************************
+     * Type: Function
+     *
+     * Summary:
+     *  Checks if the item that will be deleted is an account,
+     *  resource or activity logs and makes a DELETE request
+     *  that will permanently remove the item from the database.
+     *  When done, another modal will show up that confirms
+     *  deletion and the page will be redirected to the previous
+     *  one.
+     *
+     ******************************************************/
+
     const handleSubmit = async (event) => {
         console.log(id);
         console.log(type);
@@ -48,7 +72,7 @@ const DeletePopUpCont = ({ user }) => {
                 } else {
                     await ResourceService.deleteSpThesis(id);
                 }
-                setItemName(id);
+                setItemName(resTitle);
                 setMessage("success");
                 handleClose();
                 // setVisible(true);
@@ -56,18 +80,22 @@ const DeletePopUpCont = ({ user }) => {
                 setPathAfter("/manage-resources");
             } else if (item === "logs") {
                 await PersonService.clearUserLogs();
+                setItemName("Logs");
                 setMessage("success");
                 handleClose();
                 setPathAfter("/view-activitylogs");
             } else if (item === "account") {
                 setItemName(user.fullName);
+                console.log("error here");
                 await PersonService.deleteUser(user); //deletes the user from the database
+
                 await PersonService.logoutUser(user); // logs the user out
                 localStorage.removeItem(jwtPrivateKey); // removes token from the browser
                 setIsSelf(true);
                 setMessage("success");
                 setPathAfter("/");
                 handleClose();
+                // window.location = "/";
             } else {
                 if (toDelete.googleId === user.googleId) {
                     await PersonService.deleteUser(toDelete);
@@ -93,7 +121,6 @@ const DeletePopUpCont = ({ user }) => {
                 alert(err);
                 // alert(err.response.data.errorMessage); // some reason error message
             }
-            console.log(err);
         }
     };
 
@@ -111,10 +138,11 @@ const DeletePopUpCont = ({ user }) => {
             />
             <Modal
                 show={show}
-                onHide={handleClose}
+                onHide={handleCancel}
                 backdrop="static"
                 keyboard={false}
-                centered>
+                centered
+            >
                 {/* Renders according to item.
           If resource, else if user, else account */}
                 <Modal.Header closeButton>
@@ -132,12 +160,14 @@ const DeletePopUpCont = ({ user }) => {
                                 [
                                     item === "logs" ? (
                                         <Modal.Title
-                                            style={{ fontWeight: "bold" }}>
+                                            style={{ fontWeight: "bold" }}
+                                        >
                                             Clear Activity Logs
                                         </Modal.Title>
                                     ) : (
                                         <Modal.Title
-                                            style={{ fontWeight: "bold" }}>
+                                            style={{ fontWeight: "bold" }}
+                                        >
                                             Remove Account
                                         </Modal.Title>
                                     ),
@@ -165,7 +195,7 @@ const DeletePopUpCont = ({ user }) => {
                                 <Modal.Body>
                                     Are you sure you want to delete{" "}
                                     {item === "resource"
-                                        ? id
+                                        ? resTitle
                                         : toDelete.fullName}
                                     ?
                                 </Modal.Body>

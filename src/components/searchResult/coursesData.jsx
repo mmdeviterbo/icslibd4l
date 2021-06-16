@@ -1,3 +1,11 @@
+/***************************************************************************
+ * Type: React Array
+ *
+ * Summary:
+ * Contains the labels for the autocomplete searchbar
+ * 
+ ***************************************************************************/
+
 export const coursesData = [
     {
         label: "CMSC12",

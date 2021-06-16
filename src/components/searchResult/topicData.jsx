@@ -1,3 +1,10 @@
+/***************************************************************************
+ * Type: React Array
+ *
+ * Summary:
+ * Contains the labels for the autocomplete searchbar
+ * 
+ ***************************************************************************/
 export const topicData = [
     {
         id:"0001",
@@ -9,7 +16,7 @@ export const topicData = [
     },
     {
         id:"0003",
-        label: "Adventure",
+        label: "Augmented",
     },
     {
         id:"0004",
