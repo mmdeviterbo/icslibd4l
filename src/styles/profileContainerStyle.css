@@ -1,59 +1,158 @@
-/* text field */
-input {
-  font-style: Montserrat;
-  font-size: 25px;
-  margin: 12px 20px;
-  border-radius: 8px;
-  padding: 12px;
-  outline-style: none;
+/* profile header */
+.profile-header-container {
+  background-color: none;
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 2rem;
+  padding-left: 15%;
+  padding-right: 15%;
+  background-color: #f4f4f4;
+}
+
+.profile-header-container h1 {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 2.75rem;
   width: 100%;
 }
 
-input:focus {
-  border-radius: 8px;
-  border: inherit + .5px solid #90ee90;
-}
-
-.edit-icon:hover {
-  transition: transform 100ms ease, box-shadow 125ms ease;
-  transform: scale(1.25);
-  cursor: pointer;
-
-}
-
-/* profileContainer */
+/* profile container */
 .profile-container {
-  display: grid;
-  gap: 20px;
-  min-height: 90vh;
-  width: 90vw;
-  padding: 10vh;
-  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  height: 50vh;
+  margin: 2rem 12%;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0.5rem 0.5rem 1rem #cfcfcf;
+  background-color: white;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 0.8rem;
+  margin: 0.8rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  /* border: 1px solid blue; */
 }
 
-/* remove account container */
-.removal-bar {
-  padding-top: 10vh;
-}
-
-/* edit button cell */
-.edit-column {
-  padding-left: none;
-  padding-top: 21px;
-  align-items: flex-start;
-  
-}
-
-.grid-columns {
-  align-items: center;
-  justify-content: center;
-  padding: 12px 0px 12px 12px;
-  /* border: 1px solid red; */
+.grid-row {
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
 }
 
 .label-container {
-  padding: 12px;
+  width: 100%;
+  vertical-align: middle;
+  padding-top: 0.8rem;
+  font-weight: bold;
+  font-size: calc(0.1vw + 1em);
 }
 
+.field-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.field-container input {
+  flex-shrink: 1;
+  font-style: normal;
+  font-size: calc(0.7vw + 1em);
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+  margin: 0.8rem 0.8rem 0.8rem 0;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  height: fit-content;
+}
+
+.field-container input:focus {
+  width: 50%;
+  outline: none;
+  border-bottom: 1px solid black;
+  height: fit-content;
+}
+
+/* edit button cell */
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 20%;
+  align-items: center;
+}
+
+.nick-icon {
+  margin: 0.8rem 0.8rem 0.8rem 0;
+
+  /* margin: 0.8rem !important; */
+  font-size: calc(0.8vw + 1em) !important;
+}
+
+.nick-icon:hover {
+  transition: transform 100ms ease, box-shadow 125ms ease;
+  transform: scale(1.125);
+  cursor: pointer;
+}
+
+/* remove account container */
+.remove-account-container {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  padding: 0.8rem;
+  margin: 0.8rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.remove-account-container span {
+  padding: 0.8rem;
+  font-size: calc(0.8vw + 1em);
+  font-weight: bold;
+}
+
+.remove-account-container p {
+  text-align: justify;
+  margin: 0;
+  padding: 0.8rem;
+  font-size: calc(0.3vw + 1em);
+}
+
+.remove-account-button-container {
+  display: flex;
+  padding: 0.8rem;
+
+  justify-content: flex-start;
+}
+
+.remove-account-button {
+  display: inline-block;
+  align-items: center;
+  background-color: white;
+  color: #c82333;
+  border-style: solid;
+  border-color: #c82333;
+  border-width: 1px;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 2vh;
+  font-weight: bold;
+}
+
+.remove-account-button:hover {
+  background-color: #c82333;
+  border-color: white;
+  color: white;
+}

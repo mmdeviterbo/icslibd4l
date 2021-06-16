@@ -10,6 +10,14 @@ import { produce } from "immer";
 import StatusModal from "../modal/operationStatusModal";
 import ToastNotification from "../toastNotification";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  A single-page form to be filled up by the user with
+ *  relevant SP/Thesis attributes
+ *
+ ******************************************************/
 
 const classificationOptions = [
   { value: "Special Problem", label: "Special Problem" },
@@ -117,12 +125,21 @@ const AddNewSPThesisForm = () => {
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
-  const handleSubmit = async (event) => {
-    console.log("meow");
-    event.preventDefault();
+    const handleSubmit = async (event) => {
+        // console.log("meow");
+        event.preventDefault();
 
-    if (authorList.length === 0) {
-      return ToastNotification({ content: "Please enter all required fields" });
+    if (
+      authorList === null ||
+      adviserList === null ||
+      keywords === null ||
+      authorList.length === 0 ||
+      adviserList.length === 0 ||
+      keywords.length === 0
+    ) {
+      return ToastNotification({
+        content: "Please enter all required fields",
+      });
     }
 
     try {
@@ -139,22 +156,13 @@ const AddNewSPThesisForm = () => {
         authors: authorList,
         keywords,
       };
-
-      console.log(userInput);
       const { data } = await ResourceServices.addSpThesis(userInput);
-      console.log(data);
-
       setSuccess("success");
       setShow(true);
       event.target.reset();
-      // window.location = "/add-new-resource/";
     } catch (err) {
       if (err.response && err.response.data) {
         ToastNotification({ content: err.response.data.errorMessage });
-        // <ToastNotification
-        //   content={err.response.data.errorMessage}
-        //   style={{ width: "2000px" }}
-        // />;
       }
     }
   };
@@ -169,310 +177,316 @@ const AddNewSPThesisForm = () => {
     setKeyword(chip);
   };
 
-  // FIX THIS
+  // creates an array of adviser names from the user input
   const handleAdviserChange = (adviserList) => {
     const adviser = [...adviserList].map((obj) => obj.value);
     // setCourses(values);
     setAdviserList(adviser);
   };
 
-  return (
-    <div className="add-res-form-cont">
-
-        <form className = "main-form" id="addSPTForm" onSubmit={handleSubmit} autoComplete="off">
-            
-            <div className = "form-columns">
-
-                <div className = "form-left-column">
-
-                    {/* Title */}
-                    <div className="primaryfields">
-                        <label htmlFor="resTitle">Title: &nbsp; </label>
-                        <input
-                            type="text"
-                            id="resTitle"
-                            required
-                            onChange={(event) => {
-                            setTitle(event.target.value);
-                            }}
-                        />
-                    </div>
-
-                    {/* Date Published */}
-                    <div className="primaryfields">
-                        <label htmlFor="datePublished">Year Published: &nbsp; </label>
-                        <input
+    return (
+        <div className="add-res-form-cont">
+            <form
+                className="main-form"
+                id="addSPTForm"
+                onSubmit={handleSubmit}
+                autoComplete="off">
+                <div className="form-columns">
+                    <div className="form-left-column">
+                        {/* Title */}
+                        <div className="primaryfields">
+                            <label htmlFor="resTitle">Title: &nbsp; </label>
+                            <input
                                 type="text"
+                                id="resTitle"
+                                required
+                                onChange={(event) => {
+                                    setTitle(event.target.value);
+                                }}
+                            />
+                        </div>
+                        {/* Date Published */}
+                        <div className="primaryfields">
+                            <label htmlFor="datePublished">
+                                Year Published: &nbsp;{" "}
+                            </label>
+                            <input
+                                type="number"
                                 pattern="[0-9]*"
-                                inputMode = "numeric"
+                                inputMode="numeric"
                                 id="sptYear"
                                 required
                                 min={1908}
                                 max={9999}
                                 // defaultValue={year}
                                 onChange={(event) => {
-                                if (event.target.value < 0) {
-                                    event.target.value = event.target.defaultValue;
-                                }
-                                setYear(event.target.value);
+                                    if (event.target.value < 0) {
+                                        event.target.value =
+                                            event.target.defaultValue;
+                                    }
+                                    setYear(event.target.value);
                                 }}
-                                onMouseEnter={e=>e.target.focus()}
+                                onMouseEnter={(e) => e.target.focus()}
                             />
-                    </div>
+                        </div>
+                        {/* Author fields */}
+                        <div className="authors-group">
+                            <h4 style={{ fontWeight: "normal" }}>Author(s):</h4>
 
-                    {/* Author fields */}
-                    <div className="authors-group">
-                        <h4 style = {{fontWeight:"normal"}}
-                        >Author(s):</h4>
+              {/* button adds fields for author */}
+              <button
+                id="addAuthor"
+                onClick={() => {
+                  setAuthorList((currentAuthors) => [
+                    ...currentAuthors,
+                    {
+                      // author needs to generate ID para di madelete lahat ng fields in one button click
+                      authorid: nanoid(5),
+                      fname: "",
+                      lname: "",
+                    },
+                  ]);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-plus"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                </svg>
+                Add Author
+              </button>
 
-                        {/* button adds fields for author */}
-                        <button
-                            id="addAuthor"
-                            onClick={() => {
-                            setAuthorList((currentAuthors) => [
-                                ...currentAuthors,
-                                {
-                                // author needs to generate ID para di madelete lahat ng fields in one button click
-                                authorid: nanoid(5),
-                                fname: "",
-                                lname: "",
-                                },
-                            ]);
-                            }}
-                            >
-                            <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            className="bi bi-plus"
-                            viewBox="0 0 16 16"
-                            >
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg>
-                            Add Author
-                        </button>
+              {authorList.map((p, index) => {
+                return (
+                  <div className="authorfields" key={p.authorid}>
+                    {/* AUTHOR FIRST NAME FIELD */}
+                    <div className="authorname-cont">
+                      <div
+                        className="author-name"
+                        style={{ marginRight: "3%" }}
+                      >
+                        <label htmlFor="resAuthorFN">First Name:</label>
 
-                        {authorList.map((p, index) => {
-                            return (
-                            <div className = "authorfields" key={p.authorid}>
-                                    {/* AUTHOR FIRST NAME FIELD */}
-                                    <div className = "authorname-cont">
-
-                                        <div className="author-name">
-                                            <label htmlFor="resAuthorFN">
-                                                First Name:
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                id="resAuthorFN"
-                                                // name="fname"
-                                                required
-                                                value={p.fname}
-                                                onChange={(e) => {
-                                                const fname = e.target.value;
-                                                setAuthorList((currentAuthors) =>
-                                                    produce(currentAuthors, (v) => {
-                                                    v[index].fname = fname;
-                                                    })
-                                                );
-                                                // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                                                }}
-                                            />
-                                        </div>
-
-                                        {/* AUTHOR LAST NAME FIELD */}
-                                        <div className="author-name">
-                                            <label htmlFor="resAuthorLN">
-                                                Last Name: 
-                                            </label>
-                                            <input
-                                                type="text"
-                                                id="resAuthorLN"
-                                                required
-                                                // name="lname"
-                                                value={p.lname}
-                                                onChange={(e) => {
-                                                const lname = e.target.value;
-                                                setAuthorList((currentAuthors) =>
-                                                    produce(currentAuthors, (v) => {
-                                                    v[index].lname = lname;
-                                                    })
-                                                );
-                                                // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
-                                                }}
-                                            />
-                                        </div>
-                                        
-                                    </div> {/* closing div for authorname-cont */}
-
-                                    {/* button deletes author fields */}
-                                    <button
-                                        id="deleteAuthor"
-                                        onClick={() => {
-                                        setAuthorList((currentAuthors) =>
-                                        currentAuthors.filter(
-                                            (x) => x.authorid !== p.authorid
-                                        )
-                                        );
-                                        // function checks if Author-To-Be-Deleted exists.
-                                        // function deletes ALL instances of same author to be deleted
-                                        // we generate a random id so no 2 author fields are the same
-                                        // hence no faulty deleting
-                                        // wag nalang istore si author id sa db
-                                        }}
-                                        >
-                                        Delete Author
-                                    </button>
-                                
-                                
-                            </div> //closing for authorfields
+                        <input
+                          type="text"
+                          id="resAuthorFN"
+                          // name="fname"
+                          required
+                          value={p.fname}
+                          onChange={(e) => {
+                            const fname = e.target.value;
+                            setAuthorList((currentAuthors) =>
+                              produce(currentAuthors, (v) => {
+                                v[index].fname = fname;
+                              })
                             );
-                        })}
-                                {/* for testing only: */}
-                                {/* <div className = "testdiv">
-                                                {JSON.stringify(authorList, null, 2)}
-                                            </div> */}    
-                    </div> {/* authors-group close */}
-                
-                </div>  {/*closing for left column  */}
-
-                <div className = "form-mid-column">
-
-                    {/* Classification */}
-                    <div className="classifSelect">
-                        Classification:
-                        <Select
-                            id="resClassification"
-                            required
-                            // defaultValue={"Select..."}
-                            options={classificationOptions}
-                            value={classificationOptions.find((obj) => obj.value === type)}
-                            onChange={handleTypeChange}
-                        ></Select>
-                    </div>
-
-                    {/* Adviser Dropdown Multi */}
-                    <div className="select-advisers">
-                    <label 
-                        htmlFor= "advsel"
-                        >Advisers:</label>
-                    <Select
-                        id="advsel"
-                        required
-                        options={adviserchoices}
-                        value={adviserchoices.find((obj) => obj.value === adviser)}
-                        onChange={handleAdviserChange}
-                        isMulti
-                    ></Select>
-                    </div>
-
-                    {/* Abstract TextArea */}
-                    <div className = "abstract-div">
-                        <label htmlFor= "abstractText">Abstract:</label>
-                        <textarea
-                            required
-                            id="abstractText"
-                            onChange={(event) => {
-                            setAbstract(event.target.value);
-                            }}
+                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                          }}
                         />
-                    </div>
+                      </div>
 
-                </div> {/* mid column close */}
-
-                <div className ="form-right-column">
-
-                    <div className = "primaryfields">
-                        <label htmlFor="">Source Code Link:</label>
+                      {/* AUTHOR LAST NAME FIELD */}
+                      <div className="author-name">
+                        <label htmlFor="resAuthorLN">Last Name:</label>
                         <input
-                            type = "url"
-                            className="resourcefiles"
-                            id="spt-sourcecode"
-                            placeholder ={"https://www.example.com/"}
-                            onChange={(event) => 
-                                {
-                                setSourceCode(event.target.value)
-                                }
-                            }
+                          type="text"
+                          id="resAuthorLN"
+                          required
+                          // name="lname"
+                          value={p.lname}
+                          onChange={(e) => {
+                            const lname = e.target.value;
+                            setAuthorList((currentAuthors) =>
+                              produce(currentAuthors, (v) => {
+                                v[index].lname = lname;
+                              })
+                            );
+                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                          }}
                         />
-                    </div>
-
-                    <div className = "primaryfields">
-                        <label htmlFor="">Manuscript Link:</label>
-                        <input
-                            type = "url"
-                            className="resourcefiles"
-                            id="spt-manuscript"
-                            placeholder ={"https://www.example.com/"}
-                            onChange={(event) => 
-                                {
-                                setManuscript(event.target.value);
-                                }
-                            }
-                        />
-                    </div>
-
-                    <div className = "primaryfields">
-                        <label htmlFor="">Journal Link:</label>
-                        <input
-                            type = "url"
-                            className="resourcefiles"
-                            id="spt-journal"
-                            placeholder ={"https://www.example.com/"}
-                            onChange={(event) => 
-                                {
-                                setJournal(event.target.value);
-                                }
-                            }
-                        />
-                    </div>
-
-                    <div className = "primaryfields">
-                        <label htmlFor="">Poster Link:</label>
-                        <input
-                            type = "url"
-                            className="resourcefiles"
-                            id="spt-poster"
-                            placeholder ={"https://www.example.com/"}
-                            onChange={(event) => 
-                                {
-                                setPoster(event.target.value);
-                                }
-                            }
-                        />
-                    </div>
-
-                    <div className="primaryfields">
-                        <label htmlFor="keywords-field">Keywords: &nbsp; </label>
-                        <ChipInput
-                            id="keywords-field"
-                            onChange={(chips) => handleChips(chips)}
-                        />
-                    </div>
-
-                    <button type="submit" id="saveResource">
-                        Save
+                      </div>
+                    </div>{" "}
+                    {/* closing div for authorname-cont */}
+                    {/* button deletes author fields */}
+                    <button
+                      id="deleteAuthor"
+                      onClick={() => {
+                        setAuthorList((currentAuthors) =>
+                          currentAuthors.filter(
+                            (x) => x.authorid !== p.authorid
+                          )
+                        );
+                        // function checks if Author-To-Be-Deleted exists.
+                        // function deletes ALL instances of same author to be deleted
+                        // we generate a random id so no 2 author fields are the same
+                        // hence no faulty deleting
+                        // wag nalang istore si author id sa db
+                      }}
+                      style={{ marginTop: "3%" }}
+                    >
+                      Delete Author
                     </button>
+                  </div> //closing for authorfields
+                );
+              })}
+              {/* for testing only: */}
+              {/* <div className = "testdiv">
+                                                {JSON.stringify(authorList, null, 2)}
+                                            </div> */}
+            </div>{" "}
+            {/* authors-group close */}
+          </div>{" "}
+          {/*closing for left column  */}
+          <div className="form-mid-column">
+            {/* Classification */}
+            <div className="classifSelect">
+              Classification:
+              <Select
+                id="resClassification"
+                required
+                // defaultValue={"Select..."}
+                options={classificationOptions}
+                value={classificationOptions.find((obj) => obj.value === type)}
+                onChange={handleTypeChange}
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    "&:hover": { borderColor: "#778899" }, // border style on hover
+                    border: "2px solid #afbcc9", // default border color
+                    boxShadow: "none", // no box-shadow
+                    marginTop: "0.4rem",
+                  }),
+                }}
+              ></Select>
+            </div>
 
-                </div> {/* right form close */}
-            
-            </div> {/* form-columns close */}
-        
-        </form> {/* main form close */}
+            {/* Adviser Dropdown Multi */}
+            <div className="select-advisers">
+              <label htmlFor="advsel">Advisers:</label>
+              <Select
+                id="advsel"
+                required
+                options={adviserchoices}
+                value={adviserchoices.find((obj) => obj.value === adviser)}
+                onChange={handleAdviserChange}
+                isMulti
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    "&:hover": { borderColor: "#778899" }, // border style on hover
+                    border: "2px solid #afbcc9",
+                    boxShadow: "none",
+                  }),
+                }}
+              ></Select>
+            </div>
+            <br></br>
+            {/* Abstract TextArea */}
+            <div className="abstract-div">
+              <label htmlFor="abstractText">Abstract:</label>
+              <textarea
+                required
+                id="abstractText"
+                onChange={(event) => {
+                  setAbstract(event.target.value);
+                }}
+              />
+            </div>
+          </div>{" "}
+          {/* mid column close */}
+          <div className="form-right-column">
+            <div className="primaryfields">
+              <label htmlFor="">Source Code Link:</label>
+              <input
+                type="url"
+                className="resourcefiles"
+                id="spt-sourcecode"
+                placeholder={"https://drive.google.com/file/d/_id/view"}
+                onChange={(event) => {
+                  setSourceCode(event.target.value);
+                }}
+              />
+            </div>
 
-        <StatusModal
-            message={success}
-            name={"Sp/Thesis"}
-            show={show}
-            setShow={setShow}
-            operation={"add"}
-            pathAfter={"/add-new-spt/"}
-        />
+            <div className="primaryfields">
+              <label htmlFor="">Manuscript Link:</label>
+              <input
+                type="url"
+                className="resourcefiles"
+                id="spt-manuscript"
+                placeholder={"https://drive.google.com/file/d/_id/view"}
+                onChange={(event) => {
+                  setManuscript(event.target.value);
+                }}
+              />
+            </div>
+
+            <div className="primaryfields">
+              <label htmlFor="">Journal Link:</label>
+              <input
+                type="url"
+                className="resourcefiles"
+                id="spt-journal"
+                placeholder={"https://drive.google.com/file/d/_id/view"}
+                onChange={(event) => {
+                  setJournal(event.target.value);
+                }}
+              />
+            </div>
+
+            <div className="primaryfields">
+              <label htmlFor="">Poster Link:</label>
+              <input
+                type="url"
+                className="resourcefiles"
+                id="spt-poster"
+                placeholder={"https://drive.google.com/file/d/_id/view"}
+                onChange={(event) => {
+                  setPoster(event.target.value);
+                }}
+              />
+            </div>
+
+            <div className="primaryfields">
+              <label htmlFor="keywords-field">Keywords: &nbsp; </label>
+              <ChipInput
+                id="keywords-field"
+                onChange={(chips) => handleChips(chips)}
+                color="primary"
+                style={{
+                  border: "2px solid #afbcc9",
+                  padding: "0.5rem",
+                  paddingBottom: "0rem",
+                  borderRadius: "0.3rem",
+                }}
+              />
+            </div>
+
+            <button type="submit" id="saveResource">
+              Save
+            </button>
+          </div>{" "}
+          {/* right form close */}
+        </div>{" "}
+        {/* form-columns close */}
+      </form>{" "}
+      {/* main form close */}
+      {/* modal that shows confirmation upon form submission */}
+      <StatusModal
+        message={success}
+        name={"Sp/Thesis"}
+        show={show}
+        setShow={setShow}
+        operation={"add"}
+        pathAfter={"/add-new-spt/"}
+      />
     </div> //add-res-form-cont close
   );
-
-}
+};
 
 export default AddNewSPThesisForm;

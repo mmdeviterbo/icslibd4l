@@ -8,6 +8,14 @@ import StatusModal from "../modal/operationStatusModal";
 // import { toast } from "react-toastify";
 import ToastNotification from "../toastNotification";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  A single-page form to be filled up by the user with
+ *  relevant book attributes
+ *
+ ******************************************************/
 
 const courseList = [
   { value: "CMSC 12", label: "CMSC 12" },
@@ -57,9 +65,30 @@ const AddBookFormContainer = () => {
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
+  /****************************************************
+   * Type: Function
+   *
+   * Summary:
+   *  Stores all user inputs to an object containing book
+   *  attributes and make a POST request.
+   *  Shows a modal to confirm if request is successful or
+   *  not.
+   *  Adds the book in the database if successful.
+   *
+   ******************************************************/
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (
+      authorList === null ||
+      authorList.length === 0 ||
+      courses === null ||
+      courses.length === 0
+    ) {
+      return ToastNotification({
+        content: "Please enter all required fields",
+      });
+    }
     try {
       const userInput = {
         title,
@@ -73,7 +102,7 @@ const AddBookFormContainer = () => {
         datePublished,
         dateAcquired,
       };
-      console.log(userInput);
+    //   console.log(userInput);
       await ResourceServices.addBook(userInput);
 
       setSuccess("success");
@@ -83,9 +112,6 @@ const AddBookFormContainer = () => {
     } catch (err) {
       if (err.response && err.response.data) {
         ToastNotification({ content: err.response.data.errorMessage });
-        // setSuccess("fail");
-        // setShow(true);
-        // alert(err.response.data.errorMessage); // some reason error message
       }
     }
   };
@@ -151,6 +177,7 @@ const AddBookFormContainer = () => {
                   onChange={(event) => {
                     setDatePublished(handleDate(event.target.value));
                   }}
+                  style={{ marginRight: "5%" }}
                 />
               </div>
 
@@ -203,7 +230,10 @@ const AddBookFormContainer = () => {
                     {/* AUTHOR FIRST NAME FIELD */}
 
                     <div className="authorname-cont">
-                      <div className="author-name">
+                      <div
+                        className="author-name"
+                        style={{ marginRight: "3%" }}
+                      >
                         <label htmlFor="resAuthorFN">First Name:</label>
 
                         <input
@@ -221,6 +251,7 @@ const AddBookFormContainer = () => {
                             );
                             // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
                           }}
+                          style={{ marginRight: "5%" }}
                         />
                       </div>
 
@@ -313,17 +344,19 @@ const AddBookFormContainer = () => {
                             No. of copies available:
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             pattern="[1-9]*"
                             inputMode = "numeric"
                             min = {1}
                             placeholder="1-999"
                             required
-                            // key={`${Math.floor((Math.random() * 1000))}-min`} 
-                            //need random key para lumabas yung defaultValue, sa initial render lang kasi lumalabas nang maayos yung numberOfCopies
                             id="availBookCopies"
-                            onChange={(event) => {
-                                setNumOfCopies(event.target.value);
+                             onChange={(event) => {
+                                if (isNaN(Number(event.target.value))) {
+                                    return;
+                                } else {
+                                    setNumOfCopies(event.target.value);
+                                }
                             }}
                             onMouseEnter={e=>e.target.focus()}
                         />
@@ -339,6 +372,15 @@ const AddBookFormContainer = () => {
                 options={courseList}
                 value={courseList.find((obj) => obj.value === courses)}
                 onChange={(courses) => handleCourses(courses)}
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    "&:hover": { borderColor: "#778899" }, // border style on hover
+                    border: "2px solid #afbcc9", // default border color
+                    boxShadow: "none", // no box-shadow
+                    marginTop: "0.4rem",
+                  }),
+                }}
               ></Select>
             </div>
 
@@ -349,12 +391,10 @@ const AddBookFormContainer = () => {
                 placeholder={"https://www.example.com/"}
                 className="resourcefiles"
                 id="bookcover"
-                onChange={(event) => 
-                      {
-                      setBookCoverLink(event.target.value);
-                      }
-                    }
-                />
+                onChange={(event) => {
+                  setBookCoverLink(event.target.value);
+                }}
+              />
             </div>
 
             <button type="submit" id="saveResource">

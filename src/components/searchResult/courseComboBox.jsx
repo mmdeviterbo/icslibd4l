@@ -3,11 +3,23 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { coursesData } from "./coursesData";
 
+/***************************************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * Searchbar with autocomplete for sidebar filter 
+ *
+ * props:
+ * - <prop> = <description>
+ * course = variable, contains the value of course filter
+ * setCourse = function, sets the state of course filter
+ * 
+ ***************************************************************************/
+
 export default function CourseComboBox({ course, setCourse }) {
   const handleCourseChange = (newVal) => {
     if (newVal !== undefined || newVal !== null) {
       setCourse(newVal);
-      // setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
     }
   };
 

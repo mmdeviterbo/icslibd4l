@@ -24,22 +24,19 @@ export default function Footer() {
                     <p style={icsTextFooter}><strong>Institute of Computer Science</strong></p>
                     <p style={textFooter}>College of Arts and Sciences</p>
                     <p style={textFooter}>University of the Philippines Los Baños</p>
+                    <div>
+                        <i style={icons} className="fa fa-lg fa-facebook"
+                        onClick={() => openInNewTab('https://www.facebook.com/ICS.UPLB')}
+                        />
+                        <i style={icons} className="fa fa-lg fa-twitter-square"
+                        onClick={() => openInNewTab('https://twitter.com/ics_uplb')}
+                        />
+                    </div>
                 </div>
             </div>
-            <div className="right-footer-container" style={rightFooterContainer}>
-                <img draggable="false" src={logo} style={icslogo} alt="#"/>
-                <p>FOLLOW US</p>
-                <div>
-                    <i style={icons} className="fa fa-lg fa-facebook"
-                    onClick={() => openInNewTab('https://www.facebook.com/ICS.UPLB')}
-                    />
-                    <i style={icons} className="fa fa-lg fa-twitter-square"
-                    onClick={() => openInNewTab('https://twitter.com/ics_uplb')}
-                    />
-                </div>
-            </div>
-            <div style={{flexGrow:1}}>
-                <Link to="/about" style={{color:"white"}}><strong>ABOUT</strong></Link>
+            <div style={{flexGrow:1, display:"flex", alignItems:"center", flexDirection:"column"}}>
+                <img className="logoFooter" draggable="false" src={logo} style={logoFooter} alt="#" onClick={()=>history.push("/about")}/>
+                <p><Link to="/about" style={{color:"white"}}><strong>ABOUT</strong></Link></p>
                 <p>ICS Online Library D4L 2021</p>
             </div>
 
@@ -48,15 +45,14 @@ export default function Footer() {
 }
 
 const footerContainer={
-    "minHeight":"220px",
-    "width":"100%",
-    "display":"flex",
-    "justifyContent":"space-around",
-    "alignItems":"center",
-    "color":"white",
-    "backgroundColor":"black",
-    "fontFamily": 'Montserrat',
-    "boxShadow": "1px 1px 4px 0 rgba(255, 255, 255, 0.2) inset,-8px -8px 12px 0 rgba(0, 0, 0, .25) inset"
+    minHeight:"220px",
+    width:"100%",
+    display:"flex",
+    justifyContent:"space-evenly",
+    alignItems:"center",
+    color:"white",
+    backgroundColor:"black",
+    padding:"0 5%"
 }
 
 const leftFooterContainer = {
@@ -67,13 +63,7 @@ const leftFooterContainer = {
     "alignItems":"center",
     "lineHeight":"0.3"
 }
-const rightFooterContainer = {
-    "flexGrow":"2",
-    "display":"flex",
-    "justifyContent":"center",
-    "flexDirection":"column",
-    "alignItems":"center",
-}
+
 const icsTextFooter={
     "fontSize":"24px",
     "fontWeight":"550"
@@ -81,14 +71,17 @@ const icsTextFooter={
 const textFooter={
     "fontSize":"14px",
 }
-const icslogo={
-    "height":"90px",
-    "width":"100px",
-    "margin":"8px"
+const logoFooter={
+    height:"90px",
+    width:"100px",
+    margin:"8px",
+    cursor:"pointer",
+    transition:"0.4s"
 }
 const icons = {
-    "margin":"6px",
-    "cursor":"pointer",
+    margin:"6px",
+    cursor:"pointer",
+    transition:"0.3s"
 }
 
 //opening external links on ICS facebook and ICS twitter

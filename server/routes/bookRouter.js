@@ -115,6 +115,7 @@ router.post("/create", async (req, res) => {
         // sample verification: incomplete fields
         if (
             !title ||
+            !ISBN ||
             !authors ||
             !subjects ||
             !physicalDesc ||
@@ -124,6 +125,12 @@ router.post("/create", async (req, res) => {
             return res
                 .status(400)
                 .send({ errorMessage: "Please enter all required fields." });
+        }
+
+        const isbnLen = ISBN.replace(/\D/g, "").length;
+
+        if (isbnLen != 10 && isbnLen != 13){
+            return res.status(400).send({ errorMessage: "ISBN must contain 10 or 13 digits." });
         }
 
         //search if book exists
@@ -177,7 +184,7 @@ router.post("/create", async (req, res) => {
             res.json(savedBook);
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send({ errorMessage: "Book already exists!" });
+            res.status(400).send({ errorMessage: "ISBN already exists!" });
         }
     } catch (err) {
         console.log(err);
@@ -300,7 +307,7 @@ router.put("/update", async (req, res) => {
         bookId,
         title,
         ISBN,
-        authors,
+        author,
         subjects,
         physicalDesc,
         publisher,
@@ -314,7 +321,7 @@ router.put("/update", async (req, res) => {
     if (
         !bookId ||
         !title ||
-        !authors ||
+        !author ||
         !subjects ||
         !physicalDesc ||
         !publisher ||
@@ -350,9 +357,9 @@ router.put("/update", async (req, res) => {
             await bookAuthorModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
-            authors.forEach(async function (entry) {
-                const author_fname = entry.fname;
-                const author_lname = entry.lname;
+            author.forEach(async function (entry) {
+                const author_fname = entry.author_fname;
+                const author_lname = entry.author_lname;
                 const author_name = author_fname.concat(" ", author_lname);
 
                 const newBookAuthor = new bookAuthorModel({
@@ -362,7 +369,10 @@ router.put("/update", async (req, res) => {
                     author_name,
                 });
                 await newBookAuthor.save();
+                console.log(newBookAuthor)
             });
+            console.log(author)
+            
 
             // edit fields in the book_subject collection
             // delete the current entries of subject
