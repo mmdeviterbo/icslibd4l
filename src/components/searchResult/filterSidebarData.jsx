@@ -1,6 +1,14 @@
 import React from "react";
 import * as FaIcons from "react-icons/fa";
 
+/****************************************************
+ * Type: React Array
+ *
+ * Summary:
+ * Contains the labels and sublabels for nested sidebar
+ * 
+ ******************************************************/
+
 export const FilterSidebarData = [
     {
         label: "Author",

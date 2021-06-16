@@ -4,9 +4,8 @@ import { Dropdown } from "semantic-ui-react";
 import searchBg from "../../assets/searchBg_4.png";
 import { gsap, Power3 } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import logo from '../../assets/mainlogo/icslibd4l.png'
+import logo from "../../assets/mainlogo/icslibd4l.webp";
 gsap.registerPlugin(ScrollTrigger);
-
 
 export default function SearchbarPart() {
   const [localSearch, setLocalSearch] = useState("");
@@ -46,13 +45,24 @@ export default function SearchbarPart() {
         <div style={barStyleSix} className="barStyle"></div>
 
         <div style={blueBox}>
-            <div style={imgTitleContainer}>
-                <div style={{display:"flex",  flexDirection:"column"}} className="titleCaption">
-                  <h1 style={titleStyle}>Analytica</h1>
-                  <p style={{fontWeight:400, fontSize:"calc(12px + 0.5vw)", textAlign:"right"}}>ICS Digital Library</p>
-                </div>
-                <img src={logo} style={logoStyle} alt="#" className="logoClass"/>
+          <div style={imgTitleContainer}>
+            <div
+              style={{ display: "flex", flexDirection: "column" }}
+              className="titleCaption"
+            >
+              <h1 style={titleStyle}>Analytica</h1>
+              <p
+                style={{
+                  fontWeight: 400,
+                  fontSize: "calc(12px + 0.5vw)",
+                  textAlign: "right",
+                }}
+              >
+                ICS Digital Library
+              </p>
             </div>
+            <img src={logo} style={logoStyle} alt="#" className="logoClass" />
+          </div>
         </div>
         <div style={inputCaptionContainer} className="hoverForImagesVector">
           <div style={alignSearchIcon} className="formSearchHomepage">
@@ -94,9 +104,10 @@ export default function SearchbarPart() {
 const DropdownFilter = ({ setFilterTag, filterTag }) => {
   const options = [
     { key: 1, text: "Any", value: "any" },
-    { key: 2, text: "Books", value: "books" },
+    { key: 2, text: "Book", value: "book" },
     // TOUCHED: value changed from special problem to sp for uniform URL manipulation
     { key: 3, text: "Special Problem", value: "sp" },
+    // { key: 3, text: "Special Problem", value: "Special Problem" },
     { key: 4, text: "Thesis", value: "thesis" },
   ];
   const handleChange = (e, data) => setFilterTag(data.value);
@@ -161,7 +172,8 @@ const searchBoxContainer = {
   background: "rgba(0,0,0,0.95)",
   transition: "1s",
   borderRadius: "10px",
-  boxShadow: "1px 1px 4px black",
+  // boxShadow: "1px 1px 4px black",
+  boxShadow: "2px 5px 8px 0 #36454f, -6px -6px 8px 0 rgba(255, 255, 255, 0.8)",
 };
 
 const inputCaptionContainer = {
@@ -250,27 +262,32 @@ const barStyleSix = {
 };
 
 const logoStyle = {
-  height:"90%",
-  width:"22%",
-  objectFit:"cover",
-  marginLeft:"2%"
-}
+  height: "90%",
+  width: "22%",
+  objectFit: "cover",
+  marginLeft: "2%",
+};
 
 const imgTitleContainer = {
-  display:"flex",
-  justifyContent:"flex-end",
-  alignItems:"center",
-  height:"90%", 
-  width:"98%", 
-}
+  display: "flex",
+  justifyContent: "flex-end",
+  alignItems: "center",
+  height: "90%",
+  width: "98%",
+};
 const titleStyle = {
-  fontSize:"calc(30px + 1.5vw)",
-  letterSpacing:"3px",
-  fontWeight:900,
-}
+  fontSize: "calc(30px + 1.5vw)",
+  letterSpacing: "3px",
+  fontWeight: 900,
+};
 
 const animateSearchBox = () => {
-  gsap.from(".titleCaption",{ scale: 0.8, opacity: 0.6, duration: 0.5, ease:Power3 });
+  gsap.from(".titleCaption", {
+    scale: 0.8,
+    opacity: 0.6,
+    duration: 0.5,
+    ease: Power3,
+  });
 
   gsap.from(".formSearchHomepage", {
     opacity: 0,
@@ -281,38 +298,36 @@ const animateSearchBox = () => {
   });
 
   let tl = gsap.timeline({
-    scrollTrigger: { 
+    scrollTrigger: {
       trigger: ".searchBoxContainer",
-      scrub:0.5,
-      start:"center center",
-    } 
-  })
+      scrub: 0.5,
+      start: "center center",
+    },
+  });
   let t2 = gsap.timeline({
-    scrollTrigger: { 
+    scrollTrigger: {
       trigger: ".searchBoxContainer",
-      scrub:1,
-      start:"center center",
-    } 
-  })
+      scrub: 1,
+      start: "center center",
+    },
+  });
   let t3 = gsap.timeline({
-    scrollTrigger: { 
+    scrollTrigger: {
       trigger: ".searchBoxContainer",
-      scrub:1,
-      start:"center center",
-    } 
-  })
+      scrub: 1,
+      start: "center center",
+    },
+  });
   let t4 = gsap.timeline({
-    scrollTrigger: { 
+    scrollTrigger: {
       trigger: ".searchBoxContainer",
-      scrub:1,
-      start:"center center",
-    } 
-  })
+      scrub: 1,
+      start: "center center",
+    },
+  });
 
   tl.to(".barStyle", { xPercent: -110 });
   t2.to(".barStyle1", { xPercent: -100 });
   t3.to(".logoClass", { scale: 0, rotation: 180 });
   t4.to(".titleCaption", { scale: 0.8, opacity: 0.1 });
 };
-
-

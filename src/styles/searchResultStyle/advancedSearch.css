@@ -1,37 +1,59 @@
 .removeOutline:focus {
-    box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .topContainer:focus-within {
-    border-bottom: 2px solid rgb(0, 103, 161) !important;
+  border-bottom: 2px solid rgb(0, 103, 161) !important;
 }
 
 .textStyle {
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    -khtml-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    -user-select: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  -user-select: none !important;
 }
-.btnApplyFilter:hover {
-    transition: transform 100ms ease, box-shadow 125ms ease;
 
-    transform: scale(1.025) !important;
+.btnApplyFilter {
+  /* margin-top: 1rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border-style: solid;
+  border-color: #0067a1;
+  color: white;
+  background-color: #0067a1;
+  width: 100%;
+  box-shadow: 0.3rem 0.3rem 0.7rem #cfcfcf; */
+
+  margin-top: "1rem";
+  height: "2.5rem";
+  border-radius: "0.5rem";
+  border-style: "solid";
+  border-color: "#0067a1";
+  color: "white";
+  background-color: "#0067a1";
+  width: "50%";
+  box-shadow: "0.3rem 0.3rem 0.7rem #cfcfcf";
+}
+
+.btnApplyFilter:hover {
+  transition: transform 100ms ease, box-shadow 125ms ease;
+  transform: scale(1.025) !important;
 }
 
 .sidebarLink:hover {
-    background: rgb(211, 211, 211, 0.2);
-    cursor: pointer;
-    transform: scale(1.03);
+  background: rgb(211, 211, 211, 0.2);
+  cursor: pointer;
+  transform: scale(1.03);
 }
 .iconMagnifyingGlass:hover {
-    transform: scale(1.08) !important;
+  transform: scale(1.08) !important;
 }
 
 .dropdownNav > span:hover {
-    color: black;
-    cursor: pointer;
+  color: black;
+  cursor: pointer;
 }
 
 /*.sidebarLabel:hover{
@@ -39,46 +61,46 @@
 }*/
 
 .resultMainContainer:hover {
-    background: rgb(220, 220, 220, 0.3);
-    transform: scale(1.015);
+  background: rgb(220, 220, 220, 0.3);
+  transform: scale(1.015);
 }
 
 .paginationBttns {
-    width: 80%;
-    height: 40px;
-    list-style: none;
-    display: flex;
-    justify-content: center;
+  width: 80%;
+  height: 40px;
+  list-style: none;
+  display: flex;
+  justify-content: center;
 }
 
 .paginationBttns a {
-    padding: 10px;
-    margin: 8px;
-    border-radius: 5px;
-    border: 1px solid rgb(0, 103, 161);
-    color: rgb(0, 103, 161);
-    cursor: pointer;
+  padding: 10px;
+  margin: 8px;
+  border-radius: 5px;
+  border: 1px solid rgb(0, 103, 161);
+  color: rgb(0, 103, 161);
+  cursor: pointer;
 }
 
 .paginationBttns a:hover {
-    color: white;
-    background-color: rgb(0, 103, 161);
+  color: white;
+  background-color: rgb(0, 103, 161);
 }
 
 .paginationActive a {
-    color: white;
-    background-color: rgb(0, 103, 161);
-    cursor: default;
+  color: white;
+  background-color: rgb(0, 103, 161);
+  cursor: default;
 }
 
 .paginationActiveText {
-    color: white;
+  color: white;
 }
 
 .paginationText:hover {
-    color: white;
+  color: white;
 }
 
 .paginationDisabled a {
-    visibility: hidden;
+  visibility: hidden;
 }

@@ -6,16 +6,44 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
-// import { coursesData } from "./coursesData";
 import { topicData } from "./topicData";
-// import TextField from "@material-ui/core/TextField";
-// import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Multiselect } from "multiselect-react-dropdown";
 import ClearIcon from "@material-ui/icons/Clear";
 import { IconButton } from "@material-ui/core";
 import "../../styles/searchResultStyle/advancedSearch.css";
 import FilterSubMenu from "./filterSubMenu";
 import CourseComboBox from "./courseComboBox";
+
+/***************************************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * Sidebar for search filters containing author, adviser, 
+ * type, year, publisher, course and topics/keywords
+ * Has react components:
+ * | -combobox
+ * | -select
+ * | -multiselect
+ * | -datepicker
+ *
+ * props:
+ * - <prop> = <description>
+ * searchFilterAuthor = variable, contains the value of author filter
+ * setSearchFilterAuthor = function, sets the state of author filter
+ * searchFilterAdviser  = variable, contains the value of adviser filter
+ * setSearchFilterAdviser = function, sets the state of adviser filter
+ * resourceType  = variable, contains the value of resource type filter
+ * setResourceType = function, sets the state of resource filter
+ * searchFilterYear  = variable, contains the value of year filter
+ * setSearchFilterYear = function, sets the state of year filter
+ * searchFilterPublisher  = variable, contains the value of publisher filter
+ * setSearchFilterPublisher = function, sets the state of publisher filter
+ * course  = variable, contains the value of course filter
+ * setCourse = function, sets the state of course filter
+ * keywords  = variable, contains the value of keywords filter
+ * setKeywords = function, sets the state of keywords filter
+ * 
+ ***************************************************************************/
 
 export default function FilterSidebar({
     searchFilterAuthor,
@@ -49,13 +77,6 @@ export default function FilterSidebar({
         setResourceType(event.target.value);
     };
 
-    // const handleCourseChange = (newVal) => {
-    //     if (newVal !== undefined || newVal !== null) {
-    //         setCourse(newVal);
-    //         // setSearchFilterAdviser({fname:newVal.value.fname, lname:newVal.value.lname});
-    //     }
-    // };
-
     const getSelected = (data) => {
         setKeywords((keywords) => [...keywords, data[data.length - 1].label]);
     };
@@ -64,6 +85,7 @@ export default function FilterSidebar({
         const newArray = data.map((e) => e.label);
         setKeywords(newArray);
     };
+    console.log(resourceType);
 
     return (
         <div>
@@ -79,6 +101,7 @@ export default function FilterSidebar({
                         }
                         if (
                             item.label === "Publisher" &&
+                            // (resourceType === "Special Problem" || resourceType === "thesis")
                             (resourceType === "sp" || resourceType === "thesis")
                         ) {
                             return null;
@@ -106,16 +129,24 @@ export default function FilterSidebar({
                     }
 
                     {/* Topics */}
-                    <span style={sidebarLink} className="sidebarLink">
-                        <span style={sidebarLabel}>Topic</span>
-                    </span>
-                    <Multiselect
-                        options={topicData}
-                        displayValue="label"
-                        style={multipleSearchStyle}
-                        onSelect={getSelected}
-                        onRemove={deselect}
-                    />
+
+                    {
+                        (resourceType === "sp" || resourceType === "thesis" || resourceType === "any")
+                        ?   <div>
+                            <span style={sidebarLink} className="sidebarLink">
+                                <span style={sidebarLabel}>Topic</span>
+                            </span>
+                            <Multiselect
+                                options={topicData}
+                                displayValue="label"
+                                style={multipleSearchStyle}
+                                onSelect={getSelected}
+                                onRemove={deselect}
+                            />
+                            </div>
+                        : null
+                    }
+                    
 
                     {/* TYPE filter */}
                     <span style={sidebarLink} className="sidebarLink">
@@ -142,6 +173,7 @@ export default function FilterSidebar({
                                 Book
                             </MenuItem>
                             <MenuItem style={menuItems} value="sp">
+                            {/* <MenuItem style={menuItems} value="Special Problem"> */}
                                 Special Problem
                             </MenuItem>
                             <MenuItem style={menuItems} value="thesis">
@@ -163,6 +195,8 @@ export default function FilterSidebar({
                                     onChange={(date) => setSearchFilterYear(date)}
                                     animateYearScrolling
                                     isclearable="true"
+                                    minDate={new Date("01-01-1950")}
+                                    maxDate={new Date("12-31-2022")}
                                     placeholder={"Year"}
                                     style={{ width: "50px" }}
                                 />
@@ -194,12 +228,12 @@ const sidebarNav = {
 };
 
 const wrapper = {
-    margin: "1vw 0 0.5vw 1.5vw",
+    margin: "0.5vw 0 0.5vw 1.5vw",
     width: "100%",
 };
 
 const sidebarTitle = {
-    margin: "1vw 0 1vw -0.5vw",
+    margin: "0vw 0 0vw -0.5vw",
     fontSize: "1.5em",
     fontWeight: "800",
     fontFamily: "Trebuchet MS",
@@ -216,8 +250,7 @@ const sidebarLink = {
     color: "black",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "0 1vw 0 0",
-    marginTop: "1vw",
+    marginTop: "0.5vw",
     listStyle: "none",
     height: "3vw",
     fontSize: "1.1em",
@@ -235,8 +268,6 @@ const sidebarLabel = {
 const multipleSearchStyle = {
     display: "flex",
     searchBox: {
-        // To change search box element look
-        // border:"none",
         borderRadius: "0",
         borderTop: "0",
         borderRight: "0",
@@ -252,11 +283,9 @@ const multipleSearchStyle = {
     },
     inputField: {
         padding: "0",
-        margin: "1px",
+        marginBottom: "0"
     },
     chips: {
         whiteSpace: "normal",
     },
 };
-
-// for classes of Select

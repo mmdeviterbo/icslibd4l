@@ -1,5 +1,16 @@
 import React from "react";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Renders the book attributes.
+ *
+ *  props:
+ *    {isbn, publisher, numOfCopies, subjects,
+ *    physical Desc } = book attributes
+ ******************************************************/
+
 const BookCoverandInfo = ({
   isbn,
   publisher,
@@ -7,37 +18,50 @@ const BookCoverandInfo = ({
   subjects,
   physicalDesc,
 }) => {
+
   return (
     <div className="book-cover-info-side">
-      <table id="bookinfo">
-        <tbody>
-          <tr className="book-info-tr">
-            <th className="book-info-tr"> ISBN: </th>
-            <th className="book-info-tr"> {isbn} </th>
-          </tr>
-          <tr className="book-info-tr">
-            <th className="book-info-tr"> Publisher: </th>
-            <th className="book-info-tr"> {publisher} </th>
-          </tr>
 
-          <tr className="book-info-tr">
-            <th className="book-info-tr"> Number of copies: </th>
-            <th className="book-info-tr"> {numOfCopies} </th>
-          </tr>
+        <div className="info-group">
+            <h3 className= "info-head">ISBN:</h3>
+            <h3 className = "info-value">{isbn}</h3>
+            
+        </div>
+        <hr/>
 
-          <tr className="book-info-tr">
-            <th className="book-info-tr"> Subject(s) </th>
+        <div className = "info-group">
+            <h3 className= "info-head">Publisher:</h3>
+            <h3 className = "info-value">{publisher}</h3>
+            
+        </div>
+        <hr/>
+
+        <div className = "info-group">
+            <h3 className= "info-head">No. of copies available:</h3>
+            <h3 className = "info-value">{numOfCopies}</h3>
+           
+        </div>
+        <hr/>
+
+        <div className = "info-group">
+            <h3 className= "info-head">Subject(s):</h3>
             {subjects.map((item, key) => (
-              <div className="book-info-multi" key={key}>
-                {item.subject}
-              </div>
+              <h3 className="info-value" key={key}>
+                {item.subject}<br/>
+              </h3>
             ))}
-          </tr>
-        </tbody>
-      </table>
-      <div className="physical-description">
-        <p className="physical-text">{physicalDesc}</p>
-      </div>
+            
+        </div>
+        <hr/>
+
+        <div className = "info-group">
+            <h3 className= "info-head">Physical Description:</h3>
+            <p className = "info-value-pd">{physicalDesc}</p>
+           
+        </div>
+        <hr/>
+
+
     </div>
   );
 };
