@@ -282,7 +282,7 @@ export default function EditSPTFormContainer(props) {
 
     // creates an array of keywords from theh user input
     const handleChips = (chip) => {
-        setKeyword([...keywords, chip[chip.length - 1]]);
+        setKeyword(chip);
     };
 
     const renderAuthorFields = () => {
@@ -599,7 +599,7 @@ export default function EditSPTFormContainer(props) {
             ) : (
                 <div
                     style={{
-                        minHeight: "80vh",
+                        minHeight: "90vh",
                         display: "grid",
                         placeItems: "center",
                     }}>
