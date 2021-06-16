@@ -37,43 +37,40 @@ const InfoSidebar = ({ user, resourceData }) => {
   };
   return (
     <div className="info-sidebar">
-      <table id="spttableinfo">
-        <tbody>
-          <tr>
-            <th className="spt-thtr">Type</th>
-            <th className="spt-thtr-type">{resourceData && resourceData.type}</th>
-          </tr>
+      <div className="info-group">
+            <h3>Type:</h3>
+            <h3 className = "info-value">{resourceData && resourceData.type}</h3>
+        </div>
+        <hr/>
 
-          <tr>
-            <th className="spt-thtr">Adviser</th>
-            <th className="keyword-container">
+        <div className = "info-group">
+            <h3>Adviser(s):</h3>
             {resourceData &&
               resourceData.advisers.map((item, key) => (
-                <div className="spt-thtr-multi" key={key}>
+                <h3 className="info-value" key={key}>
                   {item.adviser_name}
-                </div>
+                </h3>
               ))}
-            </th>
-          </tr>
+            
+        </div>
+        <hr/>
 
-          <tr>
-            <th className="spt-thtr">Keywords</th>
-            <th className="keyword-container">
-              {resourceData &&
+        <div className = "info-group">
+            <h3>Keywords:</h3>
+            <div>
+            {resourceData &&
                 resourceData.keywords.map((item, key) => (
-                  <div className="spt-thtr-multi" key={key}>
+                  <h3 className="info-value" key={key}>
                     {item.sp_thesis_keyword}
-                  </div>
+                  </h3>
                 ))}
-              {(!resourceData || resourceData?.keywords?.length===0) && 
-                <div className="spt-thtr-multi">
-                {<br/>}
-              </div>
-              }
-            </th>
-          </tr>
-        </tbody>
-      </table>
+            {(!resourceData || (resourceData && resourceData.keywords.length===0))
+            &&
+            <p style={{fontStyle:"italic"}}>No keyword</p>
+            }
+            </div>
+        </div>
+        <hr/>
 
       {user && (
         <div className="spt-view-buttons">

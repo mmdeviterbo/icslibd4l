@@ -102,7 +102,7 @@ const AddBookFormContainer = () => {
         datePublished,
         dateAcquired,
       };
-
+    //   console.log(userInput);
       await ResourceServices.addBook(userInput);
 
       setSuccess("success");
@@ -339,24 +339,28 @@ const AddBookFormContainer = () => {
           </div>
 
           <div className="form-right-column">
-            <div className="primaryfields">
-              <label htmlFor="availBookCopies">No. of copies available:</label>
-              <input
-                type="text"
-                pattern="[1-9]*"
-                inputMode="numeric"
-                min={1}
-                placeholder="1-999"
-                required
-                // key={`${Math.floor((Math.random() * 1000))}-min`}
-                //need random key para lumabas yung defaultValue, sa initial render lang kasi lumalabas nang maayos yung numberOfCopies
-                id="availBookCopies"
-                onChange={(event) => {
-                  setNumOfCopies(event.target.value);
-                }}
-                // onMouseEnter={(e) => e.target.focus()}
-              />
-            </div>
+             <div className="primaryfields">
+                        <label htmlFor="availBookCopies">
+                            No. of copies available:
+                        </label>
+                        <input
+                            type="number"
+                            pattern="[1-9]*"
+                            inputMode = "numeric"
+                            min = {1}
+                            placeholder="1-999"
+                            required
+                            id="availBookCopies"
+                             onChange={(event) => {
+                                if (isNaN(Number(event.target.value))) {
+                                    return;
+                                } else {
+                                    setNumOfCopies(event.target.value);
+                                }
+                            }}
+                            onMouseEnter={e=>e.target.focus()}
+                        />
+                    </div>
 
             <div className="bookRelatedCourses">
               Related Courses:

@@ -307,7 +307,7 @@ router.put("/update", async (req, res) => {
         bookId,
         title,
         ISBN,
-        authors,
+        author,
         subjects,
         physicalDesc,
         publisher,
@@ -321,7 +321,7 @@ router.put("/update", async (req, res) => {
     if (
         !bookId ||
         !title ||
-        !authors ||
+        !author ||
         !subjects ||
         !physicalDesc ||
         !publisher ||
@@ -357,9 +357,9 @@ router.put("/update", async (req, res) => {
             await bookAuthorModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
-            authors.forEach(async function (entry) {
-                const author_fname = entry.fname;
-                const author_lname = entry.lname;
+            author.forEach(async function (entry) {
+                const author_fname = entry.author_fname;
+                const author_lname = entry.author_lname;
                 const author_name = author_fname.concat(" ", author_lname);
 
                 const newBookAuthor = new bookAuthorModel({
@@ -369,7 +369,10 @@ router.put("/update", async (req, res) => {
                     author_name,
                 });
                 await newBookAuthor.save();
+                console.log(newBookAuthor)
             });
+            console.log(author)
+            
 
             // edit fields in the book_subject collection
             // delete the current entries of subject
