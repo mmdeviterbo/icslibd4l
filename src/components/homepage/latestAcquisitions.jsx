@@ -25,6 +25,8 @@ export default function LatestAcquisitions({ latestAcqRef }) {
       for (var book of booksInfo.data) {
         book.bookCoverLink = `https://drive.google.com/uc?export=view&id=${book.bookCoverLink
           .replace("https://drive.google.com/uc?id=", "")
+          .replace("https://drive.google.com/file/d/", "")
+          .replace("/view?usp=sharing","")
           .replace("/view", "")}`;
       }
       setacquisitions(booksInfo.data);

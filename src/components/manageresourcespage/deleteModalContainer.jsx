@@ -6,7 +6,6 @@ import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
 import StatusModal from "../modal/operationStatusModal";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 /****************************************************
  * Type: React Functional Component
@@ -24,10 +23,10 @@ const DeletePopUpCont = ({ user }) => {
   const history = useHistory();
   const location = useLocation();
   const id = location.state.resid;
-  const item = location.state.item;
   const type = location.state.type;
-  const title = location.state.title;
+  const item = location.state.item;
   const toDelete = location.state.user; // Object containing user information to be deleted
+  const resTitle = location.state.restitle;
   // const userState = user;
   const [message, setMessage] = useState("");
   const [show, setShow] = useState(true);
@@ -61,6 +60,9 @@ const DeletePopUpCont = ({ user }) => {
    ******************************************************/
 
   const handleSubmit = async (event) => {
+    console.log(id);
+    console.log(type);
+    // console.log(id);
     event.preventDefault();
     // handleClose();
     try {
@@ -70,7 +72,7 @@ const DeletePopUpCont = ({ user }) => {
         } else {
           await ResourceService.deleteSpThesis(id);
         }
-        setItemName(id);
+        setItemName(resTitle);
         setMessage("success");
         handleClose();
         // setVisible(true);
@@ -78,18 +80,22 @@ const DeletePopUpCont = ({ user }) => {
         setPathAfter("/manage-resources");
       } else if (item === "logs") {
         await PersonService.clearUserLogs();
+        setItemName("Logs");
         setMessage("success");
         handleClose();
         setPathAfter("/view-activitylogs");
       } else if (item === "account") {
         setItemName(user.fullName);
+        console.log("error here");
         await PersonService.deleteUser(user); //deletes the user from the database
+
         await PersonService.logoutUser(user); // logs the user out
         localStorage.removeItem(jwtPrivateKey); // removes token from the browser
         setIsSelf(true);
         setMessage("success");
         setPathAfter("/");
         handleClose();
+        // window.location = "/";
       } else {
         if (toDelete.googleId === user.googleId) {
           await PersonService.deleteUser(toDelete);
@@ -132,7 +138,7 @@ const DeletePopUpCont = ({ user }) => {
       />
       <Modal
         show={show}
-        onHide={handleClose}
+        onHide={handleCancel}
         backdrop="static"
         keyboard={false}
         centered
@@ -183,7 +189,7 @@ const DeletePopUpCont = ({ user }) => {
               ) : (
                 <Modal.Body>
                   Are you sure you want to delete{" "}
-                  {item === "resource" ? title : toDelete.fullName}?
+                  {item === "resource" ? resTitle : toDelete.fullName}?
                 </Modal.Body>
               ),
             ]

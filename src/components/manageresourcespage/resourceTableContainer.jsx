@@ -1,5 +1,4 @@
 import React from "react";
-// import MainResourceTable from "./resourcesMainTbl2"; // CHANGED TO PREVIOUS VERIONS
 import MainResourceTable from "./resourcesMainTable"; // CHANGED TO PREVIOUS VERIONS
 import AddNewResource from "./createNewResource";
 import AddNewSPT from "./newSPTButton";

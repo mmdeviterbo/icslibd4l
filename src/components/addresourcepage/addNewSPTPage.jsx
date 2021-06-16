@@ -137,6 +137,7 @@ const AddNewSPThesisForm = () => {
    *
    ******************************************************/
   const handleSubmit = async (event) => {
+    // console.log("meow");
     event.preventDefault();
 
     if (
@@ -166,9 +167,7 @@ const AddNewSPThesisForm = () => {
         authors: authorList,
         keywords,
       };
-
       await ResourceServices.addSpThesis(userInput);
-
       setSuccess("success");
       setShow(true);
       event.target.reset();
@@ -222,7 +221,7 @@ const AddNewSPThesisForm = () => {
             <div className="primaryfields">
               <label htmlFor="datePublished">Year Published: &nbsp; </label>
               <input
-                type="text"
+                type="number"
                 pattern="[0-9]*"
                 inputMode="numeric"
                 id="sptYear"

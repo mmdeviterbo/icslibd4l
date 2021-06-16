@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useHistory } from "react-router";
 import PropTypes from "prop-types";
 // import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -100,18 +101,24 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
-            </TableSortLabel>
+            {headCell.label === "Title" ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <span className={classes.visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </span>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              <span>{headCell.label}</span>
+            )}
           </TableCell>
         ))}
       </TableRow>
@@ -174,6 +181,7 @@ const MainResourceTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [selectedEdit, setSelectedEdit] = useState();
   const [resourceList, setResourceList] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     async function fetchBooks() {
@@ -197,7 +205,7 @@ const MainResourceTable = () => {
     fetchBooks();
   }, []);
 
-  const DeleteBtn = ({ id, type, title }) => {
+  const DeleteBtn = ({ id, title, type }) => {
     return (
       <Link
         to={{
@@ -206,8 +214,8 @@ const MainResourceTable = () => {
             background: location,
             resid: id,
             item: "resource",
+            restitle: title,
             type: type,
-            title: title,
           },
         }}
       >
@@ -319,14 +327,23 @@ const MainResourceTable = () => {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  const sptClick = `/sp-thesis/${row.sp_thesis_id}`;
+                  const bookClick = `/book/${row.bookId}`;
+                  console.log(classes.tablecell);
 
                   return (
                     <TableRow
-                      className={classes.tablecell}
+                      className={`${classes.tablecell} tableRowStyle`}
                       hover
                       tabIndex={-1}
                       key={index}
                       selected={isItemSelected}
+                      onClick={() =>
+                        history.push(
+                          (row.sp_thesis_id && sptClick) ||
+                            (bookClick && bookClick)
+                        )
+                      }
                     >
                       {/* {row} */}
 
@@ -448,14 +465,14 @@ const MainResourceTable = () => {
                         {row && row.bookId ? (
                           <DeleteBtn
                             id={row.bookId}
-                            type={"book"}
                             title={row.title}
+                            type={"book"}
                           />
                         ) : (
                           <DeleteBtn
                             id={row.sp_thesis_id}
-                            type={row.type}
                             title={row.title}
+                            type={row.type}
                           />
                         )}
                       </TableCell>
