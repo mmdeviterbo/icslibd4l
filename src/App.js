@@ -121,7 +121,7 @@ function App() {
                 <Route
                     path="/book/:id"
                     render={(props) => (
-                        <ReadingBookContainer appRef={appRef} {...props} />
+                        <ReadingBookContainer appRef={appRef} user={user} {...props} />
                     )}
                 />
                 <Route

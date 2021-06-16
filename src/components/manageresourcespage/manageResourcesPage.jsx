@@ -1,6 +1,6 @@
 import React from "react";
 import ManagementHeader from "../managementHeader";
-import FieldsContainerRes from "./filterFieldsResources";
+// import FieldsContainerRes from "./filterFieldsResources";
 import ResourceTableContainer from "./resourceTableContainer";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "./../../config.json";
@@ -31,14 +31,14 @@ const ManageResourcesPage = ({ user }) => {
                 <div className="manage-resources-page-container">
                     <ManagementHeader type={"resource"} />
                     <br/>
-                    <FieldsContainerRes />
+                    {/* <FieldsContainerRes /> */}
                     {/* <ResTableContainer resourceList={resourceList} /> */}
                     <ResourceTableContainer />
                 </div>
             ) : (
                 <div
                     style={{
-                        minHeight: "80vh",
+                        minHeight: "90vh",
                         display: "grid",
                         placeItems: "center",
                     }}>

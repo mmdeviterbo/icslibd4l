@@ -4,11 +4,11 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import { Link } from 'react-router-dom';
-import DateFnsUtils from "@date-io/date-fns";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import ClearIcon from "@material-ui/icons/Clear";
-import { IconButton } from "@material-ui/core";
-import ResourceServices from "../../services/resourceService";
+// import DateFnsUtils from "@date-io/date-fns";
+// import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+// import ClearIcon from "@material-ui/icons/Clear";
+// import { IconButton } from "@material-ui/core";
+// import ResourceServices from "../../services/resourceService";
 
 const resourceType = [
   { value: "Special Problem", label: "Special Problem" },
@@ -20,20 +20,20 @@ const FiltersContainerRes = () => {
   const [year, setYear] = useState(0);
   const [type, setType] = useState("");
 
-  const handleFilter = async (event) => {
-    event.preventDefault();
-    try {
-      const filter = {
-        type,
-        year,
-      };
-      await ResourceServices.addSpThesis(filter);
-    } catch (err) {
-      if (err.response && err.response.data) {
-        console.log(err.response.data.errorMessage);
-      }
-    }
-  };
+//   const handleFilter = async (event) => {
+//     event.preventDefault();
+//     try {
+//       const filter = {
+//         type,
+//         year,
+//       };
+//       await ResourceServices.addSpThesis(filter);
+//     } catch (err) {
+//       if (err.response && err.response.data) {
+//         console.log(err.response.data.errorMessage);
+//       }
+//     }
+//   };
 
     // const handleFilter = async (event) => {
     //     event.preventDefault();

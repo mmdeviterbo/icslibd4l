@@ -1,12 +1,13 @@
 import React,{useEffect} from 'react';
 import {gsap} from 'gsap';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import notFoundHover from '../assets/notFound_1_hover.png';
-import '../styles/notFoundStyle.css'; 
 import notFound from '../assets/notFound_1.webp'
+import '../styles/notFoundStyle.css'; 
 
 
 export default function Unauthorized() {
+    const history = useHistory();
     useEffect(()=>{
         gsap.from('.white-notfound',{
             duration:0.5,
@@ -16,7 +17,7 @@ export default function Unauthorized() {
     },[])
 
     return (
-        <div className="notFoundContainer">
+        <div className="notFoundContainer" onClick={()=>window.location = '/home'}>
             <img src={notFound} alt="#" className="notFoundPicture"/>
             <img src={notFoundHover} alt="#" className="notFoundhoverEffect notFoundhover1"/>
             <img src={notFoundHover} alt="#" className="notFoundhoverEffect notFoundhover2"/>
@@ -27,7 +28,7 @@ export default function Unauthorized() {
                     401 <br/><br/>Unauthorized
                 </p>
                 <div style={{margin:"auto"}}>
-                    <img src="https://img.icons8.com/wired/64/ffffff/data-encryption.png"/>
+                    <img src="https://img.icons8.com/wired/64/ffffff/data-encryption.png" alt="#"/>
                 </div>
                 <hr style={{borderTop:"0.5px solid white"}}/>
                 <p className="caption-notfound">Unauthorized access.</p>

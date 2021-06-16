@@ -450,7 +450,13 @@ export default function UserTable({ user, selectedFilter, searchInput }) {
 
     return (
         <>
-            <TableContainer component={Paper} className="main-table-container">
+            <TableContainer 
+            component={Paper} 
+            className="main-table-container"
+            style={{
+                borderRadius: "10px",
+                boxShadow: "4px 4px 20px #cfcfcf",
+              }}>
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>{header}</TableRow>

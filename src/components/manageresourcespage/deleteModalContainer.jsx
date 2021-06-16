@@ -60,8 +60,8 @@ const DeletePopUpCont = ({ user }) => {
      ******************************************************/
 
     const handleSubmit = async (event) => {
-        console.log(id);
-        console.log(type);
+        // console.log(id);
+        // console.log(type);
         // console.log(id);
         event.preventDefault();
         // handleClose();

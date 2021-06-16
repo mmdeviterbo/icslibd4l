@@ -1,5 +1,6 @@
 import React from "react";
-
+import {Link} from 'react-router-dom';
+import resourceService from '../../services/resourceService';
 /****************************************************
  * Type: React Functional Component
  *
@@ -17,7 +18,26 @@ const BookCoverandInfo = ({
   numOfCopies,
   subjects,
   physicalDesc,
+  bookId,
+  user
 }) => {
+
+  const [sourceInfo, setSourceInfo] = React.useState();
+  React.useEffect(()=>{
+    async function fetchResources(){
+      try{
+        const books = await resourceService.browseResources({
+          type: "book",
+      });
+      const spThesis = await resourceService.browseResources({
+          type: "thesis",
+      });
+      let arr = books.data && books.data.concat(spThesis.data);
+      setSourceInfo(arr);
+      }catch(err){}
+    }
+    fetchResources();
+  },[])
 
   return (
     <div className="book-cover-info-side">
@@ -57,11 +77,17 @@ const BookCoverandInfo = ({
         <div className = "info-group">
             <h3 className= "info-head">Physical Description:</h3>
             <p className = "info-value-pd">{physicalDesc}</p>
-           
         </div>
         <hr/>
-
-
+        {user && user.userType===1 &&
+              <Link to={{
+                  pathname: `/edit-book/${bookId}`,
+                  state: { sourceInfo, id:{id:bookId}},
+              }}>
+                <i className = "fa fa-pencil"/>
+                &nbsp; {`Edit Book`}
+              </Link>
+          }  
     </div>
   );
 };

@@ -386,6 +386,7 @@ router.get("/search", async (req, res) => {
                 return item.year == yearFilter;
             });
             book_arr = book_arr.filter((item) => {
+                console.log(item)
                 return item.datePublished.getFullYear() == yearFilter;
             });
         }
@@ -1898,9 +1899,8 @@ router.put("/update", async (req, res) => {
         // deletes keyword entries with corresponding id, then adds new values
         await thesisKeyModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
         keywords.forEach(async function (updatedEntry) {
-            const sp_thesis_keyword = updatedEntry
+            const sp_thesis_keyword = updatedEntry;
 
-            console.log(sp_thesis_keyword);
             const newKey = new thesisKeyModel({
                 sp_thesis_id,
                 sp_thesis_keyword,

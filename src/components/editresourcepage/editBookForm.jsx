@@ -85,7 +85,7 @@ export default function EditBookFormContainer(props) {
     }, []);
 
     // console.log(bookInfoArr);    // dateAcquired and datePublished are strings here
-    console.log(idSource);
+    // console.log(idSource);
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -135,7 +135,7 @@ export default function EditBookFormContainer(props) {
                     setBookCoverLink(bookCoverLink);
 
 
-                    console.log(sourceItem);
+                    // console.log(sourceItem);
                     break;
                 }
             }
@@ -220,7 +220,19 @@ export default function EditBookFormContainer(props) {
         ]);
     };
     
-   console.log(subject[0].subject)
+//    console.log(subject)
+    const subjectArr = [];
+
+    const concatSubjs = (val,index,array) => {
+        subjectArr.push(
+            {label:val.subject,
+            value:val.subject,
+            }
+        )
+    }
+
+    subject.forEach(concatSubjs)
+    // console.log(subjectArr)
 
     return (
         <>
@@ -478,7 +490,8 @@ export default function EditBookFormContainer(props) {
                                         isMulti
                                         placeholder={"Courses..."}
                                         options={courseList}
-                                        defaultValue={subject}
+                                        // defaultValue={subject}
+                                        value={subjectArr}
                                         onChange={(subject) =>
                                             handleSubject(subject)
                                         }></Select>

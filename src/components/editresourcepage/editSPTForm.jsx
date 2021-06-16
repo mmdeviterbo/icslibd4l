@@ -56,7 +56,7 @@ var adviserchoices = [
         label: "Madrid, Val Randolf M.",
     },
     {
-        value: { adviser_fname: "Katrina Joy H", adviser_lname: "Magno" },
+        value: { adviser_fname: "Katrina Joy H.", adviser_lname: "Magno" },
         label: "Magno, Katrina Joy H.",
     },
     {
@@ -64,11 +64,11 @@ var adviserchoices = [
         label: "Maniaol, Rozano S.",
     },
     {
-        value: { adviser_fname: "Danilo J.", adviser_lname: "Mercado" },
-        label: "Mercado, Danilo J.",
+        value: { adviser_fname: "Danilo", adviser_lname: "Mercado" },
+        label: "Mercado, Danilo",
     },
     {
-        value: { adviser_fname: "Rizza DC", adviser_lname: "Mercado" },
+        value: { adviser_fname: "Rizza DC.", adviser_lname: "Mercado" },
         label: "Mercado, Rizza DC.",
     },
     {
@@ -76,20 +76,28 @@ var adviserchoices = [
         label: "Monserrat, Toni-Jan Keith P.",
     },
     {
-        value: { adviser_fname: "Jaderick P.", adviser_lname: "Pabico" },
-        label: "Pabico, Jaderick P.",
+        value: { adviser_fname: "Jaderick", adviser_lname: "Pabico" },
+        label: "Pabico, Jaderick",
     },
     {
-        value: { adviser_fname: "Margarita Carmen S.", adviser_lname: "Paterno" },
-        label: "Paterno, Margarita Carmen S.",
+        value: { adviser_fname: "Vladimir", adviser_lname: "Mariano" },
+        label: "Mariano, Vladimir",
+    },
+    {
+        value: { adviser_fname: "Reinald Adrian", adviser_lname: "Pugoy"},
+        label: "Pugoy, Reinald Adrian",
+    },
+    {
+        value: { adviser_fname: "Margarita Carmen", adviser_lname: "Paterno" },
+        label: "Paterno, Margarita Carmen",
     },
     {
         value: { adviser_fname: "Reginald Neil C.", adviser_lname: "Recario" },
         label: "Recario, Reginald Neil C.",
     },
     {
-        value: { adviser_fname: "Samaniego, Jaime M.", adviser_lname: "Samaniego" },
-        label: "Samaniego, Jaime M.",
+        value: { adviser_fname: "Jaime", adviser_lname: "Samaniego" },
+        label: "Samaniego, Jaime",
     },
 ];
 
@@ -127,16 +135,27 @@ export default function EditSPTFormContainer(props) {
     // return ALL resources (dahil walang search na gumagamit ng id)
     const [spThInfoArr, setSpThInfoArr] = useState([]); //all sp/thesis array
     const [idSource, setIdSource] = useState(); //unique key to identify to which specific sp/thesis
-
-    useEffect(() => {
+    const [tempAdvisers, setTempAdvisers]=useState([]);
+    
+    useEffect(()=>{
         try {
-            setIdSource(props.location?.state.id);
-            setSpThInfoArr(props.location?.state.sourceInfo); //all objects from table
+            const {id, sourceInfo} = props.location.state; 
+            setIdSource(id);
+            setSpThInfoArr(sourceInfo); //all objects from table
+
+            let tempSourceInfo = sourceInfo.filter(source=>source.advisers);
+            tempSourceInfo = tempSourceInfo.filter(source=>source.sp_thesis_id === id.id);
+            tempSourceInfo = tempSourceInfo[0].advisers;
+            tempSourceInfo.map(adviser=>
+                setTempAdvisers([...tempAdvisers,{
+                    value:{fname: adviser.adviser_fname, lname: adviser.adviser_lname},
+                    label: `${adviser.adviser_lname}, ${adviser.adviser_fname}`
+                }])
+            )
         } catch (err) {
             window.location = "/not-found";
         }
-    }, []);
-
+    },[])
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -229,10 +248,21 @@ export default function EditSPTFormContainer(props) {
         }
     };
 
-    // const handleAdviserChange = (adviserList) => {
-    //     const adviser = [...adviserList].map((obj) => obj.value);
-    //     // setCourses(values);
-    //     setAdviserList(adviser);
+    // const handleAdviserChange = (adviser) => {
+    //     const vals = [...advisers].map((opt) => opt.value);
+    //     setAdviser(vals);
+    // }
+
+    const handleAdviserChange = (adviserList) => {
+        // console.log(adviserList);
+        const advisers = [...adviserList].map((obj) => obj.value);
+        // setCourses(values);
+        setAdviser(advisers);
+    };
+
+    // get input from type selection
+    // const handleChange = (e) => {
+    //     setType(e.value);
     // };
 
     // creates an array of keywords from theh user input
@@ -265,10 +295,12 @@ export default function EditSPTFormContainer(props) {
 
     advisers.forEach(concatAdviserNames)
 
-    console.log(adviserLabels)
+    // console.log(adviserLabels)
 
     var typeInString = JSON.stringify(type);
     typeInString = typeInString.substring(1,typeInString.length-1);
+
+
 
     return (
         <>
@@ -363,7 +395,6 @@ export default function EditSPTFormContainer(props) {
                                                         id="resAuthorFN"
                                                         required
                                                         value={p.author_fname}
-                                                        // defaultValue = {author[0].author_fname}  //cant access?????
                                                         onChange={(e) => {
                                                             const author_fname =e.target.value;
                                                             setAuthor(
@@ -459,9 +490,9 @@ export default function EditSPTFormContainer(props) {
                                 {/* Adviser Dropdown Multi */}
                                 <div className="select-advisers">
 
-                                    <div className = "testdiv">
+                                    {/* <div className = "testdiv">
                                         {JSON.stringify(adviserLabels, null, 2)}
-                                    </div>
+                                    </div> */}
 
                                     <label htmlFor="advsel">Advisers:</label>
                                     <Select
@@ -470,9 +501,10 @@ export default function EditSPTFormContainer(props) {
                                         value={adviserLabels}
                                         // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
                                         // onChange={handleAdviserChange}
+                                        // defaultValue={tempAdvisers}
+                                        onChange={handleAdviserChange}
                                         isMulti></Select>
                                 </div>
-
                                 {/* Abstract TextArea */}
                                 <div className="abstract-div">
                                     <label htmlFor="abstractText">

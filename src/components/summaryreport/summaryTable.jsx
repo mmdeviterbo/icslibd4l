@@ -383,7 +383,14 @@ function SummaryTable({ resourceFilter }) {
                 <div className="loader-container"></div>
             ) : (
                 <>
-                    <TableContainer component={Paper} className="summary-table">
+                    <TableContainer 
+                    component={Paper} 
+                    className="summary-table"
+                    style={{
+                        borderRadius: "10px",
+                        boxShadow: "4px 4px 20px #cfcfcf",
+                      }}
+                    >
                         <TableEntries />
                         <TablePagination
                             className="pagination-container"
