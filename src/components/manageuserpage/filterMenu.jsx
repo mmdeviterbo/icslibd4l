@@ -3,7 +3,30 @@ import Select from "react-select";
 
 import "../../styles/manageUserStyle.css";
 
-export default function FilterMenu({ selection, setSelection }) {
+/****************************************************************************
+ * Type: Functional Component
+ *
+ * Summary:
+ * React Component containing the main table of users.
+ *
+ * Props:
+ * selection - the currently selected filter.
+ * setSelection - state setter for selection variable
+ * setSearchField - setter function for the input field of the search
+ * setSearchInput - setter function for the search input variable.
+ ****************************************************************************/
+export default function FilterMenu({
+    selection,
+    setSelection,
+    setSearchField,
+    setSearchInput,
+}) {
+    /****************************************************************************
+     * Type: React Hooks (useEffect)
+     *
+     * Summary:
+     * Sets the default selection to -1 (no filter applied) on page load/refresh.
+     ****************************************************************************/
     useEffect(() => {
         setSelection(-1);
     }, [setSelection]);
@@ -16,15 +39,22 @@ export default function FilterMenu({ selection, setSelection }) {
     ];
 
     const filterContainer = {
-        width:"100%",
-        position:"relative",
+        width: "100%",
+        position: "relative",
         display: "flex",
         justifyContent: "space-evenly",
         zIndex: "1",
-        margin:0,
-        padding:0,
+        margin: 0,
+        padding: 0,
     };
 
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Sets the current selection to whatever value is selected by the user
+     * using the select field (dropdown).
+     ****************************************************************************/
     const handleFilterSelect = (e) => {
         setSelection(e.value);
     };
@@ -43,8 +73,12 @@ export default function FilterMenu({ selection, setSelection }) {
             <div className="user-clrbtn">
                 <button
                     id="user-filters-clear"
-                    onClick={(e) => setSelection(-1)}
-                    style={{ border: 0, backgroundColor: "white" }}
+                    onClick={(e) => {
+                        setSelection(-1);
+                        setSearchField("");
+                        setSearchInput("");
+                    }}
+                    style={{ border: 0, backgroundColor: "#f4f4f4" }}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap/";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "@material-ui/core/";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { jwtPrivateKey } from "../../config.json";
 import { jwtEncryptionKey } from "../../config.json";
 import * as jwtEncrypt from "jwt-token-encrypt";
 import PersonService from "../../services/personService";
-
+import ToastNotification from "../toastNotification";
 import "../../styles/profileContainerStyle.css";
 
-//<summary>
-// gets the jwt token from the localStorage and decrypts it to get the infor of
-// the logged in user
-//</summary>
-//<output>
-// an object containing the information of the logged in user
-//</output>
+/****************************************************
+ * Type: Function
+ *
+ * Summary:
+ * a function gets the jwt token from the localStorage and decrypts it to get the information
+ * of the logged in user
+ *
+ * Return value:
+ * userInfo = {
+ *      userInfo.googleId,
+ *      userInfo.nickname,
+ *      userInfo.fullName,
+ *      userInfo.userType,
+ *      userInfo.email
+ * }
+ * - object that contains the information of the logged in user
+ *
+ ******************************************************/
 const getCurrentToken = () => {
     try {
         const jwt = localStorage.getItem("icslib-privateKey");
@@ -32,31 +38,33 @@ const getCurrentToken = () => {
     } catch (err) {}
 };
 
-//<summary>
-// create a container that contains user information.
-// user information includes their nickname, full name, classification, and email
-//</summary>
-//<output>
-// A component that contains the information regarding the current user
-//</output>
+/******************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * A component that displays the information of the logged in user.
+ * The user can:
+ *      - edit their display name which will be reflected to the states and the database
+ *      - remove their account from the database
+ *
+ ******************************************************/
 export default function ProfileContainer() {
-    const location = useLocation();
-
     const [user, setUser] = useState(getCurrentToken()); // lazy initializer to immediately get the user state
     const [type, setType] = useState();
-    const [nick, setNick] = useState(user ? user.nickname : "");
-
+    const [isEditing, setEditing] = useState(false);
+    const [nick, setNick] = useState(user && user.nickname);
+    const [currNick, setCurrNick] = useState(user && user.nickname);
     const [click, setClick] = useState("false");
-    const [buttonStyle, setButtonStyle] = useState(faPencilAlt);
-    const [btnStyle, setBtnStyle] = useState("gray");
-    const [disable, setDisable] = useState(toString(true));
+    const [disable, setDisable] = useState(true);
+
+    const location = useLocation();
+    const inputRef = useRef();
 
     // handles appearance changing of the edit button
-    const setIcon = (click, buttonStyle, style) => {
+    const setIcon = (click, isEditing, disable) => {
         setClick(click);
-        setButtonStyle(buttonStyle);
-        setBtnStyle(style);
-        setDisable(!disable);
+        setDisable(disable);
+        setEditing(!isEditing);
     };
 
     // updates the token stored in the local storage after making changes to the nickname
@@ -75,20 +83,40 @@ export default function ProfileContainer() {
     // updates the user's nickname in the database
     const updateNick = async (userInfo) => {
         try {
-            const { data } = await PersonService.updateNickname(userInfo);
+            await PersonService.updateNickname(userInfo);
         } catch (err) {}
     };
 
     // function that handles nickname changing
     const editNickname = (nicknameToken, userInfo) => {
         if (click === "false") {
-            setIcon("true", faCheck, "#90ee90");
+            setIcon("true", false, isEditing);
+            setCurrNick(nick);
         } else if (click === "true") {
-            setIcon("false", faPencilAlt, "gray");
+            setIcon("false", true, isEditing);
             updateNick(nicknameToken);
             updateToken(userInfo);
+            setCurrNick(nick);
         }
     };
+
+    // handles clear changes
+    const clearChanges = () => {
+        setNick(currNick);
+        setIcon("false", true, isEditing);
+    };
+
+    // function that renders the toast notification for improper nickname length
+    const renderToast = (message) => {
+        return ToastNotification({
+            content: message,
+        });
+    };
+
+    // focus nickname field on click
+    useEffect(() => {
+        if (isEditing) inputRef.current.focus();
+    }, [isEditing]);
 
     // functional component that renders a remove account button and redirects to a modal
     const RemoveAccount = (id) => {
@@ -102,21 +130,24 @@ export default function ProfileContainer() {
                         item: "account",
                     },
                 }}>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    className="delete-button"
-                    startIcon={<DeleteIcon />}
-                    fontWeight="900">
-                    Remove Account
-                </Button>
+                <div className="remove-account-button-container">
+                    <button
+                        className="remove-account-button"
+                        onContextMenu={(e) => {
+                            e.preventDefault();
+                        }}
+                        onAuxClick={(e) => {
+                            e.preventDefault();
+                        }}>
+                        Remove Account
+                    </button>
+                </div>
             </Link>
         );
     };
 
     // convert userType to its corresponding string representation
     useEffect(() => {
-        // console.log(userinfos);
         if (user) {
             if (user.userType === 1) setType("Admin");
             else if (user.userType === 2) setType("Faculty");
@@ -133,165 +164,180 @@ export default function ProfileContainer() {
         });
     }, [nick]);
 
+    // layout code
     return (
         // column for the title bar "Profile Display"
-        <Container className="profile-container">
-            <Row className="title-bar">
-                <Col xs={2} className="grid-columns"></Col>
-                <Col xs={8}>
-                    <div className="headerText" style={headerText}>
-                        Profile Display
-                    </div>
-                </Col>
-                <Col xs={1} className="grid-columns"></Col>
-            </Row>
-            {/* nickname section */}
-            <Row>
-                <Col xs={2} className="grid-columns"></Col>
-                <Col xs={4} className="grid-columns">
-                    <div className="label-text" style={labelText}>
-                        Nickname:
-                    </div>
-                </Col>
-                <Col xs={5} className="grid-columns">
-                    <input
-                        onChange={(e) => {
-                            setNick(e.target.value);
-                        }}
-                        disabled={disable}
-                        type="text"
-                        className="text-field"
-                        value={user ? nick : ""}
-                    />
-                </Col>
-                <Col xs={1} className="edit-column">
-                    <div>
-                        <FontAwesomeIcon
-                            className="edit-icon"
-                            onClick={() => {
-                                editNickname(
-                                    {
-                                        googleId: user.googleId,
-                                        newNickname: user.nickname,
-                                    },
-                                    user
-                                );
+        <div className="profile-container">
+            <div className="info-container">
+                {/* nickname section */}
+                <div className="grid-row">
+                    <div className="label-container">DISPLAY NAME</div>
+                    <div className="field-container">
+                        <input
+                            onChange={(e) => {
+                                setNick(e.target.value);
                             }}
-                            state={click}
-                            aria-label="edit"
-                            style={{
-                                width: "20px",
-                                height: "20px",
-                                color: `${btnStyle}`,
-                                marginLeft: "-20px",
-                            }}
-                            icon={buttonStyle}
+                            disabled={disable}
+                            ref={inputRef}
+                            type="text"
+                            size="60"
+                            className="text-field field-nickname"
+                            value={user ? nick : ""}
                         />
+                        <div className="button-container">
+                            {click === "true" ? (
+                                <>
+                                    <i
+                                        className="nick-icon fa fa-save"
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        onClick={() => {
+                                            if (nick === currNick) {
+                                                clearChanges();
+                                            } else {
+                                                if (
+                                                    nick === user.fullName ||
+                                                    (nick.length > 2 &&
+                                                        nick.length < 10)
+                                                ) {
+                                                    editNickname(
+                                                        {
+                                                            googleId:
+                                                                user.googleId,
+                                                            newNickname:
+                                                                user.nickname,
+                                                        },
+                                                        user
+                                                    );
+                                                } else {
+                                                    if (
+                                                        nick !== user.fullName
+                                                    ) {
+                                                        if (nick.length < 3) {
+                                                            renderToast(
+                                                                "Nickname length must be greater than two (2). "
+                                                            );
+                                                        } else if (
+                                                            nick.length > 9
+                                                        ) {
+                                                            renderToast(
+                                                                "Nickname length must be less than ten (10). "
+                                                            );
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }}
+                                        aria-label="edit"
+                                        style={{
+                                            color: "gray",
+                                        }}></i>
+                                    <i
+                                        className="nick-icon fa fa-times"
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        onClick={() => {
+                                            clearChanges();
+                                        }}
+                                        style={{
+                                            color: "red",
+                                        }}></i>
+                                </>
+                            ) : (
+                                <>
+                                    <i
+                                        className="nick-icon fa fa-pencil"
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+                                        }}
+                                        onClick={() => {
+                                            editNickname(
+                                                {
+                                                    googleId: user.googleId,
+                                                    newNickname: user.nickname,
+                                                },
+                                                user
+                                            );
+                                        }}
+                                        aria-label="edit"
+                                        style={{
+                                            color: "gray",
+                                        }}></i>
+                                </>
+                            )}
+                        </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
 
-            {/* full name section */}
-            <Row>
-                <Col xs={2} className="grid-columns"></Col>
-
-                <Col xs={4} className="grid-columns">
-                    <div className="label-text" style={labelText}>
-                        Name:
+                {/* full name section */}
+                <div className="grid-row">
+                    <div className="label-container">NAME</div>
+                    <div className="field-container">
+                        <input
+                            disabled={true}
+                            type="text"
+                            className="text-field"
+                            defaultValue={user && user.fullName}
+                        />
+                        <div className="button-container"></div>
                     </div>
-                </Col>
-                <Col xs={5} className="grid-columns">
-                    <input
-                        disabled={true}
-                        type="text"
-                        className="text-field"
-                        defaultValue={user ? user.fullName : ""}
-                    />
-                </Col>
-                <Col xs={1} className="grid-columns"></Col>
-            </Row>
+                </div>
 
-            {/* user classification section */}
-            <Row>
-                <Col xs={2} className="grid-columns"></Col>
+                {/* user classification section */}
+                <div className="grid-row">
+                    <div className="label-container">USER TYPE</div>
 
-                <Col xs={4} className="grid-columns">
-                    <div className="label-text" style={labelText}>
-                        Classification:
+                    <div className="field-container">
+                        <input
+                            type="text"
+                            disabled={true}
+                            className="text-field"
+                            defaultValue={user ? type : ""}
+                        />
+                        <div className="button-container"></div>
                     </div>
-                </Col>
-                <Col xs={5} className="grid-columns">
-                    <input
-                        type="text"
-                        disabled={true}
-                        className="text-field"
-                        defaultValue={user ? type : ""}
-                    />
-                </Col>
-                <Col xs={1} className="grid-columns"></Col>
-            </Row>
+                </div>
 
-            {/* user email section */}
-            <Row>
-                <Col xs={2} className="grid-columns"></Col>
+                {/* user email section */}
+                <div className="grid-row">
+                    <div className="label-container">EMAIL</div>
 
-                <Col xs={4} className="grid-columns">
-                    <div className="label-text" style={labelText}>
-                        Email:
+                    <div className="field-container">
+                        <input
+                            disabled={true}
+                            type="text"
+                            className="text-field"
+                            defaultValue={user && user.email}
+                        />
+                        <div className="button-container"></div>
                     </div>
-                </Col>
-                <Col xs={5} className="grid-columns">
-                    <input
-                        disabled={true}
-                        type="text"
-                        className="text-field"
-                        defaultValue={user ? user.email : ""}
-                    />
-                </Col>
-                <Col xs={1} className="grid-columns"></Col>
-            </Row>
+                </div>
+            </div>
+            <div
+                className="divider"
+                style={{
+                    borderLeft: "2px solid #c5c5c5",
+                    height: "100%",
+                    // left: "50%",
+                }}></div>
 
             {/* part for account removal */}
-            <Row className="removal-bar">
-                <Col xs={2} className="grid-columns"></Col>
-
-                <Col xs={8}>
-                    <div
-                        className="header-text"
-                        style={{ fontWeight: "900", fontSize: "30px" }}>
-                        Account Removal
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={2} className="grid-columns"></Col>
-
-                <Col xs={8} className="grid-columns">
-                    <div style={{ padding: "5px", fontSize: "15px" }}>
-                        Removing your accounts means dissociating your account
-                        from the app.
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={2} className="grid-columns"></Col>
-
-                <Col xs={8}>
-                    <RemoveAccount id={user ? user.googleId : ""} user={user} />
-                </Col>
-            </Row>
-        </Container>
+            <div className="remove-account-container">
+                <span>Account Removal</span>
+                <p>
+                    Removing your accounts means dissociating your account from
+                    the app.
+                </p>
+                <p>
+                    You can still login using your UP mail but all changes made
+                    to your account will be set to default.
+                </p>
+                <div>
+                    <RemoveAccount id={user && user.googleId} user={user} />
+                </div>
+            </div>
+        </div>
     );
 }
-
-const headerText = {
-    fontWeight: "900",
-    fontSize: "35px",
-};
-
-const labelText = {
-    verticalAlign: "center",
-    paddingTop: "12px",
-    fontWeight: "900",
-    fontSize: "25px",
-};
