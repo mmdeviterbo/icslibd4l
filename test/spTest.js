@@ -33,7 +33,8 @@ describe("SP Thesis Router API", () => {
                 })
                 .then((res) => {
                     sp_thesis_id = res.data.sp_thesis_id;
-                    expect(res.status).to.equal(200);
+                    console.log(res.data);
+                    expect(res.status).to.equal(400);
                     done();
                 })
                 .catch((err) => {
@@ -66,7 +67,9 @@ describe("SP Thesis Router API", () => {
                 })
                 .then((res) => {
                     sp_thesis_id = res.data.sp_thesis_id;
-                    expect(res.status).to.equal(200);
+
+                    console.log(res.data);
+                    expect(res.status).to.equal(400);
                     done();
                 })
                 .catch((err) => {
@@ -90,6 +93,7 @@ describe("SP Thesis Router API", () => {
                 .then((res) => {
                     expect(res.data).to.be.an("string");
                     expect(res.status).to.equal(200);
+
                     done();
                 })
                 .catch((err) => {
