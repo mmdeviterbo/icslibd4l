@@ -64,14 +64,15 @@ const InfoSidebar = ({ user, resourceData, type, resId }) => {
         <hr/>
 
         <div className = "info-group">
-            <h3>Adviser(s):</h3>
+            <h3 style={{marginRight:"2%"}}>Adviser(s):</h3>
+            <div>
             {resourceData &&
               resourceData.advisers.map((item, key) => (
                 <h3 className="info-value" key={key}>
                   {item.adviser_name}
                 </h3>
               ))}
-            
+            </div>
         </div>
         <hr/>
 
