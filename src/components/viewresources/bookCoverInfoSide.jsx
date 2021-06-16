@@ -1,5 +1,16 @@
 import React from "react";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Renders the book attributes.
+ *
+ *  props:
+ *    {isbn, publisher, numOfCopies, subjects,
+ *    physical Desc } = book attributes
+ ******************************************************/
+
 const BookCoverandInfo = ({
   isbn,
   publisher,

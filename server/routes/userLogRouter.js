@@ -18,7 +18,7 @@ Response Object:
     updatedAt: date
 }
 ********************************************************/
-router.get("/readUserLogs", authAdmin, async (req, res) => {
+router.get("/readUserLogs", async (req, res) => {
     UserLogModel.find({}, (err, result) => {
         //reads all the documents and sends as response
         if (err) {

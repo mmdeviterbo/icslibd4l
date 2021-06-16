@@ -1,6 +1,20 @@
 import React from "react";
 import dateFormat from "dateformat";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Shows the title, authors and publishing year of a
+ *  specific SP/Thesis.
+ *
+ *  props:
+ *    title = SP/Thesis title
+ *    authorList = an array of authors
+ *    year = publishing year
+ *    item =
+ ******************************************************/
+
 const TitleContainer = ({ title, authorList, year, item }) => {
   return (
     <div className="title-author">

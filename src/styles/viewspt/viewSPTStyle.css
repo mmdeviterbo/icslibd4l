@@ -1,13 +1,13 @@
 table {
-    width: 100%;
+  width: 100%;
 }
 
 .reading-main-container {
-    display: flex;
-    flex-direction: flex-start;
-    align-items: flex-start;
-    min-height: 90vh !important;
-    background-color: #f4f4f4;
+  display: flex;
+  flex-direction: flex-start;
+  align-items: flex-start;
+  min-height: 90vh !important;
+  background-color: #f4f4f4;
 }
 
 .book-page-container {
@@ -40,131 +40,140 @@ table {
 }
 
 .title-author {
-    margin: 2rem 10%;
+  margin: 2rem 10%;
 }
 
 .title-author h1 {
-    font-size: 2.5rem;
-    font-family: "Montserrat";
-    font-weight: bolder;
+  font-size: 2.5rem;
+  font-family: "Montserrat";
+  font-weight: bolder;
 }
 
 .title-author h3 {
-    font-family: "Montserrat", sans-serif;
-    font-weight: normal;
-    color: #0067a1;
+  font-family: "Montserrat", sans-serif;
+  font-weight: normal;
+  color: #0067a1;
 }
 
 .title-author p {
-    color: #9b9b9b;
+  color: #9b9b9b;
 }
 
 .date-and-view {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .date-and-view svg {
-    color: black;
+  color: black;
 }
 
 #view-manuscript {
-    color: #0067a1;
+  color: #0067a1;
 }
 
 #view-manuscript:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .abstract-container {
-    margin: 0px 6%;
+  margin: 0px 6%;
 
-    width: 60%;
+  width: 60%;
 }
 
 .abstract-container h2 {
-    font-family: "Montserrat", sans-serif;
-    padding-bottom: 1rem;
+  font-family: "Montserrat", sans-serif;
+  padding-bottom: 1rem;
 }
 
 .abstract-container p {
-    font-size: 1.2rem;
-    text-align: justify;
-    text-justify: inter-word;
+  font-size: 1.2rem;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .abstract-and-info {
-    margin: 0px 6%;
-    display: flex;
-    flex-direction: row;
+  margin: 0px 6%;
+  display: flex;
+  flex-direction: row;
 
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .info-sidebar {
-    width: 40%;
-    padding: 0px 6%;
+  width: 40%;
+  padding: 0px 6%;
 }
+
 .spt-thtr {
-    font-size: 1.2rem;
-    padding: 1.3rem;
-    border-bottom: 1px solid;
-    border-color: #e5e5e5;
+  font-size: 1.2rem;
+  padding: 1.3rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+.spt-thtr-type{
+  font-size: 1.2rem;
+  padding: 1.3rem;
+  font-weight: 100;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .spt-thtr-multi {
-    font-size: 1.2rem;
-    padding: 0.5rem;
+  font-size: 1.1rem;
+  padding: 0.2rem;
+
 }
 
 .keyword-container {
-    padding: 1.3rem;
-    display: flex;
-    flex-direction: column;
-    overflow-y: hidden;
+  font-weight: 100;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .spt-view-buttons {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .spt-view-buttons button {
-    font-family: "Montserrat", sans-serif;
-    width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 0.5rem;
-    background-color: white;
-    border-color: #bff1ff;
-    border-style: solid;
-    border-radius: 0.5rem;
-    box-shadow: 1px 1px 0.3rem rgb(204, 204, 204);
-    font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 0.5rem;
+  background-color: white;
+  border-color: #bff1ff;
+  border-style: solid;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 0.3rem rgb(204, 204, 204);
+  font-size: 1.2rem;
 }
 
 .spt-view-buttons button:hover {
-    /* box-shadow: none; */
-    transition: transform 100ms ease, box-shadow 125ms ease;
-    transform: scale(1.025);
+  /* box-shadow: none; */
+  transition: transform 100ms ease, box-shadow 125ms ease;
+  transform: scale(1.025);
 }
 
 .bookcover-and-desc {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    margin: 2rem 6%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 2rem 6%;
 }
 .imgContainerBook {
-    position: relative;
-    height: 55vh;
-    width: 50%;
-    display: flex;
-    justify-content: center;
+  position: relative;
+  height: 55vh;
+  width: 50%;
+  display: flex;
+  justify-content: center;
 }
 .imgBook {
-    height: 100%;
-    width: 60%;
-    position: absolute;
+  height: 100%;
+  width: 60%;
+  position: absolute;
 }
 
 .book-cover-info-side {
@@ -175,10 +184,10 @@ table {
 }
 
 .book-info-tr {
-    font-size: 1.2rem;
-    padding: 1.3rem;
-    border-bottom: 1px solid;
-    border-color: #e5e5e5;
+  font-size: 1.2rem;
+  padding: 1.3rem;
+  border-bottom: 1px solid;
+  border-color: #e5e5e5;
 }
 
 /* .book-info-multi {
@@ -193,15 +202,16 @@ table {
 } */
 
 .physical-description {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 
-    padding: 1.3rem;
+  padding: 1.3rem;
 }
 
 .physical-text {
-    width: inherit;
-    text-align: justify;
-    text-justify: inter-word;
+  width: inherit;
+  text-align: justify;
+  text-justify: inter-word;
+  word-wrap: break-word;
 }
 
 .info-group{

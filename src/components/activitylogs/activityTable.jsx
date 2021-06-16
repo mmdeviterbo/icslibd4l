@@ -56,11 +56,13 @@ export default function ActivityTable() {
         <TableCell
             key={index}
             style={{
+                backgroundColor: "#0067a1",
                 align: "left",
                 fontWeight: "bold",
                 fontSize: "1.4rem",
+                color:"white",
             }}>
-            <span>{headerTxt}</span>
+            <p>{headerTxt}</p>
         </TableCell>
     ));
 
@@ -229,7 +231,7 @@ export default function ActivityTable() {
                                             padding: "5rem",
                                             textAlign: "center",
                                         }}>
-                                        <h1>User Logs database is empty.</h1>
+                                        <h1>User activity logs is empty</h1>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -261,9 +263,13 @@ export default function ActivityTable() {
                 />
             </TableContainer>
             <br />
-            <div className="clear-logs-button-container">
-                <ClearLogs />
-            </div>
+            {activityLogs.length === 0 ? (
+                <></>
+            ) : (
+                <div className="clear-logs-button-container">
+                    <ClearLogs />
+                </div>
+            )}
         </>
     );
 }
