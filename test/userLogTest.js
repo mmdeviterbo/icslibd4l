@@ -1,7 +1,6 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 const axios = require("axios");
-const sinon = require("sinon");
 const expect = chai.expect;
 const userLogRoute = "http://localhost:3001/userLogs";
 var app;

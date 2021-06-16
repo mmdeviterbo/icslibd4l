@@ -1,7 +1,6 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 const axios = require("axios");
-const sinon = require("sinon");
 const fs = require("fs");
 
 const expect = chai.expect;
