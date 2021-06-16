@@ -5,16 +5,15 @@ import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import searchBg from "../../assets/searchBg_4.png";
 import ParallaxEffect from "./parallaxEffect";
-import logo from '../../assets/mainlogo/icslibd4l.webp';
+import logo from "../../assets/mainlogo/icslibd4l.webp";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function BrowsePart({ browseRef }) {
   const [isHoverTitle, setIsHoverTitle] = useState("BROWSE");
 
-
-  useEffect(()=>{
+  useEffect(() => {
     animateScrollTrigger();
-  },[])
+  }, []);
 
   return (
     <div
@@ -24,8 +23,10 @@ export default function BrowsePart({ browseRef }) {
     >
       <img src={searchBg} style={searchBgStyle} alt="#" />
       <div style={colorBrowseContainer} className="colorBrowseContainer">
-        <img src={logo} style={logoImgBg} alt="#"/>
-        <h1 style={titleOrientation}><p className="isHoverTitle">{isHoverTitle}</p></h1>
+        <img src={logo} style={logoImgBg} alt="#" />
+        <h1 style={titleOrientation}>
+          <p className="isHoverTitle">{isHoverTitle}</p>
+        </h1>
       </div>
       <div style={designBoxContainer} className="designBoxContainer">
         <ParallaxEffect />
@@ -94,7 +95,6 @@ export default function BrowsePart({ browseRef }) {
           // to="/browse-special-problems"
           // TOUCHED: search filter redirect to search page type=books search=all books
           to="/search?type=sp&search="
-          // to="/search?type=Special%20Problem&search="
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("SP")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}
@@ -150,24 +150,24 @@ const colorBrowseContainer = {
   width: "95%",
   background: "#0067A1",
   borderRadius: "7px",
-  boxShadow: "2px 5px 8px 0 rgba(0, 0, 0, 0.8), -6px -6px 8px 0 rgba(255, 255, 255, 0.8)",
+  boxShadow: "2px 5px 8px 0 #36454f, -6px -6px 8px 0 rgba(255, 255, 255, 0.8)",
   display: "flex",
   justifyContent: "center",
-  overflow:"hidden"
+  overflow: "hidden",
 };
 
 const logoImgBg = {
-  position:"absolute",
-  height:"200%",
-  width:"120%",
-  objecFit:"cover",
-  filter:"grayscale(0.8)",
-  opacity:0.4,
-  zIndex:0  
-}
+  position: "absolute",
+  height: "200%",
+  width: "120%",
+  objecFit: "cover",
+  filter: "grayscale(0.8)",
+  opacity: 0.4,
+  zIndex: 0,
+};
 
 const titleOrientation = {
-  overflow:"hidden",
+  overflow: "hidden",
   writingMode: "vertical-rl",
   textOrientation: "upright",
   color: "white",
@@ -177,9 +177,9 @@ const titleOrientation = {
   background: "rgba(0,0,0,0.9)",
   textAlign: "center",
   margin: 0,
-  padding:"0 3%",
-  marginLeft:"10%",
-  zIndex:1
+  padding: "0 3%",
+  marginLeft: "10%",
+  zIndex: 1,
 };
 
 const designBoxContainer = {
@@ -200,7 +200,7 @@ const browseBox = {
   width: "30vh",
   cursor: "pointer",
   background: "#e0e0e0",
-  boxShadow:"3px 3px 5px 0 rgba(0, 0, 0, 0.5), -3px -3px 5px 0 rgba(255, 255, 255, 0.3)",
+  boxShadow: "3px 3px 5px 0 #36454f, -3px -3px 5px 0 rgba(255, 255, 255, 0.3)",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -234,26 +234,26 @@ const titleSource = {
   margin: 0,
 };
 
-const animateScrollTrigger=()=>{
+const animateScrollTrigger = () => {
   let tl = gsap.timeline({
-    scrollTrigger: { 
+    scrollTrigger: {
       trigger: ".colorBrowseContainer",
-      scrub:0.5,
-      start:"top center",
-      end:"bottom bottom",
-    } 
-  })
-  tl.from('.browseboxBooks',{ xPercent:-80  });
-  tl.from('.browseboxTheses',{ xPercent:80  });
-  tl.from('.browseboxSP',{ xPercent:-80  });
-  
+      scrub: 0.5,
+      start: "top center",
+      end: "bottom bottom",
+    },
+  });
+  tl.from(".browseboxBooks", { xPercent: -80 });
+  tl.from(".browseboxTheses", { xPercent: 80 });
+  tl.from(".browseboxSP", { xPercent: -80 });
+
   let t2 = gsap.timeline({
-    scrollTrigger: { 
+    scrollTrigger: {
       trigger: ".colorBrowseContainer",
-      scrub:2,
-      start:"top center",
-      end:"bottom bottom",
-    } 
-  })
-  t2.from('.isHoverTitle',{ yPercent:-80 });
-}
+      scrub: 2,
+      start: "top center",
+      end: "bottom bottom",
+    },
+  });
+  t2.from(".isHoverTitle", { yPercent: -80 });
+};

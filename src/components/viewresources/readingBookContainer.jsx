@@ -5,123 +5,122 @@ import ResourceService from "../../services/resourceService";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/viewspt/viewSPTStyle.css";
 
+/****************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ *  Makes a GET request using bookId and resource type as
+ *  params.
+ *  Returned object will be rendered in the components
+ *  accordingly.
+ *
+ ******************************************************/
+
 const ReadingBookContainer = (props) => {
-    // const resourceData =
-    //   (props.location && props.location.state.resourceData) || {};
+  let [loading, setLoading] = useState(true);
+  let [imgLoading, setImgLoading] = useState(true);
+  const [resourceData, setResourceData] = useState({});
+  const resourceID = props.match?.params?.id;
 
-    let [loading, setLoading] = useState(true);
-    let [imgLoading, setImgLoading] = useState(true);
-    const [resourceData, setResourceData] = useState({});
-    const resourceID = props.match.params.id;
-    // console.log(props.match.params);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const urlRequest = `/search-id?id=${resourceID}`;
+        const { data } = await ResourceService.searchByID(urlRequest, "Book");
+        data[0].bookCoverLink = `https://drive.google.com/uc?export=view&id=${data[0].bookCoverLink
+          .replace("https://drive.google.com/uc?id=", "")
+          .replace("https://drive.google.com/file/d/", "")
+          .replace("/view?usp=sharing","")
+          .replace("/view", "")}`;
+        setResourceData(data && data[0]);
+        setLoading(false);
+        // handleLoading();
+      } catch (err) {}
+    }
+    fetchData();
+  }, []);
 
-    // const handleLoading = () => {
-    //   console.log(resourceData.bookCoverLink);
-    //   if (resourceData && resourceData.bookCoverLink) {
-    //     return setLoading(true);
-    //   }
-    // };
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                setLoading(true);
-                const urlRequest = `/search-id?id=${resourceID}`;
-                const { data } = await ResourceService.searchByID(
-                    urlRequest,
-                    "Book"
-                );
-                setResourceData(data && data[0]);
-                setLoading(false);
-                // handleLoading();
-            } catch (err) {}
-        }
-        fetchData();
-    }, []);
-
-    return (
-        <div>
-            {loading ? (
-                <div
-                    style={{
-                        height: "100vh",
-                        display: "grid",
-                        placeItems: "center",
-                    }}>
-                    <PropagateLoader
-                        color={"#0067a1"}
-                        speedMultiplier={2}
-                        loading={true}
-                        size={20}
-                    />
-                </div>
-            ) : (
-                <div className="reading-main-container">
-                    <div className="book-page-container">
-                        <TitleContainer
-                            title={resourceData && resourceData.title}
-                            authorList={resourceData && resourceData.author}
-                            year={resourceData && resourceData.datePublished}
-                            item={"book"}
-                        />
-
-                        <div className="bookcover-and-desc">
-                            <div className="imgContainerBook">
-                                {resourceData && resourceData.bookCoverLink ? (
-                                    <>
-                                        {imgLoading && (
-                                            <div
-                                                style={{
-                                                    height: "100%",
-                                                    display: "grid",
-                                                    placeItems: "center",
-                                                }}>
-                                                <PropagateLoader
-                                                    color={"#0067a1"}
-                                                    speedMultiplier={2}
-                                                    loading={true}
-                                                    size={20}
-                                                />
-                                            </div>
-                                        )}
-                                        <img
-                                            draggable={false}
-                                            className="imgBook"
-                                            src={resourceData.bookCoverLink}
-                                            alt="bookCover"
-                                            onLoad={() => setImgLoading(false)}
-                                        />
-                                    </>
-                                ) : (
-                                    <img
-                                        draggable={false}
-                                        className="imgBook"
-                                        src="https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg"
-                                        alt="bookCover"
-                                    />
-                                )}
-                            </div>
-
-                            <BookCoverandInfo
-                                isbn={resourceData && resourceData.bookId}
-                                publisher={
-                                    resourceData && resourceData.publisher
-                                }
-                                numOfCopies={
-                                    resourceData && resourceData.numberOfCopies
-                                }
-                                subjects={resourceData && resourceData.subject}
-                                physicalDesc={
-                                    resourceData && resourceData.physicalDesc
-                                }
-                            />
-
-                            {/* <BookPhysDescription physicalDesc={resourceData.physicalDesc} /> */}
-                        </div>
-                    </div>
-                </div>
-            )}
+  return (
+    <div>
+      {loading ? (
+        <div
+          style={{
+            height: "100vh",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <PropagateLoader
+            color={"#0067a1"}
+            speedMultiplier={2}
+            loading={true}
+            size={20}
+          />
         </div>
-    );
+      ) : (
+        <div className="reading-main-container">
+          <div className="book-page-container">
+            <TitleContainer
+              title={resourceData && resourceData.title}
+              authorList={resourceData && resourceData.author}
+              year={resourceData && resourceData.datePublished}
+              item={"book"}
+            />
+
+            <div className="bookcover-and-desc">
+              <div className="imgContainerBook">
+                {resourceData && resourceData.bookCoverLink ? (
+                  <>
+                    {imgLoading && (
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "grid",
+                          placeItems: "center",
+                        }}
+                      >
+                        <PropagateLoader
+                          color={"#0067a1"}
+                          speedMultiplier={2}
+                          loading={true}
+                          size={20}
+                        />
+                      </div>
+                    )}
+                    <img
+                      draggable={false}
+                      className="imgBook"
+                      src={resourceData.bookCoverLink}
+                      alt="bookCover"
+                      onLoad={() => setImgLoading(false)}
+                    />
+                  </>
+                ) : (
+                  <img
+                    draggable={false}
+                    className="imgBook"
+                    src="https://samsinternational.com/wp-content/themes/sams/dist/images/rug-no-thumb.jpg"
+                    alt="bookCover"
+                  />
+                )}
+              </div>
+
+              <BookCoverandInfo
+                isbn={resourceData && resourceData.ISBN}
+                publisher={resourceData && resourceData.publisher}
+                numOfCopies={resourceData && resourceData.numberOfCopies}
+                subjects={resourceData && resourceData.subject}
+                physicalDesc={resourceData && resourceData.physicalDesc}
+              />
+
+              {/* <BookPhysDescription physicalDesc={resourceData.physicalDesc} /> */}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default ReadingBookContainer;

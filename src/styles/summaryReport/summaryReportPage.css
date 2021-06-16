@@ -1,0 +1,165 @@
+/*  Stylings for summaryReportPage.jsx */
+.summary-report-container {
+    border:10px solid transparent;
+    background-color: #f4f4f4;
+}
+
+.loader-container {
+    height: 100vh;
+}
+
+.summary-header-container {
+    background-color: #f4f4f4;
+    width: 100%;
+    height: rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 6%;
+    padding-right: 15%;
+}
+
+.summary-header-container h1 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+    font-size: 2.75rem;
+    margin: 0;
+    text-align: right;
+    width: 25%;
+}
+
+.resource-label {
+    font-family: "Montserrat", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.resource-label h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.resource-type-selector {
+    z-index: 1000;
+    display: inline-block;
+    width: 11rem;
+    padding-left: 1rem;
+}
+
+.download-button-container {
+    padding-top: 1rem;
+}
+
+/* Stylings for summaryTable.jsx*/
+.download-report-button {
+    display: inline-block;
+    background-color: white;
+    color: #0067a1;
+    border-style: solid;
+    border-color: #0067a1;
+    border-width: 1px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-right: 1rem;
+}
+
+.download-report-button:hover {
+    background-color: #0067a1;
+    border-color: white;
+    color: white;
+}
+
+.download-report-button span {
+    padding-left: 1rem;
+}
+
+.summary-table-container {
+    margin: 3rem;
+}
+
+/* Stylings for documentViewer.jsx */
+/* .pdf-view-container {
+    background-color: #f4f4f4;
+
+    min-height: 90vh;
+    background-color: "#CFCFCF";
+    overflow-y: auto;
+}
+
+.pdf-controls-container {
+    position: sticky;
+    top: 0;
+    background-color: #1a1a1a;
+    z-index: 1;
+    color: white;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.file-label-here {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-container {
+    display: inline-block;
+    color: white;
+}
+
+.pagination-button {
+    font-weight: bold;
+}
+
+.page-label {
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.page-input {
+    width: 3rem;
+}
+
+.page-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+} */
+
+/* Firefox */
+/* .page-input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.zoom-value-input {
+    width: 7rem;
+    display: inline-block;
+    color: black;
+} */
+
+/* Sets the color of all icon inside the pdf controls container*/
+/* .pdf-controls-container .fa {
+    color: white;
+}
+
+.download-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.react-pdf__Page__canvas {
+    margin: 0 auto;
+    box-shadow: 5px 10px 18px #888888;
+}
+
+.pdf-file-container {
+    padding: 1rem;
+} */

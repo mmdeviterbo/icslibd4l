@@ -1,43 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import Select from "react-select";
-// import ResourceService from "../../services/resourceService";
+import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
-import DocumentViewer from "./documentViewer";
+import SummaryTable from "./summaryTable";
 import { jwtPrivateKey } from "../../config.json";
 import PropagateLoader from "react-spinners/PropagateLoader";
 
-import Merged from "../../download/Merged.pdf";
-import Books from "../../download/Books.pdf";
-import SpThesis from "../../download/spThesis.pdf";
+import "../../styles/summaryReport/summaryReportPage.css";
 
-import "./summaryReportStyle.css";
-
+/****************************************************************************
+ * Type: Functional Component
+ *
+ * Summary:
+ * Main container for the summary report page
+ ****************************************************************************/
 export default function SummaryReportPage({ user }) {
     const FilterOptions = [
-        { label: "All", value: Merged },
-        { label: "Books", value: Books },
-        { label: "SP/Thesis", value: SpThesis },
+        { label: "Books", value: "books" },
+        { label: "SP/Thesis", value: "spthesis" },
     ];
 
     const [selection, setSelection] = useState(FilterOptions[0].label);
-    const [pdfFile, setPdfFile] = useState(Merged);
     const history = useHistory();
 
-    // UseEffect to get the summary report from the backend.
-    // useEffect(() => {
-    //     generateSummary();
-    // }, []);
+    /****************************************************************************
+     * Type: React Hooks (useEffect)
+     *
+     * Summary:
+     * Generates new pdf files at page refresh
+     ****************************************************************************/
+    useEffect(() => {
+        const generateSummary = async (type) => {
+            try {
+                await ResourceService.generateReport(type).then();
+            } catch (error) {}
+        };
+        generateSummary("all");
+    }, []);
 
-    // const generateSummary = async () => {
-    //     try {
-    //         await ResourceService.generateReport("all");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     return "";
-    // };
-
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Checks if the currently logged in user is authorized to access
+     * summary report page.
+     ****************************************************************************/
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -52,11 +60,23 @@ export default function SummaryReportPage({ user }) {
         }, 700);
     };
 
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Handler funmction for when the react-select component selection was change.
+     * Sets the current selection to the label fo the currently selected option.
+     ****************************************************************************/
     const handleChange = (e) => {
         setSelection(e.label);
-        setPdfFile(e.value);
     };
 
+    /****************************************************************************
+     * Type: Functional Component
+     *
+     * Summary:
+     * React component containing the react-select field with its container.
+     ****************************************************************************/
     const ResourceTypeSelect = () => {
         return (
             <div className="summary-header-container">
@@ -71,7 +91,7 @@ export default function SummaryReportPage({ user }) {
                         onChange={handleChange}
                     />
                 </div>
-                <h1 style={{"whiteSpace": "nowrap"}}>Summary Report</h1>
+                <h1 style={{ whiteSpace: "nowrap" }}>Summary Report</h1>
             </div>
         );
     };
@@ -80,9 +100,8 @@ export default function SummaryReportPage({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="summary-report-container">
-                    {/* {generateSummary()} */}
                     <ResourceTypeSelect className="summary-header" />
-                    <DocumentViewer pdfFile={pdfFile} />
+                    <SummaryTable resourceFilter={selection} />
                 </div>
             ) : (
                 <div

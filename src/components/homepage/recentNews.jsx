@@ -43,24 +43,38 @@ export default function RecentNews({ appRef, newsRef }) {
     <div
       className="recentNewsContainer"
       style={recentNewsContainer}
-      ref={newsRef}>
+      ref={newsRef}
+    >
       <img src={recentNewsBg} style={recentNewsBgStyle} alt="#" />
       <div style={titleContentContainer}>
-        <p style={newsStyle}><span className="UPLBNewsClass" style={{overflow:"hidden"}}>UPLB NEWS</span></p>
+        <p style={newsStyle}>
+          <span className="UPLBNewsClass" style={{ overflow: "hidden" }}>
+            UPLB NEWS
+          </span>
+        </p>
         <div
           className="ui three stackable cards"
-          style={loader? displayLoader : recentNewsInnerContainer}>
-          {loader? <PropagateLoader color={'#0067a1'} speedMultiplier={2} loading={loader} size={20} />:
-          titleNews.map((title, index) => (
-            <ArticleContainer
-              title={title}
-              link={linkNews[index]}
-              imgSrc={imgNews[index]}
-              date={dateNews[index]}
-              key={index}
-              className="recentNewsTitle"
+          style={loader ? displayLoader : recentNewsInnerContainer}
+        >
+          {loader ? (
+            <PropagateLoader
+              color={"#0067a1"}
+              speedMultiplier={2}
+              loading={loader}
+              size={20}
             />
-          ))}
+          ) : (
+            titleNews.map((title, index) => (
+              <ArticleContainer
+                title={title}
+                link={linkNews[index]}
+                imgSrc={imgNews[index]}
+                date={dateNews[index]}
+                key={index}
+                className="recentNewsTitle"
+              />
+            ))
+          )}
         </div>
       </div>
       <div style={scrollToTopStyle}>
@@ -82,8 +96,9 @@ const ArticleContainer = ({ title, link, imgSrc, date }) => {
   return (
     <div
       className="ui fluid card myCardNews"
-      style={{ cursor: "pointer", transition:"0.3s" }}
-      onClick={() => openInNewTab(link)}>
+      style={{ cursor: "pointer", transition: "0.3s" }}
+      onClick={() => openInNewTab(link)}
+    >
       <div className="image" style={{}}>
         <img src={imgSrc} alt="#" />
       </div>
@@ -143,7 +158,8 @@ const recentNewsInnerContainer = {
   margin: 0,
   background: "rgb(0, 103, 161)",
   padding: "1% 2%",
-  borderRadius:"0 0 7px 7px",
+  borderRadius: "0 0 7px 7px",
+  boxShadow: "2px 5px 8px 0 #36454f",
 };
 const newsStyle = {
   padding: "12px",
@@ -155,6 +171,7 @@ const newsStyle = {
   fontSize: "calc(26px + 2vw)",
   fontWeight: 900,
   margin: 0,
+  boxShadow: "2px 5px 8px 0 #36454f, -6px -6px 8px 0 rgba(255, 255, 255, 0.8)",
 
   // protect from copy paste
   WebkitUserSelect: "none",
@@ -174,20 +191,20 @@ const recentNewsBgStyle = {
 };
 
 const displayLoader = {
-  display:"grid",
+  display: "grid",
   placeItems: "center",
-  height:"100%"
-}
+  height: "100%",
+};
 
-const animateScrollTriggger=()=>{
-  gsap.from('.UPLBNewsClass',{
-      scrollTrigger: { 
-        trigger: ".recentNewsContainer",
-        scrub:0.2,
-      },
-      xPercent:90,
-      duration:1.5,
-      scale:1.4,
-      opacity:0.7
-  })
-}
+const animateScrollTriggger = () => {
+  gsap.from(".UPLBNewsClass", {
+    scrollTrigger: {
+      trigger: ".recentNewsContainer",
+      scrub: 0.2,
+    },
+    xPercent: 90,
+    duration: 1.5,
+    scale: 1.4,
+    opacity: 0.7,
+  });
+};
