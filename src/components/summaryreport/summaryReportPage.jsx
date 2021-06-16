@@ -3,21 +3,18 @@ import { useHistory } from "react-router";
 import Select from "react-select";
 import ResourceService from "../../services/resourceService";
 import PersonService from "../../services/personService";
-// import DocumentViewer from "./documentViewer";
 import SummaryTable from "./summaryTable";
 import { jwtPrivateKey } from "../../config.json";
 import PropagateLoader from "react-spinners/PropagateLoader";
 
-// import Merged from "../../download/Merged.pdf";
-// import Books from "../../download/Books.pdf";
-// import SpThesis from "../../download/spThesis.pdf";
-
 import "../../styles/summaryReport/summaryReportPage.css";
 
-// const Merged = "/pdf/Merged.pdf";
-// const Books = "/pdf/Books.pdf";
-// const SpThesis = "/pdf/spThesis.pdf";
-
+/****************************************************************************
+ * Type: Functional Component
+ *
+ * Summary:
+ * Main container for the summary report page
+ ****************************************************************************/
 export default function SummaryReportPage({ user }) {
     const FilterOptions = [
         { label: "Books", value: "books" },
@@ -25,22 +22,30 @@ export default function SummaryReportPage({ user }) {
     ];
 
     const [selection, setSelection] = useState(FilterOptions[0].label);
-    // const [pdfFile, setPdfFile] = useState(Merged);
     const history = useHistory();
 
+    /****************************************************************************
+     * Type: React Hooks (useEffect)
+     *
+     * Summary:
+     * Generates new pdf files at page refresh
+     ****************************************************************************/
     useEffect(() => {
         const generateSummary = async (type) => {
             try {
-                    await ResourceService.generateReport(type).then((response) => {
-                });
-            } catch (error) {
-            }
+                await ResourceService.generateReport(type).then();
+            } catch (error) {}
         };
         generateSummary("all");
-        generateSummary("books");
-        generateSummary("spThesis");
-    },[]);
+    }, []);
 
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Checks if the currently logged in user is authorized to access
+     * summary report page.
+     ****************************************************************************/
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -55,11 +60,23 @@ export default function SummaryReportPage({ user }) {
         }, 700);
     };
 
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Handler funmction for when the react-select component selection was change.
+     * Sets the current selection to the label fo the currently selected option.
+     ****************************************************************************/
     const handleChange = (e) => {
         setSelection(e.label);
-        // setPdfFile(e.value);
     };
 
+    /****************************************************************************
+     * Type: Functional Component
+     *
+     * Summary:
+     * React component containing the react-select field with its container.
+     ****************************************************************************/
     const ResourceTypeSelect = () => {
         return (
             <div className="summary-header-container">
@@ -83,10 +100,8 @@ export default function SummaryReportPage({ user }) {
         <>
             {user && user.userType === 1 ? (
                 <div className="summary-report-container">
-                    {/* {generateSummary()} */}
                     <ResourceTypeSelect className="summary-header" />
                     <SummaryTable resourceFilter={selection} />
-                    {/* <DocumentViewer pdfFile={pdfFile} /> */}
                 </div>
             ) : (
                 <div

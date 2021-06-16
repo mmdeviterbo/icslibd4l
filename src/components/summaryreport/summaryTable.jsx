@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,8 +7,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
-
-// import PropagateLoader from "react-spinners/PropagateLoader";
 
 import Merged from "../../download/Merged.pdf";
 import Books from "../../download/Books.pdf";
@@ -90,20 +87,26 @@ function SummaryTable({ resourceFilter }) {
     const [booksList, setBooksList] = useState([]);
     const [spThesisList, setSpThesisList] = useState([]);
     const [allResource, setAllResource] = useState([]);
-    // const [booksPage, setBooksPage] = useState(0);
-    // const [spThesisPage, setSpThesisPage] = useState(0);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(8);
-    // const [fileUrl, setFileUrl] = useState("pdf/Merged.pdf");
-    // const history = useHistory();
+    const [rowsPerPage] = useState(10);
 
-    // UseEffect to get the summary report from the backend.
+    /****************************************************************************
+     * Type: React Hooks (useEffect)
+     *
+     * Summary:
+     * Calls retrieve data function on page visit/refresh
+     ****************************************************************************/
     useEffect(() => {
-        retreiveData();
-        // generateSummary();
+        retrieveData();
     }, []);
 
-    const retreiveData = async () => {
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Retrieves the required data using resourceService.
+     ****************************************************************************/
+    const retrieveData = async () => {
         const books = await ResourceService.browseResources({
             type: "book",
         });
@@ -116,24 +119,12 @@ function SummaryTable({ resourceFilter }) {
         setSpThesisList(spThesis.data);
     };
 
-    // const generateSummary = async () => {
-    //     try {
-    //         await ResourceService.generateReport("all");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
-    // const downloadFile = (fileUrl) => {
-    //     console.log(fileUrl);
-    //     const url = window.URL.createObjectURL(new Blob([fileUrl]));
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     link.setAttribute("download", "Merged.pdf"); //or any other extension
-    //     document.body.appendChild(link);
-    //     link.click();
-    // };
-
+    /****************************************************************************
+     * Type: React Hooks (useEffect)
+     *
+     * Summary:
+     * Sets the allResource variable depending on the selected filter
+     ****************************************************************************/
     useEffect(() => {
         setAllResource(resourceFilter === "Books" ? booksList : spThesisList);
     }, [resourceFilter, booksList, spThesisList]);
@@ -142,14 +133,12 @@ function SummaryTable({ resourceFilter }) {
         rowsPerPage -
         Math.min(rowsPerPage, allResource.length - page * rowsPerPage);
 
-    /*************************************************************************
-     * Type: React Functional Component
+    /****************************************************************************
+     * Type: Functional Component
      *
      * Summary:
-     *
-     * props:
-     * None
-     ************************************************************************/
+     * Formats the table for Books
+     ****************************************************************************/
     const BooksEntries = () => {
         return (
             <Table stickyHeader>
@@ -164,7 +153,7 @@ function SummaryTable({ resourceFilter }) {
                                     fontSize: "1.4rem",
                                     zIndex: "0",
                                     backgroundColor: "#0067a1",
-                                    color:"white"
+                                    color: "white",
                                 }}
                             >
                                 <p>{book.label}</p>
@@ -181,7 +170,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="book-id-cell"
                                             key={`${rsrc.bookId}-${index}`}
-                                            style={{ fontSize: "1rem"}}
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.bookId}
                                         </TableCell>
@@ -189,8 +178,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="book-title-cell"
                                             key={`${rsrc.bookId}-${rsrc.bookTitle}`}
-                                            style={{ fontSize: "1rem"}}
-
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.title}
                                         </TableCell>
@@ -200,7 +188,9 @@ function SummaryTable({ resourceFilter }) {
                                                 rsrc.author.map((name) => (
                                                     <div
                                                         key={`${rsrc.bookId}-${name.author_name}`}
-                                                        style={{ fontSize: "1rem"}}
+                                                        style={{
+                                                            fontSize: "1rem",
+                                                        }}
                                                     >
                                                         {name.author_name}
                                                     </div>
@@ -212,7 +202,9 @@ function SummaryTable({ resourceFilter }) {
                                                 rsrc.subject.map((sub) => (
                                                     <div
                                                         key={`${rsrc.bookId}-${sub.subject}`}
-                                                        style={{ fontSize: "1rem"}}
+                                                        style={{
+                                                            fontSize: "1rem",
+                                                        }}
                                                     >
                                                         {sub.subject}
                                                     </div>
@@ -222,7 +214,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="book-copies-cell"
                                             key={`${rsrc.bookId}${rsrc.numberOfCopies}-${index}`}
-                                            style={{ fontSize: "1rem"}}
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.numberOfCopies}
                                         </TableCell>
@@ -230,7 +222,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="date-acquired-cell"
                                             key={`${rsrc.bookId}-${rsrc.dateAcquired}-${index}`}
-                                            style={{ fontSize: "1rem"}}
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {dateFormatter(rsrc.dateAcquired)}
                                         </TableCell>
@@ -249,14 +241,12 @@ function SummaryTable({ resourceFilter }) {
         );
     };
 
-    /*************************************************************************
-     * Type: React Functional Component
+    /****************************************************************************
+     * Type: Functional Component
      *
      * Summary:
-     *
-     * props:
-     * None
-     ************************************************************************/
+     * Formats the table for SpThesis
+     ****************************************************************************/
     const SpThesisEntries = () => {
         return (
             <Table stickyHeader style={{ tableLayout: "fixed" }}>
@@ -289,7 +279,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-id-cell"
                                             key={`${rsrc.sp_thesis_id}-${index}`}
-                                            style={{ fontSize: "1rem"}}
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.sp_thesis_id}
                                         </TableCell>
@@ -297,8 +287,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-type-cell"
                                             key={`${rsrc.sp_thesis_id}-${rsrc.type}${index}`}
-                                            style={{ fontSize: "1rem"}}
-
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.type && rsrc.type}
                                         </TableCell>
@@ -306,7 +295,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-title-cell"
                                             key={`${rsrc.sp_thesis_id}-${rsrc.title}${index}`}
-                                            style={{ fontSize: "1rem"}}
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.title}
                                         </TableCell>
@@ -314,7 +303,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-author-cell"
                                             key={`${rsrc.sp_thesis_id}-authors-${index}`}
-                                            style={{ fontSize: "1rem"}}
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.authors &&
                                                 rsrc.authors.map(
@@ -331,7 +320,7 @@ function SummaryTable({ resourceFilter }) {
                                         <TableCell
                                             className="spThesis-adviser-cell"
                                             key={`${rsrc.sp_thesis_id}-advisers-${index}`}
-                                            style={{ fontSize: "1rem"}}
+                                            style={{ fontSize: "1rem" }}
                                         >
                                             {rsrc.advisers &&
                                                 rsrc.advisers.map(
@@ -359,14 +348,13 @@ function SummaryTable({ resourceFilter }) {
         );
     };
 
-    /*************************************************************************
-     * Type: React Functional Component
+    /****************************************************************************
+     * Type: Functional Component
      *
      * Summary:
-     *
-     * props:
-     * None
-     ************************************************************************/
+     * Chooses which table to rended to the screen given the filter selected
+     * (default value of the filter is books)
+     ****************************************************************************/
     const TableEntries = () => {
         return (
             <>
@@ -379,14 +367,14 @@ function SummaryTable({ resourceFilter }) {
         );
     };
 
-    // Handler event for page change in user table
+    /****************************************************************************
+     * Type: Functional Component
+     *
+     * Summary:
+     * Handler function for when the user selects the next page function
+     ****************************************************************************/
     const handlePageChange = (event, newPage) => {
         setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value,8));
-        setPage(0);
     };
 
     return (
@@ -403,7 +391,6 @@ function SummaryTable({ resourceFilter }) {
                             rowsPerPageOptions={[5]}
                             component="div"
                             onChangePage={handlePageChange}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
                             page={page}
                             count={allResource.length}
                         />
