@@ -183,14 +183,14 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
     const searchResource = useCallback(async () => {
         const objFilters = year ? { year: year } : {};
         const resourceType =
-            restype === "Books"
+            restype === "Book"
                 ? "book"
                 : restype === "Thesis"
                 ? "thesis"
                 : restype === "Special Problem"
                 ? "sp"
                 : "any";
-
+        console.log(resourceType);
         const { data } = await resourceService.searchSpThesis(
             objFilters,
             `/search?type=${resourceType}&search=${searchInput}`
@@ -247,7 +247,6 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
     };
 
     useEffect(() => {
-        setIsLoading(true);
         if (searchInput) {
             searchResource();
         } else {
