@@ -20,43 +20,44 @@ import StatusModal from "../modal/operationStatusModal";
  ******************************************************/
 
 const DeletePopUpCont = ({ user }) => {
-  const history = useHistory();
-  const location = useLocation();
-  const id = location.state.resid;
-  const type = location.state.type;
-  const item = location.state.item;
-  const toDelete = location.state.user; // Object containing user information to be deleted
-  // const userState = user;
-  const [message, setMessage] = useState("");
-  const [show, setShow] = useState(true);
-  const [visible, setVisible] = useState(false); // State for the status message modal
-  const [itemName, setItemName] = useState("");
-  const [pathAfter, setPathAfter] = useState("");
-  const [isSelf, setIsSelf] = useState(false);
+    const history = useHistory();
+    const location = useLocation();
+    const id = location.state.resid;
+    const type = location.state.type;
+    const item = location.state.item;
+    const toDelete = location.state.user; // Object containing user information to be deleted
+    const resTitle = location.state.restitle;
+    // const userState = user;
+    const [message, setMessage] = useState("");
+    const [show, setShow] = useState(true);
+    const [visible, setVisible] = useState(false); // State for the status message modal
+    const [itemName, setItemName] = useState("");
+    const [pathAfter, setPathAfter] = useState("");
+    const [isSelf, setIsSelf] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-    // history.goBack();
-    setVisible(true);
-  };
+    const handleClose = () => {
+        setShow(false);
+        // history.goBack();
+        setVisible(true);
+    };
 
-  const handleCancel = () => {
-    setShow(false);
-    history.goBack();
-  };
+    const handleCancel = () => {
+        setShow(false);
+        history.goBack();
+    };
 
-  /****************************************************
-   * Type: Function
-   *
-   * Summary:
-   *  Checks if the item that will be deleted is an account,
-   *  resource or activity logs and makes a DELETE request
-   *  that will permanently remove the item from the database.
-   *  When done, another modal will show up that confirms
-   *  deletion and the page will be redirected to the previous
-   *  one.
-   *
-   ******************************************************/
+    /****************************************************
+     * Type: Function
+     *
+     * Summary:
+     *  Checks if the item that will be deleted is an account,
+     *  resource or activity logs and makes a DELETE request
+     *  that will permanently remove the item from the database.
+     *  When done, another modal will show up that confirms
+     *  deletion and the page will be redirected to the previous
+     *  one.
+     *
+     ******************************************************/
 
     const handleSubmit = async (event) => {
         console.log(id);
@@ -71,7 +72,7 @@ const DeletePopUpCont = ({ user }) => {
                 } else {
                     await ResourceService.deleteSpThesis(id);
                 }
-                setItemName(id);
+                setItemName(resTitle);
                 setMessage("success");
                 handleClose();
                 // setVisible(true);
@@ -99,29 +100,29 @@ const DeletePopUpCont = ({ user }) => {
                 if (toDelete.googleId === user.googleId) {
                     await PersonService.deleteUser(toDelete);
 
-          await PersonService.logoutUser(user); // logs the user out
-          localStorage.removeItem(jwtPrivateKey); // removes token from the browser
-          setIsSelf(true);
-          setMessage("success");
-          setPathAfter("/");
-          // window.location = "/";
-          handleClose();
-        } else {
-          await PersonService.deleteUser(toDelete);
+                    await PersonService.logoutUser(user); // logs the user out
+                    localStorage.removeItem(jwtPrivateKey); // removes token from the browser
+                    setIsSelf(true);
+                    setMessage("success");
+                    setPathAfter("/");
+                    // window.location = "/";
+                    handleClose();
+                } else {
+                    await PersonService.deleteUser(toDelete);
 
-          setMessage("success");
-          setItemName(toDelete.fullName);
-          handleClose();
+                    setMessage("success");
+                    setItemName(toDelete.fullName);
+                    handleClose();
+                }
+            }
+        } catch (err) {
+            if (err.response && err.response.data) {
+                setMessage("fail");
+                alert(err);
+                // alert(err.response.data.errorMessage); // some reason error message
+            }
         }
-      }
-    } catch (err) {
-      if (err.response && err.response.data) {
-        setMessage("fail");
-        alert(err);
-        // alert(err.response.data.errorMessage); // some reason error message
-      }
-    }
-  };
+    };
 
     return (
         <>
@@ -176,43 +177,47 @@ const DeletePopUpCont = ({ user }) => {
                     )}
                 </Modal.Header>
 
-        {/* Renders according to item.
+                {/* Renders according to item.
           If account, else resource/user */}
-        <Modal.Body>
-          {item === "account" ? (
-            <Modal.Body>
-              Are you sure you want to remove your account?
-            </Modal.Body>
-          ) : (
-            [
-              item === "logs" ? (
                 <Modal.Body>
-                  Are you sure you want to clear Activity Logs?
+                    {item === "account" ? (
+                        <Modal.Body>
+                            Are you sure you want to remove your account?
+                        </Modal.Body>
+                    ) : (
+                        [
+                            item === "logs" ? (
+                                <Modal.Body>
+                                    Are you sure you want to clear Activity
+                                    Logs?
+                                </Modal.Body>
+                            ) : (
+                                <Modal.Body>
+                                    Are you sure you want to delete{" "}
+                                    {item === "resource"
+                                        ? resTitle
+                                        : toDelete.fullName}
+                                    ?
+                                </Modal.Body>
+                            ),
+                        ]
+                    )}
+                    {/* read resource title and author here */}
                 </Modal.Body>
-              ) : (
-                <Modal.Body>
-                  Are you sure you want to delete{" "}
-                  {item === "resource" ? id : toDelete.fullName}?
-                </Modal.Body>
-              ),
-            ]
-          )}
-          {/* read resource title and author here */}
-        </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCancel}>
-            Close
-          </Button>
-          <Button variant="danger" onClick={handleSubmit}>
-            {item === "account"
-              ? "Remove"
-              : [item === "logs" ? "Clear" : "Delete"]}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancel}>
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={handleSubmit}>
+                        {item === "account"
+                            ? "Remove"
+                            : [item === "logs" ? "Clear" : "Delete"]}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
 };
 
 export default DeletePopUpCont;
