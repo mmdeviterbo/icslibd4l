@@ -126,7 +126,7 @@ router.post("/create", async (req, res) => {
                 .status(400)
                 .send({ errorMessage: "Please enter all required fields." });
         }
-
+        
         const isbnLen = ISBN.replace(/\D/g, "").length;
 
         if (isbnLen != 10 && isbnLen != 13){
@@ -253,7 +253,6 @@ res String:
 router.get("/search-book/:bookId", async (req, res) => {
     var returnObject = [];
     const bookIdHolder = req.params.bookId;
-
     if (!bookIdHolder) {
         return res
             .status(404)
@@ -265,7 +264,7 @@ router.get("/search-book/:bookId", async (req, res) => {
         if (!BookEntry) {
             return res.status(404).json({ errorMessage: "Entry not found." });
         }
-
+  
         const BookAuthors = await bookAuthorModel.find({
             bookId: bookIdHolder,
         });
@@ -332,6 +331,12 @@ router.put("/update", async (req, res) => {
             .json({ errorMessage: "Please enter all required fields." });
     }
 
+    const isbnLen = ISBN.replace(/\D/g, "").length;
+
+    if (isbnLen != 10 && isbnLen != 13){
+        return res.status(400).send({ errorMessage: "ISBN must contain 10 or 13 digits." });
+    }
+
     try {
         //search if book exists
         const existingBook = await bookModel.findOne({ bookId: bookId });
@@ -392,7 +397,6 @@ router.put("/update", async (req, res) => {
             res.status(400).send("This book does not exist! Cannot update.");
         }
     } catch (err) {
-        console.log(err);
         res.status(500).send();
     }
 });
@@ -407,9 +411,8 @@ res String:
 "Entry Deleted"
 ********************************************************/
 
-router.delete("/delete/:bookId", authAdmin, async (req, res) => {
+router.delete("/delete/:bookId", async (req, res) => {
     const bookIdHolder = req.params.bookId;
-
     if (!bookIdHolder) {
         return res
             .status(404)
@@ -433,7 +436,6 @@ router.delete("/delete/:bookId", authAdmin, async (req, res) => {
             });
         }
     } catch (err) {
-        console.log(err);
         res.status(500).send();
     }
 });

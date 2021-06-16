@@ -90,6 +90,7 @@ describe("Book Router API", () => {
                     expect(err).to.be.instanceOf(Error);
                     expect(err.errorMessage).to.match(/ISBN must contain 10 or 13 digits./);
                     assert.fail(null, null, "ISBN must contain 10 or 13 digits.");
+                    done(err);
                 });
         });
     });
@@ -112,10 +113,10 @@ describe("Book Router API", () => {
     describe("GET /search-book/:bookId ", () => {
         it("get a book by its bookId", () => {
             let bookInfo = {
-                "bookId": bookId
+                "bookId": bookId,
             };
             axios
-                .get(userRoute + "/search-book/:bookId", bookInfo, {
+                .get(userRoute + "/search-book/" + bookId, bookInfo, {
                     withCredentials: true,
                 })
                 .then((res) => {
@@ -129,4 +130,57 @@ describe("Book Router API", () => {
         });
     });
 
+    /**********************
+     UPDATE route
+     ***********************/
+    describe("PUT /update ", () => {
+        it("update book information", (done) => {
+            let bookInfo = {
+                "bookId": bookId,
+                "ISBN":"0 98765 432 1",
+                "title": "Test Book",
+                "authors": [{"fname":"Tester", "lname":"OneUpdated"}, {"fname":"Tester", "lname":"TwoUpdated"}],
+                "subjects": ["Subject One Updated", "Subject Two Updated"],
+                "physicalDesc": "Physical Description",
+                "publisher": "Publisher",
+                "numberOfCopies": 2,
+                "bookCoverLink": "https://drive.google.com/file/d/1fhkFDaoYJLOX6R9KLwKjG2658jUFxZ2-/view?usp=sharing",
+                "datePublished": "2010-09-29",
+                "dateAcquired": "2021-04-20"
+            };
+            axios
+                .put(userRoute + "/update", bookInfo, {
+                    withCredentials: true,
+                })
+                .then((res) => {
+                    expect(res.data).to.have.string("Entry Updated");
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+    });
+
+    /**********************
+     DELETE route
+     ***********************/
+    describe("DELETE /delete/:bookId ", () => {
+        it("delete a book from the database using its bookId", (done) => {
+            let bookInfo = {
+                "bookId": bookId,
+            };
+            axios
+                .delete(userRoute + "/delete/" + bookId, bookInfo, {
+                    withCredentials: true,
+                })
+                .then((res) => {
+                    expect(res.data).to.have.string("Entry Deleted");
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+    });
 });
