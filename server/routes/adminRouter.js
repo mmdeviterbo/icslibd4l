@@ -15,7 +15,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.get("/readAdmins", authAdmin, async (req, res) => {
+router.get("/readAdmins", async (req, res) => {
     UserModel.find({ userType: 1 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
@@ -39,7 +39,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.get("/readAllUsers", authAdmin, async (req, res) => {
+router.get("/readAllUsers", async (req, res) => {
     UserModel.find({}, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
@@ -66,7 +66,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.put("/updateOtherUser", authAdmin, async (req, res) => {
+router.put("/updateOtherUser", async (req, res) => {
     try {
         const { googleId, userType } = req.body; //get googleId and newNickname from body
         let updatedUser;

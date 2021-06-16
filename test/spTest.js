@@ -154,7 +154,7 @@ describe("SP Thesis Router API", () => {
 
         describe("From home browse", () => {
             
-            it("get all books", () => {
+            it("get all books", (done) => {
                 let searchInfo = {
                     type: "book",
                     search: ""
@@ -174,7 +174,7 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("get all special problems", () => {
+            it("get all special problems", (done) => {
                 let searchInfo = {
                     type: "sp",
                     search: ""
@@ -185,7 +185,7 @@ describe("SP Thesis Router API", () => {
                         expect(res.data).to.be.an("array");
                         expect(res.status).to.equal(200);
                         res.data.forEach((item) => {
-                            expect(item).to.include( {type: "Special Problem"} );
+                            expect(item).to.includes( {type: "Special Problem"} );
                         });
                         done();
                     })
@@ -194,7 +194,7 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("get all theses", () => {
+            it("get all theses", (done) => {
                 let searchInfo = {
                     type: "thesis",
                     search: ""
@@ -205,7 +205,7 @@ describe("SP Thesis Router API", () => {
                         expect(res.data).to.be.an("array");
                         expect(res.status).to.equal(200);
                         res.data.forEach((item) => {
-                            expect(item).to.include( {type: "Thesis"} );
+                            expect(item).to.includes( {type: "Thesis"} );
                         });
                         done();
                     })
@@ -219,7 +219,7 @@ describe("SP Thesis Router API", () => {
 
         describe("From home search", () => {
 
-            it("search all resources based on query", () => {
+            it("search all resources based on query", (done) => {
                 let searchInfo = {
                     type: "any",
                     search: "test"
@@ -232,34 +232,34 @@ describe("SP Thesis Router API", () => {
                         let searchReq = searchInfo.search.toLowerCase();
                         let spThesisArr = res.data.filter((item) => "sp_thesis_id" in item);
                         let bookArr = res.data.filter((item) => "bookId" in item);
-                        expect(spThesisArr.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.abstract.toLowerCase().include(searchReq) ||
+                        spThesisArr.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.abstract.toLowerCase().includes(searchReq) ||
                                 item.authors.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.advisers.some((advi) => {
-                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                    return advi.adviser_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.keywords.some((keyw) => {
-                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                    return keyw.sp_thesis_keyword.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
-                        expect(bookArr.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.publisher.toLowerCase().include(searchReq) ||
-                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                            ).to.be.true;
+                        });
+                        bookArr.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.publisher.toLowerCase().includes(searchReq) ||
+                                item.physicalDesc.toLowerCase().includes(searchReq) ||
                                 item.author.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.subject.some((subj) => {
-                                    return subj.subject.toLowerCase().include(searchReq);
+                                    return subj.subject.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        });
                         done();
                     })
                     .catch((err) => {
@@ -267,7 +267,7 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("search all books based on query", () => {
+            it("search all books based on query", (done) => {
                 let searchInfo = {
                     type: "book",
                     search: "intro"
@@ -281,19 +281,19 @@ describe("SP Thesis Router API", () => {
                             expect(item).to.have.property("bookId");
                         });
                         let searchReq = searchInfo.search.toLowerCase();
-                        expect(res.data.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.publisher.toLowerCase().include(searchReq) ||
-                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                        res.data.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.publisher.toLowerCase().includes(searchReq) ||
+                                item.physicalDesc.toLowerCase().includes(searchReq) ||
                                 item.author.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.subject.some((subj) => {
-                                    return subj.subject.toLowerCase().include(searchReq);
+                                    return subj.subject.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        });
                         done();
                     })
                     .catch((err) => {
@@ -301,7 +301,7 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("search all special problems based on query", () => {
+            it("search all special problems based on query", (done) => {
                 let searchInfo = {
                     type: "sp",
                     search: "test"
@@ -312,24 +312,24 @@ describe("SP Thesis Router API", () => {
                         expect(res.data).to.be.an("array");
                         expect(res.status).to.equal(200);
                         res.data.forEach((item) => {
-                            expect(item).to.include( {type: "Special Problem"} );
+                            expect(item).to.includes( {type: "Special Problem"} );
                         });
                         let searchReq = searchInfo.search.toLowerCase();
-                        expect(res.data.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.abstract.toLowerCase().include(searchReq) ||
+                        res.data.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.abstract.toLowerCase().includes(searchReq) ||
                                 item.authors.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.advisers.some((advi) => {
-                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                    return advi.adviser_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.keywords.some((keyw) => {
-                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                    return keyw.sp_thesis_keyword.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        });
                         done();
                     })
                     .catch((err) => {
@@ -337,7 +337,7 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("search all theses based on query", () => {
+            it("search all theses based on query", (done) => {
                 let searchInfo = {
                     type: "thesis",
                     search: "study"
@@ -348,24 +348,24 @@ describe("SP Thesis Router API", () => {
                         expect(res.data).to.be.an("array");
                         expect(res.status).to.equal(200);
                         res.data.forEach((item) => {
-                            expect(item).to.include( {type: "Thesis"} );
+                            expect(item).to.includes( {type: "Thesis"} );
                         });
                         let searchReq = searchInfo.search.toLowerCase();
-                        expect(res.data.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.abstract.toLowerCase().include(searchReq) ||
+                        res.data.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.abstract.toLowerCase().includes(searchReq) ||
                                 item.authors.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.advisers.some((advi) => {
-                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                    return advi.adviser_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.keywords.some((keyw) => {
-                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                    return keyw.sp_thesis_keyword.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        })
                         done();
                     })
                     .catch((err) => {
@@ -378,7 +378,7 @@ describe("SP Thesis Router API", () => {
 
         describe("From search and filter page", () => {
 
-            it("search and filter resources", () => {
+            it("search and filter resources", (done) => {
                 let searchInfo = {
                     type: "any",
                     search: "computer",
@@ -386,7 +386,7 @@ describe("SP Thesis Router API", () => {
                     publisher: "morgan",
                     author: "david",
                     adviser: "",
-                    subject: "CMSC 132",
+                    subject: "cmsc 132",
                     keywords: []
                 };
                 axios
@@ -399,39 +399,39 @@ describe("SP Thesis Router API", () => {
                         
                         // test search
                         let searchReq = searchInfo.search.toLowerCase();
-                        expect(spThesisArr.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.abstract.toLowerCase().include(searchReq) ||
+                        spThesisArr.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.abstract.toLowerCase().includes(searchReq) ||
                                 item.authors.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.advisers.some((advi) => {
-                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                    return advi.adviser_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.keywords.some((keyw) => {
-                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                    return keyw.sp_thesis_keyword.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
-                        expect(bookArr.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.publisher.toLowerCase().include(searchReq) ||
-                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                            ).to.be.true;
+                        });
+                        bookArr.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.publisher.toLowerCase().includes(searchReq) ||
+                                item.physicalDesc.toLowerCase().includes(searchReq) ||
                                 item.author.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.subject.some((subj) => {
-                                    return subj.subject.toLowerCase().include(searchReq);
+                                    return subj.subject.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        });
                         
                         // test filter
                         spThesisArr.forEach((item) => {
-                            expect(item).to.include( {type: {$in: ["Special Problem", "Thesis"]} } );
-                            expect(item).to.include( {year: searchInfo.year} );
+                            expect(item).to.includes( {type: {$in: ["Special Problem", "Thesis"]} } );
+                            expect(item).to.includes( {year: searchInfo.year} );
                             expect(item.authors.some((auth) => {
                                 return auth.author_name
                                     .toLowerCase()
@@ -455,8 +455,8 @@ describe("SP Thesis Router API", () => {
                         });
                         bookArr.forEach((item) => {
                             expect(item).to.have.property("bookId");
-                            expect(item.datePublished.getFullYear()).to.eql(searchInfo.year);
-                            expect(item.publisher).to.include(searchInfo.publisher);
+                            expect(item.datePublished).to.includes(searchInfo.year);
+                            expect(item.publisher.toLowerCase()).to.includes(searchInfo.publisher.toLowerCase());
                             expect(item.author.some((auth) => {
                                 return auth.author_name
                                     .toLowerCase()
@@ -475,14 +475,14 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("search and filter books", () => {
+            it("search and filter books", (done) => {
                 let searchInfo = {
                     type: "book",
-                    search: "MIT Press",
+                    search: "mit press",
                     year: 1990,
-                    publisher: "MIT Press",
-                    author: "Stein",
-                    subject: "CMSC 142"
+                    publisher: "mit press",
+                    author: "stein",
+                    subject: "cmsc 142"
                 };
                 axios
                     .get(spRoute + "/search", {params: searchInfo} )
@@ -492,25 +492,25 @@ describe("SP Thesis Router API", () => {
                         
                         // test search
                         let searchReq = searchInfo.search.toLowerCase();
-                        expect(res.data.forEach((item) => {
-                            return expect(item).to.have.property("bookId") && (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.publisher.toLowerCase().include(searchReq) ||
-                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                        res.data.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.publisher.toLowerCase().includes(searchReq) ||
+                                item.physicalDesc.toLowerCase().includes(searchReq) ||
                                 item.author.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.subject.some((subj) => {
-                                    return subj.subject.toLowerCase().include(searchReq);
+                                    return subj.subject.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        });
                         
                         // test filter
                         res.data.forEach((item) => {
                             expect(item).to.have.property("bookId");
-                            expect(item.datePublished.getFullYear()).to.eql(searchInfo.year);
-                            expect(item.publisher).to.include(searchInfo.publisher);
+                            expect(item.datePublished).to.includes(searchInfo.year);
+                            expect(item.publisher.toLowerCase()).to.includes(searchInfo.publisher.toLowerCase());
                             expect(item.author.some((auth) => {
                                 return auth.author_name
                                     .toLowerCase()
@@ -529,16 +529,16 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("search and filter special problems", () => {
+            it("search and filter special problems", (done) => {
                 let searchInfo = {
                     type: "sp",
-                    search: "Food",
+                    search: "food",
                     year: 2008,
-                    author: "Sandy",
+                    author: "sandy",
                     adviser: "Paterno, Margarita Carmen",
                     keyword: [
-                        "Bluetooth",
-                        "Mobile"
+                        "bluetooth",
+                        "mobile"
                     ]
                 };
                 axios
@@ -549,26 +549,26 @@ describe("SP Thesis Router API", () => {
                         
                         // test search
                         let searchReq = searchInfo.search.toLowerCase();
-                        expect(res.data.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.abstract.toLowerCase().include(searchReq) ||
+                        res.data.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.abstract.toLowerCase().includes(searchReq) ||
                                 item.authors.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.advisers.some((advi) => {
-                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                    return advi.adviser_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.keywords.some((keyw) => {
-                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                    return keyw.sp_thesis_keyword.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        });
                         
                         // test filter
                         res.data.forEach((item) => {
-                            expect(item).to.include( {type: "Special Problem"} );
-                            expect(item).to.include( {year: searchInfo.year} );
+                            expect(item).to.includes( {type: "Special Problem"} );
+                            expect(item).to.includes( {year: searchInfo.year} );
                             expect(item.authors.some((auth) => {
                                 return auth.author_name
                                     .toLowerCase()
@@ -597,16 +597,16 @@ describe("SP Thesis Router API", () => {
                     });
             });
 
-            it("search and filter theses", () => {
+            it("search and filter theses", (done) => {
                 let searchInfo = {
                     type: "thesis",
-                    search: "NUI",
+                    search: "nui",
                     year: 2012,
-                    author: "Fritz",
+                    author: "fritz",
                     adviser: "Hermocilla, Joseph Anthony",
                     keyword: [
-                        "Image",
-                        "Pattern"
+                        "image",
+                        "pattern"
                     ]
                 };
                 axios
@@ -617,26 +617,26 @@ describe("SP Thesis Router API", () => {
                         
                         // test search
                         let searchReq = searchInfo.search.toLowerCase();
-                        expect(res.data.forEach((item) => {
-                            return (
-                                item.title.toLowerCase().include(searchReq) ||
-                                item.abstract.toLowerCase().include(searchReq) ||
+                        res.data.forEach((item) => {
+                            expect(
+                                item.title.toLowerCase().includes(searchReq) ||
+                                item.abstract.toLowerCase().includes(searchReq) ||
                                 item.authors.some((auth) => {
-                                    return auth.author_name.toLowerCase().include(searchReq);
+                                    return auth.author_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.advisers.some((advi) => {
-                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                    return advi.adviser_name.toLowerCase().includes(searchReq);
                                 }) ||
                                 item.keywords.some((keyw) => {
-                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                    return keyw.sp_thesis_keyword.toLowerCase().includes(searchReq);
                                 })
-                            );
-                        })).to.be.true;
+                            ).to.be.true;
+                        });
                         
                         // test filter
                         res.data.forEach((item) => {
-                            expect(item).to.include( {type: "Thesis"} );
-                            expect(item).to.include( {year: searchInfo.year} );
+                            expect(item).to.includes( {type: "Thesis"} );
+                            expect(item).to.includes( {year: searchInfo.year} );
                             expect(item.authors.some((auth) => {
                                 return auth.author_name
                                     .toLowerCase()

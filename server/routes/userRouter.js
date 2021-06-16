@@ -29,6 +29,7 @@ Response Object:
 ********************************************************/
 router.post("/create", async (req, res) => {
     var loggedUser;
+    console.log(req.body);
     try {
         const { googleId, email, fullName } = req.body;
 
@@ -48,7 +49,7 @@ router.post("/create", async (req, res) => {
                 googleId,
                 email,
                 fullName,
-                userType: 1,
+                userType: 4,
                 nickname,
             });
 
@@ -103,15 +104,16 @@ router.post("/create", async (req, res) => {
         );
 
         //cookie set for 1 year until expiration
-        res.cookie("token", token, {
-            httpOnly: false,
-            maxAge: 365 * 24 * 60 * 60 * 1000,
-        })
+        return res
+            .cookie("token", token, {
+                httpOnly: false,
+                maxAge: 365 * 24 * 60 * 60 * 1000,
+            })
             .status(200)
             .send(token);
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 
@@ -132,9 +134,9 @@ router.get("/readStudents", async (req, res) => {
     await UserModel.find({ userType: 4 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
-            res.send(err);
+            return res.status(200).send(err);
         } else {
-            res.send(result);
+            return res.status(500).send(result);
         }
     });
 });
@@ -234,7 +236,7 @@ Response String:
 router.delete("/delete", async (req, res) => {
     const googleId = req.body.googleId;
     await UserModel.findOneAndDelete({ googleId });
-    res.status(200).send("Entry Deleted");
+    return res.status(200).send("Entry Deleted");
 });
 
 //logout current signed in user. deletes cookie for user
@@ -267,13 +269,15 @@ router.post("/logout", async (req, res) => {
             activity: "User logout",
         });
         await newUserLog.save();
-        res.cookie("token", "", {
-            httpOnly: false,
-            expires: new Date(0),
-        }).send("User Logged Out");
+        return res
+            .cookie("token", "", {
+                httpOnly: false,
+                expires: new Date(0),
+            })
+            .send("User Logged Out");
     } catch (err) {
         console.error(err);
-        res.status(500).send(err);
+        return res.status(500).send(err);
     }
 });
 
@@ -323,9 +327,9 @@ router.post("/findperson", async (req, res) => {
             privateData,
             "ICSlibrary"
         );
-        res.send(token);
+        return res.status(200).send(token);
     } catch (err) {
-        res.status(404).json({ errMessage: "Not foundddd" });
+        return status(404).json({ errMessage: "Not foundddd" });
     }
 });
 

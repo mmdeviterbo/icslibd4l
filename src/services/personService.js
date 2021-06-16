@@ -2,7 +2,7 @@ import http from "./httpService";
 import { apiEndpoint, jwtEncryptionKey } from "../config.json";
 import * as jwtEncrypt from "jwt-token-encrypt";
 
-// login/register a person (guess, student, admin, faculty)
+// login/register a person (guest, student, admin, faculty)
 const loginRegisterUser = (userInfo) => {
     return http.post(`${apiEndpoint}/users/create`, userInfo, {
         withCredentials: true,
@@ -27,7 +27,6 @@ const readUser = (googleId) => {
         `${apiEndpoint}/admin/search`,
         { params: { search: googleId } },
         {
-            //req.params.googleID object req.body
             withCredentials: true,
         }
     );
@@ -65,8 +64,10 @@ const readAllUsers = () => {
 
 // user filters, read data of admins only
 const readAdmins = () => {
-    return http.get(`${apiEndpoint}/admin/readAdmins`,{withCredentials: true});
-}
+    return http.get(`${apiEndpoint}/admin/readAdmins`, {
+        withCredentials: true,
+    });
+};
 
 // read data of faculty only
 const readFaculty = () => {
@@ -102,8 +103,10 @@ const searchUser = (searchField) => {
 };
 
 const updateClassification = (userInfo) => {
-    return http.put(`${apiEndpoint}/admin/updateOtherUser`, userInfo, {withCredentials:true})
-}
+    return http.put(`${apiEndpoint}/admin/updateOtherUser`, userInfo, {
+        withCredentials: true,
+    });
+};
 //decrypt data
 const decryptToken = (jwt) => {
     const encryption = {
