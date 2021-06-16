@@ -97,7 +97,6 @@ res object:
 }
 ********************************************************/
 router.post("/create", authAdmin, async (req, res) => {
-    console.log(req.body);
     try {
         const {
             title,
@@ -187,7 +186,6 @@ router.post("/create", authAdmin, async (req, res) => {
             res.status(400).send({ errorMessage: "ISBN already exists!" });
         }
     } catch (err) {
-        console.log(err);
         res.status(500).send();
     }
 });
