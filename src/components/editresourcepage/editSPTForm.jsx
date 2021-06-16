@@ -23,7 +23,7 @@ const classificationOptions = [
 const adviserchoices = [
     {
         value: { fname: "Eliezer A.", lname: "Albacea" },
-        label: "Albacea, Aliezer A.",
+        label: "Albacea, Eliezer A.",
     },
     // follow format
     {
@@ -35,19 +35,19 @@ const adviserchoices = [
         label: "Danila, Lailanie R.",
     },
     {
-        value: { fname: "Joseph Anthony C.", lname: "Hermocilla" },
-        label: "Hermocilla, Joseph Anthony C.",
+        value: { fname: "Joseph Anthony", lname: "Hermocilla" },
+        label: "Hermocilla, Joseph Anthony",
     },
     {
-        value: { fname: "Arian J.", lname: "Jacildo" },
-        label: "Jacildo, Arian J.",
+        value: { fname: "Arian", lname: "Jacildo" },
+        label: "Jacildo, Arian",
     },
     {
         value: { fname: "Concepcion L.", lname: "Khan" },
         label: "Khan, Concepcion L.",
     },
     {
-        value: { fname: "Fermin Roberto G", lname: "Lapitan" },
+        value: { fname: "Fermin Roberto G.", lname: "Lapitan" },
         label: "Lapitan, Fermin Roberto G.",
     }, //hi ser
     {
@@ -55,7 +55,7 @@ const adviserchoices = [
         label: "Madrid, Val Randolf M.",
     },
     {
-        value: { fname: "Katrina Joy H", lname: "Magno" },
+        value: { fname: "Katrina Joy H.", lname: "Magno" },
         label: "Magno, Katrina Joy H.",
     },
     {
@@ -63,11 +63,11 @@ const adviserchoices = [
         label: "Maniaol, Rozano S.",
     },
     {
-        value: { fname: "Danilo J.", lname: "Mercado" },
-        label: "Mercado, Danilo J.",
+        value: { fname: "Danilo", lname: "Mercado" },
+        label: "Mercado, Danilo",
     },
     {
-        value: { fname: "Rizza DC", lname: "Mercado" },
+        value: { fname: "Rizza DC.", lname: "Mercado" },
         label: "Mercado, Rizza DC.",
     },
     {
@@ -75,20 +75,28 @@ const adviserchoices = [
         label: "Monserrat, Toni-Jan Keith P.",
     },
     {
-        value: { fname: "Jaderick P.", lname: "Pabico" },
-        label: "Pabico, Jaderick P.",
+        value: { fname: "Jaderick", lname: "Pabico" },
+        label: "Pabico, Jaderick",
     },
     {
-        value: { fname: "Margarita Carmen S.", lname: "Paterno" },
-        label: "Paterno, Margarita Carmen S.",
+        value: { fname: "Vladimir", lname: "Mariano" },
+        label: "Mariano, Vladimir",
+    },
+    {
+        value: { fname: "Reinald Adrian", lname: "Pugoy"},
+        label: "Pugoy, Reinald Adrian",
+    },
+    {
+        value: { fname: "Margarita Carmen", lname: "Paterno" },
+        label: "Paterno, Margarita Carmen",
     },
     {
         value: { fname: "Reginald Neil C.", lname: "Recario" },
         label: "Recario, Reginald Neil C.",
     },
     {
-        value: { fname: "Samaniego, Jaime M.", lname: "Samaniego" },
-        label: "Samaniego, Jaime M.",
+        value: { fname: "Jaime", lname: "Samaniego" },
+        label: "Samaniego, Jaime",
     },
 ];
 
@@ -129,16 +137,27 @@ export default function EditSPTFormContainer(props) {
     // return ALL resources (dahil walang search na gumagamit ng id)
     const [spThInfoArr, setSpThInfoArr] = useState([]); //all sp/thesis array
     const [idSource, setIdSource] = useState(); //unique key to identify to which specific sp/thesis
-
-    useEffect(() => {
+    const [tempAdvisers, setTempAdvisers]=useState([]);
+    
+    useEffect(()=>{
         try {
-            setIdSource(props.location?.state.id);
-            setSpThInfoArr(props.location?.state.sourceInfo); //all objects from table
+            const {id, sourceInfo} = props.location.state; 
+            setIdSource(id);
+            setSpThInfoArr(sourceInfo); //all objects from table
+
+            let tempSourceInfo = sourceInfo.filter(source=>source.advisers);
+            tempSourceInfo = tempSourceInfo.filter(source=>source.sp_thesis_id === id.id);
+            tempSourceInfo = tempSourceInfo[0].advisers;
+            tempSourceInfo.map(adviser=>
+                setTempAdvisers([...tempAdvisers,{
+                    value:{fname: adviser.adviser_fname, lname: adviser.adviser_lname},
+                    label: `${adviser.adviser_lname}, ${adviser.adviser_fname}`
+                }])
+            )
         } catch (err) {
             window.location = "/not-found";
         }
-    }, []);
-
+    },[])
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -250,6 +269,7 @@ export default function EditSPTFormContainer(props) {
     // }
 
     const handleAdviserChange = (adviserList) => {
+        console.log(adviserList);
         const adviser = [...adviserList].map((obj) => obj.value);
         // setCourses(values);
         setAdviserList(adviser);
@@ -357,7 +377,7 @@ export default function EditSPTFormContainer(props) {
                                         return(
                                         <div
                                             className="authorfields"
-                                            key={p.authorid}>
+                                            key={index}>
                                             <div className="authorname-cont">
                                                 {/* AUTHOR FIRST NAME FIELD */}
                                                 <div className="author-name">
@@ -470,12 +490,10 @@ export default function EditSPTFormContainer(props) {
                                     <Select
                                         id="advsel"
                                         options={adviserchoices}
-                                        defaultValue={advisers}
-                                        // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
+                                        defaultValue={tempAdvisers}
                                         onChange={handleAdviserChange}
                                         isMulti></Select>
                                 </div>
-
                                 {/* Abstract TextArea */}
                                 <div className="abstract-div">
                                     <label htmlFor="abstractText">
