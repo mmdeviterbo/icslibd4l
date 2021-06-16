@@ -15,7 +15,7 @@ const DeleteMessagePopUp = ({ message }) => {
     history.goBack();
   };
 
-  console.log(message);
+//   console.log(message);
   return (
     <>
       <Modal
