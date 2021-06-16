@@ -53,8 +53,6 @@ Response Object:
   "__v": 0
 }
 ********************************************************/
-// AUTHENTICATION REMOVED FROM THE PARAMETERS
-// authFaculty
 router.post("/create", authFaculty, async (req, res) => {
     try {
         const {
