@@ -33,7 +33,7 @@ export default function AboutAlternative() {
                         <p className="paragraphTextStyle">
                             The <strong>Analytica Digital Library</strong> is made for educational purposes only. Unoticed duplication or reproduction of materials is probihited without any permission from the UPLB ICS faculty.   
                             <br/><br/>
-                            User manual can be found <span className="userManualLink" onClick={()=>handleUserManual("https://t.ly/Iu2u")}>here</span>
+                            User manual can be found <span className="userManualLink" onClick={()=>handleUserManual("https://t.ly/CIxr")}>here</span>
                         </p>
                         <p className="footerTextStyle">
                             <br/>
