@@ -33,22 +33,6 @@ describe("Summary Report Router API", () => {
                 .catch((err) => {
                     done(err);
                 });
-            // let app = require("../server/routes/reportRouter");
-            // chai.request(app)
-            //     .get("/report")
-            //     .query({ type: "all" })
-            //     .then((res) => {
-            //         expect(fs.existsSync("./src/download/Merged.pdf")).to.be
-            //             .true;
-            //         expect(res.status).to.equal(200);
-            //         expect(res.data).to.have.string(
-            //             "Summary Report Created Successfully"
-            //         );
-            //         done();
-            //     })
-            //     .catch((err) => {
-            //         throw err;
-            //     });
         });
     });
 });
