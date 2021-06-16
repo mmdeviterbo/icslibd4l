@@ -85,6 +85,7 @@ export default function FilterSidebar({
         const newArray = data.map((e) => e.label);
         setKeywords(newArray);
     };
+    console.log(resourceType);
 
     return (
         <div>
@@ -100,6 +101,7 @@ export default function FilterSidebar({
                         }
                         if (
                             item.label === "Publisher" &&
+                            // (resourceType === "Special Problem" || resourceType === "thesis")
                             (resourceType === "sp" || resourceType === "thesis")
                         ) {
                             return null;
@@ -128,7 +130,8 @@ export default function FilterSidebar({
 
                     {/* Topics */}
 
-                    {(resourceType === "sp" || resourceType === "thesis" || resourceType === "any")
+                    {
+                        (resourceType === "sp" || resourceType === "thesis" || resourceType === "any")
                         ?   <div>
                             <span style={sidebarLink} className="sidebarLink">
                                 <span style={sidebarLabel}>Topic</span>
@@ -170,6 +173,7 @@ export default function FilterSidebar({
                                 Book
                             </MenuItem>
                             <MenuItem style={menuItems} value="sp">
+                            {/* <MenuItem style={menuItems} value="Special Problem"> */}
                                 Special Problem
                             </MenuItem>
                             <MenuItem style={menuItems} value="thesis">
@@ -191,6 +195,8 @@ export default function FilterSidebar({
                                     onChange={(date) => setSearchFilterYear(date)}
                                     animateYearScrolling
                                     isclearable="true"
+                                    minDate={new Date("01-01-1950")}
+                                    maxDate={new Date("12-31-2022")}
                                     placeholder={"Year"}
                                     style={{ width: "50px" }}
                                 />

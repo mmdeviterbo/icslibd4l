@@ -97,6 +97,7 @@ const DropdownFilter = ({ setFilterTag, filterTag }) => {
     { key: 2, text: "Book", value: "book" },
     // TOUCHED: value changed from special problem to sp for uniform URL manipulation
     { key: 3, text: "Special Problem", value: "sp" },
+    // { key: 3, text: "Special Problem", value: "Special Problem" },
     { key: 4, text: "Thesis", value: "thesis" },
   ];
   const handleChange = (e, data) => setFilterTag(data.value);

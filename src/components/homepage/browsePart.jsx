@@ -94,6 +94,7 @@ export default function BrowsePart({ browseRef }) {
           // to="/browse-special-problems"
           // TOUCHED: search filter redirect to search page type=books search=all books
           to="/search?type=sp&search="
+          // to="/search?type=Special%20Problem&search="
           draggable={false}
           onMouseEnter={() => setIsHoverTitle("SP")}
           onMouseLeave={() => setIsHoverTitle("BROWSE")}

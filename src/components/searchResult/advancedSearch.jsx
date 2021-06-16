@@ -26,7 +26,7 @@ export default function AdvancedSearch() {
         `${useLocation().pathname}${useLocation().search}`
     );
     const history = useHistory();
-    const urlValidator = /^\?type=(?:any|book|sp|thesis)&search=[\w\s:'"]*$/g;
+    const urlValidator = /^\?type=(?:any|book|sp|Special Problem|thesis)&search=[\w\s:'"]*$/g;
 
     //filters
     const [searchFilterAuthor, setSearchFilterAuthor] = useState("");
@@ -67,6 +67,7 @@ export default function AdvancedSearch() {
 
     function returnCloserResourceType() {
         if (url.includes("sp")) return "sp";
+        // if (url.includes("Special Problem")) return "Special Problem";
         else if (url.includes("thesis")) return "thesis";
         else if (url.includes("book")) return "book";
         else return "any";
