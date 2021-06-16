@@ -15,13 +15,17 @@ describe("Summary Report Router API", () => {
      ***********************/
     describe("READ /report ", () => {
         it("Generate Summary Report", (done) => {
+            // eslint-disable-next-line no-unused-expressions
             axios
                 .get(summaryReportRoute + "/report?type=all")
                 .then((res) => {
+                    // eslint-disable-next-line no-unused-expressions
                     expect(fs.existsSync("./src/download/Merged.pdf")).to.be
                         .true;
+                    // eslint-disable-next-line no-unused-expressions
                     expect(fs.existsSync("./src/download/Books.pdf")).to.be
                         .true;
+                    // eslint-disable-next-line no-unused-expressions
                     expect(fs.existsSync("./src/download/spThesis.pdf")).to.be
                         .true;
                     expect(res.status).to.equal(200);

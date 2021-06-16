@@ -76,7 +76,7 @@ TIP:
     how to generate pdf from multiple html:
     https://stackoverflow.com/questions/48510210/puppeteer-generate-pdf-from-multiple-htmls
 ********************************************************/
-router.get("/report", async (req, res) => {
+router.get("/report", authAdmin, async (req, res) => {
     //type of report to be generated
     const type = req.query.type;
 
