@@ -17,23 +17,26 @@ describe("SP Thesis Router API", () => {
         it("add a SP to the database without 4 file links", (done) => {
             let spInfo = {
                 "type": "Special Problem",
-                "title": "Test Title",
-                "abstract": "Title Abstract",
-                "year": "2020",
-                "keywords" : ["keywords1", "keywords2"],
+                "title": "Test Title1",
+                "abstract": "Title Abstract1",
+                "year": 2020,
+                "keywords" : ["keywords01", "keywords02"],
                 "authors": [
-                    {	"fname" : "First",
-                        "lname" : "Last"	
+                    {	"fname" : "First1",
+                        "lname" : "Last1"	
                     }
                 ],
                 "advisers": [
-                    {	"fname" : "First",
-                        "lname" : "Last"	
+                    {	"fname" : "First1",
+                        "lname" : "Last1"	
                     }
                 ],
             };
             axios
                 .post(spRoute + "/create", spInfo, {
+                    headers: {
+                        Cookie: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InB1YmxpYyI6bnVsbCwiSUNTbGlicmFyeSI6ImU5NDU0Y2VhN2UwYTc0NWQ2ZGZkYjUzNzRhMmYxMTE3MDIxZDcwZDExZDJkYmI5NmYxZWJkZThhZDFmMzYxZTRhYjRjNDlhMjllMTFkZmFiMGNlNWIzMjczZGExOTVjODM0ODU5MzI0N2MyNmZhYWM5YmUwNTA3MzhlNDBmOGY3NjdhYjBhOGU1YThjZTIxZjFmZGE5YTBhNWU2ZjA0ZjgxZGFmYjNkNGQ2M2Q2Nzc2OTUzZWE5MDljZGExN2I2NTc1ZTE0YTI4YmVmOTdlYzc1NzFiYzg2YmI4NWU2NTQ0NzA5YmNiZjk1MzFhOGM5ZmY4NTc1ZTkxYWFiNTMwMjVmZGE1NTBiZmNjMmU4NGNkZGQ1OWVmMWVlMTJhNGM1MyJ9LCJpYXQiOjE2MjM4MjExNzgsImV4cCI6MTYyMzkwNzU3OH0.F-LPE0_4Odr-5HfNJ1hM_sFYGcLOwjFgMVlOKur5fPk",
+                    },
                     withCredentials: true,
                 })
                 .then((res) => {
@@ -51,27 +54,30 @@ describe("SP Thesis Router API", () => {
         it("add a Thesis to the database with 4 file links", (done) => {
             let spInfo = {
                 "type": "Thesis",
-                "title": "La Vie en Rose",
-                "abstract": "Panorama",
-                "year": "2020",
-                "keywords" : ["keywords1", "keywords2"],
+                "title": "Test Title2",
+                "abstract": "Title Abstract2",
+                "year": 2020,
+                "keywords" : ["keywords11", "keywords12"],
                 "authors": [
-                    {	"fname" : "Kim",
-                        "lname" : "Chaewon"	
+                    {	"fname" : "First2",
+                        "lname" : "Last2"	
                     }
                 ],
                 "advisers": [
-                    {	"fname" : "Miyawaki",
-                        "lname" : "Sakura"	
+                    {	"fname" : "First2",
+                        "lname" : "Last2"	
                     }
                 ],
-                "source_code": "wwww",
-                "manuscript": "wwww",
+                "source_code": "www",
+                "manuscript": "www",
                 "journal": "www",
                 "poster": "www"
             };
             axios
                 .post(spRoute + "/create", spInfo, {
+                    headers: {
+                        Cookie: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InB1YmxpYyI6bnVsbCwiSUNTbGlicmFyeSI6ImU5NDU0Y2VhN2UwYTc0NWQ2ZGZkYjUzNzRhMmYxMTE3MDIxZDcwZDExZDJkYmI5NmYxZWJkZThhZDFmMzYxZTRhYjRjNDlhMjllMTFkZmFiMGNlNWIzMjczZGExOTVjODM0ODU5MzI0N2MyNmZhYWM5YmUwNTA3MzhlNDBmOGY3NjdhYjBhOGU1YThjZTIxZjFmZGE5YTBhNWU2ZjA0ZjgxZGFmYjNkNGQ2M2Q2Nzc2OTUzZWE5MDljZGExN2I2NTc1ZTE0YTI4YmVmOTdlYzc1NzFiYzg2YmI4NWU2NTQ0NzA5YmNiZjk1MzFhOGM5ZmY4NTc1ZTkxYWFiNTMwMjVmZGE1NTBiZmNjMmU4NGNkZGQ1OWVmMWVlMTJhNGM1MyJ9LCJpYXQiOjE2MjM4MjExNzgsImV4cCI6MTYyMzkwNzU3OH0.F-LPE0_4Odr-5HfNJ1hM_sFYGcLOwjFgMVlOKur5fPk",
+                    },
                     withCredentials: true,
                 })
                 .then((res) => {
