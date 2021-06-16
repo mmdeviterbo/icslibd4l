@@ -9,6 +9,12 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 
 import "../../styles/summaryReport/summaryReportPage.css";
 
+/****************************************************************************
+ * Type: Functional Component
+ *
+ * Summary:
+ * Main container for the summary report page
+ ****************************************************************************/
 export default function SummaryReportPage({ user }) {
     const FilterOptions = [
         { label: "Books", value: "books" },
@@ -18,17 +24,28 @@ export default function SummaryReportPage({ user }) {
     const [selection, setSelection] = useState(FilterOptions[0].label);
     const history = useHistory();
 
+    /****************************************************************************
+     * Type: React Hooks (useEffect)
+     *
+     * Summary:
+     * Generates new pdf files at page refresh
+     ****************************************************************************/
     useEffect(() => {
         const generateSummary = async (type) => {
             try {
-                await ResourceService.generateReport(type).then(
-                    (response) => {}
-                );
+                await ResourceService.generateReport(type).then();
             } catch (error) {}
         };
         generateSummary("all");
-    });
+    }, []);
 
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Checks if the currently logged in user is authorized to access
+     * summary report page.
+     ****************************************************************************/
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -43,10 +60,23 @@ export default function SummaryReportPage({ user }) {
         }, 700);
     };
 
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Handler funmction for when the react-select component selection was change.
+     * Sets the current selection to the label fo the currently selected option.
+     ****************************************************************************/
     const handleChange = (e) => {
         setSelection(e.label);
     };
 
+    /****************************************************************************
+     * Type: Functional Component
+     *
+     * Summary:
+     * React component containing the react-select field with its container.
+     ****************************************************************************/
     const ResourceTypeSelect = () => {
         return (
             <div className="summary-header-container">

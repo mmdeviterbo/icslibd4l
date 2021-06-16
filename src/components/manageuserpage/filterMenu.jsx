@@ -3,12 +3,30 @@ import Select from "react-select";
 
 import "../../styles/manageUserStyle.css";
 
+/****************************************************************************
+ * Type: Functional Component
+ *
+ * Summary:
+ * React Component containing the main table of users.
+ *
+ * Props:
+ * selection - the currently selected filter.
+ * setSelection - state setter for selection variable
+ * setSearchField - setter function for the input field of the search
+ * setSearchInput - setter function for the search input variable.
+ ****************************************************************************/
 export default function FilterMenu({
     selection,
     setSelection,
     setSearchField,
     setSearchInput,
 }) {
+    /****************************************************************************
+     * Type: React Hooks (useEffect)
+     *
+     * Summary:
+     * Sets the default selection to -1 (no filter applied) on page load/refresh.
+     ****************************************************************************/
     useEffect(() => {
         setSelection(-1);
     }, [setSelection]);
@@ -30,6 +48,13 @@ export default function FilterMenu({
         padding: 0,
     };
 
+    /****************************************************************************
+     * Type: Function
+     *
+     * Summary:
+     * Sets the current selection to whatever value is selected by the user
+     * using the select field (dropdown).
+     ****************************************************************************/
     const handleFilterSelect = (e) => {
         setSelection(e.value);
     };
