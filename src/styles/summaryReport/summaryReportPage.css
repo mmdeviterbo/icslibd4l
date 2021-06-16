@@ -1,8 +1,15 @@
 /*  Stylings for summaryReportPage.jsx */
+.summary-report-container {
+    border:10px solid transparent;
+    background-color: #f4f4f4;
+}
+
+.loader-container {
+    height: 100vh;
+}
+
 .summary-header-container {
     background-color: #f4f4f4;
-
-    /* background-color: white; */
     width: 100%;
     height: rem;
     display: flex;
@@ -44,8 +51,39 @@
     padding-left: 1rem;
 }
 
+.download-button-container {
+    padding-top: 1rem;
+}
+
+/* Stylings for summaryTable.jsx*/
+.download-report-button {
+    display: inline-block;
+    background-color: white;
+    color: #0067a1;
+    border-style: solid;
+    border-color: #0067a1;
+    border-width: 1px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-right: 1rem;
+}
+
+.download-report-button:hover {
+    background-color: #0067a1;
+    border-color: white;
+    color: white;
+}
+
+.download-report-button span {
+    padding-left: 1rem;
+}
+
+.summary-table-container {
+    margin: 3rem;
+}
+
 /* Stylings for documentViewer.jsx */
-.pdf-view-container {
+/* .pdf-view-container {
     background-color: #f4f4f4;
 
     min-height: 90vh;
@@ -93,10 +131,10 @@
 .page-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
+} */
 
 /* Firefox */
-.page-input[type="number"] {
+/* .page-input[type="number"] {
     -moz-appearance: textfield;
 }
 
@@ -104,10 +142,10 @@
     width: 7rem;
     display: inline-block;
     color: black;
-}
+} */
 
 /* Sets the color of all icon inside the pdf controls container*/
-.pdf-controls-container .fa {
+/* .pdf-controls-container .fa {
     color: white;
 }
 
@@ -124,4 +162,4 @@
 
 .pdf-file-container {
     padding: 1rem;
-}
+} */
