@@ -165,7 +165,10 @@ router.post("/create", authFaculty, async (req, res) => {
             // recheck if correctly sent by sending entry : thesisModel
             return res.json(savedThesis);
         } else {
-            return res.status(400).send({ errorMessage: "It already exists!" });
+            return res.status(400).send({
+                existingThesis,
+                errorMessage: "It already exists!",
+            });
         }
     } catch (err) {
         console.log(err);
@@ -1791,8 +1794,7 @@ body:
 Response String:
 "Entry Updated"
 ********************************************************/
-router.put("/update", async (req, res) => {
-    console.log(req.body);
+router.put("/update", authAdmin, async (req, res) => {
     const {
         old_sp_thesis_id,
         sp_thesis_id,
@@ -1814,15 +1816,10 @@ router.put("/update", async (req, res) => {
             { sp_thesis_id: old_sp_thesis_id },
             (err, updatedThesisSp) => {
                 if (
-                    !sp_thesis_id ||
                     !type ||
                     !title ||
                     !abstract ||
                     !year ||
-                    !source_code ||
-                    !manuscript ||
-                    !poster ||
-                    !journal ||
                     !advisers ||
                     !authors ||
                     !keywords
@@ -1831,10 +1828,6 @@ router.put("/update", async (req, res) => {
                         errorMessage: "Please enter all required fields.",
                     });
                 }
-                console.log("====START UPDATE HERE=====");
-                console.log(req.body);
-                // changing values
-                updatedThesisSp.sp_thesis_id = old_sp_thesis_id;
                 updatedThesisSp.type = type;
                 updatedThesisSp.title = title;
                 updatedThesisSp.abstract = abstract;
@@ -1843,8 +1836,6 @@ router.put("/update", async (req, res) => {
                 updatedThesisSp.manuscript = manuscript;
                 updatedThesisSp.poster = poster;
                 updatedThesisSp.journal = journal;
-
-                console.log(updatedThesisSp);
                 // updates
                 updatedThesisSp.save();
             }
@@ -1855,17 +1846,10 @@ router.put("/update", async (req, res) => {
             sp_thesis_id: old_sp_thesis_id,
         });
 
-        // console.log("!!!! TINGIN KA DITO !!!!")
-        console.log(authors);
-
         authors.forEach(async function (updatedEntry) {
             const author_fname = updatedEntry.fname;
             const author_lname = updatedEntry.lname;
             const author_name = author_fname.concat(" ", author_lname);
-
-            // await console.log("!!!!! GOT HERE !!!!!")
-            await console.log(author_fname);
-            await console.log(author_lname);
 
             const newAuthor = new thesisAuthorModel({
                 sp_thesis_id,
@@ -1885,9 +1869,6 @@ router.put("/update", async (req, res) => {
             const adviser_lname = updatedEntry.lname;
             const adviser_name = adviser_fname.concat(" ", adviser_lname);
 
-            console.log(adviser_fname);
-            console.log(adviser_lname);
-
             const newAdviser = new thesisAdviserModel({
                 sp_thesis_id,
                 adviser_fname,
@@ -1902,7 +1883,6 @@ router.put("/update", async (req, res) => {
         keywords.forEach(async function (updatedEntry) {
             const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
 
-            console.log(sp_thesis_keyword);
             const newKey = new thesisKeyModel({
                 sp_thesis_id,
                 sp_thesis_keyword,
@@ -1927,7 +1907,6 @@ Response String:
 "Entry Updated"
 ********************************************************/
 router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
-    console.log("del");
     const sp_thesis_id_holder = req.params.sp_thesis_id;
 
     if (!sp_thesis_id_holder) {
