@@ -13,6 +13,7 @@ import StatusModal from "../modal/operationStatusModal";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PersonService from "../../services/personService";
 import { jwtPrivateKey } from "../../config.json";
+import dateFormat from "dateformat";
 
 const courseList = [
     { value: "CMSC 12", label: "CMSC 12" },
@@ -58,7 +59,7 @@ export default function EditBookFormContainer(props) {
             lname: "",
         },
     ]);
-    const [subjects, setSubject] = useState([]);
+    const [subject, setSubject] = useState([]);
     const [publisher, setPublisher] = useState("");
     const [numberOfCopies, setNumOfCopies] = useState(0);
     const [physicalDesc, setDescription] = useState("");
@@ -83,6 +84,8 @@ export default function EditBookFormContainer(props) {
         }
     }, []);
 
+    // console.log(bookInfoArr);    // dateAcquired and datePublished are strings here
+    console.log(idSource);
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -96,6 +99,8 @@ export default function EditBookFormContainer(props) {
             }
         }, 700);
     };
+
+
 
     // iterate through array to match id
     useEffect(() => {
@@ -112,24 +117,25 @@ export default function EditBookFormContainer(props) {
                         ISBN,
                         physicalDesc,
                         numberOfCopies,
-                        subjects,
+                        subject,
                         bookCoverLink,
                     } = sourceItem;
                     // setType(type);
                     setBookId(bookId);
                     setTitle(title);
                     setPublisher(publisher);
-                    setDatePublished(datePublished);
-                    setDateAcquired(dateAcquired);
+                    setDatePublished(datePublished);    //undefined
+                    setDateAcquired(dateAcquired);      //undefined
                     setAuthor(author);
                     // setAuthorList(author);
                     setISBN(ISBN);
                     setDescription(physicalDesc);
                     setNumOfCopies(numberOfCopies);
-                    setSubject(subjects);
+                    setSubject(subject);
                     setBookCoverLink(bookCoverLink);
 
-                    // console.log(sourceItem);
+
+                    console.log(sourceItem);
                     break;
                 }
             }
@@ -161,7 +167,7 @@ export default function EditBookFormContainer(props) {
                 datePublished,
                 dateAcquired,
                 author,
-                subjects,
+                subject,
                 physicalDesc,
                 publisher,
                 numberOfCopies,
@@ -213,6 +219,8 @@ export default function EditBookFormContainer(props) {
             },
         ]);
     };
+    
+   console.log(subject[0].subject)
 
     return (
         <>
@@ -268,7 +276,7 @@ export default function EditBookFormContainer(props) {
                                         <input
                                             type="date"
                                             id="datePublished"
-                                            defaultValue={"2001-06-09"}
+                                            value={dateFormat(datePublished, "yyyy-mm-dd")}
                                             required
                                             onChange={(event) => {
                                                 setDatePublished(
@@ -289,7 +297,7 @@ export default function EditBookFormContainer(props) {
                                             type="date"
                                             id="dateAcquired"
                                             required
-                                            defaultValue={"2016-07-23"}
+                                            value={dateFormat(dateAcquired, "yyyy-mm-dd")}
                                             onChange={(event) => {
                                                 setDateAcquired(
                                                     handleDate(
@@ -322,12 +330,12 @@ export default function EditBookFormContainer(props) {
                                     </button>
 
                                     {author&&
-                                    author.map( (p,index, key) => {
+                                    author.map( (p,index) => {
                                         return (
                                             <div
                                                 className="authorfields"
-                                                key={p.author_fname}>
-                                                <div className="authorname-cont" key={p.author_fname}>
+                                                key={index}>
+                                                <div className="authorname-cont" key={index}>
                                                     {/* AUTHOR FIRST NAME FIELD */}
                                                     <div className="author-name">
                                                         <label htmlFor="resAuthorFN">
@@ -470,9 +478,9 @@ export default function EditBookFormContainer(props) {
                                         isMulti
                                         placeholder={"Courses..."}
                                         options={courseList}
-                                        defaultValue={subjects}
-                                        onChange={(subjects) =>
-                                            handleSubject(subjects)
+                                        defaultValue={subject}
+                                        onChange={(subject) =>
+                                            handleSubject(subject)
                                         }></Select>
                                 </div>
 

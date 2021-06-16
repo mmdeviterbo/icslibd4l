@@ -65,7 +65,7 @@ const FiltersContainerRes = () => {
             />
 
       <div className="res-clrbtn">
-        <Link id="res-filters-clear" href="#">
+        <Link id="res-filters-clear" to="#">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

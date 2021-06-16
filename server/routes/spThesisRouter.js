@@ -1857,8 +1857,8 @@ router.put("/update", async (req, res) => {
         console.log(authors);
 
         authors.forEach(async function (updatedEntry) {
-            const author_fname = updatedEntry.fname;
-            const author_lname = updatedEntry.lname;
+            const author_fname = updatedEntry.author_fname;
+            const author_lname = updatedEntry.author_lname;
             const author_name = author_fname.concat(" ", author_lname);
 
             // await console.log("!!!!! GOT HERE !!!!!")
@@ -1879,8 +1879,8 @@ router.put("/update", async (req, res) => {
             sp_thesis_id: old_sp_thesis_id,
         });
         advisers.forEach(async function (updatedEntry) {
-            const adviser_fname = updatedEntry.fname;
-            const adviser_lname = updatedEntry.lname;
+            const adviser_fname = updatedEntry.adviser_fname;
+            const adviser_lname = updatedEntry.adviser_lname;
             const adviser_name = adviser_fname.concat(" ", adviser_lname);
 
             console.log(adviser_fname);
@@ -1898,7 +1898,7 @@ router.put("/update", async (req, res) => {
         // deletes keyword entries with corresponding id, then adds new values
         await thesisKeyModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
         keywords.forEach(async function (updatedEntry) {
-            const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
+            const sp_thesis_keyword = updatedEntry
 
             console.log(sp_thesis_keyword);
             const newKey = new thesisKeyModel({

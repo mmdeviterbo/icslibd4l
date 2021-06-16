@@ -129,18 +129,18 @@ const AddNewSPThesisForm = () => {
         // console.log("meow");
         event.preventDefault();
 
-    if (
-      authorList === null ||
-      adviserList === null ||
-      keywords === null ||
-      authorList.length === 0 ||
-      adviserList.length === 0 ||
-      keywords.length === 0
-    ) {
-      return ToastNotification({
-        content: "Please enter all required fields",
-      });
-    }
+        if (
+            authorList === null ||
+            adviserList === null ||
+            keywords === null ||
+            authorList.length === 0 ||
+            adviserList.length === 0 ||
+            keywords.length === 0
+            ) {
+        return ToastNotification({
+            content: "Please enter all required fields",
+        });
+        }
 
     try {
       const userInput = {
@@ -159,7 +159,9 @@ const AddNewSPThesisForm = () => {
       const { data } = await ResourceServices.addSpThesis(userInput);
       setSuccess("success");
       setShow(true);
-      event.target.reset();
+      console.log(userInput)
+      window.location = "/manage-resources";
+    //   event.target.reset();
     } catch (err) {
       if (err.response && err.response.data) {
         ToastNotification({ content: err.response.data.errorMessage });
@@ -226,7 +228,7 @@ const AddNewSPThesisForm = () => {
                                     }
                                     setYear(event.target.value);
                                 }}
-                                onMouseEnter={(e) => e.target.focus()}
+                                // onMouseEnter={(e) => e.target.focus()}
                             />
                         </div>
                         {/* Author fields */}
@@ -263,7 +265,7 @@ const AddNewSPThesisForm = () => {
 
               {authorList.map((p, index) => {
                 return (
-                  <div className="authorfields" key={p.authorid}>
+                  <div className="authorfields" key={index}>
                     {/* AUTHOR FIRST NAME FIELD */}
                     <div className="authorname-cont">
                       <div
@@ -334,10 +336,6 @@ const AddNewSPThesisForm = () => {
                   </div> //closing for authorfields
                 );
               })}
-              {/* for testing only: */}
-              {/* <div className = "testdiv">
-                                                {JSON.stringify(authorList, null, 2)}
-                                            </div> */}
             </div>{" "}
             {/* authors-group close */}
           </div>{" "}

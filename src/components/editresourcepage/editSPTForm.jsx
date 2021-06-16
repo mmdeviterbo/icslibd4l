@@ -1,3 +1,4 @@
+  
 // import { SignalCellularNoSimOutlined } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
@@ -20,74 +21,74 @@ const classificationOptions = [
     { value: "Thesis", label: "Thesis" },
 ];
 
-const adviserchoices = [
+var adviserchoices = [
     {
-        value: { fname: "Eliezer A.", lname: "Albacea" },
+        value: { adviser_fname: "Eliezer A.", adviser_lname: "Albacea" },
         label: "Albacea, Aliezer A.",
     },
     // follow format
     {
-        value: { fname: "Maria Art Antonette D.", lname: "Clariño" },
+        value: { adviser_fname: "Maria Art Antonette D.", adviser_lname: "Clariño" },
         label: "Clariño, Maria Art Antonette D.",
     },
     {
-        value: { fname: "Lailanie R.", lname: "Danila" },
+        value: { adviser_fname: "Lailanie R.", adviser_lname: "Danila" },
         label: "Danila, Lailanie R.",
     },
     {
-        value: { fname: "Joseph Anthony C.", lname: "Hermocilla" },
+        value: { adviser_fname: "Joseph Anthony C.", adviser_lname: "Hermocilla" },
         label: "Hermocilla, Joseph Anthony C.",
     },
     {
-        value: { fname: "Arian J.", lname: "Jacildo" },
+        value: { adviser_fname: "Arian J.", adviser_lname: "Jacildo" },
         label: "Jacildo, Arian J.",
     },
     {
-        value: { fname: "Concepcion L.", lname: "Khan" },
+        value: { adviser_fname: "Concepcion L.", adviser_lname: "Khan" },
         label: "Khan, Concepcion L.",
     },
     {
-        value: { fname: "Fermin Roberto G", lname: "Lapitan" },
+        value: { adviser_fname: "Fermin Roberto G", adviser_lname: "Lapitan" },
         label: "Lapitan, Fermin Roberto G.",
     }, //hi ser
     {
-        value: { fname: "Val Randolf M.", lname: "Madrid" },
+        value: { adviser_fname: "Val Randolf M.", adviser_lname: "Madrid" },
         label: "Madrid, Val Randolf M.",
     },
     {
-        value: { fname: "Katrina Joy H", lname: "Magno" },
+        value: { adviser_fname: "Katrina Joy H", adviser_lname: "Magno" },
         label: "Magno, Katrina Joy H.",
     },
     {
-        value: { fname: "Rozano S.", lname: "Maniaol" },
+        value: { adviser_fname: "Rozano S.", adviser_lname: "Maniaol" },
         label: "Maniaol, Rozano S.",
     },
     {
-        value: { fname: "Danilo J.", lname: "Mercado" },
+        value: { adviser_fname: "Danilo J.", adviser_lname: "Mercado" },
         label: "Mercado, Danilo J.",
     },
     {
-        value: { fname: "Rizza DC", lname: "Mercado" },
+        value: { adviser_fname: "Rizza DC", adviser_lname: "Mercado" },
         label: "Mercado, Rizza DC.",
     },
     {
-        value: { fname: "Toni-Jan Keith P.", lname: "Monserrat" },
+        value: { adviser_fname: "Toni-Jan Keith P.", adviser_lname: "Monserrat" },
         label: "Monserrat, Toni-Jan Keith P.",
     },
     {
-        value: { fname: "Jaderick P.", lname: "Pabico" },
+        value: { adviser_fname: "Jaderick P.", adviser_lname: "Pabico" },
         label: "Pabico, Jaderick P.",
     },
     {
-        value: { fname: "Margarita Carmen S.", lname: "Paterno" },
+        value: { adviser_fname: "Margarita Carmen S.", adviser_lname: "Paterno" },
         label: "Paterno, Margarita Carmen S.",
     },
     {
-        value: { fname: "Reginald Neil C.", lname: "Recario" },
+        value: { adviser_fname: "Reginald Neil C.", adviser_lname: "Recario" },
         label: "Recario, Reginald Neil C.",
     },
     {
-        value: { fname: "Samaniego, Jaime M.", lname: "Samaniego" },
+        value: { adviser_fname: "Samaniego, Jaime M.", adviser_lname: "Samaniego" },
         label: "Samaniego, Jaime M.",
     },
 ];
@@ -109,19 +110,16 @@ export default function EditSPTFormContainer(props) {
     const [keywords, setKeyword] = useState();
     // multiple authors should be possible
     
-    const [advisers, setAdviser] = useState({
-        fname: "",
-        lname: "",
-    });
+    const [advisers, setAdviser] = useState([])
     const [authors, setAuthor] = useState([]);
-    const [authorList, setAuthorList] = useState([
-        {
-            authorid: nanoid(5),
-            author_fname: "",
-            author_lname: "",
-        },
-    ]);
-    const [adviserList, setAdviserList] = useState([]);
+    // const [authorList, setAuthorList] = useState([
+    //     {
+    //         authorid: nanoid(5),
+    //         author_fname: "",
+    //         author_lname: "",
+    //     },
+    // ]);
+    // const [adviserList, setAdviserList] = useState([]);
 
     const [show, setShow] = useState(false);
     const [success, setSuccess] = useState("");
@@ -182,13 +180,10 @@ export default function EditSPTFormContainer(props) {
                     setSourceCode(source_code);
                     setAbstract(abstract);
 
-                    setAdviser({
-                        fname: advisers[0]?.adviser_fname,
-                        lname: advisers[0]?.adviser_lname,
-                    });
+                    setAdviser(advisers);
                     setAuthor(authors);
 
-                    console.log(authors)
+                    // console.log(authors)
                     // console.log("fsdfsdfd");
                     // console.log(sourceItem);
 
@@ -205,16 +200,6 @@ export default function EditSPTFormContainer(props) {
         }
     }, [idSource, resourceData]);
 
-    // const addAuthor = (e) => {
-    //     const { name, value } = e.target;
-    //     setAuthor({ ...author, [name]: value });
-    // };
-
-    // const addAdviser = (e) => {
-    //     const { name, value } = e.target;
-    //     setAdviser({ ...adviser, [name]: value });
-    // };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -230,7 +215,7 @@ export default function EditSPTFormContainer(props) {
                 journal,
                 poster,
                 authors,
-                advisers: adviserList,
+                advisers,
                 keywords,
             };
             // console.log(userInput);
@@ -244,20 +229,10 @@ export default function EditSPTFormContainer(props) {
         }
     };
 
-    // const handleAdviserChange = (adviser) => {
-    //     const vals = [...advisers].map((opt) => opt.value);
-    //     setAdviser(vals);
-    // }
-
-    const handleAdviserChange = (adviserList) => {
-        const adviser = [...adviserList].map((obj) => obj.value);
-        // setCourses(values);
-        setAdviserList(adviser);
-    };
-
-    // get input from type selection
-    // const handleChange = (e) => {
-    //     setType(e.value);
+    // const handleAdviserChange = (adviserList) => {
+    //     const adviser = [...adviserList].map((obj) => obj.value);
+    //     // setCourses(values);
+    //     setAdviserList(adviser);
     // };
 
     // creates an array of keywords from theh user input
@@ -276,6 +251,24 @@ export default function EditSPTFormContainer(props) {
             },
         ]);
     };
+
+    const adviserLabels = [];
+    
+    // adviserLabels = [{value:"adviser_fname"+"adviser_lname", label:"adviser_lname"+", "+adviser_firstname}]
+    const concatAdviserNames = (val, index, array) => {
+
+        adviserLabels.push(
+            { label: val.adviser_lname + ", " + val.adviser_fname,
+            value: {adviser_fname: val.adviser_fname, adviser_lname: val.adviser_lname} }
+            )
+    }
+
+    advisers.forEach(concatAdviserNames)
+
+    console.log(adviserLabels)
+
+    var typeInString = JSON.stringify(type);
+    typeInString = typeInString.substring(1,typeInString.length-1);
 
     return (
         <>
@@ -357,8 +350,8 @@ export default function EditSPTFormContainer(props) {
                                         return(
                                         <div
                                             className="authorfields"
-                                            key={p.authorid}>
-                                            <div className="authorname-cont" key ={p.author_fname}>
+                                            key={index}>
+                                            <div className="authorname-cont">
                                                 {/* AUTHOR FIRST NAME FIELD */}
                                                 <div className="author-name">
                                                     <label htmlFor="resAuthorFN">
@@ -368,7 +361,6 @@ export default function EditSPTFormContainer(props) {
                                                     <input
                                                         type="text"
                                                         id="resAuthorFN"
-                                                        // name="fname"
                                                         required
                                                         value={p.author_fname}
                                                         // defaultValue = {author[0].author_fname}  //cant access?????
@@ -380,7 +372,7 @@ export default function EditSPTFormContainer(props) {
                                                                         (v) => {v[index].author_fname=author_fname;}
                                                                     )
                                                                 );
-                                                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                                                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default adviser_fname)
                                                         }}
                                                     />
                                                 </div>
@@ -393,7 +385,6 @@ export default function EditSPTFormContainer(props) {
                                                         type="text"
                                                         id="resAuthorLN"
                                                         required
-                                                        // name="lname"
                                                         value={p.author_lname}
                                                         // defaultValue={author.author_lname}   //cant access?????
                                                         onChange={(e) => {
@@ -404,7 +395,7 @@ export default function EditSPTFormContainer(props) {
                                                                         (v) => {v[index].author_lname=author_lname;}
                                                                     )
                                                                 );
-                                                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default fname)
+                                                            // we call setAuthorList, and return a new array with a new value for the first name (instead of default adviser_fname)
                                                         }}
                                                     />
                                                     
@@ -442,14 +433,14 @@ export default function EditSPTFormContainer(props) {
                                         </div> //authorfields end
                                         );}
                                     )}
-
-
-
-                                </div>{" "}
+                                </div>
                                 {/* authors-group close */}
-                            </div>{" "}
+                            </div>
                             {/*closing for left column  */}
+
+                            
                             <div className="form-mid-column">
+
                                 {/* Classification */}
                                 <div className="classifSelect">
                                     Classification:
@@ -457,22 +448,28 @@ export default function EditSPTFormContainer(props) {
                                         id="resClassification"
                                         // defaultValue={"Select..."}
                                         options={classificationOptions}
-                                        value={classificationOptions.find(
-                                            (obj) => obj.value === type
-                                        )}
-                                        // onChange={handleTypeChange}
-                                    ></Select>
+                                        value={{label: typeInString, value:typeInString}}
+                                        onChange={(e)=>{
+                                            setType(e.value)
+                                        }}
+                                    >
+                                    </Select>
                                 </div>
 
                                 {/* Adviser Dropdown Multi */}
                                 <div className="select-advisers">
+
+                                    <div className = "testdiv">
+                                        {JSON.stringify(adviserLabels, null, 2)}
+                                    </div>
+
                                     <label htmlFor="advsel">Advisers:</label>
                                     <Select
                                         id="advsel"
                                         options={adviserchoices}
-                                        defaultValue={advisers}
+                                        value={adviserLabels}
                                         // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
-                                        onChange={handleAdviserChange}
+                                        // onChange={handleAdviserChange}
                                         isMulti></Select>
                                 </div>
 

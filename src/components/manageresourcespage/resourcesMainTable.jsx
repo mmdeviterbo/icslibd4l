@@ -467,7 +467,7 @@ const MainResourceTable = () => {
                                                 >
                                                     {row && row.bookId
                                                         ? dateFormat(
-                                                              row.dateAcquired,
+                                                              row.datePublished,
                                                               "mmmm yyyy"
                                                           )
                                                         : row && row.year}
