@@ -29,7 +29,6 @@ Response Object:
 ********************************************************/
 router.post("/create", async (req, res) => {
     var loggedUser;
-    console.log(req.body);
     try {
         const { googleId, email, fullName } = req.body;
 
@@ -130,7 +129,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.get("/readStudents", async (req, res) => {
+router.get("/readStudents", authFaculty, async (req, res) => {
     await UserModel.find({ userType: 4 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
@@ -157,7 +156,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.put("/update", async (req, res) => {
+router.put("/update", authStudent, async (req, res) => {
     try {
         const { googleId, newNickname } = req.body; //get googleId and newNickname from body
 
@@ -233,7 +232,7 @@ Request Object:
 Response String: 
 "Entry Deleted"
 ********************************************************/
-router.delete("/delete", async (req, res) => {
+router.delete("/delete", authStudent, async (req, res) => {
     const googleId = req.body.googleId;
     await UserModel.findOneAndDelete({ googleId });
     return res.status(200).send("Entry Deleted");
@@ -248,7 +247,7 @@ Request Object:
 Response String:
 "User Logged Out"
 ********************************************************/
-router.post("/logout", async (req, res) => {
+router.post("/logout", authStudent, async (req, res) => {
     try {
         const token = req.cookies.token;
         // Encryption settings
@@ -288,7 +287,7 @@ googleId
 Response Object: 
 "Specific person"
 ********************************************************/
-router.post("/findperson", async (req, res) => {
+router.post("/findperson", authStudent, async (req, res) => {
     try {
         const { googleId } = req.body;
 

@@ -6,7 +6,6 @@ const jwtPrivateKey = process.env.jwtPrivateKey;
 function authenticationAdmin(req, res, next) {
     try {
         const token = req.cookies.token;
-
         //checks if token exists
         if (!token)
             return res.sendStatus(401).json({
