@@ -22,6 +22,7 @@ export default function SummaryReportPage({ user }) {
     ];
 
     const [selection, setSelection] = useState(FilterOptions[0].label);
+    const [isLoading, setIsLoading] = useState(true);
     const history = useHistory();
 
     /****************************************************************************
@@ -57,6 +58,7 @@ export default function SummaryReportPage({ user }) {
             } catch (err) {
                 return history.push("/unauthorized");
             }
+            setIsLoading(false);
         }, 700);
     };
 
@@ -99,10 +101,28 @@ export default function SummaryReportPage({ user }) {
     return (
         <>
             {user && user.userType === 1 ? (
-                <div className="summary-report-container">
-                    <ResourceTypeSelect className="summary-header" />
-                    <SummaryTable resourceFilter={selection} />
-                </div>
+                isLoading ? (
+                    <div
+                        style={{
+                            minHeight: "80vh",
+                            display: "grid",
+                            placeItems: "center",
+                        }}
+                    >
+                        <PropagateLoader
+                            color={"#0067a1"}
+                            speedMultiplier={2}
+                            loading={true}
+                            size={20}
+                        />
+                        {accessPrivilege()}
+                    </div>
+                ) : (
+                    <div className="summary-report-container">
+                        <ResourceTypeSelect className="summary-header" />
+                        <SummaryTable resourceFilter={selection} />
+                    </div>
+                )
             ) : (
                 <div
                     style={{
