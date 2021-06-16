@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useHistory } from 'react-router';
 import PropTypes from "prop-types";
 // import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -100,7 +101,7 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? "none" : "default"}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
+                        {headCell.label==="Title"? <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : "asc"}
                             onClick={createSortHandler(headCell.id)}
@@ -114,6 +115,9 @@ function EnhancedTableHead(props) {
                                 </span>
                             ) : null}
                         </TableSortLabel>
+                        :
+                        <span>{headCell.label}</span>
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -176,6 +180,7 @@ const MainResourceTable = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selectedEdit, setSelectedEdit] = useState();
     const [resourceList, setResourceList] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         async function fetchBooks() {
@@ -328,6 +333,12 @@ const MainResourceTable = () => {
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    const sptClick = `/sp-thesis/${row.sp_thesis_id}`;
+                                    const bookClick = `/book/${row.bookId}`;
+                                    const viewAllBook = `/search?type=book&search=`;
+                                    const viewAllSP = `/search?type=sp&search=`;
+                                    const viewAllThesis = `/search?type=thesis&search=`;
+                                    const viewAllPath = (row?.bookId && viewAllBook) || (row?.type==="Thesis"? viewAllThesis : viewAllSP) 
 
                                     return (
                                         <TableRow
@@ -336,7 +347,7 @@ const MainResourceTable = () => {
                                             tabIndex={-1}
                                             key={index}
                                             selected={isItemSelected}
-                                        >
+                                            >
                                             {/* {row} */}
 
                                             <TableCell
@@ -347,7 +358,8 @@ const MainResourceTable = () => {
                                                 id={labelId}
                                                 scope="row"
                                                 padding="none"
-                                                className={classes.tablecell}
+                                                className={`${classes.tablecell} tableRowStyle`}
+                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
                                             >
                                                 {/* unique id */}
                                                 <div
@@ -367,7 +379,8 @@ const MainResourceTable = () => {
                                                 style={{
                                                     width: "30%",
                                                 }}
-                                                className={classes.tablecell}
+                                                className={`${classes.tablecell} tableRowStyle`}
+                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
                                                 align="left"
                                             >
                                                 {/* title of resources */}
@@ -384,7 +397,8 @@ const MainResourceTable = () => {
                                                 style={{
                                                     width: "20%",
                                                 }}
-                                                className={classes.tablecell}
+                                                className={`${classes.tablecell} tableRowStyle`}
+                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
                                                 align="left"
                                             >
                                                 {/* author */}
@@ -425,7 +439,7 @@ const MainResourceTable = () => {
                                                 style={{
                                                     width: "12%",
                                                 }}
-                                                className={classes.tablecell}
+                                                className={`${classes.tablecell} tableRowStyle`}
                                                 align="left"
                                             >
                                                 {/* classifcation */}
@@ -434,6 +448,7 @@ const MainResourceTable = () => {
                                                         fontSize: "16px",
                                                         fontWeight: "normal",
                                                     }}
+                                                    onClick={()=>history.push(viewAllPath)}
                                                 >
                                                     {/* Checks if a resource is a book by using the bookId attribute as checker */}
                                                     {row && row.bookId

@@ -23,6 +23,7 @@ const ReadingSPTContainer = (props) => {
   let [loading, setLoading] = useState(true);
   const [resourceData, setResourceData] = useState({});
   const resourceID = props.match.params.id;
+  let resId = window.location.pathname.replace("/sp-thesis/","").replace("/book/","");
 
   let type = "";
   if (resourceID.slice(0, 3) === "SP_") {
@@ -33,11 +34,14 @@ const ReadingSPTContainer = (props) => {
     type = "Book";
   }
 
+
+
+
   useEffect(() => {
     // <RingLoader loading />;
     async function fetchData() {
       try {
-        const urlRequest = `/search-id?id=${resourceID}`;
+        const urlRequest = `/search-id?id=${resourceID || resId}`;
         const { data } = await ResourceService.searchByID(urlRequest, type);
         setResourceData(data && data[0]);
         setLoading(false);
@@ -79,7 +83,7 @@ const ReadingSPTContainer = (props) => {
               <AbstractContainer
                 abstract={resourceData && resourceData.abstract}
               />
-              <InfoSidebar user={props.user} resourceData={resourceData} />
+              <InfoSidebar user={props.user} resourceData={resourceData} type={type} resId={resId}/>
             </div>
           </div>
         </div>

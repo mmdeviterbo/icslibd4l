@@ -109,3 +109,7 @@
   -o-user-select: none !important;
   user-select: none !important;
 }
+
+.tableRowStyle:hover{
+  cursor: pointer;
+}
