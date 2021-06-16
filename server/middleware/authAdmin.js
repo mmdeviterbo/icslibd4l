@@ -24,11 +24,11 @@ function authenticationAdmin(req, res, next) {
         const decrypted = jwtEncrypt.readJWT(token, encryption, "ICSlibrary");
         const verified = decrypted.data;
 
-    //checks if token exists
-    if (!token)
-      return res.sendStatus(401).json({
-        errorMessage: "Unauthorized Access",
-      });
+        //checks if token exists
+        if (!token)
+            return res.sendStatus(401).json({
+                errorMessage: "Unauthorized Access",
+            });
 
         if (verified.userType === 1) next();
         else
@@ -37,7 +37,9 @@ function authenticationAdmin(req, res, next) {
             });
     } catch (err) {
         console.log(err);
-        res.sendStatus(401).json({ errorMessage: "Unauthorized Access" });
+        return res
+            .sendStatus(401)
+            .json({ errorMessage: "Unauthorized Access" });
     }
 }
 

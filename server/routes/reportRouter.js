@@ -76,7 +76,7 @@ TIP:
     how to generate pdf from multiple html:
     https://stackoverflow.com/questions/48510210/puppeteer-generate-pdf-from-multiple-htmls
 ********************************************************/
-router.get("/report", async (req, res) => {
+router.get("/report", authAdmin, async (req, res) => {
     //type of report to be generated
     const type = req.query.type;
 
@@ -88,7 +88,11 @@ router.get("/report", async (req, res) => {
         });
         const page = await browser.newPage();
         let books, spThesis;
-        let pdfBuffer = [], pdfBufferBook = [], pdfBufferspThesis = [], bookStart = 0, spThesisStart = 0;
+        let pdfBuffer = [],
+            pdfBufferBook = [],
+            pdfBufferspThesis = [],
+            bookStart = 0,
+            spThesisStart = 0;
         //books
         if (type === "all" || type === "books") {
             //query for all book information
@@ -115,36 +119,45 @@ router.get("/report", async (req, res) => {
 
             //create pdf buffers with 10 items per page for books
             do {
-                if(bookStart + 10 > books.length){
-                    const bookContent = await compile("book", books.slice(bookStart,books.length));
+                if (bookStart + 10 > books.length) {
+                    const bookContent = await compile(
+                        "book",
+                        books.slice(bookStart, books.length)
+                    );
                     const bookPage = await browser.newPage();
                     await bookPage.setContent(bookContent);
                     await bookPage.pdf({
                         path: "./src/download/Books.pdf",
                         format: "A4",
                         printBackground: true,
-                        margin: {top: 40, bottom: 40, left: 40, right: 40},
-                        landscape: true
+                        margin: { top: 40, bottom: 40, left: 40, right: 40 },
+                        landscape: true,
                     });
                     pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
-                    pdfBufferBook.push(fs.readFileSync("./src/download/Books.pdf"));
-                }
-                else {
-                    const bookContent = await compile("book", books.slice(bookStart,bookStart+10));
+                    pdfBufferBook.push(
+                        fs.readFileSync("./src/download/Books.pdf")
+                    );
+                } else {
+                    const bookContent = await compile(
+                        "book",
+                        books.slice(bookStart, bookStart + 10)
+                    );
                     const bookPage = await browser.newPage();
                     await bookPage.setContent(bookContent);
                     await bookPage.pdf({
                         path: "./src/download/Books.pdf",
                         format: "A4",
                         printBackground: true,
-                        margin: {top: 40, bottom: 40, left: 40, right: 40},
-                        landscape: true
+                        margin: { top: 40, bottom: 40, left: 40, right: 40 },
+                        landscape: true,
                     });
                     pdfBuffer.push(fs.readFileSync("./src/download/Books.pdf"));
-                    pdfBufferBook.push(fs.readFileSync("./src/download/Books.pdf"));
+                    pdfBufferBook.push(
+                        fs.readFileSync("./src/download/Books.pdf")
+                    );
                 }
                 bookStart += 10;
-            } while(bookStart < books.length);
+            } while (bookStart < books.length);
         }
 
         //sp and thesis
@@ -199,36 +212,49 @@ router.get("/report", async (req, res) => {
 
             //create pdf buffers with 20 items per page for spThesis
             do {
-                if(spThesisStart + 20 > spThesis.length){
-                    const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,(spThesis.length)));
+                if (spThesisStart + 20 > spThesis.length) {
+                    const bookContent = await compile(
+                        "spThesis",
+                        spThesis.slice(spThesisStart, spThesis.length)
+                    );
                     const bookPage = await browser.newPage();
                     await bookPage.setContent(bookContent);
                     await bookPage.pdf({
                         path: "./src/download/spThesis.pdf",
                         format: "A4",
                         printBackground: true,
-                        margin: {top: 40, bottom: 40, left: 40, right: 40},
-                        landscape: true
+                        margin: { top: 40, bottom: 40, left: 40, right: 40 },
+                        landscape: true,
                     });
-                    pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
-                    pdfBufferspThesis.push(fs.readFileSync("./src/download/spThesis.pdf"));
-                }
-                else {
-                    const bookContent = await compile("spThesis", spThesis.slice(spThesisStart,spThesisStart+20));
+                    pdfBuffer.push(
+                        fs.readFileSync("./src/download/spThesis.pdf")
+                    );
+                    pdfBufferspThesis.push(
+                        fs.readFileSync("./src/download/spThesis.pdf")
+                    );
+                } else {
+                    const bookContent = await compile(
+                        "spThesis",
+                        spThesis.slice(spThesisStart, spThesisStart + 20)
+                    );
                     const bookPage = await browser.newPage();
                     await bookPage.setContent(bookContent);
                     await bookPage.pdf({
                         path: "./src/download/spThesis.pdf",
                         format: "A4",
                         printBackground: true,
-                        margin: {top: 40, bottom: 40, left: 40, right: 40},
-                        landscape: true
+                        margin: { top: 40, bottom: 40, left: 40, right: 40 },
+                        landscape: true,
                     });
-                    pdfBuffer.push(fs.readFileSync("./src/download/spThesis.pdf"));
-                    pdfBufferspThesis.push(fs.readFileSync("./src/download/spThesis.pdf"));
+                    pdfBuffer.push(
+                        fs.readFileSync("./src/download/spThesis.pdf")
+                    );
+                    pdfBufferspThesis.push(
+                        fs.readFileSync("./src/download/spThesis.pdf")
+                    );
                 }
                 spThesisStart += 20;
-            } while(spThesisStart < spThesis.length);
+            } while (spThesisStart < spThesis.length);
         }
 
         //users, not a priority
@@ -256,12 +282,15 @@ router.get("/report", async (req, res) => {
                 },
             ]);
         }
-        
+
         //merge pdf buffers and save file
         const mergedPdf = await PDFDocument.create();
-        for (const pdfBytes of pdfBuffer){
+        for (const pdfBytes of pdfBuffer) {
             const pdf = await PDFDocument.load(pdfBytes);
-            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+            const copiedPages = await mergedPdf.copyPages(
+                pdf,
+                pdf.getPageIndices()
+            );
             copiedPages.forEach((page) => {
                 mergedPdf.addPage(page);
             });
@@ -269,19 +298,22 @@ router.get("/report", async (req, res) => {
 
         const buf = await mergedPdf.save();
 
-        let path = './src/download/Merged.pdf';;
-        fs.open(path, 'w', function(err, fd) {
-            fs.write(fd, buf, 0, buf.length, null, function (err){
+        let path = "./src/download/Merged.pdf";
+        fs.open(path, "w", function (err, fd) {
+            fs.write(fd, buf, 0, buf.length, null, function (err) {
                 fs.close(fd, function () {
-                    console.log('file saved');
+                    console.log("file saved");
                 });
             });
         });
 
         const mergedPdfbook = await PDFDocument.create();
-        for (const pdfBytes of pdfBufferBook){
+        for (const pdfBytes of pdfBufferBook) {
             const pdf = await PDFDocument.load(pdfBytes);
-            const copiedPages = await mergedPdfbook.copyPages(pdf, pdf.getPageIndices());
+            const copiedPages = await mergedPdfbook.copyPages(
+                pdf,
+                pdf.getPageIndices()
+            );
             copiedPages.forEach((page) => {
                 mergedPdfbook.addPage(page);
             });
@@ -289,19 +321,22 @@ router.get("/report", async (req, res) => {
 
         const bufbook = await mergedPdfbook.save();
 
-        path = './src/download/Books.pdf';;
-        fs.open(path, 'w', function(err, fd) {
-            fs.write(fd, bufbook, 0, bufbook.length, null, function (err){
+        path = "./src/download/Books.pdf";
+        fs.open(path, "w", function (err, fd) {
+            fs.write(fd, bufbook, 0, bufbook.length, null, function (err) {
                 fs.close(fd, function () {
-                    console.log('file saved');
+                    console.log("file saved");
                 });
             });
         });
 
         const mergedPdfspthesis = await PDFDocument.create();
-        for (const pdfBytes of pdfBufferspThesis){
+        for (const pdfBytes of pdfBufferspThesis) {
             const pdf = await PDFDocument.load(pdfBytes);
-            const copiedPages = await mergedPdfspthesis.copyPages(pdf, pdf.getPageIndices());
+            const copiedPages = await mergedPdfspthesis.copyPages(
+                pdf,
+                pdf.getPageIndices()
+            );
             copiedPages.forEach((page) => {
                 mergedPdfspthesis.addPage(page);
             });
@@ -309,49 +344,25 @@ router.get("/report", async (req, res) => {
 
         const bufspthesis = await mergedPdfspthesis.save();
 
-        path = './src/download/spThesis.pdf';;
-        fs.open(path, 'w', function(err, fd) {
-            fs.write(fd, bufspthesis, 0, bufspthesis.length, null, function (err){
-                fs.close(fd, function () {
-                    console.log('file saved');
-                });
-            });
+        path = "./src/download/spThesis.pdf";
+        fs.open(path, "w", function (err, fd) {
+            fs.write(
+                fd,
+                bufspthesis,
+                0,
+                bufspthesis.length,
+                null,
+                function (err) {
+                    fs.close(fd, function () {
+                        console.log("file saved");
+                    });
+                }
+            );
         });
-
-
-
-        // const bookContent = await compile("book", books);
-        // const bookPage = await browser.newPage();
-        // await bookPage.setContent(bookContent);
-        // await bookPage.pdf({
-        //     path: "./src/download/Books.pdf",
-        //     format: "A4",
-        //     printBackground: true,
-        //     margin: {top: 40, bottom: 40, left: 40, right: 40},
-        //     landscape: true
-        // });
-
-        // const spThesisContent = await compile("spThesis", spThesis);
-        // const spThesisPage = await browser.newPage();
-        // await spThesisPage.setContent(spThesisContent);
-        // await spThesisPage.pdf({
-        //     path: "./src/download/spThesis.pdf",
-        //     format: "A4",
-        //     printBackground: true,
-        //     margin: {top: 40, bottom: 40, left: 40, right: 40},
-        //     landscape: true
-        // });
-
-        // const merger = new pdfMerge();
-
-        // merger.add("./src/download/Books.pdf");
-        // merger.add("./src/download/spThesis.pdf");
-
-        // await merger.save("./src/download/Merged.pdf");
 
         await browser.close();
 
-        res.send();
+        res.status(200).send("Summary Report Created Successfully");
     } catch (err) {
         console.error(err);
         res.status(500).send(err);

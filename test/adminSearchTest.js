@@ -20,10 +20,7 @@ describe("admin router", () => {
         it("find a user using a keyword", (done) => {
             axios
                 
-                .get(adminRoute + "/search", {params: {search: "caleb"} }, {
-                    withCredentials: true,
-                })
-                
+                .get(adminRoute + "/search", {params: {search: "caleb"} }) 
                 .then((res) => {
                     expect(res.data).to.be.an("array");
                     expect(res.status).to.equal(200);
