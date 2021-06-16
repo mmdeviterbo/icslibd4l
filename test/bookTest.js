@@ -139,7 +139,7 @@ describe("Book Router API", () => {
                 "bookId": bookId,
                 "ISBN": "0 98765 432 1",
                 "title": "Test Book",
-                "authors": [{"fname":"Tester", "lname":"OneUpdated"}, {"fname":"Tester", "lname":"TwoUpdated"}],
+                "author": [{"author_fname":"Tester", "author_lname":"OneUpdated"}, {"author_fname":"Tester", "author_lname":"TwoUpdated"}],
                 "subjects": ["Subject One Updated", "Subject Two Updated"],
                 "physicalDesc": "Physical Description",
                 "publisher": "Publisher",
@@ -153,6 +153,7 @@ describe("Book Router API", () => {
                     withCredentials: true,
                 })
                 .then((res) => {
+                    expect(res.status).to.equal(200);
                     expect(res.data).to.have.string("Entry Updated");
                     done();
                 })
@@ -175,6 +176,7 @@ describe("Book Router API", () => {
                     withCredentials: true,
                 })
                 .then((res) => {
+                    expect(res.status).to.equal(200);
                     expect(res.data).to.have.string("Entry Deleted");
                     done();
                 })

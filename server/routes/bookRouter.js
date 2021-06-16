@@ -306,7 +306,7 @@ router.put("/update", async (req, res) => {
         bookId,
         title,
         ISBN,
-        authors,
+        author,
         subjects,
         physicalDesc,
         publisher,
@@ -316,18 +316,16 @@ router.put("/update", async (req, res) => {
         dateAcquired,
     } = req.body;
 
-    console.log(bookId);
     // verification: incomplete fields
     if (
         !bookId ||
         !title ||
-        !authors ||
+        !author ||
         !subjects ||
         !physicalDesc ||
         !publisher ||
         !numberOfCopies
     ) {
-        console.log("HERE");
         return res
             .status(400)
             .json({ errorMessage: "Please enter all required fields." });
@@ -344,7 +342,6 @@ router.put("/update", async (req, res) => {
         const existingBook = await bookModel.findOne({ bookId: bookId });
 
         if (existingBook) {
-            console.log("HERE2");
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
             await bookModel.findOne({ bookId: bookId }, (err, updatedBook) => {
@@ -365,7 +362,7 @@ router.put("/update", async (req, res) => {
             await bookAuthorModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
-            authors.forEach(async function (entry) {
+            author.forEach(async function (entry) {
                 const author_fname = entry.author_fname;
                 const author_lname = entry.author_lname;
                 const author_name = author_fname.concat(" ", author_lname);
@@ -394,7 +391,7 @@ router.put("/update", async (req, res) => {
                 await newBookSubject.save();
             });
 
-            res.send("Entry Updated");
+            res.status(200).send("Entry Updated");
         } else {
             //sends a 400 status if book already exists
             res.status(400).send("This book does not exist! Cannot update.");
@@ -432,7 +429,7 @@ router.delete("/delete/:bookId", async (req, res) => {
             await bookAuthorModel.deleteMany({ bookId: bookIdHolder });
             await bookSubjectModel.deleteMany({ bookId: bookIdHolder });
 
-            res.send("Entry Deleted");
+            res.status(200).send("Entry Deleted");
         } else {
             res.status(400).json({
                 errorMessage: "This book does not exist! Cannot delete.",
