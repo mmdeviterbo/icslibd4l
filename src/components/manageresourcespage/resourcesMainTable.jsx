@@ -56,12 +56,6 @@ const resHeadCells = [
         disablePadding: false,
         label: "Type",
     },
-    // {
-    //   id: "relatedcourses",
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: "Related Courses",
-    // },
     {
         id: "pubyr",
         numeric: true,
@@ -96,19 +90,32 @@ function EnhancedTableHead(props) {
                         align={"left"}
                         padding={headCell.disablePadding ? "none" : "default"}
                         sortDirection={orderBy === headCell.id ? order : false}>
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : "asc"}
-                            onClick={createSortHandler(headCell.id)}>
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <span className={classes.visuallyHidden}>
-                                    {order === "desc"
-                                        ? "sorted descending"
-                                        : "sorted ascending"}
-                                </span>
-                            ) : null}
-                        </TableSortLabel>
+                        
+                        {/* if title, sort, else dont */}
+                        {headCell.id === "title" ? 
+                            (<TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : "asc"}
+                                onClick={createSortHandler(headCell.id)}
+                                >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <span className={classes.visuallyHidden}>
+                                        {order === "desc"
+                                            ? "sorted descending"
+                                            : "sorted ascending"}
+                                    </span>
+                                ) : null}
+                            </TableSortLabel>)
+                        :
+                            (
+                                <h3 
+                                style = {{fontWeight:"medium", fontFamily:"Montserrat, sans-serif"}}> 
+                                    {headCell.label} 
+                                </h3>
+                            )
+
+                        }
                     </TableCell>
                 ))}
             </TableRow>
