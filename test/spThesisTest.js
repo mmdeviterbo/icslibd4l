@@ -862,17 +862,17 @@ describe("Sp/Thesis Router API", () => {
                 journal: "example.com",
                 authors: [
                     {
-                        fname: "Alex",
-                        lname: "Gaskarth",
+                        author_fname: "Alex",
+                        author_lname: "Gaskarth",
                     },
-                    { fname: "Ted", lname: "Bundy" },
+                    { author_fname: "Ted", author_lname: "Bundy" },
                 ],
                 advisers: [
                     {
-                        fname: "Jack",
-                        lname: "Barackat",
+                        adviser_fname: "Jack",
+                        adviser_lname: "Barackat",
                     },
-                    { fname: "Zack", lname: "Merrick" },
+                    { adviser_fname: "Zack", adviser_lname: "Merrick" },
                 ],
                 keywords: [
                     {
@@ -894,7 +894,6 @@ describe("Sp/Thesis Router API", () => {
                     done();
                 })
                 .catch((err) => {
-                    // console.log(err);
                     done(err);
                 });
         });
@@ -908,7 +907,6 @@ describe("Sp/Thesis Router API", () => {
             let sp_thesis_info = {
                 sp_thesis_id: sp_thesis_id1,
             };
-            console.log(sp_thesis_info);
             axios
                 .delete(spThesisRoute + "/delete/" + sp_thesis_id1, {
                     withCredentials: true,
@@ -933,7 +931,6 @@ describe("Sp/Thesis Router API", () => {
             let sp_thesis_info = {
                 sp_thesis_id: sp_thesis_id2,
             };
-            console.log(sp_thesis_info);
             axios
                 .delete(spThesisRoute + "/delete/" + sp_thesis_id2, {
                     withCredentials: true,
