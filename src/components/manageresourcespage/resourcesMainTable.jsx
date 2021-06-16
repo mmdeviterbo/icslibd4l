@@ -329,21 +329,20 @@ const MainResourceTable = () => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   const sptClick = `/sp-thesis/${row.sp_thesis_id}`;
                   const bookClick = `/book/${row.bookId}`;
-                  console.log(classes.tablecell);
+                  const viewAllBook = `/search?type=book&search=`;
+                  const viewAllSP = `/search?type=sp&search=`;
+                  const viewAllThesis = `/search?type=thesis&search=`;
+                  const viewAllPath =
+                    (row?.bookId && viewAllBook) ||
+                    (row?.type === "Thesis" ? viewAllThesis : viewAllSP);
 
                   return (
                     <TableRow
-                      className={`${classes.tablecell} tableRowStyle`}
+                      className={classes.tablecell}
                       hover
                       tabIndex={-1}
                       key={index}
                       selected={isItemSelected}
-                      onClick={() =>
-                        history.push(
-                          (row.sp_thesis_id && sptClick) ||
-                            (bookClick && bookClick)
-                        )
-                      }
                     >
                       {/* {row} */}
 
@@ -355,7 +354,13 @@ const MainResourceTable = () => {
                         id={labelId}
                         scope="row"
                         padding="none"
-                        className={classes.tablecell}
+                        className={`${classes.tablecell} tableRowStyle`}
+                        onClick={() =>
+                          history.push(
+                            (row.sp_thesis_id && sptClick) ||
+                              (bookClick && bookClick)
+                          )
+                        }
                       >
                         {/* unique id */}
                         <div
@@ -374,7 +379,13 @@ const MainResourceTable = () => {
                         style={{
                           width: "30%",
                         }}
-                        className={classes.tablecell}
+                        className={`${classes.tablecell} tableRowStyle`}
+                        onClick={() =>
+                          history.push(
+                            (row.sp_thesis_id && sptClick) ||
+                              (bookClick && bookClick)
+                          )
+                        }
                         align="left"
                       >
                         {/* title of resources */}
@@ -391,7 +402,13 @@ const MainResourceTable = () => {
                         style={{
                           width: "20%",
                         }}
-                        className={classes.tablecell}
+                        className={`${classes.tablecell} tableRowStyle`}
+                        onClick={() =>
+                          history.push(
+                            (row.sp_thesis_id && sptClick) ||
+                              (bookClick && bookClick)
+                          )
+                        }
                         align="left"
                       >
                         {/* author */}
@@ -416,7 +433,7 @@ const MainResourceTable = () => {
                         style={{
                           width: "12%",
                         }}
-                        className={classes.tablecell}
+                        className={`${classes.tablecell} tableRowStyle`}
                         align="left"
                       >
                         {/* classifcation */}
@@ -425,6 +442,7 @@ const MainResourceTable = () => {
                             fontSize: "16px",
                             fontWeight: "normal",
                           }}
+                          onClick={() => history.push(viewAllPath)}
                         >
                           {/* Checks if a resource is a book by using the bookId attribute as checker */}
                           {row && row.bookId ? "Book" : row && row.type}
