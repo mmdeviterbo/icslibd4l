@@ -229,6 +229,11 @@ table {
     text-align: right;
 }
 
+.info-value-pd{
+  font-weight:100;
+  text-align: justify;
+  margin-left: 5%;
+}
 .info-head{
     max-width: 30%;
 }

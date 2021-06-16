@@ -56,7 +56,7 @@ const BookCoverandInfo = ({
 
         <div className = "info-group">
             <h3 className= "info-head">Physical Description:</h3>
-            <p className = "info-value">{physicalDesc}</p>
+            <p className = "info-value-pd">{physicalDesc}</p>
            
         </div>
         <hr/>
