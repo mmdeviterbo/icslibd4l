@@ -55,7 +55,7 @@ Response Object:
 ********************************************************/
 // AUTHENTICATION REMOVED FROM THE PARAMETERS
 // authFaculty
-router.post("/create", async (req, res) => {
+router.post("/create", authFaculty, async (req, res) => {
     try {
         const {
             // REQUIRED
@@ -247,9 +247,10 @@ router.post("/browse", async (req, res) => {
                 {
                     $match: {
                         $or: [
-                            { 
-                                type: { $in: spName }, 
-                            },{ 
+                            {
+                                type: { $in: spName },
+                            },
+                            {
                                 type: { $in: thesisName },
                             },
                         ],
@@ -1399,7 +1400,7 @@ router.get("/search", async (req, res) => {
     function noSP(mode) {
         thesisModel.aggregate(
             [
-                { $match: { type: { $in: spName }, } },
+                { $match: { type: { $in: spName } } },
                 {
                     $lookup: {
                         from: "sp_thesis_advisers",
@@ -1447,7 +1448,7 @@ router.get("/search", async (req, res) => {
     function noThesis() {
         thesisModel.aggregate(
             [
-                { $match: { type: { $in: thesisName }, } },
+                { $match: { type: { $in: thesisName } } },
                 {
                     $lookup: {
                         from: "sp_thesis_advisers",
