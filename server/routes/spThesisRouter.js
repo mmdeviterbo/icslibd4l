@@ -1857,7 +1857,7 @@ router.put("/update", async (req, res) => {
         });
 
         // console.log("!!!! TINGIN KA DITO !!!!")
-        console.log(authors);
+        // console.log(authors);
 
         authors.forEach(async function (updatedEntry) {
             const author_fname = updatedEntry.author_fname;

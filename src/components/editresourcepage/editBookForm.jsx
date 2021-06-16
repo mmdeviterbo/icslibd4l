@@ -412,11 +412,7 @@ export default function EditBookFormContainer(props) {
                                         }
                                     )}
 
-                                    
-
-                                    {/* for testing only: */}
-                                    
-                                </div>{" "}
+                                </div>
                                 {/* closing tag for authors group */}
                             </div>
                             {/* left column div close: */}
@@ -473,11 +469,13 @@ export default function EditBookFormContainer(props) {
                                         isMulti
                                         placeholder={"Courses..."}
                                         options={courseList}
-                                        value={subjects}
+                                        defaultValue={subjects}
                                         onChange={(subjects) =>
                                             handleSubject(subjects)
                                         }></Select>
                                 </div>
+
+                                
 
                                 <div className="primaryfields">
                                     Book cover link:
