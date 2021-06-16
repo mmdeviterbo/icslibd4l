@@ -15,7 +15,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.get("/readFaculty", authAdmin, async (req, res) => {
+router.get("/readFaculty", async (req, res) => {
     UserModel.find({ userType: 2 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
@@ -39,7 +39,7 @@ Response Object:
     userType: userType,
 }
 ********************************************************/
-router.get("/readStaff", authAdmin, async (req, res) => {
+router.get("/readStaff", async (req, res) => {
     UserModel.find({ userType: 3 }, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
