@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useHistory } from 'react-router';
+import { useHistory } from "react-router";
 import PropTypes from "prop-types";
 // import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,6 +20,7 @@ import Paper from "@material-ui/core/Paper";
 import resourceService from "../../services/resourceService";
 // import MessagePopUpCont from "../messageModalContainer";
 import dateFormat from "dateformat";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -99,25 +100,26 @@ function EnhancedTableHead(props) {
                         key={index}
                         align={"left"}
                         padding={headCell.disablePadding ? "none" : "default"}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        {headCell.label==="Title"? <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : "asc"}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <span className={classes.visuallyHidden}>
-                                    {order === "desc"
-                                        ? "sorted descending"
-                                        : "sorted ascending"}
-                                </span>
-                            ) : null}
-                        </TableSortLabel>
-                        :
-                        <span>{headCell.label}</span>
-                        }
+                        sortDirection={orderBy === headCell.id ? order : false}>
+                        {headCell.label === "Title" ? (
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={
+                                    orderBy === headCell.id ? order : "asc"
+                                }
+                                onClick={createSortHandler(headCell.id)}>
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <span className={classes.visuallyHidden}>
+                                        {order === "desc"
+                                            ? "sorted descending"
+                                            : "sorted ascending"}
+                                    </span>
+                                ) : null}
+                            </TableSortLabel>
+                        ) : (
+                            <span>{headCell.label}</span>
+                        )}
                     </TableCell>
                 ))}
             </TableRow>
@@ -180,6 +182,7 @@ const MainResourceTable = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selectedEdit, setSelectedEdit] = useState();
     const [resourceList, setResourceList] = useState([]);
+    const [isLoading, setLoading] = useState(0);
     const history = useHistory();
 
     useEffect(() => {
@@ -199,6 +202,7 @@ const MainResourceTable = () => {
                 // arr.push(spThesis.data);
                 setResourceList(arr);
                 setSelectedEdit(arr);
+                setLoading(1);
                 // setSpThesisList(spThesis_arr)
             } catch (error) {}
         }
@@ -217,15 +221,13 @@ const MainResourceTable = () => {
                         restitle: title,
                         type: type,
                     },
-                }}
-            >
+                }}>
                 <i
                     className="table-icons fa fa-trash-o"
                     style={{
                         margin: "10px",
                         color: "red",
-                    }}
-                ></i>
+                    }}></i>
             </Link>
         );
     };
@@ -236,15 +238,13 @@ const MainResourceTable = () => {
                 to={{
                     pathname: `/edit-spt/${id.id}`,
                     state: { sourceInfo: selectedEdit, id },
-                }}
-            >
+                }}>
                 <i
                     className="table-icons fa fa-pencil"
                     style={{
                         margin: "10px",
                         color: "gray",
-                    }}
-                ></i>
+                    }}></i>
             </Link>
         );
     };
@@ -255,15 +255,13 @@ const MainResourceTable = () => {
                 to={{
                     pathname: `/edit-book/${id.id}`,
                     state: { sourceInfo: selectedEdit, id },
-                }}
-            >
+                }}>
                 <i
                     className="table-icons fa fa-pencil"
                     style={{
                         margin: "10px",
                         color: "gray",
-                    }}
-                ></i>
+                    }}></i>
             </Link>
         );
     };
@@ -310,8 +308,7 @@ const MainResourceTable = () => {
                         className={classes.table}
                         aria-labelledby="tableTitle"
                         size={"medium"}
-                        aria-label="enhanced table"
-                    >
+                        aria-label="enhanced table">
                         <EnhancedTableHead
                             classes={classes}
                             numSelected={selected.length}
@@ -321,207 +318,289 @@ const MainResourceTable = () => {
                             onRequestSort={handleRequestSort}
                             rowCount={resourceList.length}
                         />
-                        <TableBody>
-                            {stableSort(
-                                resourceList,
-                                getComparator(order, orderBy)
-                            )
-                                .slice(
-                                    page * rowsPerPage,
-                                    page * rowsPerPage + rowsPerPage
-                                )
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-                                    const sptClick = `/sp-thesis/${row.sp_thesis_id}`;
-                                    const bookClick = `/book/${row.bookId}`;
-                                    const viewAllBook = `/search?type=book&search=`;
-                                    const viewAllSP = `/search?type=sp&search=`;
-                                    const viewAllThesis = `/search?type=thesis&search=`;
-                                    const viewAllPath = (row?.bookId && viewAllBook) || (row?.type==="Thesis"? viewAllThesis : viewAllSP) 
-
-                                    return (
-                                        <TableRow
-                                            className={classes.tablecell}
-                                            hover
-                                            tabIndex={-1}
-                                            key={index}
-                                            selected={isItemSelected}
-                                            >
-                                            {/* {row} */}
-
-                                            <TableCell
-                                                style={{
-                                                    width: "15%",
-                                                }}
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                padding="none"
-                                                className={`${classes.tablecell} tableRowStyle`}
-                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
-                                            >
-                                                {/* unique id */}
-                                                <div
-                                                    style={{
-                                                        fontSize: "16px",
-                                                        fontWeight: "normal",
-                                                    }}
-                                                >
-                                                    {row && row.bookId
-                                                        ? row && row.ISBN
-                                                        : row &&
-                                                          row.sp_thesis_id}
-                                                    {/* {row.id} */}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    width: "30%",
-                                                }}
-                                                className={`${classes.tablecell} tableRowStyle`}
-                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
-                                                align="left"
-                                            >
-                                                {/* title of resources */}
-                                                <div
-                                                    style={{
-                                                        fontSize: "16px",
-                                                        fontWeight: "normal",
-                                                    }}
-                                                >
-                                                    {row && row.title}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    width: "20%",
-                                                }}
-                                                className={`${classes.tablecell} tableRowStyle`}
-                                                onClick={()=>history.push((row.sp_thesis_id && sptClick) || (bookClick && bookClick))}
-                                                align="left"
-                                            >
-                                                {/* author */}
-                                                <div
-                                                    style={{
-                                                        fontSize: "16px",
-                                                        fontWeight: "normal",
-                                                    }}
-                                                >
-                                                    {row && row.bookId
-                                                        ? row.author &&
-                                                          row.author.map(
-                                                              (item, key) => (
-                                                                  <div
-                                                                      key={key}
-                                                                  >
-                                                                      {
-                                                                          item.author_name
-                                                                      }
-                                                                  </div>
-                                                              )
-                                                          )
-                                                        : row.authors &&
-                                                          row.authors.map(
-                                                              (item, key) => (
-                                                                  <div
-                                                                      key={key}
-                                                                  >
-                                                                      {
-                                                                          item.author_name
-                                                                      }
-                                                                  </div>
-                                                              )
-                                                          )}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    width: "12%",
-                                                }}
-                                                className={`${classes.tablecell} tableRowStyle`}
-                                                align="left"
-                                            >
-                                                {/* classifcation */}
-                                                <div
-                                                    style={{
-                                                        fontSize: "16px",
-                                                        fontWeight: "normal",
-                                                    }}
-                                                    onClick={()=>history.push(viewAllPath)}
-                                                >
-                                                    {/* Checks if a resource is a book by using the bookId attribute as checker */}
-                                                    {row && row.bookId
-                                                        ? "Book"
-                                                        : row && row.type}
-                                                </div>
-                                            </TableCell>
-
-                                            <TableCell
-                                                style={{
-                                                    width: "13%",
-                                                }}
-                                                className={classes.tablecell}
-                                                align="left"
-                                            >
-                                                {/* publishing year */}
-                                                <div
-                                                    style={{
-                                                        fontSize: "16px",
-                                                        fontWeight: "normal",
-                                                    }}
-                                                >
-                                                    {row && row.bookId
-                                                        ? dateFormat(
-                                                              row.dateAcquired,
-                                                              "mmmm yyyy"
-                                                          )
-                                                        : row && row.year}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell
-                                                style={{
-                                                    width: "10%",
-                                                    textAlign: "center",
-                                                    fontSize: "1.5rem",
-                                                }}
-                                            >
-                                                {row.bookId ? (
-                                                    <EditBookBtn
-                                                        id={row.bookId}
-                                                    />
-                                                ) : (
-                                                    <EditSPTBtn
-                                                        id={row.sp_thesis_id}
-                                                    />
-                                                )}
-                                                {row && row.bookId ? (
-                                                    <DeleteBtn
-                                                        id={row.bookId}
-                                                        title={row.title}
-                                                        type={"book"}
-                                                    />
-                                                ) : (
-                                                    <DeleteBtn
-                                                        id={row.sp_thesis_id}
-                                                        title={row.title}
-                                                        type={row.type}
-                                                    />
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
+                        {isLoading === 0 ? (
+                            <TableBody>
                                 <TableRow
                                     style={{
-                                        height: 53 * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
+                                        width: "100%",
+                                        textAlign: "center",
+                                        height: 53 * 10,
+                                    }}>
+                                    <TableCell colSpan="6" rowSpan="5">
+                                        <div
+                                            style={{
+                                                display: "grid",
+                                                placeItems: "center",
+                                            }}>
+                                            <PropagateLoader
+                                                color={"#0067a1"}
+                                                speedMultiplier={2}
+                                                loading={true}
+                                                size={20}
+                                            />
+                                        </div>
+                                    </TableCell>
                                 </TableRow>
-                            )}
-                        </TableBody>
+                            </TableBody>
+                        ) : resourceList.length === 0 ? (
+                            <TableBody>
+                                <TableRow
+                                    style={{
+                                        width: "100%",
+                                        textAlign: "center",
+                                        height: 53 * 10,
+                                    }}>
+                                    <TableCell colSpan="6">
+                                        <div
+                                            style={{
+                                                padding: "5rem",
+                                                textAlign: "center",
+                                            }}>
+                                            <h1>Resource table is empty</h1>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        ) : (
+                            <TableBody>
+                                {stableSort(
+                                    resourceList,
+                                    getComparator(order, orderBy)
+                                )
+                                    .slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                    )
+                                    .map((row, index) => {
+                                        const isItemSelected = isSelected(
+                                            row.name
+                                        );
+                                        const labelId = `enhanced-table-checkbox-${index}`;
+                                        const sptClick = `/sp-thesis/${row.sp_thesis_id}`;
+                                        const bookClick = `/book/${row.bookId}`;
+                                        const viewAllBook = `/search?type=book&search=`;
+                                        const viewAllSP = `/search?type=sp&search=`;
+                                        const viewAllThesis = `/search?type=thesis&search=`;
+                                        const viewAllPath =
+                                            (row?.bookId && viewAllBook) ||
+                                            (row?.type === "Thesis"
+                                                ? viewAllThesis
+                                                : viewAllSP);
+
+                                        return (
+                                            <TableRow
+                                                className={classes.tablecell}
+                                                hover
+                                                tabIndex={-1}
+                                                key={index}
+                                                selected={isItemSelected}>
+                                                {/* {row} */}
+
+                                                <TableCell
+                                                    style={{
+                                                        width: "15%",
+                                                    }}
+                                                    component="th"
+                                                    id={labelId}
+                                                    scope="row"
+                                                    padding="none"
+                                                    className={`${classes.tablecell} tableRowStyle`}
+                                                    onClick={() =>
+                                                        history.push(
+                                                            (row.sp_thesis_id &&
+                                                                sptClick) ||
+                                                                (bookClick &&
+                                                                    bookClick)
+                                                        )
+                                                    }>
+                                                    {/* unique id */}
+                                                    <div
+                                                        style={{
+                                                            fontSize: "16px",
+                                                            fontWeight:
+                                                                "normal",
+                                                        }}>
+                                                        {row && row.bookId
+                                                            ? row && row.ISBN
+                                                            : row &&
+                                                              row.sp_thesis_id}
+                                                        {/* {row.id} */}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell
+                                                    style={{
+                                                        width: "30%",
+                                                    }}
+                                                    className={`${classes.tablecell} tableRowStyle`}
+                                                    onClick={() =>
+                                                        history.push(
+                                                            (row.sp_thesis_id &&
+                                                                sptClick) ||
+                                                                (bookClick &&
+                                                                    bookClick)
+                                                        )
+                                                    }
+                                                    align="left">
+                                                    {/* title of resources */}
+                                                    <div
+                                                        style={{
+                                                            fontSize: "16px",
+                                                            fontWeight:
+                                                                "normal",
+                                                        }}>
+                                                        {row && row.title}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell
+                                                    style={{
+                                                        width: "20%",
+                                                    }}
+                                                    className={`${classes.tablecell} tableRowStyle`}
+                                                    onClick={() =>
+                                                        history.push(
+                                                            (row.sp_thesis_id &&
+                                                                sptClick) ||
+                                                                (bookClick &&
+                                                                    bookClick)
+                                                        )
+                                                    }
+                                                    align="left">
+                                                    {/* author */}
+                                                    <div
+                                                        style={{
+                                                            fontSize: "16px",
+                                                            fontWeight:
+                                                                "normal",
+                                                        }}>
+                                                        {row && row.bookId
+                                                            ? row.author &&
+                                                              row.author.map(
+                                                                  (
+                                                                      item,
+                                                                      key
+                                                                  ) => (
+                                                                      <div
+                                                                          key={
+                                                                              key
+                                                                          }>
+                                                                          {
+                                                                              item.author_name
+                                                                          }
+                                                                      </div>
+                                                                  )
+                                                              )
+                                                            : row.authors &&
+                                                              row.authors.map(
+                                                                  (
+                                                                      item,
+                                                                      key
+                                                                  ) => (
+                                                                      <div
+                                                                          key={
+                                                                              key
+                                                                          }>
+                                                                          {
+                                                                              item.author_name
+                                                                          }
+                                                                      </div>
+                                                                  )
+                                                              )}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell
+                                                    style={{
+                                                        width: "12%",
+                                                    }}
+                                                    className={`${classes.tablecell} tableRowStyle`}
+                                                    align="left">
+                                                    {/* classifcation */}
+                                                    <div
+                                                        style={{
+                                                            fontSize: "16px",
+                                                            fontWeight:
+                                                                "normal",
+                                                        }}
+                                                        onClick={() =>
+                                                            history.push(
+                                                                viewAllPath
+                                                            )
+                                                        }>
+                                                        {/* Checks if a resource is a book by using the bookId attribute as checker */}
+                                                        {row && row.bookId
+                                                            ? "Book"
+                                                            : row && row.type}
+                                                    </div>
+                                                </TableCell>
+
+                                                <TableCell
+                                                    style={{
+                                                        width: "13%",
+                                                    }}
+                                                    className={
+                                                        classes.tablecell
+                                                    }
+                                                    align="left">
+                                                    {/* publishing year */}
+                                                    <div
+                                                        style={{
+                                                            fontSize: "16px",
+                                                            fontWeight:
+                                                                "normal",
+                                                        }}>
+                                                        {row && row.bookId
+                                                            ? dateFormat(
+                                                                  row.dateAcquired,
+                                                                  "mmmm yyyy"
+                                                              )
+                                                            : row && row.year}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell
+                                                    style={{
+                                                        width: "10%",
+                                                        textAlign: "center",
+                                                        fontSize: "1.5rem",
+                                                    }}>
+                                                    {row.bookId ? (
+                                                        <EditBookBtn
+                                                            id={row.bookId}
+                                                        />
+                                                    ) : (
+                                                        <EditSPTBtn
+                                                            id={
+                                                                row.sp_thesis_id
+                                                            }
+                                                        />
+                                                    )}
+                                                    {row && row.bookId ? (
+                                                        <DeleteBtn
+                                                            id={row.bookId}
+                                                            title={row.title}
+                                                            type={"book"}
+                                                        />
+                                                    ) : (
+                                                        <DeleteBtn
+                                                            id={
+                                                                row.sp_thesis_id
+                                                            }
+                                                            title={row.title}
+                                                            type={row.type}
+                                                        />
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                {emptyRows > 0 && (
+                                    <TableRow
+                                        style={{
+                                            height: 53 * emptyRows,
+                                        }}>
+                                        <TableCell colSpan={6} />
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        )}
                     </Table>
                 </TableContainer>
                 <TablePagination

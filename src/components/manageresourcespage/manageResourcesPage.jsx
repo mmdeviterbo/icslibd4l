@@ -9,28 +9,28 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import "../../styles/manageresources/manageResourcesStyle.css";
 
 const ManageResourcesPage = ({ user }) => {
-  const history = useHistory();
+    const history = useHistory();
 
-  const accessPrivilege = () => {
-    setTimeout(() => {
-      try {
-        const user = PersonService.decryptToken(
-          localStorage.getItem(jwtPrivateKey)
-        );
-        if (!user || (user && user.userType !== 1))
-          return history.push("/unauthorized");
-      } catch (err) {
-        return history.push("/unauthorized");
-      }
-    }, 700);
-  };
+    const accessPrivilege = () => {
+        setTimeout(() => {
+            try {
+                const user = PersonService.decryptToken(
+                    localStorage.getItem(jwtPrivateKey)
+                );
+                if (!user || (user && user.userType !== 1))
+                    return history.push("/unauthorized");
+            } catch (err) {
+                return history.push("/unauthorized");
+            }
+        }, 700);
+    };
 
     return (
         <>
             {user && user.userType === 1 ? (
                 <div className="manage-resources-page-container">
                     <ManagementHeader type={"resource"} />
-                    <br/>
+                    <br />
                     {/* <FieldsContainerRes /> */}
                     {/* <ResTableContainer resourceList={resourceList} /> */}
                     <ResourceTableContainer />
@@ -38,7 +38,7 @@ const ManageResourcesPage = ({ user }) => {
             ) : (
                 <div
                     style={{
-                        minHeight: "80vh",
+                        minHeight: "90vh",
                         display: "grid",
                         placeItems: "center",
                     }}>

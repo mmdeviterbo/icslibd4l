@@ -74,7 +74,7 @@
         "pdf-merger-js": "^3.1.0",
         "pdfjs-dist": "^2.6.347",
         "process-nextick-args": "^2.0.1",
-        "puppeteer": "^9.1.1",
+        "puppeteer": "^10.0.0",
         "react": "^17.0.2",
         "react-bootstrap": "^1.6.0",
         "react-dom": "^17.0.2",
