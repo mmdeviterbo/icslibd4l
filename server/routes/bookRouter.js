@@ -96,7 +96,7 @@ res object:
     dateAcquired,
 }
 ********************************************************/
-router.post("/create", async (req, res) => {
+router.post("/create", authAdmin, async (req, res) => {
     console.log(req.body);
     try {
         const {
@@ -301,7 +301,7 @@ book: {
 res String: 
 "Entry Updated"
 ********************************************************/
-router.put("/update", async (req, res) => {
+router.put("/update", authAdmin, async (req, res) => {
     const {
         bookId,
         title,
@@ -340,6 +340,7 @@ router.put("/update", async (req, res) => {
     try {
         //search if book exists
         const existingBook = await bookModel.findOne({ bookId: bookId });
+
 
         if (existingBook) {
             // edit fields in the book collection
@@ -411,7 +412,7 @@ res String:
 "Entry Deleted"
 ********************************************************/
 
-router.delete("/delete/:bookId", async (req, res) => {
+router.delete("/delete/:bookId", authAdmin, async (req, res) => {
     const bookIdHolder = req.params.bookId;
     if (!bookIdHolder) {
         return res
