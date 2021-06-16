@@ -4,6 +4,25 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { AdviserData } from "./adviserData";
 
+/***************************************************************************
+ * Type: React Functional Component
+ *
+ * Summary:
+ * Submenu for the filter sidebar
+ *
+ * props:
+ * - <prop> = <description>
+ * item = variable, contains the parent component/label of the submenu
+ * searchFilterAuthor = variable, contains the value of author filter
+ * setSearchFilterAuthor = function, sets the state of author filter
+ * searchFilterAdviser  = variable, contains the value of adviser filter
+ * setSearchFilterAdviser = function, sets the state of adviser filter
+ * searchFilterPublisher  = variable, contains the value of publisher filter
+ * setSearchFilterPublisher = function, sets the state of publisher filter
+ * setCourse = function, sets the state of course filter
+ * 
+ ***************************************************************************/
+
 export default function FilterSubMenu({
     item,
     searchFilterAuthor,
@@ -15,7 +34,6 @@ export default function FilterSubMenu({
     setCourse,
 }) {
     const [subnav, setSubnav] = useState(false);
-    const [moreSubnav, setmoreSubnav] = useState(false);
 
     // functions for opening and closing submenus
     const showSubnav = () => setSubnav(!subnav);
@@ -83,7 +101,7 @@ export default function FilterSubMenu({
                                     <div
                                         style={{
                                             position: "relative",
-                                            left: "-3.5vw",
+                                            left: "-3.75vw",
                                         }}
                                     >
                                         <Autocomplete
@@ -93,13 +111,11 @@ export default function FilterSubMenu({
                                             options={AdviserData.map(
                                                 (option) => option.label
                                             )}
-                                            // options={AdviserData}
-                                            // getOptionLabel={(option) => option.label}
                                             onChange={(e, newValue) => {
                                                 handleAdviserChange(newValue);
                                             }}
                                             style={{
-                                                width: 200,
+                                                width: "12vw",
                                                 marginTop: "2vw",
                                                 marginBottom: "2vw",
                                             }}

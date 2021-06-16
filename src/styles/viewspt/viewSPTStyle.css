@@ -216,7 +216,6 @@ table {
 
 .info-group{
     display:flex;
-    flex-direction: row;
     justify-content: space-between;
     margin: 0;
 }
@@ -226,10 +225,8 @@ table {
 }
 
 .info-value{
-    font-weight: normal;
-    text-align: justify;
-    padding-left: 2rem;
-    max-width:80%;
+    font-weight:100;
+    text-align: right;
 }
 
 .info-head{

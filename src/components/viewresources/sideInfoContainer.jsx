@@ -40,7 +40,6 @@ const InfoSidebar = ({ user, resourceData }) => {
       <div className="info-group">
             <h3>Type:</h3>
             <h3 className = "info-value">{resourceData && resourceData.type}</h3>
-            
         </div>
         <hr/>
 
@@ -49,7 +48,7 @@ const InfoSidebar = ({ user, resourceData }) => {
             {resourceData &&
               resourceData.advisers.map((item, key) => (
                 <h3 className="info-value" key={key}>
-                  {item.adviser_name} <br/>
+                  {item.adviser_name}
                 </h3>
               ))}
             
@@ -58,12 +57,18 @@ const InfoSidebar = ({ user, resourceData }) => {
 
         <div className = "info-group">
             <h3>Keywords:</h3>
+            <div>
             {resourceData &&
                 resourceData.keywords.map((item, key) => (
                   <h3 className="info-value" key={key}>
-                    {item.sp_thesis_keyword} <br/>
+                    {item.sp_thesis_keyword}
                   </h3>
                 ))}
+            {(!resourceData || (resourceData && resourceData.keywords.length===0))
+            &&
+            <p style={{fontStyle:"italic"}}>No keyword</p>
+            }
+            </div>
         </div>
         <hr/>
 

@@ -1,3 +1,10 @@
+/***************************************************************************
+ * Type: React Array
+ *
+ * Summary:
+ * Contains the labels for the autocomplete searchbar
+ * 
+ ***************************************************************************/
 export const AdviserData = [
     {
         value: { fname: "Eliezer A.", lname: "Albacea" },
