@@ -175,6 +175,36 @@ describe("Book Router API", () => {
         });
     });
 
+    describe("PUT /update ", () => {
+        it("update book information - check if ISBN already exists", () => {
+            let bookInfo = {
+                "bookId": bookId,
+                "ISBN": "978-0470902103",
+                "title": "Test Book",
+                "author": [{"author_fname":"Tester", "author_lname":"OneUpdated2"}, {"author_fname":"Tester", "author_lname":"TwoUpdated2"}],
+                "subjects": ["Subject One Updated2", "Subject Two Updated2"],
+                "physicalDesc": "Physical Description",
+                "publisher": "Publisher",
+                "numberOfCopies": 2,
+                "bookCoverLink": "https://drive.google.com/file/d/1fhkFDaoYJLOX6R9KLwKjG2658jUFxZ2-/view?usp=sharing",
+                "datePublished": "2010-09-29",
+                "dateAcquired": "2021-04-20"
+            };
+            axios
+                .put(userRoute + "/update", bookInfo, {
+                    headers: {
+                        Cookie: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InB1YmxpYyI6bnVsbCwiSUNTbGlicmFyeSI6ImU5NDU0Y2VhN2UwYTc0NWQ2ZGZkYjUzNzRhMmYxMTE3MDIxZDcwZDExZDJkYmI5NmYxZWJkZThhZDFmMzYxZTRhYjRjNDlhMjllMTFkZmFiMGNlNWIzMjczZGExOTVjODM0ODU5MzI0N2MyNmZhYWM5YmUwNTA3MzhlNDBmOGY3NjdhYjBhOGU1YThjZTIxZjFmZGE5YTBhNWU2ZjA0ZjgxZGFmYjNkNGQ2M2Q2Nzc2OTUzZWE5MDljZGExN2I2NTc1ZTE0YTI4YmVmOTdlYzc1NzFiYzg2YmI4NWU2NTQ0NzA5YmNiZjk1MzFhOGM5ZmY4NTc1ZTkxYWFiNTMwMjVmZGE1NTBiZmNjMmU4NGNkZGQ1OWVmMWVlMTJhNGM1MyJ9LCJpYXQiOjE2MjM4MjExNzgsImV4cCI6MTYyMzkwNzU3OH0.F-LPE0_4Odr-5HfNJ1hM_sFYGcLOwjFgMVlOKur5fPk",
+                    },
+                    withCredentials: true,
+                })
+                .catch((err) => {
+                    expect(err).to.be.instanceOf(Error);
+                    expect(err.errorMessage).to.match(/ISBN already exists!/);
+                    assert.fail(null, null, "ISBN already exists!");
+                });
+        });
+    });
+
     /**********************
      DELETE route
      ***********************/

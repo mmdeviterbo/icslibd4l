@@ -339,8 +339,15 @@ router.put("/update", authAdmin, async (req, res) => {
         //search if book exists
         const existingBook = await bookModel.findOne({ bookId: bookId });
 
-
         if (existingBook) {
+            // if user wants to update the ISBN, check first if the new ISBN already exists
+            if(existingBook.ISBN != ISBN){
+                existingISBN = await bookModel.findOne({"ISBN":ISBN });
+                if(existingISBN){
+                    return res.status(400).send({ errorMessage: "ISBN already exists!" });
+                }
+            }
+
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
             await bookModel.findOne({ bookId: bookId }, (err, updatedBook) => {
