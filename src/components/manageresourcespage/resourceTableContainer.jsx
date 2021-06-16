@@ -13,12 +13,16 @@ import AddNewSPT from "./newSPTButton";
  *
  ******************************************************/
 
-const ResourcesTableContainer = () => {
+const ResourcesTableContainer = ({ searchInput, year, restype, subject }) => {
   return (
     <div className="res-table-cont">
-      <MainResourceTable />
+      <MainResourceTable
+        searchInput={searchInput}
+        year={year}
+        restype={restype}
+        subject={subject}
+      />
       <br />
-
       <div className="addBtns">
         <AddNewResource /> {/* Add book */}
         <AddNewSPT /> {/* Add Sp/Thesis */}

@@ -84,6 +84,7 @@ export default function ActivityTable() {
   const readLogs = async () => {
     try {
       const { data } = await PersonService.readUserLogs();
+      data.reverse(); //reverses the order (latest first)
       setActivityLogs(data);
       setLoading(1);
     } catch (err) {}

@@ -256,6 +256,8 @@ function SummaryTable({ resourceFilter }) {
                   align: "left",
                   fontWeight: "bold",
                   fontSize: "1.4rem",
+                  backgroundColor: "#0067a1",
+                  color: "white",
                   zIndex: "0",
                 }}
               >
