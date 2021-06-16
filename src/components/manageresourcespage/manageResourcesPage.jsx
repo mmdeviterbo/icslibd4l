@@ -19,7 +19,6 @@ const ManageResourcesPage = ({ user }) => {
     // States for filters
     const [year, setYear] = useState(0);
     const [type, setType] = useState("");
-    const [subject, setSubject] = useState([]);
 
     const accessPrivilege = () => {
         setTimeout(() => {
@@ -87,7 +86,8 @@ const ManageResourcesPage = ({ user }) => {
                         <FieldsContainerRes
                             setYear={setYear}
                             setType={setType}
-                            setSubject={setSubject}
+                            setSearchField={setSearchField}
+                            setSearchInput={setSearchInput}
                         />
                     </div>
                     {/* <ResTableContainer resourceList={resourceList} /> */}

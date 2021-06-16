@@ -7,7 +7,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import ClearIcon from "@material-ui/icons/Clear";
 import { IconButton } from "@material-ui/core";
-import ResourceServices from "../../services/resourceService";
 // import SearchBar from "../temporarySearchBar";
 
 const courseList = [
@@ -41,20 +40,31 @@ const resourceType = [
     { value: "Book", label: "Book" },
 ];
 
-const FiltersContainerRes = ({ setYear, setType, setSubject }) => {
+const FiltersContainerRes = ({
+    setYear,
+    setType,
+    setSearchField,
+    setSearchInput,
+}) => {
     const [localType, setLocalType] = useState(null);
     const [localYear, setLocalYear] = useState(0);
-    const [localSubs, setLocalSubs] = useState([]);
 
     const handleFilter = async () => {
-        console.log("Filter Updated");
         setYear(localYear ? localYear.getFullYear() : 0);
         setType(localType);
-        setSubject(localSubs);
     };
 
-    const handleSubjectFilter = (event) => {
-        setLocalSubs(event.map((sub) => sub.label));
+    const handleClearFilter = () => {
+        setYear(0);
+        setType(null);
+        setLocalYear(0);
+        setLocalType(null);
+        setSearchField("");
+        setSearchInput("");
+    };
+
+    const handleFilterSelect = (e) => {
+        setLocalType();
     };
 
     return (
@@ -64,20 +74,20 @@ const FiltersContainerRes = ({ setYear, setType, setSubject }) => {
                 id="res-category"
                 placeholder={"Resource Type"}
                 options={resourceType}
-                defaultValue={localType}
-                onChange={(e) => setLocalType(e.value)}
+                value={localType}
+                onChange={handleFilterSelect}
             />
 
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <div style={{ marginLeft: "2rem" }} className="picker">
                     <DatePicker
                         selected={localYear}
-                        value={localYear}
+                        placeholder={"Year"}
+                        value={localYear !== 0 ? localYear : null}
                         views={["year"]}
                         onChange={(year) => setLocalYear(year)}
                         animateYearScrolling
                         isclearable={"true"}
-                        placeholder={"Year"}
                         style={{ width: "50px" }}
                         maxDate={new Date()}
                     />
@@ -92,21 +102,15 @@ const FiltersContainerRes = ({ setYear, setType, setSubject }) => {
                 </div>
             </MuiPickersUtilsProvider>
 
-            {/* <Select
-                className="res-filters"
-                placeholder={"Related Courses"}
-                id="res-related-courses"
-                options={courseList}
-                onChange={handleSubjectFilter}
-                isMulti
-            /> */}
-            {/* <Select className="res-filters" id="res-author/publisher" /> */}
             <button className="apply-filter-button" onClick={handleFilter}>
                 Apply Filters
             </button>
 
             <div className="res-clrbtn">
-                <button className="res-filters-clear">
+                <button
+                    className="res-filters-clear"
+                    onClick={handleClearFilter}
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"

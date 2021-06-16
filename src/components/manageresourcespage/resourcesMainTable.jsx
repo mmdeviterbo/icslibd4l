@@ -225,7 +225,6 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
             }
 
             // Filters according to date
-            console.log(year);
             if (year !== 0) {
                 arr = arr.filter((resource) => {
                     if (resource.type) {
