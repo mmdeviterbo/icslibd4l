@@ -225,8 +225,8 @@ export default function EditBookFormContainer(props) {
                         onSubmit={handleSubmit}
                         autoComplete="off">
                         {/* 
-            <h2>Book</h2>
-            <hr/> */}
+                        <h2>Book</h2>
+                        <hr/> */}
                         <div className="form-columns">
                             <div className="form-left-column">
                                 {/* Title Field */}
@@ -321,12 +321,13 @@ export default function EditBookFormContainer(props) {
                                         Add Author
                                     </button>
 
-                                    {author.map( (p,index) => {
+                                    {author&&
+                                    author.map( (p,index, key) => {
                                         return (
                                             <div
                                                 className="authorfields"
-                                                key={p.authorid}>
-                                                <div className="authorname-cont">
+                                                key={p.author_fname}>
+                                                <div className="authorname-cont" key={p.author_fname}>
                                                     {/* AUTHOR FIRST NAME FIELD */}
                                                     <div className="author-name">
                                                         <label htmlFor="resAuthorFN">

@@ -358,7 +358,7 @@ export default function EditSPTFormContainer(props) {
                                         <div
                                             className="authorfields"
                                             key={p.authorid}>
-                                            <div className="authorname-cont">
+                                            <div className="authorname-cont" key ={p.author_fname}>
                                                 {/* AUTHOR FIRST NAME FIELD */}
                                                 <div className="author-name">
                                                     <label htmlFor="resAuthorFN">
