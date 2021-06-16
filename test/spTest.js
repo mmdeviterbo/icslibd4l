@@ -149,6 +149,522 @@ describe("SP Thesis Router API", () => {
                     done(err);
                 });
         });
+
+        // search resources from home browse
+
+        describe("From home browse", () => {
+            
+            it("get all books", () => {
+                let searchInfo = {
+                    type: "book",
+                    search: ""
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        res.data.forEach((item) => {
+                            expect(item).to.have.property("bookId");
+                        });
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("get all special problems", () => {
+                let searchInfo = {
+                    type: "sp",
+                    search: ""
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        res.data.forEach((item) => {
+                            expect(item).to.include( {type: "Special Problem"} );
+                        });
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("get all theses", () => {
+                let searchInfo = {
+                    type: "thesis",
+                    search: ""
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        res.data.forEach((item) => {
+                            expect(item).to.include( {type: "Thesis"} );
+                        });
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+        });
+
+        // search resources from home search
+
+        describe("From home search", () => {
+
+            it("search all resources based on query", () => {
+                let searchInfo = {
+                    type: "any",
+                    search: "test"
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        let searchReq = searchInfo.search.toLowerCase();
+                        let spThesisArr = res.data.filter((item) => "sp_thesis_id" in item);
+                        let bookArr = res.data.filter((item) => "bookId" in item);
+                        expect(spThesisArr.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.abstract.toLowerCase().include(searchReq) ||
+                                item.authors.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.advisers.some((advi) => {
+                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.keywords.some((keyw) => {
+                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        expect(bookArr.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.publisher.toLowerCase().include(searchReq) ||
+                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                                item.author.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.subject.some((subj) => {
+                                    return subj.subject.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("search all books based on query", () => {
+                let searchInfo = {
+                    type: "book",
+                    search: "intro"
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        res.data.forEach((item) => {
+                            expect(item).to.have.property("bookId");
+                        });
+                        let searchReq = searchInfo.search.toLowerCase();
+                        expect(res.data.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.publisher.toLowerCase().include(searchReq) ||
+                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                                item.author.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.subject.some((subj) => {
+                                    return subj.subject.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("search all special problems based on query", () => {
+                let searchInfo = {
+                    type: "sp",
+                    search: "test"
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        res.data.forEach((item) => {
+                            expect(item).to.include( {type: "Special Problem"} );
+                        });
+                        let searchReq = searchInfo.search.toLowerCase();
+                        expect(res.data.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.abstract.toLowerCase().include(searchReq) ||
+                                item.authors.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.advisers.some((advi) => {
+                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.keywords.some((keyw) => {
+                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("search all theses based on query", () => {
+                let searchInfo = {
+                    type: "thesis",
+                    search: "study"
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        res.data.forEach((item) => {
+                            expect(item).to.include( {type: "Thesis"} );
+                        });
+                        let searchReq = searchInfo.search.toLowerCase();
+                        expect(res.data.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.abstract.toLowerCase().include(searchReq) ||
+                                item.authors.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.advisers.some((advi) => {
+                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.keywords.some((keyw) => {
+                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+        });
+
+        // search resources from search and filter page
+
+        describe("From search and filter page", () => {
+
+            it("search and filter resources", () => {
+                let searchInfo = {
+                    type: "any",
+                    search: "computer",
+                    year: 2011,
+                    publisher: "morgan",
+                    author: "david",
+                    adviser: "",
+                    subject: "CMSC 132",
+                    keywords: []
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        let spThesisArr = res.data.filter((item) => "sp_thesis_id" in item);
+                        let bookArr = res.data.filter((item) => "bookId" in item);
+                        
+                        // test search
+                        let searchReq = searchInfo.search.toLowerCase();
+                        expect(spThesisArr.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.abstract.toLowerCase().include(searchReq) ||
+                                item.authors.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.advisers.some((advi) => {
+                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.keywords.some((keyw) => {
+                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        expect(bookArr.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.publisher.toLowerCase().include(searchReq) ||
+                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                                item.author.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.subject.some((subj) => {
+                                    return subj.subject.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        
+                        // test filter
+                        spThesisArr.forEach((item) => {
+                            expect(item).to.include( {type: {$in: ["Special Problem", "Thesis"]} } );
+                            expect(item).to.include( {year: searchInfo.year} );
+                            expect(item.authors.some((auth) => {
+                                return auth.author_name
+                                    .toLowerCase()
+                                    .includes(searchInfo.author.toLowerCase());
+                            })).to.be.true;
+                            let fnameFilter, lnameFilter;
+                            [lnameFilter, fnameFilter] = searchInfo.adviser.split(", ");
+                            expect(item.advisers.some((advi) => {
+                                return (
+                                    advi.adviser_fname == fnameFilter &&
+                                    advi.adviser_lname == lnameFilter
+                                );
+                            })).to.be.true;
+                            expect(item.keywords.some((keyw) => {
+                                return searchInfo.keyword.some((keyFilter) => {
+                                    return keyw.sp_thesis_keyword
+                                        .toLowerCase()
+                                        .includes(keyFilter.toLowerCase());
+                                });
+                            })).to.be.true;
+                        });
+                        bookArr.forEach((item) => {
+                            expect(item).to.have.property("bookId");
+                            expect(item.datePublished.getFullYear()).to.eql(searchInfo.year);
+                            expect(item.publisher).to.include(searchInfo.publisher);
+                            expect(item.author.some((auth) => {
+                                return auth.author_name
+                                    .toLowerCase()
+                                    .includes(searchInfo.author.toLowerCase());
+                            })).to.be.true;
+                            expect(item.subject.some((subj) => {
+                                return subj.subject
+                                    .toLowerCase()
+                                    .includes(searchInfo.subject.toLowerCase());
+                            })).to.be.true;
+                        });
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("search and filter books", () => {
+                let searchInfo = {
+                    type: "book",
+                    search: "MIT Press",
+                    year: 1990,
+                    publisher: "MIT Press",
+                    author: "Stein",
+                    subject: "CMSC 142"
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        
+                        // test search
+                        let searchReq = searchInfo.search.toLowerCase();
+                        expect(res.data.forEach((item) => {
+                            return expect(item).to.have.property("bookId") && (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.publisher.toLowerCase().include(searchReq) ||
+                                item.physicalDesc.toLowerCase().include(searchReq) ||
+                                item.author.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.subject.some((subj) => {
+                                    return subj.subject.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        
+                        // test filter
+                        res.data.forEach((item) => {
+                            expect(item).to.have.property("bookId");
+                            expect(item.datePublished.getFullYear()).to.eql(searchInfo.year);
+                            expect(item.publisher).to.include(searchInfo.publisher);
+                            expect(item.author.some((auth) => {
+                                return auth.author_name
+                                    .toLowerCase()
+                                    .includes(searchInfo.author.toLowerCase());
+                            })).to.be.true;
+                            expect(item.subject.some((subj) => {
+                                return subj.subject
+                                    .toLowerCase()
+                                    .includes(searchInfo.subject.toLowerCase());
+                            })).to.be.true;
+                        });
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("search and filter special problems", () => {
+                let searchInfo = {
+                    type: "sp",
+                    search: "Food",
+                    year: 2008,
+                    author: "Sandy",
+                    adviser: "Paterno, Margarita Carmen",
+                    keyword: [
+                        "Bluetooth",
+                        "Mobile"
+                    ]
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        
+                        // test search
+                        let searchReq = searchInfo.search.toLowerCase();
+                        expect(res.data.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.abstract.toLowerCase().include(searchReq) ||
+                                item.authors.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.advisers.some((advi) => {
+                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.keywords.some((keyw) => {
+                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        
+                        // test filter
+                        res.data.forEach((item) => {
+                            expect(item).to.include( {type: "Special Problem"} );
+                            expect(item).to.include( {year: searchInfo.year} );
+                            expect(item.authors.some((auth) => {
+                                return auth.author_name
+                                    .toLowerCase()
+                                    .includes(searchInfo.author.toLowerCase());
+                            })).to.be.true;
+                            let fnameFilter, lnameFilter;
+                            [lnameFilter, fnameFilter] = searchInfo.adviser.split(", ");
+                            expect(item.advisers.some((advi) => {
+                                return (
+                                    advi.adviser_fname == fnameFilter &&
+                                    advi.adviser_lname == lnameFilter
+                                );
+                            })).to.be.true;
+                            expect(item.keywords.some((keyw) => {
+                                return searchInfo.keyword.some((keyFilter) => {
+                                    return keyw.sp_thesis_keyword
+                                        .toLowerCase()
+                                        .includes(keyFilter.toLowerCase());
+                                });
+                            })).to.be.true;
+                        });
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+
+            it("search and filter theses", () => {
+                let searchInfo = {
+                    type: "thesis",
+                    search: "NUI",
+                    year: 2012,
+                    author: "Fritz",
+                    adviser: "Hermocilla, Joseph Anthony",
+                    keyword: [
+                        "Image",
+                        "Pattern"
+                    ]
+                };
+                axios
+                    .get(spRoute + "/search", {params: searchInfo} )
+                    .then((res) => {
+                        expect(res.data).to.be.an("array");
+                        expect(res.status).to.equal(200);
+                        
+                        // test search
+                        let searchReq = searchInfo.search.toLowerCase();
+                        expect(res.data.forEach((item) => {
+                            return (
+                                item.title.toLowerCase().include(searchReq) ||
+                                item.abstract.toLowerCase().include(searchReq) ||
+                                item.authors.some((auth) => {
+                                    return auth.author_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.advisers.some((advi) => {
+                                    return advi.adviser_name.toLowerCase().include(searchReq);
+                                }) ||
+                                item.keywords.some((keyw) => {
+                                    return keyw.sp_thesis_keyword.toLowerCase().include(searchReq);
+                                })
+                            );
+                        })).to.be.true;
+                        
+                        // test filter
+                        res.data.forEach((item) => {
+                            expect(item).to.include( {type: "Thesis"} );
+                            expect(item).to.include( {year: searchInfo.year} );
+                            expect(item.authors.some((auth) => {
+                                return auth.author_name
+                                    .toLowerCase()
+                                    .includes(searchInfo.author.toLowerCase());
+                            })).to.be.true;
+                            let fnameFilter, lnameFilter;
+                            [lnameFilter, fnameFilter] = searchInfo.adviser.split(", ");
+                            expect(item.advisers.some((advi) => {
+                                return (
+                                    advi.adviser_fname == fnameFilter &&
+                                    advi.adviser_lname == lnameFilter
+                                );
+                            })).to.be.true;
+                            expect(item.keywords.some((keyw) => {
+                                return searchInfo.keyword.some((keyFilter) => {
+                                    return keyw.sp_thesis_keyword
+                                        .toLowerCase()
+                                        .includes(keyFilter.toLowerCase());
+                                });
+                            })).to.be.true;
+                        });
+                        done();
+                    })
+                    .catch((err) => {
+                        done(err);
+                    });
+            });
+        });
     });
 
     describe("GET /search-id", () => {
