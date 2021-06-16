@@ -190,7 +190,6 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
                 : restype === "Special Problem"
                 ? "sp"
                 : "any";
-        console.log(resourceType);
         const { data } = await resourceService.searchSpThesis(
             objFilters,
             `/search?type=${resourceType}&search=${searchInput}`
