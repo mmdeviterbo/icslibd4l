@@ -125,19 +125,9 @@ const AddNewSPThesisForm = () => {
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState("");
 
-  /****************************************************
-   * Type: Function
-   *
-   * Summary:
-   *  Stores all user inputs to an object containing SP/
-   *  Thesis attributes and make a POST request.
-   *  Shows a modal to confirm if request is successful or
-   *  not.
-   *  Adds the SP/Thesis in the database if successful.
-   *
-   ******************************************************/
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+    const handleSubmit = async (event) => {
+        // console.log("meow");
+        event.preventDefault();
 
     if (
       authorList === null ||
@@ -166,9 +156,7 @@ const AddNewSPThesisForm = () => {
         authors: authorList,
         keywords,
       };
-
-      await ResourceServices.addSpThesis(userInput);
-
+      const { data } = await ResourceServices.addSpThesis(userInput);
       setSuccess("success");
       setShow(true);
       event.target.reset();
@@ -196,52 +184,54 @@ const AddNewSPThesisForm = () => {
     setAdviserList(adviser);
   };
 
-  return (
-    <div className="add-res-form-cont">
-      <form
-        className="main-form"
-        id="addSPTForm"
-        onSubmit={handleSubmit}
-        autoComplete="off"
-      >
-        <div className="form-columns">
-          <div className="form-left-column">
-            {/* Title */}
-            <div className="primaryfields">
-              <label htmlFor="resTitle">Title: &nbsp; </label>
-              <input
-                type="text"
-                id="resTitle"
-                required
-                onChange={(event) => {
-                  setTitle(event.target.value);
-                }}
-              />
-            </div>
-            {/* Date Published */}
-            <div className="primaryfields">
-              <label htmlFor="datePublished">Year Published: &nbsp; </label>
-              <input
-                type="text"
-                pattern="[0-9]*"
-                inputMode="numeric"
-                id="sptYear"
-                required
-                min={1908}
-                max={9999}
-                // defaultValue={year}
-                onChange={(event) => {
-                  if (event.target.value < 0) {
-                    event.target.value = event.target.defaultValue;
-                  }
-                  setYear(event.target.value);
-                }}
-                // onMouseEnter={(e) => e.target.focus()}
-              />
-            </div>
-            {/* Author fields */}
-            <div className="authors-group">
-              <h4 style={{ fontWeight: "normal" }}>Author(s):</h4>
+    return (
+        <div className="add-res-form-cont">
+            <form
+                className="main-form"
+                id="addSPTForm"
+                onSubmit={handleSubmit}
+                autoComplete="off">
+                <div className="form-columns">
+                    <div className="form-left-column">
+                        {/* Title */}
+                        <div className="primaryfields">
+                            <label htmlFor="resTitle">Title: &nbsp; </label>
+                            <input
+                                type="text"
+                                id="resTitle"
+                                required
+                                onChange={(event) => {
+                                    setTitle(event.target.value);
+                                }}
+                            />
+                        </div>
+                        {/* Date Published */}
+                        <div className="primaryfields">
+                            <label htmlFor="datePublished">
+                                Year Published: &nbsp;{" "}
+                            </label>
+                            <input
+                                type="number"
+                                pattern="[0-9]*"
+                                inputMode="numeric"
+                                id="sptYear"
+                                required
+                                min={1908}
+                                max={9999}
+                                // defaultValue={year}
+                                onChange={(event) => {
+                                    if (event.target.value < 0) {
+                                        event.target.value =
+                                            event.target.defaultValue;
+                                    }
+                                    setYear(event.target.value);
+                                }}
+                                onMouseEnter={(e) => e.target.focus()}
+                            />
+                        </div>
+                        {/* Author fields */}
+                        <div className="authors-group">
+                            <h4 style={{ fontWeight: "normal" }}>Author(s):</h4>
 
               {/* button adds fields for author */}
               <button
