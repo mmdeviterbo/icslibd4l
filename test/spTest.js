@@ -11,7 +11,6 @@ describe("SP Thesis Router API", () => {
     /**********************
      CREATE route
      ***********************/
-    before(() => {});
 
     describe("POST /create SP ", () => {
         it("add a SP to the database without 4 file links", (done) => {
@@ -32,9 +31,10 @@ describe("SP Thesis Router API", () => {
                     withCredentials: true,
                 })
                 .then((res) => {
-                    sp_thesis_id = res.data.sp_thesis_id;
-                    console.log(res.data);
-                    expect(res.status).to.equal(400);
+                    console.log(res.status);
+                    if (res.data.errorMessage === "It already exists!")
+                        expect(res).to.have.status(400);
+                    else expect(res).to.have.status(200);
                     done();
                 })
                 .catch((err) => {
@@ -66,10 +66,13 @@ describe("SP Thesis Router API", () => {
                     withCredentials: true,
                 })
                 .then((res) => {
-                    sp_thesis_id = res.data.sp_thesis_id;
-
-                    console.log(res.data);
-                    expect(res.status).to.equal(400);
+                    console.log(res.status);
+                    if (res.data.errorMessage === "It already exists!")
+                        expect(res).to.have.status(400);
+                    else {
+                        expect(res).to.have.status(200);
+                        expect(res.data).to.be.an("array");
+                    }
                     done();
                 })
                 .catch((err) => {

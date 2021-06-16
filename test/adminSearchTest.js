@@ -8,7 +8,6 @@ const adminRoute = "http://localhost:3001/admin";
 
 //Assertion style
 chai.use(chaiHttp);
-let token;
 describe("admin router", () => {
     /**********************
      Read user route

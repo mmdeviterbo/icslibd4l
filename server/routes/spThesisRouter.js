@@ -84,6 +84,7 @@ router.post("/create", authFaculty, async (req, res) => {
             !authors ||
             !keywords
         ) {
+            console.log("Error here");
             return res.status(400).json({
                 errorMessage: "Please enter all required fields.",
             });
@@ -164,13 +165,15 @@ router.post("/create", authFaculty, async (req, res) => {
             });
 
             // recheck if correctly sent by sending entry : thesisModel
-            res.json(savedThesis);
+            return res.json(savedThesis);
         } else {
-            res.status(400).send({ errorMessage: "It already exists!" });
+            return res.status(400).send({ errorMessage: "It already exists!" });
         }
     } catch (err) {
         console.log(err);
-        res.status(500).json({ errorMessage: "Cannot create resource." });
+        return res
+            .status(500)
+            .json({ errorMessage: "Cannot create resource." });
     }
 });
 
