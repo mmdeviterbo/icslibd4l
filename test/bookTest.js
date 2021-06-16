@@ -137,7 +137,7 @@ describe("Book Router API", () => {
         it("update book information", (done) => {
             let bookInfo = {
                 "bookId": bookId,
-                "ISBN":"0 98765 432 1",
+                "ISBN": "0 98765 432 1",
                 "title": "Test Book",
                 "authors": [{"fname":"Tester", "lname":"OneUpdated"}, {"fname":"Tester", "lname":"TwoUpdated"}],
                 "subjects": ["Subject One Updated", "Subject Two Updated"],

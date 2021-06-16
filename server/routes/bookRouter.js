@@ -306,7 +306,7 @@ router.put("/update", async (req, res) => {
         bookId,
         title,
         ISBN,
-        author,
+        authors,
         subjects,
         physicalDesc,
         publisher,
@@ -316,16 +316,18 @@ router.put("/update", async (req, res) => {
         dateAcquired,
     } = req.body;
 
+    console.log(bookId);
     // verification: incomplete fields
     if (
         !bookId ||
         !title ||
-        !author ||
+        !authors ||
         !subjects ||
         !physicalDesc ||
         !publisher ||
         !numberOfCopies
     ) {
+        console.log("HERE");
         return res
             .status(400)
             .json({ errorMessage: "Please enter all required fields." });
@@ -342,6 +344,7 @@ router.put("/update", async (req, res) => {
         const existingBook = await bookModel.findOne({ bookId: bookId });
 
         if (existingBook) {
+            console.log("HERE2");
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
             await bookModel.findOne({ bookId: bookId }, (err, updatedBook) => {
@@ -362,7 +365,7 @@ router.put("/update", async (req, res) => {
             await bookAuthorModel.deleteMany({ bookId: bookId });
 
             // iterate on the json array and create new entries
-            author.forEach(async function (entry) {
+            authors.forEach(async function (entry) {
                 const author_fname = entry.author_fname;
                 const author_lname = entry.author_lname;
                 const author_name = author_fname.concat(" ", author_lname);
@@ -374,10 +377,7 @@ router.put("/update", async (req, res) => {
                     author_name,
                 });
                 await newBookAuthor.save();
-                console.log(newBookAuthor)
-            });
-            console.log(author)
-            
+            });            
 
             // edit fields in the book_subject collection
             // delete the current entries of subject
