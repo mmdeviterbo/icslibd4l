@@ -112,6 +112,8 @@ const ReadingBookContainer = (props) => {
                 numOfCopies={resourceData && resourceData.numberOfCopies}
                 subjects={resourceData && resourceData.subject}
                 physicalDesc={resourceData && resourceData.physicalDesc}
+                bookId={resourceData && resourceData.bookId}
+                user={props.user}
               />
 
               {/* <BookPhysDescription physicalDesc={resourceData.physicalDesc} /> */}
