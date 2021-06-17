@@ -15,8 +15,15 @@ export default function AdvancedSearch() {
     return str.replace(/%27/g, "'");
   };
 
-  var queryStore = `${useLocation().search}`.substring(
-    `${useLocation().search}`.indexOf("search=") + 7
+  //decla ng queryStore
+  var queryStore = `${window.location.href.replace(
+    "http://localhost:3000/search",
+    ""
+  )}`.substring(
+    `${window.location.href.replace(
+      "http://localhost:3000/search",
+      ""
+    )}`.indexOf("search=") + 7
   );
 
   const [query, setQuery] = useState(parseSymbols(queryStore));
@@ -99,7 +106,7 @@ export default function AdvancedSearch() {
   };
 
   // http request
-  async function fetchData() {
+  async function fetchData(newUrl) {
     setLoader(true);
     if (!url.match(urlValidator)) setIsValidQuery(false);
     else {
@@ -118,9 +125,10 @@ export default function AdvancedSearch() {
           //  urlRequest string that contains the search query -> example: search?type=title
           const { data } = await ResourceService.searchSpThesis(
             objFilter,
-            urlRequest
+            newUrl // changed to get the updated request from the current url
           );
           setResultsFilterArr(data);
+          console.log(resultsFilterArr);
           setLoader(false);
         } catch (err) {
           console.log(err);
@@ -131,8 +139,23 @@ export default function AdvancedSearch() {
   // get filtered results to backend
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchData();
-  }, [objFilter]);
+    setQuery(queryStore);
+    setResourceType(
+      `${window.location.href.replace("http://localhost:3000/search", "")}`
+        .split("&")[0]
+        .substring(
+          `${window.location.href.replace(
+            "http://localhost:3000/search",
+            ""
+          )}`.indexOf("type=") + 5
+        )
+    );
+    // gets the updated request from the current url
+    const newUrl = parseSymbols(
+      `${window.location.href.replace("http://localhost:3000", "")}`
+    );
+    fetchData(newUrl);
+  }, [objFilter, url]);
 
   const handleForm = (e) => {
     e.preventDefault();
@@ -203,7 +226,7 @@ export default function AdvancedSearch() {
             style={inputSearch}
             type="text"
             className="form-control removeOutline"
-            defaultValue={query || urlQuery}
+            value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={
               query || "Search for Books, Theses, and Special Problems"
