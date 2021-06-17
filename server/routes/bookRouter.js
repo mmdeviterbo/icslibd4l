@@ -400,7 +400,7 @@ router.put("/update", authAdmin, async (req, res) => {
             res.status(200).send("Entry Updated");
         } else {
             //sends a 400 status if book already exists
-            res.status(400).send("This book does not exist! Cannot update.");
+            res.status(400).send({ errorMessage: "This book does not exist! Cannot update."});
         }
     } catch (err) {
         res.status(500).send();

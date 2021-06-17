@@ -15,8 +15,15 @@ export default function AdvancedSearch() {
     return str.replace(/%27/g, "'");
   };
 
-  var queryStore = `${useLocation().search}`.substring(
-    `${useLocation().search}`.indexOf("search=") + 7
+  //decla ng queryStore
+  var queryStore = `${window.location.href.replace(
+    "http://localhost:3000/search",
+    ""
+  )}`.substring(
+    `${window.location.href.replace(
+      "http://localhost:3000/search",
+      ""
+    )}`.indexOf("search=") + 7
   );
 
   const [query, setQuery] = useState(parseSymbols(queryStore));
@@ -99,7 +106,7 @@ export default function AdvancedSearch() {
   };
 
   // http request
-  async function fetchData() {
+  async function fetchData(newUrl) {
     setLoader(true);
     if (!url.match(urlValidator)) setIsValidQuery(false);
     else {
@@ -115,10 +122,10 @@ export default function AdvancedSearch() {
         setPageNumber(0);
         try {
           //  objFilter store filters in an object <field>:<value>
-          //  urlRequest string that contains the search query -> example: search?type=title
+          //  newUrl string that contains the search query -> example: search?type=title
           const { data } = await ResourceService.searchSpThesis(
             objFilter,
-            urlRequest
+            newUrl // changed to get the updated request from the current url
           );
           setResultsFilterArr(data);
           setLoader(false);
@@ -131,8 +138,31 @@ export default function AdvancedSearch() {
   // get filtered results to backend
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchData();
-  }, [objFilter]);
+    // previouse bug: results page does not change the current results
+    // current change: Made the string in the searchbox change depending on the current url
+    setQuery(queryStore);
+
+    //previous bug: When the type in the url changes, the value in the sideBar does not change
+    //current change: first, the query from the url is extracted. then on the resulting string, split is used with delimeter '&'
+    //next, we extract the substring based on the index of "type=" + the length of "type=" which is 5
+    setResourceType(
+      `${window.location.href.replace("http://localhost:3000/search", "")}`
+        .split("&")[0]
+        .substring(
+          `${window.location.href.replace(
+            "http://localhost:3000/search",
+            ""
+          )}`.indexOf("type=") + 5
+        )
+    );
+
+    // previous bug: url seen in the website changes but not the urlRequest sent to backend
+    // current change: gets the updated request from the current url and pass as props to fetchData()
+    const newUrl = parseSymbols(
+      `${window.location.href.replace("http://localhost:3000", "")}`
+    );
+    fetchData(newUrl);
+  }, [objFilter, url]);
 
   const handleForm = (e) => {
     e.preventDefault();
@@ -203,7 +233,7 @@ export default function AdvancedSearch() {
             style={inputSearch}
             type="text"
             className="form-control removeOutline"
-            defaultValue={query || urlQuery}
+            value={query} // changed from defaultValue={query || urlQuery}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={
               query || "Search for Books, Theses, and Special Problems"
