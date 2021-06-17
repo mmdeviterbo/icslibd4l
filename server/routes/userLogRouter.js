@@ -18,7 +18,7 @@ Response Object:
     updatedAt: date
 }
 ********************************************************/
-router.get("/readUserLogs", async (req, res) => {
+router.get("/readUserLogs", authAdmin, async (req, res) => {
     UserLogModel.find({}, (err, result) => {
         //reads all the documents and sends as response
         if (err) {
@@ -36,7 +36,7 @@ NULL
 Response String: 
 "All Entries Deleted"
 ********************************************************/
-router.delete("/deleteAllUserLogs", async (req, res) => {
+router.delete("/deleteAllUserLogs", authAdmin, async (req, res) => {
     try {
         UserLogModel.deleteMany({}, function (err, result) {
             if (err) {

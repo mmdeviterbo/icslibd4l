@@ -96,8 +96,7 @@ res object:
     dateAcquired,
 }
 ********************************************************/
-router.post("/create", async (req, res) => {
-    console.log(req.body);
+router.post("/create", authAdmin, async (req, res) => {
     try {
         const {
             title,
@@ -126,7 +125,7 @@ router.post("/create", async (req, res) => {
                 .status(400)
                 .send({ errorMessage: "Please enter all required fields." });
         }
-
+        
         const isbnLen = ISBN.replace(/\D/g, "").length;
 
         if (isbnLen != 10 && isbnLen != 13){
@@ -187,7 +186,6 @@ router.post("/create", async (req, res) => {
             res.status(400).send({ errorMessage: "ISBN already exists!" });
         }
     } catch (err) {
-        console.log(err);
         res.status(500).send();
     }
 });
@@ -253,7 +251,6 @@ res String:
 router.get("/search-book/:bookId", async (req, res) => {
     var returnObject = [];
     const bookIdHolder = req.params.bookId;
-
     if (!bookIdHolder) {
         return res
             .status(404)
@@ -265,7 +262,7 @@ router.get("/search-book/:bookId", async (req, res) => {
         if (!BookEntry) {
             return res.status(404).json({ errorMessage: "Entry not found." });
         }
-
+  
         const BookAuthors = await bookAuthorModel.find({
             bookId: bookIdHolder,
         });
@@ -302,7 +299,7 @@ book: {
 res String: 
 "Entry Updated"
 ********************************************************/
-router.put("/update", async (req, res) => {
+router.put("/update", authAdmin, async (req, res) => {
     const {
         bookId,
         title,
@@ -332,11 +329,25 @@ router.put("/update", async (req, res) => {
             .json({ errorMessage: "Please enter all required fields." });
     }
 
+    const isbnLen = ISBN.replace(/\D/g, "").length;
+
+    if (isbnLen != 10 && isbnLen != 13){
+        return res.status(400).send({ errorMessage: "ISBN must contain 10 or 13 digits." });
+    }
+
     try {
         //search if book exists
         const existingBook = await bookModel.findOne({ bookId: bookId });
 
         if (existingBook) {
+            // if user wants to update the ISBN, check first if the new ISBN already exists
+            if(existingBook.ISBN != ISBN){
+                existingISBN = await bookModel.findOne({"ISBN":ISBN });
+                if(existingISBN){
+                    return res.status(400).send({ errorMessage: "ISBN already exists!" });
+                }
+            }
+
             // edit fields in the book collection
             // look for the book using its bookId and set new values for the fields
             await bookModel.findOne({ bookId: bookId }, (err, updatedBook) => {
@@ -369,10 +380,7 @@ router.put("/update", async (req, res) => {
                     author_name,
                 });
                 await newBookAuthor.save();
-                console.log(newBookAuthor)
-            });
-            console.log(author)
-            
+            });            
 
             // edit fields in the book_subject collection
             // delete the current entries of subject
@@ -389,13 +397,12 @@ router.put("/update", async (req, res) => {
                 await newBookSubject.save();
             });
 
-            res.send("Entry Updated");
+            res.status(200).send("Entry Updated");
         } else {
             //sends a 400 status if book already exists
             res.status(400).send({ errorMessage: "This book does not exist! Cannot update."});
         }
     } catch (err) {
-        console.log(err);
         res.status(500).send();
     }
 });
@@ -412,7 +419,6 @@ res String:
 
 router.delete("/delete/:bookId", authAdmin, async (req, res) => {
     const bookIdHolder = req.params.bookId;
-
     if (!bookIdHolder) {
         return res
             .status(404)
@@ -429,14 +435,13 @@ router.delete("/delete/:bookId", authAdmin, async (req, res) => {
             await bookAuthorModel.deleteMany({ bookId: bookIdHolder });
             await bookSubjectModel.deleteMany({ bookId: bookIdHolder });
 
-            res.send("Entry Deleted");
+            res.status(200).send("Entry Deleted");
         } else {
             res.status(400).json({
                 errorMessage: "This book does not exist! Cannot delete.",
             });
         }
     } catch (err) {
-        console.log(err);
         res.status(500).send();
     }
 });
