@@ -226,6 +226,7 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
       }
       setResourceList(arr);
       setSelectedEdit(arr);
+      setIsLoading(false);
     } catch (error) {}
   }, [restype, searchInput]);
 
@@ -235,7 +236,6 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
     } else {
       fetchBooks();
     }
-    setIsLoading(false);
   }, [searchInput, searchResource, fetchBooks]);
   const DeleteBtn = ({ id, title, type }) => {
     return (
@@ -361,6 +361,7 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
                   style={{
                     width: "100%",
                     textAlign: "center",
+                    height: 54 * 7,
                   }}
                 >
                   <TableCell colSpan="6">
@@ -393,6 +394,7 @@ const MainResourceTable = ({ searchInput, year, restype }) => {
                   style={{
                     width: "100%",
                     textAlign: "center",
+                    height: 54 * 8,
                   }}
                 >
                   <TableCell colSpan="5">

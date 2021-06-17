@@ -116,21 +116,9 @@ export default function EditSPTFormContainer(props) {
     const [abstract, setAbstract] = useState("");
     const [keywords, setKeyword] = useState();
     // multiple authors should be possible
-    
-    const [advisers, setAdviser] = useState({
-        fname: "",
-        lname: "",
-    });
-    const [authors, setAuthor] = useState([]);
-    const [authorList, setAuthorList] = useState([
-        {
-            authorid: nanoid(5),
-            author_fname: "",
-            author_lname: "",
-        },
-    ]);
-    const [adviserList, setAdviserList] = useState([]);
 
+    const [advisers, setAdviser] = useState([]);
+    const [authors, setAuthor] = useState([]);
     const [show, setShow] = useState(false);
     const [success, setSuccess] = useState("");
 
@@ -200,17 +188,8 @@ export default function EditSPTFormContainer(props) {
                     setPoster(poster);
                     setSourceCode(source_code);
                     setAbstract(abstract);
-
-                    setAdviser({
-                        fname: advisers[0]?.adviser_fname,
-                        lname: advisers[0]?.adviser_lname,
-                    });
+                    setAdviser(advisers);
                     setAuthor(authors);
-
-                    console.log(authors)
-                    // console.log("fsdfsdfd");
-                    // console.log(sourceItem);
-
                     const tempKeyword = [];
                     keywords.map((keyword) =>
                         tempKeyword.push(keyword.sp_thesis_keyword)
@@ -234,6 +213,14 @@ export default function EditSPTFormContainer(props) {
     //     setAdviser({ ...adviser, [name]: value });
     // };
 
+    function refactorKeyAdviser(advisers){
+        let refactorAdvisers = []
+        for(let adviser of advisers){
+            refactorAdvisers.push({fname:(adviser.fname || adviser.adviser_fname), lname:(adviser.lname || adviser.adviser_lname)})
+        }
+        return refactorAdvisers;
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -249,10 +236,9 @@ export default function EditSPTFormContainer(props) {
                 journal,
                 poster,
                 authors,
-                advisers: adviserList,
+                advisers: refactorKeyAdviser(advisers),
                 keywords,
             };
-            // console.log(userInput);
             await ResourceServices.editSpThesis(userInput);
             setSuccess("success");
             setShow(true);
@@ -268,13 +254,24 @@ export default function EditSPTFormContainer(props) {
     //     setAdviser(vals);
     // }
 
+    const adviserLabels = [];
+    
+    
     const handleAdviserChange = (adviserList) => {
-        console.log(adviserList);
-        const adviser = [...adviserList].map((obj) => obj.value);
-        // setCourses(values);
-        setAdviserList(adviser);
+        let advisers = [...adviserList].map((obj) => obj.value);
+        setAdviser(advisers);
     };
-
+    
+    const concatAdviserNames = (val, index, array) => {
+        adviserLabels.push(
+            { 
+                value: {adviser_lname: (val.adviser_lname || val.lname), adviser_fname: (val.adviser_fname || val.fname)},
+                label: (val.adviser_lname || val.lname)  + ", " + (val.adviser_fname || val.fname)
+            } 
+            )
+    }
+    advisers.forEach(concatAdviserNames)
+    
     // get input from type selection
     // const handleChange = (e) => {
     //     setType(e.value);
@@ -282,7 +279,7 @@ export default function EditSPTFormContainer(props) {
 
     // creates an array of keywords from theh user input
     const handleChips = (chip) => {
-        setKeyword([...keywords, chip[chip.length - 1]]);
+        setKeyword(chip);
     };
 
     const renderAuthorFields = () => {
@@ -296,6 +293,9 @@ export default function EditSPTFormContainer(props) {
             },
         ]);
     };
+
+    // var typeInString = JSON.stringify(type);
+    // typeInString = typeInString.substring(1,typeInString.length-1);
 
     return (
         <>
@@ -490,7 +490,7 @@ export default function EditSPTFormContainer(props) {
                                     <Select
                                         id="advsel"
                                         options={adviserchoices}
-                                        defaultValue={tempAdvisers}
+                                        value={adviserLabels}
                                         onChange={handleAdviserChange}
                                         isMulti></Select>
                                 </div>
@@ -599,7 +599,7 @@ export default function EditSPTFormContainer(props) {
             ) : (
                 <div
                     style={{
-                        minHeight: "80vh",
+                        minHeight: "90vh",
                         display: "grid",
                         placeItems: "center",
                     }}>
