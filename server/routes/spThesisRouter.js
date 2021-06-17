@@ -53,9 +53,7 @@ Response Object:
   "__v": 0
 }
 ********************************************************/
-// AUTHENTICATION REMOVED FROM THE PARAMETERS
-// authFaculty
-router.post("/create", async (req, res) => {
+router.post("/create", authFaculty, async (req, res) => {
     try {
         const {
             // REQUIRED
@@ -84,6 +82,7 @@ router.post("/create", async (req, res) => {
             !authors ||
             !keywords
         ) {
+            console.log("Error here");
             return res.status(400).json({
                 errorMessage: "Please enter all required fields.",
             });
@@ -164,13 +163,18 @@ router.post("/create", async (req, res) => {
             });
 
             // recheck if correctly sent by sending entry : thesisModel
-            res.json(savedThesis);
+            return res.json(savedThesis);
         } else {
-            res.status(400).send({ errorMessage: "It already exists!" });
+            return res.status(400).send({
+                existingThesis,
+                errorMessage: "It already exists!",
+            });
         }
     } catch (err) {
         console.log(err);
-        res.status(500).json({ errorMessage: "Cannot create resource." });
+        return res
+            .status(500)
+            .json({ errorMessage: "Cannot create resource." });
     }
 });
 
@@ -247,9 +251,10 @@ router.post("/browse", async (req, res) => {
                 {
                     $match: {
                         $or: [
-                            { 
-                                type: { $in: spName }, 
-                            },{ 
+                            {
+                                type: { $in: spName },
+                            },
+                            {
                                 type: { $in: thesisName },
                             },
                         ],
@@ -386,8 +391,11 @@ router.get("/search", async (req, res) => {
                 return item.year == yearFilter;
             });
             book_arr = book_arr.filter((item) => {
-                console.log(item)
-                return item.datePublished.getFullYear() == yearFilter;
+                if (!item.datePublished){
+                    return false;
+                }else{
+                    return item.datePublished.getFullYear() == yearFilter;
+                }
             });
         }
 
@@ -1400,7 +1408,7 @@ router.get("/search", async (req, res) => {
     function noSP(mode) {
         thesisModel.aggregate(
             [
-                { $match: { type: { $in: spName }, } },
+                { $match: { type: { $in: spName } } },
                 {
                     $lookup: {
                         from: "sp_thesis_advisers",
@@ -1448,7 +1456,7 @@ router.get("/search", async (req, res) => {
     function noThesis() {
         thesisModel.aggregate(
             [
-                { $match: { type: { $in: thesisName }, } },
+                { $match: { type: { $in: thesisName } } },
                 {
                     $lookup: {
                         from: "sp_thesis_advisers",
@@ -1790,8 +1798,7 @@ body:
 Response String:
 "Entry Updated"
 ********************************************************/
-router.put("/update", async (req, res) => {
-    console.log(req.body);
+router.put("/update", authAdmin, async (req, res) => {
     const {
         old_sp_thesis_id,
         sp_thesis_id,
@@ -1813,15 +1820,10 @@ router.put("/update", async (req, res) => {
             { sp_thesis_id: old_sp_thesis_id },
             (err, updatedThesisSp) => {
                 if (
-                    !sp_thesis_id ||
                     !type ||
                     !title ||
                     !abstract ||
                     !year ||
-                    !source_code ||
-                    !manuscript ||
-                    !poster ||
-                    !journal ||
                     !advisers ||
                     !authors ||
                     !keywords
@@ -1830,10 +1832,6 @@ router.put("/update", async (req, res) => {
                         errorMessage: "Please enter all required fields.",
                     });
                 }
-                console.log("====START UPDATE HERE=====");
-                console.log(req.body);
-                // changing values
-                updatedThesisSp.sp_thesis_id = old_sp_thesis_id;
                 updatedThesisSp.type = type;
                 updatedThesisSp.title = title;
                 updatedThesisSp.abstract = abstract;
@@ -1842,8 +1840,6 @@ router.put("/update", async (req, res) => {
                 updatedThesisSp.manuscript = manuscript;
                 updatedThesisSp.poster = poster;
                 updatedThesisSp.journal = journal;
-
-                console.log(updatedThesisSp);
                 // updates
                 updatedThesisSp.save();
             }
@@ -1854,17 +1850,10 @@ router.put("/update", async (req, res) => {
             sp_thesis_id: old_sp_thesis_id,
         });
 
-        // console.log("!!!! TINGIN KA DITO !!!!")
-        console.log(authors);
-
         authors.forEach(async function (updatedEntry) {
             const author_fname = updatedEntry.author_fname;
             const author_lname = updatedEntry.author_lname;
             const author_name = author_fname.concat(" ", author_lname);
-
-            // await console.log("!!!!! GOT HERE !!!!!")
-            await console.log(author_fname);
-            await console.log(author_lname);
 
             const newAuthor = new thesisAuthorModel({
                 sp_thesis_id,
@@ -1880,12 +1869,9 @@ router.put("/update", async (req, res) => {
             sp_thesis_id: old_sp_thesis_id,
         });
         advisers.forEach(async function (updatedEntry) {
-            const adviser_fname = updatedEntry.fname;
-            const adviser_lname = updatedEntry.lname;
+            const adviser_fname = updatedEntry.adviser_fname;
+            const adviser_lname = updatedEntry.adviser_lname;
             const adviser_name = adviser_fname.concat(" ", adviser_lname);
-
-            console.log(adviser_fname);
-            console.log(adviser_lname);
 
             const newAdviser = new thesisAdviserModel({
                 sp_thesis_id,
@@ -1926,7 +1912,6 @@ Response String:
 "Entry Updated"
 ********************************************************/
 router.delete("/delete/:sp_thesis_id", authAdmin, async (req, res) => {
-    console.log("del");
     const sp_thesis_id_holder = req.params.sp_thesis_id;
 
     if (!sp_thesis_id_holder) {
