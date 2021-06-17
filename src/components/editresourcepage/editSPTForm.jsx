@@ -23,7 +23,7 @@ const classificationOptions = [
 const adviserchoices = [
     {
         value: { fname: "Eliezer A.", lname: "Albacea" },
-        label: "Albacea, Aliezer A.",
+        label: "Albacea, Eliezer A.",
     },
     // follow format
     {
@@ -35,19 +35,19 @@ const adviserchoices = [
         label: "Danila, Lailanie R.",
     },
     {
-        value: { fname: "Joseph Anthony C.", lname: "Hermocilla" },
-        label: "Hermocilla, Joseph Anthony C.",
+        value: { fname: "Joseph Anthony", lname: "Hermocilla" },
+        label: "Hermocilla, Joseph Anthony",
     },
     {
-        value: { fname: "Arian J.", lname: "Jacildo" },
-        label: "Jacildo, Arian J.",
+        value: { fname: "Arian", lname: "Jacildo" },
+        label: "Jacildo, Arian",
     },
     {
         value: { fname: "Concepcion L.", lname: "Khan" },
         label: "Khan, Concepcion L.",
     },
     {
-        value: { fname: "Fermin Roberto G", lname: "Lapitan" },
+        value: { fname: "Fermin Roberto G.", lname: "Lapitan" },
         label: "Lapitan, Fermin Roberto G.",
     }, //hi ser
     {
@@ -55,7 +55,7 @@ const adviserchoices = [
         label: "Madrid, Val Randolf M.",
     },
     {
-        value: { fname: "Katrina Joy H", lname: "Magno" },
+        value: { fname: "Katrina Joy H.", lname: "Magno" },
         label: "Magno, Katrina Joy H.",
     },
     {
@@ -63,11 +63,11 @@ const adviserchoices = [
         label: "Maniaol, Rozano S.",
     },
     {
-        value: { fname: "Danilo J.", lname: "Mercado" },
-        label: "Mercado, Danilo J.",
+        value: { fname: "Danilo", lname: "Mercado" },
+        label: "Mercado, Danilo",
     },
     {
-        value: { fname: "Rizza DC", lname: "Mercado" },
+        value: { fname: "Rizza DC.", lname: "Mercado" },
         label: "Mercado, Rizza DC.",
     },
     {
@@ -75,20 +75,28 @@ const adviserchoices = [
         label: "Monserrat, Toni-Jan Keith P.",
     },
     {
-        value: { fname: "Jaderick P.", lname: "Pabico" },
-        label: "Pabico, Jaderick P.",
+        value: { fname: "Jaderick", lname: "Pabico" },
+        label: "Pabico, Jaderick",
     },
     {
-        value: { fname: "Margarita Carmen S.", lname: "Paterno" },
-        label: "Paterno, Margarita Carmen S.",
+        value: { fname: "Vladimir", lname: "Mariano" },
+        label: "Mariano, Vladimir",
+    },
+    {
+        value: { fname: "Reinald Adrian", lname: "Pugoy"},
+        label: "Pugoy, Reinald Adrian",
+    },
+    {
+        value: { fname: "Margarita Carmen", lname: "Paterno" },
+        label: "Paterno, Margarita Carmen",
     },
     {
         value: { fname: "Reginald Neil C.", lname: "Recario" },
         label: "Recario, Reginald Neil C.",
     },
     {
-        value: { fname: "Samaniego, Jaime M.", lname: "Samaniego" },
-        label: "Samaniego, Jaime M.",
+        value: { fname: "Jaime", lname: "Samaniego" },
+        label: "Samaniego, Jaime",
     },
 ];
 
@@ -108,37 +116,36 @@ export default function EditSPTFormContainer(props) {
     const [abstract, setAbstract] = useState("");
     const [keywords, setKeyword] = useState();
     // multiple authors should be possible
-    
-    const [advisers, setAdviser] = useState({
-        fname: "",
-        lname: "",
-    });
-    const [authors, setAuthor] = useState([]);
-    const [authorList, setAuthorList] = useState([
-        {
-            authorid: nanoid(5),
-            author_fname: "",
-            author_lname: "",
-        },
-    ]);
-    const [adviserList, setAdviserList] = useState([]);
 
+    const [advisers, setAdviser] = useState([]);
+    const [authors, setAuthor] = useState([]);
     const [show, setShow] = useState(false);
     const [success, setSuccess] = useState("");
 
     // return ALL resources (dahil walang search na gumagamit ng id)
     const [spThInfoArr, setSpThInfoArr] = useState([]); //all sp/thesis array
     const [idSource, setIdSource] = useState(); //unique key to identify to which specific sp/thesis
-
-    useEffect(() => {
+    const [tempAdvisers, setTempAdvisers]=useState([]);
+    
+    useEffect(()=>{
         try {
-            setIdSource(props.location?.state.id);
-            setSpThInfoArr(props.location?.state.sourceInfo); //all objects from table
+            const {id, sourceInfo} = props.location.state; 
+            setIdSource(id);
+            setSpThInfoArr(sourceInfo); //all objects from table
+
+            let tempSourceInfo = sourceInfo.filter(source=>source.advisers);
+            tempSourceInfo = tempSourceInfo.filter(source=>source.sp_thesis_id === id.id);
+            tempSourceInfo = tempSourceInfo[0].advisers;
+            tempSourceInfo.map(adviser=>
+                setTempAdvisers([...tempAdvisers,{
+                    value:{fname: adviser.adviser_fname, lname: adviser.adviser_lname},
+                    label: `${adviser.adviser_lname}, ${adviser.adviser_fname}`
+                }])
+            )
         } catch (err) {
             window.location = "/not-found";
         }
-    }, []);
-
+    },[])
     const accessPrivilege = () => {
         setTimeout(() => {
             try {
@@ -181,17 +188,8 @@ export default function EditSPTFormContainer(props) {
                     setPoster(poster);
                     setSourceCode(source_code);
                     setAbstract(abstract);
-
-                    setAdviser({
-                        fname: advisers[0]?.adviser_fname,
-                        lname: advisers[0]?.adviser_lname,
-                    });
+                    setAdviser(advisers);
                     setAuthor(authors);
-
-                    console.log(authors)
-                    // console.log("fsdfsdfd");
-                    // console.log(sourceItem);
-
                     const tempKeyword = [];
                     keywords.map((keyword) =>
                         tempKeyword.push(keyword.sp_thesis_keyword)
@@ -215,6 +213,14 @@ export default function EditSPTFormContainer(props) {
     //     setAdviser({ ...adviser, [name]: value });
     // };
 
+    function refactorKeyAdviser(advisers){
+        let refactorAdvisers = []
+        for(let adviser of advisers){
+            refactorAdvisers.push({fname:(adviser.fname || adviser.adviser_fname), lname:(adviser.lname || adviser.adviser_lname)})
+        }
+        return refactorAdvisers;
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -230,10 +236,9 @@ export default function EditSPTFormContainer(props) {
                 journal,
                 poster,
                 authors,
-                advisers: adviserList,
+                advisers: refactorKeyAdviser(advisers),
                 keywords,
             };
-            // console.log(userInput);
             await ResourceServices.editSpThesis(userInput);
             setSuccess("success");
             setShow(true);
@@ -249,12 +254,24 @@ export default function EditSPTFormContainer(props) {
     //     setAdviser(vals);
     // }
 
+    const adviserLabels = [];
+    
+    
     const handleAdviserChange = (adviserList) => {
-        const adviser = [...adviserList].map((obj) => obj.value);
-        // setCourses(values);
-        setAdviserList(adviser);
+        let advisers = [...adviserList].map((obj) => obj.value);
+        setAdviser(advisers);
     };
-
+    
+    const concatAdviserNames = (val, index, array) => {
+        adviserLabels.push(
+            { 
+                value: {adviser_lname: (val.adviser_lname || val.lname), adviser_fname: (val.adviser_fname || val.fname)},
+                label: (val.adviser_lname || val.lname)  + ", " + (val.adviser_fname || val.fname)
+            } 
+            )
+    }
+    advisers.forEach(concatAdviserNames)
+    
     // get input from type selection
     // const handleChange = (e) => {
     //     setType(e.value);
@@ -262,7 +279,7 @@ export default function EditSPTFormContainer(props) {
 
     // creates an array of keywords from theh user input
     const handleChips = (chip) => {
-        setKeyword([...keywords, chip[chip.length - 1]]);
+        setKeyword(chip);
     };
 
     const renderAuthorFields = () => {
@@ -276,6 +293,9 @@ export default function EditSPTFormContainer(props) {
             },
         ]);
     };
+
+    // var typeInString = JSON.stringify(type);
+    // typeInString = typeInString.substring(1,typeInString.length-1);
 
     return (
         <>
@@ -357,7 +377,7 @@ export default function EditSPTFormContainer(props) {
                                         return(
                                         <div
                                             className="authorfields"
-                                            key={p.authorid}>
+                                            key={index}>
                                             <div className="authorname-cont">
                                                 {/* AUTHOR FIRST NAME FIELD */}
                                                 <div className="author-name">
@@ -470,12 +490,10 @@ export default function EditSPTFormContainer(props) {
                                     <Select
                                         id="advsel"
                                         options={adviserchoices}
-                                        defaultValue={advisers}
-                                        // defaultValue={adviserchoices.find((obj) => obj.value === adviser)}
+                                        value={adviserLabels}
                                         onChange={handleAdviserChange}
                                         isMulti></Select>
                                 </div>
-
                                 {/* Abstract TextArea */}
                                 <div className="abstract-div">
                                     <label htmlFor="abstractText">
@@ -581,7 +599,7 @@ export default function EditSPTFormContainer(props) {
             ) : (
                 <div
                     style={{
-                        minHeight: "80vh",
+                        minHeight: "90vh",
                         display: "grid",
                         placeItems: "center",
                     }}>

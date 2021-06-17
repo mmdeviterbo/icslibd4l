@@ -1884,8 +1884,9 @@ router.put("/update", authAdmin, async (req, res) => {
 
         // deletes keyword entries with corresponding id, then adds new values
         await thesisKeyModel.deleteMany({ sp_thesis_id: old_sp_thesis_id });
+
         keywords.forEach(async function (updatedEntry) {
-            const sp_thesis_keyword = updatedEntry.sp_thesis_keyword;
+            const sp_thesis_keyword = updatedEntry;
 
             const newKey = new thesisKeyModel({
                 sp_thesis_id,
