@@ -21,7 +21,6 @@ const browseResources = (resourceType) => {
 };
 
 const searchSpThesis = (filter, query) => {
-    console.log(`${apiEndpoint}/thesis${query}`)
     return http.get(
         `${apiEndpoint}/thesis${query}`,
         { params: filter },

@@ -122,13 +122,12 @@ export default function AdvancedSearch() {
         setPageNumber(0);
         try {
           //  objFilter store filters in an object <field>:<value>
-          //  urlRequest string that contains the search query -> example: search?type=title
+          //  newUrl string that contains the search query -> example: search?type=title
           const { data } = await ResourceService.searchSpThesis(
             objFilter,
             newUrl // changed to get the updated request from the current url
           );
           setResultsFilterArr(data);
-          console.log(resultsFilterArr);
           setLoader(false);
         } catch (err) {
           console.log(err);
@@ -139,7 +138,13 @@ export default function AdvancedSearch() {
   // get filtered results to backend
   useEffect(() => {
     window.scrollTo(0, 0);
+    // previouse bug: results page does not change the current results
+    // current change: Made the string in the searchbox change depending on the current url
     setQuery(queryStore);
+
+    //previous bug: When the type in the url changes, the value in the sideBar does not change
+    //current change: first, the query from the url is extracted. then on the resulting string, split is used with delimeter '&'
+    //next, we extract the substring based on the index of "type=" + the length of "type=" which is 5
     setResourceType(
       `${window.location.href.replace("http://localhost:3000/search", "")}`
         .split("&")[0]
@@ -150,7 +155,9 @@ export default function AdvancedSearch() {
           )}`.indexOf("type=") + 5
         )
     );
-    // gets the updated request from the current url
+
+    // previous bug: url seen in the website changes but not the urlRequest sent to backend
+    // current change: gets the updated request from the current url and pass as props to fetchData()
     const newUrl = parseSymbols(
       `${window.location.href.replace("http://localhost:3000", "")}`
     );
@@ -226,7 +233,7 @@ export default function AdvancedSearch() {
             style={inputSearch}
             type="text"
             className="form-control removeOutline"
-            value={query}
+            value={query} // changed from defaultValue={query || urlQuery}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={
               query || "Search for Books, Theses, and Special Problems"

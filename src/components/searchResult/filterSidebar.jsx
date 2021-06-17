@@ -72,7 +72,7 @@ export default function FilterSidebar({
       marginTop: theme.spacing(2),
     },
   }));
-  console.log(resourceType);
+
   const classes = useStyles();
 
   const handleChange = (event) => {
